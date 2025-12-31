@@ -1,0 +1,86 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0|^8.1",
+        "amphp/parallel": "^1.4",
+        "amphp/parallel-functions": "^1.1",
+        "dcvn/moving-average": "*",
+        "guzzlehttp/guzzle": "^7.2",
+        "laravel/framework": "^9.0",
+        "laravel/ui": "^3.4",
+        "maatwebsite/excel": "^3.1.40",
+        "markrogoyski/math-php": "^2.10",
+        "mcamara/laravel-localization": "^1.8",
+        "milon/barcode": "*",
+        "php-ai/php-ml": "^0.10.0",
+        "spatie/async": "^1.6",
+        "spatie/laravel-medialibrary": "^10.0",
+        "spatie/laravel-permission": "^5.5",
+        "spatie/laravel-view-models": "^1.5",
+        "winternet-studio/odoo-jsonrpc-client": "*",
+        "yoeunes/toastr": "^2.3",
+		  "laravel/tinker": "^2.7",
+     "fruitcake/laravel-cors": "^3.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.7",
+        "barryvdh/laravel-ide-helper": "^2.12",
+      
+        "fakerphp/faker": "^1.20",
+        "kitloong/laravel-migrations-generator": "^6.11",
+        "laravel/sail": "^1.16",
+        "mockery/mockery": "^1.5",
+        "nunomaduro/collision": "^6.1",
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "app/Helpers/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    }
+}

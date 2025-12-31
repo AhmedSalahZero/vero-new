@@ -1,0 +1,11 @@
+{
+  "resources/js/expenses.js": {
+    "file": "assets/expenses-Dy53XbtJ.js",
+    "name": "expenses",
+    "src": "resources/js/expenses.js",
+    "isEntry": true,
+    "css": [
+      "assets/expenses-CphEvWB3.css"
+    ]
+  }
+}
