@@ -104,7 +104,7 @@ class LeasingController extends Controller
 
     public function store(Company $company, StoreLeasingRevenueStreamRequest $request, Study $study)
     {
-        if ($request->get('save-categories')) {
+        if ($request->get('submit_button') === 'save-categories') {
             $study->storeRepeaterRelations($request, ['leasingRevenueStreamBreakdown'], $company);
 			return response()->json([
 				'redirectTo'=>route('create.leasing.revenue.stream.breakdown',['company'=>$company->id,'study'=>$study->id])

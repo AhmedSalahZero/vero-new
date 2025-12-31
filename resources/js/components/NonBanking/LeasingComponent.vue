@@ -104,7 +104,6 @@ const totalPerColumns = computed(() => loanAmountsTotals.value.totalPerColumns)
 const totalRowTotals = computed(() => loanAmountsTotals.value.totalRowTotals)
 
 const fundingStructureCal = computed(() => {
-  console.log('e')
   if (!model.value?.equity_funding_rates || !dates.value.length) {
     return {
       equityFundingValues: [],
@@ -127,13 +126,11 @@ const fundingStructureCal = computed(() => {
   dates.value.forEach((dateFormatted, dateAsIndex) => {
     const equityRate = model.value.equity_funding_rates[dateAsIndex] || 0
     const totalColumn = totalPerColumns.value[dateAsIndex] || 0
-    console.log('e')
     // Equity Funding
     results.equityFundingValues[dateAsIndex] = totalColumn * (equityRate / 100)
 
     // New Loans Funding Rate
     results.newLoansFundingRates[dateAsIndex] = 100 - equityRate
-    console.log('e')
     // New Loans Funding Value
     results.newLoansFundingValues[dateAsIndex] =
       totalColumn * (results.newLoansFundingRates[dateAsIndex] / 100)
@@ -146,7 +143,6 @@ const fundingStructureCal = computed(() => {
     for (const endDateOfYearIndex of lastMonthIndexInEachYear.value) {
       let equityYearSum = 0
       let newLoansYearSum = 0
-      console.log('e')
       // حساب مجموع السنة
       for (let j = startIndex; j <= endDateOfYearIndex; j++) {
         equityYearSum += results.equityFundingValues[j] || 0
