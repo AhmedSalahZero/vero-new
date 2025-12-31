@@ -1,11 +1,37 @@
 {
+  "_sweetalert2.esm-BSuriRtL.css": {
+    "file": "assets/sweetalert2.esm-BSuriRtL.css",
+    "src": "_sweetalert2.esm-BSuriRtL.css"
+  },
+  "_sweetalert2.esm.all-DYUtdcnG.js": {
+    "file": "assets/sweetalert2.esm.all-DYUtdcnG.js",
+    "name": "sweetalert2.esm.all",
+    "css": [
+      "assets/sweetalert2.esm-BSuriRtL.css"
+    ]
+  },
   "resources/js/expenses.js": {
-    "file": "assets/expenses-Dy53XbtJ.js",
+    "file": "assets/expenses-_70jPRAu.js",
     "name": "expenses",
     "src": "resources/js/expenses.js",
     "isEntry": true,
+    "imports": [
+      "_sweetalert2.esm.all-DYUtdcnG.js"
+    ],
     "css": [
-      "assets/expenses-CphEvWB3.css"
+      "assets/expenses-CENvil0p.css"
+    ]
+  },
+  "resources/js/leasing.js": {
+    "file": "assets/leasing-rnGciFCx.js",
+    "name": "leasing",
+    "src": "resources/js/leasing.js",
+    "isEntry": true,
+    "imports": [
+      "_sweetalert2.esm.all-DYUtdcnG.js"
+    ],
+    "css": [
+      "assets/leasing-fczTr-yH.css"
     ]
   }
 }
