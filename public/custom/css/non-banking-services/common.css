@@ -356,10 +356,14 @@ input.custom-input-string-width{
 	min-width : 300px !important; 
 	transition:all 1s !important ;
 	font-size:13px !important;
+	
+	
 }
 
 .min-width-hover-300:hover{
 	min-width : 600px !important; 
+	
+	
 }
 
 
