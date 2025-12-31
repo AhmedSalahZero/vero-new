@@ -8,6 +8,8 @@ export default defineConfig({
       input: [
 		'resources/js/expenses.js',
 		'resources/js/leasing.js',
+		
+		
 	],
       refresh: true,
     }),
