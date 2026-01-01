@@ -2895,14 +2895,25 @@
     <div class="row btn-for-submit--js">
       <div class="col-lg-6"></div>
       <div class="col-lg-6 kt-align-right">
-        <input
+        <button
           v-if="!isLoading"
           @click="submitForm"
           :disabled="disableSubmitBtn"
-          data-save-and-continue="1"
+          data-button-value="save-and-go-to-next-value"
           type="submit"
-          class="btn text-white active-style save-form"
-          value="Save &amp; Go To Next" />
+          class="btn text-white active-style save-form">
+          <!--  -->
+          <span
+            v-if="disableSubmitBtn"
+            class="spinner-border mr-2 spinner-border-sm mb-1"
+            role="status"
+            aria-hidden="true"></span>
+          <span
+            class="text-lg"
+            data-button-value="save-and-go-to-next-value"
+            v-html="disableSubmitBtn ? 'Saving...' : 'Save & Go To Next'">
+          </span>
+        </button>
       </div>
     </div>
     <!-- <button

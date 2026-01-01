@@ -608,19 +608,38 @@ onMounted(() => {
                 <div
                   class="d-flex justify-content-end"
                   style="gap: 5px">
+                  <button
+                    v-if="!isLoading"
+                    @click="submitForm"
+                    :disabled="disableSubmitBtn || !enableEdit"
+                    data-button-value="save-categories"
+                    type="submit"
+                    class="btn text-white active-style save-form">
+                    <!--  -->
+                    <span
+                      v-if="disableSubmitBtn"
+                      class="spinner-border mr-2 spinner-border-sm mb-1"
+                      role="status"
+                      aria-hidden="true"></span>
+                    <span
+                      class="text-lg"
+                      data-button-value="save-categories"
+                      v-html="disableSubmitBtn ? 'Saving...' : 'Save'">
+                    </span>
+                  </button>
+                  <!-- 		
                   <input
                     v-if="!isLoading"
                     @click="submitForm"
                     :disabled="disableSubmitBtn || !enableEdit"
-                    data-save-and-continue="1"
+          
                     type="submit"
                     data-button-value="save-categories"
                     class="btn text-white active-style save-form"
-                    value="Save" />
+                    value="Save" /> -->
                   <input
                     v-if="!isLoading"
                     :disabled="disableSubmitBtn"
-                    data-save-and-continue="1"
                     type="submit"
                     class="btn text-white active-style save-form"
                     @click="enableEdit = !enableEdit"
@@ -884,14 +903,14 @@ onMounted(() => {
                     v-if="!isLoading"
                     @click="submitForm"
                     :disabled="disableSubmitBtn || !enableEdit"
-                    data-save-and-continue="1"
+                    
                     type="submit"
                     class="btn text-white active-style save-form"
                     value="Save" />
                   <input
                     v-if="!isLoading"
                     :disabled="disableSubmitBtn"
-                    data-save-and-continue="1"
+                    
                     type="submit"
                     class="btn text-white active-style save-form"
                     @click="enableEdit = !enableEdit"
@@ -1407,19 +1426,46 @@ onMounted(() => {
 
     <div class="col-md-12">
       <div
-        class="d-flex justify-content-end"
+        class="d-flex align-items-center justify-content-end"
         style="gap: 5px">
-        <input
+        <button
           v-if="!isLoading"
           @click="submitForm"
           :disabled="disableSubmitBtn"
-          data-save-and-continue="1"
-          type="submit"
           data-button-value="save-and-go-to-next-value"
-          class="btn text-white active-style save-form"
-          value="Save & Go To Next" />
+          type="submit"
+          class="btn text-white active-style save-form">
+          <!--  -->
+          <span
+            v-if="disableSubmitBtn"
+            class="spinner-border mr-2 spinner-border-sm mb-1"
+            role="status"
+            aria-hidden="true"></span>
+          <span
+            class="text-lg"
+            data-button-value="save-and-go-to-next-value"
+            v-html="disableSubmitBtn ? 'Saving...' : 'Save & Go To Next'">
+          </span>
+        </button>
       </div>
     </div>
+
+    <!-- <div class="col-md-12">
+      <div class="d-flex">
+        <button
+          @click="submitForm"
+          :disabled="isLoading || disableSubmitBtn"
+          class="btn text-white active-style save-form d-flex align-items-center">
+          <span v-if="!isLoading">Save & Go To Next</span>
+
+          <span
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true"></span>
+          Saving
+        </button>
+      </div>
+    </div> -->
   </div>
 </template>
 <style scoped>
