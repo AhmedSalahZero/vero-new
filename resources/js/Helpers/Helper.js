@@ -243,12 +243,117 @@ export default {
 			}
 		]
 	},
- repeatRight(items, dateAsIndex) {
+ repeatRight(items, dateAsIndex,dates) {
   const value = items[dateAsIndex]
-  const length = items.length|| Object.keys(items).length 
+  const length = dates.length|| Object.keys(dates).length 
   for (let i = dateAsIndex + 1; i < length; i++) {
     items[i] = value
   }
 },
+ calculateTableTotals(lastMonthIndexInEachYear,subItems, config) {
+  if (!subItems || !lastMonthIndexInEachYear.value.length) {
+    return {
+      subRowTotals: {},
+      totalPerColumns: {},
+      totalRowTotals: { per_year: {}, total: 0 },
+    }
+  }
+
+  const tableResult = {
+    subRowTotals: {},
+    totalPerColumns: {},
+    totalRowTotals: { per_year: {}, total: 0 },
+  }
+
+  // تحديد نوع البيانات
+  const isArray = Array.isArray(subItems)
+  const isSimpleArray = config?.type === 'simple' // subItems[j]
+  const hasNestedKey = config?.nestedKey // subItems[itemId]['loan_amounts'][j]
+
+  // الحصول على القيم بناءً على النوع
+  const getValue = (item, dateIndex) => {
+    if (isSimpleArray) {
+      // حالة: subItems[j]
+      return parseFloat(item || 0)
+    } else if (hasNestedKey) {
+      // حالة: subItems[itemId]['loan_amounts'][j]
+      return parseFloat(item?.[hasNestedKey]?.[dateIndex] || 0)
+    } else {
+      // حالة: subItems[itemId][j]
+      return parseFloat(item?.[dateIndex] || 0)
+    }
+  }
+
+  // إذا كانت simple array (مثل direct_factoring_transactions_projections)
+  if (isSimpleArray) {
+    tableResult.subRowTotals = { per_year: {}, total: 0 }
+
+    let startIndex = 0
+    for (const endDateOfYearIndex of lastMonthIndexInEachYear.value) {
+      let yearSum = 0
+      for (let j = startIndex; j <= endDateOfYearIndex; j++) {
+        const value = getValue(subItems[j], j)
+        yearSum += value
+        tableResult.totalPerColumns[j] = (tableResult.totalPerColumns[j] || 0) + value
+      }
+      tableResult.subRowTotals.per_year[endDateOfYearIndex] = yearSum
+      tableResult.subRowTotals.total += yearSum
+      startIndex = endDateOfYearIndex + 1
+    }
+  }
+  // إذا كانت array of objects
+  else if (isArray) {
+    subItems.forEach((item, itemIndex) => {
+      tableResult.subRowTotals[itemIndex] = { per_year: {}, total: 0 }
+
+      let startIndex = 0
+      for (const endDateOfYearIndex of lastMonthIndexInEachYear.value) {
+        let yearSum = 0
+        for (let j = startIndex; j <= endDateOfYearIndex; j++) {
+          const value = getValue(item, j)
+          yearSum += value
+          tableResult.totalPerColumns[j] = (tableResult.totalPerColumns[j] || 0) + value
+        }
+        tableResult.subRowTotals[itemIndex].per_year[endDateOfYearIndex] = yearSum
+        tableResult.subRowTotals[itemIndex].total += yearSum
+        startIndex = endDateOfYearIndex + 1
+      }
+    })
+  }
+  // إذا كانت object of arrays/objects
+  else {
+    for (const itemId in subItems) {
+      tableResult.subRowTotals[itemId] = { per_year: {}, total: 0 }
+
+      let startIndex = 0
+      for (const endDateOfYearIndex of lastMonthIndexInEachYear.value) {
+        let yearSum = 0
+        for (let j = startIndex; j <= endDateOfYearIndex; j++) {
+          const value = getValue(subItems[itemId], j)
+          yearSum += value
+          tableResult.totalPerColumns[j] = (tableResult.totalPerColumns[j] || 0) + value
+        }
+        tableResult.subRowTotals[itemId].per_year[endDateOfYearIndex] = yearSum
+        tableResult.subRowTotals[itemId].total += yearSum
+        startIndex = endDateOfYearIndex + 1
+      }
+    }
+  }
+
+  // حساب total row (نفس الكود لجميع الحالات)
+  let startIndex = 0
+  for (const endDateOfYearIndex of lastMonthIndexInEachYear.value) {
+    let yearSum = 0
+    for (let j = startIndex; j <= endDateOfYearIndex; j++) {
+      yearSum += tableResult.totalPerColumns[j] || 0
+    }
+    tableResult.totalRowTotals.per_year[endDateOfYearIndex] = yearSum
+    tableResult.totalRowTotals.total += yearSum
+    startIndex = endDateOfYearIndex + 1
+  }
+
+  return tableResult
+}
+
 
 }

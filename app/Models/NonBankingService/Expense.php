@@ -311,17 +311,19 @@ class Expense extends Model
 		}
 		return $result;
 	}
-	public function getStartDateAsString()
+	public function getStartDateAsString(Study $study)
 	{
-		return $this->study->getDateFromDateIndex($this->getStartDateAsIndex());
+		return $study->getDateFromDateIndex($this->getStartDateAsIndex());
 	}
-	public function getEndDateAsString()
+	public function getEndDateAsString(Study $study)
 	{
-		return $this->study->getDateFromDateIndex($this->getEndDateAsIndex());
+		return $study->getDateFromDateIndex($this->getEndDateAsIndex());
 	}
 	public static function generateRow($expense,Study $study,bool $isOneTimeExpense , string $expenseType,array $revenueCategoriesPerRevenue,array $expenseNamesPerCategories , array $positionPerDepartments)
 	{
-		 
+		 /**
+		  * @var Expense $expense
+		  */
 		return [
 			'fixed_monthly_repeating_amount'=>[
 				 'id'=>$expense ? $expense->id : 0,
@@ -330,8 +332,8 @@ class Expense extends Model
 					'filteredExpenseNamesOptions'=>$expense ? ($expenseNamesPerCategories[$expense->expense_category]??[])  : [],
 					'amount'=>$expense? $expense->amount:null,//null is important as default // for monthly repeating and one time expense only
 					'increase_rates'=>$expense? $expense->increase_rates:0, // for monthly repeating only
-					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString()) : formatDateForVueDatePicker($study->getStudyStartDate()),
-					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString()) : formatDateForVueDatePicker($study->getEndDate()),
+					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString($study)) : formatDateForVueDatePicker($study->getStudyStartDate()),
+					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString($study)) : formatDateForVueDatePicker($study->getEndDate()),
 					 'vat_rate'=>$expense? $expense->vat_rate:0, // for monthly repeating only
 					'withhold_tax_rate'=>$expense? $expense->withhold_tax_rate:0, // for monthly repeating only
 					 'payment_terms'=>$expense ? $expense->payment_terms : 'cash',
@@ -349,8 +351,8 @@ class Expense extends Model
 					'stream_category_ids'=>$expense? $expense->stream_category_ids:[], 
 					'filteredRevenueCategoriesOptions'=>$expense  ?  getOnlyFilterOptions($revenueCategoriesPerRevenue , $expense->revenue_stream_type?:[] ) : [],
 					'monthly_percentage'=>$expense? $expense->monthly_percentage:0, 
-					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString()) : formatDateForVueDatePicker($study->getStudyStartDate()),
-					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString()) : formatDateForVueDatePicker($study->getEndDate()),
+					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString($study)) : formatDateForVueDatePicker($study->getStudyStartDate()),
+					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString($study)) : formatDateForVueDatePicker($study->getEndDate()),
 					 'vat_rate'=>$expense? $expense->vat_rate:0, // for monthly repeating only
 					'withhold_tax_rate'=>$expense? $expense->withhold_tax_rate:0, // for monthly repeating only
 					 'payment_terms'=>$expense ? $expense->payment_terms : 'cash',
@@ -367,8 +369,8 @@ class Expense extends Model
 					'stream_category_ids'=>$expense? $expense->stream_category_ids:[], 
 					'filteredRevenueCategoriesOptions'=>$expense  ?  getOnlyFilterOptions($revenueCategoriesPerRevenue , $expense->revenue_stream_type?:[] ) : [],
 					'monthly_cost_of_unit'=>$expense? $expense->monthly_cost_of_unit:null, 
-					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString()) : formatDateForVueDatePicker($study->getStudyStartDate()),
-					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString()) : formatDateForVueDatePicker($study->getEndDate()),
+					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString($study)) : formatDateForVueDatePicker($study->getStudyStartDate()),
+					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString($study)) : formatDateForVueDatePicker($study->getEndDate()),
 					 'vat_rate'=>$expense? $expense->vat_rate:0, // for monthly repeating only
 					'withhold_tax_rate'=>$expense? $expense->withhold_tax_rate:0, // for monthly repeating only
 					 'payment_terms'=>$expense ? $expense->payment_terms : 'cash',
@@ -383,7 +385,7 @@ class Expense extends Model
 					'filteredExpenseNamesOptions'=>$expense ? ($expenseNamesPerCategories[$expense->expense_category]??[])  : [],
 					'amount'=>$expense? $expense->amount:null, 
 					'amortization_months'=>$expense? $expense->amortization_months:12, 
-					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString()) : formatDateForVueDatePicker($study->getStudyStartDate()),
+					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString($study)) : formatDateForVueDatePicker($study->getStudyStartDate()),
 					 'vat_rate'=>$expense? $expense->vat_rate:0, // for monthly repeating only
 					'withhold_tax_rate'=>$expense? $expense->withhold_tax_rate:0, // for monthly repeating only
 					 'payment_terms'=>$expense ? $expense->payment_terms : 'cash',
@@ -399,8 +401,8 @@ class Expense extends Model
 					'position_ids'=>$expense? $expense->position_ids:[], 
 					'filteredPositionsOptions'=>$expense  ?  getOnlyFilterOptions($positionPerDepartments , $positionIds ) : [],
 					'monthly_cost_of_unit'=>$expense? $expense->monthly_cost_of_unit:null, 
-					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString()) : formatDateForVueDatePicker($study->getStudyStartDate()),
-					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString()) : formatDateForVueDatePicker($study->getEndDate()),
+					'start_date'=>$expense ? formatDateForVueDatePicker($expense->getStartDateAsString($study)) : formatDateForVueDatePicker($study->getStudyStartDate()),
+					 'end_date'=>$expense && !$isOneTimeExpense ? formatDateForVueDatePicker($expense->getEndDateAsString($study)) : formatDateForVueDatePicker($study->getEndDate()),
 					 'vat_rate'=>$expense? $expense->vat_rate:0, // for monthly repeating only
 					'withhold_tax_rate'=>$expense? $expense->withhold_tax_rate:0, // for monthly repeating only
 					 'payment_terms'=>$expense ? $expense->payment_terms : 'cash',

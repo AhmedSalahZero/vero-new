@@ -3,35 +3,47 @@
     "file": "assets/sweetalert2.esm-BSuriRtL.css",
     "src": "_sweetalert2.esm-BSuriRtL.css"
   },
-  "_sweetalert2.esm.all-DYUtdcnG.js": {
-    "file": "assets/sweetalert2.esm.all-DYUtdcnG.js",
+  "_sweetalert2.esm.all-DNSgMTmu.js": {
+    "file": "assets/sweetalert2.esm.all-DNSgMTmu.js",
     "name": "sweetalert2.esm.all",
     "css": [
       "assets/sweetalert2.esm-BSuriRtL.css"
     ]
   },
+  "resources/js/direct-factoring.js": {
+    "file": "assets/direct-factoring-B_3VduqB.js",
+    "name": "direct-factoring",
+    "src": "resources/js/direct-factoring.js",
+    "isEntry": true,
+    "imports": [
+      "_sweetalert2.esm.all-DNSgMTmu.js"
+    ],
+    "css": [
+      "assets/direct-factoring-lWUv4y2o.css"
+    ]
+  },
   "resources/js/expenses.js": {
-    "file": "assets/expenses-Chd8iOww.js",
+    "file": "assets/expenses-BwdSa35V.js",
     "name": "expenses",
     "src": "resources/js/expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-DYUtdcnG.js"
+      "_sweetalert2.esm.all-DNSgMTmu.js"
     ],
     "css": [
-      "assets/expenses-C9c9lCma.css"
+      "assets/expenses-BB4858b4.css"
     ]
   },
   "resources/js/leasing.js": {
-    "file": "assets/leasing-3sjgtKo7.js",
+    "file": "assets/leasing-BZBejx5f.js",
     "name": "leasing",
     "src": "resources/js/leasing.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-DYUtdcnG.js"
+      "_sweetalert2.esm.all-DNSgMTmu.js"
     ],
     "css": [
-      "assets/leasing-BCSHZ_dS.css"
+      "assets/leasing-CSfBkTyB.css"
     ]
   }
 }

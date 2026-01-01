@@ -83,22 +83,11 @@ class LeasingController extends Controller
 	}
     protected function getViewVars(Company $company, Study $study)
     {
-        // $eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::LEASING) : null;
-        // $yearsWithItsMonths =  $study->getOperationDurationPerYearFromIndexes() ;
-        // $yearOrMonthsIndexes = $study->getYearOrMonthIndexes();
-        // $isYearsStudy = !$study->isMonthlyStudy();
-
-
         return [
             'company'=>$company ,
             'study'=>$study,
             'model'=>$study ,
             'title'=>__('Leasing Revenue Stream Breakdown'),
-            // 'eclAndNewPortfolioFundingRate'=>$eclAndNewPortfolioFundingRate,
-            // 'storeRoute'=>routeWithQueryParam(route('store.leasing.revenue.stream.breakdown', ['company'=>$company->id , 'study'=>$study->id])),
-            // 'yearsWithItsMonths' =>$yearsWithItsMonths,
-            // 'yearOrMonthsIndexes'=>$yearOrMonthsIndexes,
-            // 'isYearsStudy'=>$isYearsStudy
         ];
     }
 

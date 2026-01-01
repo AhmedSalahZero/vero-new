@@ -2456,7 +2456,6 @@ class Study extends Model
                 $bankInterestRate = ($currentBaseRate + $currentBankMarginRate)/100  ;
                 $currentDailyPricing = ($currentMarginRate  + $currentBaseRate) /100 / 360;
                 
-                // $allll[$monthIndex] = $bankInterestRate;
                 $directFactoringStatements[$directFactoringBreakdownId]['beginning_balance'][$monthIndex] = $currentDirectFactoringBeginningBalance + $currentDirectAmount ;
                 $directFactoringStatements[$directFactoringBreakdownId]['direct_factoring_settlements'][$monthIndex +  ceil($category/30) ] = $currentDirectAmount;
                 $currentMonthSettlement = $directFactoringStatements[$directFactoringBreakdownId]['direct_factoring_settlements'][$monthIndex] ?? 0;

@@ -53,9 +53,7 @@ input.form-control[readonly],.p-inputtext:disabled  {
     background-color: #cce2fd !important;
     font-weight: bold !important;
 }
-.gap-10px{
-	
-}
+
 .table-striped th,
 .table-striped2 th {
     background-color: #074da5 !important;

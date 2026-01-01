@@ -5432,60 +5432,60 @@ function factoringDueInDays():array
     return [
        
         [
-            'value'=>30,
+            'id'=>30,
             'title'=>30 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>45,
+            'id'=>45,
             'title'=>45 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>60,
+            'id'=>60,
             'title'=>60 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>75,
+            'id'=>75,
             'title'=>75 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>90 ,
+            'id'=>90 ,
             'title'=>90 .  ' ' . __('Days Factoring')
         ],
         [
-            'value'=> 120 ,
+            'id'=> 120 ,
             'title'=>120 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>150,
+            'id'=>150,
             'title'=>150 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=> 180 ,
+            'id'=> 180 ,
             'title'=>180 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=> 210 ,
+            'id'=> 210 ,
             'title'=>210 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>240 ,
+            'id'=>240 ,
             'title'=>240 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>270 ,
+            'id'=>270 ,
             'title'=>270 . ' ' . __('Days Factoring')
         ],
 
         [
-            'value'=>300 ,
+            'id'=>300 ,
             'title'=>300 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=>330 ,
+            'id'=>330 ,
             'title'=>330 . ' ' . __('Days Factoring')
         ],
         [
-            'value'=> 360 ,
+            'id'=> 360 ,
             'title'=>360 . ' ' . __('Days Factoring')
         ],
     ];

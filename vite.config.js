@@ -8,6 +8,7 @@ export default defineConfig({
       input: [
 		'resources/js/expenses.js',
 		'resources/js/leasing.js',
+		'resources/js/direct-factoring.js',
 		
 		
 	],

@@ -3,13 +3,22 @@ import axios from 'axios'
 import InputNumber from 'primevue/inputnumber'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onErrorCaptured, onMounted, ref } from 'vue'
 import Helper from '../../Helpers/Helper'
 
+onErrorCaptured((err, instance, info) => {
+  console.error('❌ Error captured:', err)
+  console.error('📍 Component:', instance?.$options?.name)
+  console.error('ℹ️ Info:', info)
+  console.error('📚 Stack:', err.stack)
+  // Return false to stop error propagation
+  return false
+})
 // properties
 const dates = ref([])
 const hideTablesDates = ref({
-  loansTableRef: [],
+  directFactoringRevenueProjectionByCategoryRef: [],
+  directFactoringBreakdownsRef: [],
   fundingTableRef: [],
 })
 
@@ -35,22 +44,63 @@ const hideOrExpandMyYear = (tableId, toDateAsIndex) => {
     }
   }
 }
+const emits = defineEmits(['loanAmountChanged'])
+const loanAmounts = computed(() => {
+  const results = {}
+
+  // نخرج المراجع خارج الحلقات لسرعة الوصول (Caching references)
+  const breakdowns = model.value.directFactoringBreakdowns
+  const projections =
+    model.value.directFactoringRevenueProjectionByCategory.direct_factoring_transactions_projections
+  const dateKeys = Object.keys(dates.value)
+
+  Object.keys(breakdowns).forEach((index) => {
+    const categoryResults = {}
+    const percentagePayload = breakdowns[index].percentage_payload || []
+    dateKeys.forEach((_, dateAsIndex) => {
+      const currentValue = projections[dateAsIndex] || 0
+      const currentPercentage = percentagePayload[dateAsIndex] || 0
+      categoryResults[dateAsIndex] = (currentPercentage / 100) * currentValue
+    })
+    results[index] = categoryResults
+    model.value.directFactoringBreakdowns[index].loan_amounts = categoryResults
+  })
+  //   emits('loanAmountChanged', results)
+  return results
+})
 
 const allTablesTotals = computed(() => {
   return {
     // حالة 1: array of objects مع nested key
-    loanAmounts: Helper.calculateTableTotals(
+    directFactoringBreakdownTotals: Helper.calculateTableTotals(
       lastMonthIndexInEachYear,
-      model.value?.loan_amounts?.sub_items,
-      {},
+      model.value?.directFactoringBreakdowns,
+      {
+        nestedKey: 'loan_amounts',
+      },
+    ),
+    directFactoringProjectTotals: Helper.calculateTableTotals(
+      lastMonthIndexInEachYear,
+      model.value?.directFactoringRevenueProjectionByCategory
+        ?.direct_factoring_transactions_projections,
+      { type: 'simple' },
+    ),
+    netDisbursementTotals: Helper.calculateTableTotals(
+      lastMonthIndexInEachYear,
+      model.value?.netDisbursements,
+      { type: 'simple' },
     ),
   }
 })
-// ✅ استخراج لكل جدول
-const loanAmountsTotals = computed(() => allTablesTotals.value.loanAmounts || {})
-const subRowTotals = computed(() => loanAmountsTotals.value.subRowTotals)
-const totalPerColumns = computed(() => loanAmountsTotals.value.totalPerColumns)
-const totalRowTotals = computed(() => loanAmountsTotals.value.totalRowTotals)
+const directFactoringBreakdownTotals = computed(
+  () => allTablesTotals.value.directFactoringBreakdownTotals,
+)
+const directFactoringProjectTotals = computed(
+  () => allTablesTotals.value.directFactoringProjectTotals,
+)
+
+const netDisbursementTotals = computed(() => allTablesTotals.value.netDisbursementTotals)
+const totalPerColumns = computed(() => [])
 
 const fundingStructureCal = computed(() => {
   if (!model.value?.equity_funding_rates || !dates.value.length) {
@@ -74,7 +124,8 @@ const fundingStructureCal = computed(() => {
   // 1️⃣ حساب القيم لكل تاريخ
   dates.value.forEach((dateFormatted, dateAsIndex) => {
     const equityRate = model.value.equity_funding_rates[dateAsIndex] || 0
-    const totalColumn = totalPerColumns.value[dateAsIndex] || 0
+    const totalColumn = model.value.netDisbursements[dateAsIndex] || 0
+    // const totalColumn = totalPerColumns.value[dateAsIndex] || 0
     // Equity Funding
     results.equityFundingValues[dateAsIndex] = totalColumn * (equityRate / 100)
 
@@ -105,7 +156,7 @@ const fundingStructureCal = computed(() => {
       // إضافة للمجموع الكلي
       results.equityTotals.total += equityYearSum
       results.newLoansTotals.total += newLoansYearSum
-      console.log(newLoansYearSum)
+
       startIndex = endDateOfYearIndex + 1
     }
   }
@@ -195,8 +246,8 @@ const submitUrl = ref(null)
 const selectOptions = ref({})
 const model = ref(null)
 const showAndHide = ref({
-  leasingRevenueStreamBreakdown: true,
-  loanAmounts: true,
+  directFactoringProjects: true,
+  directFactoringBreakdown: true,
   feesRates: true,
   fundingStructure: true,
 })
@@ -212,14 +263,14 @@ const handleRepeatRight = (items, dateAsIndex, dates) => {
 }
 
 const addNewItem = (type) => {
-  const emptyRow = model.value[type].empty_row
-  return model.value[type].sub_items.push({ ...emptyRow })
+  const emptyRow = empty_rows.value[type]
+  return model.value[type].push({ ...emptyRow })
 }
 
 const deleteRepeaterRow = (index, type) => {
-  model.value[type].sub_items.splice(index, 1)
+  model.value[type].splice(index, 1)
 }
-
+const empty_rows = ref([])
 const getModelData = () => {
   const body = document.querySelector('body')
   const csrfToken = body.dataset.token
@@ -228,7 +279,7 @@ const getModelData = () => {
   const studyId = body.dataset.studyId
   const lang = body.dataset.lang
 
-  const fetchOldDataUrl = `${baseUrl}/${lang}/${companyId}/non-banking-financial-services/study/${studyId}/leasing-fetch-old-data`
+  const fetchOldDataUrl = `${baseUrl}/${lang}/${companyId}/non-banking-financial-services/study/${studyId}/direct-factoring-fetch-old-data`
   axios
     .get(fetchOldDataUrl, {
       headers: {
@@ -238,7 +289,9 @@ const getModelData = () => {
     })
     .then((response) => {
       studyStartDate.value = response.data.studyStartDate
+      empty_rows.value = response.data.empty_rows
       hasEnteredRevenueStreamBreakdown.value = response.data.hasEnteredRevenueStreamBreakdown
+      //  model.value.direct_factoring_transactions_projections = response.data.directFactoringRevenueProjectionByCategory.direct_factoring_transactions_projections
       dates.value = response.data.dates
       lastMonthIndexInEachYear.value = response.data.lastMonthIndexInEachYear
       enableEdit.value = !response.data.hasEnteredRevenueStreamBreakdown
@@ -248,8 +301,9 @@ const getModelData = () => {
       isLoading.value = false
     })
     .catch((error) => {
+      console.log(error)
       isLoading.value = false
-      const errorMessage = error.response?.data?.message || 'An error occurred'
+      const errorMessage = error.response?.data?.message || 'An error occurred' + error
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -260,6 +314,7 @@ const getModelData = () => {
 
 const submitForm = (e) => {
   model.value.submit_button = e.target.getAttribute('data-button-value')
+  console.log(e.target)
   disableSubmitBtn.value = true
   const body = document.querySelector('body')
   const csrfToken = body.dataset.token
@@ -292,24 +347,22 @@ onMounted(() => {
 
 <template>
   <div v-if="!isLoading">
-    <!-- start Leasing Revenue Stream -->
+    <!-- start Leasing Revenue Projection By Category -->
     <div class="kt-portlet">
       <div class="kt-portlet__body">
         <div class="row">
           <div class="col-md-11">
             <div class="d-flex align-items-center">
               <h3 class="font-weight-bold form-label kt-subheader__title small-caps">
-                Leasing Revenue Stream
+                Direct Factoring Revenue Projection By Category [you can use the three dots to
+                repeat within the same year]
               </h3>
             </div>
           </div>
           <div class="col-md-1">
             <div class="d-flex justify-content-end">
               <div
-                @click="
-                  showAndHide.leasingRevenueStreamBreakdown =
-                    !showAndHide.leasingRevenueStreamBreakdown
-                "
+                @click="showAndHide.directFactoringProjects = !showAndHide.directFactoringProjects"
                 class="btn show-hide-style">
                 Show/Hide
               </div>
@@ -321,316 +374,7 @@ onMounted(() => {
         </div>
 
         <div
-          v-show="showAndHide.leasingRevenueStreamBreakdown"
-          class="row mt-4">
-          <div class="col-md-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th
-                    class="form-label font-weight-bold text-center align-middle col-md-1 action-class">
-                    <div class="d-flex align-items-center justify-content-center">
-                      <span class="">×</span>
-                    </div>
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class-16">
-                    <div class="d-flex align-items-center justify-content-center">
-                      <span
-                        >Leasing <br />
-                        Category</span
-                      >
-                    </div>
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class-13">
-                    <span class="text-left d-inline-block"
-                      >Loan <br />
-                      Nature</span
-                    >
-                  </th>
-                  <th
-                    class="form-label font-weight-bold text-center align-middle loan-type-class header-border-down">
-                    <span class="text-left d-inline-block"
-                      >Loan <br />
-                      Type</span
-                    >
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle rate-class header-border-down">
-                    <span class="text-left d-inline-block"
-                      >Tenor <br />
-                      Months</span
-                    >
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle rate-class header-border-down">
-                    <span class="text-left d-inline-block"
-                      >Grace <br />
-                      Period</span
-                    >
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle rate-class header-border-down">
-                    <span class="text-left d-inline-block min-w-percentage">Spread <br />Rate</span>
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle interval-class header-border-down">
-                    <span class="text-left d-inline-block"
-                      >Installment <br />
-                      Interval</span
-                    >
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle rate-class header-border-down">
-                    <span class="text-left d-inline-block min-w-percentage"
-                      >Step <br />Rate (+/-)</span
-                    >
-                  </th>
-
-                  <th
-                    class="form-label font-weight-bold text-center align-middle interval-class header-border-down">
-                    <span class="text-left d-inline-block">Step <br />Interval</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(leasingRevenueStreamBreakdownItem, index) in model
-                    .leasingRevenueStreamBreakdown.sub_items"
-                  :key="index"
-                  :data-repeater-style="index + 1">
-                  <td class="text-center">
-                    <button
-                      :disabled="!enableEdit"
-                      @click="deleteRepeaterRow(index, 'leasingRevenueStreamBreakdown')"
-                      type="button"
-                      class="btn btn-danger btn-md btn-danger-style ml-2"
-                      title="Delete">
-                      <i class="fas exclude-icon fa-trash trash-icon"></i>
-                    </button>
-                  </td>
-
-                  <td>
-                    <Select
-                      :disabled="!enableEdit"
-                      filter
-                      v-model="leasingRevenueStreamBreakdownItem.category_id"
-                      :options="selectOptions.leasingCategories"
-                      optionLabel="title"
-                      optionValue="id"
-                      placeholder=""
-                      checkmark
-                      :highlightOnSelect="false"
-                      class="w-full md:w-56" />
-                  </td>
-
-                  <td>
-                    <Select
-                      :disabled="!enableEdit"
-                      filter
-                      v-model="leasingRevenueStreamBreakdownItem.loan_nature"
-                      :options="Helper.loanNatures()"
-                      optionLabel="title"
-                      optionValue="id"
-                      placeholder=""
-                      checkmark
-                      :highlightOnSelect="false"
-                      class="w-full md:w-56" />
-                  </td>
-                  <td>
-                    <Select
-                      :disabled="!enableEdit"
-                      filter
-                      v-model="leasingRevenueStreamBreakdownItem.loan_type"
-                      :options="Helper.loanTypes()"
-                      optionLabel="title"
-                      optionValue="id"
-                      placeholder=""
-                      checkmark
-                      :highlightOnSelect="false"
-                      class="w-full md:w-56" />
-                  </td>
-
-                  <td>
-                    <InputNumber
-                      :disabled="!enableEdit"
-                      v-model="leasingRevenueStreamBreakdownItem.tenor"
-                      :min="1"
-                      input-class="text-center"
-                      :minFractionDigits="0"
-                      :maxFractionDigits="0"
-                      fluid />
-                  </td>
-                  <td>
-                    <InputNumber
-                      :disabled="
-                        !enableEdit ||
-                        !leasingRevenueStreamBreakdownItem.loan_type.includes('grace')
-                      "
-                      v-model="leasingRevenueStreamBreakdownItem.grace_period"
-                      :min="0"
-                      input-class="text-center"
-                      :minFractionDigits="0"
-                      :maxFractionDigits="0"
-                      fluid />
-                  </td>
-                  <td>
-                    <InputNumber
-                      :disabled="!enableEdit"
-                      :maxFractionDigits="2"
-                      :step="0.25"
-                      :min="0"
-                      input-class="text-center"
-                      :max="100"
-                      mode="decimal"
-                      showButtons
-                      v-model="leasingRevenueStreamBreakdownItem.margin_rate"
-                      suffix=" %"
-                      fluid />
-                  </td>
-
-                  <td>
-                    <Select
-                      :disabled="!enableEdit"
-                      filter
-                      v-model="leasingRevenueStreamBreakdownItem.installment_interval"
-                      :options="Helper.getInstallmentInterest()"
-                      optionLabel="title"
-                      optionValue="id"
-                      placeholder=""
-                      checkmark
-                      :highlightOnSelect="false"
-                      class="w-full md:w-56" />
-                  </td>
-
-                  <td>
-                    <InputNumber
-                      :disabled="
-                        !enableEdit || !leasingRevenueStreamBreakdownItem.loan_type.includes('step')
-                      "
-                      :maxFractionDigits="2"
-                      :step="0.25"
-                      :min="0"
-                      input-class="text-center"
-                      :max="100"
-                      mode="decimal"
-                      showButtons
-                      v-model="leasingRevenueStreamBreakdownItem.step_rate"
-                      suffix=" %"
-                      fluid />
-                  </td>
-                  <td>
-                    <Select
-                      :disabled="!enableEdit"
-                      filter
-                      v-model="leasingRevenueStreamBreakdownItem.step_interval"
-                      :options="Helper.getStepIntervals()"
-                      optionLabel="title"
-                      optionValue="id"
-                      placeholder=""
-                      checkmark
-                      :highlightOnSelect="false"
-                      class="w-full md:w-56" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="row">
-              <div class="col-md-6">
-                <input
-                  :disabled="!enableEdit"
-                  @click="addNewItem('leasingRevenueStreamBreakdown')"
-                  type="button"
-                  class="btn btn-primary btn-sm text-white"
-                  value="Add New" />
-              </div>
-              <div class="col-md-6">
-                <div
-                  class="d-flex justify-content-end"
-                  style="gap: 5px">
-                  <button
-                    v-if="!isLoading"
-                    @click="submitForm"
-                    :disabled="disableSubmitBtn || !enableEdit"
-                    data-button-value="save-categories"
-                    type="submit"
-                    class="btn text-white active-style save-form">
-                    <!--  -->
-                    <span
-                      v-if="disableSubmitBtn"
-                      class="spinner-border mr-2 spinner-border-sm mb-1"
-                      role="status"
-                      aria-hidden="true"></span>
-                    <span
-                      class="text-lg"
-                      data-button-value="save-categories"
-                      v-html="disableSubmitBtn ? 'Saving...' : 'Save'">
-                    </span>
-                  </button>
-                  <!-- 		
-                  <input
-                    v-if="!isLoading"
-                    @click="submitForm"
-                    :disabled="disableSubmitBtn || !enableEdit"
-          
-                    type="submit"
-                    data-button-value="save-categories"
-                    class="btn text-white active-style save-form"
-                    value="Save" /> -->
-                  <input
-                    v-if="!isLoading"
-                    :disabled="disableSubmitBtn"
-                    type="submit"
-                    class="btn text-white active-style save-form"
-                    @click="enableEdit = !enableEdit"
-                    :value="enableEdit ? 'Disable Edit' : 'Enable Edit'" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- end Leasing Revenue Stream -->
-    <!-- start Leasing Revenue Projection By Category -->
-    <div
-      class="kt-portlet"
-      v-if="hasEnteredRevenueStreamBreakdown">
-      <div class="kt-portlet__body">
-        <div class="row">
-          <div class="col-md-11">
-            <div class="d-flex align-items-center">
-              <h3 class="font-weight-bold form-label kt-subheader__title small-caps">
-                Leasing Revenue Projection By Category [you can use the three dots to repeat within
-                the same year]
-              </h3>
-            </div>
-          </div>
-          <div class="col-md-1">
-            <div class="d-flex justify-content-end">
-              <div
-                @click="showAndHide.loanAmounts = !showAndHide.loanAmounts"
-                class="btn show-hide-style">
-                Show/Hide
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <hr style="background-color: lightgray" />
-          </div>
-        </div>
-
-        <div
-          v-show="showAndHide.loanAmounts"
+          v-show="showAndHide.directFactoringProjects"
           class="row mt-4">
           <div class="col-md-12 overflow-scroll">
             <table class="table">
@@ -643,7 +387,12 @@ onMounted(() => {
                   <template
                     v-for="(dateFormatted, dateAsIndex) in dates"
                     :key="dateAsIndex">
-                    <template v-if="!hideTablesDates.loansTableRef.includes(dateAsIndex)">
+                    <template
+                      v-if="
+                        !hideTablesDates.directFactoringRevenueProjectionByCategoryRef.includes(
+                          dateAsIndex,
+                        )
+                      ">
                       <th
                         class="form-label expandable-th-amount-input font-weight-bold text-center align-middle header-border-down">
                         <span class="text-left d-inline-block">{{ dateFormatted }}</span>
@@ -652,8 +401,8 @@ onMounted(() => {
                     <!--  start Total Yr. 2026 for example -->
                     <th
                       v-if="
-                        lastMonthIndexInEachYear.length > 1 &&
-                        lastMonthIndexInEachYear.includes(dateAsIndex)
+                        lastMonthIndexInEachYear.includes(dateAsIndex) &&
+                        lastMonthIndexInEachYear.length > 1
                       "
                       class="form-label expandable-th-amount-input font-weight-bold text-center align-middle header-border-down">
                       <div
@@ -664,7 +413,207 @@ onMounted(() => {
                           {{ getYearsFromDates[dateAsIndex] }}
                         </span>
                         <i
-                          @click="hideOrExpandMyYear('loansTableRef', dateAsIndex)"
+                          @click="
+                            hideOrExpandMyYear(
+                              'directFactoringRevenueProjectionByCategoryRef',
+                              dateAsIndex,
+                            )
+                          "
+                          title="Expand / Collapse"
+                          class="cursor-pointer fa fa-expand-arrows-alt text-primary exclude-icon"></i>
+                      </div>
+                    </th>
+                    <!--  end Total Yr. 2026 for example -->
+                  </template>
+                  <!-- start total of all years for the current row -->
+                  <th
+                    class="form-label expandable-th-amount-input font-weight-bold text-center align-middle header-border-down">
+                    <div
+                      class="d-flex flex-column align-items-center"
+                      style="gap: 10px">
+                      <span class="">Total <br /> </span>
+                      <!-- <i
+                        class="cursor-pointer fa fa-expand-arrows-alt text-primary exclude-icon"
+                        style="visibility: hidden"></i> -->
+                    </div>
+                  </th>
+                  <!-- end total of all years for the current row -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-if="!isLoading"
+                  :data-repeater-style="1">
+                  <td>
+                    <div class="d-flex flex-column align-items-start">
+                      <input
+                        :value="'Direct Factoring Projection'"
+                        disabled=""
+                        class="form-control min-width-300 text-left mt-2"
+                        type="text" />
+
+                      <i
+                        style="visibility: hidden"
+                        class="fa fa-ellipsis-h"></i>
+                    </div>
+                  </td>
+                  <template
+                    v-for="(dateFormatted, dateAsIndex) in dates"
+                    :key="dateAsIndex">
+                    <td
+                      v-if="
+                        !hideTablesDates.directFactoringRevenueProjectionByCategoryRef.includes(
+                          dateAsIndex,
+                        )
+                      ">
+                      <!-- {{ logRender(leasingRevenueStreamBreakdownItem.id, dateAsIndex) }} -->
+                      <div class="d-flex flex-column align-items-center">
+                        <InputNumber
+                          v-model="
+                            model.directFactoringRevenueProjectionByCategory
+                              .direct_factoring_transactions_projections[dateAsIndex]
+                          "
+                          :min="0"
+                          input-class="text-center"
+                          :minFractionDigits="0"
+                          :maxFractionDigits="2"
+                          suffix=" EGP"
+                          fluid />
+                        <i
+                          @click="
+                            handleRepeatRight(
+                              model.directFactoringRevenueProjectionByCategory
+                                .direct_factoring_transactions_projections,
+                              dateAsIndex,
+                              dates,
+                            )
+                          "
+                          class="fa fa-ellipsis-h row-repeater-icon cursor-pointer"
+                          title="Repeat Right"></i>
+                      </div>
+                    </td>
+                    <!--  start Total Yr. 2026 for example -->
+                    <td
+                      v-if="
+                        lastMonthIndexInEachYear.includes(dateAsIndex) &&
+                        lastMonthIndexInEachYear.length > 1
+                      ">
+                      <InputNumber
+                        v-model="directFactoringProjectTotals.subRowTotals['per_year'][dateAsIndex]"
+                        :min="0"
+                        input-class="text-center"
+                        :minFractionDigits="0"
+                        :maxFractionDigits="2"
+                        suffix=" EGP"
+                        disabled
+                        fluid />
+                      <i
+                        style="visibility: hidden"
+                        class="fa fa-ellipsis-h"></i>
+                    </td>
+                    <!--  end Total Yr. 2026 for example -->
+                  </template>
+
+                  <td>
+                    <InputNumber
+                      v-model="directFactoringProjectTotals.subRowTotals['total']"
+                      :min="0"
+                      input-class="text-center"
+                      :minFractionDigits="0"
+                      :maxFractionDigits="2"
+                      suffix=" EGP"
+                      disabled
+                      fluid />
+                    <i
+                      style="visibility: hidden"
+                      class="fa fa-ellipsis-h"></i>
+                  </td>
+                </tr>
+
+                <!-- end total row -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Leasing Revenue Projection By Category -->
+
+    <!-- start Direct Factoring Breakdown -->
+    <div class="kt-portlet">
+      <div class="kt-portlet__body">
+        <div class="row">
+          <div class="col-md-11">
+            <div class="d-flex align-items-center">
+              <h3 class="font-weight-bold form-label kt-subheader__title small-caps">
+                Direct Factoring Breakdown
+              </h3>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <div class="d-flex justify-content-end">
+              <div
+                @click="
+                  showAndHide.directFactoringBreakdown = !showAndHide.directFactoringBreakdown
+                "
+                class="btn show-hide-style">
+                Show/Hide
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <hr style="background-color: lightgray" />
+          </div>
+        </div>
+
+        <div
+          v-show="showAndHide.directFactoringBreakdown"
+          class="row mt-4">
+          <div class="col-md-12 overflow-scroll">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th
+                    class="form-label font-weight-bold text-center align-middle col-md-1 action-class">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <span class="">×</span>
+                    </div>
+                  </th>
+
+                  <th
+                    class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class">
+                    Category
+                  </th>
+                  <th
+                    class="form-label font-weight-bold text-center align-middle header-border-down">
+                    Spread Rate
+                  </th>
+                  <template
+                    v-for="(dateFormatted, dateAsIndex) in dates"
+                    :key="dateAsIndex">
+                    <template
+                      v-if="!hideTablesDates.directFactoringBreakdownsRef.includes(dateAsIndex)">
+                      <th
+                        class="form-label expandable-th-amount-input font-weight-bold text-center align-middle header-border-down">
+                        <span class="text-left d-inline-block">{{ dateFormatted }}</span>
+                      </th>
+                    </template>
+                    <!--  start Total Yr. 2026 for example -->
+                    <th
+                      v-if="
+                        lastMonthIndexInEachYear.includes(dateAsIndex) &&
+                        lastMonthIndexInEachYear.length > 1
+                      "
+                      class="form-label expandable-th-amount-input font-weight-bold text-center align-middle header-border-down">
+                      <div
+                        class="d-flex align-items-center"
+                        style="gap: 10px">
+                        <span class="text-left d-inline-block"
+                          >Total Yr. <br />
+                          {{ getYearsFromDates[dateAsIndex] }}
+                        </span>
+                        <i
+                          @click="hideOrExpandMyYear('directFactoringBreakdownsRef', dateAsIndex)"
                           title="Expand / Collapse"
                           class="cursor-pointer fa fa-expand-arrows-alt text-primary exclude-icon"></i>
                       </div>
@@ -688,64 +637,101 @@ onMounted(() => {
               </thead>
               <tbody>
                 <template
-                  v-for="(leasingRevenueStreamBreakdownItem, index) in model
-                    .leasingRevenueStreamBreakdown.sub_items"
+                  v-for="(directFactorBreakdownItem, index) in model.directFactoringBreakdowns"
                   :key="index">
                   <tr
-                    v-if="model.loan_amounts.sub_items[leasingRevenueStreamBreakdownItem.id]"
+                    v-if="!isLoading"
                     :data-repeater-style="index + 1">
-                    <td>
-                      <div class="d-flex flex-column align-items-start">
-                        <input
-                          :value="model.loan_amounts.names[leasingRevenueStreamBreakdownItem.id]"
-                          disabled=""
-                          class="form-control min-width-hover-300 text-left mt-2"
-                          type="text" />
+                    <td class="text-center">
+                      <button
+                        @click="deleteRepeaterRow(index, 'directFactoringBreakdowns')"
+                        type="button"
+                        class="btn btn-danger btn-md btn-danger-style ml-2"
+                        title="Delete">
+                        <i class="fas exclude-icon fa-trash trash-icon"></i>
+                      </button>
+                    </td>
 
-                        <i
-                          style="visibility: hidden"
-                          class="fa fa-ellipsis-h"></i>
+                    <td>
+                      <div
+                        class="d-flex flex-column align-items-start"
+                        style="gap: 5px">
+                        <Select
+                          filter
+                          v-model="directFactorBreakdownItem.category"
+                          :options="selectOptions.categories"
+                          optionLabel="title"
+                          optionValue="id"
+                          placeholder=""
+                          checkmark
+                          :highlightOnSelect="false"
+                          class="w-full md:w-56" />
+
+                        <input
+                          :value="'Direct Factoring Projection'"
+                          disabled=""
+                          class="form-control min-width-300 text-left mt-2"
+                          type="text" />
                       </div>
+                    </td>
+                    <td>
+                      <InputNumber
+                        v-model="directFactorBreakdownItem.margin_rate"
+                        :min="0"
+                        input-class="text-center"
+                        :minFractionDigits="2"
+                        suffix=" %"
+                        fluid />
                     </td>
                     <template
                       v-for="(dateFormatted, dateAsIndex) in dates"
                       :key="dateAsIndex">
-                      <td v-if="!hideTablesDates.loansTableRef.includes(dateAsIndex)">
+                      <td
+                        v-if="!hideTablesDates.directFactoringBreakdownsRef.includes(dateAsIndex)">
                         <!-- {{ logRender(leasingRevenueStreamBreakdownItem.id, dateAsIndex) }} -->
-                        <div class="d-flex flex-column align-items-center">
+                        <div
+                          class="d-flex flex-column align-items-center"
+                          style="gap: 10px">
+                          <div class="min-w-percentage d-flex align-items-center flex-column">
+                            <InputNumber
+                              v-model="directFactorBreakdownItem.percentage_payload[dateAsIndex]"
+                              :min="0"
+                              input-class="text-center"
+                              :minFractionDigits="2"
+                              suffix=" %"
+                              fluid />
+                            <i
+                              @click="
+                                handleRepeatRight(
+                                  directFactorBreakdownItem.percentage_payload,
+                                  dateAsIndex,
+                                  dates,
+                                )
+                              "
+                              class="fa fa-ellipsis-h row-repeater-icon cursor-pointer"
+                              title="Repeat Right"></i>
+                          </div>
+
                           <InputNumber
-                            v-model="
-                              model.loan_amounts.sub_items[leasingRevenueStreamBreakdownItem.id][
-                                dateAsIndex
-                              ]
-                            "
+                            :model-value="loanAmounts[index][dateAsIndex]"
+                            disabled
                             :min="0"
                             input-class="text-center"
                             :minFractionDigits="0"
                             :maxFractionDigits="2"
                             suffix=" EGP"
                             fluid />
-                          <i
-                            @click="
-                              handleRepeatRight(
-                                model.loan_amounts.sub_items[leasingRevenueStreamBreakdownItem.id],
-                                dateAsIndex,
-                                dates,
-                              )
-                            "
-                            class="fa fa-ellipsis-h row-repeater-icon cursor-pointer"
-                            title="Repeat Right"></i>
                         </div>
                       </td>
                       <!--  start Total Yr. 2026 for example -->
                       <td
                         v-if="
-                          lastMonthIndexInEachYear.length > 1 &&
-                          lastMonthIndexInEachYear.includes(dateAsIndex)
+                          lastMonthIndexInEachYear.includes(dateAsIndex) &&
+                          lastMonthIndexInEachYear.length > 1
                         ">
                         <InputNumber
                           v-model="
-                            subRowTotals[leasingRevenueStreamBreakdownItem.id]['per_year'][
+                            directFactoringBreakdownTotals.subRowTotals[index]['per_year'][
                               dateAsIndex
                             ]
                           "
@@ -765,7 +751,7 @@ onMounted(() => {
 
                     <td>
                       <InputNumber
-                        v-model="subRowTotals[leasingRevenueStreamBreakdownItem.id]['total']"
+                        v-model="directFactoringBreakdownTotals.subRowTotals[index]['total']"
                         :min="0"
                         input-class="text-center"
                         :minFractionDigits="0"
@@ -780,115 +766,27 @@ onMounted(() => {
                   </tr>
                 </template>
 
-                <!-- start total row -->
-                <tr :data-repeater-style="Object.keys(model.loan_amounts.sub_items).length">
-                  <td>
-                    <div class="d-flex flex-column align-items-start">
-                      <input
-                        :value="'Total'"
-                        disabled=""
-                        class="form-control min-width-hover-300 text-left mt-2"
-                        type="text" />
-                    </div>
-                  </td>
-                  <template
-                    v-for="(dateFormatted, dateAsIndex) in dates"
-                    :key="dateAsIndex">
-                    <td v-if="!hideTablesDates.loansTableRef.includes(dateAsIndex)">
-                      <div class="d-flex flex-column align-items-center mt-2">
-                        <InputNumber
-                          v-model="totalPerColumns[dateAsIndex]"
-                          :min="0"
-                          input-class="text-center"
-                          disabled
-                          :minFractionDigits="0"
-                          :maxFractionDigits="2"
-                          suffix=" EGP"
-                          fluid />
-                      </div>
-                    </td>
-                    <td
-                      v-if="
-                        lastMonthIndexInEachYear.length > 1 &&
-                        lastMonthIndexInEachYear.includes(dateAsIndex)
-                      ">
-                      <InputNumber
-                        v-model="totalRowTotals['per_year'][dateAsIndex]"
-                        :min="0"
-                        input-class="text-center"
-                        :minFractionDigits="0"
-                        :maxFractionDigits="2"
-                        suffix=" EGP"
-                        disabled
-                        fluid />
-                      <!-- <i
-                        style="visibility: hidden"
-                        class="fa fa-ellipsis-h"></i> -->
-                    </td>
-                  </template>
-
-                  <td>
-                    <InputNumber
-                      v-model="totalRowTotals['total']"
-                      :min="0"
-                      :minFractionDigits="0"
-                      :maxFractionDigits="2"
-                      input-class="text-center"
-                      suffix=" EGP"
-                      disabled
-                      fluid />
-                    <!-- <i
-                        style="visibility: hidden"
-                        class="fa fa-ellipsis-h"></i> -->
-                  </td>
-                </tr>
-
                 <!-- end total row -->
               </tbody>
             </table>
 
-            <!-- <div class="row">
+            <div class="d-flex mb-3">
               <div class="col-md-6">
                 <input
-                  :disabled="!enableEdit"
-                  @click="addNewItem('leasingRevenueStreamBreakdown')"
+                  @click="addNewItem('directFactoringBreakdowns')"
                   type="button"
                   class="btn btn-primary btn-sm text-white"
                   value="Add New" />
               </div>
-              <div class="col-md-6">
-                <div
-                  class="d-flex justify-content-end"
-                  style="gap: 5px">
-                  <input
-                    v-if="!isLoading"
-                    @click="submitForm"
-                    :disabled="disableSubmitBtn || !enableEdit"
-                    
-                    type="submit"
-                    class="btn text-white active-style save-form"
-                    value="Save" />
-                  <input
-                    v-if="!isLoading"
-                    :disabled="disableSubmitBtn"
-                    
-                    type="submit"
-                    class="btn text-white active-style save-form"
-                    @click="enableEdit = !enableEdit"
-                    :value="enableEdit ? 'Disable Edit' : 'Enable Edit'" />
-                </div>
-              </div>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- end Leasing Revenue Projection By Category -->
+    <!-- end Direct Factoring Breakdown -->
 
     <!-- start Administration Fees Rate & ECL Rate -->
-    <div
-      class="kt-portlet"
-      v-if="hasEnteredRevenueStreamBreakdown">
+    <div class="kt-portlet">
       <div class="kt-portlet__body">
         <div class="row">
           <div class="col-md-11">
@@ -1014,8 +912,46 @@ onMounted(() => {
       </div>
     </div>
     <!-- end Administration Fees Rate & ECL Rate -->
+    <!-- start calculate net disbursement -->
+    <div class="kt-portlet">
+      <div class="kt-portlet__body">
+        <div class="row">
+          <div class="col-md-12">
+            <div
+              class="d-flex align-items-center justify-content-end"
+              style="gap: 5px">
+              <button
+                v-if="!isLoading"
+                @click="submitForm"
+                :disabled="disableSubmitBtn"
+                data-button-value="calculate-net-disbursement"
+                type="submit"
+                class="btn btn-danger text-white font-weight-bold">
+                <!--  -->
+                <span
+                  v-if="disableSubmitBtn && model.submit_button == 'calculate-net-disbursement'"
+                  class="spinner-border mr-2 spinner-border-sm mb-1"
+                  data-button-value="calculate-net-disbursement"
+                  role="status"
+                  aria-hidden="true"></span>
+                <span
+                  class="text-lg"
+                  data-button-value="calculate-net-disbursement"
+                  v-html="
+                    disableSubmitBtn && model.submit_button == 'calculate-net-disbursement'
+                      ? 'Calculating...'
+                      : 'Calculate Net Disbursement'
+                  ">
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end calculate net disbursement -->
 
-    <!-- start Leasing New Portfolio Funding Structure -->
+    <!-- start New Portfolio Funding Structure -->
     <div
       class="kt-portlet"
       v-if="hasEnteredRevenueStreamBreakdown">
@@ -1024,7 +960,7 @@ onMounted(() => {
           <div class="col-md-11">
             <div class="d-flex align-items-center">
               <h3 class="font-weight-bold form-label kt-subheader__title small-caps">
-                Leasing New Portfolio Funding Structure
+                Factoring New Portfolio Funding Structure
               </h3>
             </div>
           </div>
@@ -1100,8 +1036,87 @@ onMounted(() => {
                 </tr>
               </thead>
               <tbody>
-                <!-- start equity funding rate -->
+                <!-- start net disbursements -->
                 <tr :data-repeater-style="1">
+                  <td>
+                    <div class="d-flex flex-column align-items-start">
+                      <input
+                        :value="'Direct Factoring New Portfolio Amounts'"
+                        disabled=""
+                        class="form-control min-width-hover-300 text-left mt-3"
+                        type="text" />
+
+                      <i
+                        style="visibility: hidden"
+                        class="fa fa-ellipsis-h"></i>
+                    </div>
+                  </td>
+                  <template
+                    v-for="(dateFormatted, dateAsIndex) in dates"
+                    :key="dateAsIndex">
+                    <td v-if="!hideTablesDates.fundingTableRef.includes(dateAsIndex)">
+                      <div class="d-flex flex-column align-items-center">
+                        <InputNumber
+                          v-model="model.netDisbursements[dateAsIndex]"
+                          :min="0"
+                          disabled
+                          input-class="text-center"
+                          :minFractionDigits="0"
+                          :maxFractionDigits="2"
+                          suffix=" EGP"
+                          fluid />
+                        <!-- <i
+                          @click="
+                            handleRepeatRight(
+                              model.loan_amounts.sub_items[leasingRevenueStreamBreakdownItem.id],
+                              dateAsIndex,
+                            )
+                          "
+                          class="fa fa-ellipsis-h row-repeater-icon cursor-pointer"
+                          title="Repeat Right"></i> -->
+                      </div>
+                    </td>
+                    <!--  start Total Yr. 2026 for example -->
+                    <td
+                      v-if="
+                        lastMonthIndexInEachYear.length > 1 &&
+                        lastMonthIndexInEachYear.includes(dateAsIndex)
+                      ">
+                      <InputNumber
+                        :min="0"
+                        input-class="text-center"
+                        :modelValue="netDisbursementTotals?.subRowTotals?.per_year?.[dateAsIndex]"
+                        :minFractionDigits="0"
+                        :maxFractionDigits="2"
+                        suffix=" EGP"
+                        disabled
+                        fluid />
+                      <!-- <i
+                        style="visibility: hidden"
+                        class="fa fa-ellipsis-h"></i> -->
+                    </td>
+                    <!--  end Total Yr. 2026 for example -->
+                  </template>
+                  <!-- Start Grand Total -->
+                  <td>
+                    <InputNumber
+                      :min="0"
+                      input-class="text-center"
+                      :modelValue="netDisbursementTotals?.subRowTotals?.total"
+                      :minFractionDigits="0"
+                      :maxFractionDigits="2"
+                      suffix=" EGP"
+                      disabled
+                      fluid />
+                    <!-- <i
+                      style="visibility: hidden"
+                      class="fa fa-ellipsis-h"></i> -->
+                  </td>
+                  <!-- End Grand Total -->
+                </tr>
+                <!-- end net disbursements -->
+                <!-- start equity funding rate -->
+                <tr :data-repeater-style="2">
                   <td>
                     <div class="d-flex flex-column align-items-start">
                       <input
@@ -1170,7 +1185,7 @@ onMounted(() => {
                 </tr>
                 <!-- end Equity Funding rates -->
                 <!-- start Equity Funding Value -->
-                <tr :data-repeater-style="2">
+                <tr :data-repeater-style="3">
                   <td>
                     <div class="d-flex flex-column align-items-start">
                       <input
@@ -1251,7 +1266,7 @@ onMounted(() => {
                 <!-- end equity funding values -->
 
                 <!-- start new loan funding rate -->
-                <tr :data-repeater-style="3">
+                <tr :data-repeater-style="4">
                   <td>
                     <div class="d-flex flex-column align-items-start">
                       <input
@@ -1322,7 +1337,7 @@ onMounted(() => {
                 </tr>
                 <!-- end new loan Funding rates -->
                 <!-- start new loan Funding Value -->
-                <tr :data-repeater-style="4">
+                <tr :data-repeater-style="5">
                   <td>
                     <div class="d-flex flex-column align-items-start mt-3">
                       <input
@@ -1420,35 +1435,23 @@ onMounted(() => {
           class="btn text-white active-style save-form">
           <!--  -->
           <span
-            v-if="disableSubmitBtn"
+            v-if="disableSubmitBtn && model.submit_button == 'save-and-go-to-next-value'"
             class="spinner-border mr-2 spinner-border-sm mb-1"
+            data-button-value="save-and-go-to-next-value"
             role="status"
             aria-hidden="true"></span>
           <span
             class="text-lg"
             data-button-value="save-and-go-to-next-value"
-            v-html="disableSubmitBtn ? 'Saving...' : 'Save & Go To Next'">
+            v-html="
+              disableSubmitBtn && model.submit_button == 'save-and-go-to-next-value'
+                ? 'Saving...'
+                : 'Save & Go To Next'
+            ">
           </span>
         </button>
       </div>
     </div>
-
-    <!-- <div class="col-md-12">
-      <div class="d-flex">
-        <button
-          @click="submitForm"
-          :disabled="isLoading || disableSubmitBtn"
-          class="btn text-white active-style save-form d-flex align-items-center">
-          <span v-if="!isLoading">Save & Go To Next</span>
-
-          <span
-            class="spinner-border spinner-border-sm me-2"
-            role="status"
-            aria-hidden="true"></span>
-          Saving
-        </button>
-      </div>
-    </div> -->
   </div>
 </template>
 <style scoped>

@@ -23,6 +23,14 @@
                 </button>
               </div>
             </div>
+
+            <div v-if="isLoading">
+              <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Retrieving your data...</p>
+              </div>
+            </div>
+
             <div v-if="!isLoading">
               <!-- start fixed monthly repeating  -->
               <div
@@ -2891,6 +2899,7 @@
         </div>
       </div>
     </div>
+
     <!-- end one time expense -->
     <div class="row btn-for-submit--js">
       <div class="col-lg-6"></div>
@@ -2949,7 +2958,7 @@ import MultiSelect from 'primevue/multiselect'
 import Select from 'primevue/select'
 // import VueLoadingTemplate from 'vue-loading-template';
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import Helper from '../../Helpers/Helper'
 import Label from '../Form/Label.vue'
 // import TextInput from "../Form/TextInput.vue";
@@ -3146,6 +3155,7 @@ const getModelData = () => {
       })
     })
 }
+
 onMounted(() => {
   getModelData()
 })
@@ -3390,5 +3400,37 @@ const submitForm = (e) => {
 }
 * {
   min-width: 0;
+}
+</style>
+<style scoped>
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #3498db; /* لون البراند الخاص بك */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+p {
+  color: #666;
+  font-family: sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 </style>

@@ -3,19 +3,22 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\LetterOfGuaranteeIssuanceController;
+use App\Http\Controllers\NonBankingServices\DirectFactoringController;
 use App\Http\Controllers\ReadOdooInvoices;
 use App\Models\Company;
 use App\Models\FinancialStatement;
 
 use App\Models\MoneyPayment;
 
+use App\Models\NonBankingService\Expense;
+use App\Models\NonBankingService\Study;
 use App\Models\Partner;
 use App\Models\Settlement;
 use App\Models\SupplierInvoice;
 use App\ReadyFunctions\ConvertFlatRateToDecreasingRate;
+
 use App\Services\Api\CashExpenseOdooService;
 use App\Services\Api\OdooPayment;
-
 use App\Services\Api\OdooService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -56,6 +59,18 @@ class TestCommand extends Command
 	}
 	public function handle()
 	{
+		$new = new DirectFactoringController;
+		$study = Study::find(86);
+		$company = $study->company;
+		$request = new Request;
+		dd($new->getOldData($company,$request,$study));
+		// $expense = Expense::where('company_id',31)->where('study_id',86)->where('relation_name','percentage_of_sales')->first();
+		// $clonedExpense = $expense->replicate()->toArray();
+		// for($i = 0 ; $i<=200;$i++){
+		// 	Expense::create($clonedExpense);
+		// }
+		
+		// dd('good');
 		// $columnName = 'partner_id';
 		// $partnerTables = getTableNamesThatHasColumn($columnName);
 		// $rows=[];

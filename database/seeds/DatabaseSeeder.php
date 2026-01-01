@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Models\Expense;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +14,8 @@ class DatabaseSeeder extends Seeder
 	
     public function run()
     {
-		$this->call(TestSeeder::class);
+		
+		// $this->call(TestSeeder::class);
 		// $this->call(AccountTypeSeeder::class);
 		// for($i = 0 ; $i<=159591;$i++){
 		// 	DB::table('money2')->insert([
