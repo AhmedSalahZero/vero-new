@@ -458,7 +458,7 @@ input.form-control[readonly] {
     color: blue;
 }
 .max-w-selector-popup {
-    max-width: 100px;
+    max-width: 120px;
 	margin:auto;
 }
 

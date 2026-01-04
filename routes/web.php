@@ -422,7 +422,7 @@ Route::middleware([])->group(function () {
                             */
                             route::get('revenue-streams-breakdown/direct-factoring', 'DirectFactoringController@create')->name('create.direct.factoring.revenue.stream.breakdown');
                             route::post('revenue-streams-breakdown/direct-factoring', 'DirectFactoringController@store')->name('store.direct.factoring.revenue.stream.breakdown');
-                        							route::get('direct-factoring-fetch-old-data','DirectFactoringController@getOldData');
+                        	route::get('direct-factoring-fetch-old-data','DirectFactoringController@getOldData');
                             // route::get('revenue-streams-breakdown/direct-factoring-vue','VueDirectFactoringController@create')->name('create.direct.factoring.revenue.stream.breakdown.vue');
                             // route::post('revenue-streams-breakdown/direct-factoring-vue','VueDirectFactoringController@store')->name('store.direct.factoring.revenue.stream.breakdown.vue');
                         
@@ -437,6 +437,7 @@ Route::middleware([])->group(function () {
                              */
                             route::get('revenue-streams-breakdown/reverse-factoring', 'ReverseFactoringController@create')->name('create.reverse.factoring.revenue.stream.breakdown');
                             route::post('revenue-streams-breakdown/reverse-factoring', 'ReverseFactoringController@store')->name('store.reverse.factoring.revenue.stream.breakdown');
+							route::get('reverse-factoring-fetch-old-data','ReverseFactoringController@getOldData');
                             /**
                              * * End Reverse Factoring Revenue Streams Breakdown
                              */

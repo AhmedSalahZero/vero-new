@@ -5,7 +5,7 @@ import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 import { computed, onMounted, ref } from 'vue'
 import Helper from '../../Helpers/Helper'
-
+import Loading from './../Common/Loading.vue'
 // properties
 const dates = ref([])
 const hideTablesDates = ref({
@@ -272,8 +272,18 @@ const submitForm = (e) => {
     })
     .then((response) => {
       disableSubmitBtn.value = false
-      window.location.href = response.data.redirectTo
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your data has been saved',
+        draggable: true,
+        timer: 2000,
+      }).then((res) => {
+        disableSubmitBtn.value = false
+        window.location.href = response.data.redirectTo
+      })
     })
+
     .catch((error) => {
       const errorMessage = error.response?.data?.message || 'An error occurred'
       disableSubmitBtn.value = false
@@ -291,6 +301,26 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- <div
+    style="width: 100%; height: 100%; background-color: white"
+    v-if="isLoading"
+    class="position-relative grid place-items-center">
+    <span class="spinner"></span>
+  </div> -->
+  <div class="row">
+    <div
+      class="col-md-12"
+      v-if="isLoading">
+      <div class="kt-portlet">
+        <div class="kt-portlet__body exclude">
+          <div class="col-md-12">
+            <Loading :isLoading="isLoading"></Loading>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div v-if="!isLoading">
     <!-- start Leasing Revenue Stream -->
     <div class="kt-portlet">
@@ -1430,6 +1460,10 @@ onMounted(() => {
             v-html="disableSubmitBtn ? 'Saving...' : 'Save & Go To Next'">
           </span>
         </button>
+        <!-- <button>
+        
+          name here
+        </button> -->
       </div>
     </div>
 
@@ -1545,12 +1579,16 @@ onMounted(() => {
 }
 
 .btn-danger-style {
-  height: 30px !important;
+  padding-right: 9px;
+  padding-left: 9px;
+  padding-top: 13px;
+  padding-bottom: 13px;
 }
 
 .btn-danger-style i {
   padding-right: 0 !important;
   color: white !important;
+  font-size: 0.9rem !important;
 }
 
 :deep(.p-select-label.p-placeholder),
@@ -1590,5 +1628,27 @@ onMounted(() => {
 }
 .min-w-percentage {
   width: 110px !important;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+  border-radius: 50%;
+  border-top: 2px solid #07d;
+  border-right: 2px solid transparent;
+  animation: spinner 600ms linear infinite;
 }
 </style>

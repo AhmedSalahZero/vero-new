@@ -48,29 +48,18 @@ class DirectFactoringController extends Controller
 		$lastMonthIndexInEachYear = getLastMonthIndexInEachYear($yearsWithItsMonths); 
         $yearOrMonthsIndexes = $study->getYearOrMonthIndexes();
 		$datesAsIndexes = array_keys($yearOrMonthsIndexes) ;
+		$categories = factoringDueInDays() ;
 		$directFactoringBreakdowns = [];
 		foreach(count($study->directFactoringBreakdowns) ? $study->directFactoringBreakdowns : [null] as $index=>$directFactoringBreakdown){
-				$directFactoringBreakdowns[]=DirectFactoringBreakdown::getRow($directFactoringBreakdown,$datesAsIndexes);
+				$directFactoringBreakdowns[]=DirectFactoringBreakdown::getRow($directFactoringBreakdown,$datesAsIndexes,$categories);
 		}
-		
-		$hasEnteredRevenueStreamBreakdown = $study->leasingRevenueStreamBreakdown->count();
-	//	$leasingCategoriesFormatted = $company->getLeasingCategoriesFormattedForSelect();
+
+		$hasEnteredDirectFactoringBreakdown = $study->directFactoringBreakdowns->count();
 		$directFactoringRevenueProjection = $study->directFactoringRevenueProjectionByCategory;
 		$directFactoringRevenueProjection = $directFactoringRevenueProjection ? $directFactoringRevenueProjection->direct_factoring_transactions_projections  : array_fill_keys($datesAsIndexes,0);
-		$categories = factoringDueInDays() ;
-		// $leasingRevenueCategories = $study->leasingRevenueStreamBreakdown;
-		// $leasingRevenueStreamBreakdown = [];
-		// foreach(count($leasingRevenueCategories) ? $leasingRevenueCategories : [null] as $revenueStreamItem){
-		// 	$leasingRevenueStreamBreakdown[] = LeasingRevenueStreamBreakdown::getRow($revenueStreamItem,$study);
-		// }
+	
 		$loanAmountsPerRevenueStreamBreakdown = [];
 		$subNames = [];
-		// foreach($leasingRevenueCategories as $currentLeasingRevenueStreamBreakdown){
-		// 	$subNames[$currentLeasingRevenueStreamBreakdown->id] = $currentLeasingRevenueStreamBreakdown->getReviewForTable();
-		// 	foreach($yearOrMonthsIndexes as $dateAsIndex => $dateFormatted){
-		// 		$loanAmountsPerRevenueStreamBreakdown[$currentLeasingRevenueStreamBreakdown->id][$dateAsIndex] = $currentLeasingRevenueStreamBreakdown->getLoanAmountAtYearOrMonthIndex($dateAsIndex);
-		// 	}
-		// }
 		$eclRates = [];
 		$adminFeesRates = [];
 		$equityFundingRates = [];
@@ -87,16 +76,13 @@ class DirectFactoringController extends Controller
 			$newLoanFundingValues[$dateAsIndex] = $eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getNewLoansFundingValuesAtYearOrMonthIndex($dateAsIndex):0;
 			$netDisbursements[$dateAsIndex]=$study->getTotalDirectFactoringNewPortfolioAmountsAtYearOrMonthIndex($dateAsIndex)['sum']??0;
 		}
-		// $directFactoringBreakdowns = 
 		return [
 			'submitUrl'=>routeWithQueryParam(route('store.direct.factoring.revenue.stream.breakdown',['company'=>$company->id , 'study'=>$study->id])),
-		//	'directFactoringRevenueProjectionByCategory'=>$directFactoringRevenueProjection,
 			'dates'=>$yearOrMonthsIndexes,
 			'lastMonthIndexInEachYear'=>$lastMonthIndexInEachYear,
-			'hasEnteredRevenueStreamBreakdown'=>$hasEnteredRevenueStreamBreakdown,
-			
+			'hasEnteredDirectFactoringBreakdown'=>$hasEnteredDirectFactoringBreakdown,
 			'empty_rows'=>[
-				'directFactoringBreakdowns'=>DirectFactoringBreakdown::getRow(null,$datesAsIndexes)
+				'directFactoringBreakdowns'=>DirectFactoringBreakdown::getRow(null,$datesAsIndexes,$categories)
 			],
 			'model'=>[
 				'directFactoringRevenueProjectionByCategory'=>[

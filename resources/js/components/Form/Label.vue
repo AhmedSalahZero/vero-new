@@ -2,7 +2,7 @@
   <div>
     <label class="label"><slot></slot></label>
     <span
-      class="text-danger"
+      class="text-danger text-nowrap"
       v-if="required"
       >*</span
     >

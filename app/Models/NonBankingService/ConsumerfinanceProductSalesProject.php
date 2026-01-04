@@ -1,7 +1,6 @@
 <?php
 namespace App\Models\NonBankingService;
 
-use App\Equations\MonthlyFixedRepeatingAmountEquation;
 use App\Helpers\HArr;
 use App\Models\Traits\Scopes\CompanyScope;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;

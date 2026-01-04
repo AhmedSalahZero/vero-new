@@ -7,6 +7,7 @@ use App\Models\NonBankingService\Expense;
 <link rel="stylesheet" href="/custom/css/non-banking-services/expenses.css">
 <link rel="stylesheet" href="/custom/css/non-banking-services/common.css">
 <link rel="stylesheet" href="/custom/css/non-banking-services/select2.css">
+@vite(['resources/js/expenses.js'])
 <style>
     .js-parent-to-table {
         min-height: 50vh !important;
@@ -28,4 +29,3 @@ use App\Models\NonBankingService\Expense;
 </div>
 
 @endsection
-  @vite('resources/js/expenses.js')

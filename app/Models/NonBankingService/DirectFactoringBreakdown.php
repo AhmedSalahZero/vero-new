@@ -234,10 +234,10 @@ class  DirectFactoringBreakdown extends Model
 	{
 		return Study::DIRECT_FACTORING;
 	}
-	public static function  getRow(?self $directFactoringBreakdown,array $datesAsIndexes)
+	public static function  getRow(?self $directFactoringBreakdown,array $datesAsIndexes,array $categories)
 	{
 		return [
-			'category'=>$directFactoringBreakdown? $directFactoringBreakdown->getCategory() : 0 ,
+			'category'=>$directFactoringBreakdown? $directFactoringBreakdown->getCategory() : $categories[0]['id']  , // first one is the default one
 			'margin_rate'=>$directFactoringBreakdown ? $directFactoringBreakdown->getMarginRate()  : 0 ,
 			'percentage_payload'=>$directFactoringBreakdown ? $directFactoringBreakdown->getPercentagePayload() : array_fill_keys($datesAsIndexes,0),
 			'loan_amounts'=>$directFactoringBreakdown ? $directFactoringBreakdown->getLoanAmountPayload()  : array_fill_keys($datesAsIndexes,0),

@@ -17,9 +17,17 @@ class  ReverseFactoringBreakdown extends Model
 		'percentage_payload'=>'array',
 		'loan_amounts'=>'array',
 	];
+	public function getPercentagePayload():array 
+	{
+		return (array)$this->percentage_payload;
+	}
 	public function getPercentageAtYearOrMonthIndex(int $yearOrMonthIndex)
 	{
 		return $this->percentage_payload[$yearOrMonthIndex] ?? 0  ; 
+	}
+	public function getLoanAmountPayload():array 
+	{
+		return (array)$this->loan_amounts;
 	}
 	public function getLoanAmountPayloadAtYearOrMonthIndex(int $yearOrMonthIndex)
 	{
@@ -68,6 +76,17 @@ class  ReverseFactoringBreakdown extends Model
 	public function getRevenueType():string 
 	{
 		return Study::REVERSE_FACTORING;
+	}
+	
+	public static function  getRow(?self $directFactoringBreakdown,array $datesAsIndexes,array $categories)
+	{
+		return [
+			'category'=>$directFactoringBreakdown? $directFactoringBreakdown->getCategory() : $categories[0]['id']  , // first one is the default one
+			'tenor'=>$directFactoringBreakdown ? $directFactoringBreakdown->getTenor() : 0 ,
+			'margin_rate'=>$directFactoringBreakdown ? $directFactoringBreakdown->getMarginRate()  : 0 ,
+			'percentage_payload'=>$directFactoringBreakdown ? $directFactoringBreakdown->getPercentagePayload() : array_fill_keys($datesAsIndexes,0),
+			'loan_amounts'=>$directFactoringBreakdown ? $directFactoringBreakdown->getLoanAmountPayload()  : array_fill_keys($datesAsIndexes,0),
+		];
 	}
 	
 }

@@ -57,6 +57,11 @@ class TestCommand extends Command
 	{
 	
 	}
+	public function testConnectionToOdoo()
+	{
+		
+	}
+	
 	public function handle()
 	{
 		$new = new DirectFactoringController;

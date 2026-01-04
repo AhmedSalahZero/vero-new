@@ -811,7 +811,7 @@ class Study extends Model
     //     return $this->hasOne(DirectFactoringNewPortfolioFundingStructure::class, 'study_id', 'id');
     // }
     
-    public function ReverseFactoringRevenueProjectionByCategory()
+    public function reverseFactoringRevenueProjectionByCategory()
     {
         return $this->hasOne(ReverseFactoringRevenueProjectionByCategory::class, 'study_id');
     }

@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
-import ExpenseComponent from './components/NonBanking/Expenses/ExpensesComponent.vue'
+import ExpenseComponent from './components/NonBanking/ReverseFactoringComponent.vue'
 
-import Aura from '@primeuix/themes/aura'
 import PrimeVue from 'primevue/config'
+import Aura from '@primeuix/themes/aura';
 
 
 
@@ -23,4 +23,4 @@ app.use(PrimeVue, {
     theme: {
         preset: Aura
     }
-}).mount('#app-expenses')
+}).mount('#app-reverse-factoring')

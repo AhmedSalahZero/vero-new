@@ -1,12 +1,10 @@
 <?php
 namespace App\Models\NonBankingService;
 
-use App\Equations\MonthlyFixedRepeatingAmountEquation;
-use App\Helpers\HArr;
+
 use App\Models\Traits\Scopes\CompanyScope;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\ReadyFunctions\ConvertFlatRateToDecreasingRate;
-use App\ReadyFunctions\SeasonalityService;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 

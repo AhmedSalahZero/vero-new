@@ -5430,7 +5430,6 @@ function dueInDays()
 function factoringDueInDays():array
 {
     return [
-       
         [
             'id'=>30,
             'title'=>30 . ' ' . __('Days Factoring')
@@ -5497,15 +5496,15 @@ function reverseFactoringSelector():array
     return [
        
         [
-            'value'=>'monthly-interest-and-principle',
+            'id'=>'monthly-interest-and-principle',
             'title'=>__('Monthly Interest & Principle')
         ],
         [
-            'value'=>'monthly-interest-and-quarterly-principle',
+            'id'=>'monthly-interest-and-quarterly-principle',
             'title'=>__('Monthly Interest & Quarterly Principle')
         ],
         [
-            'value'=>'quarterly-interest-and-principle',
+            'id'=>'quarterly-interest-and-principle',
             'title'=>__('Quarterly Interest & Principle')
         ],
     ];

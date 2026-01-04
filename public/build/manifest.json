@@ -1,49 +1,61 @@
 {
-  "_sweetalert2.esm-BSuriRtL.css": {
-    "file": "assets/sweetalert2.esm-BSuriRtL.css",
-    "src": "_sweetalert2.esm-BSuriRtL.css"
+  "_sweetalert2.esm-CrZfwPRI.css": {
+    "file": "assets/sweetalert2.esm-CrZfwPRI.css",
+    "src": "_sweetalert2.esm-CrZfwPRI.css"
   },
-  "_sweetalert2.esm.all-DNSgMTmu.js": {
-    "file": "assets/sweetalert2.esm.all-DNSgMTmu.js",
+  "_sweetalert2.esm.all-BZlhcBbH.js": {
+    "file": "assets/sweetalert2.esm.all-BZlhcBbH.js",
     "name": "sweetalert2.esm.all",
     "css": [
-      "assets/sweetalert2.esm-BSuriRtL.css"
+      "assets/sweetalert2.esm-CrZfwPRI.css"
     ]
   },
   "resources/js/direct-factoring.js": {
-    "file": "assets/direct-factoring-B_3VduqB.js",
+    "file": "assets/direct-factoring-085Q7eES.js",
     "name": "direct-factoring",
     "src": "resources/js/direct-factoring.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-DNSgMTmu.js"
+      "_sweetalert2.esm.all-BZlhcBbH.js"
     ],
     "css": [
-      "assets/direct-factoring-lWUv4y2o.css"
+      "assets/direct-factoring-CFInjOfM.css"
     ]
   },
   "resources/js/expenses.js": {
-    "file": "assets/expenses-BwdSa35V.js",
+    "file": "assets/expenses-CY8bxq2U.js",
     "name": "expenses",
     "src": "resources/js/expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-DNSgMTmu.js"
+      "_sweetalert2.esm.all-BZlhcBbH.js"
     ],
     "css": [
-      "assets/expenses-BB4858b4.css"
+      "assets/expenses-BGS-zbEA.css"
     ]
   },
   "resources/js/leasing.js": {
-    "file": "assets/leasing-BZBejx5f.js",
+    "file": "assets/leasing-D14i3zQi.js",
     "name": "leasing",
     "src": "resources/js/leasing.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-DNSgMTmu.js"
+      "_sweetalert2.esm.all-BZlhcBbH.js"
     ],
     "css": [
-      "assets/leasing-CSfBkTyB.css"
+      "assets/leasing-DODcSLJB.css"
+    ]
+  },
+  "resources/js/reverse-factoring.js": {
+    "file": "assets/reverse-factoring-DF4t07K4.js",
+    "name": "reverse-factoring",
+    "src": "resources/js/reverse-factoring.js",
+    "isEntry": true,
+    "imports": [
+      "_sweetalert2.esm.all-BZlhcBbH.js"
+    ],
+    "css": [
+      "assets/reverse-factoring-Ce8qBhBY.css"
     ]
   }
 }

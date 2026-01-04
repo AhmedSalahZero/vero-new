@@ -9,6 +9,7 @@ export default defineConfig({
 		'resources/js/expenses.js',
 		'resources/js/leasing.js',
 		'resources/js/direct-factoring.js',
+		'resources/js/reverse-factoring.js',
 		
 		
 	],

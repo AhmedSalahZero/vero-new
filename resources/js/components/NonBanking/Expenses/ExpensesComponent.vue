@@ -24,12 +24,7 @@
               </div>
             </div>
 
-            <div v-if="isLoading">
-              <div class="loading-container">
-                <div class="spinner"></div>
-                <p>Retrieving your data...</p>
-              </div>
-            </div>
+            <Loading :isLoading="isLoading"></Loading>
 
             <div v-if="!isLoading">
               <!-- start fixed monthly repeating  -->
@@ -48,7 +43,22 @@
                     <div
                       v-for="(item, index) in model[typeObject.id].sub_items"
                       :key="index"
-                      class="row col-12">
+                      class="row main-row-style">
+                      <div class="col-md-1 max-w-trash">
+                        <div
+                          v-if="index > 0"
+                          class="d-flex flex-column justify-content-start align-items-start">
+                          <label style="visibility: hidden">Delete</label>
+                          <button
+                            @click="deleteRepeaterRow(index, typeObject.id)"
+                            type="button"
+                            class="btn btn-danger btn-md btn-danger-style ml-2"
+                            title="Delete">
+                            <i class="fas exclude-icon fa-trash trash-icon"></i>
+                          </button>
+                        </div>
+                      </div>
+
                       <div class="col-md-2 col">
                         <Label :required="false">Expense Category</Label>
                         <Select
@@ -101,7 +111,7 @@
                           suffix=" EGP"
                           fluid />
                       </div>
-                      <div class="col-md-1 col">
+                      <!-- <div class="col-md-1 col">
                         <Label :required="false">Increase Rate</Label>
                         <div class="form-group">
                           <InputNumber
@@ -116,7 +126,7 @@
                             suffix=" %"
                             fluid />
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="col-md-1 col">
                         <Label :required="false">End Date</Label>
@@ -264,6 +274,26 @@
                             fluid />
                         </div>
                       </div>
+
+                      <IncreaseRateModal
+                        :typeObject="typeObject"
+                        :item="item"
+                        :index="index"
+                        :increase-years-formatted="increaseYearsFormatted"
+                        :modals="modals">
+                        <div
+                          class="col-md-1 col"
+                          v-if="increaseYearsFormatted.length">
+                          <Label :required="false">Increase Rate</Label>
+                          <button
+                            @click="modals.increaseRate.currentActive = typeObject.id + '-' + index"
+                            class="btn btn-primary btn-md text-nowrap"
+                            type="button">
+                            Increase Rate
+                          </button>
+                        </div>
+                      </IncreaseRateModal>
+
                       <!-- <div class="col-md-1">
                                 <PercentageInput
                                     v-model="item.vat_rate"
@@ -278,20 +308,6 @@
                                     placeholder="Withhold Rate"
                                 ></PercentageInput>
                             </div> -->
-                      <div class="col-md-1">
-                        <div
-                          v-if="index > 0"
-                          class="d-flex flex-column justify-content-start align-items-start">
-                          <label style="visibility: hidden">Delete</label>
-                          <button
-                            @click="deleteRepeaterRow(index, typeObject.id)"
-                            type="button"
-                            class="btn btn-danger btn-md btn-danger-style ml-2"
-                            title="Delete">
-                            <i class="fas exclude-icon fa-trash trash-icon"></i>
-                          </button>
-                        </div>
-                      </div>
                     </div>
                     <div class="container mt-4">
                       <div class="row">
@@ -588,7 +604,23 @@
                     <div
                       v-for="(item, index) in model[typeObject.id].sub_items"
                       :key="index"
-                      class="row col-12 flex-nowrap">
+                      class="row flex-nowrap main-row-style">
+                      <div class="max-w-trash col-md-1">
+                        <Label style="visibility: hidden">ddd</Label>
+                        <div
+                          :style="{ visibility: index == 0 ? 'hidden' : 'visible' }"
+                          class="d-flex flex-column justify-content-start align-items-start">
+                          <label style="visibility: hidden">Delete</label>
+                          <button
+                            @click="deleteRepeaterRow(index, typeObject.id)"
+                            type="button"
+                            class="btn btn-danger btn-md btn-danger-style ml-2"
+                            title="Delete">
+                            <i class="fas exclude-icon fa-trash trash-icon"></i>
+                          </button>
+                        </div>
+                      </div>
+
                       <div class="col-md-2 col">
                         <Label :required="false"
                           >Expense <br />
@@ -870,35 +902,6 @@
                             v-model="item.withhold_tax_rate"
                             suffix=" %"
                             fluid />
-                        </div>
-                      </div>
-                      <!-- <div class="col-md-1">
-                                <PercentageInput
-                                    v-model="item.vat_rate"
-                                    label="Vat Rate"
-                                    placeholder="Vat Rate"
-                                ></PercentageInput>
-                            </div> -->
-                      <!-- <div class="col-md-1">
-                                <PercentageInput
-                                    v-model="item.withhold_tax_rate"
-                                    label="Withhold Rate"
-                                    placeholder="Withhold Rate"
-                                ></PercentageInput>
-                            </div> -->
-                      <div style="width: 50px">
-                        <Label style="visibility: hidden">ddd</Label>
-                        <div
-                          :style="{ visibility: index == 0 ? 'hidden' : 'visible' }"
-                          class="d-flex flex-column justify-content-start align-items-start">
-                          <label style="visibility: hidden">Delete</label>
-                          <button
-                            @click="deleteRepeaterRow(index, typeObject.id)"
-                            type="button"
-                            class="btn btn-danger btn-md btn-danger-style ml-2"
-                            title="Delete">
-                            <i class="fas exclude-icon fa-trash trash-icon"></i>
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -1197,7 +1200,23 @@
                     <div
                       v-for="(item, index) in model[typeObject.id].sub_items"
                       :key="index"
-                      class="row col-12 flex-nowrap">
+                      class="row flex-nowrap main-row-style">
+                      <div class="max-w-trash col-md-1">
+                        <Label style="visibility: hidden">ddd</Label>
+                        <div
+                          :style="{ visibility: index == 0 ? 'hidden' : 'visible' }"
+                          class="d-flex flex-column justify-content-start align-items-start">
+                          <label style="visibility: hidden">Delete</label>
+                          <button
+                            @click="deleteRepeaterRow(index, typeObject.id)"
+                            type="button"
+                            class="btn btn-danger btn-md btn-danger-style ml-2"
+                            title="Delete">
+                            <i class="fas exclude-icon fa-trash trash-icon"></i>
+                          </button>
+                        </div>
+                      </div>
+
                       <div class="col-md-2 col">
                         <Label :required="false"
                           >Expense <br />
@@ -1461,6 +1480,29 @@
                             fluid />
                         </div>
                       </div>
+
+                      <IncreaseRateModal
+                        :typeObject="typeObject"
+                        :item="item"
+                        :index="index"
+                        :increase-years-formatted="increaseYearsFormatted"
+                        :modals="modals">
+                        <div
+                          class="col-md-1 col"
+                          v-if="increaseYearsFormatted.length">
+                          <Label :required="false"
+                            >Increase <br />
+                            Rate</Label
+                          >
+                          <button
+                            @click="modals.increaseRate.currentActive = typeObject.id + '-' + index"
+                            class="btn btn-primary btn-md text-nowrap"
+                            type="button">
+                            Increase Rate
+                          </button>
+                        </div>
+                      </IncreaseRateModal>
+
                       <!-- <div class="col-md-1">
                                 <PercentageInput
                                     v-model="item.vat_rate"
@@ -1475,21 +1517,6 @@
                                     placeholder="Withhold Rate"
                                 ></PercentageInput>
                             </div> -->
-                      <div style="width: 50px">
-                        <Label style="visibility: hidden">ddd</Label>
-                        <div
-                          :style="{ visibility: index == 0 ? 'hidden' : 'visible' }"
-                          class="d-flex flex-column justify-content-start align-items-start">
-                          <label style="visibility: hidden">Delete</label>
-                          <button
-                            @click="deleteRepeaterRow(index, typeObject.id)"
-                            type="button"
-                            class="btn btn-danger btn-md btn-danger-style ml-2"
-                            title="Delete">
-                            <i class="fas exclude-icon fa-trash trash-icon"></i>
-                          </button>
-                        </div>
-                      </div>
                     </div>
                     <div class="container mt-4">
                       <div class="row">
@@ -1786,7 +1813,26 @@
                     <div
                       v-for="(item, index) in model[typeObject.id].sub_items"
                       :key="index"
-                      class="row col-12">
+                      class="row main-row-style">
+                      <div class="max-w-trash col-md-1">
+                        <div
+                          v-if="index > 0"
+                          class="d-flex flex-column justify-content-start align-items-start">
+                          <label style="visibility: hidden"
+                            >Delete
+                            <br />
+                            <span>a</span>
+                          </label>
+                          <button
+                            @click="deleteRepeaterRow(index, typeObject.id)"
+                            type="button"
+                            class="btn btn-danger btn-md btn-danger-style ml-2"
+                            title="Delete">
+                            <i class="fas exclude-icon fa-trash trash-icon"></i>
+                          </button>
+                        </div>
+                      </div>
+
                       <div class="col-md-2 col">
                         <Label :required="false"
                           >Expense <br />
@@ -2004,25 +2050,6 @@
                             v-model="item.withhold_tax_rate"
                             suffix=" %"
                             fluid />
-                        </div>
-                      </div>
-
-                      <div class="col-md-1">
-                        <div
-                          v-if="index > 0"
-                          class="d-flex flex-column justify-content-start align-items-start">
-                          <label style="visibility: hidden"
-                            >Delete
-                            <br />
-                            <span>a</span>
-                          </label>
-                          <button
-                            @click="deleteRepeaterRow(index, typeObject.id)"
-                            type="button"
-                            class="btn btn-danger btn-md btn-danger-style ml-2"
-                            title="Delete">
-                            <i class="fas exclude-icon fa-trash trash-icon"></i>
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -2321,7 +2348,23 @@
                     <div
                       v-for="(item, index) in model[typeObject.id].sub_items"
                       :key="index"
-                      class="row col-12 flex-nowrap">
+                      class="row flex-nowrap main-row-style">
+                      <div class="col-md-1 max-w-trash">
+                        <Label style="visibility: hidden">ddd</Label>
+                        <div
+                          :style="{ visibility: index == 0 ? 'hidden' : 'visible' }"
+                          class="d-flex flex-column justify-content-start align-items-start">
+                          <label style="visibility: hidden">Delete</label>
+                          <button
+                            @click="deleteRepeaterRow(index, typeObject.id)"
+                            type="button"
+                            class="btn btn-danger btn-md btn-danger-style ml-2"
+                            title="Delete">
+                            <i class="fas exclude-icon fa-trash trash-icon"></i>
+                          </button>
+                        </div>
+                      </div>
+
                       <div class="col-md-2 col">
                         <Label :required="false"
                           >Expense <br />
@@ -2585,35 +2628,28 @@
                             fluid />
                         </div>
                       </div>
-                      <!-- <div class="col-md-1">
-                                <PercentageInput
-                                    v-model="item.vat_rate"
-                                    label="Vat Rate"
-                                    placeholder="Vat Rate"
-                                ></PercentageInput>
-                            </div> -->
-                      <!-- <div class="col-md-1">
-                                <PercentageInput
-                                    v-model="item.withhold_tax_rate"
-                                    label="Withhold Rate"
-                                    placeholder="Withhold Rate"
-                                ></PercentageInput>
-                            </div> -->
-                      <div style="width: 50px">
-                        <Label style="visibility: hidden">ddd</Label>
+
+                      <IncreaseRateModal
+                        :typeObject="typeObject"
+                        :item="item"
+                        :index="index"
+                        :increase-years-formatted="increaseYearsFormatted"
+                        :modals="modals">
                         <div
-                          :style="{ visibility: index == 0 ? 'hidden' : 'visible' }"
-                          class="d-flex flex-column justify-content-start align-items-start">
-                          <label style="visibility: hidden">Delete</label>
+                          class="col-md-1 col"
+                          v-if="increaseYearsFormatted.length">
+                          <Label :required="false"
+                            >Increase <br />
+                            Rate</Label
+                          >
                           <button
-                            @click="deleteRepeaterRow(index, typeObject.id)"
-                            type="button"
-                            class="btn btn-danger btn-md btn-danger-style ml-2"
-                            title="Delete">
-                            <i class="fas exclude-icon fa-trash trash-icon"></i>
+                            @click="modals.increaseRate.currentActive = typeObject.id + '-' + index"
+                            class="btn btn-primary btn-md text-nowrap"
+                            type="button">
+                            Increase Rate
                           </button>
                         </div>
-                      </div>
+                      </IncreaseRateModal>
                     </div>
                     <div class="container mt-4">
                       <div class="row">
@@ -2956,13 +2992,21 @@
 import InputNumber from 'primevue/inputnumber'
 import MultiSelect from 'primevue/multiselect'
 import Select from 'primevue/select'
+import Loading from '../../Common/Loading.vue'
+import IncreaseRateModal from './modals/IncreaseRateModal.vue'
 // import VueLoadingTemplate from 'vue-loading-template';
 import axios from 'axios'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
-import Helper from '../../Helpers/Helper'
-import Label from '../Form/Label.vue'
+import { onMounted, ref } from 'vue'
+import Helper from '../../../Helpers/Helper'
+import Label from '../../Form/Label.vue'
 // import TextInput from "../Form/TextInput.vue";
 const isLoading = ref(true)
+// modals.increaseRate.currentActive = null
+const modals = ref({
+  increaseRate: {
+    currentActive: null,
+  },
+})
 let expenseNamesPerCategories = []
 const percentageOf = Helper.getPercentageOf()
 const currentActiveTab = ref('fixed_monthly_repeating_amount')
@@ -3107,7 +3151,7 @@ const model = ref({})
 const revenueStreams = ref([])
 const departments = ref([])
 const expenseCategories = ref([])
-
+const increaseYearsFormatted = ref([])
 let revenueCategoriesPerRevenue = []
 let positionsPerDepartments = []
 
@@ -3136,6 +3180,7 @@ const getModelData = () => {
       model.value = response.data.model
       //   initializeFormattedNumbers();
       expenseCategories.value = response.data.expenseCategories
+      increaseYearsFormatted.value = response.data.increaseYearsFormatted
       revenueStreams.value = response.data.revenueStreams
       departments.value = response.data.departments
       // businessUnits.value = response.data.businessUnitsForMultiSelect
@@ -3245,7 +3290,15 @@ const submitForm = (e) => {
     })
     .then((response) => {
       disableSubmitBtn.value = false
-      window.location.href = response.data.redirectTo
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your data has been saved',
+        draggable: true,
+        timer: 2000,
+      }).then((res) => {
+        window.location.href = response.data.redirectTo
+      })
     })
     .catch((error) => {
       const errorMessage = error.response?.data?.message || 'An error occurred'
@@ -3273,10 +3326,6 @@ const submitForm = (e) => {
 
 .max-w-530px {
   max-width: 530px !important;
-}
-
-.input-border {
-  border: 1px solid #6babef;
 }
 
 /* Fix z-index for PrimeVue Select dropdown inside modal */
@@ -3352,28 +3401,18 @@ const submitForm = (e) => {
 }
 
 .btn-danger-style {
-  height: 30px !important;
+  padding-right: 9px;
+  padding-left: 9px;
+  padding-top: 3px;
+  padding-bottom: 5px;
 }
 
 .btn-danger-style i {
   padding-right: 0 !important;
   color: white !important;
+  font-size: 0.9rem !important;
 }
 
-:deep(.p-select-label.p-placeholder),
-:deep(.p-select-label) {
-  color: black !important;
-}
-:deep(.p-multiselect-label) {
-  color: black !important;
-}
-:deep(.p-select:not(.p-disabled).p-focus) {
-  border-color: #cce2fd;
-}
-
-:deep(.p-select) {
-  border-color: #cce2fd !important;
-}
 .max-w-150 {
   width: 150px !important;
   min-width: 150px !important;
@@ -3401,36 +3440,36 @@ const submitForm = (e) => {
 * {
   min-width: 0;
 }
+.max-w-trash {
+  max-width: 55px !important;
+}
+
+:deep(.p-select-label.p-placeholder),
+:deep(.p-select-label) {
+  color: black !important;
+}
+:deep(.p-multiselect-label) {
+  color: black !important;
+}
+:deep(.p-select:not(.p-disabled).p-focus) {
+  border-color: #4d9afa;
+}
+
+:deep(.p-select) {
+  border-color: #4d9afa !important;
+}
+
+:deep(.main-row-style:nth-child(even) .p-select),
+:deep(.main-row-style:nth-child(even) .p-multiselect),
+:deep(.main-row-style:nth-child(even) .dp__input),
+:deep(.main-row-style:nth-child(even) .p-inputtext) {
+  border: 1px solid #54aaa6 !important;
+}
+:deep(.main-row-style:nth-child(odd) .p-multiselect),
+:deep(.main-row-style:nth-child(odd) .p-select),
+:deep(.main-row-style:nth-child(odd) .dp__input),
+:deep(.main-row-style:nth-child(odd) .p-inputtext) {
+  border: 1px solid #4d9afa !important;
+}
 </style>
-<style scoped>
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 50px;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #3498db; /* لون البراند الخاص بك */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 15px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-p {
-  color: #666;
-  font-family: sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-}
-</style>
+<style scoped></style>

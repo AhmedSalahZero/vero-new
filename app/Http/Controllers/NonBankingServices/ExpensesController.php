@@ -23,8 +23,11 @@ class ExpensesController extends Controller
     }
      public function expensesGetVueOldData(Company $company, Request $request, Study $study)
     {
-    
-		
+		$increaseYearsFormatted = $study->getYearlyIndexes();
+		unset($increaseYearsFormatted[0]);
+		$increaseYearsFormatted = array_values(array_map(function($item){
+			return explode('-',$item)[1];
+		},$increaseYearsFormatted));
 		$departmentsFormatted = $company->departments->sortBy('name')->pluck('name','id')->toArray() ;
 		$departments = [];
 		
@@ -70,11 +73,11 @@ class ExpensesController extends Controller
             if ($expense) {
                 $revenueStreamsPerBusinessUnits[$expense->id] = [];
             }
-            $expensesPerTypes[$expenseType]['sub_items'][] =  Expense::generateRow($expense,$study,$isOneTimeExpense,$expenseType,$revenueCategoriesPerRevenue,$expenseNamesPerCategories,$positionPerDepartments);
+            $expensesPerTypes[$expenseType]['sub_items'][] =  Expense::generateRow($expense,$study,$isOneTimeExpense,$expenseType,$revenueCategoriesPerRevenue,$expenseNamesPerCategories,$positionPerDepartments,$increaseYearsFormatted);
           
 			$model[$expenseType] = $expensesPerTypes[$expenseType];
         }
-		$model[$expenseType]['empty_row'] = Expense::generateRow(null,$study,$isOneTimeExpense,$expenseType,$revenueCategoriesPerRevenue,$expenseNamesPerCategories,$positionPerDepartments);
+		$model[$expenseType]['empty_row'] = Expense::generateRow(null,$study,$isOneTimeExpense,$expenseType,$revenueCategoriesPerRevenue,$expenseNamesPerCategories,$positionPerDepartments,$increaseYearsFormatted);
 	  }
 	  	
 	  	$model['model_id'] = $study->id;
@@ -99,7 +102,8 @@ class ExpensesController extends Controller
 		   'revenueCategoriesPerRevenue'=>$revenueCategoriesPerRevenue,
 		   'revenueStreams'=>$selectedRevenueStreams,
 		   'departments'=>$departments,
-		   'positionsPerDepartments'=>$positionPerDepartments
+		   'positionsPerDepartments'=>$positionPerDepartments,
+		   'increaseYearsFormatted'=>$increaseYearsFormatted
 		//    'selectedRevenueStreams'=>$selectedRevenueStreams,
    //        'businessUnitsForMultiSelect'=>$businessUnitsForMultiSelect,
  //          'revenueStreamsPerBusinessUnits'=>$revenueStreamsPerBusinessUnits // for selects
