@@ -31,8 +31,8 @@
 <form action="{{ route('products.sales.targets', $company) }}" method="POST">
 
     @csrf
-    <?php $total_sales_targets_values = 0; $total_sales_targets_percentages = 0;
-        $name_of_product = ($has_product_item === true) ? 'Item' :'' ;?>
+    @php $total_sales_targets_values = 0; $total_sales_targets_percentages = 0;
+        $name_of_product = ($has_product_item === true) ? 'Item' :'' ;@endphp
     @if ($sales_forecast['add_new_products'] == 1)
     <div class="kt-portlet">
         <div class="kt-portlet__head">
@@ -57,12 +57,12 @@
                 @slot('table_body')
 
                 @for ($number = 0; $number < $sales_forecast->number_of_products; $number++)
-                    <?php
+                    @php
                                     $sales_targets_value = $product_seasonality[$number]->sales_target_value??0;
                                     $sales_targets_percentage = $product_seasonality[$number]->sales_target_percentage??0;
                                     $total_sales_targets_values += $sales_targets_value;
                                     $total_sales_targets_percentages += $sales_targets_percentage;
-                                ?>
+                                @endphp
                     <tr>
                         <td class="text-center"> {{@$product_seasonality[$number]->name}}</td>
 
@@ -86,7 +86,7 @@
         </div>
     </div>
     @endif
-    <?php $existing_products_sales_targets = $sales_forecast->sales_target - $total_sales_targets_values ;?>
+    @php $existing_products_sales_targets = $sales_forecast->sales_target - $total_sales_targets_values ;@endphp
     @if($existing_products_sales_targets > 0)
     <div class="kt-portlet">
         <div class="kt-portlet__head">
@@ -168,21 +168,21 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                <?php $total = array_sum(array_column($product_item_breakdown_data,'Sales Value'));
+                @php $total = array_sum(array_column($product_item_breakdown_data,'Sales Value'));
                                     $total =  $sales_forecast->seasonality == "last_3_years" ? $total/3 : $total ;
                                     $total_existing_targets = 0;
-                                ?>
+                                @endphp
                 @foreach ($product_item_breakdown_data as $key => $product_data )
                 <tr>
                     <th>{{$product_data['item'] ?? '-'}}</th>
-                    <?php $sales_values  = $sales_forecast->seasonality == "last_3_years" ? (($product_data['Sales Value']??0)/3 ):$product_data['Sales Value'] ; ?>
+                    @php $sales_values  = $sales_forecast->seasonality == "last_3_years" ? (($product_data['Sales Value']??0)/3 ):$product_data['Sales Value'] ; @endphp
                     <td class="text-center">{{number_format($sales_values)}}</td>
 
-                    <?php
+                    @php
                                                 $target_percentage = ($total == 0) ? 0 : (($sales_values/$total)) ;
                                                 $existing_target_per_product = $target_percentage*$existing_products_sales_targets;
                                                 $total_existing_targets += $existing_target_per_product;
-                                            ?>
+                                            @endphp
                     <td class="text-center">{{ number_format ($existing_target_per_product)}}</td>
                     <td class="text-center">{{ number_format ($target_percentage*100, 1). ' %'}}</td>
                     <input type="hidden" name="sales_targets_percentages[{{$product_data['item']}}]" value="{{$target_percentage}}">

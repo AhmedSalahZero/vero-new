@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
+/**
+ * @mixin IdeHelperLabelingItem
+ */
 class LabelingItem extends Model
 {
     use StaticBoot;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
 
     protected $guarded = [];
 

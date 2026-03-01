@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLgAgainstTdOrCdOpeningBalance
+ */
 class LgAgainstTdOrCdOpeningBalance extends Model
 {
     protected $guarded = ['id'];

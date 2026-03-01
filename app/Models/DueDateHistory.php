@@ -5,6 +5,9 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperDueDateHistory
+ */
 class DueDateHistory extends Model
 {
 	protected $guarded = [

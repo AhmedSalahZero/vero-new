@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 
+/**
+ * @mixin IdeHelperOverdraftAgainstCommercialPaperBankStatement
+ */
 class OverdraftAgainstCommercialPaperBankStatement extends Model
 {
 	use IsBankStatement,HasDeleteButTriggerChangeOnLastElement;		

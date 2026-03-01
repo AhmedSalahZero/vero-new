@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperSupplierPayableOpeningBalance
+ */
 class SupplierPayableOpeningBalance extends Model
 {
     use HasCollectionOrPaymentStatement;

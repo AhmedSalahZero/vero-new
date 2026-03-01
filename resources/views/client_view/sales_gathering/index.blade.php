@@ -466,12 +466,9 @@ $date = now()->format('d-m-Y')
                     <form class="kt-portlet__body" method="post" action="{{route('salesGathering.destroy',[$company->id,$item->id,$modelName])}}" style="display: inline">
 					
 						@if($modelName == 'LoanSchedule')
-						{{-- {{ dd() }} --}}
-						{{-- @if($item->remaining > 0) --}}
 						<a href="{{ route('view.loan.schedule.settlements',['company'=>$company->id , 'loanSchedule'=>$item->id]) }}" class="btn btn-secondary btn-outline-hover-primary btn-icon">
 							<i class="fa fa-dollar-sign"></i>
 						</a>
-						{{-- @endif --}}
 						@endif 
                         @method('DELETE')
                         @csrf

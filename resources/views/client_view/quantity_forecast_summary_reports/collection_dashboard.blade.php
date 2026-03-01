@@ -64,11 +64,11 @@
     </div>
 
 
-    <?php
+    @php
     $monthly_chart_data = [];
     $accumulated_chart_data = [];
     $accumulated_value = 0;
-    ?>
+    @endphp
     {{-- First Section --}}
     <div class="row">
         {{-- Total Facilities --}}
@@ -80,7 +80,7 @@
                         <div class="col-md-12">
                             <div class="tab-pane" id="kt_apps_contacts_view_tab_2" role="tabpanel">
 
-                                <?php $collection_base = ucwords(str_replace('_', ' ', $collection_settings->collection_base)); ?>
+                                @php $collection_base = ucwords(str_replace('_', ' ', $collection_settings->collection_base)); @endphp
                                 {{-- General Collection Policy --}}
                                 @if ($collection_settings->collection_base == 'general_collection_policy')
                                     <x-table :tableTitle="__($collection_base.' Collection Policy')"
@@ -100,7 +100,7 @@
                                                 @foreach ($monthly_dates as $date => $value)
                                                     <td class="text-center"> {{ number_format($collection[$date] ?? 0) }}
                                                     </td>
-                                                    <?php
+                                                    @php
                                                     $accumulated_value += $collection[$date] ?? 0;
                                                     $monthly_chart_data[] = [
                                                         'date' => date('d-M-Y', strtotime($date)),
@@ -110,7 +110,7 @@
                                                         'date' => date('d-M-Y', strtotime($date)),
                                                         'price' => number_format($accumulated_value, 0),
                                                     ];
-                                                    ?>
+                                                    @endphp
                                                 @endforeach
                                                 <td class="text-center active-style">{{ number_format(array_sum($collection)) }}</td>
                                             </tr>
@@ -129,12 +129,12 @@
                                             </tr>
                                         @endslot
                                         @slot('table_body')
-                                            <?php $total = []; ?>
+                                            @php $total = []; @endphp
                                             @foreach ($collection as $base_name => $base_collection)
                                                 <tr>
                                                     <td> <b> {{ $base_name }} </b></td>
                                                     @foreach ($monthly_dates as $date => $value)
-                                                        <?php $total[$date] = ($base_collection[$date] ?? 0) + ($total[$date] ?? 0); ?>
+                                                        @php $total[$date] = ($base_collection[$date] ?? 0) + ($total[$date] ?? 0); @endphp
                                                         <td class="text-center"> {{ number_format($base_collection[$date] ?? 0) }}
                                                         </td>
                                                     @endforeach
@@ -146,7 +146,7 @@
                                                 <td class="active-style"> <b> {{ __('Total') }} </b></td>
                                                 @foreach ($monthly_dates as $date => $value)
                                                     <td class="active-style">{{ number_format($total[$date] ?? 0) }}</td>
-                                                    <?php
+                                                    @php
                                                     $accumulated_value += $total[$date] ?? 0;
                                                     $monthly_chart_data[] = [
                                                         'date' => date('d-M-Y', strtotime($date)),
@@ -156,7 +156,7 @@
                                                         'date' => date('d-M-Y', strtotime($date)),
                                                         'price' => number_format($accumulated_value, 0),
                                                     ];
-                                                    ?>
+                                                    @endphp
                                                 @endforeach
                                                 <td class="text-center active-style">{{ number_format(array_sum($total)) }}</td>
                                             </tr>

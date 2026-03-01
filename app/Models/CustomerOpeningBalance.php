@@ -7,6 +7,9 @@ use App\Models\MoneyReceived;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCustomerOpeningBalance
+ */
 class CustomerOpeningBalance extends Model
 {
     protected $guarded = ['id'];

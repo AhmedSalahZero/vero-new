@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin IdeHelperBusinessSector
+ */
 class BusinessSector extends Model  implements IBaseModel
 {
     use BusinessSectorRelation ,BusinessSectorAccessor  , BusinessSectorMutator , CompanyScope,HasCompany;

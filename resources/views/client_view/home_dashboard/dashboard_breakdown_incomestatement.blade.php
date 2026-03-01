@@ -65,14 +65,14 @@
 @endsection
 @section('content')
 
-@php
+@@php
 // $total_of_main_with_rows_with_depreciation = [0,0,0,0,0,0,0,0];
 // $total_of_main_with_rows_depreciation = [0,0,0,0,0,0,0,0];
 $earningBeforeTaxes = 0 ;
 $totalOfDepreactionAndAmortization = 0;
 
 
-@endphp
+@end@php
 
 <div class="kt-portlet">
     <div class="kt-portlet__head">
@@ -141,10 +141,10 @@ $totalOfDepreactionAndAmortization = 0;
 				@if ($singleType == 'Corporate Taxes')
 					@continue
 				@endif
-                @php
+                @@php
                 $color = 'primary';
                 $currentIndex = array_search($singleType,array_keys($types)) ;
-                @endphp
+                @end@php
 
                 <div @if($currentIndex==0 || $currentIndex==1 ||$currentIndex==2 ) class="col-md-4" @else class="col-md-4" @endif>
                     <!--begin::Total Profit-->
@@ -156,23 +156,23 @@ $totalOfDepreactionAndAmortization = 0;
                                 </h4>
                             </div>
                         </div>
-                        @php
+                        @@php
                         $total_of_sales_revenue = get_total_for_group_by_key($reports_data,'Sales Revenue')['total_with_depreciation'] ?? 0;
-                        @endphp
+                        @end@php
 
 
                         <div class="kt-widget24__details">
                             <span class="kt-widget24__stats kt-font-{{$color}}" style="font-size:1.75rem">
-                                @php
+                                @@php
                                 $totalsOfEachRows = get_total_for_group_by_key($reports_data , $type) ;
                                 $total_of_each_group_with_depreciation =$totalsOfEachRows['total_with_depreciation'] ;
                                 $total_of_each_group_depreciation = $totalsOfEachRows['total_depreciation'] ;
-                                @endphp
+                                @end@php
                                 {{ number_format($total_of_each_group_with_depreciation) }}
                                 @if($singleType == __('Sales Revenue'))
-                                @php
+                                @@php
                                 $total_of_sales_revenue = $total_of_each_group_with_depreciation ;
-                                @endphp
+                                @end@php
                                 @endif
                                 @if($singleType != __('Sales Revenue'))
                                 <span style="color:black !important;">
@@ -180,11 +180,11 @@ $totalOfDepreactionAndAmortization = 0;
                                     [ {{ $total_of_sales_revenue ? number_format($total_of_each_group_with_depreciation / $total_of_sales_revenue  *100 , 2  ) . ' %' : 0 }} ]
                                 </span>
                                 @endif
-                                @php
+                                @@php
                                 $total_of_main_with_rows_with_depreciation[$singleType] = $total_of_each_group_with_depreciation ;
                                 $total_of_main_with_rows_depreciation[$singleType] = $total_of_each_group_depreciation ;
 								
-                                @endphp
+                                @end@php
 
                         </div>
 
@@ -272,9 +272,9 @@ $totalOfDepreactionAndAmortization = 0;
         <div class="kt-portlet__body  kt-portlet__body--fit">
             <div class="row row-no-padding row-col-separator-xl">
                 @foreach ([5=>'Gross Profit <br> &nbsp;',13=>'Earning Before Interest Taxes <br> Depreciation Amortization - EBITDA',15=>'Earning Before Interest Taxes - EBIT <br> &nbsp;',19=>'Earning Before Taxes - EBT',21=>__('Corporate Taxes'),23=>'Net Profit'] as $idOfItem=>$mainWithoutSubItemsName )
-                @php
+                @@php
                 $color = 'primary';
-                @endphp
+                @end@php
 
 
                 <div @if( $idOfItem==13 ) class="col-md-4" @else class="col-md-4" @endif>
@@ -292,18 +292,18 @@ $totalOfDepreactionAndAmortization = 0;
 
 
                         @if($idOfItem == 5)
-                        @php
+                        @@php
                         $salesRevenue = $total_of_main_with_rows_with_depreciation[('Sales Revenue')] ?? 0 ;
 
                         $costOfGoods = $total_of_main_with_rows_with_depreciation['Cost Of Goods / Service Sold'] ??0;
 
                         $totalOfSub = $salesRevenue- $costOfGoods ;
 
-                        @endphp
+                        @end@php
 
                         @endif
                         @if($idOfItem == 13)
-                        @php
+                        @@php
                         $salesRevenueWithDepreciation = $total_of_main_with_rows_with_depreciation[('Sales Revenue')] ??0 ;
                         $costOfGoodsWithDepreciation = $total_of_main_with_rows_with_depreciation[('Cost Of Goods / Service Sold')]?? 0;
                         // $grossProfitWithDepreciation = $total_of_main_with_rows_with_depreciation[('Gross Profit')] ?? 0 ;
@@ -321,54 +321,54 @@ $totalOfDepreactionAndAmortization = 0;
                         $totalOfSub = $totalOfDepreactionAndAmortization + $totalDepreciation
 
 
-                        @endphp
+                        @end@php
                         @endif
 
 
                         @if($idOfItem == 15)
-                        @php
+                        @@php
 
                         $totalOfSub = $totalOfDepreactionAndAmortization ;
                         $earningBeforeIntresetAndTaxes = $totalOfSub ;
 
 
-                        @endphp
+                        @end@php
                         @endif
 
                         @if($idOfItem == 19)
-                        @php
+                        @@php
                         $generalExpensesWithDepreciation = $total_of_main_with_rows_with_depreciation['Finance Income/(Expenses)'] ?? 0 ;
                         $totalOfSub = $earningBeforeIntresetAndTaxes + $generalExpensesWithDepreciation;
                         $earningBeforeTaxes =$totalOfSub ;
                           $total_of_main_with_rows_with_depreciation['Corporate Taxes'] = $earningBeforeTaxes < 0 ? 0 : $earningBeforeTaxes * $corporateTaxesPercentage/100 ;
-						@endphp
+						@end@php
                         @endif
 						
 
                         @if($idOfItem == 21)
-                        @php
+                        @@php
                         $corportatTaxes = $total_of_main_with_rows_with_depreciation['Corporate Taxes'] ?? 0 ;
                         $totalOfSub =  $corportatTaxes ;
 
 
-                        @endphp
+                        @end@php
                         @endif					
 
 
                         @if($idOfItem == 23)
-                        @php
+                        @@php
                         $corportatTaxes = $total_of_main_with_rows_with_depreciation['Corporate Taxes'] ?? 0 ;
                         $totalOfSub = $earningBeforeTaxes - $corportatTaxes ;
 
 
-                        @endphp
+                        @end@php
                         @endif
 
                         <div class="kt-widget24__details">
                             <span class="kt-widget24__stats kt-font-{{$totalOfSub >= 0 ? 'success' : 'danger'}}" style="font-size:1.75rem">
-                                @php
+                                @@php
                                 $totalWithDpreciationSalesRevenue = $total_of_main_with_rows_with_depreciation['Sales Revenue'] ?? 0 ;
-                                @endphp
+                                @end@php
                                 {{ number_format($totalOfSub) }} [{{ $totalWithDpreciationSalesRevenue ? number_format($totalOfSub / $totalWithDpreciationSalesRevenue * 100 , 2 ) . ' %'  : 0 }}]
 
 
@@ -467,7 +467,7 @@ $totalOfDepreactionAndAmortization = 0;
                                 <div class="kt-portlet__body">
 
                                     <!--begin: Datatable -->
-                                    <?php
+                                    @php
                                                 if ($type == 'service_provider_birth_year' || $type == 'service_provider_type') {
                                                     $report_count_data = $report_data['report_count_data']??[];
                                                     $total_count = ( count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0;
@@ -475,7 +475,7 @@ $totalOfDepreactionAndAmortization = 0;
 
                                                 }
                                                 $total = array_sum(array_column(($report_data??[]),'Sales Value'));$key=0;
-                                            ?>
+                                            @endphp
                                     <x-table :tableClass="'kt_table_with_no_pagination_no_scroll_without_pdf'">
                                         @slot('table_header')
                                         <tr class="table-active text-center">
@@ -495,17 +495,17 @@ $totalOfDepreactionAndAmortization = 0;
                                         @slot('table_body')
 
 
-                                        @php
+                                        @@php
                                         $totalOfSalesRevenuePercentage = 0 ;
                                         $totalForAll = getTotalForQuantityAndValues(($reports_data[$type]['sub_items']),$singleType == __('Sales Revenue'),true) ;
 
-                                        @endphp
+                                        @end@php
                                         @foreach ($reports_data[$type]['sub_items'] as $key => $item)
                                         @if(!isQuantitySubItem($key))
-                                        @php
+                                        @@php
                                         $totalForSub = getTotalForQuantityAndValues(($reports_data[$type]['sub_items']),$singleType == __('Sales Revenue'),false,$key) ;
 
-                                        @endphp
+                                        @end@php
 
                                         <tr>
                                             <td>{{$key?? '-'}}</td>
@@ -519,12 +519,12 @@ $totalOfDepreactionAndAmortization = 0;
                                             @if($singleType != __('Sales Revenue'))
 
                                             <td class="text-center">
-                                                @php
+                                                @@php
 												
                                                 $currentSalesRevenuePercentage = $total_of_sales_revenue ? $item / $total_of_sales_revenue * 100  : 0;
                                                 
 												$totalOfSalesRevenuePercentage += $currentSalesRevenuePercentage
-                                                @endphp
+                                                @end@php
                                                 {{number_format($currentSalesRevenuePercentage,2) . ' %'}}</td>
                                             @endif
 

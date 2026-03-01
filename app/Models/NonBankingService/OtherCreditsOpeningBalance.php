@@ -6,6 +6,9 @@ use App\Traits\HasCollectionOrPaymentStatement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperOtherCreditsOpeningBalance
+ */
 class OtherCreditsOpeningBalance extends Model
 {
 	  use HasCollectionOrPaymentStatement;

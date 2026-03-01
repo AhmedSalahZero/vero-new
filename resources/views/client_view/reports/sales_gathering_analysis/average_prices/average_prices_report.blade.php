@@ -92,10 +92,10 @@
         <div class="tab-content  kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
-            <?php
+            @php
                     array_push($names, 'Total');
                     array_push($names, 'Sales_Channel_Sales_Percentages');
-                    ?>
+                    @endphp
             {{-- <div class="tab-pane " id="kt_apps_contacts_view_tab_1" role="tabpanel">
                     @foreach ($names as $name_of_sales_channel)
 
@@ -116,9 +116,9 @@
 @endforeach
 </div> --}}
 <!--End:: Tab  EGP FX Rate Table -->
-@php
+@@php
 	$view_name = str_replace('Items',' Products Items',$view_name);
-@endphp
+@end@php
 <!--Begin:: Tab USD FX Rate Table -->
 <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
     <x-table :tableTitle="__($view_name.' Report')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
@@ -132,10 +132,10 @@
         @endslot
         @slot('table_body')
 
-        <?php $id =1 ;?>
+        @php $id =1 ;@endphp
         @foreach ($report_data as $sales_channel_name => $sales_channel_channels_data)
 
-        {{-- <?php $chart_data = [];?> --}}
+        {{-- @php $chart_data = [];@endphp --}}
 
         @if ($sales_channel_name != 'Total' && $sales_channel_name != 'Growth Rate %')
 
@@ -146,11 +146,11 @@
                 <b>{{ __($sales_channel_name) }}</b>
             </td>
             {{-- Total --}}
-            <?php $total_per_sales_channel = $sales_channel_channels_data['Total'] ?? [];
-                                        unset($sales_channel_channels_data['Total']); ?>
+            @php $total_per_sales_channel = $sales_channel_channels_data['Total'] ?? [];
+                                        unset($sales_channel_channels_data['Total']); @endphp
             {{-- Growth Rate % --}}
-            <?php $growth_rate_per_sales_channel = $sales_channel_channels_data['Growth Rate %'] ?? [];
-                                        unset($sales_channel_channels_data['Growth Rate %']); ?>
+            @php $growth_rate_per_sales_channel = $sales_channel_channels_data['Growth Rate %'] ?? [];
+                                        unset($sales_channel_channels_data['Growth Rate %']); @endphp
             @foreach ($dates as $date)
             <td class="text-center white-text">
                 {{-- {{ number_format($total_per_sales_channel[$date] ?? 0)}} --}}
@@ -175,7 +175,7 @@
                                     <tr class="active-style text-center">
                                         <td class="active-style text-center" colspan="2"><b>{{ __($sales_channel_name) }}</b></td>
         <td class="hidden"></td>
-        <?php $decimals = $sales_channel_name == 'Growth Rate %' ? 2 : 0; ?>
+        @php $decimals = $sales_channel_name == 'Growth Rate %' ? 2 : 0; @endphp
         @foreach ($dates as $date)
 
         <td class="text-center active-style">
@@ -183,7 +183,7 @@
         @endforeach
         </tr> --}}
         @endif
-        <?php $id++ ;?>
+        @php $id++ ;@endphp
         @endforeach
 
 

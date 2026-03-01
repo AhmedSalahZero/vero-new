@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ServiceCategory whereRevenueBusinessLineId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ServiceCategory whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @mixin IdeHelperServiceCategory
  */
 class ServiceCategory extends Model implements IHaveCompany,IHaveCreator,IBaseModel
 { 

@@ -439,7 +439,6 @@
 	@php
 		$index = 1 ;
 	@endphp
-	{{-- {{ dd($fixedAtEndResult['beginning'],$loanStartDate,$loanDates) }} --}}
 		@foreach($loanDates as $date )
 		<tr>
 			<td class="text-center">{{ $index }}</td>

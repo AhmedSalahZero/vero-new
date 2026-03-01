@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperContract
+ */
 class Contract extends Model
 {
     use HasFactory, HasBasicStoreRequest,HasCompany;

@@ -264,9 +264,9 @@
                                         {{ __('Actions') }}
                                     </td>
                                 </tr>
-                                @php
+                                @@php
                                 $id = 0 ;
-                                @endphp
+                                @end@php
                                 @foreach($items as $name => $subItems )
 
                                 <tr class="group-color main-row-tr">
@@ -331,7 +331,7 @@
                                         </b></td>
                                 </tr>
                                 @endforeach
-                                <?php $id++ ;?>
+                                @php $id++ ;@endphp
                                 @endforeach
                                 @endslot
                             </x-table>

@@ -16,7 +16,7 @@
         <form class="kt-form kt-form--label-right" method="POST" action={{  $name_of_selector_label == 'Sales Discount' ? route('branches.salesDiscount.analysis.result', $company) : route('branches.analysis.result', $company) }} enctype="multipart/form-data">
             @csrf
             <div class="kt-portlet">
-                <?php 
+                @php 
                    
                         $branches = getTypeFor('branch',$company->id,false);
                         
@@ -31,7 +31,7 @@
                             $column =  6 ;
                             $data_type_selector = 'disabled';
                         }
-                    ?>
+                    @endphp
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">

@@ -49,7 +49,7 @@ class IjaraMortgageController extends Controller
 		$equityFundingValues = [];
 		$newLoansFundingRates = [];
 		$newLoanFundingValues = [];
-		$eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::IJARA) : null;
+		$eclAndNewPortfolioFundingRate =  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::IJARA) ;
 		foreach($yearOrMonthsIndexes as $dateAsIndex => $dateFormatted ){
 			$adminFeesRates[$dateAsIndex]=$eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getAdminFeesRatesAtYearOrMonthIndex($dateAsIndex) : 0;
 			$eclRates[$dateAsIndex] = $eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getEclRatesAtYearOrMonthIndex($dateAsIndex) : 0;

@@ -8,6 +8,9 @@ use App\Traits\Models\HasLetterOfGuaranteeStatements;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLetterOfGuaranteeFacility
+ */
 class LetterOfGuaranteeFacility extends Model
 {
 	use HasLetterOfGuaranteeStatements , HasLetterOfGuaranteeCashCoverStatements;

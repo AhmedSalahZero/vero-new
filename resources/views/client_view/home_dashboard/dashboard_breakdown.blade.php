@@ -111,7 +111,7 @@
 @endsection
 @section('content')
 
-@php
+@@php
 $exportableFields = (new \App\Http\Controllers\ExportTable)->customizedTableField($company, 'SalesGathering', 'selected_fields');
 $exportableFieldsValues = array_keys($exportableFields);
 if(in_array('document_type' , $exportableFieldsValues) && in_array('document_number' , $exportableFieldsValues) )
@@ -120,7 +120,7 @@ $exportableFieldsValues[] = 'invoice_count';
 $exportableFieldsValues[] = 'product_item_avg_count';
 $exportableFieldsValues[] = 'avg_invoice_value';
 }
-@endphp
+@end@php
 <div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
@@ -218,9 +218,9 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        @php
+                                        @@php
                                         $businessSectors = getTypeFor($type,$company->id,false);
-                                        @endphp
+                                        @end@php
                                         <input type="hidden" name="company_id" value="{{ $company->id }}">
                                         <input type="hidden" name="type" value="{{ $type }}">
                                         <label class="text-left font-weight-bold  w-100 mb-3 text-black">{{ __('Please Select') }} {{ ucwords(str_replace('_',' ',$type)) }}</label>
@@ -391,7 +391,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <?php
+                        @php
                                                 if ($type == 'service_provider_birth_year' || $type == 'service_provider_type') {
                                                     $report_count_data = $report_data['report_count_data']??[];
                                                     $total_count = ( count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0;
@@ -399,7 +399,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
 
                                                 }
                                                 $total = array_sum(array_column(($report_data??[]),'Sales Value'));$key=0;
-                                            ?>
+                                            @endphp
 
                         <x-table :tableClass="'kt_table_with_no_pagination_no_scroll'">
                             @slot('table_header')
@@ -418,9 +418,9 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                             @slot('table_body')
 
 
-@php
+@@php
 	$acc = 0;
-@endphp
+@end@php
                             @foreach ($report_data as $key => $item)
 
                             <tr>
@@ -428,9 +428,9 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                 <th>{{($key??0)+1}}</th>
                                 <td class=" max-w-300">{{$item['item']?? '-'}}</td>
                                 <td class="text-center">{{number_format($item['Sales Value']??0)}}</td>
-								@php
+								@@php
 									$acc += $total == 0 ? 0 : (($item['Sales Value']/$total)*100)  ;
-								@endphp
+								@end@php
                                 {{-- <td class="text-center">{{ . ' %'}}</td> --}}
                                 <td class="text-center">{{$total == 0 ? 0 : number_format((($item['Sales Value']/$total)*100) , 1) . ' %'}}</td>
                                 <td class="text-center">{{number_format($acc,1). ' %'}}</td>

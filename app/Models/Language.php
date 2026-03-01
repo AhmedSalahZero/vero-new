@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\StaticBoot;
 
+/**
+ * @mixin IdeHelperLanguage
+ */
 class Language extends Model
 {
     use SoftDeletes,StaticBoot;

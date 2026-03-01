@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * * هو عباره عن الكاش اللي بدفعه للمورد
+ *
+ * @mixin IdeHelperCashPayment
  */
 class CashPayment extends Model
 {

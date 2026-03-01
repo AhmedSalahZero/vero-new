@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @mixin IdeHelperForecastedProperty
+ */
 class ForecastedProperty extends Model
 {
     use BelongsToStudy,BelongsToCompany,HasDueInstallment;
@@ -141,7 +144,7 @@ class ForecastedProperty extends Model
     {
         $forecastedDueInstallment = $this->forecastedDueInstallment;
         /**
-         * @var PropertyDueInstallment $forecastedDueInstallment
+         * @var ?PropertyDueInstallment $forecastedDueInstallment
          */
         return [
             'id' => $forecastedDueInstallment ? $forecastedDueInstallment->id : 0,

@@ -36,18 +36,7 @@
                         </thead>
                         <tbody>
 						
-							{{-- @php
-								$total = 0 ;
-								$totalInMainFunctionalCurrency = 0 ;
-								
-								
-							@endphp --}}
-							
-							{{-- @if($itemName == 'Outliers' && $idPrefix=='second' && $mainItemName != 'General Exp - G&A Exp.')
-										{{ dd($detailItems) }}
-										{{ dd( (isset($reportData['report_data'][$mainItemName][$itemName]['dates']) && !count($reportData['report_data'][$mainItemName][$itemName]['dates']))) }}
-										{{ dd(isset($reportData['report_data'][$mainItemName][$itemName]['dates']) && !count($reportData['report_data'][$mainItemName][$itemName]['dates'])) }}
-										@endif --}}
+						
 										
                             @foreach($detailItems['dates'] as $date => $value)
 		

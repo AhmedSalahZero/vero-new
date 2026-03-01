@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * @mixin IdeHelperBank
+ */
 class Bank extends Model
 {
 	protected $guarded = ['id'];

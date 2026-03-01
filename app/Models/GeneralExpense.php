@@ -7,6 +7,9 @@ use App\Models\Traits\Relations\GeneralExpenseRelation;
 use App\Traits\HasExpense;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperGeneralExpense
+ */
 class GeneralExpense extends Model
 {
     use  GeneralExpenseRelation , GeneralExpenseAccessor,HasExpense;

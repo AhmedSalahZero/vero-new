@@ -97,10 +97,10 @@
         <div class="tab-content  kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
-            <?php
+            @php
                     array_push($salesPersons_names, 'Total');
                     array_push($salesPersons_names, 'Sales_Channel_Sales_Percentages');
-                ?>
+                @endphp
             <!--End:: Tab  EGP FX Rate Table -->
 
             <!--Begin:: Tab USD FX Rate Table -->
@@ -118,15 +118,15 @@
                     @endslot
                     @slot('table_body')
 
-                    <?php $id = 1; sortReportForTotals($report_data)?>
+                    @php $id = 1; sortReportForTotals($report_data)@endphp
                     @foreach ($report_data as $sales_channel_name => $sales_channel_channels_data)
 
-                    <?php $chart_data = [];?>
+                    @php $chart_data = [];@endphp
 
                     @if ($sales_channel_name != 'Total' && $sales_channel_name != 'Growth Rate %')
-                    <?php
+                    @php
 
-                                ?>
+                                @endphp
 
                     <tr class="group-color ">
                         <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
@@ -134,11 +134,11 @@
                             <b>{{ __($sales_channel_name) }}</b>
                         </td>
                         {{-- Total --}}
-                        <?php $total_per_sales_channel = $sales_channel_channels_data['Total'] ?? [];
-                                        unset($sales_channel_channels_data['Total']); ?>
+                        @php $total_per_sales_channel = $sales_channel_channels_data['Total'] ?? [];
+                                        unset($sales_channel_channels_data['Total']); @endphp
                         {{-- Growth Rate % --}}
-                        <?php $growth_rate_per_sales_channel = $sales_channel_channels_data['Growth Rate %'] ?? [];
-                                        unset($sales_channel_channels_data['Growth Rate %']); ?>
+                        @php $growth_rate_per_sales_channel = $sales_channel_channels_data['Growth Rate %'] ?? [];
+                                        unset($sales_channel_channels_data['Growth Rate %']); @endphp
 
                         @foreach ($dates as $date)
                         <td class="text-center white-text">{{ number_format($total_per_sales_channel[$date] ?? 0) . '  [ GR '.number_format($growth_rate_per_sales_channel[$date] ?? 0) . ' % ]'}}
@@ -149,9 +149,9 @@
 
 
 
-                    @php
+                    @@php
                     sortSubItems($sales_channel_channels_data)
-                    @endphp
+                    @end@php
                     @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 
                     <tr class="row{{ $id }}  text-center" style="display: none">
@@ -177,7 +177,7 @@
                     <tr class="active-style text-center">
                         <td class="active-style text-center"><b>{{ __($sales_channel_name) }}</b></td>
 
-                        <?php $decimals = $sales_channel_name == 'Growth Rate %' ? 2 : 0; ?>
+                        @php $decimals = $sales_channel_name == 'Growth Rate %' ? 2 : 0; @endphp
                         @foreach ($dates as $date)
 
                         <td class="text-center active-style">
@@ -186,7 +186,7 @@
                         <td class="text-center active-style">{{$sales_channel_name == 'Growth Rate %' ? "-" : number_format(array_sum($sales_channel_channels_data  ?? []),0)}}</td>
                     </tr>
                     @endif
-                    <?php $id++; ?>
+                    @php $id++; @endphp
                     @endforeach
 
 

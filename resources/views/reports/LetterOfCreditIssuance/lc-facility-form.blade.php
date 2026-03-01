@@ -316,7 +316,6 @@ use App\Models\LetterOfCreditIssuance;
                                     <label>{{__('LC Currency')}}
                                         @include('star')
                                     </label>
-									{{-- {{ dd($model->getLcCurrency()) }} --}}
                                     <div class="input-group">
                                         <select  name="lc_currency" class="form-control lc-currency update-exchange-rate current-invoice-currency">
                                             <option selected>{{__('Select')}}</option>

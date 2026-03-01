@@ -19,7 +19,7 @@
             </div>
         </div>
             <!--begin::Form-->
-            <?php $section_row = isset($section) ? $section : old(); ?>
+            @php $section_row = isset($section) ? $section : old(); @endphp
             <form class="kt-form kt-form--label-right" method="POST" action= {{isset($section) ? route('section.update',$section): route('section.store')}} enctype="multipart/form-data">
                 @csrf
                 {{isset($section) ?  method_field('PUT'): ""}}

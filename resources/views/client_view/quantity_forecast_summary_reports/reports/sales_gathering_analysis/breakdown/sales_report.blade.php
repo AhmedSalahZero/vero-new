@@ -75,7 +75,7 @@
                             </tr>
                         @endslot
                         @slot('table_body') 
-                            <?php $total = array_sum(array_column($report_view_data,'Sales Value')); $total_count = (isset($report_count_data) && count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0; ?>
+                            @php $total = array_sum(array_column($report_view_data,'Sales Value')); $total_count = (isset($report_count_data) && count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0; @endphp
                             @foreach ($report_view_data as $key => $item)
                              <tr>
                                  <th>{{$key+1}}</th>

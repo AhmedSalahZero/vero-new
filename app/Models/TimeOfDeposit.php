@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
-     * * الوديعه لاجل هي عباره عن مبلغ معين من المال بيتمجد لفتره محددة وبينزل عليه فؤائد
-     * * وبيختلف عن الشهادة بان مدة بتكون اقل وبالتالي فايدة اقل
-     * * يعني الوديعه بتكون من اسبوع لسنه مثلا اما الشهادة فا بتبدا من ثلاث سنين وانت طالع
-     */
+ * * الوديعه لاجل هي عباره عن مبلغ معين من المال بيتمجد لفتره محددة وبينزل عليه فؤائد
+ * * وبيختلف عن الشهادة بان مدة بتكون اقل وبالتالي فايدة اقل
+ * * يعني الوديعه بتكون من اسبوع لسنه مثلا اما الشهادة فا بتبدا من ثلاث سنين وانت طالع
+ *
+ * @mixin IdeHelperTimeOfDeposit
+ */
 class TimeOfDeposit extends Model
 {
     use HasDebitStatements,HasCreditStatements,HasBlockedAgainst,HasLastStatementAmount,HasDepositAccount,HasOdooMoneyTransfer,HasCompany,HasPeriodicInterest ;

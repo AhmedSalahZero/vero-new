@@ -99,9 +99,9 @@
                             <span class="kt-widget24__stats kt-font-success">
                                 {{ $previous_year_sales =  number_format($sales_forecast['previous_1_year_sales'] ?? 0) }}
 
-                                @php
+                                @@php
                                 $previous_year_sales = 0;
-                                @endphp
+                                @end@php
                             </span>
                             <input type="hidden" name="previous_1_year_sales" value="{{ $sales_forecast['previous_1_year_sales'] ?? 0 }}">
                             <input type="hidden" name="previous_year" value="{{ $sales_forecast['previous_year'] }}">
@@ -215,7 +215,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
 
-                                <?php $sales_forecast['others_products_previous_year'] = isset($sales_forecast['others_products_previous_year']) ? $sales_forecast['others_products_previous_year'] : old('others_products_previous_year'); ?>
+                                @php $sales_forecast['others_products_previous_year'] = isset($sales_forecast['others_products_previous_year']) ? $sales_forecast['others_products_previous_year'] : old('others_products_previous_year'); @endphp
 
                                 <label>{{ __('Show From Others (Multi-Selector  - Maximum 5 )') }} @include('star')</label>
 
@@ -255,7 +255,7 @@
                         @endslot
 
                         @slot('table_body')
-                        <?php $total = array_sum(array_column($sales_forecast['previous_year_seasonality']??[],'Sales Value')); ?>
+                        @php $total = array_sum(array_column($sales_forecast['previous_year_seasonality']??[],'Sales Value')); @endphp
                         @foreach ($sales_forecast['previous_year_seasonality']??[] as $key => $item)
                         <tr>
                             <th>{{$key+1}}</th>
@@ -310,7 +310,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <?php $sales_forecast['others_products_previous_3_year'] = isset($sales_forecast['others_products_previous_3_year']) ? $sales_forecast['others_products_previous_3_year'] : old('others_products_previous_3_year'); ?>
+                                @php $sales_forecast['others_products_previous_3_year'] = isset($sales_forecast['others_products_previous_3_year']) ? $sales_forecast['others_products_previous_3_year'] : old('others_products_previous_3_year'); @endphp
                                 <label>{{ __('Show From Others (Multi-Selector  - Maximum 5 )') }} @include('star')</label>
 
                                 <select class="form-control kt-select2" id="kt_select2_8" name="others_products_previous_3_year[]" multiple="multiple">
@@ -346,7 +346,7 @@
                         </tr>
                         @endslot
                         @slot('table_body')
-                        <?php $total = array_sum(array_column($sales_forecast['last_3_years_seasonality'],'Sales Value')); ?>
+                        @php $total = array_sum(array_column($sales_forecast['last_3_years_seasonality'],'Sales Value')); @endphp
                         @foreach ($sales_forecast['last_3_years_seasonality'] as $key => $item)
                         <tr>
                             <th>{{$key+1}}</th>
@@ -384,7 +384,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="kt-portlet kt-portlet--mobile">
-                <?php $sales_forecast_data = App\Models\QuantitySalesForecast::company()->first() ?? old(); ?>
+                @php $sales_forecast_data = App\Models\QuantitySalesForecast::company()->first() ?? old(); @endphp
                 <div class="kt-portlet__body">
                     <!--begin: Datatable -->
                     <div class="row">

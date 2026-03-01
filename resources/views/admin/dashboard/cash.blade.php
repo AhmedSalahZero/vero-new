@@ -97,9 +97,9 @@
 
     <div class="kt-portlet__body" style="padding-bottom:0 !important;">
         <ul style="margin-bottom:0 ;" class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
-            @php
+            @@php
             $index = 0 ;
-            @endphp
+            @end@php
             @foreach($selectedCurrencies as $currencyUpper=>$currency)
 
             <li class="nav-item @if($index ==0 ) active @endif">
@@ -109,18 +109,18 @@
                 </a>
             </li>
 
-            @php
+            @@php
             $index++;
-            @endphp
+            @end@php
             @endforeach
         </ul>
     </div>
 </div>
 
 <div class="tab-content  kt-margin-t-20">
-    @php
+    @@php
     $index = 0 ;
-    @endphp
+    @end@php
 
     @foreach($selectedCurrencies as $name=>$currency)
 
@@ -142,9 +142,9 @@
                                 <div class="kt-widget24__info w-100">
                                     <h4 class="kt-widget24__title font-size text-uppercase d-flex justify-content-between align-items-center">
                                         {{ __('Cash & Banks' )  . ' [ ' . $currency . ' ]' }}
-										@php
+										@@php
 											$currentModalId = 'safe';
-										@endphp
+										@end@php
 										<button class="btn btn-sm btn-brand btn-elevate btn-pill text-white" data-toggle="modal" data-target="#{{ $currentModalId.$currency }}">{{ __('Details') }}</button>
 										@include('admin.dashboard.details_cash_in_safe_modal',['detailItems'=> array_merge($details[$name]['current_account']??[],$details[$name]['cash_in_safe'] ?? [])  , 'modalId'=>$currentModalId ,'title'=>__('Cash  Details')])
                                     </h4>
@@ -172,9 +172,9 @@
                                 <div class="kt-widget24__info w-100">
                                     <h4 class="kt-widget24__title font-size  text-uppercase d-flex justify-content-between align-items-center">
                                         {{ __('Time Deposit') . ' [ ' . $currency . ' ]' }}
-										@php
+										@@php
 											$currentModalId = 'time_of_deposits_details';
-										@endphp
+										@end@php
 										<button class="btn btn-sm btn-brand btn-elevate btn-pill text-white" data-toggle="modal" data-target="#{{ $currentModalId.$currency }}">{{ __('Details') }}</button>
 										
 										@include('admin.dashboard.details_modal',['detailItems'=>$details[$name]['time_of_deposits'] ?? [] , 'modalId'=>$currentModalId ,'title'=>__('Time Of Deposits Details')])
@@ -208,9 +208,9 @@
                                 <div class="kt-widget24__info w-100">
                                     <h4 class="kt-widget24__title font-size text-uppercase d-flex justify-content-between align-items-center">
                                         {{ __('Certificate Of Deposit') . ' [ ' . $currency . ' ] ' }}
-										@php
+										@@php
 											$currentModalId = 'certificate_of_deposits_details';
-										@endphp
+										@end@php
 										<button class="btn btn-sm btn-brand btn-elevate btn-pill text-white" data-toggle="modal" data-target="#{{ $currentModalId.$currency }}">{{ __('Details') }}</button>
 
 										@include('admin.dashboard.details_modal',['detailItems'=>$details[$name]['certificate_of_deposits'] ?? [] , 'modalId'=>$currentModalId ,'title'=>__('Certificate Of Deposits Details')])
@@ -661,12 +661,12 @@
                                         <div class="kt-portlet__body">
 
                                             <!--begin: Datatable -->
-                                            <?php
+                                            @php
                                                
                                                 $availableRoomTotal = array_sum(array_column(($totalRoomForEachFullySecuredOverdraftId[$currency]??[]),'available_room'));$key=0;
                                                 $limitTotal = array_sum(array_column(($totalRoomForEachFullySecuredOverdraftId[$currency]??[]),'limit'));$key=0;
                                                 $endBalanceTotal = array_sum(array_column(($totalRoomForEachFullySecuredOverdraftId[$currency]??[]),'end_balance'));$key=0;
-                                            ?>
+                                            @endphp
 
                                             <x-table :tableClass="'kt_table_with_no_pagination_no_scroll_no_entries'">
                                                 @slot('table_header')
@@ -912,12 +912,12 @@
                                         <div class="kt-portlet__body">
 
                                             <!--begin: Datatable -->
-                                            <?php
+                                            @php
                                                
                                                 $availableRoomTotal = array_sum(array_column(($totalRoomForEachCleanOverdraftId[$currency]??[]),'available_room'));$key=0;
                                                 $limitTotal = array_sum(array_column(($totalRoomForEachCleanOverdraftId[$currency]??[]),'limit'));$key=0;
                                                 $endBalanceTotal = array_sum(array_column(($totalRoomForEachCleanOverdraftId[$currency]??[]),'end_balance'));$key=0;
-                                            ?>
+                                            @endphp
 
                                             <x-table :tableClass="'kt_table_with_no_pagination_no_scroll_no_entries'">
                                                 @slot('table_header')
@@ -1156,12 +1156,12 @@
                                         <div class="kt-portlet__body">
 
                                             <!--begin: Datatable -->
-                                            <?php
+                                            @php
                                                
                                                 $availableRoomTotal = array_sum(array_column(($totalRoomForEachOverdraftAgainstCommercialPaperId[$currency]??[]),'available_room'));$key=0;
                                                 $limitTotal = array_sum(array_column(($totalRoomForEachOverdraftAgainstCommercialPaperId[$currency]??[]),'limit'));$key=0;
                                                 $endBalanceTotal = array_sum(array_column(($totalRoomForEachOverdraftAgainstCommercialPaperId[$currency]??[]),'end_balance'));$key=0;
-                                            ?>
+                                            @endphp
 
                                             <x-table :tableClass="'kt_table_with_no_pagination_no_scroll_no_entries'">
                                                 @slot('table_header')
@@ -1400,12 +1400,12 @@
                                         <div class="kt-portlet__body">
 
                                             <!--begin: Datatable -->
-                                            <?php
+                                            @php
                                                
                                                 $availableRoomTotal = array_sum(array_column(($totalRoomForEachOverdraftAgainstAssignmentOfContractId[$currency]??[]),'available_room'));$key=0;
                                                 $limitTotal = array_sum(array_column(($totalRoomForEachOverdraftAgainstAssignmentOfContractId[$currency]??[]),'limit'));$key=0;
                                                 $endBalanceTotal = array_sum(array_column(($totalRoomForEachOverdraftAgainstAssignmentOfContractId[$currency]??[]),'end_balance'));$key=0;
-                                            ?>
+                                            @endphp
 
                                             <x-table :tableClass="'kt_table_with_no_pagination_no_scroll_no_entries'">
                                                 @slot('table_header')
@@ -1547,11 +1547,11 @@
 
                                 </div>
                             </div>
-							@php
+							@@php
 								$nextInstallment = $mediumTermLoan->getNextInstallmentDateAndAmount($date) ;
 								$nextInstallmentAmountFormatted = $nextInstallment['amount_formatted'];
 								$nextInstallmentDateFormatted = $nextInstallment['date_formatted'];
-							@endphp
+							@end@php
                             <div class="kt-widget24__details">
                                 <span class="kt-widget24__stats kt-font-success">
 									@if($nextInstallmentDateFormatted)
@@ -1697,9 +1697,9 @@
 
     </div>
 
-    @php
+    @@php
     $index++;
-    @endphp
+    @end@php
     @endforeach
 </div>
 @endsection

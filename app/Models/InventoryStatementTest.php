@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\StaticBoot;
+/**
+ * @mixin IdeHelperInventoryStatementTest
+ */
 class InventoryStatementTest extends Model
 {
     use StaticBoot;
     //  SoftDeletes,
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
     protected $guarded = [];
 
     /**
@@ -45,11 +44,7 @@ class InventoryStatementTest extends Model
     // {
     //     return $query->except(['validation']);
     // }
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+   
     protected $casts = [
         'validation' => 'array',
     ];

@@ -18,6 +18,9 @@ use App\Models\Traits\Scopes\CompanyScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperRevenueBusinessLine
+ */
 class RevenueBusinessLine extends Model implements IHaveView,IHaveCompany,IHaveCreator,IBaseModel , IExportable
 { 
     use RevenueBusinessLineAccessor,RevenueBusinessLineMutator , RevenueBusinessLineRelation   , CompanyScope ;

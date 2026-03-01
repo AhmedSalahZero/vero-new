@@ -3,6 +3,9 @@ namespace App\Models ;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperReceivableAndPayment
+ */
 class ReceivableAndPayment extends Model{
 	protected $guarded  = ['id'];
 	

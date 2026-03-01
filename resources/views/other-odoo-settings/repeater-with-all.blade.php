@@ -28,7 +28,6 @@
 
 </style>
 
-{{-- {{ dd($financialInstitutionBanks) }} --}}
 <div id="repeater-container" data-name="revenues">
 	@foreach(count($company->interestRevenuesAccounts) ? $company->interestRevenuesAccounts : [null]  as $interestRevenuesAccount)
     <div class="repeater-row d-flex align-items-center" data-first="true">

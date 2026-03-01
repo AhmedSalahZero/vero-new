@@ -9,7 +9,10 @@ parameters:
         - routes/
         - resources/views/
 
-    # المستوى (من 0 إلى 9) - 0 هو الأسهل و 9 هو الأكثر صرامة
+ 
+
+    scanFiles:
+        - _ide_helper_models.php
     level: 4
 
     excludePaths:

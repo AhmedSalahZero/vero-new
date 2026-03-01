@@ -37,10 +37,10 @@
                 </div>
                 <div class="kt-portlet__body  kt-portlet__body--fit">
                     <div class="row row-no-padding row-col-separator-xl">
-                        <?php
+                        @php
                             $count = count($types);
                             $col = 12/$count;
-                        ?>
+                        @endphp
                         @foreach ($types as $type => $color)
                             <div class="col-md-{{$col}}">
                                 <!--begin::Total Profit-->
@@ -53,9 +53,9 @@
                                             </h4>
                                         </div>
                                     </div>
-                                    <?php
+                                    @php
                                     
-                                     ?>
+                                     @endphp
                                     <div class="kt-widget24__details">
                                         <span class="kt-widget24__stats kt-font-{{$color}}">
                                             {{ __( '[ ' .($top_data[$type]['item'] ?? ' - ')) .' ]  ' .number_format(($top_data[$type]['Sales Value']??0)) }}
@@ -155,7 +155,7 @@
                                         <div class="kt-portlet__body">
 
                                             <!--begin: Datatable -->
-                                            <?php
+                                            @php
                                                 if ($type == 'service_provider_birth_year' || $type == 'service_provider_type') {
                                                     $report_count_data = $report_data['report_count_data']??[];
                                                     $total_count = ( count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0;
@@ -163,7 +163,7 @@
 
                                                 }
                                                 $total = array_sum(array_column(($report_data??[]),'Sales Value'));$key=0;
-                                            ?>
+                                            @endphp
 
                                             <x-table  :tableClass="'kt_table_with_no_pagination_no_scroll'">
                                                 @slot('table_header')

@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereServiceCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @mixin IdeHelperServiceItem
  */
 class ServiceItem extends Model implements IHaveCompany,IHaveCreator,IBaseModel
 { 

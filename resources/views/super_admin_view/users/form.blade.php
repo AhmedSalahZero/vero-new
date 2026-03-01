@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@php
+@@php
 	use App\Models\User;
-@endphp
+@end@php
 @section('css')
     <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
@@ -20,8 +20,9 @@
             </div>
         </div>
             <!--begin::Form-->
-            <?php $user_row = isset($user) ? $user : old(); ?>
-				
+			@@php
+             $user_row = isset($user) ? $user : old();
+		@end@php 				
             <form class="kt-form kt-form--label-right" method="POST" action= {{isset($user) ? route('user.update',$user): route('user.store')}} enctype="multipart/form-data">
                 @csrf
                 {{isset($user) ?  method_field('PUT'): ""}}
@@ -100,7 +101,7 @@
                             <div class="col-6">
                                 <label>{{__('Select Companies - (Multi Selection)')}} </label>
                                 <select required name="companies[]" class="form-control kt-selectpicker" multiple>
-                                    <?php $selectedcompanies = isset($user) ?  $user->companies->pluck('id')->toArray() : []; ?>
+                                    @php $selectedcompanies = isset($user) ?  $user->companies->pluck('id')->toArray() : []; @endphp
                                     @foreach ($companies as $item)
                                         <option {{ old('companies') == $item->id || in_array($item->id, $selectedcompanies) ? 'selected' : ''}}  value="{{$item->id}}">{{$item->name[$lang]}}</option>
                                     @endforeach

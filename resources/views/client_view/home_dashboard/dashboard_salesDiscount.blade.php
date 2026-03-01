@@ -103,7 +103,7 @@
                             </tr>
                         @endslot
                         @slot('table_body')
-                            <?php $total = array_sum(array_column($sales_discount_bd,'Sales Value')) ?>
+                            @php $total = array_sum(array_column($sales_discount_bd,'Sales Value')) @endphp
                             @foreach ($sales_discount_bd as $key => $item)
                             <tr>
                                 <th>{{$key+1}}</th>
@@ -153,7 +153,7 @@
                             <tr class="table-active text-center">
 
                                 <th>{{ __('Sales Channel / Discounts') }}</th>
-                                <?php
+                                @php
 
                                     $all_items = $sales_channels_discounts['all_items'];
                                     $items_totals = $sales_channels_discounts['items_totals'];
@@ -161,7 +161,7 @@
                                     $main_type_items_totals = $sales_channels_discounts['main_type_items_totals'];
                                     $totals_sales_per_main_type = $sales_channels_discounts['totals_sales_per_main_type'];
                                     $total_sales = $sales_channels_discounts['total_sales'];
-                                ?>
+                                @endphp
                                 @foreach ($all_items as $item)
                                     <th>{{ __($item) }}</th>
                                 @endforeach
@@ -172,21 +172,21 @@
                             </tr>
                         @endslot
                         @slot('table_body')
-                            <?php $total_per_item = []; ?>
-                            <?php $final_total = array_sum($items_totals);
-                            $final_percentage = $final_total == 0 ? 0 : (($final_total ?? 0) / $final_total) * 100; ?>
+                            @php $total_per_item = []; @endphp
+                            @php $final_total = array_sum($items_totals);
+                            $final_percentage = $final_total == 0 ? 0 : (($final_total ?? 0) / $final_total) * 100; @endphp
                             @foreach ($main_type_items_totals as $main_type_item_name => $main_item_total)
                                 <tr>
                                     <th> {{ __($main_type_item_name) }} </th>
 
                                     @foreach ($all_items as $item)
-                                        <?php $value = $report_data[$main_type_item_name][$item] ?? 0;
-                                        $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; ?>
+                                        @php $value = $report_data[$main_type_item_name][$item] ?? 0;
+                                        $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; @endphp
                                         <td class="text-center">
                                                 {{ number_format($value) }}
                                         </td>
                                     @endforeach
-                                    <?php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; ?>
+                                    @php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; @endphp
                                     <td class="text-center">
                                         {{ number_format($main_item_total) }}
                                     </td>
@@ -202,8 +202,8 @@
                                     <th> {{ __($main_type_item_name) .' %' }} </th>
 
                                     @foreach ($all_items as $item)
-                                        <?php $value = $report_data[$main_type_item_name][$item] ?? 0;
-                                        $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; ?>
+                                        @php $value = $report_data[$main_type_item_name][$item] ?? 0;
+                                        $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; @endphp
                                         <td class="text-center">
 
                                             <span  ><b> {{ number_format($percentage_per_value, 1) . ' %  ' }}</b></span>
@@ -211,7 +211,7 @@
 
                                         </td>
                                     @endforeach
-                                    <?php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; ?>
+                                    @php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; @endphp
                                     <td class="text-center">
                                         <span><b> {{   number_format($total_percentage, 1) . ' %  ' }}</b></span>
                                     </td>
@@ -242,7 +242,7 @@
                             <tr class="table-active text-center">
                                 <th class="text-center"> {{ __('Discounts % / Total Discounts')  }} </th>
                                 @foreach ($all_items as $item_name)
-                                    <?php $items_percentage = $final_total == 0 ? 0 : (($items_totals[$item_name] ?? 0) / $final_total) * 100; ?>
+                                    @php $items_percentage = $final_total == 0 ? 0 : (($items_totals[$item_name] ?? 0) / $final_total) * 100; @endphp
                                     <td class="text-center">
                                         <b> {{   number_format($items_percentage, 1) . ' %' }}</b>
                                     </td>
@@ -258,7 +258,7 @@
                                 <tr class="table-active text-center">
                                     <th class="text-center"> {{ __('Discounts % / Sales')  }} </th>
                                     @foreach ($all_items as $item_name)
-                                        <?php $items_percentage = $total_sales == 0 ? 0 : (($items_totals[$item_name] ?? 0) / $total_sales) * 100; ?>
+                                        @php $items_percentage = $total_sales == 0 ? 0 : (($items_totals[$item_name] ?? 0) / $total_sales) * 100; @endphp
                                         <td class="text-center">
                                             <b> {{   number_format($items_percentage, 1) . ' %' }}</b>
                                         </td>

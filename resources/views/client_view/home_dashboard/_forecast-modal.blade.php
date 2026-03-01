@@ -55,7 +55,6 @@
 							$totalInMainFunctionalCurrency = 0 ;
 
                             @endphp
-							{{-- {{ dd($simpleLinearRegressionForAllTypes,$type) }} --}}
                             @foreach($simpleLinearRegressionForAllTypes[$type]??[] as $name => $nameAndValues )
 							@if($name != 'total')
                             <tr>

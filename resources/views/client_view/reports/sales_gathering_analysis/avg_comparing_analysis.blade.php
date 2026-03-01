@@ -118,12 +118,12 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    @php
+                    @@php
                     $id = 0 ;
 					$firstAllTotal = 0 ;
 					$secondAllTotal = 0 ;
 					 ;
-                    @endphp
+                    @end@php
                     @foreach ($mainItems as $mainItemName)
                     <tr class="group-color ">
 
@@ -144,7 +144,7 @@
                     <tr class="row{{ $id }}  text-center" style="display: none">
                         <td class="text-left"><b>{{ $secondItemName  }}</b></td>
                         <td class="text-center">
-                            @php
+                            @@php
 						   $currentFirstDates =[];
 						    $currentFirstValue  = $firstReportData['report_data'][$mainItemName][$secondItemName]??0;
 							if(is_array($currentFirstValue)){
@@ -159,7 +159,7 @@
 								$currentSecondValue = $currentSecondValue['value']??0;
 							}
 							
-							@endphp
+							@end@php
 							
                             <span class="active-text-color"><b> 
 							
@@ -224,7 +224,7 @@
                     </tr>
 
                     @endforeach
-                    <?php $id++;?>
+                    @php $id++;@endphp
                     @endforeach
 					
 					

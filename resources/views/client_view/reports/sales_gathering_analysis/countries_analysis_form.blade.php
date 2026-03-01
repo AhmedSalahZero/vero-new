@@ -21,16 +21,16 @@
             <div class="kt-portlet">
                 @if ($type == 'averagePrices')
                 <input type="hidden" name="type_of_report" value="countries_products_avg">
-                <?php
+                @php
                             $type = 'product_or_service'  ;
-                        ?>
+                        @endphp
                 @elseif ($type == 'averagePricesProductItems')
                 <input type="hidden" name="type_of_report" value="countries_Items_avg">
-                <?php
+                @php
                             $type = 'product_item'  ;
-                        ?>
+                        @endphp
                 @endif
-                <?php $countries = App\Models\SalesGathering::company()
+                @php $countries = App\Models\SalesGathering::company()
                         ->whereNotNull('country')
                         ->where('country','!=','')
                         ->groupBy('country')
@@ -49,7 +49,7 @@
                             $column =  6 ;
                             $data_type_selector = 'disabled';
                         }
-                    ?>
+                    @endphp
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">

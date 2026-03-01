@@ -15,6 +15,8 @@ use App\Models\Company;
 use App\Models\IncomeStatement;
 use App\Models\IncomeStatementItem;
 use App\Models\Log;
+use App\Models\Partner;
+use App\Models\User;
 use App\Services\Caching\CashingService;
 use App\Traits\GeneralFunctions;
 use Auth;
@@ -35,7 +37,6 @@ class HomeController extends Controller
 	 */
 	public function index(Request $request)
 	{
-	
 		$user =  Auth::user();
 		$companies = $user->companies;
 		if (count($user->companies) > 1) {

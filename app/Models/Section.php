@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @mixin IdeHelperSection
+ */
 class Section extends Model
 {
      use SoftDeletes,StaticBoot;

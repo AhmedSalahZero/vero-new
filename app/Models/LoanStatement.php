@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperLoanStatement
+ */
 class LoanStatement extends Model  implements IHaveStatement
 {
 	use HasDeleteButTriggerChangeOnLastElement,IsBankStatement;

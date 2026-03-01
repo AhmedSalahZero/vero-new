@@ -6,6 +6,9 @@ use App\Models\Traits\Accessors\OtherVariableManpowerExpenseAccessor;
 use App\Models\Traits\Relations\OtherVariableManpowerExpenseRelation;
 use App\Traits\HasExpense;
 use Illuminate\Database\Eloquent\Model;
+/**
+ * @mixin IdeHelperOtherVariableManpowerExpense
+ */
 class OtherVariableManpowerExpense extends Model
 {
     

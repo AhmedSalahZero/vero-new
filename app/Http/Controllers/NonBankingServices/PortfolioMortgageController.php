@@ -78,7 +78,7 @@ protected function getPortfolioMortgageDurations():array
 		$newLoansFundingRates = [];
 		$newLoanFundingValues = [];
 	//	$netDisbursements= [];
-		$eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::PORTFOLIO_MORTGAGE) : null;
+		$eclAndNewPortfolioFundingRate =  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::PORTFOLIO_MORTGAGE);
 		foreach($yearOrMonthsIndexes as $dateAsIndex => $dateFormatted ){
 			$adminFeesRates[$dateAsIndex]=$eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getAdminFeesRatesAtYearOrMonthIndex($dateAsIndex) : 0;
 			$eclRates[$dateAsIndex] = $eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getEclRatesAtYearOrMonthIndex($dateAsIndex) : 0;

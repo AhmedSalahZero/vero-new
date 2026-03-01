@@ -228,7 +228,11 @@
             <div class="left-section">
                 <div class="inner-content">
                     <h1 class="heading">404</h1>
-                    <?php $message =  $exception->getMessage() ? json_decode($exception->getMessage(),true) : null ;?>
+                    @php 
+$message = isset($exception) && $exception->getMessage() 
+    ? json_decode($exception->getMessage(), true) 
+    : null;
+@endphp
 
                     <p class="subheading">{{$message['en'] ?? 'Looks like the page you were looking for is not Found'}}</p>
                     <p class="subheading">{{$message['ar'] ?? '.يبدو أن الصفحة التي تبحث غير موجودة'}}</p>

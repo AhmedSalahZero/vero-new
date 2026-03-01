@@ -3,6 +3,9 @@ namespace App\Models\NonBankingService;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperSeasonality
+ */
 class Seasonality extends Model
 {
 	protected $table ='seasonality';

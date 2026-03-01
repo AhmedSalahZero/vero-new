@@ -10,14 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperSupplierInvoice
+ */
 class SupplierInvoice extends Model implements IInvoice
 {
     use StaticBoot , IsInvoice;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
     
     protected $dates = [
 		

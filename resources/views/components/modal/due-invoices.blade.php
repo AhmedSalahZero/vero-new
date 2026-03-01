@@ -58,7 +58,6 @@
 								$dueInvoiceRow = \DB::table('weekly_cashflow_custom_due_invoices')->where('is_contract',$isContract)->where('cashflow_report_id',$cashflowReportId)->where('invoice_type',$currentInvoiceType)->where('company_id',$company->id)->whereIn('invoice_id',$allIds)->get();
 								
 							@endphp
-							{{-- dd($pastDueCustomerInvoices); --}}
                             @foreach($pastDueCustomerInvoices as $pastDueCustomerInvoice)
 							@php
 								$row = $dueInvoiceRow->where('invoice_id',$pastDueCustomerInvoice['id'])->first();
@@ -86,7 +85,6 @@
                                         <div class="input-group">
 										
 											<input type="hidden" name="dd" value="ali">
-							{{-- {{ dd($currentInvoiceType) }} --}}
                           	  <input type="hidden" name="customer_invoice_id[]" value="{{ $pastDueCustomerInvoice['id'] }}">
 											<input type="hidden" name="invoice_amount[{{ $pastDueCustomerInvoice['id'] }}]"  value="{{ $pastDueCustomerInvoice['net_balance_in_main_currency'] }}">
 											

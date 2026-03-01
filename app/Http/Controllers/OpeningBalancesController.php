@@ -63,9 +63,6 @@ class OpeningBalancesController
         ]);
         
         foreach ($request->get('cash-in-safe', []) as $index => $cashInSafeArr) {
-            /**
-             * @var MoneyReceived $moneyReceived
-             */
             $amount = number_unformat($cashInSafeArr['received_amount'] ?: 0) ;
             $receivingBranchId = $cashInSafeArr['received_branch_id'] ?: null ;
             $exchangeRate = isset($cashInSafeArr['exchange_rate']) ? $cashInSafeArr['exchange_rate'] : 1  ;

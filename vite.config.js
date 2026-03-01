@@ -17,7 +17,6 @@ export default defineConfig({
 		'resources/js/NonBanking/Views/GeneralAssumptions/general-assumptions.ts',
 		
 		
-		
 		'resources/js/PropertyManagement/Views/Properties/properties.ts',
 		'resources/js/PropertyManagement/Views/Properties/index.ts',
 		'resources/js/PropertyManagement/Views/Contracts/index.ts',
@@ -34,7 +33,7 @@ export default defineConfig({
 		'resources/js/PropertyManagement/Views/occupied-properties/occupied-properties-with-partial-rent-coverage-duration.ts',
 		'resources/js/PropertyManagement/Views/occupied-properties/properties-to-be-delivered.ts',
 		
-		
+		'resources/js/NonBanking/Views/Spreadsheet/spread-sheet.js',
 		
 		
 		'resources/js/Trading/Views/Properties/properties.ts',
@@ -53,11 +52,33 @@ export default defineConfig({
 		'resources/js/Trading/Views/occupied-properties/occupied-properties-with-partial-rent-coverage-duration.ts',
 		'resources/js/Trading/Views/occupied-properties/properties-to-be-delivered.ts',
 		
+		
+		
 	],
       refresh: true,
     }),
     vue(),
 	
   ],
+  optimizeDeps: {
+	include: [
+		'@univerjs/core',
+		'@univerjs/sheets',
+		'@univerjs/sheets-ui',
+		'@univerjs/ui',
+		'@univerjs/engine-formula',
+		'@univerjs/sheets-formula',
+		
+	],
+	// مهم جداً بدونه Vite ممكن يتعطل
+	exclude: [],
+},
+resolve: {
+	alias: {
+		'react': 'react',
+		'react-dom': 'react-dom',
+	}
+}
+
   
 })

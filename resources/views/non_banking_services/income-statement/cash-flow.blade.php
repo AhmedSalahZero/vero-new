@@ -69,7 +69,6 @@ use App\Models\NonBankingService\Study;
 
         </div>
     </div>
-	{{-- {{ dd($request) }} --}}
     <div class="kt-portlet__body">
         <div class="tab-content  kt-margin-t-20">
 

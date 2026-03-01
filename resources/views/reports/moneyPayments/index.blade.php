@@ -159,7 +159,6 @@ $banks = [];
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- {{ dd($payableCheques->pluck('id')->toArray()) }} --}}
                                 @foreach($payableCheques as $moneyPayment)
                                 <tr>
                                     <td>

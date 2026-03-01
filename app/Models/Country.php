@@ -6,6 +6,9 @@ use App\Interfaces\Models\IBaseModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin IdeHelperCountry
+ */
 class Country extends Model implements IBaseModel
 {
 

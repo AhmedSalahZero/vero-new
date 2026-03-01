@@ -1,6 +1,6 @@
-@php
+@@php
 $tableId = 'kt_table_1';
-@endphp
+@end@php
 <style>
 
 .bb-0{
@@ -322,9 +322,9 @@ td.padding-left-0{
                         {{ __('Actions') }}
                     </td>
                 </tr>
-                @php
+                @@php
                 $id = 0 ;
-                @endphp
+                @end@php
                 @foreach($items as $mainItemId => $mainItemData )
 
                 <tr class="group-color main-row-tr">
@@ -495,7 +495,7 @@ td.padding-left-0{
                         </b></td>
                 </tr>
                 @endforeach
-                <?php $id++ ;?>
+                @php $id++ ;@endphp
                 @endforeach
                 @endslot
             </x-table>

@@ -101,9 +101,9 @@
                                 <span class="kt-widget24__stats kt-font-success">
                                     {{ $previous_year_sales =  number_format($sales_forecast['previous_1_year_sales'] ?? 0) }}
 
-                                    @php
+                                    @@php
                                         $previous_year_sales = 0;
-                                    @endphp
+                                    @end@php
                                 </span>
                                 <input type="hidden" name="previous_1_year_sales"
                                     value="{{ $sales_forecast['previous_1_year_sales'] ?? 0 }}">
@@ -267,7 +267,7 @@
                             @slot('table_body')
                                 <tr>
                                     <th class="text-center">{{ __('Seasonality') }}</th>
-                                    <?php $sum_totals = array_sum($sales_forecast['last_3_years_seasonality'] ?? []); ?>
+                                    @php $sum_totals = array_sum($sales_forecast['last_3_years_seasonality'] ?? []); @endphp
                                     @foreach ($sales_forecast['last_3_years_seasonality'] ?? [] as $month => $total)
                                         <td class="text-center">
                                             {{ $sum_totals ? number_format(($total / $sum_totals) * 100 , 2) . ' %' : 0 }}
@@ -293,7 +293,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="kt-portlet kt-portlet--mobile">
-                    <?php $sales_forecast_data = App\Models\SalesForecast::company()->first() ?? old(); ?>
+                    @php $sales_forecast_data = App\Models\SalesForecast::company()->first() ?? old(); @endphp
                     <div class="kt-portlet__body">
                         <!--begin: Datatable -->
                         <div class="row">
@@ -457,7 +457,7 @@
 
 
 
-                        <?php ?>
+                        @php @endphp
                                                    @if(hasProductsItems($company))
 
                         <div class="row">

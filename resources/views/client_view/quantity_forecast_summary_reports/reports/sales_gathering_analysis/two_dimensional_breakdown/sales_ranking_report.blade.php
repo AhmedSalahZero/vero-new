@@ -60,7 +60,7 @@
 <x-table :tableClass="'kt_table_with_no_pagination '">
     @slot('table_header')
     <tr class="table-active text-center">
-        <?php $main_type_name = ucwords(str_replace('_', ' ', $main_type));  ?>
+        @php $main_type_name = ucwords(str_replace('_', ' ', $main_type));  @endphp
         <th>{{ __($main_type_name) 
                  }}</th>
         @for($i = 1 ; $i <= count($data) ; $i++) @foreach(['Rank [ '.$i.' ] '.ucwords(str_replace(' _', ' ' , $type)) , 'Percentage %' , 'Value' , 'Percentage %' ] as $item) <th>{{ __($item) }}</th>
@@ -74,11 +74,11 @@
     </tr>
     @endslot
     @slot('table_body')
-    {{-- $final_percentage = $final_total == 0 ? 0 : (($final_total ?? 0) / $final_total) * 100; ?> --}}
+    {{-- $final_percentage = $final_total == 0 ? 0 : (($final_total ?? 0) / $final_total) * 100; @endphp --}}
     @foreach ($data as $branchName => $statistics)
     <tr>
         <th> {{ __($branchName) }} </th>
-        @for($rankNumber = 1 ;$rankNumber <= count($data) ; $rankNumber++ ) @php $totalForBranch=countTotalForBranch($data[$branchName]) @endphp @php $allRanksTotals=countSumForAllRank($data , $rankNumber) @endphp  <td class="text-center">
+        @for($rankNumber = 1 ;$rankNumber <= count($data) ; $rankNumber++ ) @@php $totalForBranch=countTotalForBranch($data[$branchName]) @end@php @@php $allRanksTotals=countSumForAllRank($data , $rankNumber) @end@php  <td class="text-center">
             {{-- <td class="text-center"> --}}
 
 
@@ -109,9 +109,9 @@
     </tr>
     @endslot
     @slot('table_body')
-    @php $produtNumber = 0;$dataForRankings = $data[$branchName][$rankNumber] ?? [];
+    @@php $produtNumber = 0;$dataForRankings = $data[$branchName][$rankNumber] ?? [];
     orderTotalsForRanking($dataForRankings);
-    @endphp
+    @end@php
 
     @foreach( $dataForRankings as $productName=>$val)
     <tr>
@@ -188,7 +188,7 @@
 <tr class="table-active text-center">
     <th class="text-center"> {{ __('Total') }} </th>
     @foreach ($data as $branchName => $statistics)
-    @for($rankNumber = 1 ;$rankNumber <= count($data) ; $rankNumber++ ) @php $allRanksTotals=countSumForAllRank($data , $rankNumber) @endphp  <td class="text-center">
+    @for($rankNumber = 1 ;$rankNumber <= count($data) ; $rankNumber++ ) @@php $allRanksTotals=countSumForAllRank($data , $rankNumber) @end@php  <td class="text-center">
         {{ $allRanksTotals['total'] }}
         </td>
 
@@ -244,7 +244,7 @@
                 <tr class="table-active text-center">
                     <th class="text-center"> {{ __(ucwords(str_replace('_', ' ', $type))) . ' % / Sales'   }} </th>
 @foreach ($all_items as $item_name)
-@php $items_percentage = $total_sales == 0 ? 0 : (($items_totals[$item_name] ?? 0) / $total_sales) * 100; @endphp
+@@php $items_percentage = $total_sales == 0 ? 0 : (($items_totals[$item_name] ?? 0) / $total_sales) * 100; @end@php
 <td class="text-center">
     <b> {{ number_format($items_percentage, 1) . ' %' }}</b>
 </td>

@@ -6,6 +6,9 @@ use App\Traits\Models\IsOrder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPurchaseOrder
+ */
 class PurchaseOrder extends Model
 {
 	protected $guarded = ['id'];

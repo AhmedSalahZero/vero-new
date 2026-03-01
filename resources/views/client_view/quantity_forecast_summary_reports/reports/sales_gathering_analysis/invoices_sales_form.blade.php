@@ -19,9 +19,9 @@
         <input type="hidden" name="view_name" value="{{ $view_name }}">
             @csrf
             <div class="kt-portlet">
-                <?php 
+                @php 
                 $selects = getTypeFor($type , $company->id , true);
-                ?>
+                @endphp
 
                 <div class="kt-portlet__body">
                     <div class="form-group row">

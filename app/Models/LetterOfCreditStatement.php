@@ -11,6 +11,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperLetterOfCreditStatement
+ */
 class LetterOfCreditStatement extends Model
 {
 	use HasDeleteButTriggerChangeOnLastElement,IsBankStatement;

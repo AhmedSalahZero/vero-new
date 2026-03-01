@@ -8,6 +8,9 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperFixedAssetName
+ */
 class FixedAssetName extends Model
 {
 	use BelongsToStudy,BelongsToCompany,HasBasicStoreRequest;

@@ -103,11 +103,11 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    @php
+                    @@php
                     $id = 0 ;
 					$firstAllTotal = 0 ;
 					$secondAllTotal = 0 ;
-                    @endphp
+                    @end@php
                     @foreach ($mainItems as $mainItemName)
                     <tr class="group-color ">
 
@@ -116,37 +116,37 @@
                             <b>{{ __($mainItemName) }}</b>
                         </td>
                         <td class="text-center white-text">
-                            @php
+                            @@php
                             $firstTotal = isset($report_data[$mainItemName]) ? sum_all_array_values($report_data[$mainItemName]) : 0 ;
 							$firstAllTotal += $firstTotal ; 
 
-                            @endphp
+                            @end@php
                             {{ number_format($firstTotal)  }}
                         </td>
 
                         <td class="text-center white-text">
-                            @php
+                            @@php
                             $secondTotal = isset($secondReportData['report_data'][$mainItemName]) ? sum_all_array_values($secondReportData['report_data'][$mainItemName]) : 0 ;
 							$secondAllTotal += $secondTotal ; 
 							
-                            @endphp
+                            @end@php
                             {{ number_format($secondTotal) }}
                         </td>
                         <td class="text-center white-text">{{$firstTotal ? number_format(    ($secondTotal - $firstTotal) / $firstTotal *100    , 2 ) . ' %' : __('NA')  }} </td>
                     </tr>
-					@php
+					@@php
 						$secondReportSubs = $secondReportData['report_data'][$mainItemName]??[] ; 
 						$secondSubItemsOrdered=isset($isDayNameReport) && $isDayNameReport ? App\Helpers\HArr::orderByDayNameForOneDimension($secondReportSubs) : $secondReportSubs;
 						
 						$firstReportSubs = $firstReportData['report_data'][$mainItemName]??[] ; 
 						$firstSubItemsOrdered=isset($isDayNameReport) && $isDayNameReport ? App\Helpers\HArr::orderByDayNameForOneDimension($firstReportSubs) : $firstReportSubs;
 						$subItemsOrdered = array_unique(array_merge(array_keys($firstReportSubs),array_keys($secondSubItemsOrdered)));
-					@endphp
+					@end@php
                     @foreach ( $subItemsOrdered as $subItemName )
-					@php
+					@@php
                             $firstReportTotalForItem = $report_data[$mainItemName][$subItemName] ?? 0 ;
                             $secondReportTotalForItem = $secondReportSubs[$subItemName] ?? 0 ;
-                            @endphp
+                            @end@php
 							
 					@if($firstReportTotalForItem == 0 && $secondReportTotalForItem ==0)
 					@continue 
@@ -163,7 +163,7 @@
                     </tr>
 
                     @endforeach
-                    <?php $id++;?>
+                    @php $id++;@endphp
                     @endforeach
 					
 					
@@ -178,9 +178,9 @@
                         {{ number_format($secondAllTotal) }}
 						</td>
                   
-						@php
+						@@php
 							$finalGrowthRate = $firstAllTotal ? ($secondAllTotal - $firstAllTotal) / $firstAllTotal * 100 : 0 ;
-						@endphp
+						@end@php
                     <td class="text-center active-style">{{ number_format(  $finalGrowthRate ,2) }} %</td>
                     </tr>
 

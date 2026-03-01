@@ -78,7 +78,6 @@
 										$currentMainRowTotal += $currentValue;
 									}
 									 if($customerName == 'Accumulated Net Cash (+/-)'){
-						//				dd($customerName,$allMainRowsTotals,$finalResult[$currentCurrencyName]);
 									}
 									$allMainRowsTotals[$customerName][$weekAndYear] = $currentMainRowTotal ;
 										

@@ -41,10 +41,10 @@
 @if(config('app.showTrendCharts'))
             <!--Begin:: Tab  EGP FX Rate Table -->
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
-                <?php
+                @php
                     array_push($categories_names, 'Total');
                     array_push($categories_names, 'Categories_Sales_Percentages');
-                    ?>
+                    @endphp
                 @foreach ($categories_names as $name_of_category)
                 {{-- Monthly Chart --}}
                 <div class="col-xl-12">
@@ -83,7 +83,7 @@
                     @endslot
                     @slot('table_body')
                     @foreach ($final_report_data as $category_name => $zoone_data)
-                    <?php $chart_data = []; ?>
+                    @php $chart_data = []; @endphp
 
                     <tr class="group-color  table-active text-lg-left  ">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($category_name) }}</b>
@@ -100,19 +100,19 @@
                     <tr>
                         <th>{{ __('Sales Values') }}</th>
                         @foreach ($dates as $date )
-                        <?php
+                        @php
                                         $chart_data[] = [
                                             'date' => date('d-M-Y', strtotime($date)),
                                             'Sales Value' => number_format($zoone_data['Sales Values'][$date] ?? 0),
                                             'Sales GR %' => number_format($zoone_data['Growth Rate %'][$date] ?? 0, 2),
-                                        ]; ?>
+                                        ]; @endphp
                         <td class="text-center">
                             {{ number_format($zoone_data['Sales Values'][$date] ?? 0) }}</td>
 							
 							
 							 @if($loop->last)
                         <td class="text-center">
-                            @php $totalForCategory[$category_name] = ($totalForSingleCategory = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
+                            @@php $totalForCategory[$category_name] = ($totalForSingleCategory = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
                             {{ number_format($totalForSingleCategory) }}
                         </td>
                         @endif
@@ -131,14 +131,14 @@
                     </tr>
                     <input type="hidden" id="{{ str_replace(' ', '_', $category_name) }}_data" data-total="{{ json_encode($chart_data) }}">
                     @endforeach
-                     <?php $sumOfTotalsOfCategorySales = 0 ?>
+                     @php $sumOfTotalsOfCategorySales = 0 @endphp
 				
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL') }}</th>
                         @foreach ($dates as $date )
 						
                         <td class="text-center active-style">{{ number_format($total_categories[$date] ?? 0) }}</td>
-						<?php $sumOfTotalsOfCategorySales += ($total_categories[$date] ?? 0) ?>
+						@php $sumOfTotalsOfCategorySales += ($total_categories[$date] ?? 0) @endphp
 						   @if($loop->last)
                         <td class="text-center active-style">
                             {{ number_format($sumOfTotalsOfCategorySales ?? 0) }}
@@ -151,14 +151,14 @@
 
                     <tr class="table-active">
                         <th class="active-style text-center">{{ __('Growth Rate %') }}</th>
-                        <?php $chart_data = []; ?>
+                        @php $chart_data = []; @endphp
                         @foreach ($dates as $date )
-                        <?php
+                        @php
                                     $chart_data[] = [
                                         'date' => date('d-M-Y', strtotime($date)),
                                         'Total Sales Values' => number_format($total_categories[$date] ?? 0),
                                         'Sales GR %' => number_format($total_categories_growth_rates[$date] ?? 0, 2),
-                                    ]; ?>
+                                    ]; @endphp
                         <td class="text-center active-style">{{ number_format($total_categories_growth_rates[$date] ?? 0, 2) . ' %' }}</td>
 						@if($loop->last)
                         <td class="text-center active-style">
@@ -191,7 +191,7 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    <?php $chart_data = []; ?>
+                    @php $chart_data = []; @endphp
                     @foreach ($final_report_data as $category_name => $zoone_data)
                     <tr class="group-color  table-active text-lg-left  ">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($category_name) }}</b></td>
@@ -207,13 +207,13 @@
                     <tr>
                         <th>{{ __('Percent %') }}</th>
                         @foreach ($dates as $date )
-						@php
+						@@php
 							$currentTotal = $total_categories[$date] ?? 0;
-						@endphp
-                        <?php
+						@end@php
+                        @php
                                         $percentage = $currentTotal == 0 ? 0 : number_format((($zoone_data['Sales Values'][$date] ?? 0) / ($currentTotal ?? 0)*100), 2);
                                         $chart_data[$date][$category_name] = [$category_name . ' %' => $percentage, ];
-                                        ?>
+                                        @endphp
 
                         <td class="text-center">
                             {{ $percentage . ' %' }}
@@ -229,12 +229,12 @@
                     </tr>
 
                     @endforeach
-                    <?php
+                    @php
                                 $return = array();
                                 array_walk($chart_data, function($values,$date) use (&$return) {
                                     $return[] =array_merge(['date'=>date('d-M-Y', strtotime($date))], array_merge(...array_values($values)));
                                 });
-                            ?>
+                            @endphp
                     <input type="hidden" id="Categories_Sales_Percentages_data" data-total="{{ json_encode($return) }}">
 
 

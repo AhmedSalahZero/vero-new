@@ -92,13 +92,13 @@ class  Loan extends Model
 	{
 		return  $this->loan_type ;
 	}
-	public function getPricing():float
-	{
-		$baseRate = $this->getBaseRate() ;
-		$marginRate = $this->getMarginRate();
+	// public function getPricing():float
+	// {
+	// 	$baseRate = $this->getBaseRate() ;
+	// 	$marginRate = $this->getMarginRate();
 		
-		return  $baseRate + $marginRate ; 
-	}
+	// 	return  $baseRate + $marginRate ; 
+	// }
 	public function getGracePeriod():int 
 	{
 		return $this->grace_period?:0;

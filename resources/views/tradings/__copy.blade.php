@@ -107,7 +107,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- {{dd($rooms)}} --}}
                                 @foreach($rooms??[] as $index=>$room)
 
                                 <tr>
@@ -511,8 +510,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- {{dd($salesChannelsNames)}} --}}
-                                    {{-- <@php  $years= 0;$month_number = $salesPlan->start_from;$key=0;@endphp --}}
                                     @php
                                     $currentTotal = [];
 
@@ -928,7 +925,6 @@
                                     </div>
 
                                 </td>
-                                {{-- @dd('d') --}}
 
                                 @if($monthName =='december')
 
@@ -1480,7 +1476,6 @@ $order = $order +1 ;
                                         <td>
 
                                             @php
-                                            // dd($salesChannel->getRevenueSharePercentageAtYear($year),$year);
                                             $currentVal = $salesChannel->getRevenueSharePercentageAtYear($year) ?? 0 ;
                                             $currentTotal[$year]=isset($currentTotal[$year]) ? $currentTotal[$year] + $currentVal : $currentVal;
                                             @endphp

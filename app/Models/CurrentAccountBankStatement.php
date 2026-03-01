@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperCurrentAccountBankStatement
+ */
 class CurrentAccountBankStatement extends Model  implements IHaveStatement
 {
 	const DEDUCTED_FOR_CURRENT_ACCOUNT = 'deducted-for-deposit';

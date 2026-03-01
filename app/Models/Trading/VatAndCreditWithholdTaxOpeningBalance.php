@@ -6,6 +6,9 @@ use App\Models\Trading\Study;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperVatAndCreditWithholdTaxOpeningBalance
+ */
 class VatAndCreditWithholdTaxOpeningBalance extends Model
 {
     protected $connection= TRADING_CONNECTION_NAME;

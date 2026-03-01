@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperLetterOfGuaranteeIssuance
+ */
 class LetterOfGuaranteeIssuance extends Model
 {
     use HasBasicStoreRequest,HasCommissionStatements,HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements,HasUserComment,HasCompany;

@@ -7,6 +7,9 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperMicrofinanceLoanOfficerCasesProjection
+ */
 class MicrofinanceLoanOfficerCasesProjection extends Model
 {
     use HasBasicStoreRequest,CompanyScope , BelongsToStudy;

@@ -68,7 +68,7 @@ class ExpensesController extends Controller
 			
 		 foreach (count($expenses) ? $expenses : [null] as $expense) {
 			/**
-			 * @var Expense $expense
+			 * @var ?Expense $expense
 			 */
             if ($expense) {
                 $revenueStreamsPerBusinessUnits[$expense->id] = [];
@@ -137,7 +137,7 @@ class ExpensesController extends Controller
         // $datesAsIndexAndString = array_flip($datesAsStringDateIndex);
         $operationStartDateAsIndex = $datesAsStringDateIndex[$study->getOperationStartDate()];
         $studyExtendedEndDateAsIndex = Arr::last($datesAsStringDateIndex);
-        $studyEndDateAsIndex = $study->getStudyEndDateAsIndex($datesAsStringDateIndex, $study->getStudyEndDate());
+        $studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
     
         $model = ('\App\Models\\NonBankingService\\'.$modelName)::find($modelId);
         foreach ($expenseTypes as $tableId) {

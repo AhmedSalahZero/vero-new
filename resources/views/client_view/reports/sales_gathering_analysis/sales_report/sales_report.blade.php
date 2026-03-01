@@ -127,12 +127,12 @@
                         @endforeach
                         <td class="hidden"> </td>
                     </tr>
-                    <?php $chart_data = []; ?>
+                    @php $chart_data = []; @endphp
 
                     @foreach ($report_data as $label => $data)
                     <tr>
                         <th>{{ __($label) }}</th>
-                        <?php $num_of_decimals = $label == 'Month Sales %' ? 1 : 0; ?>
+                        @php $num_of_decimals = $label == 'Month Sales %' ? 1 : 0; @endphp
                         @foreach ($dates as $date)
 
                         <td>{{ number_format($data[$date] ?? 0, $num_of_decimals) . ($label == 'Month Sales %' ? ' %' : '') }}
@@ -157,9 +157,9 @@
 
                     <tr>
                         <th>{{ __('Sales Values') }}</th>
-                        <?php $accumulated_total = 0; ?>
+                        @php $accumulated_total = 0; @endphp
                         @foreach ($dates as $date)
-                        <?php
+                        @php
                                     $accumulated_total += $report_data['Sales Values'][$date] ?? 0;
                                     $chart_data[] = [
                                         'date' => date('d-M-Y', strtotime($date)),
@@ -171,8 +171,8 @@
                                         'date' => date('d-M-Y', strtotime($date)),
                                         'price' => number_format($accumulated_total, 0),
                                     ];
-                                    ?>
-                        <?php ?>
+                                    @endphp
+                        @php @endphp
                         <td>{{ number_format($accumulated_total) }}</td>
                         @endforeach
                         <td>-</td>

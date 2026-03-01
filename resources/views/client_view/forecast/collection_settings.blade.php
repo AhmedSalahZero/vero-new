@@ -18,7 +18,7 @@
 @section('content')
     <form action="{{ route('collection.settings', $company) }}" method="POST">
         @csrf
-        <?php $collection_settings = isset($collection_settings) ? $collection_settings : old(); ?>
+        @php $collection_settings = isset($collection_settings) ? $collection_settings : old(); @endphp
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">

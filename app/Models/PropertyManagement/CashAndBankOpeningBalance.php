@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperCashAndBankOpeningBalance
+ */
 class CashAndBankOpeningBalance extends Model
 {
 	use HasCollectionOrPaymentStatement;

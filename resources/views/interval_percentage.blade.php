@@ -1,7 +1,7 @@
-<?php
-$TheMainSectionTitle = @explode('Sales', Request()->segments()[count(Request()->segments()) - 2])[0] ?? '' ;
+@php
+$TheMainSectionTitle = @explode('Sales', Request()->segments()[count(Request()->segments()) - 2])[0]  ;
 
- ?>
+ @endphp
 <style>
 .seasonality-table tr:not(:last-of-type) td{
 	color:black !important;
@@ -26,7 +26,6 @@ $TheMainSectionTitle = @explode('Sales', Request()->segments()[count(Request()->
     @foreach ($final_report_data as $zone_name => $zoone_data)
 
 
-{{-- {{ dd('e') }} --}}
     <tr class="group-color   text-lg-left  ">
         <td colspan="{{ count($total_branches) + 2 }}"><b class="white-text">{{ __($zone_name) }}</b>
         </td>
@@ -38,14 +37,14 @@ $TheMainSectionTitle = @explode('Sales', Request()->segments()[count(Request()->
     </tr>
     <tr>
         <th>{{ __('% Of Total') }}</th>
-        <?php $totalSum = array_sum($zoone_data['Sales Values'])  ?>
-        <?php   $totals = 0 ;  ?>
+        @php $totalSum = array_sum($zoone_data['Sales Values'])  @endphp
+        @php   $totals = 0 ;  @endphp
         @foreach ($dates as $date )
         <td class="text-center">
 
-            <?php $totals = $totals + ($totalss = number_format(isset($zoone_data['Sales Values'][$date])  && $totalSum  ? (($zoone_data['Sales Values'][$date] / $totalSum)*100      ) : 0,2) )  ?>
+            @php $totals = $totals + ($totalss = number_format(isset($zoone_data['Sales Values'][$date])  && $totalSum  ? (($zoone_data['Sales Values'][$date] / $totalSum)*100      ) : 0,2) )  @endphp
 
-            <?php 
+            @php 
 
                                             if (isset($totalArrys[$date]['value']))
                                             {
@@ -66,7 +65,7 @@ $TheMainSectionTitle = @explode('Sales', Request()->segments()[count(Request()->
                                             
                                             
                                             
-                                            ?>
+                                            @endphp
 
 
             {{ number_format($totalss , 2) }} %

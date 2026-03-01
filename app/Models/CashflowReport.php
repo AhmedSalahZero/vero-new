@@ -5,6 +5,9 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCashflowReport
+ */
 class CashflowReport extends Model
 {
 	protected $guarded = [];

@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * * هنا عميلة تحويل الاموال من حساب بنك الي حساب بنكي اخر
  * * عن طريق بسحب كريدت من حساب احطة دبت في حساب تاني
+ *
+ * @mixin IdeHelperInternalMoneyTransfer
  */
 class InternalMoneyTransfer extends Model 
 {

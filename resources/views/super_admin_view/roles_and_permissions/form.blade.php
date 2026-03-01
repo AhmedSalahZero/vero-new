@@ -4,9 +4,9 @@
     <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
     @endsection
 @section('content')
-@php
+@@php
 	use App\Models\User;
-@endphp
+@end@php
 
 
 <div class="row">
@@ -37,7 +37,7 @@
 						   <div class="col-md-4">
                                 <label>{{__('Company')}} </label>
                                 <select id="company-select-id" update-users-based-on-company-and-role required name="company_id" class="form-control kt-selectpicker" >
-                                    <?php $selectedcompanies = isset($user) ?  $user->companies->pluck('id')->toArray() : []; ?>
+                                    @php $selectedcompanies = isset($user) ?  $user->companies->pluck('id')->toArray() : []; @endphp
                                     @foreach ($companies as $item)
                                         <option {{ old('company_id') == $item->id || in_array($item->id, $selectedcompanies) ? 'selected' : ''}}  value="{{$item->id}}">{{$item->name[$lang]}}</option>
                                     @endforeach

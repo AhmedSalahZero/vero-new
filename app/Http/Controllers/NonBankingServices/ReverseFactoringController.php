@@ -53,7 +53,7 @@ class ReverseFactoringController extends Controller
 		$equityFundingValues = [];
 		$newLoansFundingRates = [];
 		$newLoanFundingValues = [];
-		$eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::REVERSE_FACTORING) : null;
+		$eclAndNewPortfolioFundingRate =  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::REVERSE_FACTORING) ;
 		foreach($yearOrMonthsIndexes as $dateAsIndex => $dateFormatted ){
 			$adminFeesRates[$dateAsIndex]=$eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getAdminFeesRatesAtYearOrMonthIndex($dateAsIndex) : 0;
 			$eclRates[$dateAsIndex] = $eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getEclRatesAtYearOrMonthIndex($dateAsIndex) : 0;

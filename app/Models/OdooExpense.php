@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 use App\Helpers\HStr;
 
+/**
+ * @mixin IdeHelperOdooExpense
+ */
 class OdooExpense extends Model
 {
 	const APPROVED ='approved';

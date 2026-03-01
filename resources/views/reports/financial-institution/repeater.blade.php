@@ -107,12 +107,10 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="interest_rate" @else name="accounts[0][interest_rate]" @endif type="text" class="form-control " value="{{ number_format(isset($account) ? $account->getInterestRate() : old('interest_rate',0)) }}">
+                                <input @if($isRepeater) name="interest_rate" @else name="accounts[0][interest_rate]" @endif type="text" class="form-control " value="{{ old('interest_rate',0) }}">
                             </div>
                         </div>
                     </div>
-
-
                     <div class="col-1">
                         <label class="form-label font-weight-bold">{{ __('Min Balance') }}
 
@@ -121,11 +119,10 @@
                         <div class="kt-input-icon">
                             <div class="input-group">
                                 <input type="text" class="form-control only-greater-than-or-equal-zero-allowed trigger-change-repeater" value="{{ number_format(isset($account) ? $account->getMinBalance() : old('min_balance',0)) }}">
-                                <input type="hidden" value="{{ (isset($account) ? $account->getMinBalance() : old('min_balance',0)) }}" @if($isRepeater) name="min_balance" @else name="accounts[0][min_balance]" @endif>
+                                <input type="hidden" value="{{ ( old('min_balance',0)) }}" @if($isRepeater) name="min_balance" @else name="accounts[0][min_balance]" @endif>
                             </div>
                         </div>
                     </div>
-
 
 
 

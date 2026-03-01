@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * * هنا لو معايا عملة ورايح اغيرها وليكن مثلا من البنك وحطها في حسابي الجاري
+ *
+ * @mixin IdeHelperBuyOrSellCurrency
  */
 class BuyOrSellCurrency extends Model
 {

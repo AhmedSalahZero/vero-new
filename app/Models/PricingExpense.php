@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPricingExpense
+ */
 class PricingExpense extends Model
 {
 	protected $guarded = [

@@ -24,7 +24,6 @@
         }
 </style>
 
-{{-- {{ dd($financialInstitutionBanks) }} --}}
  <div id="repeater-container" data-name="safe">
         <div class="repeater-row d-flex align-items-center" data-first="true">
             <div class="col-md-3">

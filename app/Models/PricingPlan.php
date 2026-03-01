@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Models\QuickPricingCalculator;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPricingPlan
+ */
 class PricingPlan extends Model
 {
 	protected $guarded = [

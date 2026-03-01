@@ -99,6 +99,16 @@ Route::group(['prefix'=>NON_BANKING_SERVICE_URL_PREFIX,'middleware'=>'isNonBanki
             route::post('revenue-streams-breakdown/direct-factoring', 'DirectFactoringController@store')->name('store.direct.factoring.revenue.stream.breakdown');
             route::get('direct-factoring-fetch-old-data', 'DirectFactoringController@getOldData');
                    
+			/**
+			* * Start Spreadsheet
+			*/
+			route::get('spreadsheet', 'SpreadsheetController@create')->name('create.spreadsheet');
+			route::post('spreadsheet', 'SpreadsheetController@store')->name('store.spreadsheet');
+			route::get('spreadsheet-fetch-old-data', 'SpreadsheetController@getOldData');
+			/**
+			* * End Spreadsheet
+			*/
+			
             /**
              * * End Direct Factoring Revenue Streams Breakdown
              */

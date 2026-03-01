@@ -74,7 +74,7 @@
 
 
                 <div class="row">
-                    <?php
+                    @php
                             $total_previous_year=0;
                             $col_num = 12;
                             if (count($report_data) == 2 ) {
@@ -82,7 +82,7 @@
                             }elseif (count($report_data) > 2 ){
                                 $col_num = 4;
                             }
-                        ?>
+                        @endphp
                     @foreach ($report_data as $year =>$data_per_year)
                     <div class="col-md-{{$col_num}}">
 
@@ -101,28 +101,28 @@
                                 <td>{{$date}}</td>
                                 <td>{{number_format(($data_per_year['Sales Values'][$date]??0),0)}}</td>
                                 <td class="bg-antiquewhite">{{number_format(($data_per_year['Month Sales %'][$date]??0),2) . ' %'}}</td>
-                                @php
+                                @@php
                                 $yoyGR = $data_per_year['YoY GR%'][$date]??0 ;
                                 $yoyGRColor = '';
 
                                 if($yoyGR < 0 ) { $yoyGRColor='red !important' ; } elseif($yoyGR> 0){
                                     $yoyGRColor = 'green !important';
                                     }
-                                    @endphp
+                                    @end@php
                                     <td style="color:{{ $yoyGRColor  }}">{{number_format(($yoyGR),2) . ' %'}}</td>
                             </tr>
                             @endforeach
-                            <?php
+                            @php
                                             $total_sales_values_per_year = (array_sum($data_per_year['Sales Values']??[]));
                                             $total_yoy = $total_previous_year ==0 ? 0 : ($total_sales_values_per_year - $total_previous_year)/$total_previous_year *100;
-                                        ?>
+                                        @endphp
                             <tr class="table-active text-center odd">
                                 <th>{{__('Total')}}</th>
                                 <td>{{number_format(($total_sales_values_per_year),0)}}</td>
                                 <td>{{number_format((array_sum($data_per_year['Month Sales %']??[])),2) . ' %'}}</td>
                                 <td>{{number_format($total_yoy,2) . ' %'}}</td>
                             </tr>
-                            <?php $total_previous_year=$total_sales_values_per_year;?>
+                            @php $total_previous_year=$total_sales_values_per_year;@endphp
                             @endslot
                         </x-table>
                     </div>
@@ -147,23 +147,23 @@
                             </tr>
                             @endslot
                             @slot('table_body')
-                            <?php $sum_totals = array_sum($total_full_data); ?>
+                            @php $sum_totals = array_sum($total_full_data); @endphp
                             @foreach ($total_full_data as $date => $total)
                             <tr class="text-center">
                                 <td>{{$date}}</td>
                                 <td>{{number_format(((($total/$sum_totals)*100)??0),2) . ' %' }} </td>
                             </tr>
                             @endforeach
-                            <?php
+                            @php
                                             $total_sales_values_per_year = (array_sum($data_per_year['Sales Values']??[]));
                                             $total_yoy = $total_previous_year ==0 ? 0 : ($total_sales_values_per_year - $total_previous_year)/$total_previous_year *100;
-                                        ?>
+                                        @endphp
                             <tr class="table-active text-center odd">
                                 <th>{{__('Total')}}</th>
                                 {{-- <td>{{number_format((array_sum($data_per_year['Month Sales %']??[])),2) . ' %'}}</td> --}}
                                 <td>100%</td>
                             </tr>
-                            <?php $total_previous_year=$total_sales_values_per_year;?>
+                            @php $total_previous_year=$total_sales_values_per_year;@endphp
                             @endslot
                         </x-table>
                     </div>
@@ -179,7 +179,7 @@
                             </tr>
                             @endslot
                             @slot('table_body')
-                            <?php $sum_totals = array_sum($total_full_data); ?>
+                            @php $sum_totals = array_sum($total_full_data); @endphp
                             <tr class="text-center">
                                 <td>{{ __('Quarter One (Jan / Feb / Mar)') }}</td>
                                 <td> {{ sumBasedOnQuarterNumber($total_full_data , ['January','February','March']  , $sum_totals) }} </td>

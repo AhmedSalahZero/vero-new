@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="kt-portlet kt-portlet--mobile">
-                            <?php $allocations_setting = isset($allocations_setting) ? $allocations_setting : old(); ?>
+                            @php $allocations_setting = isset($allocations_setting) ? $allocations_setting : old(); @endphp
                             <div class="kt-portlet__body">
                                 <!--begin: Datatable -->
 
@@ -211,7 +211,7 @@
         </div>
 
         {{-- @if (count($allocations_setting_base_data) > 0)
-            <?php $item = ucwords(str_replace('_', ' ', $allocation_base)); ?>
+            @php $item = ucwords(str_replace('_', ' ', $allocation_base)); @endphp
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -272,19 +272,19 @@
                             </tr>
                         @endslot
                         @slot('table_body')
-                            <?php $total = array_sum(array_column($allocations_setting_base_data, 'Sales Value'));
+                            @php $total = array_sum(array_column($allocations_setting_base_data, 'Sales Value'));
                             $allocations_setting !== 'last_3_years' ?: ($total = $total / 3);
                             $total_existing_targets = 0;
-                            ?>
+                            @endphp
                             @foreach ($allocations_setting_base_data as $key => $product_data)
                                 <tr>
                                     <td>{{ $product_data['item'] ?? '-' }}</td>
-                                    <?php
+                                    @php
                                     $sales_value = $allocations_setting == 'last_3_years' ? ($product_data['Sales Value'] ?? 0) / 3 : $product_data['Sales Value'] ?? 0;
                                     $target_percentage = $total == 0 ? 0 : $sales_value / $total;
                                     $existing_target_per_product = $target_percentage * $sales_forecast->sales_target;
                                     $total_existing_targets += $existing_target_per_product;
-                                    ?>
+                                    @endphp
                                     <td class="text-center">{{ number_format($sales_value ?? 0) }}</td>
 
                                     @if ($allocations_setting !== 'new_breakdown_annually')
@@ -308,7 +308,7 @@
                                         </td>
                                     @else
                                         @foreach ($sales_targets as $quarter_name => $value)
-                                            <?php $quarter_name = str_replace(' ', '_', $quarter_name); ?>
+                                            @php $quarter_name = str_replace(' ', '_', $quarter_name); @endphp
 
                                             <td class="text-center">
                                                 <input type="number"
@@ -346,7 +346,7 @@
                                     </td>
                                 @else
                                     @foreach ($sales_targets as $quarter_name => $value)
-                                        <?php $quarter_name = str_replace(' ', '_', $quarter_name); ?>
+                                        @php $quarter_name = str_replace(' ', '_', $quarter_name); @endphp
                                         <td id="total_modify_sales_target_{{ $quarter_name }}">
                                             {{ !isset($modified_targets['products_modified_targets'])? 0: number_format(array_sum(array_column($modified_targets['products_modified_targets'], 'value') ?? [])) }}
                                         </td>
@@ -384,7 +384,7 @@
     <script src="{{ url('assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js') }}" type="text/javascript">
     </script>
     @foreach ($sales_targets as $quarter_name => $value)
-        <?php $quarter_name = str_replace(' ', '_', $quarter_name); ?>
+        @php $quarter_name = str_replace(' ', '_', $quarter_name); @endphp
         <script>
             $('.modify_sales_target_'+'{{$quarter_name}}').on('change', function() {
                 var index = $('.modify_sales_target_'+'{{$quarter_name}}').index(this);

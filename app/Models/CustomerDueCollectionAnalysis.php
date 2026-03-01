@@ -6,15 +6,13 @@ use App\Traits\StaticBoot;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCustomerDueCollectionAnalysis
+ */
 class CustomerDueCollectionAnalysis extends Model
 {
     use StaticBoot;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-
+  
     protected $guarded = [];
 
 

@@ -7,6 +7,9 @@ use App\Models\Traits\Scopes\FinancialPlanning\BelongsToStudy;
 use App\Traits\Models\IsSalesGatheringModel;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProduct
+ */
 class Product extends Model
 {
 	

@@ -9,6 +9,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin IdeHelperLcIssuanceExpense
+ */
 class LcIssuanceExpense extends Model
 {
 	use HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements;

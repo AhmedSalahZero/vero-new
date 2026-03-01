@@ -21,6 +21,9 @@ use App\Models\Traits\Scopes\Globals\StateCountryScope;
 use App\Models\Traits\Scopes\withAllRelationsScope;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperQuotationPricingCalculator
+ */
 class QuotationPricingCalculator extends Model implements IBaseModel , IHaveAllRelations , IExportable , IShareable
 {
     use  QuotationPricingCalculatorAccessor,QuotationPricingCalculatorMutator , QuotationPricingCalculatorRelation , CompanyScope , withAllRelationsScope ;

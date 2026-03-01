@@ -8,6 +8,9 @@ use App\ReadyFunctions\ConvertFlatRateToDecreasingRate;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperMicrofinanceProductSalesProject
+ */
 class MicrofinanceProductSalesProject extends Model
 {
     use HasBasicStoreRequest,CompanyScope , BelongsToStudy;

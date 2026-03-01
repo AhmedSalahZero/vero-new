@@ -69,10 +69,10 @@
         <div class="tab-content  kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
-            <?php
+            @php
                     array_push($zones_names, 'Total');
                     array_push($zones_names, 'Zone_Sales_Percentages');
-                    ?>
+                    @endphp
             {{-- <div class="tab-pane " id="kt_apps_contacts_view_tab_1" role="tabpanel">
                     @foreach ($zones_names as $name_of_zone)
 
@@ -107,14 +107,14 @@
         </tr>
         @endslot
         @slot('table_body')
-        <?php $id =1 ;?>
+        @php $id =1 ;@endphp
         @foreach ($report_data as $zone_name => $zone_channels_data)
 
-        <?php $chart_data = [];?>
+        @php $chart_data = [];@endphp
 
         @if ($zone_name != 'Total' && $zone_name != 'Discount % / Total Sales')
-        <?php
-                                    ?>
+        @php
+                                    @endphp
 
         <tr class="group-color ">
             <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
@@ -122,13 +122,13 @@
                 <b>{{ __($zone_name) }}</b>
             </td>
             {{-- Total --}}
-            <?php $total_per_zone = $zone_channels_data['Total'] ?? [];
-                                        unset($zone_channels_data['Total']); ?>
+            @php $total_per_zone = $zone_channels_data['Total'] ?? [];
+                                        unset($zone_channels_data['Total']); @endphp
             {{-- Perc.% / Sales --}}
 
 
             @foreach ($dates as $date)
-            <?php $growth_rate_per_zone = ($report_data['Total'][$date]??0) == 0 ? 0 :(($total_per_zone[$date] ?? 0) /( ($report_data['Total'][$date]??0))*100); ?>
+            @php $growth_rate_per_zone = ($report_data['Total'][$date]??0) == 0 ? 0 :(($total_per_zone[$date] ?? 0) /( ($report_data['Total'][$date]??0))*100); @endphp
 
             <td class="text-center white-text">{{ number_format($total_per_zone[$date] ?? 0) . '  [ Dist '.number_format($growth_rate_per_zone ,1) . ' % ]'}}
             </td>
@@ -140,16 +140,16 @@
         @foreach ($channel_section as $section => $channel_data)
         <tr class="row{{ $id }} {{ ($section == 'Perc.% / Sales') ? 'secondary-row-color' : '' }} text-center" style="display: none">
             {{-- <td></td> --}}
-            <?php $name_ofdiscount = ucwords(str_replace('_',' ' ,$channel_name)) ?>
+            @php $name_ofdiscount = ucwords(str_replace('_',' ' ,$channel_name)) @endphp
             <td class="text-left"><b>{{ $name_ofdiscount . ' ' . $section }}</b></td>
-            <?php
+            @php
                                                     $decimals = ($section == 'Perc.% / Sales') ? 2 : 0;
 
-                                                ?>
+                                                @endphp
             @foreach ($dates as $date)
-            <?php
+            @php
                                                         $result = ($section == 'Perc.% / Sales') ?(($channel_data[$date] ?? 0)*100) : ($channel_data[$date] ?? 0);
-                                                    ?>
+                                                    @endphp
             <td class="text-center">
                 {{ number_format($result, $decimals) . ($decimals == 0 ? '' : ' %') }}
             </td>
@@ -183,21 +183,21 @@
             <td class="active-style text-center"><b>{{ __($zone_name) }}</b></td>
 
 
-            <?php
+            @php
                                             $decimals =  $zone_name == 'Discount % / Total Sales'  ? 1 : 0;
 
-                                        ?>
+                                        @endphp
             @foreach ($dates as $date)
-            <?php
+            @php
                                                 $result = $zone_name == 'Discount % / Total Sales' ?(($zone_channels_data[$date] ?? 0)*100) : ($zone_channels_data[$date] ?? 0);
-                                            ?>
+                                            @endphp
             <td class="text-center active-style">
                 {{ number_format($result,$decimals)  . ($decimals == 0 ? '' : ' %')}}</td>
             @endforeach
             <td class="text-center active-style">{{$zone_name == 'Growth Rate %' ? "-" : number_format(array_sum($zone_channels_data  ?? []),0)}}</td>
         </tr>
         @endif
-        <?php $id++;?>
+        @php $id++;@endphp
         @endforeach
 
 
@@ -217,7 +217,7 @@
     </tr>
     @endslot
     @slot('table_body')
-    <?php $chart_data = []; ?>
+    @php $chart_data = []; @endphp
     @foreach ($final_report_data as $zone_name => $zone_data)
     <tr class="group-color  text-lg-left  ">
         <td colspan="{{ count($total_zones) + 1 }}"><b class="white-text">{{ __($zone_name) }}</b></td>
@@ -228,10 +228,10 @@
     <tr>
         <th>{{ __('Percent %') }}</th>
         @foreach ($total_zones as $date => $total)
-        <?php
+        @php
                                         $percentage = $total == 0 ? 0 : number_format(($zone_data['Sales Values'][$date] ?? 0) / ($total ?? 0), 2);
                                         $chart_data[$date][$zone_name] = [$zone_name . ' %' => $percentage];
-                                        ?>
+                                        @endphp
 
         <td class="text-center">
             {{ $percentage . ' %' }}
@@ -240,12 +240,12 @@
     </tr>
 
     @endforeach
-    <?php
+    @php
                             $return = [];
                             array_walk($chart_data, function ($values, $date) use (&$return) {
                                 $return[] = array_merge(['date' => date('d-M-Y', strtotime($date))], array_merge(...array_values($values)));
                             });
-                            ?>
+                            @endphp
     <input type="hidden" id="Zone_Sales_Percentages_data" data-total="{{ json_encode($return) }}">
 
 

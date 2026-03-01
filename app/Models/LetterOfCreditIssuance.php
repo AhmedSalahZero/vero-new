@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperLetterOfCreditIssuance
+ */
 class LetterOfCreditIssuance extends Model
 {
 	use HasBasicStoreRequest,HasCompany,HasForeignExchangeGainOrLoss,HasCommissionStatements,HasLetterOfCreditStatements,HasLetterOfCreditCashCoverStatements,HasDeleteButTriggerChangeOnLastElement,HasUserComment;

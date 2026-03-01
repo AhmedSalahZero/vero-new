@@ -15,11 +15,11 @@
 @endsection
 
 @section('content')
-@php
+@@php
 // $dates = [ ];
 // $report_data = []
 
-@endphp
+@end@php
 <div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
@@ -136,11 +136,11 @@
                         </span>
                     </div>
 
-                    <?php
+                    @php
                         // $current_month = $sales_value_data['current_month'] !== '-' ? $sales_value_data['current_month'] : 0;
                         // $previous_month = $sales_value_data['previous_month'] !== '-' ? $sales_value_data['previous_month'] : 0;
                         // $percentage = $previous_month == 0 ? 0 : number_format((($current_month - $previous_month) / $previous_month) * 100);
-                        ?>
+                        @endphp
                     <div class="progress progress--sm">
                         <div class="progress-bar kt-bg-danger" role="progressbar" style="width: {{ $percentage }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
@@ -318,12 +318,12 @@
     </div>
 </div>
 
-{{-- @php 
+{{-- @@php 
     $dates = $salesReport['dates'];
     $report_data = $salesReport['report_data'];
     $gr = $salesReport['gr'];
     $last_date = $salesReport['last_date'];
-  @endphp --}}
+  @end@php --}}
 <div class="row">
     <div class="col-md-12">
         <div class="kt-portlet ">
@@ -354,7 +354,7 @@
                             <x-table :fixedColumns=[] :tableClass="'kt_table_with_no_pagination_no_search'">
 
                                 @slot('table_header')
-                                @php $tableHeader = $monthlyChartArr[array_key_first($monthlyChartArr)] ?? [] @endphp
+                                @@php $tableHeader = $monthlyChartArr[array_key_first($monthlyChartArr)] ?? [] @end@php
                                 <tr class="table-active text-center">
                                     <th>{{ __('Sales Value / Month') }}</th>
                                     @foreach($tableHeader as $key => $date)
@@ -365,7 +365,7 @@
                                     @endforeach
                                 </tr>
                                 @endslot
-                                @php array_shift($monthlyChartArr) @endphp
+                                @@php array_shift($monthlyChartArr) @end@php
                                 @slot('table_body')
 							
                                 @foreach ($monthlyChartArr as $title => $values)
@@ -427,13 +427,13 @@
                                 @endforeach
                                 <td class="hidden"> </td>
                             </tr>
-                            @php $chart_data = []; @endphp
+                            @@php $chart_data = []; @end@php
 
                             @foreach ($report_data as $label => $data)
 
                             <tr>
                                 <th>{{ __($label) }}</th>
-                                @php $num_of_decimals = $label == 'Month Sales %' ? 1 : 0; @endphp
+                                @@php $num_of_decimals = $label == 'Month Sales %' ? 1 : 0; @end@php
                                 @foreach ($dates as $date)
 
                                 <td>{{ number_format($data[$date] ?? 0, $num_of_decimals) . ($label == 'Month Sales %' ? ' %' : '') }}
@@ -459,9 +459,9 @@
 
                             <tr>
                                 <th>{{ __('Sales Values') }}</th>
-                                @php $accumulated_total = 0; @endphp
+                                @@php $accumulated_total = 0; @end@php
                                 @foreach ($dates as $date)
-                                @php
+                                @@php
 
                                 $accumulated_total += $report_data['Sales Values'][$date] ?? 0;
                                 $chart_data[] = [
@@ -474,7 +474,7 @@
                                 'date' => date('d-M-Y', strtotime($date)),
                                 'price' => number_format($accumulated_total, 0),
                                 ];
-                                @endphp
+                                @end@php
 
                                 <td>{{ number_format($accumulated_total) }}</td>
                                 @endforeach

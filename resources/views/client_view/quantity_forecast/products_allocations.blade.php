@@ -36,7 +36,7 @@
         <div class="kt-portlet" id="copied_company_target">
 
         </div>
-        <?php $name = ($has_product_item == true) ? 'Items' : '' ?>
+        @php $name = ($has_product_item == true) ? 'Items' : '' @endphp
         {{-- New Products --}}
         @if ($sales_forecast['add_new_products'] == 1)
             <div class="kt-portlet">
@@ -133,21 +133,21 @@
                         </tr>
                     @endslot
                     @slot('table_body')
-                        <?php
+                        @php
                         $totals_per_month = [];
 
-                        ?>
+                        @endphp
                         @foreach ($existing_products_targets as $item => $product_data)
-                            <?php $total_existing_targets = 0; ?>
+                            @php $total_existing_targets = 0; @endphp
                             <tr>
                                 <td> <b> {{ $item ?? '-' }}</b></td>
 
                                 @foreach ($product_data as $date => $value)
 
-                                    <?php
+                                    @php
                                         $totals_per_month[$date] = $value + ($totals_per_month[$date] ?? 0);
                                         $total_existing_targets += $value;
-                                    ?>
+                                    @endphp
                                     <td class="text-center">{{ number_format(($value??0)) }}</td>
                                 @endforeach
                                 <td class="text-center">{{ number_format($total_existing_targets) }}</td>
@@ -195,15 +195,15 @@
                                     </tr>
                                 @endslot
                                 @slot('table_body')
-                                    <?php $total_existing_new = []; ?>
+                                    @php $total_existing_new = []; @endphp
                                     {{-- New Product Item Sales Target --}}
                                     <tr>
                                         <th>{{ __('New Product '.$name.' Sales Target') }}</th>
                                         @foreach ($new_products_totals as $date => $value)
-                                            <?php $total_existing_new[$date] = ($total_existing_new[$date] ?? 0) + $value; ?>
+                                            @php $total_existing_new[$date] = ($total_existing_new[$date] ?? 0) + $value; @endphp
                                             <td>{{ number_format($value) }}</td>
                                         @endforeach
-                                        <?php $all_new_products_totals = array_sum($new_products_totals); ?>
+                                        @php $all_new_products_totals = array_sum($new_products_totals); @endphp
                                         <td class="text-center">{{ number_format($all_new_products_totals) }}</td>
                                     </tr>
 
@@ -211,10 +211,10 @@
                                     <tr>
                                         <th>{{ __('Existing Product '.$name.' Sales Target') }}</th>
                                         @foreach ($totals_per_month as $date => $value)
-                                            <?php $total_existing_new[$date] = ($total_existing_new[$date] ?? 0) + $value; ?>
+                                            @php $total_existing_new[$date] = ($total_existing_new[$date] ?? 0) + $value; @endphp
                                             <td>{{ number_format($value) }}</td>
                                         @endforeach
-                                        <?php $all_existings_total = array_sum($totals_per_month); ?>
+                                        @php $all_existings_total = array_sum($totals_per_month); @endphp
                                         <td class="text-center">{{ number_format($all_existings_total) }}</td>
                                     </tr>
 
@@ -223,7 +223,7 @@
                                         @foreach ($total_existing_new as $date => $value)
                                             <td class="text-center">{{ number_format($value) }}</td>
                                         @endforeach
-                                        <?php $all_existing_new_total = array_sum($total_existing_new); ?>
+                                        @php $all_existing_new_total = array_sum($total_existing_new); @endphp
                                         <td class="text-center">{{ number_format($all_existing_new_total) }}</td>
                                     </tr>
 

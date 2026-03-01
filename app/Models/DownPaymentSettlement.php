@@ -7,9 +7,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * * هي عباره عن ال 
+ * * هي عباره عن ال
  * * down payment  Settlements
  * * الخاصة بال money received
+ *
+ * @mixin IdeHelperDownPaymentSettlement
  */
 class DownPaymentSettlement extends Model
 {

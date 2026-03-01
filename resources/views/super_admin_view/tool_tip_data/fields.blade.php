@@ -25,7 +25,7 @@
             </tr>
         @endslot
         @slot('table_body')
-        <?php $num = 1 ; ?>
+        @php $num = 1 ; @endphp
             @foreach ($fields as $item)
                 <tr>
                     <td>{{$num}}</td>
@@ -38,7 +38,7 @@
                         </span>
                     </td>
                 </tr>
-                <?php $num++ ; ?>
+                @php $num++ ; @endphp
             @endforeach
 
         @endslot

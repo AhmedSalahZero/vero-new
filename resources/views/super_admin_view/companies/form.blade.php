@@ -17,7 +17,7 @@
             </div>
         </div>
         <!--begin::Form-->
-        <?php $row = isset($companySection) ? $companySection : old(); ?>
+        @php $row = isset($companySection) ? $companySection : old(); @endphp
         <form class="kt-form kt-form--label-right" method="POST" action=@if (isset($company_row)) @if (isset($companySection) ) {{ route('edit.admin.company',[$company_row,$companySection])}} @else {{ route('admin.company',$company_row)}} @endif @elseif (isset($companySection) ) {{route('companySection.update',$companySection)}} @else {{route('companySection.store')}} @endif enctype="multipart/form-data">
             @csrf
             {{isset($companySection) ?  method_field('PUT'): ""}}

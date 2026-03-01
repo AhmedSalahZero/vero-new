@@ -31,6 +31,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use MathPHP\Finance;
 
+/**
+ * @mixin IdeHelperStudy
+ */
 class Study extends Model
 {
     use HasBasicStoreRequest;
@@ -196,7 +199,7 @@ class Study extends Model
             'dateWithMonthNumber'=>$dateWithMonthNumber,
             'dateWithDateIndex'=>$dateWithDateIndex,
         ];
-        return $datesIndexWithYearIndex ;
+        // return $datesIndexWithYearIndex ;
     }
     public function getStudyDates(): array
     {
@@ -251,10 +254,6 @@ class Study extends Model
         return $startDate;
     }
 
-    // public function getOperationStartDateAsIndex(array $datesAsStringAndIndex, ?string $operationStartDateFormatted): ?int
-    // {
-    //     return  $operationStartDateFormatted ? $datesAsStringAndIndex[$operationStartDateFormatted] : null;
-    // }
     public function getOperationStartDateAsIndex():string
     {
         
@@ -2786,10 +2785,10 @@ class Study extends Model
         $datesAsStringAndIndex = $this->getDateWithDateIndex();
         $dateIndexWithDate = $this->getDateIndexWithDate();
         $dateWithDateIndex = $this->getDateWithDateIndex();
-        $operationStartDateFormatted = $this->getOperationStartDateFormatted();
+        // $operationStartDateFormatted = $this->getOperationStartDateFormatted();
         $datesIndexWithYearIndex = $this->getDatesIndexWithYearIndex();
         $dateWithMonthNumber = $this->getDateWithMonthNumber();
-        $operationStartDateAsIndex = $this->getOperationStartDateAsIndex($datesAsStringAndIndex, $operationStartDateFormatted);
+        $operationStartDateAsIndex = $this->getOperationStartDateAsIndex();
         $yearIndexWithYear = $this->getYearIndexWithYear();
         $studyDurationPerYear = $this->getStudyDurationPerYear($datesAsStringAndIndex, $datesIndexWithYearIndex, $yearIndexWithYear, $dateIndexWithDate, $dateWithMonthNumber, true, true, false);
         $studyDates=$this->getOnlyDatesOfActiveStudy($studyDurationPerYear, $dateIndexWithDate);
@@ -6213,10 +6212,9 @@ class Study extends Model
 	{
 		$study = $this;
 				$dateWithDateIndex = $study->getDateWithDateIndex();
-		$studyEndDateAsString = $study->getStudyEndDate();
 		$studyStartDateAsString = $study->getStudyStartDate();
 		$studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex,$studyStartDateAsString);
-		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex($dateWithDateIndex,$studyEndDateAsString);
+		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
 	
 		$totalFixedAssetAmounts = [];
 		$currentFixedAssetAmounts = [];

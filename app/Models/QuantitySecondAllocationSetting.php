@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperQuantitySecondAllocationSetting
+ */
 class QuantitySecondAllocationSetting extends Model
 {
     /**
@@ -12,11 +15,7 @@ class QuantitySecondAllocationSetting extends Model
      * @var string
      */
     protected $table = 'quantity_second_allocation_settings';
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
     protected $guarded = [];
     // Company Scoop
     public function scopeCompany($query)

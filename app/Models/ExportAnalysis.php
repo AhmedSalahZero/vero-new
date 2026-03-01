@@ -5,14 +5,13 @@ namespace App\Models;
 use App\Traits\StaticBoot;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperExportAnalysis
+ */
 class ExportAnalysis extends Model
 {
     use StaticBoot;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
 
     protected $guarded = [];
 

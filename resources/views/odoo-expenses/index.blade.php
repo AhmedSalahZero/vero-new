@@ -79,7 +79,6 @@ use App\Models\OdooExpense ;
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- {{ dd($models) }} --}}
                                 @foreach($models[$currentType] as $index=>$model)
                                 <tr>
                                     <td>

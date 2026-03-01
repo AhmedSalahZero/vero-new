@@ -11,14 +11,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperLoanSchedule
+ */
 class LoanSchedule extends Model
 {
     use StaticBoot;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
 
     protected $guarded = [];
 

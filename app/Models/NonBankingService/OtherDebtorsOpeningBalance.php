@@ -6,6 +6,9 @@ use App\Traits\HasCollectionOrPaymentStatement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperOtherDebtorsOpeningBalance
+ */
 class OtherDebtorsOpeningBalance extends Model
 {	use HasCollectionOrPaymentStatement;	
 	protected $connection= 'non_banking_service';

@@ -1,9 +1,9 @@
 
 <div id="kt_header" class="kt-header  kt-header--fixed fh-fixedHeader" data-ktheader-minimize="on">
-@php
+@@php
 	$super_admin_sections = \App\Helpers\HAuth::getSuperAdminSection();
 	
-@endphp
+@end@php
 
     <div class="kt-container ">
 
@@ -59,9 +59,9 @@
 
 
                         <div class="kt-grid-nav kt-grid-nav--skin-light">
-                            <?php $counter = 0; ?>
+                            @php $counter = 0; @endphp
                             @foreach ($super_admin_sections as $section)
-                            <?php $counter++; ?>
+                            @php $counter++; @endphp
                             @if ($counter == 1)
                             <div class="kt-grid-nav__row">
                                 @endif
@@ -82,7 +82,7 @@
 								
 								
                                 @if ($counter == 2)
-                            </div> <?php $counter = 0; ?>
+                            </div> @php $counter = 0; @endphp
                             @endif
                             @endforeach
                             @if ($counter == 1)
@@ -121,9 +121,9 @@
 
 
                     <div class="kt-grid-nav kt-grid-nav--skin-light">
-                        <?php $counter = 0; ?>
+                        @php $counter = 0; @endphp
                         @foreach ($super_admin_sections as $section)
-                        <?php $counter++; ?>
+                        @php $counter++; @endphp
                         @if ($counter == 1)
                         <div class="kt-grid-nav__row">
                             @endif
@@ -141,7 +141,7 @@
                                 <span class="kt-grid-nav__desc">{{ __('Admin Side') }}</span>
                             </a>
                             @if ($counter == 2)
-                        </div> <?php $counter = 0; ?>
+                        </div> @php $counter = 0; @endphp
                         @endif
                         @endforeach
                         @if ($counter == 1)
@@ -164,8 +164,8 @@
     <!--end: Language bar -->
 
     <!--begin: User bar -->
-    <?php $user = Auth::user();
-    $first_letter = substr($user->name, 0, 1); ?>
+    @php $user = Auth::user();
+    $first_letter = substr($user->name, 0, 1); @endphp
     <div class="kt-header__topbar-item kt-header__topbar-item--user ">
         <div class="kt-header__topbar-wrapper" data-toggle="dropdown">
             @if (isset($company) && !request()->route()->named('home'))
@@ -175,9 +175,9 @@
                     <span class="kt-header__topbar-welcome">Hi,</span>
                     <span class="kt-header__topbar-username ">{{ $user->name }} </span>
                     <span class="kt-header__topbar-icon"><b>{{ $first_letter }}</b></span> &nbsp;
-                    @php
+                    @@php
                     $days = $user->getExpirationDaysLeft();
-                    @endphp
+                    @end@php
                     @if ($user->subscription == 'free_trial')
                     <span class="kt-header__topbar-username "><b>{{ $days . __(' Days Left') }}</b></span>
                     @endif

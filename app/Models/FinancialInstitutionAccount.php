@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin IdeHelperFinancialInstitutionAccount
+ */
 class FinancialInstitutionAccount extends Model
 {
 	const NUMBER_OF_YEARS_FOR_INTEREST_IN_CURRENT_STATEMENT = 1 ;
@@ -68,20 +71,20 @@ class FinancialInstitutionAccount extends Model
         return $this->iban ;
     }
 	
-	public function getMinBalance()
-	{
-		return $this->min_balance?:0 ;
-	}
+	// public function getMinBalance()
+	// {
+	// 	return $this->min_balance?:0 ;
+	// }
 
-	public function getInterestRate()
-    {
-        return $this->interest_rate ?: 0 ;
-    }
+	// public function getInterestRate()
+    // {
+    //     return $this->interest_rate ?: 0 ;
+    // }
 
-    public function getMainCurrency()
-    {
-        return $this->main_currency ;
-    }
+    // public function getMainCurrency()
+    // {
+    //     return $this->main_currency ;
+    // }
 	public function getBalanceDate()
 	{
 		return $this->balance_date;
@@ -159,7 +162,7 @@ class FinancialInstitutionAccount extends Model
 	}
 	public function isActive():bool
 	{
-		return $this->is_active;
+		return (bool)$this->is_active;
 	}
 	public static function getAllCurrentAccountCurrenciesForCompany(int $companyId,array $exceptCurrenciesNames = []){
 		$currencies = getCurrenciesForSuppliersAndCustomers($companyId);

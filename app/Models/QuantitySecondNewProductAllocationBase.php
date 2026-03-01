@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperQuantitySecondNewProductAllocationBase
+ */
 class QuantitySecondNewProductAllocationBase extends Model
 {
     /**
@@ -12,18 +15,10 @@ class QuantitySecondNewProductAllocationBase extends Model
      * @var string
      */
     protected $table = 'quantity_second_new_products_allocation_base';
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
     protected $guarded = [];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    
     protected $casts = [
         'allocation_base_data' => 'array',
         'new_allocation_bases_names' => 'array',

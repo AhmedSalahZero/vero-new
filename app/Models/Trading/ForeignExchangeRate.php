@@ -6,6 +6,9 @@ use App\Models\Company;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperForeignExchangeRate
+ */
 class ForeignExchangeRate extends Model
 {
 	protected $connection =TRADING_CONNECTION_NAME;

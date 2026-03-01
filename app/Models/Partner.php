@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @mixin IdeHelperPartner
+ */
 class Partner extends Model
 {
     const PARTNERS = 'partners';
@@ -53,6 +56,8 @@ class Partner extends Model
     }
     public function getCustomerName()
     {
+		
+		
         return $this->getName();
     }
     public function scopeOnlyCompany(Builder $query, $companyId)

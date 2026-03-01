@@ -136,7 +136,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
     let globalTable = null;
 
 </script>
-{{-- {{ dD($cashflowReport['report_data']) }} --}}
 <style>
     td.editable-date,
     th.editable-date,
@@ -270,7 +269,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 </style>
 <div class="row">
     <div class="col-md-12">
-	{{-- {{ dd('e') }} --}}
 
         <div class="kt-portlet kt-portlet--tabs">
 
@@ -454,9 +452,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 											$isTotalRow = true ;
                                             @endphp
                                             
-								{{-- {{ dd('v') }}			 --}}
-											
-											{{-- {{ dD($pastDueLoanInstallments,$dates) }} --}}
 					 <tr class=" @if($customerName == __('Total Cash Inflow') || $customerName == __('Total Cash Outflow') ||  $customerName == __('Total Cash')) bg-lighter @else  @endif  parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   " data-model-id="{{ $rowIndex }}">
                                     <td class="red reset-table-width text-nowrap @if($hasSubRows) trigger-child-row-1 cursor-pointer @endif sub-text-bg text-capitalize main-tr is-close"> @if($hasSubRows) + @endif  </td>
                                     <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ $customerName }}</td>
@@ -466,7 +461,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 										
 										@if($customerName == __('Customers Past Due Invoices'))
 										<button   class="btn btn-sm btn-danger text-white js-show-customer-due-invoices-modal">{{ __('View') }}</button>
-										{{-- {{ dd($contractCode , $currencyName , isset($cashflowReport) ? $cashflowReport:null ,$reportInterval ) }} --}}
                                                 <x-modal.due-invoices :contractCode="$contractCode" :currencyName="$currencyName"  :cashflowReport="isset($cashflowReport) ? $cashflowReport:null" :report-interval="$reportInterval" :currentInvoiceType="'CustomerInvoice'" :dates="$dates" :weeks="$weeks" :pastDueCustomerInvoices="$pastDueCustomerInvoices[$currentCurrencyName]??[]" :id="'test-modal-id'"></x-modal.due-invoices>
 										@endif 
 										
@@ -505,7 +499,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 										$finalResult[$currentCurrencyName][$mainReportKey]['Accumulated Net Cash (+/-)']['weeks'][$weekAndYear] = array_sum($finalResult[$currentCurrencyName][$mainReportKey]['Net Cash (+/-)']['weeks']);
 									}	
 									if($customerName == 'Net Cash (+/-)'){
-										//	dd($allMainRowsTotals);
 									}
 									
 									if(isset($finalResult[$currentCurrencyName][$mainReportKey][$parentKeyName]['weeks'][$weekAndYear]))
@@ -515,7 +508,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 									//	$currentMainRowTotal += $currentValue;
 									}
 									if(isset($isTotalRow) && isset($finalResult[$currentCurrencyName][$mainReportKey][$parentKeyName]['total'][$weekAndYear])){
-										//dd($finalResult['EGP']);
 										$currentValue = $finalResult[$currentCurrencyName][$mainReportKey][$parentKeyName]['total'][$weekAndYear];
 										$currentMainRowTotal += $currentValue;
 										
@@ -524,7 +516,6 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 									{
 										$startDate = $dates[$weekAndYear]['start_date'] ;
 										$filtered = array_filter($customerDueInvoices[$currentCurrencyName] ?? [], function ($item) use ($startDate) {
-											//dd($item['week_start_date']);
     												return $item['week_start_date'] == $startDate;
 											});
 										$currentRow = reset($filtered) ?: null ;

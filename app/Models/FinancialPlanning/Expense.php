@@ -7,6 +7,9 @@ use App\Models\Traits\Scopes\BelongsToCompany;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperExpense
+ */
 class Expense extends Model
 {
 	use BelongsToStudy,BelongsToCompany;
@@ -56,10 +59,10 @@ class Expense extends Model
 	{
 		return !is_null($this->end_date) ? app('dateIndexWithDate')[$this->end_date] : null;
 	}
-	public function getMonthlyAmount()
-	{
-		return $this->monthly_amount ?: 0 ;
-	}
+	// public function getMonthlyAmount()
+	// {
+	// 	return $this->monthly_amount ?: 0 ;
+	// }
 	public function getPaymentTerm()
 	{
 		return $this->payment_terms ;
@@ -113,31 +116,31 @@ public function getInterval()
 {
 	return $this->interval ;
 }
-public function getAllocationBaseOne()
-{
-	return $this->allocation_base_1 ; 
-}
-public function getAllocationBaseTwo()
-{
-	return $this->allocation_base_2; 
-}
+// public function getAllocationBaseOne()
+// {
+// 	return $this->allocation_base_1 ; 
+// }
+// public function getAllocationBaseTwo()
+// {
+// 	return $this->allocation_base_2; 
+// }
 
-public function getAllocationBaseThree()
-{
-	return $this->allocation_base_3; 
-}
-	public function getConditionalTo()
-	{
-		return $this->conditional_to ;
-	}
-	public function getConditionalValueA()
-	{
-		return $this->conditional_value_a ;
-	}
-	public function getConditionalValueB()
-	{
-		return $this->conditional_value_b ;
-	}
+// public function getAllocationBaseThree()
+// {
+// 	return $this->allocation_base_3; 
+// }
+// 	public function getConditionalTo()
+// 	{
+// 		return $this->conditional_to ;
+// 	}
+// 	public function getConditionalValueA()
+// 	{
+// 		return $this->conditional_value_a ;
+// 	}
+// 	public function getConditionalValueB()
+// 	{
+// 		return $this->conditional_value_b ;
+// 	}
 	public function getPaymentRate(int $rateIndex){
 		return array_values($this->custom_collection_policy ?? [])[$rateIndex] ?? 0 ;
 	}

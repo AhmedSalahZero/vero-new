@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * * Rate هنا المقصود بيها
  * * margin rate and so on
+ *
+ * @mixin IdeHelperOverdraftAgainstAssignmentOfContractRate
  */
 class OverdraftAgainstAssignmentOfContractRate extends Model  
 {

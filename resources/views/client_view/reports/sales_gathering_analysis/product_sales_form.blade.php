@@ -16,10 +16,10 @@
         <form class="kt-form kt-form--label-right" method="POST" action={{ route('products.sales.analysis.result',$company) }}   enctype="multipart/form-data">
             @csrf
             <div class="kt-portlet">
-                <?php
+                @php
                 //  $categories =  App\Models\SalesGathering::company()->whereNotNull('category')->where('category','!=','')->groupBy('category')->selectRaw('category')->get()->pluck('category')->toArray();
                 $categories = getTypeFor('product_or_service' , $company->id , true );
-                ?>
+                @endphp
 
                 <div class="kt-portlet__body">
                     <div class="form-group row">

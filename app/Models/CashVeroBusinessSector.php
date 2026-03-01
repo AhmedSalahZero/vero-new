@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * @mixin IdeHelperCashVeroBusinessSector
+ */
 class CashVeroBusinessSector extends Model
 {
 	const BUSINESS_SECTORS = 'business-sectors';

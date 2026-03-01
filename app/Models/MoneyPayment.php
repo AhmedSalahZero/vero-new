@@ -22,6 +22,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperMoneyPayment
+ */
 class MoneyPayment extends Model
 {
     protected $with = [

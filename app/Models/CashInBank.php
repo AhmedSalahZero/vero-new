@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Traits\Models\IsCashInBank;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCashInBank
+ */
 class CashInBank extends Model
 {
 	use IsCashInBank ;

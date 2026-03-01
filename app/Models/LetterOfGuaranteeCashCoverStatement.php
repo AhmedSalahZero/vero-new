@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperLetterOfGuaranteeCashCoverStatement
+ */
 class LetterOfGuaranteeCashCoverStatement extends Model
 {
 	use HasDeleteButTriggerChangeOnLastElement,IsBankStatement;

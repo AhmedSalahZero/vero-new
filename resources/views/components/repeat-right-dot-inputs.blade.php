@@ -29,7 +29,6 @@ three-dots-parent
 	$groupIndex = $attributes->get('data-group-index');
 	$isYearRepeater = $groupIndex != null ;
 @endphp
-{{-- {{ dd() }} --}}
     <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
         <div class="input-hidden-parent">
             <input

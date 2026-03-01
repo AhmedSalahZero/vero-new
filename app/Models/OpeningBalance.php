@@ -6,7 +6,11 @@ use App\Models\Company;
 use App\Models\MoneyReceived;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin IdeHelperOpeningBalance
+ */
 class OpeningBalance extends Model
 {
     protected $guarded = ['id'];
@@ -33,12 +37,12 @@ class OpeningBalance extends Model
 		return $this->hasMany(MoneyPayment::class,'opening_balance_id');
 	}
 	
-	public function cashInSafeStatements()
+	public function cashInSafeStatements():HasMany
 	{
 		return $this->hasMany(CashInSafeStatement::class , 'opening_balance_id','id');
 	}
 	
-	public function chequeInSafe()
+	public function chequeInSafe():HasMany
 	{
 		return $this->hasMany(MoneyReceived::class,'opening_balance_id','id')->where('type',MoneyReceived::CHEQUE)->whereHas('cheque',function(Builder $builder){
 			$builder->where('status',Cheque::IN_SAFE);
@@ -46,15 +50,14 @@ class OpeningBalance extends Model
 		
 	}
 	
-	public function chequeUnderCollections()
+	public function chequeUnderCollections():HasMany
 	{
 		return $this->hasMany(MoneyReceived::class,'opening_balance_id','id')->where('type',MoneyReceived::CHEQUE)->whereHas('cheque',function(Builder $builder){
 			$builder->where('status',Cheque::UNDER_COLLECTION);
 		});
 	}
-	public function payableCheques()
+	public function payableCheques():HasMany	
 	{
-
 		return $this->hasMany(MoneyPayment::class,'opening_balance_id','id')->where('type',MoneyPayment::PAYABLE_CHEQUE)->whereHas('payableCheque',function(Builder $builder){
 			$builder->where('status',PayableCheque::PENDING);
 		});

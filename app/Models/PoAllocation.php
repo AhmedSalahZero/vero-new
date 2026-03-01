@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperPoAllocation
+ */
 class PoAllocation extends Model
 {
 	
@@ -40,46 +43,44 @@ class PoAllocation extends Model
 	{
 		return $this->allocation_percentage?:0 ;
 	}
-	public static function getSettlementAllocationPerContractAndMoneyType(array &$result   , string $moneyType,string $dateFieldName,int $contractId , int $customerId, string $startDate , string $endDate , string $currentWeekYear,string $currencyName , int $companyId , ?string $chequeStatus = null   ):void
-	{
-		return ;
-		$keyNameForCurrentType = [
-			MoneyPayment::OUTGOING_TRANSFER => __('Outgoing Transfers'),
-			MoneyPayment::CASH_PAYMENT =>__('Cash Payments'),
-			MoneyPayment::PAYABLE_CHEQUE => $chequeStatus == PayableCheque::PAID ? __('Paid Payable Cheques') : __('Under Payment Payable Cheques')
-		][$moneyType];
+	// public static function getSettlementAllocationPerContractAndMoneyType(array &$result   , string $moneyType,string $dateFieldName,int $contractId , int $customerId, string $startDate , string $endDate , string $currentWeekYear,string $currencyName , int $companyId , ?string $chequeStatus = null   ):void
+	// {
+	// 	return ;
+	// 	$keyNameForCurrentType = [
+	// 		MoneyPayment::OUTGOING_TRANSFER => __('Outgoing Transfers'),
+	// 		MoneyPayment::CASH_PAYMENT =>__('Cash Payments'),
+	// 		MoneyPayment::PAYABLE_CHEQUE => $chequeStatus == PayableCheque::PAID ? __('Paid Payable Cheques') : __('Under Payment Payable Cheques')
+	// 	][$moneyType];
 		
-		$settlementAllocations  =  self::where('settlement_allocations.contract_id',$contractId)->with(['moneyPayment','moneyPayment.supplier'])
-			->join('money_payments','settlement_allocations.money_payment_id','=','money_payments.id')
-			->where('money_payments.type',$moneyType)
-			->where('money_payments.company_id',$companyId)
-			->where('settlement_allocations.partner_id',$customerId)
-			->where('currency',$currencyName)
-			->whereBetween($dateFieldName,[$startDate,$endDate])
-			->when($chequeStatus , function(Builder $builder) use ($chequeStatus){
-				$builder->join('payable_cheques','payable_cheques.money_payment_id','=','money_payments.id')
-				->where('payable_cheques.status',$chequeStatus);
-			})
-			->get(['settlement_allocations.contract_id','invoice_id','settlement_allocations.money_payment_id','allocation_amount']);
+	// 	$settlementAllocations  =  self::where('settlement_allocations.contract_id',$contractId)->with(['moneyPayment','moneyPayment.supplier'])
+	// 		->join('money_payments','settlement_allocations.money_payment_id','=','money_payments.id')
+	// 		->where('money_payments.type',$moneyType)
+	// 		->where('money_payments.company_id',$companyId)
+	// 		->where('settlement_allocations.partner_id',$customerId)
+	// 		->where('currency',$currencyName)
+	// 		->whereBetween($dateFieldName,[$startDate,$endDate])
+	// 		->when($chequeStatus , function(Builder $builder) use ($chequeStatus){
+	// 			$builder->join('payable_cheques','payable_cheques.money_payment_id','=','money_payments.id')
+	// 			->where('payable_cheques.status',$chequeStatus);
+	// 		})
+	// 		->get(['settlement_allocations.contract_id','invoice_id','settlement_allocations.money_payment_id','allocation_amount']);
 			
-			foreach($settlementAllocations as $settlementAllocation){
-				$supplier = $settlementAllocation->moneyPayment->supplier ;
-				$invoiceId = $settlementAllocation->invoice_id ; 
-				$invoiceNumber=SupplierInvoice::find($invoiceId)->getInvoiceNumber();
-				$keyNameForCurrentType = $keyNameForCurrentType.' - '. __('Invoice No') .' ' .$invoiceNumber ;
-				$currentAmountAllocationAmount = $settlementAllocation->allocation_amount ;
-				if($currentAmountAllocationAmount <= 0){
-					continue;
-				}
-				// $supplierName = $supplier->getName();
-				$result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear]) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] + $currentAmountAllocationAmount :  $currentAmountAllocationAmount;
-				$result['suppliers'][$supplierName][$keyNameForCurrentType]['total'] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['total']) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['total']  + $currentAmountAllocationAmount : $currentAmountAllocationAmount;
-				$currentTotal = $currentAmountAllocationAmount;
-				$result['suppliers'][$supplierName]['total'][$currentWeekYear] = isset($result['suppliers'][$supplierName]['total'][$currentWeekYear]) ? $result['suppliers'][$supplierName]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
-				// $result['suppliers'][$supplierName]['total']['total_of_total'] = isset($result['suppliers'][$supplierName]['total']['total_of_total']) ? $result['suppliers'][$supplierName]['total']['total_of_total'] + $result['suppliers'][$supplierName]['total'][$currentWeekYear] : $result['suppliers'][$supplierName]['total'][$currentWeekYear];
-		//		$totalCashOutFlowArray[$currentWeekYear] = isset($totalCashOutFlowArray[$currentWeekYear]) ? $totalCashOutFlowArray[$currentWeekYear] +   $currentTotal : $currentTotal ;
-			}
-	}
+	// 		foreach($settlementAllocations as $settlementAllocation){
+	// 			$supplier = $settlementAllocation->moneyPayment->supplier ;
+	// 			$invoiceId = $settlementAllocation->invoice_id ; 
+	// 			$invoiceNumber=SupplierInvoice::find($invoiceId)->getInvoiceNumber();
+	// 			$keyNameForCurrentType = $keyNameForCurrentType.' - '. __('Invoice No') .' ' .$invoiceNumber ;
+	// 			$currentAmountAllocationAmount = $settlementAllocation->allocation_amount ;
+	// 			if($currentAmountAllocationAmount <= 0){
+	// 				continue;
+	// 			}
+	// 			// $supplierName = $supplier->getName();
+	// 			$result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear]) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] + $currentAmountAllocationAmount :  $currentAmountAllocationAmount;
+	// 			$result['suppliers'][$supplierName][$keyNameForCurrentType]['total'] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['total']) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['total']  + $currentAmountAllocationAmount : $currentAmountAllocationAmount;
+	// 			$currentTotal = $currentAmountAllocationAmount;
+	// 			$result['suppliers'][$supplierName]['total'][$currentWeekYear] = isset($result['suppliers'][$supplierName]['total'][$currentWeekYear]) ? $result['suppliers'][$supplierName]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
+	// 		}
+	// }
 	
 	
 	public static function getSettlementAllocationPerContractAndLetterOfCreditIssuance(array &$result  ,string $dateFieldName,int $contractId , int $customerId, string $startDate , string $endDate , string $currentWeekYear , int $companyId  ):void

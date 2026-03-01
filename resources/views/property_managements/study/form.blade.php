@@ -104,7 +104,6 @@
                                 <x-form.label :class="'label'" :id="'test-id'">{{ __('Study End Date') }} </x-form.label>
                                 <div class="kt-input-icon">
                                     <div class="input-group date">
-                                        {{-- {{ dd(isset($model) ? $model->getStudyEndDateWithoutDay() : getCurrentDateForFormDate('date')) }} --}}
                                         <input id="study-end-date" type="hidden" name="study_end_date" class=" form-control" readonly value="{{ isset($model) ? $model->getStudyEndDate() : getCurrentDateForFormDate('date') }}" />
                                         <input id="study-end-date-text" type="text" class=" form-control" readonly value="{{ isset($model) ? $model->getStudyEndDateWithoutDay() : getCurrentDateForFormDate('date') }}" />
                                         <div class="input-group-append">

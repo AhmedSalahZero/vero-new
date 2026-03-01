@@ -6,7 +6,6 @@ use App\Models\NonBankingService\Study;
 @php
 $months = $study->getMicrofinanceMonths() ;
 @endphp
-{{-- {{ dd('e') }} --}}
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/custom/css/non-banking-services/common.css">
@@ -78,7 +77,6 @@ $months = $study->getMicrofinanceMonths() ;
             $currentType = 'study' ;
             @endphp
 			
-	{{-- {{ dd($tableDataFormatteds) }} --}}
     @foreach($tableDataFormatteds as $title=> $tableDataFormatted)
 		@if($title != $odasTitleStatement ||  ($title == $odasTitleStatement )  )
     <div class="kt-portlet__body">

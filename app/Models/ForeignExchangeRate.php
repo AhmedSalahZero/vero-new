@@ -6,6 +6,9 @@ use App\Services\Api\ExchangeRateService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperForeignExchangeRate
+ */
 class ForeignExchangeRate extends Model
 {
 	protected $guarded = [

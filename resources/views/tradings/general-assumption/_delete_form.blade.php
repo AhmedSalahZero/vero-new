@@ -556,7 +556,6 @@
                     </div>
                     <div class="row general-assumption">
 
-{{-- {{ dd($yearOrMonthsIndexes) }} --}}
                         <div class="table-responsive">
                             <table class="table table-white repeater-class repeater ">
                                 <thead>

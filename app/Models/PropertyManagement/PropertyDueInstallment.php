@@ -9,6 +9,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPropertyDueInstallment
+ */
 class PropertyDueInstallment extends Model
 {
     use HasFactory, HasBasicStoreRequest,HasCompany,HasPropertyDueInstallment;

@@ -99,10 +99,10 @@
         <div class="tab-content  kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
-            <?php
+            @php
                     array_push($businessSectors_names, 'Total');
                     array_push($businessSectors_names, 'BusinessSectors_Sales_Percentages');
-                    ?>
+                    @endphp
             {{-- <div class="tab-pane " id="kt_apps_contacts_view_tab_1" role="tabpanel">
                     @foreach ($businessSectors_names as $name_of_zone)
 
@@ -137,19 +137,19 @@
         </tr>
         @endslot
         @slot('table_body')
-        <?php $id =1 ;
+        @php $id =1 ;
                             sortReportForTotals($report_data);
 
-                            ?>
+                            @endphp
         @foreach ($report_data as $zone_name => $data)
 
-        <?php $chart_data = [];?>
+        @php $chart_data = [];@endphp
 
         @if ($zone_name != 'Total' && $zone_name != 'Growth Rate %')
-        <?php
+        @php
                                     // $row_name = str_replace(' ', '_', $zone_name);
                                     // $row_name = str_replace(['&','(',')','{','}'], '_', $row_name);
-                                     ?>
+                                     @endphp
 
         <tr class="group-color ">
             <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
@@ -157,11 +157,11 @@
                 <b>{{ __($zone_name) }}</b>
             </td>
             {{-- Total --}}
-            <?php $total_per_zone = $data['Total'] ?? [];
-                                        unset($data['Total']); ?>
+            @php $total_per_zone = $data['Total'] ?? [];
+                                        unset($data['Total']); @endphp
             {{-- Growth Rate % --}}
-            <?php $growth_rate_per_zone = $data['Growth Rate %'] ?? [];
-                                        unset($data['Growth Rate %']); ?>
+            @php $growth_rate_per_zone = $data['Growth Rate %'] ?? [];
+                                        unset($data['Growth Rate %']); @endphp
 
             @foreach ($dates as $date)
             <td class="text-center white-text">{{ number_format($total_per_zone[$date] ?? 0) . '  [ GR '.number_format($growth_rate_per_zone[$date] ?? 0) . ' % ]'}}
@@ -179,9 +179,9 @@
         @endforeach
         </tr> --}}
 
-        @php
+        @@php
         sortSubItems($data)
-        @endphp
+        @end@php
         @foreach ($data as $channel_name => $channel_section)
 
         <tr class="row{{ $id }}  text-center" style="display: none">
@@ -207,7 +207,7 @@
         @elseif ($zone_name == 'Total' || $zone_name == 'Growth Rate %')
         <tr class="active-style text-center">
             <td class="active-style text-center"><b>{{ __($zone_name) }}</b></td>
-            <?php $decimals = $zone_name == 'Growth Rate %' ? 2 : 0; ?>
+            @php $decimals = $zone_name == 'Growth Rate %' ? 2 : 0; @endphp
             @foreach ($dates as $date)
 
             <td class="text-center active-style">
@@ -216,7 +216,7 @@
             <td class="text-center active-style">{{$zone_name == 'Growth Rate %' ? "-" : number_format(array_sum($data  ?? []),0)}}</td>
         </tr>
         @endif
-        <?php $id++ ;?>
+        @php $id++ ;@endphp
         @endforeach
 
 

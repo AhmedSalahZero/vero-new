@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCashExpenseCategory
+ */
 class CashExpenseCategory extends Model
 {
 	use HasBasicStoreRequest ;

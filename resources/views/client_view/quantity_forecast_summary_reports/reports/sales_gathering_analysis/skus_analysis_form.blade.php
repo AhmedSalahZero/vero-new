@@ -13,7 +13,7 @@
         <form class="kt-form kt-form--label-right" method="POST" action={{  $name_of_selector_label == 'Sales Discount' ? route('Items.salesDiscount.analysis.result', $company) : route('Items.analysis.result', $company) }} enctype="multipart/form-data">
             @csrf
             <div class="kt-portlet">
-                <?php 
+                @php 
                     // $ItemsData = App\Models\SalesGathering::company()
                     //     ->whereNotNull('product_item')
                     //     ->where('product_item','!=','')
@@ -34,7 +34,7 @@
                         }else {
                             $column =  6 ;
                         }
-                    ?>
+                    @endphp
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">

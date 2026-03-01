@@ -103,7 +103,7 @@
                             </tr>
                         @endslot
                         @slot('table_body')
-                            <?php $total = array_sum(array_column($sale_person,'Sales Value')) ?>
+                            @php $total = array_sum(array_column($sale_person,'Sales Value')) @endphp
                             @foreach ($sale_person as $key => $item)
                             <tr>
                                 <th>{{$key+1}}</th>

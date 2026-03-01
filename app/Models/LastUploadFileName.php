@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLastUploadFileName
+ */
 class LastUploadFileName extends Model
 {
 	const CURRENT ='current';

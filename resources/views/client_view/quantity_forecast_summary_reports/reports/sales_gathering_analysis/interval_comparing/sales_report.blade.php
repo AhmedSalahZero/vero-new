@@ -15,7 +15,7 @@
 @endsection
 @section('content')
 <div class="row">
-    <?php $intervals = ['First'=>'_one', 'Second' => '_two']; ?>
+    @php $intervals = ['First'=>'_one', 'Second' => '_two']; @endphp
     @foreach ($intervals as $interval_name => $name)
 
     <div class="col-md-6">
@@ -48,17 +48,17 @@
             </div>
         </div>
     </div>
-    <?php $report_name = 'result_for_interval'.$name?>
+    @php $report_name = 'result_for_interval'.$name@endphp
     <input type="hidden" id="data{{$name}}" data-total="{{ json_encode($$report_name) }}">
     @endforeach
 </div>
 <div class="row">
     {{-- Tables --}}
     @foreach ($intervals as $interval_name => $name)
-    <?php
+    @php
                 $report_name = 'result_for_interval'.$name ;
                 $report_count_data = 'count_result_for_interval'.$name ;
-            ?>
+            @endphp
 
     <div class="col-md-6">
         <div class="kt-portlet kt-portlet--mobile">
@@ -98,8 +98,8 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    <?php $total = array_sum(array_column($$report_name,'Sales Value'));
-                                    $total_count = (isset($$report_count_data) && count($$report_count_data) > 0) ? array_sum(array_column($$report_count_data,'Count')) : 0; ?>
+                    @php $total = array_sum(array_column($$report_name,'Sales Value'));
+                                    $total_count = (isset($$report_count_data) && count($$report_count_data) > 0) ? array_sum(array_column($$report_count_data,'Count')) : 0; @endphp
                     @foreach ($$report_name as $key => $item)
                     <tr>
                         <th>{{$key+1}}</th>

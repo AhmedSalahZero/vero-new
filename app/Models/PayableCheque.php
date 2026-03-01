@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * * دا الشيك اللي بدفعه للموردين
+ *
+ * @mixin IdeHelperPayableCheque
  */
 
 class PayableCheque extends Model

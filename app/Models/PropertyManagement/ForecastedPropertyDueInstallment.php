@@ -8,6 +8,9 @@ use App\Traits\Models\HasPropertyDueInstallment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperForecastedPropertyDueInstallment
+ */
 class ForecastedPropertyDueInstallment extends Model
 {
     use HasFactory, HasBasicStoreRequest,HasCompany,HasPropertyDueInstallment;

@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * * هنا عميلة تحويل الاموال من حساب بنك الي حساب خاص بال
  * * letter of credit issuance
  * * عن طريق بسحب كريدت من حساب احطة دبت في حساب اخر
+ *
+ * @mixin IdeHelperLcSettlementInternalMoneyTransfer
  */
 class LcSettlementInternalMoneyTransfer extends Model 
 {

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCategory
+ */
 class Category extends Model
 {
     /**
@@ -12,11 +15,7 @@ class Category extends Model
      * @var string
      */
     protected $table = 'categories';
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+ 
     protected $guarded = [];
 
     // Company Scoop

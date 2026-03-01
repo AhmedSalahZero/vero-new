@@ -189,7 +189,7 @@
 </div>
 
 
-<?php
+@php
         $dates = array_column($chart_data['multi_chart'],'date');
 
         $accumulated_chart = $chart_data['accumulated_chart'] ;
@@ -198,7 +198,7 @@
         $sales_values = $chart_data['sales'];
         $accumulated_data = $chart_data['accumulated_data'];
 
-    ?>
+    @endphp
 {{-- First Section --}}
 <div class="row">
     {{-- Total Facilities --}}

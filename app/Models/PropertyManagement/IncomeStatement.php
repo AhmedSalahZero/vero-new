@@ -6,6 +6,9 @@ use App\Models\Traits\Scopes\BelongsToCompany;
 use App\Models\Traits\Scopes\PropertyManagements\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperIncomeStatement
+ */
 class IncomeStatement extends Model
 {
     

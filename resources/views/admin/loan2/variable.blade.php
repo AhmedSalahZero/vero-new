@@ -268,7 +268,6 @@
    <div class="col-md-4 item-main-parent">
                     <div class="form-group validated">
 					
-					{{-- {{ dd($loan->interest_interval) }} --}}
                         <label class="col-form-label take">{{__('Interest Payment Interval')}}</label><span class="astric">*</span>
                         <div class="form-group-sub">
                             <select data-current-selected="{{ $loan && $loan->interest_interval ? $loan->interest_interval : 'monthly' }}" name="interest_interval" id="interest_interval" class="form-control ">

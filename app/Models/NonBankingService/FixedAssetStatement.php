@@ -7,6 +7,9 @@ use App\Models\Traits\Scopes\BelongsToCompany;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperFixedAssetStatement
+ */
 class FixedAssetStatement extends Model
 {
 	use BelongsToStudy,BelongsToCompany;

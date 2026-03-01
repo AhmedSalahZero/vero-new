@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 
+/**
+ * @mixin IdeHelperOverdraftAgainstAssignmentOfContractLimit
+ */
 class OverdraftAgainstAssignmentOfContractLimit extends Model
 {
 	use IsBankStatement;
@@ -91,7 +94,7 @@ class OverdraftAgainstAssignmentOfContractLimit extends Model
 
 			
 			/**
-			 * @var OverdraftAgainstAssignmentOfContractBankStatement $firstBankStatementRow ;
+			 * @var ?OverdraftAgainstAssignmentOfContractBankStatement $firstBankStatementRow ;
 			 */
 			 $firstBankStatementRow ? $firstBankStatementRow->update(['updated_at'=>now()]) : null ;
 			 

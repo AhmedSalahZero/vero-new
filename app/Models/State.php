@@ -6,6 +6,9 @@ use App\Interfaces\Models\IBaseModel;
 use App\Models\Traits\Relations\Commons\StateRelations;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperState
+ */
 class State extends Model implements IBaseModel 
 {
     public function getRouteKeyName()

@@ -35,6 +35,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use MathPHP\Finance;
 
+/**
+ * @mixin IdeHelperStudy
+ */
 class Study extends Model
 {
     use HasBasicStoreRequest;
@@ -202,7 +205,7 @@ class Study extends Model
             'dateWithMonthNumber'=>$dateWithMonthNumber,
             'dateWithDateIndex'=>$dateWithDateIndex,
         ];
-        return $datesIndexWithYearIndex ;
+        // return $datesIndexWithYearIndex ;
     }
     public function getStudyDates(): array
     {
@@ -257,10 +260,7 @@ class Study extends Model
         return $startDate;
     }
 
-    // public function getOperationStartDateAsIndex(array $datesAsStringAndIndex, ?string $operationStartDateFormatted): ?int
-    // {
-    //     return  $operationStartDateFormatted ? $datesAsStringAndIndex[$operationStartDateFormatted] : null;
-    // }
+   
     public function getOperationStartDateAsIndex():string
     {
         
@@ -665,27 +665,27 @@ class Study extends Model
     }
     public function hasLeasing():bool
     {
-        return $this->has_leasing;
+        return (bool)$this->has_leasing;
     }
     public function hasDirectFactoring():bool
     {
-        return $this->has_direct_factoring;
+        return (bool)$this->has_direct_factoring;
     }
     public function hasReverseFactoring():bool
     {
-        return $this->has_reverse_factoring;
+        return (bool)$this->has_reverse_factoring;
     }
     public function hasIjaraMortgage():bool
     {
-        return $this->has_ijara_mortgage;
+        return (bool)$this->has_ijara_mortgage;
     }
     public function hasPortfolioMortgage():bool
     {
-        return $this->has_portfolio_mortgage;
+        return (bool)$this->has_portfolio_mortgage;
     }
     public function hasMicroFinance():bool
     {
-        return $this->has_micro_finance;
+        return (bool)$this->has_micro_finance;
     }
     public function getMicrofinanceType():?string
     {
@@ -707,11 +707,11 @@ class Study extends Model
     }
     public function hasSecuritization():bool
     {
-        return $this->has_securitization;
+        return (bool)$this->has_securitization;
     }
     public function hasConsumerFinance():bool
     {
-        return $this->has_consumer_finance;
+        return (bool)$this->has_consumer_finance;
     }
     public function eclAndNewPortfolioFundingRates():HasMany
     {
@@ -1230,7 +1230,7 @@ class Study extends Model
         //    $operationStartDateAsIndex = $datesAsStringDateIndex[$this->getOperationStartDate()];
         $studyExtendedEndDateAsIndex = Arr::last($datesAsStringDateIndex);
         $dateIndexWithDate = $this->getDateIndexWithDate();
-        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex($datesAsStringDateIndex, $this->getStudyEndDate());
+        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex();
         foreach ($expenseTypes as $tableId) {
             
             #::delete all
@@ -2873,11 +2873,11 @@ class Study extends Model
         $projectUnderProgressService = new ProjectsUnderProgress();
         $datesAsStringAndIndex = $this->getDateWithDateIndex();
         $dateIndexWithDate = $this->getDateIndexWithDate();
-        $dateWithDateIndex = $this->getDateWithDateIndex();
-        $operationStartDateFormatted = $this->getOperationStartDateFormatted();
+        // $dateWithDateIndex = $this->getDateWithDateIndex();
+        // $operationStartDateFormatted = $this->getOperationStartDateFormatted();
         $datesIndexWithYearIndex = $this->getDatesIndexWithYearIndex();
         $dateWithMonthNumber = $this->getDateWithMonthNumber();
-        $operationStartDateAsIndex = $this->getOperationStartDateAsIndex($datesAsStringAndIndex, $operationStartDateFormatted);
+        $operationStartDateAsIndex = $this->getOperationStartDateAsIndex();
         $yearIndexWithYear = $this->getYearIndexWithYear();
         $studyDurationPerYear = $this->getStudyDurationPerYear($datesAsStringAndIndex, $datesIndexWithYearIndex, $yearIndexWithYear, $dateIndexWithDate, $dateWithMonthNumber, true, true, false);
         $studyDates=$this->getOnlyDatesOfActiveStudy($studyDurationPerYear, $dateIndexWithDate);
@@ -5549,7 +5549,7 @@ class Study extends Model
         $datesAsIndexAndString = array_flip($datesAsStringDateIndex);
         $operationStartDateAsIndex = $datesAsStringDateIndex[$this->getOperationStartDate()];
         $studyExtendedEndDateAsIndex = Arr::last($datesAsStringDateIndex);
-        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex($datesAsStringDateIndex, $this->getStudyEndDate());
+        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex();
         $dateIndexWithDate = $this->getDateIndexWithDate();
         $dateWithDateIndex = $this->getDateWithDateIndex();
         $model = ('\App\Models\\NonBankingService\\'.$modelName)::find($modelId);
@@ -6848,10 +6848,10 @@ class Study extends Model
 	{
 		$study = $this;
 				$dateWithDateIndex = $study->getDateWithDateIndex();
-		$studyEndDateAsString = $study->getStudyEndDate();
+		// $studyEndDateAsString = $study->getStudyEndDate();
 		$studyStartDateAsString = $study->getStudyStartDate();
 		$studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex,$studyStartDateAsString);
-		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex($dateWithDateIndex,$studyEndDateAsString);
+		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
 	
 		$totalFixedAssetAmounts = [];
 		$currentFixedAssetAmounts = [];

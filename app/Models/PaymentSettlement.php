@@ -8,6 +8,9 @@ use App\Traits\Models\IsSettlement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperPaymentSettlement
+ */
 class PaymentSettlement extends Model
 {
 	use HasDeleteButTriggerChangeOnLastElement ,  IsSettlement;

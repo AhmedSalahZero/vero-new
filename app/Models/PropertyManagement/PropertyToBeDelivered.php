@@ -9,6 +9,9 @@ use App\ReadyFunctions\CollectionPolicyService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperPropertyToBeDelivered
+ */
 class PropertyToBeDelivered extends Model
 {
 	

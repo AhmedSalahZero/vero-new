@@ -484,7 +484,6 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 										@if($name !='Total')
                                         <button class="btn btn-sm btn-brand btn-elevate btn-pill text-white" data-toggle="modal" data-target="#{{ $currentModalId }}">{{ __('Details') }}</button>
 										@endif
-										{{-- {{ dd() }} --}}
                                         @include('admin.dashboard.expense_modal',['detailItems'=> $subItems ,'cardTotal'=>$cardTotal , 'modalId'=>$currentModalId ,'title'=>$name])
                                     </h4>
 
@@ -751,7 +750,6 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 
 
                                 </div>
-								{{-- {{ dd($chartData['three_lines']['general']??[]) }} --}}
                                 <div class="chartdiv_two_lines" id="three-line-chart-general-id"></div>
 								
 								@foreach($chartData['three_lines']['general']??[] as $chartName => $currentChartData )
@@ -826,7 +824,6 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                 <div class="kt-portlet__head-label col-8">
                     <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $mainCategoriesName . ' ' . __('Category') }} </h3>
                 </div>
-{{-- {{ dd($subItems) }} --}}
             </div>
             <div class="kt-portlet__body">
                 <div class="row">

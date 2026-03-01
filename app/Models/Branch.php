@@ -6,6 +6,9 @@ use App\Traits\HasOdooPaymentMethod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperBranch
+ */
 class Branch extends Model
 {
 	use HasOdooPaymentMethod;

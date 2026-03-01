@@ -31,6 +31,9 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @mixin IdeHelperCompany
+ */
 class Company extends Model implements HasMedia
 {
     use
@@ -1155,7 +1158,7 @@ class Company extends Model implements HasMedia
     {
         return (new Select2Formatter)->formatForAssocArr($this->consumerfinanceProducts->pluck('title', 'id')->toArray());
     }
-    public function studies()
+    public function studies():HasMany
     {
         $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;

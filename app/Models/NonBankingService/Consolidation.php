@@ -7,6 +7,9 @@ use App\Models\Traits\Scopes\BelongsToCompany;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * @mixin IdeHelperConsolidation
+ */
 class Consolidation extends Model
 {
     use BelongsToCompany;

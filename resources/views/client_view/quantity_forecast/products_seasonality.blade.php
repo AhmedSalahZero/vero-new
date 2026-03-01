@@ -44,7 +44,7 @@
                     @endslot
                     @slot('table_body')
 
-                        <?php $key=0; $product_seasonality = count($product_seasonality)>0 ? $product_seasonality : old() ;?>
+                        @php $key=0; $product_seasonality = count($product_seasonality)>0 ? $product_seasonality : old() ;@endphp
                         @for ($number = 1; $number <= $sales_forecast->number_of_products; $number++)
                             <tr>
 
@@ -57,7 +57,7 @@
                                     </div>
                                 </td>
                                 @if ($has_product_item == true)
-                                    <?php $product_id = ($product_seasonality[$key]->product_id)??(old('products')[$key]??''); ?>
+                                    @php $product_id = ($product_seasonality[$key]->product_id)??(old('products')[$key]??''); @endphp
                                     <td class="text-center">
                                         <div class="kt-input-icon">
                                             <div class="input-group date validated">
@@ -82,7 +82,7 @@
                                 <td class="text-center">
                                     <div class="kt-input-icon">
                                         @if ($has_product_item == true)
-                                            <?php $category = isset($product_seasonality[$key]->category_id) ?  App\Models\Category::find($product_seasonality[$key]->category_id) : null?>
+                                            @php $category = isset($product_seasonality[$key]->category_id) ?  App\Models\Category::find($product_seasonality[$key]->category_id) : null@endphp
                                             <div class="input-group date">
                                                 <select name="categories[]" readonly class="form-control categories" required>
                                                     @if ($category !== null)
@@ -91,7 +91,7 @@
                                                 </select>
                                             </div>
                                         @else
-                                            <?php $categories =  App\Models\Category::where('company_id',$company->id)->get(); ?>
+                                            @php $categories =  App\Models\Category::where('company_id',$company->id)->get(); @endphp
                                             <div class="input-group date">
                                                 <select name="categories[]" readonly class="form-control categories" required>
                                                     @foreach ($categories as $category)
@@ -122,7 +122,7 @@
                                     </td>
                                 {{-- @endif --}}
                             </tr>
-                            <?php $key++; ?>
+                            @php $key++; @endphp
                         @endfor
                     @endslot
                 </x-table>
@@ -130,7 +130,7 @@
         </div>
 
 
-        <?php $key = 0;?>
+        @php $key = 0;@endphp
         @for ($number = 1; $number <= $sales_forecast->number_of_products; $number++)
             <div class="row">
                 <div class="col-md-12">
@@ -193,7 +193,7 @@
                                 <tr>
                                     <th class="text-center">{{ __('Sales %') }}</th>
                                     @foreach ($sales_forecast['dates'] as $date => $value)
-                                    <?php $value = $product_seasonality[$key]['seasonality_data'][$date] ?? (old('new_seasonality_monthly')[$key][$date]??0) ?>
+                                    @php $value = $product_seasonality[$key]['seasonality_data'][$date] ?? (old('new_seasonality_monthly')[$key][$date]??0) @endphp
 
                                             <td class="text-center">
                                                 <input type="number" data-product="{{$key}}" class="form-control months"  name="new_seasonality_monthly[{{$key}}][{{ $date }}]" value="{{ ($product_seasonality[$key]['seasonality'] ?? (old('seasonality')[$key]??'')) == 'new_seasonality_monthly' ? $value : 0}}" >
@@ -241,7 +241,7 @@
                                     <tr>
                                         <th class="text-center">{{ __('Sales %') }}</th>
                                         @foreach ($sales_forecast['quarter_dates'] as $date => $value)
-                                        <?php $value = $product_seasonality[$key]['seasonality_data'][$date] ?? (old('new_seasonality_quarterly')[$key][$date]??0) ?>
+                                        @php $value = $product_seasonality[$key]['seasonality_data'][$date] ?? (old('new_seasonality_quarterly')[$key][$date]??0) @endphp
                                             <td class="text-center">
                                                 <input type="number" data-product="{{$key}}" name="new_seasonality_quarterly[{{$key}}][{{ $date }}]" value="{{($product_seasonality[$key]['seasonality'] ?? (old('seasonality')[$key]??''))  == 'new_seasonality_quarterly' ? $value :0}}"
                                                     class="form-control quarters">
@@ -258,7 +258,7 @@
                     </div>
                 </div>
             </div>
-            <?php $key++; ?>
+            @php $key++; @endphp
         @endfor
         {{-- <x-submitting /> --}}
  <x-next__button > </x-next__button>

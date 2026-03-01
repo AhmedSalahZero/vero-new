@@ -14,6 +14,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin IdeHelperOverdraftAgainstAssignmentOfContract
+ */
 class OverdraftAgainstAssignmentOfContract extends Model implements IHaveStatement
 {
     protected $guarded = ['id'];

@@ -41,10 +41,10 @@ class StorePerEmployeeFixedAssetsRequest extends FormRequest
 		 * @var Study $study 
 		 */
 				$dateWithDateIndex = $study->getDateWithDateIndex();
-		$studyEndDateAsString = $study->getStudyEndDate();
+		// $studyEndDateAsString = $study->getStudyEndDate();
 		$studyStartDateAsString = $study->getStudyStartDate();
 		$studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex,$studyStartDateAsString);
-		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex($dateWithDateIndex,$studyEndDateAsString);
+		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
 	
 		$totalFixedAssetAmounts = [];
 		$currentFixedAssetAmounts = [];

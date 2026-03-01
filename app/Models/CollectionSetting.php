@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCollectionSetting
+ */
 class CollectionSetting extends Model
 {
     /**
@@ -12,17 +15,9 @@ class CollectionSetting extends Model
      * @var string
      */
     protected $table = 'collection_settings';
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+   
     protected $guarded = [];
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+   
     protected $casts = [
         'general_collection' => 'array',
         'first_allocation_collection' => 'array',

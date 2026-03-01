@@ -11,14 +11,18 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * * هو عباره عن التقسيمة الخاصة بال 
- * *clean overdraft 
+ * * هو عباره عن التقسيمة الخاصة بال
+ * *clean overdraft
  * * outstanding balance
  * * او اي نوع تاني خاص بالتسهيلات
  * * بمعني انك لما بتحط ال
- * * الفلوس اللي انت سحبتها من الحساب لحد لحظه فتح حسابك علي كاش فيرو ..سحبت قديه يوم قديه وقديه يوم قديه وهكذا 
+ * * الفلوس اللي انت سحبتها من الحساب لحد لحظه فتح حسابك علي كاش فيرو .
+ * 
+ * .سحبت قديه يوم قديه وقديه يوم قديه وهكذا
  * * بمعني ان مجموع القيم لازم يساوي ال
- * * outstanding balance in clean overdraft 
+ * * outstanding balance in clean overdraft
+ *
+ * @mixin IdeHelperOutstandingBreakdown
  */
 class OutstandingBreakdown extends Model
 {

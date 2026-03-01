@@ -16,7 +16,7 @@
         <form class="kt-form kt-form--label-right" method="POST" action={{ route('categories.sales.analysis.result', $company) }} enctype="multipart/form-data">
             @csrf
             <div class="kt-portlet">
-                <?php $categoriesData = App\Models\SalesGathering::company()
+                @php $categoriesData = App\Models\SalesGathering::company()
                         ->whereNotNull('category')
                         ->where('category','!=','')
                         ->groupBy('category')
@@ -25,7 +25,7 @@
                         ->pluck('category')
                         ->toArray();
 
-                    ?>
+                    @endphp
 
                 <div class="kt-portlet__body">
                     <div class="form-group row">

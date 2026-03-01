@@ -7,6 +7,9 @@ use App\Models\Traits\Scopes\BelongsToCompany;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperTenant
+ */
 class Tenant extends Model
 {
 	use BelongsToCompany,HasBasicStoreRequest;

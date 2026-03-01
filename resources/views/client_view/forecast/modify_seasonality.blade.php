@@ -92,7 +92,7 @@
                         </tr>
                     @endslot
                     @slot('table_body')
-                    <?php $product_id = 1; ?>
+                    @php $product_id = 1; @endphp
 
                         @foreach ($product_item_breakdown_data as $key => $product_data)
 
@@ -100,7 +100,7 @@
                                 <td > <b> {{ $product_data['item'] ?? '-' }} </b></td>
 
                                 @foreach ($monthly_dates as $date => $value)
-                                    <?php
+                                    @php
                                     $date = date('M-Y', strtotime($date));
                                     $month = date('F', strtotime($date));
 
@@ -113,14 +113,14 @@
                                         $percentage = $products_items_monthly_percentage[$item_name][$month] ?? 0;
                                     }
 
-                                    ?>
+                                    @endphp
                                     <td class="text-center"><input type="number" class="form-control percentage_{{$product_id}}"  step="any" name="modified_seasonality[{{$product_data['item']}}][{{$month}}]" value="{{ number_format(($percentage*100) , 4) }}"></td>
                                 @endforeach
                                 <td class="percentage_total_{{$product_id}}">
 
                                 </td>
                             </tr>
-                            <?php $product_id++; ?>
+                            @php $product_id++; @endphp
                         @endforeach
                     @endslot
                 </x-table>
@@ -164,7 +164,7 @@
     </script>
     <script src="{{ url('assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js') }}" type="text/javascript">
     </script>
-<?php $product_id = 1; ?>
+@php $product_id = 1; @endphp
 @foreach ($product_item_breakdown_data as $key => $product_data)
     <script>
         $(document).ready(function () {
@@ -176,7 +176,7 @@
         });
 
     </script>
-    <?php $product_id++; ?>
+    @php $product_id++; @endphp
 @endforeach
 <script>
         function totalPercentage(id) {
@@ -196,4 +196,3 @@
          }
 </script>
 @endsection
-

@@ -6,6 +6,9 @@ use App\Models\Traits\Accessors\FreelancerExpenseAccessor;
 use App\Models\Traits\Relations\FreelancerExpenseRelation;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperFreelancerExpense
+ */
 class FreelancerExpense extends Model
 {
     use   FreelancerExpenseRelation , FreelancerExpenseAccessor;

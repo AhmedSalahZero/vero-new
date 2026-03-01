@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperPropertyExpense
+ */
 class PropertyExpense extends Model
 {
     use BelongsToStudy,BelongsToCompany;

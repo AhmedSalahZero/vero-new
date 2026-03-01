@@ -9,6 +9,9 @@ use App\Traits\Models\HasDeleteButTriggerChangeOnLastElement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperEmployeeStatement
+ */
 class EmployeeStatement extends Model  implements IHaveStatement
 {
 	use HasDeleteButTriggerChangeOnLastElement,IsBankStatement;

@@ -36,8 +36,8 @@
     @csrf
 
     @if ($new_products_allocations)
-    <?php $total_products_items = [];
-            $allocation_base = str_replace('_', ' ', ucwords($new_products_allocations->allocation_base)); ?>
+    @php $total_products_items = [];
+            $allocation_base = str_replace('_', ' ', ucwords($new_products_allocations->allocation_base)); @endphp
 
     @if (count($products_seasonality) > 0)
     <div class="kt-portlet">
@@ -54,19 +54,19 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @php
+                @@php
                 sortTwoDimensionalExcept($allocation_data_total, ['Total']);
 
-                @endphp
+                @end@php
                 @foreach ($allocation_data_total as $base_name => $value)
-                <?php $class_name = $base_name == 'Total' ? 'active-style' : ''; ?>
+                @php $class_name = $base_name == 'Total' ? 'active-style' : ''; @endphp
                 
                 <tr>
                     <td class="{{ $class_name }}">{{ $base_name }}</td>
                     @foreach ($allocation_data_total['Total'] as $date => $total)
-                    <?php
+                    @php
                                             $total_products_items[$base_name][$date] = $value[$date] ?? 0;
-                                            ?>
+                                            @endphp
                     <td class="text-center {{ $class_name }}">
                         {{ number_format($value[$date] ?? 0) }} </td>
                     @endforeach
@@ -80,9 +80,9 @@
     </div>
     @endif
     @else
-    @php
+    @@php
     $allocation_base = '';
-    @endphp
+    @end@php
     @endif
     {{-- Existing Products  --}}
 
@@ -100,23 +100,23 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @php
+                @@php
 
                 sortTwoDimensionalExcept($existing_product_data, ['Total']);
 
-                @endphp
+                @end@php
                 @foreach ($existing_product_data as $base_name => $value)
-                <?php
+                @php
                                 $class_name = $base_name == 'Total' ? 'active-style' : '';
 
-                                ?>
+                                @endphp
                 <tr>
                     <td class="{{ $class_name }}">{{ $base_name }}</td>
                     @foreach ($existing_product_data['Total'] ?? [] as $date => $total)
-                    <?php
+                    @php
                                         $full_date = date('M-Y', strtotime('01-' . $date . '-' . $year));
                                         $total_products_items[$base_name][$full_date] = ($value[$date] ?? 0) + ($total_products_items[$base_name][$full_date] ?? 0);
-                                        ?>
+                                        @endphp
                     <td class="text-center {{ $class_name }}"> {{ number_format($value[$date] ?? 0) }}
                     </td>
                     @endforeach
@@ -133,12 +133,12 @@
     {{-- Total --}}
     <div class="kt-portlet">
         <div class="kt-portlet__body ">
-            <?php
+            @php
                     $total = $total_products_items['Total'] ?? [];
                     unset($total_products_items['Total']);
                     arsort($total_products_items);
                     $total_products_items['Total'] = $total;
-                    ?>
+                    @endphp
             <x-table :tableTitle="__('Total ' . $allocation_base . ' Monthly Sales Target Table')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
                 @slot('table_header')
                 <tr class="table-active text-center">
@@ -150,17 +150,17 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @php
+                @@php
 
                 sortTwoDimensionalExcept($total_products_items, ['Total']);
 
-                @endphp
+                @end@php
                 @foreach ($total_products_items as $base_name => $value)
-                <?php $class_name = $base_name == 'Total' ? 'active-style' : ''; ?>
+                @php $class_name = $base_name == 'Total' ? 'active-style' : ''; @endphp
                 <tr>
                     <td class="{{ $class_name }}">{{ $base_name }}</td>
                     @foreach ($total_products_items['Total'] as $date => $total)
-                    <?php $total_value = ($existing_product_data_with_dates[$base_name][$date] ?? 0) + ($value[$date] ?? 0); ?>
+                    @php $total_value = ($existing_product_data_with_dates[$base_name][$date] ?? 0) + ($value[$date] ?? 0); @endphp
                     <td class="text-center {{ $class_name }}"> {{ number_format($total_value ?? 0) }}
                     </td>
                     @endforeach

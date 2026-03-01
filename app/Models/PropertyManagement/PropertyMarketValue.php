@@ -6,6 +6,9 @@ use App\Models\Traits\Scopes\CompanyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPropertyMarketValue
+ */
 class PropertyMarketValue extends Model
 {
     use HasFactory, CompanyScope;

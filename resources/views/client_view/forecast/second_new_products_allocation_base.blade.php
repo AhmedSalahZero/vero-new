@@ -20,8 +20,8 @@
 @section('content')
     <form action="{{ route('second.new.product.allocation.base', $company) }}" method="POST">
         @csrf
-        <?php $total_sales_targets_values = 0;
-        $total_sales_targets_percentages = 0; ?>
+        @php $total_sales_targets_values = 0;
+        $total_sales_targets_percentages = 0; @endphp
         @if ( 1)
         {{-- @if ($sales_forecast['add_new_products'] == 1) --}}
             <div class="kt-portlet">
@@ -54,13 +54,13 @@
                         @endslot
                         @slot('table_body')
                             <input type="hidden" name="allocation_base" value="{{ $allocation_base }}">
-                            <?php $key = 0; ?>
-                            <?php $key_for_new_items = 0; ?>
+                            @php $key = 0; @endphp
+                            @php $key_for_new_items = 0; @endphp
 
                             @foreach ($allocation_bases_items as $item => $type)
                                 <tr class="text-center">
                                     @if ($type == 'new')
-                                        <?php $name = ($allocations_base_row->new_allocation_bases_names[$key_for_new_items]) ?? (old('new_allocation_base_items')[$key_for_new_items]??''); ?>
+                                        @php $name = ($allocations_base_row->new_allocation_bases_names[$key_for_new_items]) ?? (old('new_allocation_base_items')[$key_for_new_items]??''); @endphp
                                         <td class="text-center light-gray-bg">
                                             <div class="input-group validated">
                                                 <input type="text" name="new_allocation_base_items[{{ $key_for_new_items }}]"
@@ -74,12 +74,12 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <?php $key_for_new_items++; ?>
+                                        @php $key_for_new_items++; @endphp
                                     @else
                                         <td>{{ $item }}</td>
                                     @endif
                                     @foreach ($product_seasonality as $index2=>$product)
-                                        <?php
+                                        @php
                                         if($allocations_base_row === null){
                                                 $value = (old('allocation_base_data')[$product->name][$item][$type] ?? '' );
                                             }else{
@@ -89,8 +89,8 @@
                                                     $value = @$allocations_base_row->allocation_base_data[$product->name][$name][$type];
                                                 }
                                             }
-                                        ?>
-                                        <?php $product_name = str_replace(' ', '_', strtolower($product->name)); ?>
+                                        @endphp
+                                        @php $product_name = str_replace(' ', '_', strtolower($product->name)); @endphp
                                         {{-- <input type="hidden" name="allocation_base_data[{{$product->name}}][{{$item}}}][item_name]"> --}}
                                         <td class="text-center" style="background-color:lightgrey;">
                                             <input data-index="{{ $index2 }}" data-column="{{ $key_for_new_items }}" type="number" step="any"
@@ -104,7 +104,7 @@
                                             <input type="number" step="any" data-index="{{ $index2  }}" data-column="{{ $key_for_new_items }}" placeholder="{{ __('Insert Value') }}"
                                                 class="sales_target_value_{{ $product_name }} form-control sales_values_class">
                                         </td>
-                                        <?php $key++; ?>
+                                        @php $key++; @endphp
                                     @endforeach
 
                                 </tr>
@@ -113,7 +113,7 @@
                             <tr>
                                 <td class="text-center active-style">{{ __('Total') }}</td>
                                 @foreach ($product_seasonality as $product)
-                                    <?php $product_name = str_replace(' ', '_', strtolower($product->name)); ?>
+                                    @php $product_name = str_replace(' ', '_', strtolower($product->name)); @endphp
                                     <td class="text-center active-style"
                                         id="total_sales_target_percentage_{{ $product_name }}">
                                         {{ !isset($modified_targets['products_modified_targets'])? 0: number_format(array_sum(array_column($modified_targets['products_modified_targets'], 'percentage') ?? [])) }}
@@ -151,8 +151,8 @@
 
 
     @foreach ($product_seasonality as $product)
-        <?php $product_name = str_replace(' ', '_', strtolower($product->name));
-        $value = $product->sales_target_value; ?>
+        @php $product_name = str_replace(' ', '_', strtolower($product->name));
+        $value = $product->sales_target_value; @endphp
 
         <script>
             $(document).ready(function() {

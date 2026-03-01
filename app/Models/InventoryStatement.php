@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\StaticBoot;
+/**
+ * @mixin IdeHelperInventoryStatement
+ */
 class InventoryStatement extends Model
 {
     use StaticBoot;
     // SoftDeletes
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
 
     protected $guarded = [];
 

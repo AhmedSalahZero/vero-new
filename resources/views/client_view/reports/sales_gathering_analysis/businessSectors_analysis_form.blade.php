@@ -18,17 +18,17 @@
 
             @if ($type == 'averagePrices')
             <input type="hidden" name="type_of_report" value="businessSectors_products_avg">
-            <?php
+            @php
                         $type = 'product_or_service'  ;
-                    ?>
+                    @endphp
             @elseif ($type == 'averagePricesProductItems')
             <input type="hidden" name="type_of_report" value="businessSectors_Items_avg">
-            <?php
+            @php
                         $type = 'product_item'  ;
-                    ?>
+                    @endphp
             @endif
             <div class="kt-portlet">
-                <?php 
+                @php 
                     // $businessSectors = App\Models\SalesGathering::company()
                     //     ->whereNotNull('business_sector')
                     //     ->where('business_sector','!=','')
@@ -51,7 +51,7 @@
                             $column =  6 ;
                             $data_type_selector = 'disabled';
                         }
-                    ?>
+                    @endphp
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">

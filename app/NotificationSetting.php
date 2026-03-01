@@ -5,6 +5,9 @@ namespace App;
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperNotificationSetting
+ */
 class NotificationSetting extends Model
 {
     protected $guarded = ['id'];

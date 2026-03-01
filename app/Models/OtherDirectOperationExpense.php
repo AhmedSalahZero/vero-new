@@ -7,6 +7,9 @@ use App\Models\Traits\Relations\OtherDirectOperationExpenseRelation;
 use App\Traits\HasExpense;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperOtherDirectOperationExpense
+ */
 class OtherDirectOperationExpense extends Model
 {
     use   OtherDirectOperationExpenseRelation  , OtherDirectOperationExpenseAccessor,HasExpense;

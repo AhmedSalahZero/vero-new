@@ -18,12 +18,12 @@
             @csrf
             @if ($type == 'averagePricesProductItems')
             <input type="hidden" name="type_of_report" value="products_Items_avg">
-            <?php
+            @php
                         $type = 'product_item'  ;
-                    ?>
+                    @endphp
             @endif
             <div class="kt-portlet">
-                <?php 
+                @php 
                     // $productsData = App\Models\SalesGathering::company()
                     //     ->whereNotNull('product_or_service')
                     //     ->where('product_or_service','!=','')
@@ -58,7 +58,7 @@
                         {
                             $column =  6 ;
                         }
-                    ?>
+                    @endphp
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">
@@ -84,13 +84,13 @@
                     <input type="hidden" name="data_type" id="data_type" {{$data_type_selector}} value="value">
                     @endif
                     @if($view_name != 'Products Against Products Items Trend Analysis' && $name_of_selector_label != 'name_of_selector_label' && $type != 'product_item' )
-                    @php
+                    @@php
                     $cols = 4 ;
-                    @endphp
+                    @end@php
                     @else
-                    @php
+                    @@php
                     $cols = 4 ;
-                    @endphp
+                    @end@php
                     @endif
                     <div class="form-group row">
 					@if(isset(get_defined_vars()['__data']['type']) && get_defined_vars()['__data']['type'] !='averagePrices' &&  get_defined_vars()['__data']['type']!='averagePricesProductItems')

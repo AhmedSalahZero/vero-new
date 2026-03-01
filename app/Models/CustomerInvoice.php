@@ -10,15 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperCustomerInvoice
+ */
 class CustomerInvoice extends Model implements IInvoice
 {
     use StaticBoot , IsInvoice;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-
+ 
 	
 	
 	const UNAPPLIED_SETTLEMENT_TABLE = 'settlements';

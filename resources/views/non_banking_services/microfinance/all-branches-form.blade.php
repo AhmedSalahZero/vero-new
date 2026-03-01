@@ -135,7 +135,6 @@ $months = $study->getMicrofinanceMonths() ;
                                         @endif
                                         <td>
                                             @if($isByBranch)
-                                            {{-- {{ dd($productMix->getFundedByFormatted()) }} --}}
                                             <x-repeat-right-dot-inputs-with-diff-inputs :isNumber="false" :readonly="true" :removeThreeDots="true" :removeCurrency="true" :currentVal="isset($productMix) ? $productMix->getFundedBy():''" :currentFormattedVal="isset($productMix) ? $productMix->getFundedByFormatted():0" :classes="'only-greater-than-zero-allowed'" :is-percentage="false" :name="'microfinanceProductSalesProjects['.$product->id.'][funded_by]'" :columnIndex="-1"></x-repeat-right-dot-inputs-with-diff-inputs>
                                             @else
                                             <x-form.select :readonly="false" :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getFundedBy():0" :options="\App\Helpers\HNonBanking::getMicrofinanceFundingBySelector()" :add-new="false" class="select2-select min-w-120 repeater-select  " :all="false" name="microfinanceProductSalesProjects[{{ $product->id }}][funded_by]"></x-form.select>

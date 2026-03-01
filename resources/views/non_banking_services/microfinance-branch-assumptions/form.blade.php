@@ -17,7 +17,6 @@ use App\Models\NonBankingService\Expense;
 
 <div class="row">
     <div class="col-md-12">
-        {{-- {{ dd($storeRoute) }} --}}
 
         <form id="form-id" class="kt-form kt-form--label-right" method="POST" enctype="multipart/form-data" action="{{ $storeRoute }}">
 

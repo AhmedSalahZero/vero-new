@@ -42,9 +42,7 @@ input.form-control[readonly] {
 		</th>
 		<th class="w-20-percentage">
 			{{ $twoMonthsLater }}
-		{{-- {{ dd($twoMonthsLater) }} --}}
 		</th>
-		{{-- {{ dd($nextMonth) }} --}}
 		<th class="w-20-percentage">
 			{{ __('Total ') }}
 		</th>

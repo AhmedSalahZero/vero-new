@@ -30,7 +30,7 @@ class ConsumerFinanceController extends Controller
         $isYearsStudy = !$study->isMonthlyStudy();
 		$studyMonthsForViews =array_flip($study->getOperationDatesAsDateAndDateAsIndexToStudyEndDate()) ;
 		$dateIndexWithDate = $study->getDateIndexWithDate();
-		 $eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::CONSUMER_FINANCE) : null;
+		 $eclAndNewPortfolioFundingRate = $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::CONSUMER_FINANCE);
 		$title =  __('Consumer Finance'); 
         return [
 			'dateIndexWithDate'=>$dateIndexWithDate,

@@ -58,7 +58,7 @@ $basicClasses = $insideModalWithJs ? str_replace($insideModalWithJs,'select2-sel
 @if($multiple)
 data-actions-box="true"
 @endif
- @if(is_array($selectedValue)) data-current-selected-items="{{ json_encode($selectedValue) }}" @endif {{-- {{ dd($multiple) }} --}} @if($addNewModalModalName) data-modal-name="{{ $addNewModalModalName }}" data-modal-type="{{ $addNewModalModalType }}" @endif @if($disabled) disabled @endif {{ $attributes->merge(['class'=>$basicClasses]) }} data-live-search="true" data-add-new="{{ $addNew ? 1 : 0 }}" data-all="{{ $all ? 1 :0 }}" @if($multiple) multiple @endif>
+ @if(is_array($selectedValue)) data-current-selected-items="{{ json_encode($selectedValue) }}" @endif  @if($addNewModalModalName) data-modal-name="{{ $addNewModalModalName }}" data-modal-type="{{ $addNewModalModalType }}" @endif @if($disabled) disabled @endif {{ $attributes->merge(['class'=>$basicClasses]) }} data-live-search="true" data-add-new="{{ $addNew ? 1 : 0 }}" data-all="{{ $all ? 1 :0 }}" @if($multiple) multiple @endif>
 
     @if($pleaseSelect)
     <option value="" selected>{{ __('Please Select') }}</option>

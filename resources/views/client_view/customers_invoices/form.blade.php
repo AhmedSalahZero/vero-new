@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-            <?php $toolTipsData = $toolTipsData->pluck('data','field')->toArray() ?>
+            @php $toolTipsData = isset($toolTipsData) ? $toolTipsData->pluck('data','field')->toArray() : [] @endphp
 
             <!--begin::Form-->
             <form class="kt-form kt-form--label-right" method="POST" action={{(request()->is('*/edit'))  ? route('customersInvoice.update',[$company,$customerInvoice]): route('customersInvoice.store',[$company] )}}   enctype="multipart/form-data">

@@ -7,6 +7,9 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperNotification
+ */
 class Notification extends Model
 {
 	const CUSTOMER = 'customer';

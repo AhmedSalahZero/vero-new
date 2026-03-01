@@ -5,6 +5,9 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLetterOfCreditFacilityTermAndCondition
+ */
 class LetterOfCreditFacilityTermAndCondition extends Model
 {
     protected $guarded = ['id'];

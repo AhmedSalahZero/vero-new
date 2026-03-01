@@ -11,6 +11,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @mixin IdeHelperLetterOfGuaranteeIssuanceAdvancedPaymentHistory
+ */
 class LetterOfGuaranteeIssuanceAdvancedPaymentHistory extends Model
 {
     use HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements,HasDeleteButTriggerChangeOnLastElement,HasCompany;

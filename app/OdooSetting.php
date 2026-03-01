@@ -5,6 +5,9 @@ namespace App;
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperOdooSetting
+ */
 class OdooSetting extends Model
 {
     protected $guarded = ['id'];

@@ -18,13 +18,13 @@
             <div class="kt-portlet" style="overflow-x:hidden">
                 @if ($type == 'averagePrices')
                 <input type="hidden" name="type_of_report" value="categories_products_avg">
-                <?php
+                @php
                             $type = 'product_or_service'  ;
-                        ?>
+                        @endphp
                 @endif
 
 
-                <?php 
+                @php 
              
                     
                     if(isCustomerExceptionalCase($type , $name_of_selector_label) 
@@ -59,7 +59,7 @@
                         }
 
 
-                    ?>
+                    @endphp
 
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
@@ -212,9 +212,9 @@
                         @else
 
                         @if($name_of_selector_label == 'Customers Against Categories' )
-                        @php
+                        @@php
                         $name_of_selector_label = "Categories";
-                        @endphp
+                        @end@php
                         <div class="col-md-{{$column}}">
                             <label>{{ __('Select '.$name_of_selector_label.' ') }} <span class="multi_selection"></span> @include('max-option-span') </label>
                             <div class="kt-input-icon">
@@ -227,9 +227,9 @@
 
                         @elseif($name_of_selector_label == 'Customers Against Products')
 
-                        @php
+                        @@php
                         $name_of_selector_label = "Products";
-                        @endphp
+                        @end@php
                         <div class="col-md-{{$column}}">
                             <label>{{ __('Select '.$name_of_selector_label.' ') }} <span class="multi_selection"></span> @include('max-option-span') </label>
                             <div class="kt-input-icon">
@@ -243,9 +243,9 @@
 
                         @elseif($name_of_selector_label == 'Customers Against Products Items')
 
-                        @php
+                        @@php
                         $name_of_selector_label = "Product Items";
-                        @endphp
+                        @end@php
                         <div class="col-md-{{$column}}">
                             <label>{{ __('Select '.$name_of_selector_label.' ') }} <span class="multi_selection"></span> @include('max-option-span') </label>
                             <div class="kt-input-icon">

@@ -27,7 +27,7 @@
 
 
             <div class="kt-portlet">
-                <?php 
+                @php 
                     
                     // $salesPersonsData = App\Models\SalesGathering::company()
                     //     ->whereNotNull('sales_person')
@@ -52,7 +52,7 @@
                             $column =  6 ;
                             $data_type_selector = 'disabled';
                         }
-                    ?>
+                    @endphp
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">

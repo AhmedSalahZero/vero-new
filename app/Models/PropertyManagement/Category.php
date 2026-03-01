@@ -6,6 +6,9 @@ use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperCategory
+ */
 class Category extends Model
 {
     use HasBasicStoreRequest,CompanyScope ;

@@ -7,14 +7,13 @@ use App\Traits\Models\HasDeleteButTriggerChangeOnLastElement;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLoanScheduleSettlement
+ */
 class LoanScheduleSettlement extends Model
 {
 	use HasCreditStatements,HasDeleteButTriggerChangeOnLastElement;
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
 
     protected $guarded = [];
 

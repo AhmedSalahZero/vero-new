@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 
+/**
+ * @mixin IdeHelperOverdraftAgainstCommercialPaperLimit
+ */
 class OverdraftAgainstCommercialPaperLimit extends Model
 {
 	use IsBankStatement;

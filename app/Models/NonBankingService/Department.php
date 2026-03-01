@@ -8,6 +8,9 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperDepartment
+ */
 class Department extends Model
 {
 	use BelongsToStudy,BelongsToCompany,IsDepartment,HasBasicStoreRequest;

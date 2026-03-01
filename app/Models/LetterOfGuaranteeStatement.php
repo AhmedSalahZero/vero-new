@@ -11,6 +11,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperLetterOfGuaranteeStatement
+ */
 class LetterOfGuaranteeStatement extends Model
 {
 	use HasDeleteButTriggerChangeOnLastElement,IsBankStatement;

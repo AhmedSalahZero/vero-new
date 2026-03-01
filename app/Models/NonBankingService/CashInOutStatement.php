@@ -6,6 +6,9 @@ use App\Models\Traits\Scopes\BelongsToCompany;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCashInOutStatement
+ */
 class CashInOutStatement extends Model
 {
     

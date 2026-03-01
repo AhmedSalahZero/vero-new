@@ -84,9 +84,9 @@ class  FixedAssetsFundingStructure extends Model
 	{
 		return $this->interest_rates[$dateAsIndex]??0;
 	}
-	public function getPricing()
-	{
-		return $this->getMarginRate();
-	}
+	// public function getPricing()
+	// {
+	// 	return $this->getMarginRate();
+	// }
 	
 }

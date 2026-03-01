@@ -512,7 +512,7 @@ use App\Models\Contract;
                                 </td>
                             </tr>
                             @php
-                            $id = 0 ;
+                       
 							$i=0;
                             @endphp
                             @foreach($items[$currentType]??[] as $mainItemId => $parnetAndSubData )
@@ -897,7 +897,6 @@ use App\Models\Contract;
     @endforeach
 
 
-    <?php $id++ ;?>
     @endforeach
 
 

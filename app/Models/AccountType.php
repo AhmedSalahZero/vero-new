@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * * هي عباره عن انواع الحسابات البنكية وليكن مثلا ال
  * * debit  (فلوس ليا عند البنك)-> current , time deposit , certificate of deposit الحساب الجاري الحساب الودايع حساب الشهادات
  * * credit التسهيلات البنكية (فلوس عليا) ->
+ *
+ * @mixin IdeHelperAccountType
  */
 class AccountType extends Model
 {

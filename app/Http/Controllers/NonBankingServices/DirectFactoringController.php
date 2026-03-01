@@ -14,24 +14,12 @@ class DirectFactoringController extends Controller
 {
 	use NonBankingService ;
 	public function create(Company $company , Request $request,Study $study){
-		// $directFactoringEclAndNewPortfolioFundingRate = $study?  $study->directFactoringEclAndNewPortfolioFundingRate : null;
-		
-		// $yearsWithItsMonths =  $study->getOperationDurationPerYearFromIndexes() ;
-		// $yearOrMonthsIndexes = $study->getYearOrMonthIndexes();
-		// $isYearsStudy = !$study->isMonthlyStudy();
-		
 		$viewVars =  [
 			// 'eclAndNewPortfolioFundingRate'=>$study->getEclAndNewPortfolioFundingRatesForStreamType(Study::DIRECT_FACTORING),
 			'company'=>$company ,
 			'study'=>$study,
 			'model'=>$study ,
-			// 'directFactoringEclAndNewPortfolioFundingRate'=>$directFactoringEclAndNewPortfolioFundingRate,
 			'title'=>__('Direct Factoring Revenue Stream Breakdown'),
-			// 'storeRoute'=>routeWithQueryParam(route('store.direct.factoring.revenue.stream.breakdown',['company'=>$company->id , 'study'=>$study->id])),
-			// 'yearsWithItsMonths' => $yearsWithItsMonths,
-			// 'yearOrMonthsIndexes'=>$yearOrMonthsIndexes,
-			// 'isYearsStudy'=>$isYearsStudy
-			
 		];
 		return view( 'non_banking_services.direct-factoring-revenue-stream-breakdown.form', $viewVars);
 	}
@@ -67,7 +55,7 @@ class DirectFactoringController extends Controller
 		$newLoansFundingRates = [];
 		$newLoanFundingValues = [];
 		$netDisbursements= [];
-		$eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::DIRECT_FACTORING) : null;
+		$eclAndNewPortfolioFundingRate =  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::DIRECT_FACTORING);
 		foreach($yearOrMonthsIndexes as $dateAsIndex => $dateFormatted ){
 			$adminFeesRates[$dateAsIndex]=$eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getAdminFeesRatesAtYearOrMonthIndex($dateAsIndex) : 0;
 			$eclRates[$dateAsIndex] = $eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getEclRatesAtYearOrMonthIndex($dateAsIndex) : 0;

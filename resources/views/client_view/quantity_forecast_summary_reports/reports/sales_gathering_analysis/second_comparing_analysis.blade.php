@@ -104,9 +104,9 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    @php
+                    @@php
                     $id = 0 ;
-                    @endphp
+                    @end@php
                     @foreach ($mainItems as $mainItemName)
                     <tr class="group-color ">
 
@@ -115,16 +115,16 @@
                             <b>{{ __($mainItemName) }}</b>
                         </td>
                         <td class="text-center white-text">
-                            @php
+                            @@php
                             $firstTotal = isset($report_data[$mainItemName]) ? sum_all_array_values($report_data[$mainItemName]) : 0 ;
-                            @endphp
+                            @end@php
                             {{ number_format($firstTotal)  }}
                         </td>
 
                         <td class="text-center white-text">
-                            @php
+                            @@php
                             $secondTotal = isset($secondReportData['report_data'][$mainItemName]) ? sum_all_array_values($secondReportData['report_data'][$mainItemName]) : 0 ;
-                            @endphp
+                            @end@php
                             {{ number_format($secondTotal) }}
                         </td>
 
@@ -140,10 +140,10 @@
 
 
                         <td class="text-center">
-                            @php
+                            @@php
                             $firstReportTotalForItem = $report_data[$mainItemName][$secondItemName] ?? 0 ;
                             $secondReportTotalForItem = $vall ;
-                            @endphp
+                            @end@php
                             <span class="active-text-color"><b> {{ number_format($firstReportTotalForItem) }} </b></span>
                         </td>
 
@@ -161,7 +161,7 @@
                     {{-- @elseif ($sales_channel_name == 'Total' || $sales_channel_name == 'Growth Rate %')
                                     <tr class="active-style text-center">
                                         <td class="active-style text-center" ><b>{{ __($sales_channel_name) }}</b></td>
-                    @php $decimals = $sales_channel_name == 'Growth Rate %' ? 2 : 0; @endphp
+                    @@php $decimals = $sales_channel_name == 'Growth Rate %' ? 2 : 0; @end@php
                     @foreach ($dates as $date)
 
                     <td class="text-center active-style">
@@ -170,7 +170,7 @@
                     <td class="text-center active-style">{{$sales_channel_name == 'Growth Rate %' ? "-" : number_format(array_sum($sales_channel_channels_data  ?? []),0)}}</td>
                     </tr>
                     @endif --}}
-                    <?php $id++;?>
+                    @php $id++;@endphp
                     @endforeach
 
 

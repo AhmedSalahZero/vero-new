@@ -22,6 +22,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperMoneyReceived
+ */
 class MoneyReceived extends Model
 {
 	use IsMoney,HasForeignExchangeGainOrLoss ,HasDebitStatements,HasCreditStatements,HasPartnerStatement,HasReviewedBy , HasUserComment,HasNonCustomerOrSupplier;

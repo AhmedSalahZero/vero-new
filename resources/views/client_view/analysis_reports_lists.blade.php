@@ -13,9 +13,9 @@
     {{__($section->name[lang()])}}
 @endsection
 @section('content')
-@php
+@@php
 	$user = auth()->user();
-@endphp
+@end@php
 <div class="col-md-12">
 
     <!--begin:: Widgets/Tasks -->
@@ -24,15 +24,15 @@
 
             <div class="kt-portlet__head-toolbar">
                 <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">
-                    <?php $section_key = 0;?>
+                    @php $section_key = 0;@endphp
                     @foreach ($section->subSections->sortBy('order') as   $subSection)
              
                         @if ($section != 'SalesBreakdownAnalysis')
 
-                            <?php $name = $subSection->name['en'] ;
+                            @php $name = $subSection->name['en'] ;
                             if ($subSection->name['en'] == "Products / Services") {
                                 $name = "Product Or Service Name";
-                            }   ?>
+                            }   @endphp
                         @endif
                         @if (($section->name['en'] == 'Sales Breakdown Analysis Report' && $subSection->name['en'] !== "Customers Nature" && $subSection->name['en'] !== "Service Providers" && $subSection->name['en'] !== 'Sales Discounts') ||
                         ($subSection->name['en'] == "Customers Nature" && (false !== $found =  array_search('Customer Name',$viewing_names))) ||
@@ -54,7 +54,7 @@
                                     </a>
                                 </li>
 								@endif 
-                           <?php $section_key++; ?>
+                           @php $section_key++; @endphp
                         @endif
                     @endforeach
 
@@ -63,7 +63,7 @@
         </div>
         <div class="kt-portlet__body">
             <div class="tab-content">
-                <?php $section_key = 0;?>
+                @php $section_key = 0;@endphp
 				
                 @foreach ($section->subSections as $key=> $mainSubSection)
              
@@ -71,11 +71,11 @@
                     @if ($section != 'SalesBreakdownAnalysis')
 
 
-                        <?php $name = $mainSubSection->name['en'] ;
+                        @php $name = $mainSubSection->name['en'] ;
 
                         if ($mainSubSection->name['en'] == "Products / Services") {
                             $name = "Product Or Service Name";
-                        }   ?>
+                        }   @endphp
                     @endif
                     @if ($section->name['en'] == 'Sales Breakdown Analysis Report' ||  (false !== $found =  array_search(\Str::singular($name),$viewing_names) || $mainSubSection->name['en'] == "Average Prices" )
                     || $mainSubSection->name['en'] == 'Invoices'
@@ -89,18 +89,18 @@
                                 <div class="row">
 								
                                     @foreach ($mainSubSection->subSections as $sub_section)
-                                        @php $name_of_section = substr($sub_section->name['en'], strpos($sub_section->name['en'] , "Against")+8 ); @endphp 
+                                        @@php $name_of_section = substr($sub_section->name['en'], strpos($sub_section->name['en'] , "Against")+8 ); @end@php 
                                                 @if($name_of_section == 'Products')
-                                                @php
+                                                @@php
                                                     $name_of_section ='Products / Services';
-                                                @endphp
+                                                @end@php
                                                 @endif 
                                         @if ($section->name['en'] !== 'Sales Breakdown Analysis Report' && $mainSubSection->name['en'] !== "Average Prices" )
 										
                                             @if ($name_of_section == "Products / Services")
-                                                @php  $name_of_section = "Product Or Service Names" @endphp
+                                                @@php  $name_of_section = "Product Or Service Names" @end@php
                                             @elseif($name_of_section == "Products Items")
-                                                @php  $name_of_section = "Product Items" @endphp
+                                                @@php  $name_of_section = "Product Items" @end@php
                                             @endif
 											
 											
@@ -137,9 +137,9 @@
                                                     <div class="kt-widget2__item kt-widget2__item--primary">
                                                         <div class="kt-widget2__checkbox">
                                                         </div>
-                                                        @php 
+                                                        @@php 
                                                             $route = isset($sub_section->route) && $sub_section->route !== null ? explode('.', $sub_section->route) : null;
-                                                        @endphp 
+                                                        @end@php 
 														
                                                         <div class="kt-widget2__info">
                                                             <a href="{{  route(@$sub_section->route, $company) }}" class="kt-widget2__title">
@@ -155,17 +155,17 @@
                                                 </div>
                                             @endif
                                         @elseif ($mainSubSection->name['en'] == "Average Prices" )
-                                            @php $name_of_section = substr($sub_section->name['en'], strpos($sub_section->name['en'] , "Average Prices Per ")+19  );
-                                            @endphp 
+                                            @@php $name_of_section = substr($sub_section->name['en'], strpos($sub_section->name['en'] , "Average Prices Per ")+19  );
+                                            @end@php 
                                             @if (false !== $found =  array_search(\Str::singular($name_of_section),$viewing_names) )
 												@if($user->canViewReport($sub_section->name['en']) && $sub_section->isExportable($exportables) )
                                                 <div class="col-md-4">
                                                     <div class="kt-widget2__item kt-widget2__item--primary">
                                                         <div class="kt-widget2__checkbox">
                                                         </div>
-                                                        @php
+                                                        @@php
                                                             $route = isset($sub_section->route) && $sub_section->route !== null ? explode('.', $sub_section->route) : null;
-                                                        @endphp 
+                                                        @end@php 
                                                         <div class="kt-widget2__info">
                                                             <a href="{{  route(@$sub_section->route, $company) }}" class="kt-widget2__title">
                                                                 {{__($sub_section->name[lang()])}}
@@ -184,26 +184,26 @@
                                                 ($mainSubSection->name['en'] == "Customers Nature" && false !== $found =  array_search('Customer Name',$viewing_names)) ||
                                                 ($mainSubSection->name['en'] == "Service Providers"  && (count(array_intersect(['Service Provider Type','Service Provider Name','Service Provider Birth Year'],$viewing_names)) >0))  )
                                                     @if ($mainSubSection->name['en'] == 'One Dimension')
-                                                        @php $name_of_section = str_replace( " Sales Breakdown Analysis",'',  $sub_section->name['en']     );@endphp
+                                                        @@php $name_of_section = str_replace( " Sales Breakdown Analysis",'',  $sub_section->name['en']     );@end@php
                                                     @elseif ($mainSubSection->name['en'] == 'Sales Discounts')
 
-                                                        @php $name_of_section = str_replace( " Versus Discounts",'',  $sub_section->name['en']     );@endphp
+                                                        @@php $name_of_section = str_replace( " Versus Discounts",'',  $sub_section->name['en']     );@end@php
                                                     @elseif ($mainSubSection->name['en'] == 'Customers Nature')
 
-                                                        @php $name_of_section = str_replace( " Versus Customers Natures Analysis",'',  $sub_section->name['en']     );@endphp
+                                                        @@php $name_of_section = str_replace( " Versus Customers Natures Analysis",'',  $sub_section->name['en']     );@end@php
                                                     @elseif ($mainSubSection->name['en'] == 'Interval Comparing')
-                                                        @php $name_of_section = str_replace( " Sales Interval Comparing Analysis",'',  $sub_section->name['en'] );@endphp
+                                                        @@php $name_of_section = str_replace( " Sales Interval Comparing Analysis",'',  $sub_section->name['en'] );@end@php
 
                                                         @if ($name_of_section == "Service Provider")
-                                                            @php  $name_of_section = "Service Provider Name" @endphp
+                                                            @@php  $name_of_section = "Service Provider Name" @end@php
                                                         @elseif($name_of_section == "Service Provider Age Range")
-                                                            @php  $name_of_section = "Service Provider Birth Year";  @endphp
+                                                            @@php  $name_of_section = "Service Provider Birth Year";  @end@php
 
                                                         @endif
 
 
                                                     @elseif ($mainSubSection->name['en'] == 'Two Dimension')
-                                                        @php
+                                                        @@php
                                                             $name_of_section = substr($sub_section->name['en'], strpos($sub_section->name['en'] , "Versus ")+7   );
                                                             
                                                             $name_of_second_section = substr($sub_section->name['en'], strpos($sub_section->name['en'] , " Versus ")   );
@@ -221,27 +221,27 @@
 														}
 													 
 
-                                                        @endphp
+                                                        @end@php
  
                                                     @endif
                                                     @if ($name_of_section == "Products / Services" )
-                                                        @php $name_of_section = "Product Or Service Names"; @endphp 
+                                                        @@php $name_of_section = "Product Or Service Names"; @end@php 
                                                     @endif
                                                     
                                                     @if (isset($name_of_first_section) && $name_of_first_section == "Products / Services" )
-                                                        @php $name_of_first_section = "Product Or Service Names"; @endphp 
+                                                        @@php $name_of_first_section = "Product Or Service Names"; @end@php 
                                                     @endif
 
                                                     @if (isset($name_of_first_section) && $name_of_first_section == "Products / Services" )
-                                                        @php $name_of_first_section = "Branch"; @endphp 
+                                                        @@php $name_of_first_section = "Branch"; @end@php 
                                                     @endif
 
                                                     @if ($name_of_section == "Product Items Ranking" )
-                                                        @php $name_of_section = "Product Items Ranking"; @endphp 
+                                                        @@php $name_of_section = "Product Items Ranking"; @end@php 
                                                     @endif
 													
 													@if ($name_of_section == "Product Ranking" )
-                                                        @php $name_of_section = "Product Ranking"; @endphp 
+                                                        @@php $name_of_section = "Product Ranking"; @end@php 
                                                     @endif
 													
 
@@ -281,9 +281,9 @@
                                                             <div class="kt-widget2__item kt-widget2__item--primary">
                                                                 <div class="kt-widget2__checkbox">
                                                                 </div>
-                                                                @php 
+                                                                @@php 
                                                                     $route = isset($sub_section->route) && $sub_section->route !== null ? explode('.', $sub_section->route) : null;
-                                                                @endphp 
+                                                                @end@php 
 
 
                                                                 <div class="kt-widget2__info">
@@ -301,14 +301,14 @@
 														@endif 
                                                     @endif
                                                 @endif
-                                                @php  !isset($name_of_first_section) ?: $name_of_first_section = null   ; @endphp 
+                                                @@php  !isset($name_of_first_section) ?: $name_of_first_section = null   ; @end@php 
                                         @endif
 
                                     @endforeach
                                 </div>
                             </div>
                         </div>
-                        <?php $section_key++; ?>
+                        @php $section_key++; @endphp
                     @endif
                 @endforeach
             </div>

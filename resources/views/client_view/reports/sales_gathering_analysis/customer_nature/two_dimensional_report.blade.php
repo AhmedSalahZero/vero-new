@@ -86,17 +86,17 @@
 {{-- <input type="hidden" id="total" data-total="{{ json_encode($report_view_data??[]) }}"> --}}
 
 <!--Sales Values Table -->
-@php
+@@php
 $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $customersNaturesDead));
 
-@endphp
+@end@php
 
 
 
 <x-table :tableTitle="__('Sales Values Table')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
     @slot('table_header')
     <tr class="table-active text-center">
-        @php $main_type_name = ucwords(str_replace('_', ' ', $type)); @endphp
+        @@php $main_type_name = ucwords(str_replace('_', ' ', $type)); @end@php
         <th class="max-w-classes">{{ __($main_type_name) . ' / ' . __('Customers Natures') }}</th>
         @foreach ($customersNaturesActive as $reportType=>$reportDataArray)
         <th>{{ __($reportType) }}</th>
@@ -113,22 +113,22 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
     </tr>
     @endslot
     @slot('table_body')
-    @php
+    @@php
     $totalForTotalSales = calcTotalsForTotalsActiveItems($customersNaturesActive , 'total_sales') ;
-    @endphp
+    @end@php
     @foreach($getIterableTimes as $mainTypeItem=>$totalPerType)
     <tr>
         <th class="max-w-classes">  {{ __($mainTypeItem) }} </th>
-        @php
+        @@php
         $totalForActiveRaw = 0 ;
-        @endphp
+        @end@php
         @foreach ($customersNaturesActive as $mainType => $mainTypeValueArray)
-        @php
+        @@php
         // $totalPerType = getTotalForThisType($customersNaturesActive , $mainTypeItem , 'total_sales') ;
         $accumlatedValuesFor[$mainTypeItem][$mainType] = $value = sum_array_of_std_objectsForSubType($mainTypeValueArray[$mainTypeItem]??[] ,'total_sales') ;
         $percentage_per_value = $totalPerType == 0 ? 0 : ($value / $totalPerType) * 100;
         $totalForActiveRaw += $value ;
-        @endphp
+        @end@php
 
         <td class="text-center "> {{ number_format($value) }}</td>
         <td class="text-center">
@@ -144,12 +144,12 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
             <span class="active-text-color text-center"><b> {{ $totalForTotalSales ? number_format(($totalForActiveRaw/$totalForTotalSales)*100, 1) . ' % '  : 0}}</b></span>
         </td>
         @foreach($customersNaturesDead as $mainType => $mainTypeValueArray )
-        @php
+        @@php
         // year for $customersNaturesActive not $customersNaturesDead
         $totalPerType = getTotalForThisType($customersNaturesActive , $mainTypeItem , 'total_sales') ;
         $accumlatedValuesFor[$mainTypeItem][$mainType] = $value = sum_array_of_std_objectsForSubType($mainTypeValueArray[$mainTypeItem]??[] ,'total_sales') ;
         $percentage_per_value = $totalPerType == 0 ? 0 : ($value / $totalPerType) * 100;
-        @endphp
+        @end@php
 
         <td class="text-center"> {{ number_format($value) }}</td>
         <td class="text-center">
@@ -164,11 +164,11 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
     <tr class="table-active text-center">
         <th class="text-center"> {{ __('Total') }} </th>
         @foreach ($customersNaturesActive as $keyy=>$item_name)
-        @php
+        @@php
         $totalForVerticalTypes[$keyy] = getTotalForSingleType($customersNaturesActive[$keyy] ?? [] , 'total_sales');
 
 
-        @endphp
+        @end@php
         <td class="text-center">
             {{ $totalForVerticalTypes[$keyy] ? number_format($totalForVerticalTypes[$keyy]) : 0 }}
         </td>
@@ -183,9 +183,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
 
         @foreach ($customersNaturesDead as $keyy=>$item_name)
-        @php
+        @@php
         $totalForVerticalTypes[$keyy] = getTotalForSingleType($customersNaturesDead[$keyy] ?? [] , 'total_sales');
-        @endphp
+        @end@php
 
 
         <td class="text-center">
@@ -218,9 +218,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
 
         @foreach ($customersNaturesDead as $keyy=>$item_name)
-        @php
+        @@php
 
-        @endphp
+        @end@php
 
 
         <td class="text-center">
@@ -254,7 +254,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 <x-table :tableTitle="__('Counts Table')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
     @slot('table_header')
     <tr class="table-active text-center">
-        <?php $main_type_name = ucwords(str_replace('_', ' ', $type)); ?>
+        @php $main_type_name = ucwords(str_replace('_', ' ', $type)); @endphp
         <th>{{ __($main_type_name) . ' / ' . __('Customers Natures') }}</th>
         @foreach ($customersNaturesActive as $reportType=>$reportDataArray)
         <th>{{ __($reportType) }}</th>
@@ -271,24 +271,24 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
     </tr>
     @endslot
     @slot('table_body')
-    @php
+    @@php
     $totalForTotalSales = countTotalsForTotalsActiveItems($customersNaturesActive , 'no_customers') ;
-    @endphp
+    @end@php
     @foreach($getIterableTimes as $mainTypeItem=>$totalPerType)
     <tr>
         <th> {{ __($mainTypeItem) }} </th>
-        @php
+        @@php
         $totalForActiveRaw = 0 ;
-        @endphp
+        @end@php
         @foreach ($customersNaturesActive as $mainType => $mainTypeValueArray)
-        @php
+        @@php
         $totalPerType = countTotalForThisType($customersNaturesActive , $mainTypeItem ) ;
         $value = count_array_of_std_objects($mainTypeValueArray[$mainTypeItem]??[] ) ;
         $percentage_per_value = $totalPerType == 0 ? 0 : ($value / $totalPerType) * 100;
         $totalForActiveRaw += $value ;
 
 
-        @endphp
+        @end@php
         <td class="text-center"><button type="button" class="btn btn-bold btn-label-brand btn-sm" data-toggle="modal" data-target="#kt_modal_{{convertStringToClass($mainTypeItem) . convertStringToClass($mainType)}}">
                 {{ $value }}
 
@@ -314,9 +314,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
                                 </thead>
                                 <tbody>
 
-                                    @php
+                                    @@php
                                     $totalForModalItem = 0;
-                                    @endphp
+                                    @end@php
                                     @foreach($customersNaturesActive[$mainType][$mainTypeItem] ?? [] as $iterationModalItem)
                                     <tr>
                                         <td class="text-left">
@@ -368,12 +368,12 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
             <span class="active-text-color text-center"><b> {{ $totalForTotalSales ? number_format(($totalForActiveRaw/$totalForTotalSales)*100, 1) . ' % '  : 0}}</b></span>
         </td>
         @foreach($customersNaturesDead as $mainType => $mainTypeValueArray )
-        @php
+        @@php
         // yes for $customersNaturesActive not for $customersNaturesDead
         $totalPerType = countTotalForThisType($customersNaturesActive , $mainTypeItem) ;
         $value = count_array_of_std_objects($mainTypeValueArray[$mainTypeItem]??[] ) ;
         $percentage_per_value = $totalPerType == 0 ? 0 : ($value / $totalPerType) * 100;
-        @endphp
+        @end@php
 
         <td class="text-center"><button type="button" class="btn btn-bold btn-label-brand btn-sm" data-toggle="modal" data-target="#kt_modal_{{convertStringToClass($mainTypeItem) .  convertStringToClass($mainType)}}">
                 {{ $value }}
@@ -401,9 +401,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
                                 </thead>
                                 <tbody>
 
-                                    @php
+                                    @@php
                                     $totalForModalItem = 0;
-                                    @endphp
+                                    @end@php
                                     @foreach($customersNaturesDead[$mainType][$mainTypeItem] ?? [] as $iterationModalItem)
                                     <tr>
                                         <td class="text-left">
@@ -455,9 +455,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
     <tr class="table-active text-center">
         <th class="text-center"> {{ __('Total') }} </th>
         @foreach ($customersNaturesActive as $keyy=>$item_name)
-        @php
+        @@php
         $totalForVerticalTypes[$keyy] = countTotalForSingleType($customersNaturesActive[$keyy] ?? [] );
-        @endphp
+        @end@php
         <td class="text-center">
             {{ $totalForVerticalTypes[$keyy] ? ($totalForVerticalTypes[$keyy]) : 0 }}
         </td>
@@ -471,9 +471,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
 
         @foreach ($customersNaturesDead as $keyy=>$item_name)
-        @php
+        @@php
         $totalForVerticalTypes[$keyy] = countTotalForSingleType($customersNaturesDead[$keyy] ?? [] );
-        @endphp
+        @end@php
 
 
         <td class="text-center">
@@ -503,9 +503,9 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
 
         @foreach ($customersNaturesDead as $keyy=>$item_name)
-        @php
+        @@php
 
-        @endphp
+        @end@php
 
 
         <td class="text-center">
@@ -535,7 +535,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 {{-- <x-table :tableTitle="__('Counts Table')"   :tableClass="'kt_table_with_no_pagination'">
         @slot('table_header')
             <tr class="table-active text-center">
-                <?php $main_type_name = ucwords(str_replace('_', ' ', $type)); ?>
+                @php $main_type_name = ucwords(str_replace('_', ' ', $type)); @endphp
                 <th>{{ __($main_type_name) . ' / ' . __('Customers Natures') }}</th>
 @foreach ($all_items as $item)
 <th>{{ __($item) }}</th>
@@ -550,27 +550,27 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 </tr>
 @endslot
 @slot('table_body')
-<?php $total_per_item = []; ?>
-<?php
+@php $total_per_item = []; @endphp
+@php
                 $dead_stop_totals = [ 'Stop' =>$items_totals_counts['Stop'] ?? 0, 'Dead' =>$items_totals_counts['Dead'] ?? 0];
                 unset($items_totals_counts['Dead']);
                 unset($items_totals_counts['Stop']);
                 $final_total = array_sum($items_totals_counts);
                 $final_percentage = $final_total == 0 ? 0 : (($final_total ?? 0) / $final_total) * 100;
-            ?>
+            @endphp
 
 @foreach ($report_totals_counts as $main_type_item_name => $main_item_total)
 <tr>
     <th> {{ __($main_type_item_name) }} </th>
     @foreach ($all_items as $item)
-    <?php $value = $report_counts[$main_type_item_name][$item] ?? 0;
-                        $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; ?>
+    @php $value = $report_counts[$main_type_item_name][$item] ?? 0;
+                        $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; @endphp
     <td class="text-center">{{ number_format($value) }}</td>
     <td class="text-center">
         <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
     </td>
     @endforeach
-    <?php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; ?>
+    @php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; @endphp
     <td class="text-center">
         {{ number_format($main_item_total) }}
 
@@ -578,14 +578,14 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
     <td class="text-center">
         <span class="active-text-color "><b> {{ number_format($total_percentage, 1) . ' % ' }}</b></span>
     </td>
-    <?php $items_after_total = ['Stop','Dead']; ?>
+    @php $items_after_total = ['Stop','Dead']; @endphp
     @foreach ($items_after_total as $item)
 
-    <?php
+    @php
                             $value = $report_counts[$main_type_item_name][$item] ?? 0;
                             $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100;
 
-                        ?>
+                        @endphp
     <td class="text-center"> {{ number_format($value) }}</td>
     <td class="text-center">
         <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
@@ -621,7 +621,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
     <th class="text-center"> {{ 'Nature % / ' . __('Total '.($type ==  'discounts' ? 'Discounts' : 'Count')) }} </th>
 
     @foreach ($all_items as $item_name)
-    <?php $items_percentage = $final_total == 0 ? 0 : (($items_totals_counts[$item_name] ?? 0) / $final_total) * 100; ?>
+    @php $items_percentage = $final_total == 0 ? 0 : (($items_totals_counts[$item_name] ?? 0) / $final_total) * 100; @endphp
     <td class="text-center">
         <b> {{ number_format($items_percentage, 1) . ' %' }}</b>
     </td>

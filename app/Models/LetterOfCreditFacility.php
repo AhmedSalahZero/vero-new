@@ -8,6 +8,9 @@ use App\Traits\Models\HasLetterOfCreditStatements;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLetterOfCreditFacility
+ */
 class LetterOfCreditFacility extends Model
 {
 	use HasLetterOfCreditStatements , HasLetterOfCreditCashCoverStatements;

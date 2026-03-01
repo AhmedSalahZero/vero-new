@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperExpense
+ */
 class Expense extends Model
 {
     use BelongsToStudy,BelongsToCompany;
@@ -90,10 +93,10 @@ class Expense extends Model
         }
         return Carbon::make($date)->format('Y-m');
     }
-    public function getMonthlyAmount()
-    {
-        return $this->monthly_amount ?: 0 ;
-    }
+    // public function getMonthlyAmount()
+    // {
+    //     return $this->monthly_amount ?: 0 ;
+    // }
     public function getPaymentTerm()
     {
         return $this->payment_terms ;
@@ -146,31 +149,31 @@ class Expense extends Model
     {
         return $this->interval ;
     }
-    public function getAllocationBaseOne()
-    {
-        return $this->allocation_base_1 ;
-    }
-    public function getAllocationBaseTwo()
-    {
-        return $this->allocation_base_2;
-    }
+    // public function getAllocationBaseOne()
+    // {
+    //     return $this->allocation_base_1 ;
+    // }
+    // public function getAllocationBaseTwo()
+    // {
+    //     return $this->allocation_base_2;
+    // }
 
-    public function getAllocationBaseThree()
-    {
-        return $this->allocation_base_3;
-    }
-    public function getConditionalTo()
-    {
-        return $this->conditional_to ;
-    }
-    public function getConditionalValueA()
-    {
-        return $this->conditional_value_a ;
-    }
-    public function getConditionalValueB()
-    {
-        return $this->conditional_value_b ;
-    }
+    // public function getAllocationBaseThree()
+    // {
+    //     return $this->allocation_base_3;
+    // }
+    // public function getConditionalTo()
+    // {
+    //     return $this->conditional_to ;
+    // }
+    // public function getConditionalValueA()
+    // {
+    //     return $this->conditional_value_a ;
+    // }
+    // public function getConditionalValueB()
+    // {
+    //     return $this->conditional_value_b ;
+    // }
     public function getPaymentRate(int $rateIndex)
     {
         return array_values($this->custom_collection_policy ?? [])[$rateIndex] ?? 0 ;
@@ -326,7 +329,7 @@ class Expense extends Model
 	public static function generateRow($expense,Study $study,bool $isOneTimeExpense , string $expenseType,array $revenueCategoriesPerRevenue,array $expenseNamesPerCategories , array $positionPerDepartments , array $increaseYearsFormatted)
 	{
 		 /**
-		  * @var Expense $expense
+		  * @var ?Expense $expense
 		  */
 
 		 $defaultIncreaseRates = array_fill_keys(array_keys($increaseYearsFormatted),0);

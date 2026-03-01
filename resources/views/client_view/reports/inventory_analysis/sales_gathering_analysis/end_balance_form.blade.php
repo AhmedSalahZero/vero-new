@@ -76,9 +76,9 @@
                             <input type="hidden" name="company_id" value="{{$company->id}}">
 
                             @if (false !== $found = array_search('Category',$selected_fields))
-                                <?php $inventories_categories =  App\Models\InventoryStatement::whereNotNull('category')->groupBy('category')->get() ;
+                                @php $inventories_categories =  App\Models\InventoryStatement::whereNotNull('category')->groupBy('category')->get() ;
 
-                                ?>
+                                @endphp
                                 <div class="col-md-3">
                                     <label>{{__('Category')}} </label>
                                     <div class="kt-input-icon">
@@ -97,8 +97,8 @@
                             @endif
                             @if (false !== $found = array_search('Sub Category',$selected_fields))
 
-                                <?php $inventories_sub_categories =  App\Models\InventoryStatement::whereNotNull('sub_category')->groupBy('sub_category')->get() ;
-                                ?>
+                                @php $inventories_sub_categories =  App\Models\InventoryStatement::whereNotNull('sub_category')->groupBy('sub_category')->get() ;
+                                @endphp
                                 <div class="col-md-3">
                                     <label>{{__('Sub Category')}} </label>
                                     <div class="kt-input-icon">
@@ -116,8 +116,8 @@
                                 </div>
                             @endif
                             @if (false !== $found = array_search('Product',$selected_fields))
-                                <?php $inventories_products =  App\Models\InventoryStatement::whereNotNull('product')->groupBy('product')->get() ;
-                                ?>
+                                @php $inventories_products =  App\Models\InventoryStatement::whereNotNull('product')->groupBy('product')->get() ;
+                                @endphp
                                 <div class="col-md-3">
                                     <label>{{__('Product')}} </label>
                                     <div class="kt-input-icon">
@@ -135,8 +135,8 @@
                                 </div>
                             @endif
                             @if (false !== $found = array_search('Product Item',$selected_fields))
-                                <?php $inventories_product_Items =  App\Models\InventoryStatement::whereNotNull('product_item')->groupBy('product_item')->get() ;
-                                ?>
+                                @php $inventories_product_Items =  App\Models\InventoryStatement::whereNotNull('product_item')->groupBy('product_item')->get() ;
+                                @endphp
                                 <div class="col-md-3">
                                     <label>{{__('Product Item')}} </label>
                                     <div class="kt-input-icon">

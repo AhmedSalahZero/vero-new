@@ -11,6 +11,9 @@ use App\Models\Traits\Scopes\Tradings\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperFixedAsset
+ */
 class FixedAsset extends Model
 {
     use BelongsToStudy,BelongsToCompany;
@@ -229,8 +232,8 @@ class FixedAsset extends Model
     public function calculateFFEAssets(int $fixedAssetEndDateAsIndex, int $propertyDepreciationDurationInMonths, float $propertyReplacementCostRate, int $propertyReplacementIntervalInMonths, array $projectUnderProgressForConstruction, array $studyDates, int $studyEndDateAsIndex, Study $study):array
     {
         $buildingAssets = [];
-        $datesAsStringAndIndex = $study->getDatesAsStringAndIndex();
-        $operationStartDateAsIndex = $study->getOperationStartDateAsIndex($datesAsStringAndIndex, $study->getOperationStartDateFormatted());
+        // $datesAsStringAndIndex = $study->getDatesAsStringAndIndex();
+        $operationStartDateAsIndex = $study->getOperationStartDateAsIndex(	);
         // $fixedAssetEndDateAsIndex = $this->getEndDateAsIndex();
         $operationStartDateAsIndex  =  $operationStartDateAsIndex >= $fixedAssetEndDateAsIndex ? $operationStartDateAsIndex :$fixedAssetEndDateAsIndex;
         $propertyReplacementCostRate = $propertyReplacementCostRate /100;

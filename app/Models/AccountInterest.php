@@ -6,8 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * * اسعار الفايده المخصصة لهذا الحساب 
+ * * اسعار الفايده المخصصة لهذا الحساب
  * * لانه في حاله تغيرت لابد من تتبعها لان النهاردا ممكن يكون علي الحساب دا سعر فايده معينه وممكن الشهر الجي يتغير وهكذا
+ *
+ * @mixin IdeHelperAccountInterest
  */
 class AccountInterest extends Model
 {

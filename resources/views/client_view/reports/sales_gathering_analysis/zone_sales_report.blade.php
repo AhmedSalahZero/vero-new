@@ -44,10 +44,10 @@
 @if(config('app.showTrendCharts'))
 			
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
-                <?php
+                @php
                     array_push($zones_names, 'Total');
                     array_push($zones_names, 'Zone_Sales_Percentages');
-                    ?>
+                    @endphp
                 @foreach ($zones_names as $name_of_zone)
                 {{-- Monthly Chart --}}
                 <div class="col-xl-12">
@@ -86,7 +86,7 @@
                     @endslot
                     @slot('table_body')
                     @foreach ($final_report_data as $zone_name => $zoone_data)
-                    <?php $chart_data = []; ?>
+                    @php $chart_data = []; @endphp
 
                     <tr class="group-color  text-lg-left  ">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($zone_name) }}</b>
@@ -100,18 +100,18 @@
                     <tr>
                         <th>{{ __('Sales Values') }}</th>
                         @foreach ($dates as $date )
-                        <?php
+                        @php
                                         $chart_data[] = [
                                             'date' => date('d-M-Y', strtotime($date)),
                                             'Sales Value' => number_format($zoone_data['Sales Values'][$date] ?? 0),
                                             'Sales GR %' => number_format($zoone_data['Growth Rate %'][$date] ?? 0, 2),
-                                        ]; ?>
+                                        ]; @endphp
                         <td class="text-center">
                             {{ number_format($zoone_data['Sales Values'][$date] ?? 0) }}</td>
 							
 							 @if($loop->last)
                         <td class="text-center">
-                            @php $totalForZone[$zone_name] = ($totalForSingleZone = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
+                            @@php $totalForZone[$zone_name] = ($totalForSingleZone = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
                             {{ number_format($totalForSingleZone) }}
                         </td>
                         @endif
@@ -134,17 +134,17 @@
                     <input type="hidden" id="{{ str_replace(' ', '_', $zone_name) }}_data" data-total="{{ json_encode($chart_data) }}">
                     @endforeach
 					
-                    <?php $sumOfTotalsOfZoneSales = 0 ?>
+                    @php $sumOfTotalsOfZoneSales = 0 @endphp
 					
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL') }}</th>
                         @foreach ($dates as $date )
-						@php
+						@@php
 							$currentTotal = $total_zones[$date] ?? 0 ;
 							
-						@endphp
+						@end@php
                         <td class="text-center active-style">{{ number_format($currentTotal ?? 0) }}</td>
-						  <?php $sumOfTotalsOfZoneSales += ($total_zones[$date] ?? 0) ?>
+						  @php $sumOfTotalsOfZoneSales += ($total_zones[$date] ?? 0) @endphp
 
                         @if($loop->last)
                         <td class="text-center active-style">
@@ -157,14 +157,14 @@
 
                     <tr>
                         <th class="active-style text-center">{{ __('GROWTH RATE %') }}</th>
-                        <?php $chart_data = []; ?>
+                        @php $chart_data = []; @endphp
                         @foreach ($total_zones_growth_rates as $date => $total)
-                        <?php
+                        @php
                                     $chart_data[] = [
                                         'date' => date('d-M-Y', strtotime($date)),
                                         'Total Sales Values' => number_format($total_zones[$date] ?? 0),
                                         'Sales GR %' => number_format($total ?? 0, 2),
-                                    ]; ?>
+                                    ]; @endphp
                         <td class="text-center active-style">{{ number_format($total ?? 0, 2) . ' %' }}</td>
 						
 						 @if($loop->last)
@@ -198,7 +198,7 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    <?php $chart_data = []; ?>
+                    @php $chart_data = []; @endphp
                     @foreach ($final_report_data as $zone_name => $zoone_data)
                     <tr class="group-color  text-lg-left  ">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($zone_name) }}</b></td>
@@ -213,12 +213,12 @@
                         <th>{{ __('Percent %') }}</th>
                         @foreach ($dates as $date )
 						
-                        <?php
+                        @php
 						$currentTotal = $total_zones[$date] ?? 0 ;
 						
                                         $percentage = $currentTotal == 0 ? 0 : number_format(((($zoone_data['Sales Values'][$date] ?? 0) / ($currentTotal ?? 0)*100)), 2);
                                         $chart_data[$date][$zone_name] = [$zone_name . ' %' => $percentage, ];
-                                        ?>
+                                        @endphp
 
                         <td class="text-center">
                             {{ $percentage . ' %' }}
@@ -234,12 +234,12 @@
                     </tr>
 
                     @endforeach
-                    <?php
+                    @php
                                 $return = array();
                                 array_walk($chart_data, function($values,$date) use (&$return) {
                                     $return[] =array_merge(['date'=>date('d-M-Y', strtotime($date))], array_merge(...array_values($values)));
                                 });
-                            ?>
+                            @endphp
                     <input type="hidden" id="Zone_Sales_Percentages_data" data-total="{{ json_encode($return) }}">
 
 
@@ -270,7 +270,7 @@
 <script src="{{ url('assets/js/demo1/pages/crud/datatables/basic/paginations.js') }}" type="text/javascript">
 </script>
 @if(config('app.showTrendCharts'))
-@foreach ($zones_names as $name_of_zone)
+@foreach (isset($zones_names) ? $zones_names : [] as $name_of_zone)
 <script>
     am4core.ready(function() {
 

@@ -5,12 +5,15 @@ namespace App\Models\NonBankingService;
 use App\Equations\MonthlyFixedRepeatingAmountEquation;
 use App\Helpers\HArr;
 use App\Models\Company;
+use App\Models\NonBankingService\Study;
 use App\Models\Traits\Scopes\BelongsToCompany;
-
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperFixedAsset
+ */
 class FixedAsset extends Model
 {
     use BelongsToStudy,BelongsToCompany;
@@ -229,8 +232,8 @@ class FixedAsset extends Model
     public function calculateFFEAssets(int $fixedAssetEndDateAsIndex, int $propertyDepreciationDurationInMonths, float $propertyReplacementCostRate, int $propertyReplacementIntervalInMonths, array $projectUnderProgressForConstruction, array $studyDates, int $studyEndDateAsIndex, Study $study):array
     {
         $buildingAssets = [];
-        $datesAsStringAndIndex = $study->getDatesAsStringAndIndex();
-        $operationStartDateAsIndex = $study->getOperationStartDateAsIndex($datesAsStringAndIndex, $study->getOperationStartDateFormatted());
+        // $datesAsStringAndIndex = $study->getDatesAsStringAndIndex();
+        $operationStartDateAsIndex = $study->getOperationStartDateAsIndex();
         // $fixedAssetEndDateAsIndex = $this->getEndDateAsIndex();
         $operationStartDateAsIndex  =  $operationStartDateAsIndex >= $fixedAssetEndDateAsIndex ? $operationStartDateAsIndex :$fixedAssetEndDateAsIndex;
         $propertyReplacementCostRate = $propertyReplacementCostRate /100;
@@ -319,13 +322,16 @@ class FixedAsset extends Model
     }
     public function getItemCostAtDateIndex(int $dateAsIndex)
     {
+		/**
+		 * @var Study $study
+		 */
         $itemCost = $this->getItemCost();
         $vatRate = $this->getVatRate();
         $study = $this->study;
         $studyStartDateAsString = $study->getStudyStartDate();
         $dateWithDateIndex = $study->getDateWithDateIndex();
         $studyEndDateAsString = $study->getStudyEndDate();
-        $studyEndDateAsIndex = $study->getStudyEndDateAsIndex($dateWithDateIndex, $studyEndDateAsString);
+        $studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
         $studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex, $studyStartDateAsString);
         $increaseRate = $this->getCostAnnualIncreaseRate();
         $withholdRate = $this->getWithholdTaxRate();

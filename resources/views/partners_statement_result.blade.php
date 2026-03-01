@@ -51,19 +51,19 @@
 @endsection
 
 @section('content')
-@php
+@@php
 	$totalDebit = 0 ;
 	$totalCredit = 0 ;
 	$totalEndBalance = 0 ;
-@endphp
+@end@php
 <div class="kt-portlet kt-portlet--tabs">
 
     <div class="kt-portlet__body">
         <div class="tab-content  kt-margin-t-20">
 
-@php
+@@php
 	$warningMessage = '<span class="text-red"> [ Just a note: partners without any transactions won’t appear in the report. ] </span>'
-@endphp
+@end@php
             <!--End:: Tab  EGP FX Rate Table -->
 
             <!--Begin:: Tab USD FX Rate Table -->
@@ -86,7 +86,7 @@
                     @endslot
                     @slot('table_body')
 
-                    <?php $id =1 ;?>
+                    @php $id =1 ;@endphp
 
                     @foreach ($statements as $partnerId => $statementDataWithPartnerName)
 
@@ -136,45 +136,45 @@
                         </td>
 
                     </tr>
-                    @php
+                    @@php
                     $index=0;
-                    @endphp
+                    @end@php
 
                     @foreach ($statementDataWithPartnerName['statements']??[] as $modelAsStdClass)
 				
-                    @php
+                    @@php
                     $index++;
-                    @endphp
+                    @end@php
                     <tr class="row{{ $id }}  text-center" style="display: none">
                         <td class="sub-text-bg max-w-serial   ">#{{ $index }}</td>
                         <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
                         <td class="sub-text-bg text-center max-w-invoice-number">{{ number_format($modelAsStdClass->beginning_balance) }}</td>
                         <td class="sub-text-bg text-center max-w-invoice-date">{{ number_format($modelAsStdClass->debit) }}
-						@php
+						@@php
 							$totalDebit+=$modelAsStdClass->debit;
-						@endphp
+						@end@php
 						</td>
                         <td class="sub-text-bg text-center max-w-currency">{{ number_format($modelAsStdClass->credit) }}
 						
-							@php
+							@@php
 							$totalCredit+=$modelAsStdClass->credit;
-						@endphp
+						@end@php
 						
 						</td>
                         <td class="sub-text-bg text-center max-w-amount">{{ number_format($modelAsStdClass->end_balance) }}
 						
-						@php
+						@@php
 							if($loop->last){
 								$totalEndBalance+=$modelAsStdClass->end_balance;
 							}
-						@endphp
+						@end@php
 						</td>
-                        @php
+                        @@php
                         $comment = isset($modelAsStdClass->{'comment_'.$lang}) ? $modelAsStdClass->{'comment_'.$lang} : null ;
                      //   $reviewedArr = getBankStatementReviewed($modelAsStdClass) ;
                       //  $reviewedText = getReviewedText($reviewedArr);
                         $userComment = \App\Helpers\HNonBanking::getUserCommentFromModel($modelAsStdClass);
-                        @endphp
+                        @end@php
                         {{-- <td class="sub-text-bg text-left ">{{ $reviewedText   }}</td> --}}
                         <td class="sub-text-bg text-left max-w-amount">{{ $comment?:  getBankStatementComment($modelAsStdClass) }}
                             <br>
@@ -186,7 +186,7 @@
 
                     @endforeach
 
-                    <?php $id++ ;?>
+                    @php $id++ ;@endphp
                     @endforeach
 
 
@@ -403,10 +403,10 @@
 
             <div class="kt-portlet__body">
 
-                @php
+                @@php
 
                 $tableId = 'kt_table_1';
-                @endphp
+                @end@php
 
 
                 <style>
@@ -610,12 +610,12 @@
                                         <td class="sub-text-bg text-center max-w-invoice-date">{{ number_format($modelAsStdClass->debit) }}</td>
                                         <td class="sub-text-bg text-center max-w-currency">{{ number_format($modelAsStdClass->credit) }}</td>
                                         <td class="sub-text-bg text-center max-w-amount">{{ number_format($modelAsStdClass->end_balance) }}</td>
-                                        @php
+                                        @@php
                                         $comment = isset($modelAsStdClass->{'comment_'.$lang}) ? $modelAsStdClass->{'comment_'.$lang} : null ;
                                         $reviewedArr = getBankStatementReviewed($modelAsStdClass) ;
                                         $reviewedText = getReviewedText($reviewedArr);
                                         $userComment = \App\Helpers\HNonBanking::getUserCommentFromModel($modelAsStdClass);
-                                        @endphp
+                                        @end@php
                                         <td class="sub-text-bg text-left ">{{ $reviewedText   }}</td>
                                         <td class="sub-text-bg text-left max-w-amount">{{ $comment?:  getBankStatementComment($modelAsStdClass) }}
                                             <br>

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@php
+@@php
 	use App\Helpers\HArr;
-@endphp
+@end@php
 @section('css')
 <style>
 .max-id-width{
@@ -83,14 +83,14 @@
                         @endslot
                         @slot('table_body') 
 
-                            <?php $total = array_sum(array_column($report_view_data,'Sales Value')); $total_count = (isset($report_count_data) && count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0; ?>
+                            @php $total = array_sum(array_column($report_view_data,'Sales Value')); $total_count = (isset($report_count_data) && count($report_count_data) > 0) ? array_sum(array_column($report_count_data,'Count')) : 0; @endphp
                             @foreach ($report_view_data as $key => $item)
                              <tr>
                                  <th class="max-id-width">{{$key+1}}</th>
                                 <th>{{$item['item']?? '-'}}</th>
-								@php
+								@@php
 									$currentValue = $item['Sales Value']??0 ;
-								@endphp
+								@end@php
                                 <td class="text-center">{{number_format($currentValue)}}</td>
                                 <td class="text-center">{{$total == 0 ? 0 : number_format((($item['Sales Value']/$total)*100) , 1) . ' %'}}</td>
 								<td>{{ $salesToDate ? number_format($currentValue / $salesToDate* 100,2) . ' %' : '-'  }}</td>
@@ -113,10 +113,10 @@
                 </div>
             </div>
         </div>
-		@php
+		@@php
 			$report_view_data_formatted = HArr::numberFormatTwoDimArrBasedOnKey($report_view_data,'Sales Value');
 
-		@endphp
+		@end@php
         <input type="hidden" id="total" data-total="{{ json_encode($report_view_data_formatted) }}">
     </div>
 @endsection

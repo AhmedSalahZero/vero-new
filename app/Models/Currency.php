@@ -7,6 +7,9 @@ use App\Models\Traits\Relations\CurrencyRelation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperCurrency
+ */
 class Currency extends Model
 {
     use  CurrencyRelation , CurrencyAccessor;

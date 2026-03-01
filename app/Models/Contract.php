@@ -17,6 +17,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin IdeHelperContract
+ */
 class Contract extends Model
 {
 	use HasBasicStoreRequest;

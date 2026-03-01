@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperLendingInformationAgainstAssignmentOfContract
+ */
 class LendingInformationAgainstAssignmentOfContract extends Model
 {
     protected $guarded = ['id'];

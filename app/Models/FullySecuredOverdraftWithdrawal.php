@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * @mixin IdeHelperFullySecuredOverdraftWithdrawal
+ */
 class FullySecuredOverdraftWithdrawal extends Model
 {
 

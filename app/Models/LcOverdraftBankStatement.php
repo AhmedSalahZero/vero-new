@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 
+/**
+ * @mixin IdeHelperLcOverdraftBankStatement
+ */
 class LcOverdraftBankStatement extends Model
 {
 	use HasDeleteButTriggerChangeOnLastElement,IsBankStatement ;

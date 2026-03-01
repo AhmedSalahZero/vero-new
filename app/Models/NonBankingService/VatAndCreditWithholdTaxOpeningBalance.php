@@ -6,6 +6,9 @@ use App\Models\NonBankingService\Study;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperVatAndCreditWithholdTaxOpeningBalance
+ */
 class VatAndCreditWithholdTaxOpeningBalance extends Model
 {
     protected $guarded = ['id'];

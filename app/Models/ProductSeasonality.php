@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProductSeasonality
+ */
 class ProductSeasonality extends Model
 {
     /**
@@ -12,17 +15,9 @@ class ProductSeasonality extends Model
      * @var string
      */
     protected $table = 'products_seasonalities';
-       /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+       
     protected $guarded = [];
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    
     protected $casts = [
         'seasonality_data' => 'array',
     ];

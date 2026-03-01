@@ -16,9 +16,9 @@
         <form class="kt-form kt-form--label-right" method="POST" action={{ route('country.sales.analysis.result',$company) }}   enctype="multipart/form-data">
             @csrf
             <div class="kt-portlet">
-                <?php $countries =  App\Models\SalesGathering::company()->whereNotNull('country')->where('country','!=','')->groupBy('country')->selectRaw('country')->get()->pluck('country')->toArray();
+                @php $countries =  App\Models\SalesGathering::company()->whereNotNull('country')->where('country','!=','')->groupBy('country')->selectRaw('country')->get()->pluck('country')->toArray();
 
-                ?>
+                @endphp
 
                 <div class="kt-portlet__body">
                     <div class="form-group row">

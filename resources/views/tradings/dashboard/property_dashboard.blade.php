@@ -238,7 +238,6 @@ html body .header-border-down, html body .action-class{
                                                                         <tbody>
 
                                                                             @foreach($currentDetailModel['rows'] as $index => $rowItems)
-{{-- {{ dd() }} --}}
                                                                             {{-- @foreach ($study->{$relationName} as $index=>$currentLeasingRevenueStreamBreakdown) --}}
                                                                             <tr>
 																			@foreach($rowItems as $rowIndex => $rowItem)
@@ -350,7 +349,6 @@ html body .header-border-down, html body .action-class{
             </div>
             <div class="kt-portlet__body">
                 <div class="row">
-                    {{-- {{ dd($propertyTypes) }} --}}
                     <div class="col-md-12">
                         @include('admin.dashboard._rent_revenue_and_collection',[
                         'propertyTypes'=>$propertyTypes,

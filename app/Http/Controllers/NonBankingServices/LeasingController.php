@@ -44,7 +44,7 @@ class LeasingController extends Controller
 		$equityFundingValues = [];
 		$newLoansFundingRates = [];
 		$newLoanFundingValues = [];
-		$eclAndNewPortfolioFundingRate = $study?  $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::LEASING) : null;
+		$eclAndNewPortfolioFundingRate = $study->getEclAndNewPortfolioFundingRatesForStreamType(Study::LEASING) ;
 		foreach($yearOrMonthsIndexes as $dateAsIndex => $dateFormatted ){
 			$adminFeesRates[$dateAsIndex]=$eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getAdminFeesRatesAtYearOrMonthIndex($dateAsIndex) : 0;
 			$eclRates[$dateAsIndex] = $eclAndNewPortfolioFundingRate ? $eclAndNewPortfolioFundingRate->getEclRatesAtYearOrMonthIndex($dateAsIndex) : 0;

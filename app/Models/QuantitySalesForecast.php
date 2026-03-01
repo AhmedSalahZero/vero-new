@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperQuantitySalesForecast
+ */
 class QuantitySalesForecast extends Model
 {
     /**
@@ -12,17 +15,9 @@ class QuantitySalesForecast extends Model
      * @var string
      */
     protected $table = 'quantity_sales_forecast';
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    
     protected $guarded = [];
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    
     protected $casts = [
         'previous_year_seasonality' => 'array',
         'last_3_years_seasonality' => 'array',

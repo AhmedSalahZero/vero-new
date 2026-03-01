@@ -31,7 +31,7 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <?php $total_new_items_targets = array_sum($sales_targets_values); ?>
+                    @php $total_new_items_targets = array_sum($sales_targets_values); @endphp
                     <h2>
                         {{ __('New Products Items Sales Target Year ') .date('Y', strtotime($sales_forecast->start_date)) .' : ' .number_format($total_new_items_targets) }}
                     </h2>
@@ -50,12 +50,12 @@
                         </tr>
                     @endslot
                     @slot('table_body')
-                    @php
+                    @@php
                         $percentages = [];
                         sortTwoDimensionalArr($sales_targets_values);
-                    @endphp
+                    @end@php
                         @foreach ($sales_targets_values as $base_vame => $target)
-                            <?php $percentages[$base_vame] = $total_new_items_targets == 0 ? 0 : ($target / $total_new_items_targets) * 100; ?>
+                            @php $percentages[$base_vame] = $total_new_items_targets == 0 ? 0 : ($target / $total_new_items_targets) * 100; @endphp
                             <tr>
                                 <td>{{ $base_vame }}</td>
                                 <td class="text-center">{{ number_format($target) }}</td>
@@ -73,13 +73,13 @@
             </div>
         </div>
         @else
-        @php
+        @@php
         $total_new_items_targets  = 0;
 
-        @endphp
+        @end@php
 @endif
 
-        <?php $item = ucwords(str_replace('_', ' ', $allocation_base)); ?>
+        @php $item = ucwords(str_replace('_', ' ', $allocation_base)); @endphp
 
         {{-- @if(hasAtLeastOneOfType($company , $allocation_base)) --}}
 
@@ -87,7 +87,7 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <?php $existing_items_target = $sales_forecast->sales_target - $total_new_items_targets; ?>
+                    @php $existing_items_target = $sales_forecast->sales_target - $total_new_items_targets; @endphp
                     <h2>
                         {{ __('Existing Products Items Sales Target Year ') .date('Y', strtotime($sales_forecast->start_date)) .' : ' .number_format($existing_items_target) }}
                     </h2>
@@ -187,20 +187,20 @@
                         </tr>
                     @endslot
                     @slot('table_body')
-                        <?php $total = array_sum(array_column($breakdown_base_data, 'Sales Value'));
+                        @php $total = array_sum(array_column($breakdown_base_data, 'Sales Value'));
                         $allocations_setting->breakdown !== 'last_3_years' ?: ($total = $total / 3);
                         $total_existing_targets = 0;
                          sortTwoDimensionalBaseOnKey($breakdown_base_data , 'Sales Value');
-                        ?>
+                        @endphp
                         @foreach ($breakdown_base_data as $key => $product_data)
                             <tr>
                                 <td>{{ $product_data['item'] ?? '-' }}</td>
-                                <?php
+                                @php
                                 $sales_value = $allocations_setting->breakdown == 'last_3_years' ? ($product_data['Sales Value'] ?? 0) / 3 : $product_data['Sales Value'] ?? 0;
                                 $target_percentage = $total == 0 ? 0 : $sales_value / $total;
                                 $existing_target_per_product = $target_percentage * $existing_items_target;
                                 $total_existing_targets += $existing_target_per_product;
-                                ?>
+                                @endphp
                                 <td class="text-center">{{ number_format($sales_value ?? 0) }}</td>
 
                                 @if ($allocations_setting->breakdown !== 'new_breakdown_annually')
@@ -216,7 +216,7 @@
                                         <input type="number" {{-- name="modify_sales_target[{{ $product_data['item'] }}][value]" --}} placeholder="{{ __('Value') }}"
                                             class="modify_sales_target form-control" {{-- value="{{ @$modified_targets['products_modified_targets'][$product_data['item']] }}" --}}>
                                     </td>
-                                    <?php
+                                    @php
                                         if ($existing_allocations_base === null ) {
                                             $percentage = old('modify_sales_target')[ $product_data['item']] ?? '';
 
@@ -226,7 +226,7 @@
                                                 $percentage = '';
                                             }
                                         }
-                                    ?>
+                                    @endphp
                                     <td class="text-center light-gray-bg">
                                         <input type="number" name="modify_sales_target[{{ $product_data['item'] }}]"
                                             placeholder="{{ __('%') }}"
@@ -234,7 +234,7 @@
                                     </td>
                                 @else
                                     @foreach ($sales_targets as $quarter_name => $value)
-                                        <?php $quarter_name = str_replace(' ', '_', $quarter_name); ?>
+                                        @php $quarter_name = str_replace(' ', '_', $quarter_name); @endphp
 
                                         <td class="text-center">
                                             <input type="number" {{-- name="modify_sales_target[{{ $product_data['item'] }}][{{ $quarter_name }}][value]" --}} placeholder="{{ __('Value') }}"
@@ -270,7 +270,7 @@
                                 </td>
                             @else
                                 @foreach ($sales_targets as $quarter_name => $value)
-                                    <?php $quarter_name = str_replace(' ', '_', $quarter_name); ?>
+                                    @php $quarter_name = str_replace(' ', '_', $quarter_name); @endphp
                                     <td id="total_modify_sales_target_{{ $quarter_name }}">
                                         {{ !isset($modified_targets['products_modified_targets'])? 0: number_format(array_sum(array_column($modified_targets['products_modified_targets'], 'value') ?? [])) }}
                                     </td>
@@ -327,7 +327,7 @@
 
     @if ($allocations_setting->breakdown == 'new_breakdown_quarterly')
         @foreach ($sales_targets as $quarter_name => $value)
-            <?php $quarter_name = str_replace(' ', '_', $quarter_name); ?>
+            @php $quarter_name = str_replace(' ', '_', $quarter_name); @endphp
             <script>
                 $(document).ready(function() {
                     $('.modify_sales_target_percentage_' + '{{ $quarter_name }}').each(function(index, element) {

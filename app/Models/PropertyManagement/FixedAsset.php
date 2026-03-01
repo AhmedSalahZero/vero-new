@@ -11,6 +11,9 @@ use App\Models\Traits\Scopes\PropertyManagements\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperFixedAsset
+ */
 class FixedAsset extends Model
 {
     use BelongsToStudy,BelongsToCompany;
@@ -324,8 +327,7 @@ class FixedAsset extends Model
         $study = $this->study;
         $studyStartDateAsString = $study->getStudyStartDate();
         $dateWithDateIndex = $study->getDateWithDateIndex();
-        $studyEndDateAsString = $study->getStudyEndDate();
-        $studyEndDateAsIndex = $study->getStudyEndDateAsIndex($dateWithDateIndex, $studyEndDateAsString);
+        $studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
         $studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex, $studyStartDateAsString);
         $increaseRate = $this->getCostAnnualIncreaseRate();
         $withholdRate = $this->getWithholdTaxRate();

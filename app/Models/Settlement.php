@@ -7,6 +7,9 @@ use App\Traits\Models\IsSettlement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperSettlement
+ */
 class Settlement extends Model
 {
 	use IsSettlement;

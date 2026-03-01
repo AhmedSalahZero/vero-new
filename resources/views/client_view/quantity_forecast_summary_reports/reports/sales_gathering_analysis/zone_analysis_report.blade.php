@@ -68,10 +68,10 @@
         <div class="tab-content  kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
-            <?php
+            @php
                     array_push($zones_names, 'Total');
                     array_push($zones_names, 'Zone_Sales_Percentages');
-                    ?>
+                    @endphp
 
             <!--End:: Tab  EGP FX Rate Table -->
 
@@ -90,16 +90,16 @@
                     @endslot
                     @slot('table_body')
 
-                    <?php $id =1 ;?>
-                    @php
+                    @php $id =1 ;@endphp
+                    @@php
                     sortReportForTotals($report_data);
-                    @endphp
+                    @end@php
                     @foreach ($report_data as $zone_name => $zone_channels_data)
-                    <?php $chart_data = [];?>
+                    @php $chart_data = [];@endphp
                     @if ($zone_name != 'Total' && $zone_name != 'Growth Rate %')
 
-                    <?php
-                                     ?>
+                    @php
+                                     @endphp
                     <tr class="group-color ">
                         {{-- <td class="text-center" style="cursor: pointer;"
                                             onclick="toggleRow('{{ $id }}')"><i class="row_icon{{ $id }} flaticon2-up white-text"></i>
@@ -109,11 +109,11 @@
                             <b>{{ __($zone_name) }}</b>
                         </td>
                         {{-- Total --}}
-                        <?php $total_per_zone = $zone_channels_data['Total'] ?? [];
-                                        unset($zone_channels_data['Total']); ?>
+                        @php $total_per_zone = $zone_channels_data['Total'] ?? [];
+                                        unset($zone_channels_data['Total']); @endphp
                         {{-- Growth Rate % --}}
-                        <?php $growth_rate_per_zone = $zone_channels_data['Growth Rate %'] ?? [];
-                                        unset($zone_channels_data['Growth Rate %']); ?>
+                        @php $growth_rate_per_zone = $zone_channels_data['Growth Rate %'] ?? [];
+                                        unset($zone_channels_data['Growth Rate %']); @endphp
 
                         @foreach ($dates as $date)
                         <td class="text-center white-text">{{ number_format($total_per_zone[$date] ?? 0) . '  [ GR '.number_format($growth_rate_per_zone[$date] ?? 0) . ' % ]'}}
@@ -122,9 +122,9 @@
                         <td class="text-center white-text">{{number_format(array_sum($total_per_zone??[]),0)}}</td>
                     </tr>
 
-                    @php
+                    @@php
                     sortSubItems($zone_channels_data);
-                    @endphp
+                    @end@php
                     @foreach ($zone_channels_data as $channel_name => $channel_section)
 
                     <tr class="row{{ $id }}  text-center" style="display: none">
@@ -152,7 +152,7 @@
                     <tr class="active-style text-center">
                         <td class="active-style text-center"><b>{{ __($zone_name) }}</b></td>
                         {{-- <td class="hidden"></td> --}}
-                        <?php $decimals = $zone_name == 'Growth Rate %' ? 2 : 0; ?>
+                        @php $decimals = $zone_name == 'Growth Rate %' ? 2 : 0; @endphp
                         @foreach ($dates as $date)
 
                         <td class="text-center active-style">
@@ -161,7 +161,7 @@
                         <td class="text-center active-style">{{$zone_name == 'Growth Rate %' ? "-" : number_format(array_sum($zone_channels_data  ?? []),0)}}</td>
                     </tr>
                     @endif
-                    <?php $id++ ;?>
+                    @php $id++ ;@endphp
                     @endforeach
 
 

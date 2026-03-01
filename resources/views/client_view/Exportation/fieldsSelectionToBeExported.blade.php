@@ -86,14 +86,14 @@
                             <div class="row">
                                 @foreach ($columnsWithViewingNames as $fieldName => $displayName)
                                 @if(!hideExportField($fieldName , $columnsWithViewingNames))
-                                <?php
+                                @php
                                             $status_disanbeled_fields = $fieldName == 'net_sales_value' ||  $fieldName == 'invoice_status' || 
                                                             ($fieldName == 'sales_value'  && count(array_intersect($selected_fields, ['quantity_discount','cash_discount','special_discount','other_discounts'])) == 0 );
 															$hiddenFields = ['invoice_status','net_balance'];
 										if($modelName == 'LoanSchedule'){
 											$status_disanbeled_fields = true;
 										}
-										?>
+										@endphp
 										
 										@if(!in_array($fieldName,$hiddenFields))
                                 <div class="col-lg-6">

@@ -5,6 +5,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCompanySystem
+ */
 class CompanySystem extends Model
 {
 	// protected $table = 'company_system';
