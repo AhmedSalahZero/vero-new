@@ -36,21 +36,12 @@ export default defineConfig({
 		'resources/js/NonBanking/Views/Spreadsheet/spread-sheet.js',
 		
 		
-		'resources/js/Trading/Views/Properties/properties.ts',
-		'resources/js/Trading/Views/Properties/index.ts',
-		'resources/js/Trading/Views/Contracts/index.ts',
-		'resources/js/Trading/Views/Contracts/form.ts',
 		'resources/js/Trading/Views/Expenses/expenses.js',
-		'resources/js/Trading/Views/PropertyExpenses/property-expenses.js',
-		'resources/js/Trading/Views/PropertyExpenses/property-expenses.js',
-		'resources/js/Trading/Views/ForecastedProperties/forecasted-properties.js',
 		'resources/js/Trading/Views/FixedAssets/fixed-assets.ts',
 		'resources/js/Trading/Views/Dashboard/cashflow-forecast.ts',
 		'resources/js/Trading/Views/ManpowerExpenses/manpower-expenses.js',
 		'resources/js/Trading/Views/GeneralAssumptions/general-assumptions.ts',
-		'resources/js/Trading/Views/occupied-properties/occupied-properties-with-full-rent-coverage-duration.ts',
-		'resources/js/Trading/Views/occupied-properties/occupied-properties-with-partial-rent-coverage-duration.ts',
-		'resources/js/Trading/Views/occupied-properties/properties-to-be-delivered.ts',
+
 		
 		
 		
