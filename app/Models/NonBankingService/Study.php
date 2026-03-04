@@ -6981,7 +6981,7 @@ class Study extends Model
 	public function getRightOfUserRentDuration():int 
 	{
 		$rightOfUseRent = $this->getRightOfUseRent();
-		return $rightOfUseRent['duration']??$this->getDuration2InYears()*12;
+		return $rightOfUseRent['duration']??$this->getDurationInYears()*12;
 	}
 	public function getRightOfUserRentAnnualIncreaseRate():float 
 	{

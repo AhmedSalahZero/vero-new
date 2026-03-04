@@ -33,9 +33,7 @@ class BalanceSheetExport implements
 	private BalanceSheet $balanceSheet;
 	protected ?string $writerType;
 	protected string $fileName;
-	/**
-	 * @param Collection $products
-	 */
+	
 
 	public function __construct(Collection $balanceSheetReport, Request $request, BalanceSheet $balanceSheet)
 	{

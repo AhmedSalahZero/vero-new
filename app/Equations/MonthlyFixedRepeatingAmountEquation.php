@@ -7,6 +7,8 @@ class MonthlyFixedRepeatingAmountEquation
 {
     public function calculate(float $amount, int $startDateAsIndex, int $endDateAsIndex, string $increaseInterval, $increaseRate, bool $isDeductible, float $vatRate, float $withholdRate, $dateIndexWithYearIndex = [], $contractCount = null, $numberOfBranches = 1):array
     {
+		$withholdAmounts = [];
+		
         $resultWithoutVat = [];
         $resultWithVat = [];
         $resultVat = [];

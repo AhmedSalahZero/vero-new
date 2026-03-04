@@ -8,7 +8,7 @@ trait HasReviewedBy
 
 	public function isReviewed():bool
 	{
-		return $this->is_reviewed;		
+		return (bool)$this->is_reviewed;		
 	}	
 	public function reviewedBy()
 	{

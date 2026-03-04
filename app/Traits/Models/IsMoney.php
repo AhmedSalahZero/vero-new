@@ -192,7 +192,7 @@ trait IsMoney
         // if($this instanceof MoneyPayment){
         // 	return
         // }
-        throw new \Exception('Customer Exception Invalid Money Type');
+        // throw new \Exception('Customer Exception Invalid Money Type');
     }
     public function getReceivingOrPaymentMoneyDate():string
     {
@@ -401,7 +401,7 @@ trait IsMoney
         
         
         /**
-         * @var MoneyPayment $this
+         *  MoneyPayment $this
          */
         if ($this->isCashPayment()) {
             return (int)$this->getBranch()->getOdooOutboundTransferPaymentMethodId();

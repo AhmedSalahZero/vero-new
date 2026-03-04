@@ -120,7 +120,7 @@ trait HasPropertyDueInstallment
     
     public function getHasAnnuallyInstallments():bool
     {
-        return $this->has_annually_installments?:0;
+        return (bool)$this->has_annually_installments?:0;
     }
     public function getHasDeliveryPayments():bool
     {
@@ -128,7 +128,7 @@ trait HasPropertyDueInstallment
     }
     public function getHasMaintenancePayments():bool
     {
-        return $this->has_maintenance_payments?:0;
+        return (bool)$this->has_maintenance_payments?:0;
     }
    
 	public function getReservationPayment():float
