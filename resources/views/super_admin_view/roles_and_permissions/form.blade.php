@@ -4,9 +4,9 @@
     <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
     @endsection
 @section('content')
-@@php
+@php
 	use App\Models\User;
-@end@php
+@endphp
 
 
 <div class="row">

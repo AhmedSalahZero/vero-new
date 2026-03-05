@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\IShareable;
@@ -24,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperQuotationPricingCalculator
  */
-class QuotationPricingCalculator extends Model implements IBaseModel , IHaveAllRelations , IExportable , IShareable
+class QuotationPricingCalculator extends Model implements  IHaveAllRelations , IExportable , IShareable
 {
     use  QuotationPricingCalculatorAccessor,QuotationPricingCalculatorMutator , QuotationPricingCalculatorRelation , CompanyScope , withAllRelationsScope ;
          
@@ -82,12 +81,12 @@ class QuotationPricingCalculator extends Model implements IBaseModel , IHaveAllR
             // 'updateRoute'=>route('admin.update.quotation.pricing.calculator',[$currentCompanyId ]),
             'hasChildRows'=>true ,
             'pageTitle'=>QuotationPricingCalculator::getPageTitle(),
-             'revenueBusinessLines'=>App(RevenueBusinessLineRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceCategories'=>App(ServiceCategoryRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceItems'=>App(ServiceItemRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceNatures'=>App(ServiceNatureRepository::class)->allFormattedForSelect($currentCompanyId),
+             'revenueBusinessLines'=>App(RevenueBusinessLineRepository::class)->allFormattedForSelect(),
+            'serviceCategories'=>App(ServiceCategoryRepository::class)->allFormattedForSelect(),
+            'serviceItems'=>App(ServiceItemRepository::class)->allFormattedForSelect(),
+            'serviceNatures'=>App(ServiceNatureRepository::class)->allFormattedForSelect(),
             'positions'=>App(PositionRepository::class)->allFormattedForSelect($currentCompanyId),
-            'currencies'=>App(CurrencyRepository::class)->allFormattedForSelect($currentCompanyId),
+            'currencies'=>App(CurrencyRepository::class)->allFormattedForSelect(),
  //            'customersAndLeads'=>App(CustomerRepository::class)->allFormattedForSelect($currentCompanyId),
             'redirectAfterSubmitRoute'=>route('admin.view.quotation.pricing.calculator',$currentCompanyId),
             'type'=>'create'

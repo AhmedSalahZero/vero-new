@@ -51,26 +51,26 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @@php
-                @end@php
+                @php
+                @endphp
 		
                 @foreach ($allocation_data_total as $base_name => $value)
-				@@php
+				@php
 					$class_name = $base_name == 'Total' ? 'active-style' : '' ;
-				@end@php
+				@endphp
 				@if($base_name != 'Total')
                 			
                 <tr>
                     <td class="{{$class_name}}">{{ $base_name }} </td>
 		
-					@@php
+					@php
 						$currentRowTotal = 0 ;
-					@end@php
+					@endphp
 					@foreach(array_keys(array_first($value,null,[]) ) as $date )
-					@@php
+					@php
 						$currentTdTotal = array_sum_at_date($allocation_data[$base_name],$date) ;
 						$currentRowTotal += $currentTdTotal ;
-					@end@php
+					@endphp
                     <td class="text-center {{$class_name}}"> {{ number_format($currentTdTotal) }} </td>
 					@endforeach 
 					{{-- @endforeach  --}}
@@ -106,11 +106,11 @@
     @endif
 
     @else
-    @@php
+    @php
 	
     $allocation_base = '';
     
-	@end@php
+	@endphp
 
     @endif
 
@@ -130,10 +130,10 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @@php
+                @php
                 sortTwoDimensionalExcept($existing_product_data , ['Total'] );
 
-                @end@php
+                @endphp
                 @foreach ($existing_product_data as $base_name => $value)
                 @php
                                 $class_name = $base_name == 'Total' ? 'active-style' : '' ;
@@ -181,11 +181,11 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @@php
+                @php
                 sortTwoDimensionalExcept($total_products_items , ['Total'] );
 
 
-                @end@php
+                @endphp
 
                 @foreach ($total_products_items as $base_name => $value)
 

@@ -4,33 +4,37 @@ namespace App\Models;
 
 use App\Models\OpeningBalance;
 use App\Models\OutgoingTransfer;
+use App\Models\Settlement;
 use App\Services\Api\CashExpenseOdooService;
 use App\Services\Api\OdooPayment;
 use App\Traits\Models\HasCreditStatements;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasNonCustomerOrSupplier;
+use App\Traits\Models\IsMoneyOut;
 use App\Traits\Models\HasReviewedBy;
 use App\Traits\Models\HasUserComment;
-use App\Traits\Models\IsMoney;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
+
 /**
  * @mixin IdeHelperCashExpense
  */
+
 class CashExpense extends Model
 {
 	
-	use IsMoney ,HasForeignExchangeGainOrLoss,HasCreditStatements,HasReviewedBy,HasUserComment,HasNonCustomerOrSupplier;
+	use IsMoneyOut ,HasForeignExchangeGainOrLoss,HasCreditStatements,HasReviewedBy,HasUserComment,HasNonCustomerOrSupplier;
 	const CASH_PAYMENT  = 'cash_payment';
 	const PAYABLE_CHEQUE  = 'payable_cheque';
 	const OUTGOING_TRANSFER  = 'outgoing-transfer';
 	const DOWN_PAYMENT_OVER_CONTRACT = 'over_contract' ;
 	const DOWN_PAYMENT_GENERAL = 'general' ;
 	const SETTLEMENT_OF_OPENING_BALANCE = 'settlement-of-opening-balance' ;
+	
 	public static function generateComment(self $cashExpense,string $lang)
 	{
 		if($cashExpense->isPayableCheque()){
@@ -706,4 +710,58 @@ class CashExpense extends Model
     {
         return 'supplier';
     }
+	public function getType():string
+    {
+        return $this->type ;
+    }
+	public function isCash():bool
+	{
+		return $this->isCashPayment();
+	}
+	public function isChequeOrChequePayment():bool 
+	{
+		return $this->isPayableCheque();
+	}
+	public function getChequeJournalId():int
+	{
+	
+		$payableCheque = $this->payableCheque;
+		if($payableCheque){
+			$financialInstitution = $payableCheque->deliveryBank;
+			$accountTypeId = $payableCheque->account_type;
+			$accountNumber  = $payableCheque->account_number;
+			return $financialInstitution->getJournalIdForAccount($accountTypeId, $accountNumber);
+	}
+	return 0;
+} 
+	public function getChequeOdooId():int
+	{
+		$payableCheque = $this->payableCheque;
+		if($payableCheque){
+				/**
+				 * ! getOdooId Is Not Exists In FinancialInstitution Model
+				 */
+			return $payableCheque->deliveryBank->getOdooId();
+		}
+		return 0;
+	}
+	public function partner()
+    {
+        return $this->belongsTo(Partner::class, 'partner_id', 'id');
+    }
+	/**
+	 * * For Larastan
+	 */
+	public function settlements()
+	{
+		// return $this->hasMany(Settlement::class, 'money_payment_id', 'id');
+	}
+	
+	public $settlements = null;
+	public $contract = null ;
+	public $cheque = null ;
+	public $advanced_opening_balance_id = 0 ;
+	/**
+	 * * End For Larastan
+	 */
 }

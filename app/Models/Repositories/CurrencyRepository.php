@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,7 +49,7 @@ class CurrencyRepository implements IBaseRepository
         return Currency::inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return Currency::find($id);
     }
@@ -60,7 +59,7 @@ class CurrencyRepository implements IBaseRepository
         return Currency::latest($column)->first();
 
     }
-    public function store(Request $request ):IBaseModel
+    public function store(Request $request )
     {
         
         return Currency::create([
@@ -73,7 +72,7 @@ class CurrencyRepository implements IBaseRepository
 
 
 
-    public function update( IBaseModel $currency , Request $request ):void
+    public function update(  $currency , Request $request ):void
     {
         $currency->update($request->except('_token'));
     }

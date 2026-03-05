@@ -57,9 +57,9 @@
                         </tr>
                     @endslot
                     @slot('table_body')
-                    @@php
+                    @php
                         sortTwoDimensionalArr($sales_targets_values);
-                    @end@php
+                    @endphp
                     @php $total_new_items_targets = array_sum($total_monthly_targets['new']);@endphp
 
                         @foreach ($sales_targets_values as $base_vame => $target)

@@ -139,10 +139,10 @@
         @slot('table_body')
 
         @php $id =1 ;@endphp
-        @@php
+        @php
         sortReportForTotals($report_data)
 
-        @end@php
+        @endphp
         @foreach ($report_data as $sales_channel_name => $sales_channel_channels_data)
 
         @php $chart_data = [];@endphp
@@ -168,9 +168,9 @@
             @endforeach
             <td class="text-center white-text">{{number_format(array_sum($total_per_sales_channel??[]),0)}}</td>
         </tr>
-        @@php
+        @php
         sortSubItems($sales_channel_channels_data,$type)
-        @end@php
+        @endphp
 
         @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 

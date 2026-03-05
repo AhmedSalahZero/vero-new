@@ -141,9 +141,9 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-				@@php
+				@php
 					$totalSales = array_sum($salesReportForInterval) ;
-				@end@php
+				@endphp
 					<tr>
 						<td>{{ __('Value') }}</td>
 						@foreach($salesReportForInterval as $date => $value)
@@ -187,7 +187,7 @@
 							
 							   @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForSalesChannel[$sales_channel_name] = ($totalForSingleSalesChannel = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForSalesChannel[$sales_channel_name] = ($totalForSingleSalesChannel = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleSalesChannel) }}
                         </td>
                         @endif
@@ -205,22 +205,22 @@
 							
                         @endforeach
                     </tr>
-					@@php
+					@php
 						$totalCurrentValue = 0;
-					@end@php
+					@endphp
 					<tr>
                         <th>{{ __('Percentage From Revenues') }}</th>
-						@@php
+						@php
 							$dateIndex=  0 ;
-						@end@php
+						@endphp
                         @foreach ($dates as $date )
                         <td class="text-center">
-						@@php
+						@php
 							$currentValue = $zoone_data['Sales Values'][$date] ?? 0;
 							$currentSalesValue = array_values($salesReportForInterval)[$dateIndex] ?? 0;
 							$totalCurrentValue += $currentValue;
 							$currentPercentageOfRevenue = $currentValue &&  $currentSalesValue ? number_format($currentValue / $currentSalesValue * 100,2) . ' %' : 0 ; 
-						@end@php
+						@endphp
                             {{ $currentPercentageOfRevenue }}</td>
 							@if($loop->last)
 							<td class="text-center">
@@ -311,9 +311,9 @@
                     <tr>
                         <th>{{ __('Percent %') }}</th>
                         @foreach ($dates as $date)
-						@@php
+						@php
 							$currentTotal = $mainItemTotals[$date] ?? 0 ;
-						@end@php
+						@endphp
                         @php
                                         $percentage = $currentTotal == 0 ? 0 : number_format((($zoone_data['Sales Values'][$date] ?? 0) / ($currentTotal ?? 0) *100), 2);
                                         $chart_data[$date][$sales_channel_name] = [$sales_channel_name . ' %' => $percentage, ];

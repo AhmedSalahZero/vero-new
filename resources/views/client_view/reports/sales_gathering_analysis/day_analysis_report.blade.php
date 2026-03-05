@@ -91,9 +91,9 @@
                     @slot('table_body')
 
                     @php $id =1 ;@endphp
-                    @@php
+                    @php
                     sortReportForTotals($report_data);
-                    @end@php
+                    @endphp
                     @foreach ($report_data as $day_name => $day_channels_data)
                     @php $chart_data = [];@endphp
                     @if ($day_name != 'Total' && $day_name != 'Growth Rate %')
@@ -121,9 +121,9 @@
                         <td class="text-center white-text">{{number_format(array_sum($total_per_day??[]),0)}}</td>
                     </tr>
 
-                    @@php
+                    @php
                     sortSubItems($day_channels_data);
-                    @end@php
+                    @endphp
                     @foreach ($day_channels_data as $channel_name => $channel_section)
 
                     <tr class="row{{ $id }}  text-center" style="display: none">

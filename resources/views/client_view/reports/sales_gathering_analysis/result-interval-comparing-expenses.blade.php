@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@@php
+@php
 	use App\Helpers\HArr;
-@end@php
+@endphp
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
@@ -89,10 +89,10 @@
 
             </div>
             <div class="kt-portlet__body">
-			@@php
+			@php
 				$currentSalesValue = $salesToDateForIntervals[$name] ?? 0 ;
 			
-			@end@php
+			@endphp
 
                 <!--begin: Datatable -->
 			<h2 class="text-green pl-4"> {{ __('Sales Revenues') }} : {{ number_format($currentSalesValue) }}</h2>
@@ -122,14 +122,14 @@
                         <th>{{$item['item']?? '-'}}</th>
                         <td class="text-center">{{number_format($item['Sales Value']??0)}}</td>
                         <td class="text-center">{{$total == 0 ? 0 : number_format((($item['Sales Value']/$total)*100) , 1) . ' %'}}</td>
-						@@php
+						@php
 							$currentItemValue = $item['Sales Value'] ?? 0 ;
 							
-						@end@php
+						@endphp
 						@if($name == $latestReport)
-						@@php
+						@php
 							$otherIntervalCurrentValue = $latestReport == '_two' ? HArr::searchForCorrespondingItem($result_for_interval_one,$item['item']) :HArr::searchForCorrespondingItem($result_for_interval_two,$item['item']); 
-						@end@php
+						@endphp
                         <td class="text-center">{{$otherIntervalCurrentValue ? number_format(($currentItemValue /$otherIntervalCurrentValue  -1) *100,2) .' %' : 0 }}</td>
 						@endif
 						<td>{{ $currentSalesValue ? number_format($currentItemValue / $currentSalesValue* 100,2) . ' %' : '-'  }}</td>
@@ -141,12 +141,12 @@
                         <td class="hidden"></td>
                         <td>{{number_format($total)}}</td>
                         <td>100 %</td>
-						@@php
+						@php
 							
 						$currentTotal = 0 ;
-						@end@php
+						@endphp
 						@if($name == $latestReport)
-						@@php
+						@php
 							$totalForOne = array_sum(array_column($result_for_interval_one,'Sales Value')) ;
 							$totalForTwo = array_sum(array_column($result_for_interval_two,'Sales Value')) ;
 						if($latestReport == '_two'){
@@ -156,7 +156,7 @@
 						
 							$currentTotal =  $totalForTwo ? ($totalForOne /$totalForTwo - 1) * 100 : 0 ;
 						}		
-						@end@php
+						@endphp
                         <td>{{ number_format($currentTotal,2) . ' %' }}</td>
 						@endif
 						    <td>

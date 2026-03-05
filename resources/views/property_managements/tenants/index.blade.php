@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
-@@php
+@php
 use App\Helpers\HArr;
 use App\Models\PropertyManagement\ExpenseName;
 use App\Models\PropertyManagement\Tenant;
-@end@php
+@endphp
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
@@ -112,13 +112,13 @@ i.exclude-icon{
                                 </th>
 
                             </tr>
-                            @@php
+                            @php
                             $id = 0 ;
-                            @end@php
+                            @endphp
                             @foreach($tenants as $tenant)
-                            @@php
+                            @php
                             $tenant =$tenant ;
-                            @end@php
+                            @endphp
                             <tr class="group-color main-row-tr">
                                 <td class="black-text " style="cursor: pointer;" onclick="toggleRow('{{ $tenant->id }}')">
                                     <div class="d-flex align-items-center ">

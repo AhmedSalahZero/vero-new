@@ -43,10 +43,10 @@ class ExpenseAsPercentageOfPropertyEquation
                 $formattedResult[$monthIndex] = isset($formattedResult[$monthIndex]) ? $formattedResult[$monthIndex] + $val : $val;
             }
         }
-		 PropertyContractFullRentRenewal::getFullRentCoveragesAmounts($study, $columnName, $formattedResult);
-		 PropertyContractPartialRentRenewal::getPartialRentCoveragesAmounts($study, $columnName, $formattedResult);
-		 PropertyToBeDelivered::getToBeDeliveredCoveragesAmounts($study, $columnName, $formattedResult);
-		 ForecastedProperty::getForecastedPropertiesCoveragesAmounts($study, $columnName, $formattedResult);
+		 PropertyContractFullRentRenewal::getFullRentCoveragesAmounts($study);
+		 PropertyContractPartialRentRenewal::getPartialRentCoveragesAmounts($study);
+		 PropertyToBeDelivered::getToBeDeliveredCoveragesAmounts($study);
+		 ForecastedProperty::getForecastedPropertiesCoveragesAmounts($study);
   
         foreach ($formattedResult as $monthIndex => $val) {
             $valBeforeRate = $monthlyRate / 100 * $val ;

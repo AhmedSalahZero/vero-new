@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Helpers\HHelpers;
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\IShareable;
@@ -24,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperQuickPricingCalculator
  */
-class QuickPricingCalculator extends Model implements IBaseModel, IHaveAllRelations, IExportable, IShareable
+class QuickPricingCalculator extends Model implements  IHaveAllRelations, IExportable, IShareable
 {
     use   QuickPricingCalculatorAccessor;
     use QuickPricingCalculatorMutator ;
@@ -88,10 +87,10 @@ class QuickPricingCalculator extends Model implements IBaseModel, IHaveAllRelati
             'storeRoute' => route('admin.store.quick.pricing.calculator', $currentCompanyId),
             'hasChildRows' => true,
             'pageTitle' => QuickPricingCalculator::getPageTitle(),
-            'revenueBusinessLines' => App(RevenueBusinessLineRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceCategories' => App(ServiceCategoryRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceItems' => App(ServiceItemRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceNatures' => App(ServiceNatureRepository::class)->allFormattedForSelect($currentCompanyId),
+            'revenueBusinessLines' => App(RevenueBusinessLineRepository::class)->allFormattedForSelect(),
+            'serviceCategories' => App(ServiceCategoryRepository::class)->allFormattedForSelect(),
+            'serviceItems' => App(ServiceItemRepository::class)->allFormattedForSelect(),
+            'serviceNatures' => App(ServiceNatureRepository::class)->allFormattedForSelect(),
             'pricingPlans' => PricingPlan::allFormattedForSelect($currentCompanyId),
             'directManpowerExpensePositions' => App(PositionRepository::class)->allFormattedForSelect('direct-manpower-expense'),
             'freelancerExpensePositions' => App(PositionRepository::class)->allFormattedForSelect('freelancer-expenses'),
@@ -99,7 +98,7 @@ class QuickPricingCalculator extends Model implements IBaseModel, IHaveAllRelati
             'otherDirectOperationsExpenses' => PricingExpense::allFormattedForSelect('other-direct-operations-expense', $currentCompanyId),
             'salesAndMarketExpenses' => PricingExpense::allFormattedForSelect('sales-and-market-expense', $currentCompanyId),
             'generalExpenses' => PricingExpense::allFormattedForSelect('general-and-administrative-expense', $currentCompanyId),
-            'currencies' => App(CurrencyRepository::class)->allFormattedForSelect($currentCompanyId),
+            'currencies' => App(CurrencyRepository::class)->allFormattedForSelect(),
             'redirectAfterSubmitRoute' => route('admin.view.quick.pricing.calculator', ['company' => $currentCompanyId, 'active' => 'quick-price-calculator']),
             'type' => 'create',
 			'customers'=>HHelpers::formatForSelect2(Partner::where('company_id',$currentCompanyId)->onlyCustomers()->pluck('name','id')->toArray())

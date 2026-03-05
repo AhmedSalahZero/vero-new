@@ -1029,11 +1029,11 @@ $months = $study->getMicrofinanceMonths() ;
 
                                     <input type="hidden" name="id" value="{{ isset($subModel) ? $subModel->id : 0 }}">
                                     <td>
-                                        <x-form.select :selectedValue="isset($subModel) ? $subModel->getExpenseCategory() : 'cash'" :options="\App\Helpers\HNonBanking::getBranchExpenseCategoriesForSelect2()" :add-new="false" class="select2-select repeater-select expense_category " :all="false" name="@if($isRepeater) expense_category @else {{ $tableId }}[0][expense_category] @endif"></x-form.select>
+                                        <x-form.select :selectedValue="isset($subModel) ? $subModel->getExpenseCategory() : 'cash'" :options="\App\Helpers\HNonBanking::getBranchExpenseCategoriesForSelect2()" :add-new="false" class="select2-select repeater-select expense_category " :all="false" name="{{ $isRepeater ? 'expense_category' : $tableId . '[0][expense_category]' }}"></x-form.select>
                                     </td>
 
                                     <td>
-                                        <x-form.select data-current-selected="{{ isset($subModel) ? $subModel->getExpenseNameId() : '' }}" :selectedValue="isset($subModel) ? $subModel->getExpenseNameId() : ''" :options="[]" :add-new="false" class="select2-select repeater-select expense_name_id " :all="false" name="@if($isRepeater) expense_name_id @else {{ $tableId }}[0][expense_name_id] @endif"></x-form.select>
+                                        <x-form.select data-current-selected="{{ isset($subModel) ? $subModel->getExpenseNameId() : '' }}" :selectedValue="isset($subModel) ? $subModel->getExpenseNameId() : ''" :options="[]" :add-new="false" class="select2-select repeater-select expense_name_id " :all="false" name="{{ $isRepeater ? 'expense_name_id' : $tableId . '[0][expense_name_id]' }}"></x-form.select>
                                     </td>
 
                                     <td>
@@ -1060,7 +1060,7 @@ $months = $study->getMicrofinanceMonths() ;
                                     </td>
                                     <td>
                                         <div class="max-w-150">
-                                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select  " :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
+                                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select  " :all="false" name="{{ $isRepeater ? 'payment_terms' : $tableId . '[0][payment_terms]' }}"></x-form.select>
                                             <x-modal.custom-collection :size="'sm'" :title="__('Payment Terms')" :subModel="isset($subModel) ? $subModel : null " :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 
                                         </div>

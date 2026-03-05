@@ -259,9 +259,9 @@
                         {{ __('Actions') }}
                     </td>
                 </tr>
-                @@php
+                @php
                 $id = 0 ;
-                @end@php
+                @endphp
                 @foreach($items as $mainItemId => $mainItemData )
 
                 <tr class="group-color main-row-tr">

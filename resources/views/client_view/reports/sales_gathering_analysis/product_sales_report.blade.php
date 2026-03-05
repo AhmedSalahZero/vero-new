@@ -157,7 +157,7 @@
 
                         @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForBranch[$zone_name] = ($totalForSingleBranch = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForBranch[$zone_name] = ($totalForSingleBranch = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleBranch) }}
                         </td>
                         @endif
@@ -188,9 +188,9 @@
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL') }}</th>
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotal = $total_branches[$date] ?? 0 ; 
-						@end@php
+						@endphp
                         <td class="text-center active-style">{{ number_format($currentTotal ?? 0) }}</td>
                         @php $sumOfTotalsOfBranchSales += $currentTotal @endphp
 
@@ -208,9 +208,9 @@
                         @php $chart_data = []; @endphp
 
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentGrowthTotal = $total_branches_growth_rates[$date] ?? 0 ;
-						@end@php
+						@endphp
 						
                         @php
                                     $chart_data[] = [
@@ -275,9 +275,9 @@
                     <tr>
                         <th>{{ __('Percent %') }}</th>
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotal = $total_branches[$date] ??0;
-						@end@php
+						@endphp
                         @php
                                         $percentage = $currentTotal == 0 ? 0 : number_format((($zoone_data['Sales Values'][$date] ?? 0) / ($currentTotal ?? 0)*100), 2);
                                         $chart_data[$date][$zone_name] = [$zone_name . ' %' => $percentage, ];
@@ -314,9 +314,9 @@
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL %') }}</th>
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotal = $total_branches[$date] ?? 0 ;
-						@end@php
+						@endphp
                         <td class="text-center active-style"> {{ $sumOfTotalsOfBranchSales && $currentTotal ? number_format(   ($currentTotal / $sumOfTotalsOfBranchSales)*100  ,  2) : 0 }} % </td>
 
                         @if($loop->last)

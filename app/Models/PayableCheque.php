@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * * دا الشيك اللي بدفعه للموردين
@@ -25,11 +26,11 @@ class PayableCheque extends Model
 	const PAID = 'paid';
 		 
     protected $guarded = ['id'];
-	public function moneyPayment()
+	public function moneyPayment():BelongsTo
 	{
 		return $this->belongsTo(MoneyPayment::class,'money_payment_id');
 	}
-	public function cashExpenses()
+	public function cashExpenses():BelongsTo
 	{
 		return $this->belongsTo(CashExpense::class,'cash_expense_id');
 	}
@@ -51,7 +52,7 @@ class PayableCheque extends Model
 	{
 		return $this->delivery_date ; 
 	}
-	public function getDeliveryDateFormatted()
+	public function getDeliveryDateFormatted():string|null
 	{
 		$deliveryDate = $this->getDeliveryDate();
 		return $deliveryDate ? Carbon::make($deliveryDate)->format('d-m-Y'): null ;
@@ -75,17 +76,17 @@ class PayableCheque extends Model
 	/**
 	 * * هو البنك اللي انا باخد الشيك واسحبة منة وبالتالي لازم يكون من بنوكي
 	 */
-	public function deliveryBank()
+	public function deliveryBank():BelongsTo
 	{
 		return $this->belongsTo(FinancialInstitution::class , 'delivery_bank_id','id');
 	}
-	public function getDeliveryBankId()
+	public function getDeliveryBankId():int
 	{
 		$bank = $this->deliveryBank ;
 		return $bank  ? $bank->id : 0 ;
 	}
 	
-	public function getDeliveryBankName()
+	public function getDeliveryBankName():string
 	{
 		$deliveryBank = $this->deliveryBank ;
 		return $deliveryBank  ? $deliveryBank->getName() :__('N/A') ;

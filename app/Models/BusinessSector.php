@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Models\Traits\Accessors\BusinessSectorAccessor;
 use App\Models\Traits\Mutators\BusinessSectorMutator;
 use App\Models\Traits\Relations\BusinessSectorRelation;
@@ -15,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @mixin IdeHelperBusinessSector
  */
-class BusinessSector extends Model  implements IBaseModel
+class BusinessSector extends Model  
 {
     use BusinessSectorRelation ,BusinessSectorAccessor  , BusinessSectorMutator , CompanyScope,HasCompany;
 

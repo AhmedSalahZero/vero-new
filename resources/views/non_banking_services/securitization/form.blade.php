@@ -90,7 +90,7 @@ use App\Models\NonBankingService\Securitization;
 
                                             <input type="hidden" name="id" value="{{ isset($subModel) ? $subModel->id : 0 }}">
                                             <td>
-                                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : ''" :options="$revenueStreamTypes" :add-new="false" class="select2-select repeater-select  " :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
+                                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : ''" :options="$revenueStreamTypes" :add-new="false" class="select2-select repeater-select  " :all="false" name="{{ $isRepeater ? 'revenue_stream_type' : $tableId . '[0][revenue_stream_type]' }}"></x-form.select>
                                             </td>
 
 

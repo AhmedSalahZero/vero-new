@@ -102,7 +102,7 @@ class CertificatesOfDeposit extends Model
 	/**
 	 * * لما يتم تاكيد العمليه وقتها الفلوس الخاصة بالوديعه دي هتنزل علي انهي حساب ؟
 	 */
-	public function getMaturityAmountAddedToAccountId():int
+	public function getMaturityAmountAddedToAccountId():?int
 	{
 		return $this->maturity_amount_added_to_account_id ;
 	}

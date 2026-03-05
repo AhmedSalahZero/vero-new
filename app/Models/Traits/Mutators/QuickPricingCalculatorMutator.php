@@ -1,15 +1,9 @@
 <?php
 namespace App\Models\Traits\Mutators ;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Models\DirectManpowerExpense;
 use App\Models\FreelancerExpense;
-use App\Models\GeneralExpense;
-use App\Models\OtherDirectOperationExpense;
-use App\Models\OtherVariableManpowerExpense;
-use App\Models\Position;
-use App\Models\QuickPricingCalculator;
-use App\Models\SalesAndMarketingExpense;
+
 use Illuminate\Http\Request;
 
 trait QuickPricingCalculatorMutator
@@ -17,7 +11,7 @@ trait QuickPricingCalculatorMutator
 
     
    
-    public function storeOfferedServiceSectionWithResult(Request $request):IBaseModel  
+    public function storeOfferedServiceSectionWithResult(Request $request)  
     {
         
         foreach(

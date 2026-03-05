@@ -57,11 +57,11 @@
                                 </div>
                             </td>
                             <td>
-                                <x-form.select :pleaseSelect="true" :selectedValue="isset($currentContract) && $currentContract->client ? $currentContract->client->id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class="select2-select suppliers-or-customers-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="@if($isRepeater) partner_id @else {{ $tableId }}[0][partner_id] @endif"></x-form.select>
+                                <x-form.select :pleaseSelect="true" :selectedValue="isset($currentContract) && $currentContract->client ? $currentContract->client->id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class="select2-select suppliers-or-customers-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="{{ $isRepeater ? 'partner_id' : $tableId . '[0][partner_id]' }}"></x-form.select>
                             </td>
 
                             <td>
-                                <x-form.select :pleaseSelect="true" data-current-selected="{{ isset($currentContract) ? $currentContract->id : '' }}" :selectedValue="isset($currentContract) ? $currentContract->id : ''" :options="[]" :add-new="false" class="select2-select  contracts-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="@if($isRepeater) contract_id @else {{ $tableId }}[0][contract_id] @endif"></x-form.select>
+                                <x-form.select :pleaseSelect="true" data-current-selected="{{ isset($currentContract) ? $currentContract->id : '' }}" :selectedValue="isset($currentContract) ? $currentContract->id : ''" :options="[]" :add-new="false" class="select2-select  contracts-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="{{ $isRepeater ? 'contract_id' : $tableId . '[0][contract_id]' }}"></x-form.select>
                             </td>
 
                             <td>

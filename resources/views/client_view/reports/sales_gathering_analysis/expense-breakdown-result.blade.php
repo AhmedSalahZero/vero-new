@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@@php
+@php
 	use App\Helpers\HArr;
-@end@php
+@endphp
 @section('css')
 <style>
 .max-id-width{
@@ -88,9 +88,9 @@
                              <tr>
                                  <th class="max-id-width">{{$key+1}}</th>
                                 <th>{{$item['item']?? '-'}}</th>
-								@@php
+								@php
 									$currentValue = $item['Sales Value']??0 ;
-								@end@php
+								@endphp
                                 <td class="text-center">{{number_format($currentValue)}}</td>
                                 <td class="text-center">{{$total == 0 ? 0 : number_format((($item['Sales Value']/$total)*100) , 1) . ' %'}}</td>
 								<td>{{ $salesToDate ? number_format($currentValue / $salesToDate* 100,2) . ' %' : '-'  }}</td>
@@ -113,10 +113,10 @@
                 </div>
             </div>
         </div>
-		@@php
+		@php
 			$report_view_data_formatted = HArr::numberFormatTwoDimArrBasedOnKey($report_view_data,'Sales Value');
 
-		@end@php
+		@endphp
         <input type="hidden" id="total" data-total="{{ json_encode($report_view_data_formatted) }}">
     </div>
 @endsection

@@ -9,6 +9,7 @@ use App\Traits\Models\HasCreditStatements;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasNonCustomerOrSupplier;
 use App\Traits\Models\HasPartnerStatement;
+use App\Traits\Models\IsMoneyOut;
 use App\Traits\Models\HasReviewedBy;
 use App\Traits\Models\HasUserComment;
 use App\Traits\Models\IsMoney;
@@ -30,7 +31,7 @@ class MoneyPayment extends Model
     protected $with = [
         // 'payableCheque'
     ];
-    use IsMoney ,HasForeignExchangeGainOrLoss,HasCreditStatements,HasPartnerStatement,HasReviewedBy , HasUserComment,HasNonCustomerOrSupplier;
+    use IsMoney ,IsMoneyOut,HasForeignExchangeGainOrLoss,HasCreditStatements,HasPartnerStatement,HasReviewedBy , HasUserComment,HasNonCustomerOrSupplier;
     const CASH_PAYMENT  = 'cash_payment';
     const PAYABLE_CHEQUE  = 'payable_cheque';
     const OUTGOING_TRANSFER  = 'outgoing-transfer';
@@ -987,5 +988,7 @@ class MoneyPayment extends Model
 	{
 		return $this->payableCheque && $this->payableCheque->isPaid();
 	}
+	
+	
 	
 }

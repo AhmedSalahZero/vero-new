@@ -172,10 +172,10 @@
             {{ number_format($growth_rate_per_zone[$date] ?? 0) . ' %'}}</td>
         @endforeach
         </tr> --}}
-        @@php
+        @php
         sortSubItems($data);
 
-        @end@php
+        @endphp
 
         @foreach ($data as $channel_name => $channel_section)
 

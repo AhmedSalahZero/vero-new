@@ -187,7 +187,15 @@ class TwodimensionalSalesBreakdownAgainstAnalysisReport
             $type = 'day_name';
             $view_name = 'Product / Services Versus Day Name Sales' ;
         }
-        return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_form', compact('company', 'view_name','type','main_type'));
+		if(!isset($view_name) || !isset($type) || !isset($main_type)){
+			throw new \Exception('View name, type or main type is not set Please Add It Additional else if statement to define them');
+		}
+        return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_form', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+			'main_type' => $main_type,
+		]);
     }
 	public function getBundlingData(Request $request  ,Company $company,$main_type)
 	{

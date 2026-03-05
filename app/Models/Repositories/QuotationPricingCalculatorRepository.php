@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\QuotationPricingCalculator;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,47 +11,7 @@ use Illuminate\Http\Request;
 class QuotationPricingCalculatorRepository  
 {
     
-    // public function all():Collection
-    // {
-    //     return QuotationPricingCalculator::withAllRelations()->onlyCurrentCompany()->get();
-    // }
-
-    // public function allFormatted():array
-    // {
-    //     return QuotationPricingCalculator::onlyCurrentCompany()->pluck('name','id')->toArray();
-    // }
-    // public function allFormattedForSelect()
-    // {
-    //     $quotationPricingCalculators = $this->all();
-    //     return formatOptionsForSelect($quotationPricingCalculators , 'getId' , 'getName');
-    // }
-  
-    //  public function getAllExcept($id):?Collection
-    // {
-    //     return QuotationPricingCalculator::onlyCurrentCompany()->where('id','!=',$id)->get();
-    // }
-
-    // public function query():Builder
-    // {
-    //     return QuotationPricingCalculator::onlyCurrentCompany()->query();
-
-    // }
-    // public function Random():Builder
-    // {
-    //     return QuotationPricingCalculator::onlyCurrentCompany()->inRandomOrder();
-    // }
-
-    // public function find(?int $id):IBaseModel
-    // {
-    //     return QuotationPricingCalculator::onlyCurrentCompany()->find($id);
-    // }
-
-    // public function getLatest($column = 'id'):?QuotationPricingCalculator
-    // {
-    //     return QuotationPricingCalculator::onlyCurrentCompany()->latest($column)->first();
-
-    // }
-     public function store(Request $request ):IBaseModel
+     public function store(Request $request )
     {
         $quotationPricingCalculator = App(QuotationPricingCalculator::class);
          $quotationPricingCalculator
@@ -69,7 +28,7 @@ class QuotationPricingCalculatorRepository
          return $quotationPricingCalculator ; 
     }
     
-    public function update( IBaseModel $quotationPricingCalculator , Request $request ):void
+    public function update(  $quotationPricingCalculator , Request $request ):void
     {
         $quotationPricingCalculator
         ->updateOfferedServiceSectionWithResult($request)

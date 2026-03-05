@@ -110,9 +110,9 @@
                     <tr>
                         <td><b>{{ __('Collection') }}</b></td>
                         @foreach ($dates as $date )
-                        @@php
+                        @php
                         $numericDate = \Carbon\Carbon::make($date)->format('d-m-Y');
-                        @end@php
+                        @endphp
 
                         <td class="text-center"> {{ number_format($collection[$numericDate] ?? 0) }}
                         </td>
@@ -151,14 +151,14 @@
                     @foreach ($collection as $base_name => $base_collection)
                     <tr>
                         <td> <b> {{ $base_name }} </b></td>
-                        @@php
+                        @php
                         $totalForThisRow = 0 ;
-                        @end@php
+                        @endphp
                         @foreach ($dates as $date )
-                        @@php
+                        @php
                         $numericDate = \Carbon\Carbon::make($date)->format('d-m-Y');
                         $totalForThisRow += $base_collection[$numericDate]??0 ;
-                        @end@php
+                        @endphp
                         @php $total[$numericDate] = ($base_collection[$numericDate] ?? 0) + ($total[$numericDate] ?? 0); @endphp
                         <td class="text-center"> {{ number_format($base_collection[$numericDate] ?? 0) }}
                         </td>
@@ -171,9 +171,9 @@
                         <td class="active-style"> <b> {{ __('Total') }} </b></td>
                         @foreach ($dates as $date )
 
-                        @@php
+                        @php
                         $numericDate = \Carbon\Carbon::make($date)->format('d-m-Y');
-                        @end@php
+                        @endphp
 
                         <td class="active-style">{{ number_format($total[$numericDate] ?? 0) }}</td>
                         @php
@@ -214,21 +214,21 @@
 
 
                     @foreach ($collection as $base_name => $base_collection)
-                    @@php
+                    @php
                     $currentAccumlation = 0 ;
-                    @end@php
+                    @endphp
 
 
 
                     <tr>
                         <td> <b> {{ $base_name }} </b></td>
                         @foreach ($dates as $date )
-                        @@php
+                        @php
                         $numericDate = \Carbon\Carbon::make($date)->format('d-m-Y');
-                        @end@php
-                        @@php
+                        @endphp
+                        @php
                         $currentAccumlation += $base_collection[$numericDate] ?? 0 ;
-                        @end@php
+                        @endphp
                         <td class="text-center"> {{ number_format($currentAccumlation) }}
                         </td>
                         @endforeach

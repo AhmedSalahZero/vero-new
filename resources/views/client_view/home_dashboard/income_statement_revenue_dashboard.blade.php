@@ -15,11 +15,11 @@
 @endsection
 
 @section('content')
-@@php
+@php
 // $dates = [ ];
 // $report_data = []
 
-@end@php
+@endphp
 <div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
@@ -298,12 +298,12 @@
     </div>
 </div>
 
-{{-- @@php 
+{{-- @php 
     $dates = $salesReport['dates'];
     $report_data = $salesReport['report_data'];
     $gr = $salesReport['gr'];
     $last_date = $salesReport['last_date'];
-  @end@php --}}
+  @endphp --}}
 <div class="row">
     <div class="col-md-12">
         <div class="kt-portlet ">
@@ -334,7 +334,7 @@
                             <x-table :fixedColumns=[] :tableClass="'kt_table_with_no_pagination_no_search'">
 
                                 @slot('table_header')
-                                @@php $tableHeader = $monthlyChartArr[array_key_first($monthlyChartArr)] ?? [] @end@php
+                                @php $tableHeader = $monthlyChartArr[array_key_first($monthlyChartArr)] ?? [] @endphp
                                 <tr class="table-active text-center">
                                     <th>{{ __('Sales Value / Month') }}</th>
                                     @foreach($tableHeader as $key => $date)
@@ -345,7 +345,7 @@
                                     @endforeach
                                 </tr>
                                 @endslot
-                                @@php array_shift($monthlyChartArr) @end@php
+                                @php array_shift($monthlyChartArr) @endphp
                                 @slot('table_body')
                                 @foreach ($monthlyChartArr as $title => $values)
                                 @if(isset($values) && is_null($values[0]))
@@ -406,13 +406,13 @@
                                 @endforeach
                                 <td class="hidden"> </td>
                             </tr>
-                            @@php $chart_data = []; @end@php
+                            @php $chart_data = []; @endphp
 
                             @foreach ($report_data as $label => $data)
 
                             <tr>
                                 <th>{{ __($label) }}</th>
-                                @@php $num_of_decimals = $label == 'Month Sales %' ? 1 : 0; @end@php
+                                @php $num_of_decimals = $label == 'Month Sales %' ? 1 : 0; @endphp
                                 @foreach ($dates as $date)
 
                                 <td>{{ number_format($data[$date] ?? 0, $num_of_decimals) . ($label == 'Month Sales %' ? ' %' : '') }}
@@ -438,9 +438,9 @@
 
                             <tr>
                                 <th>{{ __('Sales Values') }}</th>
-                                @@php $accumulated_total = 0; @end@php
+                                @php $accumulated_total = 0; @endphp
                                 @foreach ($dates as $date)
-                                @@php
+                                @php
 
                                 $accumulated_total += $report_data['Sales Values'][$date] ?? 0;
                                 $chart_data[] = [
@@ -453,7 +453,7 @@
                                 'date' => date('d-M-Y', strtotime($date)),
                                 'price' => number_format($accumulated_total, 0),
                                 ];
-                                @end@php
+                                @endphp
 
                                 <td>{{ number_format($accumulated_total) }}</td>
                                 @endforeach

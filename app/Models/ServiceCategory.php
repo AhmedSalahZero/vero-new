@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IHaveCompany;
 use App\Interfaces\Models\IHaveCreator;
 use App\Models\Traits\Accessors\ServiceCategoryAccessor;
@@ -42,7 +41,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @mixin IdeHelperServiceCategory
  */
-class ServiceCategory extends Model implements IHaveCompany,IHaveCreator,IBaseModel
+class ServiceCategory extends Model implements IHaveCompany,IHaveCreator
 { 
     use  ServiceCategoryAccessor,ServiceCategoryMutator , ServiceCategoryRelation, CompanyScope    ;
     protected $guarded = [

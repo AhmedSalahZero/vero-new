@@ -278,7 +278,13 @@ class ProductsAgainstAnalysisReport
             $main_type = 'product_or_service';
             $type = 'product_or_service';
             $view_name = 'Bundled Product / Services' ;
-        return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_form', compact('company', 'view_name','type','main_type'));
+	
+        return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_form', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+			'main_type' => $main_type,
+		]);
 	}
 	public function resultForSalesDiscount(Request $request, Company $company)
 	{

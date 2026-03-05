@@ -3,7 +3,6 @@
 namespace App\Models\Repositories;
 
 use App\Helpers\HArr;
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\IncomeStatement;
 use App\Models\IncomeStatementItem;
@@ -43,7 +42,7 @@ class IncomeStatementRepository implements IBaseRepository
 		return IncomeStatement::onlyCurrentCompany()->inRandomOrder();
 	}
 
-	public function find(?int $id): IBaseModel
+	public function find(?int $id)
 	{
 		return IncomeStatement::onlyCurrentCompany()->find($id);
 	}
@@ -52,7 +51,7 @@ class IncomeStatementRepository implements IBaseRepository
 	{
 		return IncomeStatement::onlyCurrentCompany()->latest($column)->first();
 	}
-	public function store(Request $request): IBaseModel
+	public function store(Request $request)
 	{
 		/**
 		 * @var IncomeStatement $incomeStatement
@@ -63,7 +62,7 @@ class IncomeStatementRepository implements IBaseRepository
 		return $incomeStatement;
 	}
 
-	public function storeReport(Request $request): IBaseModel
+	public function storeReport(Request $request)
 	{
 	
 		$incomeStatement = new IncomeStatement();
@@ -72,7 +71,7 @@ class IncomeStatementRepository implements IBaseRepository
 		return $incomeStatement;
 	}
 
-	public function update(IBaseModel $incomeStatement, Request $request): void
+	public function update( $incomeStatement, Request $request): void
 	{
 		// $incomeStatement
 		// 	->updateProfitability($request);

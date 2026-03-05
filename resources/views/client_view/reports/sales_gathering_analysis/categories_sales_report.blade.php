@@ -112,7 +112,7 @@
 							
 							 @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForCategory[$category_name] = ($totalForSingleCategory = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForCategory[$category_name] = ($totalForSingleCategory = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleCategory) }}
                         </td>
                         @endif
@@ -207,9 +207,9 @@
                     <tr>
                         <th>{{ __('Percent %') }}</th>
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotal = $total_categories[$date] ?? 0;
-						@end@php
+						@endphp
                         @php
                                         $percentage = $currentTotal == 0 ? 0 : number_format((($zoone_data['Sales Values'][$date] ?? 0) / ($currentTotal ?? 0)*100), 2);
                                         $chart_data[$date][$category_name] = [$category_name . ' %' => $percentage, ];

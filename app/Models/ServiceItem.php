@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IHaveCompany;
 use App\Interfaces\Models\IHaveCreator;
 use App\Models\Traits\Accessors\ServiceItemAccessor;
@@ -38,7 +37,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @mixin IdeHelperServiceItem
  */
-class ServiceItem extends Model implements IHaveCompany,IHaveCreator,IBaseModel
+class ServiceItem extends Model implements IHaveCompany,IHaveCreator
 { 
     use  ServiceItemAccessor,ServiceItemMutator , ServiceItemRelation , CompanyScope    ;
     protected $guarded = [

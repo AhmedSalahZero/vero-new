@@ -78,10 +78,7 @@ class TestNonBankingBalanceSheet extends Command
         $this->error('❌ Authentication failed: Invalid credentials or Odoo not reachable.');
         return Command::FAILURE;
 	
-	$this->info('✅ Connected successfully!');
-  
 
-    return Command::SUCCESS;
 		
 	}
 

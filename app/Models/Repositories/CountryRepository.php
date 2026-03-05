@@ -3,7 +3,6 @@
 namespace App\Models\Repositories;
 
 use App\Interfaces\Excel\Exportable;
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IHaveCountriesModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\Country;
@@ -62,7 +61,7 @@ class CountryRepository implements IBaseRepository
     // {
     //     $iHaveCountriesModel->countries()->detach();
     // }
-    public function update( IBaseModel $country , Request $request ):void
+    public function update(  $country , Request $request ):void
     {
         $country->update($request->except('_token'));
     }

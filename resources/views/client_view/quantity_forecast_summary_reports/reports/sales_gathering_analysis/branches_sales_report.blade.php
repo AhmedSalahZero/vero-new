@@ -170,7 +170,7 @@
 
                         @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForBranch[$zone_name] = ($totalForSingleBranch = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForBranch[$zone_name] = ($totalForSingleBranch = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleBranch) }}
                         </td>
                         @endif

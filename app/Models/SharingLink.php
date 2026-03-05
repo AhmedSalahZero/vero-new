@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveView;
 use App\Models\Traits\Accessors\SharingLinkAccessor;

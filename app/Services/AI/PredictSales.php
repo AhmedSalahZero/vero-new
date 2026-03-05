@@ -14,8 +14,8 @@ class PredictSales
 {
 	public function predictByProphetMethod(Request $request, Company $company,$type,$endDate,array $predictionDates)
 	{
-		$startDate = Carbon::make($endDate)->startOfMonth()->subMonthNoOverflow(36)->format('Y-m-d') ;
-		
+		$startDate = Carbon::make($endDate)->startOfMonth()->subMonthsNoOverflow(36)->format('Y-m-d') ;
+		$result = [];
         $data = [];
         $main_data = SalesGathering::company($request)
                                     ->whereBetween('date', [$startDate, $endDate])
@@ -140,7 +140,7 @@ return $newArray;
 		
         // enhanced in sales dashboard // salah
   
-		$startDate = Carbon::make($endDate)->startOfMonth()->subMonthNoOverflow(36)->format('Y-m-d') ;
+		$startDate = Carbon::make($endDate)->startOfMonth()->subMonthsNoOverflow(36)->format('Y-m-d') ;
 	
         $data = [];
        						 $main_data = SalesGathering::company($request)

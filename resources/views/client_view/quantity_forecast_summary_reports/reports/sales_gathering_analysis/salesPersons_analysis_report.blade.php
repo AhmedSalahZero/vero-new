@@ -152,9 +152,9 @@
 
 
 
-                    @@php
+                    @php
                     sortSubItems($sales_channel_channels_data)
-                    @end@php
+                    @endphp
                     @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 
                     <tr class="row{{ $id }}  text-center" style="display: none">

@@ -112,7 +112,7 @@ class TimeOfDeposit extends Model
     /**
      * * لما يتم تاكيد العمليه وقتها الفلوس الخاصة بالوديعه دي هتنزل علي انهي حساب ؟
      */
-    public function getMaturityAmountAddedToAccountId():int
+    public function getMaturityAmountAddedToAccountId():?int
     {
         return $this->maturity_amount_added_to_account_id ;
     }
@@ -288,10 +288,7 @@ class TimeOfDeposit extends Model
     {
         return $this->getEndDate();
     }
-    public function getDiffBetweenEndDateAndStartDate():int
-    {
-        return Carbon::make($this->getEndDate())->diffInDays(Carbon::make($this->getStartDate()));
-    }
+   
     public function isExpired():bool
     {
         return Carbon::make($this->getEndDate())->lessThanOrEqualTo(now());

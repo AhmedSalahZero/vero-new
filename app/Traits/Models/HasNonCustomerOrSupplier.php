@@ -12,9 +12,7 @@ trait HasNonCustomerOrSupplier
 {
     public function storeNonCustomerOrSupplierOdooExpense(bool $isDownPayment)
     {
-		/**
-		 * @var MoneyReceived|MoneyPayment $this
-		 */
+		
         $company = $this->company ;
         $date = $this->getDate();
         if ($company->hasOdooIntegrationCredentials() && $company->withinIntegrationDate($date)) {

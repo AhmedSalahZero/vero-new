@@ -31,9 +31,8 @@ trait HasDeleteButTriggerChangeOnLastElement
 		
 			if($index == $length-1){
 				$statement->delete();
-			}else{
-			
-				DB::table((new self)->getTable())->where('id',$statement->id)->delete();
+			}elseif(isset($statement->id)){
+					DB::table((new self)->getTable())->where('id',$statement->id)->delete();
 			}
 		});
 		

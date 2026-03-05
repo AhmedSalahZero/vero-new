@@ -12,6 +12,7 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
     use GeneralFunctions;
     public function index(Request $request, Company $company)
     {
+	
         //service_provider_name
         if (request()->route()->named('serviceProviders.vs.businessSectors.view')) {
             $main_type = 'service_provider_name';
@@ -72,9 +73,16 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
             $type = 'service_provider_birth_year';
             $view_name = 'Service Provider Age Range Versus Products / Services' ;
         }
-
-
-        return view('client_view.reports.sales_gathering_analysis.providers_two_dimensional_breakdown.sales_form', compact('company', 'view_name','type','main_type'));
+		if(!isset($view_name) || !isset($type) || !isset($main_type)){
+			throw new \Exception('View name, type or main type is not set Please Add It Additional else if statement to define them');
+		}
+	
+		return view('client_view.reports.sales_gathering_analysis.providers_two_dimensional_breakdown.sales_form', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+			'main_type' => $main_type,
+		]);
     }
     public function result(Request $request, Company $company)
     {

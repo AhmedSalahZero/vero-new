@@ -140,8 +140,17 @@ class InvoicesAgainstAnalysisReport
               ] ;
               
           }
-
-		  return view('client_view.reports.sales_gathering_analysis.invoices_analysis_report',compact('company','view_name','type','secondTypesArray','sumForEachInterval','reportSalesValues'));
+		  if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
+		  return view('client_view.reports.sales_gathering_analysis.invoices_analysis_report',[
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+			'secondTypesArray' => $secondTypesArray,
+			'sumForEachInterval' => $sumForEachInterval,
+			'reportSalesValues' => $reportSalesValues,
+		  ]);
 
 
     }

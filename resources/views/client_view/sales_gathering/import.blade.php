@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('css')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/cr-1.5.6/date-1.1.2/fc-4.1.0/fh-3.2.3/r-2.3.0/rg-1.2.0/sl-1.4.0/sr-1.1.1/datatables.min.css" />
-@@php
+@php
 $redirectUrl = $modelName == 'LabelingItem' ? route('view.uploading',['company'=>getCurrentCompanyId(),'model'=> $modelName ]) : route('dashboard',getCurrentCompanyId()) ;
 if($modelName == 'CustomerInvoice'){
 	$redirectUrl = route('view.balances',['company'=>$company->id,'modelType'=>'CustomerInvoice']);
@@ -18,7 +18,7 @@ elseif($modelName =='ExpenseAnalysis'){
 $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Request('medium_term_loan_id')] : [];
 
 
-@end@php 
+@endphp 
 <style>
 .mx-auto{
 	margin-left:auto;
@@ -112,15 +112,15 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
                             ->where('model_name', 'SalesGatheringTest')
 							->where('model',$modelName)
                             ->first(); @endphp
-                    @@php $active_job_for_saving = App\Models\ActiveJob::where('company_id', $company->id)
+                    @php $active_job_for_saving = App\Models\ActiveJob::where('company_id', $company->id)
                     ->where('status', 'save_to_table')
                     ->where('model_name', 'SalesGatheringTest')
                     ->where('model',$modelName)
-                    ->first(); @end@php
-                    @@php
+                    ->first(); @endphp
+                    @php
                     use Illuminate\Support\Facades\Cache;
                     $canViewPleaseReviewMessage = !hasFailedRow($company->id,$modelName)&&hasCachingCompany($company->id,$modelName) && ! $active_job_for_saving && Cache::get(getShowCompletedTestMessageCacheKey($company->id,$modelName)) && ! (bool)Cache::get(getCanReloadUploadPageCachingForCompany($company->id,$modelName) );
-                    @end@php
+                    @endphp
 					@if($company->hasLastCurrentUploadFileForModel($modelName))
 					<h4>{{ __('Current File Name :') .' ' . $company->getCurrentLastFileNameForModel($modelName) }}</h4>
 					@elseif(hasFailedRow($company->id,$modelName))

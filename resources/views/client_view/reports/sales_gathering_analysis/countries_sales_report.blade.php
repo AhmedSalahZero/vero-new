@@ -108,7 +108,7 @@
 							
 							  @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForCountry[$zone_name] = ($totalForSingleCountry = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForCountry[$zone_name] = ($totalForSingleCountry = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleCountry) }}
                         </td>
                         @endif
@@ -153,10 +153,10 @@
                         <th class="active-style text-center">{{ __('GROWTH RATE %') }}</th>
                         @php $chart_data = []; @endphp
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotalGrowthRate = $total_countries_growth_rates[$date] ?? 0 ;
 							
-						@end@php
+						@endphp
                         @php
                                     $chart_data[] = [
                                         'date' => date('d-M-Y', strtotime($date)),

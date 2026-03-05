@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\Position;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,11 +30,6 @@ class PositionRepository implements IBaseRepository
         $positions = Position::where('company_id',$model->company_id)->where('position_type',$type)->get();
         return formatOptionsForSelect($positions , 'getName' , 'getName');
     }
-     public function getAllExcept($id):?Collection
-    {
-        return Position::where('company_id',getCurrentCompanyId())->where('id','!=',$id)->get();
-    }
-
     public function query():Builder
     {
         return Position::query();
@@ -46,17 +40,12 @@ class PositionRepository implements IBaseRepository
         return Position::where('company_id',getCurrentCompanyId())->inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return Position::find($id);
     }
 
-    public function getLatest($column = 'id'):?Position
-    {
-        return Position::where('company_id',getCurrentCompanyId())->latest($column)->first();
-
-    }
-    public function store(Request $request ):IBaseModel
+    public function store(Request $request )
     {
         
         return Position::create([
@@ -70,7 +59,7 @@ class PositionRepository implements IBaseRepository
 
 
 
-    public function update( IBaseModel $position , Request $request ):void
+    public function update(  $position , Request $request ):void
     {
         $position->update($request->except('_token'));
     }
@@ -128,30 +117,6 @@ class PositionRepository implements IBaseRepository
         ->orderBy(getDefaultOrderBy()['column'],getDefaultOrderBy()['direction']) ;
 
     }
-
-    public function export(Request $request):Collection
-    {
-        return $this->commonScope(
-            $request->replace(
-                [
-                    'format'=>$request->get('format'),
-                    'company_id'=>$request->get('company_id'),
-                ]
-            ))
-            ->select(['id','name_en','company_id','created_at as join_at'])
-            ->get()->each(function($position){
-
-                $position->name_en = $position->getName();
-                $position->company_id = $position->getCompanyId();
-                $position->join_at = formatDateFromString($position->join_at);
-
-            });
-
-
-    }
-
-
-
 
 
 

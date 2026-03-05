@@ -137,7 +137,7 @@ class ExpenseAgainstAnalysisReport
 	);
 
 		$perviousThreeMonthsExpenses = $perviousThreeMonthsExpenses[0]->previous_three_months_expenses ?: 0;
-		$yearOfEndDate = Carbon::make($endDate)->startOfMonth()->subMonth(1)->format('Y') ;
+		$yearOfEndDate = Carbon::make($endDate)->startOfMonth()->subMonths(1)->format('Y') ;
 
 		return view('admin.dashboard.expense',[
 			'startDate'=>$startDate,
@@ -497,7 +497,7 @@ class ExpenseAgainstAnalysisReport
 
 		if ((count($report_data) > 0) && ($type !== 'service_provider_birth_year') && $result !== "withOthers") {
 			$key_num = 0;
-			$report_data =  collect($report_data)->sortByDesc(function ($data, $key) use ($key_num) {
+			$report_data =  collect($report_data)->sortByDesc(function ($data)  {
 				return [($data['Sales Value'])];
 			});
 			$viewing_data = $report_data->toArray();
@@ -737,7 +737,15 @@ class ExpenseAgainstAnalysisReport
 		$firstColumnViewName = $this->formatTitle($type) ;
 		$view_name = $firstColumnViewName . ' ' . __('Interval Comparing');
 		$submitRoute = route('result.interval.comparing.report',['company'=>$company->id]);
-		return view('client_view.reports.sales_gathering_analysis.view-interval-comparing-expenses', compact('company', 'view_name','type','submitRoute'));
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
+		return view('client_view.reports.sales_gathering_analysis.view-interval-comparing-expenses', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+			'submitRoute' => $submitRoute,
+		]);
 	}
 	protected function formatTitle($string)
 {

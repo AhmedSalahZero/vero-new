@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Helpers\HArr;
 use App\Helpers\HVero;
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\Interfaces\IFinancialStatementAble;
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class  IncomeStatement extends Model implements IBaseModel, IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
+class  IncomeStatement extends Model implements  IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
 {
 	use  IncomeStatementAccessor, IncomeStatementMutator, IncomeStatementRelation, CompanyScope;
 

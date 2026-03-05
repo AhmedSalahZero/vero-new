@@ -82,13 +82,13 @@
                     <input type="hidden" name="data_type" id="data_type" {{$data_type_selector}} value="value">
                     @endif
                     @if($view_name != 'Products Against Products Items Trend Analysis' && $name_of_selector_label != 'name_of_selector_label' && $type != 'product_item' )
-                    @@php
+                    @php
                     $cols = 3 ;
-                    @end@php
+                    @endphp
                     @else
-                    @@php
+                    @php
                     $cols = 4 ;
-                    @end@php
+                    @endphp
                     @endif
 
                     <div class="form-group row">

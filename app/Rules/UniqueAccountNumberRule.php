@@ -30,6 +30,9 @@ class UniqueAccountNumberRule implements Rule
     {
 		$financialInstitution = Request()->route('financialInstitution') ;
         $financialInstitution = $financialInstitution ?: FinancialInstitution::find(Request()->segment(4));
+		/**
+		 * @var FinancialInstitution $financialInstitution
+		 */
 		$allAccountNumbers = $financialInstitution->getAllAccountNumbers() ;
 		if(count($this->excludeAccountNumbers)){
 			$allAccountNumbers = HArr::removeKeyFromArrayByValue($allAccountNumbers,$this->excludeAccountNumbers);

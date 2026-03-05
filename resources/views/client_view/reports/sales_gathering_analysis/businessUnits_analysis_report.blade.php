@@ -180,9 +180,9 @@
         @endforeach
         </tr> --}}
 
-        @@php
+        @php
         sortSubItems($data)
-        @end@php
+        @endphp
         @foreach ($data as $channel_name => $channel_section)
 
         <tr class="row{{ $id }}  text-center" style="display: none">

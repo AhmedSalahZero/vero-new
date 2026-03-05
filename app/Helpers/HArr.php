@@ -822,7 +822,9 @@ class HArr
             /**
              * * هنحط النتيجه بتاعتك كل سنه عند اخر شهر في السنه دي
              */
-            $result[$dateAsIndex] = $currentYearTotal;
+			if(isset($dateAsIndex)){
+				$result[$dateAsIndex] = $currentYearTotal;
+			}
         }
         return $result ;
     }
@@ -864,7 +866,9 @@ class HArr
             /**
              * * هنحط النتيجه بتاعتك كل سنه عند اخر شهر في السنه دي
              */
-            $result[$dateAsIndex] = $currentYearTotal;
+			if(isset($dateAsIndex)){
+				$result[$dateAsIndex] = $currentYearTotal;
+			}
         }
         return $result ;
     }
@@ -970,10 +974,13 @@ class HArr
                 $currentValue = $itemsAsDateIndexAndValue[$dateAsIndex]??0 ;
                 $currentYearTotal =  $currentValue;
             }
-            /**
+			 /**
              * * هنحط النتيجه بتاعتك كل سنه عند اخر شهر في السنه دي
              */
-            $result[$dateAsIndex] = $currentYearTotal;
+			if(isset($dateAsIndex)){
+				$result[$dateAsIndex] = $currentYearTotal;
+			}
+           
         }
         return $result ;
     }
@@ -1075,7 +1082,9 @@ class HArr
             /**
              * * هنحط النتيجه بتاعتك كل سنه عند اخر شهر في السنه دي
              */
-            $result[$dateAsIndex] = $currentYearTotal;
+			if(isset($dateAsIndex)){
+				$result[$dateAsIndex] = $currentYearTotal;
+			}
         }
         return $result ;
     }
@@ -1407,9 +1416,9 @@ public static function getFinancialMonthsForSelect(): array
     return $formattedMonths;
 }
 
-public static function repeatLastValueInArrayUntil(array $jsonItems, int $studyEndDate)
+public static function repeatLastValueInArrayUntil(array $itemsArray, int $studyEndDate)
 {
-    $itemsArray = is_array($jsonItems) ? $jsonItems : convertJsonToArray($jsonItems);
+
     if (!count($itemsArray)) {
         return null ;
     }

@@ -46,9 +46,7 @@ class LabelingItemExport implements
 	protected ?string $writerType;
 	protected string $fileName;
 	private $maxRows ;
-	/**
-	 * @param Collection $products
-	 */
+
 
 	public function __construct( $items )
 	{

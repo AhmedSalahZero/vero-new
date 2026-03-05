@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\ServiceItem;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,15 +30,6 @@ class ServiceItemRepository implements IBaseRepository
         return formatOptionsForSelect($serviceItems , 'getId' , 'getName');
     }
     
-     public function allCurrentServiceItemServiceItems():array
-    {
-        return ServiceItem::onlyCurrentCompany()->get()->pluck('name_'.App()->getLocale(),'id')->toArray();
-    }
-     public function getAllExcept($id):?Collection
-    {
-        return ServiceItem::onlyCurrentCompany()->where('id','!=',$id)->get();
-    }
-
     public function query():Builder
     {
         return ServiceItem::onlyCurrentCompany()->query();
@@ -50,17 +40,12 @@ class ServiceItemRepository implements IBaseRepository
         return ServiceItem::onlyCurrentCompany()->inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return ServiceItem::onlyCurrentCompany()->find($id);
     }
 
-    public function getLatest($column = 'id'):?ServiceItem
-    {
-        return ServiceItem::onlyCurrentCompany()->latest($column)->first();
-
-    }
-    public function store(Request $request ):IBaseModel
+    public function store(Request $request )
     {
         
         return ServiceItem::create([
@@ -73,7 +58,7 @@ class ServiceItemRepository implements IBaseRepository
 
 
 
-    public function update( IBaseModel $serviceItem , Request $request ):void
+    public function update(  $serviceItem , Request $request ):void
     {
         $serviceItem->update($request->except('_token'));
     }
@@ -131,30 +116,6 @@ class ServiceItemRepository implements IBaseRepository
         ->orderBy(getDefaultOrderBy()['column'],getDefaultOrderBy()['direction']) ;
 
     }
-
-    public function export(Request $request):Collection
-    {
-        return $this->commonScope(
-            $request->replace(
-                [
-                    'format'=>$request->get('format'),
-                    'company_id'=>$request->get('company_id'),
-                ]
-            ))
-            ->select(['id','name_en','company_id','created_at as join_at'])
-            ->get()->each(function($serviceItem){
-
-                $serviceItem->name_en = $serviceItem->getName();
-                $serviceItem->company_id = $serviceItem->getCompanyId();
-                $serviceItem->join_at = formatDateFromString($serviceItem->join_at);
-
-            });
-
-
-    }
-
-
-
 
 
 

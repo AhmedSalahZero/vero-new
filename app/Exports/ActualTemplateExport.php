@@ -30,12 +30,8 @@ class ActualTemplateExport implements
 
 {
 	use Exportable, RegistersEventListeners;
-	private Collection $exportData;
 	private IncomeStatement $incomeStatement;
 
-	/**
-	 * @param Collection $products
-	 */
 
 
 	public function __construct(IncomeStatement $incomeStatement)

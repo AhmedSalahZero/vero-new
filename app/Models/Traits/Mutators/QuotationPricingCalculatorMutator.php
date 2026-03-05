@@ -1,7 +1,6 @@
 <?php
 namespace App\Models\Traits\Mutators ;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Models\DirectManpowerExpense;
 use App\Models\FreelancerExpense;
 use App\Models\GeneralExpense;
@@ -14,7 +13,7 @@ trait QuotationPricingCalculatorMutator
 
     
    
-    public function storeOfferedServiceSectionWithResult(Request $request):IBaseModel  
+    public function storeOfferedServiceSectionWithResult(Request $request)  
     {
         
         foreach(

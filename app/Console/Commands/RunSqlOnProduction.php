@@ -31,11 +31,7 @@ class RunSqlOnProduction extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
+    
 	public function getAllFilesInFolderForVero():array  {
 		$fileNames = [];
 		$path = app_path('Triggers/Cashvero');

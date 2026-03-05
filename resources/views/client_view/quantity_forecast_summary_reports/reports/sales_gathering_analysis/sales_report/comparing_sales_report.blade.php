@@ -101,14 +101,14 @@
                                 <td>{{$date}}</td>
                                 <td>{{number_format(($data_per_year['Sales Values'][$date]??0),0)}}</td>
                                 <td class="bg-antiquewhite">{{number_format(($data_per_year['Month Sales %'][$date]??0),2) . ' %'}}</td>
-                                @@php
+                                @php
                                 $yoyGR = $data_per_year['YoY GR%'][$date]??0 ;
                                 $yoyGRColor = '';
 
                                 if($yoyGR < 0 ) { $yoyGRColor='red !important' ; } elseif($yoyGR> 0){
                                     $yoyGRColor = 'green !important';
                                     }
-                                    @end@php
+                                    @endphp
                                     <td style="color:{{ $yoyGRColor  }}">{{number_format(($yoyGR),2) . ' %'}}</td>
                             </tr>
                             @endforeach

@@ -122,9 +122,9 @@
 						@endslot
 						@slot('table_body')
 						@php $id = 1; @endphp
-						@@php
+						@php
 						sortReportForTotals($report_data)
-						@end@php
+						@endphp
 						@foreach ($report_data as $sales_channel_name => $sales_channel_channels_data)
 						@php $chart_data = []; @endphp
 
@@ -158,13 +158,13 @@
 
 
 
-						@@php
+						@php
 
 						sortSubItems($sales_channel_channels_data);
 
 
 
-						@end@php
+						@endphp
 						@foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 						<tr class="row{{ $id }}  text-center" style="display: none">
 

@@ -111,7 +111,7 @@
 							
 							 @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForZone[$zone_name] = ($totalForSingleZone = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForZone[$zone_name] = ($totalForSingleZone = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleZone) }}
                         </td>
                         @endif
@@ -139,10 +139,10 @@
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL') }}</th>
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotal = $total_zones[$date] ?? 0 ;
 							
-						@end@php
+						@endphp
                         <td class="text-center active-style">{{ number_format($currentTotal ?? 0) }}</td>
 						  @php $sumOfTotalsOfZoneSales += ($total_zones[$date] ?? 0) @endphp
 

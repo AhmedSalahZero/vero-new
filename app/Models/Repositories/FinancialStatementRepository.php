@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Jobs\RecalculateIncomeStatementCalculationForTypesJob;
 use App\Models\BalanceSheet;
@@ -57,7 +56,7 @@ class FinancialStatementRepository implements IBaseRepository
 	{
 		return FinancialStatement::onlyCurrentCompany()->latest($column)->first();
 	}
-	public function store(Request $request): IBaseModel
+	public function store(Request $request)
 	{
 
 		$financialStatement = new FinancialStatement();
@@ -87,7 +86,7 @@ class FinancialStatementRepository implements IBaseRepository
 		return $financialStatement;
 	}
 
-	public function storeReport(Request $request): IBaseModel
+	public function storeReport(Request $request)
 	{
 		$financialStatement = new FinancialStatement();
 
@@ -96,7 +95,7 @@ class FinancialStatementRepository implements IBaseRepository
 		return $financialStatement;
 	}
 
-	public function update(IBaseModel $financialStatement, Request $request): void
+	public function update( $financialStatement, Request $request): void
 	{
 		/**
 		 * @var FinancialStatement $financialStatement

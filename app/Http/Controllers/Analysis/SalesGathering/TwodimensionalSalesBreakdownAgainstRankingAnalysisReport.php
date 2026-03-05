@@ -26,8 +26,17 @@ class TwodimensionalSalesBreakdownAgainstRankingAnalysisReport
 		$start_date =$dates['jan'];
 		$end_date=$dates['dec'];
 		 
-		
-        return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_ranking_form', compact('company', 'view_name','type','main_type','start_date','end_date'));
+		if(!isset($view_name) || !isset($type) || !isset($main_type)){
+			throw new \Exception('View name, type or main type is not set Please Add It Additional else if statement to define them');
+		}
+        return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_ranking_form', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+			'main_type' => $main_type,
+			'start_date' => $start_date,
+			'end_date' => $end_date,
+		]);
     }
     public function result(Request $request, Company $company)
     {

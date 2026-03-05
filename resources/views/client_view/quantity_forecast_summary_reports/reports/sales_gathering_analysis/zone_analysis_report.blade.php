@@ -91,9 +91,9 @@
                     @slot('table_body')
 
                     @php $id =1 ;@endphp
-                    @@php
+                    @php
                     sortReportForTotals($report_data);
-                    @end@php
+                    @endphp
                     @foreach ($report_data as $zone_name => $zone_channels_data)
                     @php $chart_data = [];@endphp
                     @if ($zone_name != 'Total' && $zone_name != 'Growth Rate %')
@@ -122,9 +122,9 @@
                         <td class="text-center white-text">{{number_format(array_sum($total_per_zone??[]),0)}}</td>
                     </tr>
 
-                    @@php
+                    @php
                     sortSubItems($zone_channels_data);
-                    @end@php
+                    @endphp
                     @foreach ($zone_channels_data as $channel_name => $channel_section)
 
                     <tr class="row{{ $id }}  text-center" style="display: none">

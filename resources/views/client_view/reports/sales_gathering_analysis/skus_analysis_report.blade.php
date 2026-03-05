@@ -121,9 +121,9 @@
                     </tr>
                     @endslot
                     @slot('table_body')
-                    @@php
+                    @php
                     sortReportForTotals($report_data)
-                    @end@php
+                    @endphp
                     @php $id =1 ;@endphp
                     @foreach ($report_data as $sales_channel_name => $sales_channel_channels_data)
 
@@ -165,9 +165,9 @@
 
 
 
-                    @@php
+                    @php
                     sortSubItems($sales_channel_channels_data,$type	)
-                    @end@php
+                    @endphp
 
                     @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@@php
+@php
 	use App\Models\User;
-@end@php
+@endphp
 @section('css')
     <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
@@ -20,9 +20,9 @@
             </div>
         </div>
             <!--begin::Form-->
-			@@php
+			@php
              $user_row = isset($user) ? $user : old();
-		@end@php 				
+		@endphp 				
             <form class="kt-form kt-form--label-right" method="POST" action= {{isset($user) ? route('user.update',$user): route('user.store')}} enctype="multipart/form-data">
                 @csrf
                 {{isset($user) ?  method_field('PUT'): ""}}

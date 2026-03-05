@@ -34,18 +34,15 @@ class IncomeStatementExportAsPdf implements
 	private IncomeStatement $incomeStatement;
 	private array $mainRowsIndexes;
 	private array $percentageRowsIndexes;
-	private array $subRowsIndexes;
 	private int $maxRowsCount;
 	private int $maxColsCount;
 	protected ?string $writerType;
 	protected string $fileName;
 	private string $reportType;
 
-	/**
-	 * @param Collection $products
-	 */
+	
 
-	public function __construct(Collection $incomeStatementReport, Request $request, IncomeStatement $incomeStatement,array $mainRowsIndexes,array $percentageRowsIndexes,array $subRowsIndexes,int $maxColsCount , int $maxRowsCount,string $reportType)
+	public function __construct(Collection $incomeStatementReport, Request $request, IncomeStatement $incomeStatement,array $mainRowsIndexes,array $percentageRowsIndexes,int $maxColsCount , int $maxRowsCount,string $reportType)
 	{
 		$this->writerType = $request->get('format');
 		$this->fileName = $incomeStatement->name . '.Xlsx';
@@ -53,7 +50,6 @@ class IncomeStatementExportAsPdf implements
 		$this->incomeStatement = $incomeStatement;
 		$this->mainRowsIndexes = $mainRowsIndexes;
 		$this->percentageRowsIndexes = $percentageRowsIndexes;
-		$this->subRowsIndexes = $subRowsIndexes;
 		$this->maxColsCount = $maxColsCount;
 		$this->maxRowsCount = $maxRowsCount;
 		$this->reportType = $reportType;

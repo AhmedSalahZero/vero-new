@@ -24,7 +24,6 @@ use App\ReadyFunctions\PortfolioPresentValue;
 use App\ReadyFunctions\ProjectsUnderProgress;
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCollectionOrPaymentStatement;
-use App\Traits\HasSeasonality;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -41,7 +40,7 @@ use MathPHP\Finance;
 class Study extends Model
 {
     use HasBasicStoreRequest;
-    use CompanyScope,BelongsToCompany,HasFixedAsset,HasCollectionOrPaymentStatement,HasSeasonality;
+    use CompanyScope,BelongsToCompany,HasFixedAsset,HasCollectionOrPaymentStatement;
     const STUDY = 'study' ;
     const BUSINESS_PLAN = 'business-plans';  // multiple years
     const ANNUALLY_STUDY = 'annually-study'; // one year

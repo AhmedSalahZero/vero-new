@@ -34,7 +34,7 @@ class CleanOverdraftController
 		$to = $request->get('to');
 		$value = $request->query('value');
 		$collection = $collection
-		->when($request->has('value'),function($collection) use ($request,$value,$searchFieldName){
+		->when($request->has('value'),function($collection) use ($value,$searchFieldName){
 			return $collection->filter(function($moneyReceived) use ($value,$searchFieldName){
 				$currentValue = $moneyReceived->{$searchFieldName} ;
 				if($searchFieldName == 'bank_id'){

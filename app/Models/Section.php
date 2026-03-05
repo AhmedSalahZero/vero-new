@@ -34,12 +34,7 @@ class Section extends Model
         return $query->where('sub_of',0);
     }
 
-    /**
-     * Get the
-     *
-     * @param  string  $value
-     * @return string
-     */
+  
     public function getRouteNameAttribute()
     {
         $route = $this->route;

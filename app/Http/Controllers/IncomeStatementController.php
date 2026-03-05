@@ -273,7 +273,7 @@ class IncomeStatementController extends Controller
 		// $incomeStatementId = array_key_first($request->get('valueMainRowThatHasSubItems'));
 		
 		// return (new IncomeStatementExport(collect($formattedData), $request, $incomeStatement))->download();
-		return (new IncomeStatementExportAsPdf(collect($formattedData), $request, $incomeStatement,$mainRowsIndexes,$percentageRowsIndexes,$subRowsIndexes,$maxColsCount,$maxRowsCount,$reportType))->download($incomeStatement->getName().'.pdf','Dompdf');
+		return (new IncomeStatementExportAsPdf(collect($formattedData), $request, $incomeStatement,$mainRowsIndexes,$percentageRowsIndexes,$maxColsCount,$maxRowsCount,$reportType))->download($incomeStatement->getName().'.pdf','Dompdf');
 		
 	}
 	protected function combineMainValuesWithItsPercentageRows(array $firstItems, array $secondItems): array

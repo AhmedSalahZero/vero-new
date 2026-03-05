@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\ServiceNature;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,7 +49,7 @@ class ServiceNatureRepository implements IBaseRepository
         return ServiceNature::inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return ServiceNature::find($id);
     }
@@ -60,7 +59,7 @@ class ServiceNatureRepository implements IBaseRepository
         return ServiceNature::latest($column)->first();
 
     }
-    public function store(Request $request ):IBaseModel
+    public function store(Request $request )
     {
         
         return ServiceNature::create([
@@ -73,7 +72,7 @@ class ServiceNatureRepository implements IBaseRepository
 
 
 
-    public function update( IBaseModel $serviceNature , Request $request ):void
+    public function update(  $serviceNature , Request $request ):void
     {
         $serviceNature->update($request->except('_token'));
     }

@@ -290,15 +290,15 @@
                                     {{ __('Actions') }}
                                 </td>
                             </tr>
-                            @@php
+                            @php
                             $id = 0 ;
-                            @end@php
+                            @endphp
                             @foreach($items as $mainItemId => $parnetAndSubData )
-                            @@php
+                            @php
                             $parent =$parnetAndSubData['parent'] ;
                             $subItems =$parnetAndSubData['sub_items'] ?? [];
 
-                            @end@php
+                            @endphp
                             <tr class="group-color main-row-tr">
 
 

@@ -23,6 +23,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -53,11 +54,11 @@ class Company extends Model implements HasMedia
         return $this->getIdentifier();
     }
     protected $casts = ['name' => 'array','generate_labeling_code_fields'=>'array','labeling_print_headers'=>'array'];
-    public function users()
+    public function users():BelongsToMany
     {
         return $this->belongsToMany(User::class, 'companies_users');
     }
-    public function subCompanies()
+    public function subCompanies():HasMany
     {
         return $this->hasMany(Company::class, 'sub_of');
     }
@@ -65,16 +66,16 @@ class Company extends Model implements HasMedia
     // {
     //     return $this->hasMany(Branch::class);
     // }
-    public function getBranchesWithSectionsAttribute()
-    {
-        $branches = [];
-        foreach ($this->branches as $branch) {
-            @count($branch->sections) == 0 ?: array_push($branches, $branch);
-        }
+    // public function getBranchesWithSectionsAttribute()
+    // {
+    //     $branches = [];
+    //     foreach ($this->branches as $branch) {
+    //         @count($branch->sections) == 0 ?: array_push($branches, $branch);
+    //     }
 
 
-        return $branches;
-    }
+    //     return $branches;
+    // }
 
     public function exportableModelFields($modelName)
     {
@@ -207,7 +208,7 @@ class Company extends Model implements HasMedia
         return $this->hasOne(SupplierOpeningBalance::class, 'company_id');
     }
    
-    public function contracts()
+    public function contracts():HasMany
     {
         return $this->hasMany(Contract::class, 'company_id', 'id');
     }

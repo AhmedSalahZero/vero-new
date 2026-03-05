@@ -114,7 +114,7 @@ class SalesBreakdownAgainstAnalysisReport
 		$breakdownStartDate = $request->start_date ;
 		$breakdownEndDate = $request->end_date ;
 		$numOfTop = is_null($numOfTop) ? 100 : $numOfTop ;
-		$simpleLinearRegressionStartDate = Carbon::make($breakdownEndDate)->subMonthNoOverflow(23)->startOfMonth()->format('Y-m-d') ;
+		$simpleLinearRegressionStartDate = Carbon::make($breakdownEndDate)->subMonthsNoOverflow(23)->startOfMonth()->format('Y-m-d') ;
 		$predictionDates = [
 			Carbon::make($breakdownEndDate)->addMonthsNoOverflow(0)->format('Y-m-d'),	
 			Carbon::make($breakdownEndDate)->addMonthsNoOverflow(1)->format('Y-m-d'),

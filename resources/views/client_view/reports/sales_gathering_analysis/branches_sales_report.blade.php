@@ -164,7 +164,7 @@
 
                         @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForBranch[$zone_name] = ($totalForSingleBranch = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForBranch[$zone_name] = ($totalForSingleBranch = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleBranch) }}
                         </td>
                         @endif
@@ -310,9 +310,9 @@
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL %') }}</th>
                         @foreach ($dates as $date)
-						@@php
+						@php
 							$total = $total_branches[$date] ?? 0 ;
-						@end@php
+						@endphp
                         <td class="text-center active-style"> {{ $sumOfTotalsOfBranchSales && $total ? number_format(   ($total / $sumOfTotalsOfBranchSales)*100  ,  2) : 0 }} % </td>
 
                         @if($loop->last)

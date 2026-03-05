@@ -9,9 +9,7 @@ trait BelongsToStudy
 {
 	public function study():BelongsTo
 	{
-		/**
-		 * @var Model $this
-		 */
+	
 		return $this->BelongsTo(Study::class,'study_id','id');
 	}
 } 

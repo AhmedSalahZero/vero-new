@@ -105,9 +105,9 @@
                     @slot('table_header')
                     <tr class="table-active text-center">
                         <th class="text-center absorbing-column max-w-classes">{{ __(\App\Helpers\HVero::spaceAfterCapitalLetters(camelize($type))) }}</th>
-                        @@php
+                        @php
                         $colsSpans = arrayCountAllLongest($sumForEachInterval) + 1 ;
-                        @end@php
+                        @endphp
                         @foreach (getLongestArray($sumForEachInterval) as $year => $d )
                         @foreach ($d as $month=>$value )
                         <th>
@@ -125,9 +125,9 @@
                     @php $idd =1 ;@endphp
 
                     @foreach ($sumForEachInterval as $zone_name => $data)
-                    @@php
+                    @php
                     $totalCountInvoiceNumber = 0 ;
-                    @end@php
+                    @endphp
                     <tr class="group-color ">
                         <td colspan="{{ $colsSpans }}" class=" bg-white text-black max-w-classes" style="cursor: pointer;" onclick="toggleRow('{{ $idd }}')">
                             <i class="row_icon{{ $idd }} flaticon2-up text-black"></i>
@@ -153,9 +153,9 @@
                         @foreach ($d as $interval=>$q)
                         <td class="text-center">
                             <span class="white-text"><b>
-                                    @@php
+                                    @php
                                     $countInvoiceNumber = ($sumForEachInterval[$zone_name][$year][$interval]['invoice_number']) ?? 0
-                                    @end@php
+                                    @endphp
                                     {{ number_format( $countInvoiceNumber )}}
 
                                 </b></span>
@@ -176,9 +176,9 @@
                         @foreach (getLongestArray($sumForEachInterval) as $year => $d )
                         @foreach ($d as $interval=>$q)
 
-                        @@php
+                        @php
                         $invoiceNumber = ($sumForEachInterval[$zone_name][$year][$interval]['invoice_number']) ?? 0 ;
-                        @end@php
+                        @endphp
                         <td class="text-center">
                             <span class="white-text"><b>
                                     {{
@@ -206,25 +206,25 @@
 
                         @foreach (getLongestArray($sumForEachInterval) as $year => $d )
 						
-						@@php
+						@php
 							$index = -1 ;
-						@end@php
+						@endphp
                         @foreach ($d as $interval=>$q)
-						@@php
+						@php
 							$index++;
-						@end@php
+						@endphp
 						
                     
 
 
                         <td class="text-center">
                             <span class="white-text"><b>
-                                    @@php
+                                    @php
                                  
                                     $invoiceNumber = ($sumForEachInterval[$zone_name][$year][$interval]['invoice_number']) ?? 0 ;
                                     $salesValue = array_values($reportSalesValues[$zone_name])[$index] ?? 0 ;
                                     $avg_invoice_value = $invoiceNumber ? number_format($salesValue / $invoiceNumber) : 0;
-                                    @end@php
+                                    @endphp
                                
                                     {{$avg_invoice_value}}
                                 </b></span>
@@ -238,9 +238,9 @@
 
 
 
-                    @@php
+                    @php
                     $idd = $idd + 1 ;
-                    @end@php
+                    @endphp
 
                     @endforeach
 

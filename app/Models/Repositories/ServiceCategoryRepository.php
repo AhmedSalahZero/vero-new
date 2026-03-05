@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\ServiceCategory;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,15 +30,6 @@ class ServiceCategoryRepository implements IBaseRepository
         return formatOptionsForSelect($serviceCategories , 'getId' , 'getName');
     }
     
-     public function allCurrentServiceCategoryServiceCategories():array
-    {
-        return ServiceCategory::onlyCurrentCompany()->pluck('name','id')->toArray();
-    }
-     public function getAllExcept($id):?Collection
-    {
-        return ServiceCategory::onlyCurrentCompany()->where('id','!=',$id)->get();
-    }
-
     public function query():Builder
     {
         return ServiceCategory::onlyCurrentCompany()->query();
@@ -50,17 +40,12 @@ class ServiceCategoryRepository implements IBaseRepository
         return ServiceCategory::onlyCurrentCompany()->inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return ServiceCategory::onlyCurrentCompany()->find($id);
     }
 
-    public function getLatest($column = 'id'):?ServiceCategory
-    {
-        return ServiceCategory::onlyCurrentCompany()->latest($column)->first();
-
-    }
-    public function store(Request $request ):IBaseModel
+    public function store(Request $request )
     {
         return ServiceCategory::create([
         'revenue_business_line_id'=>$request->get('revenue_business_line_id'),
@@ -71,7 +56,7 @@ class ServiceCategoryRepository implements IBaseRepository
 
 
 
-    public function update( IBaseModel $serviceCategory , Request $request ):void
+    public function update(  $serviceCategory , Request $request ):void
     {
         $serviceCategory->update($request->except('_token'));
     }
@@ -129,30 +114,6 @@ class ServiceCategoryRepository implements IBaseRepository
         ->orderBy(getDefaultOrderBy()['column'],getDefaultOrderBy()['direction']) ;
 
     }
-
-    public function export(Request $request):Collection
-    {
-        return $this->commonScope(
-            $request->replace(
-                [
-                    'format'=>$request->get('format'),
-                    'company_id'=>$request->get('company_id'),
-                ]
-            ))
-            ->select(['id','name_en','company_id','created_at as join_at'])
-            ->get()->each(function($serviceCategory){
-
-                $serviceCategory->name_en = $serviceCategory->getName();
-                $serviceCategory->company_id = $serviceCategory->getCompanyId();
-                $serviceCategory->join_at = formatDateFromString($serviceCategory->join_at);
-
-            });
-
-
-    }
-
-
-
 
 
 

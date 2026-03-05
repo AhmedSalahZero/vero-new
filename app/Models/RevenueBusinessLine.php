@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveCompany;
 use App\Interfaces\Models\IHaveCreator;
@@ -21,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperRevenueBusinessLine
  */
-class RevenueBusinessLine extends Model implements IHaveView,IHaveCompany,IHaveCreator,IBaseModel , IExportable
+class RevenueBusinessLine extends Model implements IHaveView,IHaveCompany,IHaveCreator, IExportable
 { 
     use RevenueBusinessLineAccessor,RevenueBusinessLineMutator , RevenueBusinessLineRelation   , CompanyScope ;
     protected $guarded = [
@@ -47,9 +46,9 @@ class RevenueBusinessLine extends Model implements IHaveView,IHaveCompany,IHaveC
             'exportRoute'=>route('admin.export.revenue-business-line' , $currentCompanyId),
             'createRoute'=>route('admin.create.revenue-business-line',$currentCompanyId),
             'pageTitle'=>__('Revenue Business Line'),
-              'revenueBusinessLines'=>App(RevenueBusinessLineRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceCategories'=>App(ServiceCategoryRepository::class)->allFormattedForSelect($currentCompanyId),
-            'serviceItems'=>App(ServiceItemRepository::class)->allFormattedForSelect($currentCompanyId)
+              'revenueBusinessLines'=>App(RevenueBusinessLineRepository::class)->allFormattedForSelect(),
+            'serviceCategories'=>App(ServiceCategoryRepository::class)->allFormattedForSelect(),
+            'serviceItems'=>App(ServiceItemRepository::class)->allFormattedForSelect()
         ];
     }
     

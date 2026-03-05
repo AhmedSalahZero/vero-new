@@ -42,9 +42,7 @@ class Contract extends Model
     }
 	public function handleOverdraftAgainstAssignmentOfContractLimit(): void
     {
-        /**
-         * @var AccountType $accountType
-         */
+       
         // $accountType = AccountType::find($this->getAccountType());
         $overdraftAgainstAssignmentOfContract = $this->overdraftAgainstAssignmentOfContract;
 		//  OverdraftAgainstAssignmentOfContract::where('account_number', $this->getAccountNumber())->first();
@@ -341,10 +339,7 @@ class Contract extends Model
 	{
 		return $this->hasOne(LendingInformationAgainstAssignmentOfContract::class,'contract_id','id');
 	}
-	public function getAccountType()
-    {
-        return $this->account_type ;
-    }
+	
 	public function overdraftAgainstAssignmentOfContract():BelongsTo
 	{
 		return $this->belongsTo(OverdraftAgainstAssignmentOfContract::class , 'overdraft_against_assignment_of_contract_id','id');

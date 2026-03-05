@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\CashFlowStatement;
 use App\Models\CashFlowStatementItem;
@@ -42,7 +41,7 @@ class CashFlowStatementRepository implements IBaseRepository
 		return CashFlowStatement::onlyCurrentCompany()->inRandomOrder();
 	}
 
-	public function find(?int $id): IBaseModel
+	public function find(?int $id)
 	{
 		return CashFlowStatement::onlyCurrentCompany()->find($id);
 	}
@@ -51,7 +50,7 @@ class CashFlowStatementRepository implements IBaseRepository
 	{
 		return CashFlowStatement::onlyCurrentCompany()->latest($column)->first();
 	}
-	public function store(Request $request): IBaseModel
+	public function store(Request $request)
 	{
 		$cashFlowStatement = App(CashFlowStatement::class);
 
@@ -60,14 +59,14 @@ class CashFlowStatementRepository implements IBaseRepository
 		return $cashFlowStatement;
 	}
 
-	public function storeReport(Request $request): IBaseModel
+	public function storeReport(Request $request)
 	{
 		$cashFlowStatement = new CashFlowStatement();
 		$cashFlowStatement = $cashFlowStatement->storeReport($request);
 		return $cashFlowStatement;
 	}
 
-	public function update(IBaseModel $cashFlowStatement, Request $request): void
+	public function update( $cashFlowStatement, Request $request): void
 	{
 		// $cashFlowStatement
 		// 	->updateProfitability($request);

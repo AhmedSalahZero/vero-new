@@ -3,8 +3,6 @@ namespace App\Models\PropertyManagement;
 
 
 use App\Helpers\HArr;
-use App\Http\Controllers\PropertyManagements\CashInOutFlowController;
-use App\Models\CashflowReport;
 use App\Traits\HasCollectionOrPaymentStatement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

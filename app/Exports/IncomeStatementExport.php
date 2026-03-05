@@ -35,9 +35,7 @@ class IncomeStatementExport implements
 	protected ?string $writerType;
 	protected string $fileName;
 
-	/**
-	 * @param Collection $products
-	 */
+	
 
 	public function __construct(Collection $incomeStatementReport, Request $request, IncomeStatement $incomeStatement,string $reportType)
 	{

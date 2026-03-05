@@ -46,5 +46,8 @@ class PaymentSettlement extends Model
 	{
 		return $this->belongsTo(LetterOfCreditIssuance::class ,'letter_of_credit_issuance_id');
 	}
-	
+	public function getMoney(){
+		$id = $this->money_payment_id;
+			return MoneyPayment::find($id);
+	}
 }

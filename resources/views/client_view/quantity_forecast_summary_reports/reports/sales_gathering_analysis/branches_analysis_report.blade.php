@@ -131,7 +131,7 @@
         </tr>
         @endslot
         @slot('table_body')
-        @@php
+        @php
 
         sortReportForTotals($report_data)
         // (uasort($report_data, function($a,$b) use($report_data){
@@ -152,7 +152,7 @@
         // );
 
 
-        @end@php
+        @endphp
         @php $id =1 ;@endphp
         @foreach ($report_data as $zone_name => $data)
 
@@ -184,9 +184,9 @@
         </tr>
 
 
-        @@php
+        @php
         sortSubItems($data)
-        @end@php
+        @endphp
         @foreach ($data as $channel_name => $channel_section)
 
 

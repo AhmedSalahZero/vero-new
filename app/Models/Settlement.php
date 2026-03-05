@@ -40,6 +40,11 @@ class Settlement extends Model
 	{
 		return $this->customerInvoice();
 	}
+	public function getMoney()
+	{
+	     	$id = $this->money_received_id ;
+			return MoneyReceived::find($id);		
+	}
 	
 	
 }

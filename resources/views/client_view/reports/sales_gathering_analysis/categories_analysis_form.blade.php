@@ -212,9 +212,9 @@
                         @else
 
                         @if($name_of_selector_label == 'Customers Against Categories' )
-                        @@php
+                        @php
                         $name_of_selector_label = "Categories";
-                        @end@php
+                        @endphp
                         <div class="col-md-{{$column}}">
                             <label>{{ __('Select '.$name_of_selector_label.' ') }} <span class="multi_selection"></span> @include('max-option-span') </label>
                             <div class="kt-input-icon">
@@ -227,9 +227,9 @@
 
                         @elseif($name_of_selector_label == 'Customers Against Products')
 
-                        @@php
+                        @php
                         $name_of_selector_label = "Products";
-                        @end@php
+                        @endphp
                         <div class="col-md-{{$column}}">
                             <label>{{ __('Select '.$name_of_selector_label.' ') }} <span class="multi_selection"></span> @include('max-option-span') </label>
                             <div class="kt-input-icon">
@@ -243,9 +243,9 @@
 
                         @elseif($name_of_selector_label == 'Customers Against Products Items')
 
-                        @@php
+                        @php
                         $name_of_selector_label = "Product Items";
-                        @end@php
+                        @endphp
                         <div class="col-md-{{$column}}">
                             <label>{{ __('Select '.$name_of_selector_label.' ') }} <span class="multi_selection"></span> @include('max-option-span') </label>
                             <div class="kt-input-icon">

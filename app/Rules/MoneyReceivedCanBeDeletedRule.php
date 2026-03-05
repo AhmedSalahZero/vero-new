@@ -33,24 +33,24 @@ class MoneyReceivedCanBeDeletedRule implements ImplicitRule
     public function passes($attribute, $value)
     {
 		return true ;
-		$balance = null ;
-		$receivedAmount = $this->moneyReceived->getReceivedAmount();
-		if($this->moneyReceived->isChequeInSafe()){
-			return true ;
-		}
-		if($this->moneyReceived->isIncomingTransfer() || $this->moneyReceived->isCheque() || $this->moneyReceived->isCashInBank() ){
-			$response = (new MoneyReceivedController)->updateNetBalanceBasedOnAccountNumber(Request(),$this->company,$this->moneyReceived->getAccountTypeId(),$this->moneyReceived->getAccountNumber(),$this->moneyReceived->getFinancialInstitutionId());
-			$balance = $response->getData(true)['balance'] ;
-		}
-		if($this->moneyReceived->isCashInSafe()){
-			$response = (new MoneyPaymentController)->getCashInSafeStatementEndBalance(Request(),$this->company,$this->moneyReceived->getCashInSafeReceivingBranchId(),$this->moneyReceived->getReceivingCurrency());
-			$balance = $response->getData(true)['end_balance'];
+		// $balance = null ;
+		// $receivedAmount = $this->moneyReceived->getReceivedAmount();
+		// if($this->moneyReceived->isChequeInSafe()){
+		// 	return true ;
+		// }
+		// if($this->moneyReceived->isIncomingTransfer() || $this->moneyReceived->isCheque() || $this->moneyReceived->isCashInBank() ){
+		// 	$response = (new MoneyReceivedController)->updateNetBalanceBasedOnAccountNumber(Request(),$this->company,$this->moneyReceived->getAccountTypeId(),$this->moneyReceived->getAccountNumber(),$this->moneyReceived->getFinancialInstitutionId());
+		// 	$balance = $response->getData(true)['balance'] ;
+		// }
+		// if($this->moneyReceived->isCashInSafe()){
+		// 	$response = (new MoneyPaymentController)->getCashInSafeStatementEndBalance(Request(),$this->company,$this->moneyReceived->getCashInSafeReceivingBranchId(),$this->moneyReceived->getReceivingCurrency());
+		// 	$balance = $response->getData(true)['end_balance'];
 			
-		}
-		if($balance - $receivedAmount < 0 ){
-			return false ;
-		}
-		return true ;
+		// }
+		// if($balance - $receivedAmount < 0 ){
+		// 	return false ;
+		// }
+		// return true ;
     }
 
     /**

@@ -529,7 +529,8 @@ $months = $study->getMicrofinanceMonths() ;
 
                             @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
                             @php
-                            $currentLoanTotal = $currentLoanTotalPerYear[$yearOrMonthAsIndex] ;
+							
+                            $currentLoanTotal = $currentLoanTotalPerYear[$yearOrMonthAsIndex]??0 ;
 
                             @endphp
                             <td>
@@ -786,6 +787,7 @@ $months = $study->getMicrofinanceMonths() ;
                         $currentYearRepeaterIndex ++;
                         @endphp
                         @endif
+					
                         @endforeach
                         <x-tables.repeater-table-th class="  header-border-down " :title="__('Total')"></x-tables.repeater-table-th>
                     </x-slot>
@@ -810,7 +812,7 @@ $months = $study->getMicrofinanceMonths() ;
 
                             <td>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <x-repeat-right-dot-inputs data-product-id="{{ $product->id }}" data-total-projection="{{ $fundedById }}" data-group-index="{{ $currentYearRepeaterIndex }}" :numberFormatDecimals="0" :readonly="true" :removeThreeDots="true" :inputHiddenAttributes="''" :currentVal="$currentVal=$columnsTotals[$yearOrMonthAsIndex]??0" js-recalculate-equity-funding-value2 :classes="' repeater-with-collapse-input total-loans-hidden'" :is-percentage="false" :name="''" :columnIndex="$yearOrMonthAsIndex"></x-repeat-right-dot-inputs>
+                                    <x-repeat-right-dot-inputs  data-total-projection="{{ $fundedById }}" data-group-index="{{ $currentYearRepeaterIndex }}" :numberFormatDecimals="0" :readonly="true" :removeThreeDots="true" :inputHiddenAttributes="''" :currentVal="$currentVal=$columnsTotals[$yearOrMonthAsIndex]??0" js-recalculate-equity-funding-value2 :classes="' repeater-with-collapse-input total-loans-hidden'" :is-percentage="false" :name="''" :columnIndex="$yearOrMonthAsIndex"></x-repeat-right-dot-inputs>
                                 </div>
                             </td>
 

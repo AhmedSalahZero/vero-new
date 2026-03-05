@@ -99,9 +99,9 @@
                             <span class="kt-widget24__stats kt-font-success">
                                 {{ $previous_year_sales =  number_format($sales_forecast['previous_1_year_sales'] ?? 0) }}
 
-                                @@php
+                                @php
                                 $previous_year_sales = 0;
-                                @end@php
+                                @endphp
                             </span>
                             <input type="hidden" name="previous_1_year_sales" value="{{ $sales_forecast['previous_1_year_sales'] ?? 0 }}">
                             <input type="hidden" name="previous_year" value="{{ $sales_forecast['previous_year'] }}">

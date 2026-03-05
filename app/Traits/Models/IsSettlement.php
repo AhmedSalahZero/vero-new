@@ -1,28 +1,25 @@
 <?php 
 namespace App\Traits\Models;
 
-use App\Models\MoneyPayment;
-use App\Models\MoneyReceived;
-use App\Models\PaymentSettlement;
-use App\Models\Settlement;
+
 use App\Traits\HasCompany;
 
 trait IsSettlement 
 {
 	use HasCompany;
-	public function getMoney()
-	{
-		if($this instanceof Settlement){
-			$id = $this->money_received_id ;
-			return MoneyReceived::find($id);			
-		}
-		if($this instanceof PaymentSettlement){
-			$id = $this->money_payment_id;
-			return MoneyPayment::find($id);
-		}
+	// public function getMoney()
+	// {
+	// 	if($this instanceof Settlement){
+	// 		$id = $this->money_received_id ;
+	// 		return MoneyReceived::find($id);			
+	// 	}
+	// 	if($this instanceof PaymentSettlement){
+	// 		$id = $this->money_payment_id;
+	// 		return MoneyPayment::find($id);
+	// 	}
 		
 		
-	}
+	// }
 	public function getAmount()
 	{
 		return $this->settlement_amount ;
@@ -57,7 +54,6 @@ trait IsSettlement
 	}
 	public function getAmountInReceivingCurrency():float
 	{
-
 		return $this->getMoney()->getExchangeRate() * $this->getAmount();
 	}
 	

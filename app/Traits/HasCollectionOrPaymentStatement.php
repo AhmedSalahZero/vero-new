@@ -8,16 +8,16 @@ trait HasCollectionOrPaymentStatement {
 	
 	 public function calculateCollectionOrPaymentAmounts(string $paymentTerm, array $totalAfterVat, array $datesAsIndexAndString, array $customCollectionPolicy, $debug=false)
     {
-        $collectionPolicyType  = $paymentTerm == 'customize' ? 'customize':'system_default';
-        $collectionPolicyValue = $collectionPolicyType ;
+        $collectionPolicyType  = $paymentTerm === 'customize' ? 'customize' : 'system_default';
+        $collectionPolicyValue = $collectionPolicyType;
         $dateValue = $totalAfterVat;
-        if ($collectionPolicyType == 'customize') {
-            $collectionPolicyValue = $customCollectionPolicy ;
-        } elseif ($collectionPolicyType == 'system_default' && $paymentTerm=='cash') {
+        if ($collectionPolicyType === 'customize') {
+            $collectionPolicyValue = $customCollectionPolicy;
+        } elseif ($paymentTerm === 'cash') {
             $collectionPolicyValue = 'monthly';
-        }elseif($collectionPolicyType == 'system_default'){
-			$collectionPolicyValue = $paymentTerm;
-		}
+        } else {
+            $collectionPolicyValue = $paymentTerm;
+        }
         $dateValue = convertIndexKeysToString($dateValue, $datesAsIndexAndString);
         $collectionPolicyValue = is_array($collectionPolicyValue) ?  $this->formatDues($collectionPolicyValue) : $collectionPolicyValue;
         $result = (new CollectionPolicyService())->applyCollectionPolicy(true, $collectionPolicyType, $collectionPolicyValue, $dateValue) ;
@@ -142,7 +142,6 @@ trait HasCollectionOrPaymentStatement {
             foreach ($dateIndexWithDate as $dateIndex=>$dateAsString) {
 				$withhold = $withholdForIntervals[$intervalName][$dateIndex]??0; 
 				$monthNumber = explode('-',$dateIndexWithDate[$dateIndex])[01];
-                $dateIndex;
                 $result[$intervalName]['beginning_balance'][$dateIndex] = $beginningBalance;
                 $totalDue[$dateIndex] =  $withhold+$beginningBalance;
 				$settlementAtDate = 0 ;
@@ -179,12 +178,12 @@ trait HasCollectionOrPaymentStatement {
 			$previousAddition = 0 ;
 			$endBalance = [];
             foreach ($additionsForIntervals[$intervalName] as $dateIndex=>$additionAtDate) {
-                $dateIndex;
+              
                 $result[$intervalName]['beginning_balance'][$dateIndex] = $beginningBalance;
 			$totalDue[$dateIndex] =  $additionAtDate+$beginningBalance;
 				$settlementAtDate = $settlements[$dateIndex]??0;
 				 $endBalance[$dateIndex] = $totalDue[$dateIndex] - $settlementAtDate   ;
-				$previousEndBalance = $endBalance[$dateIndex] ?? 0 ;
+				$previousEndBalance = $endBalance[$dateIndex];
 				$settlements[$dateIndex+1] = $totalDue[$dateIndex] <= 0 ? 0 : $previousEndBalance;
 				if($initialBeginningBalance > 0 && $isFirstMonth){
 					$settlements[$dateIndex] = $initialBeginningBalance;
@@ -226,7 +225,6 @@ trait HasCollectionOrPaymentStatement {
             foreach ( $dates as $dateIndex=>$dateAsString) {
 				 $isLastMonthInYear =  explode('-', $dateAsString)[1] == 12;
 				$corporateTaxesAtDate = $corporateTaxesForIntervals[$intervalName][$dateIndex]??0;
-                $dateIndex;
 				$additionAtDate =$additionsForIntervals[$intervalName][$dateIndex]??0;
                 $result[$intervalName]['beginning_balance'][$dateIndex] = $beginningBalance;
 				// $isLastMonthInYear = in_array($dateIndex,$lastMonthsInYearKeys);

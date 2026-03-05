@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\QuickPricingCalculator;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,7 +41,7 @@ class QuickPricingCalculatorRepository implements IBaseRepository
         return QuickPricingCalculator::onlyCurrentCompany()->inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return QuickPricingCalculator::onlyCurrentCompany()->find($id);
     }
@@ -52,7 +51,7 @@ class QuickPricingCalculatorRepository implements IBaseRepository
         return QuickPricingCalculator::onlyCurrentCompany()->latest($column)->first();
 
     }
-     public function store(Request $request ):IBaseModel
+     public function store(Request $request )
     {
         $quickPricingCalculator = App(QuickPricingCalculator::class);
          $quickPricingCalculator
@@ -68,7 +67,7 @@ class QuickPricingCalculatorRepository implements IBaseRepository
          return $quickPricingCalculator ; 
     }
     
-    public function update( IBaseModel $quickPricingCalculator , Request $request ):void
+    public function update(  $quickPricingCalculator , Request $request ):void
     {
         $quickPricingCalculator
         ->updateOfferedServiceSectionWithResult($request)
@@ -166,23 +165,6 @@ class QuickPricingCalculatorRepository implements IBaseRepository
         ->orderBy('quick_pricing_calculators.'.getDefaultOrderBy()['column'],getDefaultOrderBy()['direction']) ;
 
     }
-
-    public function export(Request $request):Collection
-    {
-        return $this->commonScope(
-            $request->replace(
-                array_merge($request->all(),[
-                    'format'=>$request->get('format'),
-                ]  )
-            ))
-            ->select(['quick_pricing_calculators.id','revenue_business_line_id','service_category_id','service_item_id','quick_pricing_calculators.created_at as join_at','delivery_days','total_recommend_price_without_vat','total_recommend_price_with_vat','total_net_profit_after_taxes'])
-            ->get()->each(function($quickPricingCalculator){
-                // $quickPricingCalculator->name = $quickPricingCalculator->getName();
-            });
-    }
-
-
-
 
 
 

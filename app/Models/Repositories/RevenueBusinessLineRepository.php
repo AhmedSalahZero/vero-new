@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\RevenueBusinessLine;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,10 +16,6 @@ class RevenueBusinessLineRepository
         return RevenueBusinessLine::onlyCurrentCompany()->forCurrentCompany()->get();
     }
 
-    public function allFormatted():array
-    {
-        return RevenueBusinessLine::onlyCurrentCompany()->forCurrentCompany()->pluck('name','id')->toArray();
-    }
     public function allFormattedForSelect()
     {
         $revenueBusinessLines = $this->all();
@@ -33,32 +28,6 @@ class RevenueBusinessLineRepository
         return formatOptionsForSelect($revenueBusinessLines , 'getId' , 'getName');
     }
     
-  
-     public function getAllExcept($id):?Collection
-    {
-        return RevenueBusinessLine::onlyCurrentCompany()->where('id','!=',$id)->get();
-    }
-
-    public function query():Builder
-    {
-        return RevenueBusinessLine::onlyCurrentCompany()->query();
-
-    }
-    public function Random():Builder
-    {
-        return RevenueBusinessLine::onlyCurrentCompany()->inRandomOrder();
-    }
-
-    public function find(?int $id)
-    {
-        return RevenueBusinessLine::onlyCurrentCompany()->find($id);
-    }
-
-    public function getLatest($column = 'id'):?RevenueBusinessLine
-    {
-        return RevenueBusinessLine::onlyCurrentCompany()->latest($column)->first();
-
-    }
      public function store(Request $request )
     {
 		$serviceItemId = $request->get('service_item_id') ;
@@ -118,11 +87,7 @@ class RevenueBusinessLineRepository
 
 
 
-    // public function detach(IHaveRevenueBusinessLinesModel $iHaveRevenueBusinessLinesModel):void
-    // {
-    //     $iHaveRevenueBusinessLinesModel->revenueBusinessLines()->detach();
-    // }
-    public function update( IBaseModel $revenueBusinessLine , Request $request ):void
+    public function update(  $revenueBusinessLine , Request $request ):void
     {
         $revenueBusinessLine->update($request->except('_token'));
     }
@@ -193,29 +158,6 @@ class RevenueBusinessLineRepository
         ->orderBy(getDefaultOrderBy()['column'],getDefaultOrderBy()['direction']) ;
 
     }
-
-    public function export(Request $request):Collection
-    {
-        return $this->commonScope(
-            $request->replace(
-                array_merge($request->all(),[
-                    'format'=>$request->get('format'),
-                ]  )
-            ))
-            ->select(['id','name','company_id','created_at as join_at'])
-            ->get()->each(function($revenueBusinessLine){
-
-                $revenueBusinessLine->name = $revenueBusinessLine->getName();
-                // $revenueBusinessLine->company_id = $revenueBusinessLine->getCompanyId();
-                // $revenueBusinessLine->join_at = formatDateFromString($revenueBusinessLine->join_at);
-
-            });
-
-
-    }
-
-
-
 
 
 

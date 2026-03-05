@@ -107,7 +107,7 @@
                             {{ number_format($zoone_data['Sales Values'][$date] ?? 0) }}</td>
 	 @if($loop->last)
                         <td class="text-center">
-                            @@php $totalForSector[$zone_name] = ($totalForSingleSector = array_sum($zoone_data['Sales Values']) ?? 0) @end@php
+                            @php $totalForSector[$zone_name] = ($totalForSingleSector = array_sum($zoone_data['Sales Values']) ?? 0) @endphp
                             {{ number_format($totalForSingleSector) }}
                         </td>
                         @endif
@@ -132,9 +132,9 @@
                     <tr>
                         <th class="active-style text-center">{{ __('TOTAL') }}</th>
                         @foreach ($dates as $date )
-						@@php
+						@php
 							$currentTotal = $total_businessSectors[$date] ?? 0;
-						@end@php
+						@endphp
                         <td class="text-center active-style">{{ number_format($currentTotal ?? 0) }}</td>
 						
 						

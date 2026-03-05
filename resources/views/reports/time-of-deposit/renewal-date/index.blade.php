@@ -351,10 +351,7 @@ use Carbon\Carbon;
                                             <input type="date" name="expiry_date" class="form-control"   value="{{ isset($model)  ? $timeOfDeposit->getExpiryDate() :$timeOfDeposit->getRenewalDate() }}">
                                         </div>
 										
-										{{-- <div class="col-md-2 mb-4">
-                                            <label>{{__('Duration (Days)')}} </label>
-                                            <input type="numeric" class="form-control" name="duration"  value="{{ isset($model)  ? $model->getDuration() : $timeOfDeposit->getDiffBetweenEndDateAndStartDate()  }}">
-                                        </div> --}}
+										
 										
 										 <div class="col-md-1 mb-4">
                                             <label>{{__('Interest Rate')}} % </label>

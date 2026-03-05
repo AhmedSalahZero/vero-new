@@ -1,6 +1,6 @@
-@@php
+@php
 $tableId = 'kt_table_1';
-@end@php
+@endphp
 
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/cr-1.5.6/date-1.1.2/fc-4.1.0/fh-3.2.3/r-2.3.0/rg-1.2.0/sl-1.4.0/sr-1.1.1/datatables.min.css" />
@@ -279,9 +279,9 @@ td {
             </td>
             <td class=" text-center"><b class="text-capitalize">{{ __('Actions') }}</b></td>
         </tr> --}}
-        @@php
+        @php
         $id = 0 ;
-        @end@php
+        @endphp
         @foreach($items as $mainId => $mainItemArr )
 
         <tr class="group-color main-row-tr" data-model-id="{{ $mainId }}" data-model-name="RevenueBusinessLine">
@@ -334,9 +334,9 @@ td {
 
             </td>
         </tr>
-        @@php
+        @php
         $order = 1 ;
-        @end@php
+        @endphp
         @foreach ($mainItemArr['sub_items'] ?? [] as $subItemId => $subItemArr)
         {{-- @if($subItemIndex != 'sub_items') --}}
         <tr data-model-id="{{ $subItemId }}" data-model-name="ServiceCategory" class="row{{ $id }}  text-center sub-item-row" style="display: none">
@@ -442,9 +442,9 @@ td {
         @endforeach
 
 
-        @@php
+        @php
         $order = $order +1 ;
-        @end@php
+        @endphp
 
 
         @endforeach

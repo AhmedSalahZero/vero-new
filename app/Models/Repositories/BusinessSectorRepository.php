@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\BusinessSector;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,7 +48,7 @@ class BusinessSectorRepository implements IBaseRepository
         return BusinessSector::onlyCurrentCompany()->inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return BusinessSector::onlyCurrentCompany()->find($id);
     }
@@ -59,7 +58,7 @@ class BusinessSectorRepository implements IBaseRepository
         return BusinessSector::onlyCurrentCompany()->latest($column)->first();
 
     }
-     public function store(Request $request ):IBaseModel
+     public function store(Request $request )
     {
         $businessSector = BusinessSector::create([
             'name'=>$request->get('business_sector_name'),
@@ -72,7 +71,7 @@ class BusinessSectorRepository implements IBaseRepository
 
 
 
-    public function update( IBaseModel $businessSector , Request $request ):void
+    public function update(  $businessSector , Request $request ):void
     {
         $businessSector->update($request->except('_token'));
     }

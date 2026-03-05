@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Helpers\HVero;
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\IShareable;
@@ -15,7 +14,7 @@ use App\Models\Traits\Scopes\withAllRelationsScope;
 use App\Traits\HasIndexedDates;
 use Illuminate\Database\Eloquent\Model;
 
-class  FinancialStatement extends Model implements IBaseModel, IHaveAllRelations, IExportable, IShareable
+class  FinancialStatement extends Model implements  IHaveAllRelations, IExportable, IShareable
 {
 	use HasIndexedDates, FinancialStatementAccessor, FinancialStatementMutator, FinancialStatementRelation, CompanyScope, withAllRelationsScope;
 	protected  $casts = [

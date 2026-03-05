@@ -1,11 +1,9 @@
 <?php
 namespace App\Traits;
 
-use App\Helpers\HDate;
 use App\Models\FinancialInstitution;
 use App\Models\LendingInformation;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 
 

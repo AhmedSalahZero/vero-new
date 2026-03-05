@@ -66,6 +66,7 @@ trait IsMoney
     }
     public function storeNewSettlement(array $settlements, int $partnerId, Company $company, bool $isFromDownPayment = false, bool $syncWithOdoo = true):array
     {
+		
         $totalWithholdAmount= 0 ;
         $OdooPaymentService = null ;
 		$storedSettlements = [];
@@ -82,7 +83,7 @@ trait IsMoney
                 $settlementArr['withhold_amount'] = $withholdAmount ;
                 $totalWithholdAmount += $withholdAmount  ;
                 unset($settlementArr['net_balance']);
-                $settlement = $this->settlements()->create($settlementArr);
+				$settlement =  $this->settlements()->create($settlementArr);
                 if ($OdooPaymentService && $syncWithOdoo && $company->withinIntegrationDate($this->getDate())) {
                     $OdooPaymentService->createPayment($settlement);
                 }
@@ -170,19 +171,7 @@ trait IsMoney
     {
         return number_format($this->getDownPaymentAmount());
     }
-    // public function getReceivingOrPaidAmount():string
-    // {
-    // 	/**
-    // 	 * @var MoneyReceived $this
-    // 	 */
-    // 	if($this instanceof MoneyReceived){
-    // 		return $this->getReceivingAmount();
-    // 	}
-    // 	if($this instanceof MoneyPayment){
-    // 		return $this->getPaymentCurrency();
-    // 	}
-    // 	throw new \Exception('Customer Exception Invalid Money Type');
-    // }
+   
     public function getReceivingOrPaymentCurrency():string
     {
         if ($this instanceof MoneyReceived) {
@@ -332,9 +321,6 @@ trait IsMoney
         if ($this instanceof MoneyPayment && $this->isCashPayment()) {
             $isCashInSafeOrCashPayment = true ;
         }
-        if ($this instanceof CashExpense && $this->isCashPayment()) {
-            $isCashInSafeOrCashPayment = true ;
-        }
         return $isCashInSafeOrCashPayment ;
     }
     public function isAdvancedOpeningBalance():bool
@@ -399,27 +385,25 @@ trait IsMoney
             
         }
         
+        else{
+			if ($this->isCashPayment()) {
+				return (int)$this->getBranch()->getOdooOutboundTransferPaymentMethodId();
+			}
+			if ($this->isOutgoingTransfer()) {
+				$financialInstitution = $this->outgoingTransferDeliveryBank();
+				$accountTypeId = $this->getOutgoingTransferAccountTypeId();
+				$accountNumber = $this->getOutgoingTransferAccountNumber();
+				return (int)$financialInstitution->getOdooPaymentIds($accountTypeId, $accountNumber)['odoo_outbound_transfer_payment_method_id'];
+			}
+			if ($this->isPayableCheque()) {
+				$payableCheque = $this->payableCheque ;
+				$financialInstitution = $payableCheque->deliveryBank;
+				$accountTypeId = $payableCheque->account_type;
+				$accountNumber  = $payableCheque->account_number;
+				return (int)$financialInstitution->getOdooPaymentIds($accountTypeId, $accountNumber)['odoo_outbound_cheque_payment_method_id'];
+			}
+		}
         
-        /**
-         *  MoneyPayment $this
-         */
-        if ($this->isCashPayment()) {
-            return (int)$this->getBranch()->getOdooOutboundTransferPaymentMethodId();
-        }
-        if ($this->isOutgoingTransfer()) {
-            $financialInstitution = $this->outgoingTransferDeliveryBank();
-            $accountTypeId = $this->getOutgoingTransferAccountTypeId();
-            $accountNumber = $this->getOutgoingTransferAccountNumber();
-            return (int)$financialInstitution->getOdooPaymentIds($accountTypeId, $accountNumber)['odoo_outbound_transfer_payment_method_id'];
-        }
-        if ($this->isPayableCheque()) {
-            $payableCheque = $this->payableCheque ;
-            $financialInstitution = $payableCheque->deliveryBank;
-            $accountTypeId = $payableCheque->account_type;
-            $accountNumber  = $payableCheque->account_number;
-            return (int)$financialInstitution->getOdooPaymentIds($accountTypeId, $accountNumber)['odoo_outbound_cheque_payment_method_id'];
-                
-        }
             
         
         
@@ -446,15 +430,19 @@ trait IsMoney
             return $financialInstitution->getJournalIdForAccount($accountTypeId, $accountNumber);
                 
         }
-        if ($payableCheque = $this->payableCheque) {
-            $financialInstitution = $payableCheque->deliveryBank;
-            $accountTypeId = $payableCheque->account_type;
-            $accountNumber  = $payableCheque->account_number;
-            return $financialInstitution->getJournalIdForAccount($accountTypeId, $accountNumber);
-                
+        if ($this instanceof MoneyPayment ) {
+			$payableCheque = $this->payableCheque;
+			if($payableCheque){
+				$financialInstitution = $payableCheque->deliveryBank;
+				$accountTypeId = $payableCheque->account_type;
+				$accountNumber  = $payableCheque->account_number;
+				return $financialInstitution->getJournalIdForAccount($accountTypeId, $accountNumber);
+					
+				
+			}
         }
     
-        return null ;
+        return 0 ;
     }
     
     public function getChequeOdooId():int
@@ -465,30 +453,21 @@ trait IsMoney
             }
          
         }
-        if ($payableCheque = $this->payableCheque) {
-            return $payableCheque->deliveryBank->getOdooId();
-        }
+        if ($this instanceof MoneyPayment ) {
+			$payableCheque = $this->payableCheque;
+			if($payableCheque){
+				/**
+				 * ! getOdooId Is Not Exists In FinancialInstitution Model
+				 */
+				return $payableCheque->deliveryBank->getOdooId();
+			}
+		}
+		return 0 ;
+	}
     
-        return null ;
-    }
-    
-    public function getTransactionType()
-    {
-        return $this->transaction_type;
-    }
-    public function getInvoiceNumber()
-    {
-        return $this->odoo_reference ?: $this->odoo_id ;
-    }
-    public function isChequeAndNotCustomerOrSupplier()
-    {
-        return $this->isChequeOrChequePayment() && (!in_array($this->getPartnerType(), ['is_customer','is_supplier']));
-    }
     public function handleOdooDownPayments($OdooPaymentService, $hasOdooIntegration)
     {
-        /**
-         * @var MoneyPayment | MoneyReceived $this
-         */
+        
         if ($hasOdooIntegration && $this->isDownPayment()) {
             $OdooPaymentService->reCreateDownPayment($this);
         } elseif ($hasOdooIntegration && $this->isChequeAndNotCustomerOrSupplier()) {
@@ -496,62 +475,27 @@ trait IsMoney
         }
         
     }
-    /**
-     * * for money payments and cash expenses
-     */
-    public function markPayableChequeAsPaidInOdoo()
-    {
-        //	$this->refresh();
-        $actualPaymentDate = $this->payableCheque->actual_payment_date  ;
-        
-        $company = $this->company;
-        $odooPaymentService = new OdooPayment($company);
-        $odooSetting = $company->odooSetting;
-        $financialInstitution = $this->payableCheque->deliveryBank;
-        $currency = $this->getCurrency();
-        $hasSettlements = $this->settlements && $this->settlements->count()  ;
-        $items = $hasSettlements ? $this->settlements : [$this];
-        $debitAccountOdooId = $odooSetting->getChequesPayableId();
-        $odooCurrencyId =Currency::getOdooId($currency);
-        $accountTypeId=$this->payableCheque->getAccountTypeId();
-        $accountNumber = $this->payableCheque->getAccountNumber();
-        $journalId = $financialInstitution->getJournalIdForAccount($accountTypeId, $accountNumber);
-        $creditOdooAccountId = $financialInstitution->getOdooIdForAccount($accountTypeId, $accountNumber);
-        $odooPartnerId = $this->getPartnerOdooId();
-        if ($this->isInvoiceSettlementWithDownPayment()) {
-            $items->push($this);
-        }
-        foreach ($items as $settlementOrMoneyModel) {
-            $odooId = $settlementOrMoneyModel->odoo_id ;
-            $ref = 'Cheque Payment ' . $settlementOrMoneyModel->getInvoiceNumber();
-            $amount= $settlementOrMoneyModel->getAmountInReceivingCurrency();
-            $isMoneyPayment  = $settlementOrMoneyModel instanceof MoneyPayment ;
-            if ($isMoneyPayment && $this->isInvoiceSettlementWithDownPayment()) {
-                $amount = $this->downPaymentSettlements->sum('down_payment_amount')* $this->getExchangeRate();
-            }
-            if ($settlementOrMoneyModel->account_bank_statement_line_id) {
-                $odooPaymentService->unlinkBankCollection($settlementOrMoneyModel->account_bank_statement_line_id);
-            }
-            $res = $odooPaymentService->chequePayment($odooId, $amount, $actualPaymentDate, $odooCurrencyId, $journalId, $debitAccountOdooId, $creditOdooAccountId, $odooPartnerId, $ref);
-            $settlementOrMoneyModel->update([
-            'account_bank_statement_line_id'=>$res['statement_entry_id']??null,
-                'odoo_reference'=>$res['bank_reference']??null
-            ]);
-                
-        }
-                
-    }
+    
     public function markOpeningPayableChequeAsPaidInOdoo($isMoneyReceived = false)
     {
-        
-        $cheque = $isMoneyReceived ? $this->cheque : $this->payableCheque;
+        $cheque = null;
+        if ($this instanceof MoneyReceived) {
+			$cheque = $this->cheque;
+		}
+		if ($this instanceof MoneyPayment || $this instanceof CashExpense) {
+			$cheque = $this->payableCheque;
+		}
+		if(!$cheque){
+			return;
+		}
         $actualPaymentDate = $isMoneyReceived ? $cheque->actual_collection_date : $cheque->actual_payment_date  ;
         $company = $this->company;
         //  $odooPaymentService = new OdooPayment($company);
         $odooSetting = $company->odooSetting;
         $financialInstitution = $isMoneyReceived ? $cheque->drawlBank : $cheque->deliveryBank;
         $currency = $isMoneyReceived ? $this->getReceivingCurrency() :  $this->getPaymentCurrency();
-        $hasSettlements = $this->settlements && $this->settlements->count()  ;
+        $hasSettlements =  $this->settlements->count()  ;
+        // $hasSettlements = $this->settlements && $this->settlements->count()  ;
         $items = $hasSettlements ? $this->settlements : [$this];
         //      $debitAccountOdooId = $odooSetting->getChequesPayableId();
         $odooCurrencyId =Currency::getOdooId($currency);
@@ -582,9 +526,7 @@ trait IsMoney
             if ($isMoneyPayment && $this->isInvoiceSettlementWithDownPayment()) {
                 $amount = $this->downPaymentSettlements->sum('down_payment_amount');
             }
-            /**
-			 * @var MoneyReceived|MoneyPayment $this
-			 */
+           
             $cashExpenseOdooService = new CashExpenseOdooService($company);
             $amountInMainFunctionalCurrency  = $currency != $mainFunctionalCurrency  ? $amount * $this->getExchangeRate() : $amount ;
             $result = $cashExpenseOdooService->createCashExpense('', $actualPaymentDate, $amount, $amountInMainFunctionalCurrency, $journalId, $odooCurrencyId, $debitOdooAccountId, $creditOdooAccountId, [], $ref, $odooPartnerId, $isMoneyReceived);

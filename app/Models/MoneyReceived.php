@@ -23,6 +23,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * @property PayableCheque $payableCheque
+ */
+/**
  * @mixin IdeHelperMoneyReceived
  */
 class MoneyReceived extends Model

@@ -1,9 +1,9 @@
 
 <div id="kt_header" class="kt-header  kt-header--fixed fh-fixedHeader" data-ktheader-minimize="on">
-@@php
+@php
 	$super_admin_sections = \App\Helpers\HAuth::getSuperAdminSection();
 	
-@end@php
+@endphp
 
     <div class="kt-container ">
 
@@ -175,9 +175,9 @@
                     <span class="kt-header__topbar-welcome">Hi,</span>
                     <span class="kt-header__topbar-username ">{{ $user->name }} </span>
                     <span class="kt-header__topbar-icon"><b>{{ $first_letter }}</b></span> &nbsp;
-                    @@php
+                    @php
                     $days = $user->getExpirationDaysLeft();
-                    @end@php
+                    @endphp
                     @if ($user->subscription == 'free_trial')
                     <span class="kt-header__topbar-username "><b>{{ $days . __(' Days Left') }}</b></span>
                     @endif

@@ -3,6 +3,7 @@ namespace App\Services\Api;
 
 use App\Models\Company;
 use App\Models\Currency;
+use App\Models\Settlement;
 use App\Services\Api\Traits\AuthTrait;
 use App\Services\Api\Traits\HasJournal;
 use App\Services\Api\Traits\HasPayment;
@@ -111,8 +112,9 @@ class OdooPayment
     public function createDownPaymentFromSettlement($settlement)
     {
     
-      
+    
         try {
+		
             $company = $settlement->company ;
             $moneyModel =  $settlement->getMoney() ;
             $paymentDate =$moneyModel->getReceivingOrPaymentMoneyDate();

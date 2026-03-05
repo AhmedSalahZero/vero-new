@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Helpers\HVero;
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\Interfaces\IFinancialStatementAble;
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class  BalanceSheet extends Model implements IBaseModel, IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
+class  BalanceSheet extends Model implements  IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
 {
 	use  BalanceSheetAccessor, BalanceSheetMutator, BalanceSheetRelation, CompanyScope;
 

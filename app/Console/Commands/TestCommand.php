@@ -217,61 +217,61 @@ class TestCommand extends Command
 		}
 	
 	
-	public function convertIncomeStatementDatesToIndexes()
-	{
-		$financialStatements = FinancialStatement::
+	// public function convertIncomeStatementDatesToIndexes()
+	// {
+	// 	$financialStatements = FinancialStatement::
 	
-		get();
-		/**
-		 * @var FinancialStatement $financialStatement
-		 */
-		foreach($financialStatements as $financialStatement){
-			$request = (new Request)->merge([
-				'name'=>$financialStatement->getName(),
-				'start_from'=>$financialStatement->start_from,
-				'duration'=>$financialStatement->duration,
-				'duration_type'=>$financialStatement->duration_type,
-				'corporate_taxes_rate'=>22.5
-			]);
+	// 	get();
+	// 	/**
+	// 	 * @var FinancialStatement $financialStatement
+	// 	 */
+	// 	foreach($financialStatements as $financialStatement){
+	// 		$request = (new Request)->merge([
+	// 			'name'=>$financialStatement->getName(),
+	// 			'start_from'=>$financialStatement->start_from,
+	// 			'duration'=>$financialStatement->duration,
+	// 			'duration_type'=>$financialStatement->duration_type,
+	// 			'corporate_taxes_rate'=>22.5
+	// 		]);
 
-			$financialStatement->storeMainSection($request);
-			$financialStatement->updateIndexedDates();
-			$incomeStatement = $financialStatement->incomeStatement;
-			if(is_null($incomeStatement)){
-				continue;
-			}
-			$datesHelper = $financialStatement->getDatesIndexesHelper();
-			$dateWithDateIndex = $datesHelper['dateWithDateIndex'];
-			foreach([
-				'financial_statement_able_main_item_calculations',
-			'financial_statement_able_main_item_sub_items'] as $tableName){
+	// 		$financialStatement->storeMainSection($request);
+	// 		$financialStatement->updateIndexedDates();
+	// 		$incomeStatement = $financialStatement->incomeStatement;
+	// 		if(is_null($incomeStatement)){
+	// 			continue;
+	// 		}
+	// 		$datesHelper = $financialStatement->getDatesIndexesHelper();
+	// 		$dateWithDateIndex = $datesHelper['dateWithDateIndex'];
+	// 		foreach([
+	// 			'financial_statement_able_main_item_calculations',
+	// 		'financial_statement_able_main_item_sub_items'] as $tableName){
 	
-			$rows = DB::table($tableName)
-			->where('financial_statement_able_id',$incomeStatement->id)
-			->get();
-			foreach($rows as $row ){
+	// 		$rows = DB::table($tableName)
+	// 		->where('financial_statement_able_id',$incomeStatement->id)
+	// 		->get();
+	// 		foreach($rows as $row ){
 				
-				$indexedPayload = [];
-				$payload = (array)json_decode($row->payload);
-				foreach($payload as $date => $value){
-					$dateIndex = $dateWithDateIndex[$date]??null;
-					if(is_null($dateIndex)){
-						$indexedPayload[$date] = $value;
+	// 			$indexedPayload = [];
+	// 			$payload = (array)json_decode($row->payload);
+	// 			foreach($payload as $date => $value){
+	// 				$dateIndex = $dateWithDateIndex[$date]??null;
+	// 				if(is_null($dateIndex)){
+	// 					$indexedPayload[$date] = $value;
 						
-					}else{
-						$indexedPayload[$dateIndex] = $value;
-					}
-				}
-				DB::table($tableName)->where('id',$row->id)->update([
-					'payload'=>json_encode($indexedPayload)
-				]);
+	// 				}else{
+	// 					$indexedPayload[$dateIndex] = $value;
+	// 				}
+	// 			}
+	// 			DB::table($tableName)->where('id',$row->id)->update([
+	// 				'payload'=>json_encode($indexedPayload)
+	// 			]);
 				
-			}
-		}
+	// 		}
+	// 	}
 		
-	}
+	// }
 		
-	}
+	// }
 	
 	public function insertCustomersIntoPartnerTable(int $companyId)
 	{
@@ -301,23 +301,25 @@ class TestCommand extends Command
 			]);
 		});
 	}
-	public function getTableNamesThatHasColumn(string $columnName,$connectionName = null):array 
-	{
-		$contains = [];
-		$notContains = [];
-		$tables = DB::connection($connectionName)->getDoctrineSchemaManager()->listTableNames();
-		foreach($tables as $tableName){
-			if(Schema::connection($connectionName)->hasColumn($tableName,$columnName)){
-				$contains[] = $tableName;
-			}else{
-				$notContains[] = $tableName;
-			}
-		}
-		return [
-			'contains'=>$contains,
-			'not_contains'=>$notContains
-		]; 
-	}
+	// public function getTableNamesThatHasColumn(string $columnName,$connectionName = null):array 
+	// {
+	// 	$contains = [];
+	// 	$notContains = [];
+	// 	$connection = DB::connection($connectionName);
+		
+	// 	$tables = $connection->getDoctrineSchemaManager()->listTableNames();
+	// 	foreach($tables as $tableName){
+	// 		if(Schema::connection($connectionName)->hasColumn($tableName,$columnName)){
+	// 			$contains[] = $tableName;
+	// 		}else{
+	// 			$notContains[] = $tableName;
+	// 		}
+	// 	}
+	// 	return [
+	// 		'contains'=>$contains,
+	// 		'not_contains'=>$notContains
+	// 	]; 
+	// }
 	// public function calculateIrr()
 	// {
 	// 	$pythonFilePath = resource_path('python/valuation/irr.py');

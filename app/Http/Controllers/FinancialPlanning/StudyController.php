@@ -11,32 +11,7 @@ use Illuminate\Support\Collection;
 
 class StudyController extends Controller
 {
-	// protected function applyFilter(Request $request,Collection $collection):Collection{
-	// 	if(!count($collection)){
-	// 		return $collection;
-	// 	}
-	// 	$searchFieldName = $request->get('field');
-	// 	$dateFieldName =  'created_at' ;
-	// 	$from = $request->get('from');
-	// 	$to = $request->get('to');
-	// 	$value = $request->query('value');
-	// 	$collection = $collection
-	// 	->when($request->has('value'),function($collection) use ($request,$value,$searchFieldName){
-	// 		return $collection->filter(function($moneyReceived) use ($value,$searchFieldName){
-	// 			$currentValue = $moneyReceived->{$searchFieldName} ;
-	// 			return false !== stristr($currentValue , $value);
-	// 		});
-	// 	})
-	// 	->when($request->get('from') , function($collection) use($dateFieldName,$from){
-	// 		return $collection->where($dateFieldName,'>=',$from);
-	// 	})
-	// 	->when($request->get('to') , function($collection) use($dateFieldName,$to){
-	// 		return $collection->where($dateFieldName,'<=',$to);
-	// 	})
-	// 	->sortByDesc('id')->values();
-		
-	// 	return $collection;
-	// }
+	
 	
     public function index(Company $company , Request $request){
 		

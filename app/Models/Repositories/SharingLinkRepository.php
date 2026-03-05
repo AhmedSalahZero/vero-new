@@ -3,8 +3,6 @@
 namespace App\Models\Repositories;
 
 use App\Helpers\HStr;
-use App\Interfaces\Models\IBaseModel;
-use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\SharingLink;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -45,12 +43,12 @@ class SharingLinkRepository
         return SharingLink::inRandomOrder();
     }
 
-    public function find(?int $id):IBaseModel
+    public function find(?int $id)
     {
         return SharingLink::find($id);
     }
 
-    public function findBy($column, $value):IBaseModel
+    public function findBy($column, $value)
     {
         return SharingLink::where($column, $value)->firstOrFail();
     }
@@ -83,7 +81,7 @@ class SharingLinkRepository
 
 
 
-    public function update(IBaseModel $sharingLink, Request $request):void
+    public function update( $sharingLink, Request $request):void
     {
         $sharingLink->update($request->except('_token'));
     }

@@ -54,10 +54,10 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @@php
+                @php
                 sortTwoDimensionalExcept($allocation_data_total, ['Total']);
 
-                @end@php
+                @endphp
                 @foreach ($allocation_data_total as $base_name => $value)
                 @php $class_name = $base_name == 'Total' ? 'active-style' : ''; @endphp
                 
@@ -80,9 +80,9 @@
     </div>
     @endif
     @else
-    @@php
+    @php
     $allocation_base = '';
-    @end@php
+    @endphp
     @endif
     {{-- Existing Products  --}}
 
@@ -100,11 +100,11 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @@php
+                @php
 
                 sortTwoDimensionalExcept($existing_product_data, ['Total']);
 
-                @end@php
+                @endphp
                 @foreach ($existing_product_data as $base_name => $value)
                 @php
                                 $class_name = $base_name == 'Total' ? 'active-style' : '';
@@ -150,11 +150,11 @@
                 </tr>
                 @endslot
                 @slot('table_body')
-                @@php
+                @php
 
                 sortTwoDimensionalExcept($total_products_items, ['Total']);
 
-                @end@php
+                @endphp
                 @foreach ($total_products_items as $base_name => $value)
                 @php $class_name = $base_name == 'Total' ? 'active-style' : ''; @endphp
                 <tr>

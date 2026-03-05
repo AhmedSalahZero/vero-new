@@ -116,9 +116,9 @@
 @endforeach
 </div> --}}
 <!--End:: Tab  EGP FX Rate Table -->
-@@php
+@php
 	$view_name = str_replace('Items',' Products Items',$view_name);
-@end@php
+@endphp
 <!--Begin:: Tab USD FX Rate Table -->
 <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
     <x-table :tableTitle="__($view_name.' Report')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">

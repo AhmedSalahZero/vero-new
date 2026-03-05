@@ -50,10 +50,10 @@ table.dataTable tbody tr>.dtfc-fixed-right,
                         </tr>
                     @endslot
                     @slot('table_body')
-                    @@php
+                    @php
                         $percentages = [];
                         sortTwoDimensionalArr($sales_targets_values);
-                    @end@php
+                    @endphp
                         @php $total_new_items_targets = array_sum($total_monthly_targets['new']);@endphp
                         @foreach ($sales_targets_values as $base_vame => $target)
                             @php $percentages[$base_vame] = $total_new_items_targets == 0 ? 0 : ($target / $total_new_items_targets) * 100; @endphp
@@ -74,10 +74,10 @@ table.dataTable tbody tr>.dtfc-fixed-right,
             </div>
         </div>
         @else
-        @@php
+        @php
         $total_new_items_targets  = 0;
 
-        @end@php
+        @endphp
 @endif
 
         @php $item = ucwords(str_replace('_', ' ', $allocation_base)); @endphp

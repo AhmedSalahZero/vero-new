@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Interfaces\Models\IBaseModel;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\BalanceSheet;
 use App\Models\BalanceSheetItem;
@@ -42,7 +41,7 @@ class BalanceSheetRepository implements IBaseRepository
 		return BalanceSheet::onlyCurrentCompany()->inRandomOrder();
 	}
 
-	public function find(?int $id): IBaseModel
+	public function find(?int $id)
 	{
 		return BalanceSheet::onlyCurrentCompany()->find($id);
 	}
@@ -51,7 +50,7 @@ class BalanceSheetRepository implements IBaseRepository
 	{
 		return BalanceSheet::onlyCurrentCompany()->latest($column)->first();
 	}
-	public function store(Request $request): IBaseModel
+	public function store(Request $request)
 	{
 		$balanceSheet = App(BalanceSheet::class);
 
@@ -60,7 +59,7 @@ class BalanceSheetRepository implements IBaseRepository
 		return $balanceSheet;
 	}
 
-	public function storeReport(Request $request): IBaseModel
+	public function storeReport(Request $request)
 	{
 		$balanceSheet = new BalanceSheet();
 
@@ -70,7 +69,7 @@ class BalanceSheetRepository implements IBaseRepository
 		return $balanceSheet;
 	}
 
-	public function update(IBaseModel $balanceSheet, Request $request): void
+	public function update( $balanceSheet, Request $request): void
 	{
 		// $balanceSheet
 		// 	->updateProfitability($request);

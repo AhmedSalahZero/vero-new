@@ -114,11 +114,11 @@
         </tr>
         @endslot
         @slot('table_body')
-        @@php
+        @php
 
         sortReportForTotals($report_data);
 
-        @end@php
+        @endphp
         @php $id =1 ;@endphp
         @foreach ($report_data as $zone_name => $data)
 
@@ -149,9 +149,9 @@
             <td class="text-center white-text">{{number_format(array_sum($total_per_zone??[]),0)}}</td>
         </tr>
 
-        @@php
+        @php
         sortSubItems($data,$type)
-        @end@php
+        @endphp
         @foreach ($data as $channel_name => $channel_section)
 
 

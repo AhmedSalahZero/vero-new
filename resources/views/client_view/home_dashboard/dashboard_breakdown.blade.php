@@ -111,7 +111,7 @@
 @endsection
 @section('content')
 
-@@php
+@php
 $exportableFields = (new \App\Http\Controllers\ExportTable)->customizedTableField($company, 'SalesGathering', 'selected_fields');
 $exportableFieldsValues = array_keys($exportableFields);
 if(in_array('document_type' , $exportableFieldsValues) && in_array('document_number' , $exportableFieldsValues) )
@@ -120,7 +120,7 @@ $exportableFieldsValues[] = 'invoice_count';
 $exportableFieldsValues[] = 'product_item_avg_count';
 $exportableFieldsValues[] = 'avg_invoice_value';
 }
-@end@php
+@endphp
 <div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
@@ -218,9 +218,9 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        @@php
+                                        @php
                                         $businessSectors = getTypeFor($type,$company->id,false);
-                                        @end@php
+                                        @endphp
                                         <input type="hidden" name="company_id" value="{{ $company->id }}">
                                         <input type="hidden" name="type" value="{{ $type }}">
                                         <label class="text-left font-weight-bold  w-100 mb-3 text-black">{{ __('Please Select') }} {{ ucwords(str_replace('_',' ',$type)) }}</label>
@@ -418,9 +418,9 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                             @slot('table_body')
 
 
-@@php
+@php
 	$acc = 0;
-@end@php
+@endphp
                             @foreach ($report_data as $key => $item)
 
                             <tr>
@@ -428,9 +428,9 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                 <th>{{($key??0)+1}}</th>
                                 <td class=" max-w-300">{{$item['item']?? '-'}}</td>
                                 <td class="text-center">{{number_format($item['Sales Value']??0)}}</td>
-								@@php
+								@php
 									$acc += $total == 0 ? 0 : (($item['Sales Value']/$total)*100)  ;
-								@end@php
+								@endphp
                                 {{-- <td class="text-center">{{ . ' %'}}</td> --}}
                                 <td class="text-center">{{$total == 0 ? 0 : number_format((($item['Sales Value']/$total)*100) , 1) . ' %'}}</td>
                                 <td class="text-center">{{number_format($acc,1). ' %'}}</td>

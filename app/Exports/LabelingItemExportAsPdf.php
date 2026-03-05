@@ -56,9 +56,7 @@ class LabelingItemExportAsPdf implements
 	private $headers = [];
 	protected ?string $writerType;
 	protected string $fileName;																
-	/**
-	 * @param Collection $products
-	 */
+	
 
 	public function __construct(Collection $items )
 	{
