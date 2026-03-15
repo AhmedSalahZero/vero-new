@@ -27,7 +27,7 @@ class SummaryController extends Controller
 
         // Calculation of Total Company Sales Target In Quarters
         $total = $total = array_sum($detailed_company_sales_target['total'] ?? []);
-        $quarters = $this->companySalesTargetsQuarters($sales_forecast, $detailed_company_sales_target['total'] ?? 0, $total);
+        $quarters = $this->companySalesTargetsQuarters( $detailed_company_sales_target['total'] ?? 0);
         //  Total Company Sales Target Data For Chart
         $chart_data = $this->totalCompanySalesTargetsChartData($detailed_company_sales_target['total']??0, $total);
         $new_products_targets_data['value'] = array_sum($detailed_company_sales_target['new']??[]);
@@ -45,7 +45,7 @@ class SummaryController extends Controller
         ));
     }
 
-    public function companySalesTargetsQuarters($sales_forecast, $total_company_sales_target)
+    public function companySalesTargetsQuarters( $total_company_sales_target)
     {
         $quarters = [
             'Quarter One' => 0,
@@ -96,7 +96,7 @@ class SummaryController extends Controller
             $multi_chart_data[] = [
                 'date' => $formated_date,
                 'Sales Values' => number_format(($value ?? 0), 0),
-                'Month Sales %' => number_format(($month_sales ?? 0), 0),
+                'Month Sales %' => number_format(($month_sales ), 0),
                 'Growth Rate %' => number_format(($gr[$date] ?? 0), 1),
             ];
 

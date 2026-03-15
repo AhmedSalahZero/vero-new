@@ -178,7 +178,7 @@ class BuyOrSellCurrenciesController
 		$buyOrSellCurrency = new BuyOrSellCurrency ;
 		$type = $request->get('type');
 		$transferDate = Carbon::make($request->get('transaction_date'))->format('Y-m-d') ;
-		$receivingDate = Carbon::make($transferDate)->addDay($request->get('transfer_days',0))->format('Y-m-d');
+		$receivingDate = Carbon::make($transferDate)->addDays($request->get('transfer_days',0))->format('Y-m-d');
 		$transferFromAmount = $request->get('currency_to_sell_amount',0) ;
 		$transferToAmount =$request->get('currency_to_buy_amount') ;
 		$exchangeRate  = $request->get('exchange_rate');

@@ -14,7 +14,89 @@ use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasIndexedDates;
 use Illuminate\Database\Eloquent\Model;
 
-	class  Study extends Model
+	/**
+ * @property int $id
+ * @property string $name اسم الدراسة
+ * @property string $company_nature نوع الشركة
+ * @property int|null $to_be_consolidated_from_study_id هيكون رقم الدراسة اللي هيختارها
+ * @property string $study_start_date
+ * @property int $duration_in_years
+ * @property string $study_end_date
+ * @property float $operation_start_month
+ * @property string $operation_start_date
+ * @property string $financial_year_start_month
+ * @property numeric $corporate_taxes_rate
+ * @property numeric $annual_salary_increase_rate
+ * @property numeric $salary_taxes_rate
+ * @property numeric $social_insurance_rate
+ * @property numeric $revenue_multiplier
+ * @property numeric $perpetual_growth_rate
+ * @property numeric $ebitda_multiplier
+ * @property array<array-key, mixed>|null $operation_dates
+ * @property array<array-key, mixed>|null $study_dates
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property numeric $shareholder_equity_multiplier
+ * @property int $has_trading
+ * @property int $has_manufacturing
+ * @property int $has_service
+ * @property int $has_service_with_inventory
+ * @property int $main_planning_base
+ * @property int $sub_planning_base
+ * @property string|null $add_new_from_main_planning product_or_service , sales_channel , etc
+ * @property string|null $add_new_from_sub_planning product_or_service , sales_channel , etc
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesGathering\Branch> $newBranches
+ * @property-read int|null $new_branches_count
+ * @property-read bool|null $new_branches_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesGathering\Principle> $newPrinciples
+ * @property-read int|null $new_principles_count
+ * @property-read bool|null $new_principles_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesGathering\Product> $newProducts
+ * @property-read int|null $new_products_count
+ * @property-read bool|null $new_products_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesGathering\SalesChannel> $newSalesChannels
+ * @property-read int|null $new_sales_channels_count
+ * @property-read bool|null $new_sales_channels_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereAddNewFromMainPlanning($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereAddNewFromSubPlanning($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereAnnualSalaryIncreaseRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereCompanyNature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereCorporateTaxesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereDurationInYears($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereEbitdaMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereFinancialYearStartMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereHasManufacturing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereHasService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereHasServiceWithInventory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereHasTrading($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereMainPlanningBase($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereOperationDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereOperationStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereOperationStartMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study wherePerpetualGrowthRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereRevenueMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereSalaryTaxesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereShareholderEquityMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereSocialInsuranceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereStudyDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereStudyEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereStudyStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereSubPlanningBase($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereToBeConsolidatedFromStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialPlanning\Study whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class Study extends Model
 	{
 		use HasBasicStoreRequest , HasIndexedDates;
 		protected  $casts = [

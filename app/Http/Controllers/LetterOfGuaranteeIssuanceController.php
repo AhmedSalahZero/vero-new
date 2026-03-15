@@ -41,7 +41,7 @@ class LetterOfGuaranteeIssuanceController
         $to = $request->get('to');
         $value = $request->query('value');
         $collection = $collection
-        ->when($request->has('value'), function ($collection) use ($request, $value, $searchFieldName) {
+        ->when($request->has('value'), function ($collection) use ( $value, $searchFieldName) {
             return $collection->filter(function ($letterOfGuaranteeIssuance) use ($value, $searchFieldName) {
                 $currentValue = $letterOfGuaranteeIssuance->{$searchFieldName} ;
                 return false !== stristr($currentValue, $value);
@@ -456,7 +456,9 @@ class LetterOfGuaranteeIssuanceController
         if ($letterOfGuaranteeFacility instanceof LetterOfGuaranteeFacility) {
             $letterOfGuaranteeFacilityId = $letterOfGuaranteeFacility->id ;
         }
-        
+        /**
+		 * @var LetterOfGuaranteeIssuanceAdvancedPaymentHistory $letterOfGuaranteeIssuanceAdvancedPaymentHistory
+		 */
         $letterOfGuaranteeIssuanceAdvancedPaymentHistory = $letterOfGuaranteeIssuance->advancedPaymentHistories()->create([
             'date'=>$decreaseDate,
             'amount'=>$decreaseAmount,

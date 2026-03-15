@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class ExpenseAgainstAnalysisReport
 {
-    use GeneralFunctions;
+    use GeneralFunctions , Intervals;
 	
 	protected function formatMonthlySalesGathering(array $items){
 		$result = [];
@@ -49,12 +49,10 @@ class ExpenseAgainstAnalysisReport
 		$currentMonth = explode('-', $end_date_month)[0];
 		$currentYear = explode('-', $end_date_month)[1];
 		
-		$currentMonthExpenses = DB::select(DB::raw(
-
-			"
+		$query = "
             select sum(total_cost) as current_month_expenses from expense_analysis where year(date) = " . $currentYear . " and month(date)=" . $currentMonth . " and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+            " . $company->id;
+		$currentMonthExpenses = DB::select($query);
 
 		$currentMonthExpenses = $currentMonthExpenses[0]->current_month_expenses ?: 0;
 		$previousMonth = Carbon::make($endDate)->startOfMonth()->subMonths(1)->month;
@@ -64,12 +62,10 @@ class ExpenseAgainstAnalysisReport
 		$previous3Month = Carbon::make($endDate)->startOfMonth()->subMonths(3)->month;
 		$previous3MonthYear = Carbon::make($endDate)->startOfMonth()->subMonths(3)->year;
 		
-		$perviousMonthExpenses = DB::select(DB::raw(
-			"
+		$query = "
             select sum(total_cost) as previous_month_expenses from expense_analysis where year(date) = " . $previousMonthYear . " and month(date)=" . $previousMonth . " and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+            " . $company->id;
+		$perviousMonthExpenses = DB::select($query);
 		
 		$previousMonthExpenses = $perviousMonthExpenses[0]->previous_month_expenses;
 		$percentage = $previousMonthExpenses && $previousMonthExpenses != 0 ? ((($currentMonthExpenses - $previousMonthExpenses) / $previousMonthExpenses) * 100)   : 0;
@@ -80,13 +76,10 @@ class ExpenseAgainstAnalysisReport
 		$result = DB::table('expense_analysis')->where('company_id',$company->id)->whereBetween('date',[$startDate,$endDate])->pluck('category_name','expense_name')->toArray();
 		$firstColumnData = array_values(array_unique(array_values($result)));
 		$thirdColumnData = array_values(array_keys($result));
-		$salesToDate = DB::select(DB::raw(
-			"select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $startDate . "' and date <= '" . $endDate . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
-		$expensesToDate = DB::select(DB::raw(
-			"select sum(total_cost) total_sales_to_date from expense_analysis where date >= '" . $startDate . "' and date <= '" . $endDate . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+		$query = "select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $startDate . "' and date <= '" . $endDate . "' and company_id = " . $company->id;
+		$salesToDate = DB::select($query);
+		$query = "select sum(total_cost) total_sales_to_date from expense_analysis where date >= '" . $startDate . "' and date <= '" . $endDate . "' and company_id = " . $company->id;
+		$expensesToDate = DB::select($query);
 		$expensesToDate = $expensesToDate[0]->total_sales_to_date ?: 0;
 		$avgMinMaxOutliersRequest = (new Request())->merge([
 			'type'=>'category_name',
@@ -123,8 +116,7 @@ class ExpenseAgainstAnalysisReport
 		]);
 		$result = $this->twoSelectorAndThreeSelectorAndComparingResult($request,$company,'array',true);
 		
-		$perviousThreeMonthsExpenses = DB::select(DB::raw(
-			"select sum(total_cost ) previous_three_months_expenses from expense_analysis 
+		$query = "select sum(total_cost ) previous_three_months_expenses from expense_analysis 
             where (
             (year(date)  =  " . $previousMonthYear  . " and month(date)=  " . $previousMonth . " ) 
             OR 
@@ -132,9 +124,8 @@ class ExpenseAgainstAnalysisReport
             OR 
             (year(date)  = " .  $previous3MonthYear  . " and month(date)= " . ($previous3Month) . ") 
             )
-                and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+                and company_id = " . $company->id;
+		$perviousThreeMonthsExpenses = DB::select($query);
 
 		$perviousThreeMonthsExpenses = $perviousThreeMonthsExpenses[0]->previous_three_months_expenses ?: 0;
 		$yearOfEndDate = Carbon::make($endDate)->startOfMonth()->subMonths(1)->format('Y') ;
@@ -271,14 +262,13 @@ class ExpenseAgainstAnalysisReport
 		$whereIn = '';
         foreach ($firstColumnItems as  $firstColumnItem) {
 
-                $results =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,".$firstColumn.$lastColumnQuery ."
                     FROM expense_analysis
                     WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = '".$firstColumnItem."' AND date between '".$request->start_date."' and '".$request->end_date."')
 					". $whereIn ."
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->groupBy($type)->map(function($item)use($data_type){
+                    ORDER BY id ";
+                $results =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                         return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
                             return $sub_item->sum($data_type);
                         });
@@ -359,13 +349,12 @@ class ExpenseAgainstAnalysisReport
         $growthRates =[];
         $mainItems = $request->get('firstColumnData',[]) ;
         foreach ($mainItems as  $currentMainItemName) {
-            $currentResult =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , total_cost ,".$firstColumnName."
                 FROM expense_analysis
                 WHERE ( company_id = '".$company->id."'AND ".$firstColumnName." = '".$currentMainItemName."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy('gr_date')->map(function($item){
+                ORDER BY id ";
+            $currentResult =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('total_cost');
                 })->toArray();
 		
@@ -465,22 +454,18 @@ class ExpenseAgainstAnalysisReport
 
 		
 		
-		$salesToDate = DB::select(DB::raw(
-			"select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $breakdownStartDate . "' and date <= '" . $breakdownEndDate . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+		$query = "select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $breakdownStartDate . "' and date <= '" . $breakdownEndDate . "' and company_id = " . $company->id;
+		$salesToDate = DB::select($query);
 		$salesToDate = $salesToDate[0]->total_sales_to_date ?: 0;
 		
 		$view_name = $request->view_name;
 		
-		$report_data =  collect(DB::select(DB::raw(
-			"
+		$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , total_cost," . $type . "
                 FROM expense_analysis
                 WHERE ( company_id = '" . $company->id . "'AND " . $type . " IS NOT NULL  AND date between '" . $breakdownStartDate . "' and '" . $breakdownEndDate . " ')
-                ORDER BY id "
-		)->getValue(DB::connection()->getQueryGrammar())
-	));
+                ORDER BY id ";
+		$report_data =  collect(DB::select($query));
 		
 			$key_num = 0;
 			$others = 0;
@@ -666,14 +651,13 @@ class ExpenseAgainstAnalysisReport
         foreach ($firstColumnItems as  $firstColumnItem) {
 
       
-                $results =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,".$firstColumn.$lastColumnQuery ."
                     FROM expense_analysis
                     WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = '".$firstColumnItem."' AND date between '".$request->start_date."' and '".$request->end_date."')
 					". $whereIn ."
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->groupBy($type)->map(function($item)use($data_type){
+                    ORDER BY id ";
+                $results =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                         return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
                             return $sub_item->sum($data_type);
                         });
@@ -683,21 +667,22 @@ class ExpenseAgainstAnalysisReport
             foreach (($dataForLastItem) as $second_column_key => $second_column) {
 				$years = [];
                 $data_per_main_item = $results[$second_column]??[];
-                if (count(($data_per_main_item))>0 ) {
+				$counts = count($data_per_main_item);
+                if ($counts >0 ) {
                     // Data & Growth Rate Per Sales Channel
                     array_walk($data_per_main_item, function ($val, $date) use (&$years) {
                         $years[] = date('Y', strtotime($date));
                     });
                     $years = array_unique($years);
                    
-					$counts = count($data_per_main_item) ; 
 				
-					$report_data[$firstColumnItem.' - '.$second_column]['Average Value'] = $counts ? array_sum($data_per_main_item ) / $counts : 0 ;
-					$report_data[$firstColumnItem.' - '.$second_column]['Min Value'] = $counts? HArr::getMinValuesWithItsDate($data_per_main_item) : [] ;
+				
+					$report_data[$firstColumnItem.' - '.$second_column]['Average Value'] =  array_sum($data_per_main_item ) / $counts ;
+					$report_data[$firstColumnItem.' - '.$second_column]['Min Value'] =  HArr::getMinValuesWithItsDate($data_per_main_item) ;
 					$report_data[$firstColumnItem.' - '.$second_column]['Min Value']['only_date_modal'] =1 ;
-					$report_data[$firstColumnItem.' - '.$second_column]['Max Value'] = $counts ? HArr::getMaxValuesWithItsDate($data_per_main_item) : [] ;
+					$report_data[$firstColumnItem.' - '.$second_column]['Max Value'] =  HArr::getMaxValuesWithItsDate($data_per_main_item)  ;
 					$report_data[$firstColumnItem.' - '.$second_column]['Max Value']['only_date_modal'] = 1 ;
-					$report_data[$firstColumnItem.' - '.$second_column]['Outliers']['dates'] = $counts ? HMath::removeOutliers($data_per_main_item) : [] ;
+					$report_data[$firstColumnItem.' - '.$second_column]['Outliers']['dates'] =  HMath::removeOutliers($data_per_main_item)  ;
 					$report_data[$firstColumnItem.' - '.$second_column]['Outliers']['date_and_value_modal'] = 1 ;
                 }
             }
@@ -737,9 +722,7 @@ class ExpenseAgainstAnalysisReport
 		$firstColumnViewName = $this->formatTitle($type) ;
 		$view_name = $firstColumnViewName . ' ' . __('Interval Comparing');
 		$submitRoute = route('result.interval.comparing.report',['company'=>$company->id]);
-		if(!isset($view_name) || !isset($type)){
-			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
-		}
+		
 		return view('client_view.reports.sales_gathering_analysis.view-interval-comparing-expenses', [
 			'company' => $company,
 			'view_name' => $view_name,
@@ -779,10 +762,8 @@ class ExpenseAgainstAnalysisReport
         $request['start_date']=$start_date_one;
         $request['end_date']=$end_date_one;
 		
-		$salesToDateForFirstInterval = DB::select(DB::raw(
-			"select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date_one . "' and date <= '" . $end_date_one . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+		$query = "select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date_one . "' and date <= '" . $end_date_one . "' and company_id = " . $company->id;
+		$salesToDateForFirstInterval = DB::select($query);
 		$salesToDateForFirstInterval = $salesToDateForFirstInterval[0]->total_sales_to_date ?: 0;
 		
 		
@@ -800,10 +781,8 @@ class ExpenseAgainstAnalysisReport
         $request['end_date']=$end_date_two;
 		
 		
-		$salesToDateForSecondInterval = DB::select(DB::raw(
-			"select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date_two . "' and date <= '" . $end_date_two . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+		$query = "select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date_two . "' and date <= '" . $end_date_two . "' and company_id = " . $company->id;
+		$salesToDateForSecondInterval = DB::select($query);
 		$salesToDateForSecondInterval = $salesToDateForSecondInterval[0]->total_sales_to_date ?: 0;
 		$salesToDateForIntervals = [
 			'_one'=>$salesToDateForFirstInterval,

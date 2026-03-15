@@ -160,8 +160,8 @@ Route::group(['prefix'=>PROPERTY_MANAGEMENT_SERVICE_URL_PREFIX,'middleware'=>'is
             route::get('cash-in-out-export', 'CashInOutFlowController@exportReport')->name('export.property.management.forecast.cash.in.out');
                             
                             
-            route::get('previous-years-income-statement', 'IncomeStatementController@viewPreviousTwoYearsIncomeStatement')->name('property.management.view.previous.property.management.forecast.income.statement');
-            route::post('previous-years-income-statement', 'IncomeStatementController@storePreviousTwoYearsIncomeStatement')->name('property.management.store.previous.property.management.forecast.income.statement');
+            // route::get('previous-years-income-statement', 'IncomeStatementController@viewPreviousTwoYearsIncomeStatement')->name('property.management.view.previous.property.management.forecast.income.statement');
+            // route::post('previous-years-income-statement', 'IncomeStatementController@storePreviousTwoYearsIncomeStatement')->name('property.management.store.previous.property.management.forecast.income.statement');
 
                        
             route::get('valuation', 'ValuationController@index')->name('view.property.management.valuation');

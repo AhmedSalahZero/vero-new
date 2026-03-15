@@ -7,7 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperUsageStatus
+ * @property int $id
+ * @property string $name
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\UsageStatus whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class UsageStatus extends Model
 {

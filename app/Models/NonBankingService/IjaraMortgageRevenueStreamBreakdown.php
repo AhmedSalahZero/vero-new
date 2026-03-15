@@ -5,7 +5,13 @@ use App\Models\Company;
 use App\Models\NonBankingService\Study;
 use Illuminate\Database\Eloquent\Model;
 
-class  IjaraMortgageRevenueStreamBreakdown extends Model
+/**
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageRevenueStreamBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageRevenueStreamBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageRevenueStreamBreakdown query()
+ * @mixin \Eloquent
+ */
+class IjaraMortgageRevenueStreamBreakdown extends Model
 {
 
 	public function getViewVars(Company $company, Study $study):array{

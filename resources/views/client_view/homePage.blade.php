@@ -246,24 +246,7 @@
                                         @endif
 
 
-										  @if($company->hasTrading())
-                                        <div class="card">
-                                            <div class="card-header" id="trading">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapsetrading" aria-expanded="true" aria-controls="collapseOne4">
-                                                    <i class="flaticon2-layers-1"></i> {{ __('Trading') }}
-                                                </div>
-                                            </div>
-                                            <div id="collapsetrading" class="collapse" aria-labelledby="headingOne" data-parent="#trading">
-                                                <div class="card-body with-padding">
-                                                    {{-- @can('view income statement planning') --}}
-                                                    <x-quick-nav :link="route('trading.view.study', ['company'=>$company->id ])">{{ __('Go To Studies') }}</x-quick-nav>
-                                                    {{-- @endcan --}}
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endif
+										
 										
 
 

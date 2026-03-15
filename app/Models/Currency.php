@@ -8,7 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperCurrency
+ * @property int $id
+ * @property int|null $odoo_id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuickPricingCalculator> $quickPricingCalculators
+ * @property-read int|null $quick_pricing_calculators_count
+ * @property-read bool|null $quick_pricing_calculators_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Currency whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Currency extends Model
 {

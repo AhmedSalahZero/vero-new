@@ -6,7 +6,47 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  FixedAssetsFundingStructure extends Model
+/**
+ * @property int $id
+ * @property string $fixed_asset_type
+ * @property int $is_fully_funded_though_equity
+ * @property array<array-key, mixed>|null $direct_ffe_amounts
+ * @property array<array-key, mixed>|null $equity_funding_rates
+ * @property array<array-key, mixed>|null $equity_funding_values
+ * @property array<array-key, mixed>|null $new_loans_funding_rates
+ * @property array<array-key, mixed>|null $new_loans_funding_values
+ * @property array<array-key, mixed>|null $tenors
+ * @property array<array-key, mixed>|null $grace_periods
+ * @property array<array-key, mixed>|null $interest_rates
+ * @property array<array-key, mixed>|null $installment_intervals
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereDirectFfeAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereEquityFundingRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereEquityFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereFixedAssetType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereGracePeriods($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereInstallmentIntervals($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereInterestRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereIsFullyFundedThoughEquity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereNewLoansFundingRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereNewLoansFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereTenors($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetsFundingStructure whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class FixedAssetsFundingStructure extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

@@ -8,7 +8,40 @@ use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperMicrofinanceLoanOfficerCasesProjection
+ * @property int $id
+ * @property string $type all-branches , new-branches,by-branch
+ * @property int|null $branch_id
+ * @property int $is_senior
+ * @property array<array-key, mixed>|null $existing_cases
+ * @property array<array-key, mixed>|null $hiring
+ * @property int|null $existing_count
+ * @property array<array-key, mixed>|null $new_cases
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $total_existing_officers_cases_count
+ * @property array<array-key, mixed>|null $total_new_officers_cases_count
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereExistingCases($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereExistingCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereHiring($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereIsSenior($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereNewCases($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereTotalExistingOfficersCasesCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereTotalNewOfficersCasesCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class MicrofinanceLoanOfficerCasesProjection extends Model
 {

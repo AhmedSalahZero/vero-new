@@ -12,9 +12,41 @@ use Illuminate\Database\Eloquent\Model;
 
 
 
-class  ReverseFactoringRevenueStreamBreakdown extends Model
+/**
+ * @property int $id
+ * @property string|null $category
+ * @property numeric $margin_rate
+ * @property numeric $sensitivity_margin_rate
+ * @property float $tenor
+ * @property string|null $percentage_payload
+ * @property array<array-key, mixed>|null $loan_amounts
+ * @property string|null $monthly_loan_amounts
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereMonthlyLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown wherePercentagePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereSensitivityMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereTenor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class ReverseFactoringRevenueStreamBreakdown extends Model
 {
-	use HasBasicStoreRequest,CompanyScope , BelongsToStudy , IsRevenueStream;
+	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';
 	protected $table = 'reverse_factoring_breakdowns';
 	protected $guarded = ['id'];
@@ -47,7 +79,7 @@ class  ReverseFactoringRevenueStreamBreakdown extends Model
 	}
 	
 	public function getViewVars(Company $company, Study $study):array{
-		$reverseFactoringEclAndNewPortfolioFundingRate = $study?  $study->reverseFactoringEclAndNewPortfolioFundingRate : null;
+		$reverseFactoringEclAndNewPortfolioFundingRate =  $study->reverseFactoringEclAndNewPortfolioFundingRate ;
 		$yearsWithItsMonths =  $study->getOperationDurationPerYearFromIndexes() ;
 		$yearOrMonthsIndexes = $study->getYearOrMonthIndexes();
 		$isYearsStudy = !$study->isMonthlyStudy();

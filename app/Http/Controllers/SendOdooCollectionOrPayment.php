@@ -28,12 +28,6 @@ class SendOdooCollectionOrPayment extends Controller
 		foreach($customerInvoiceSettlements as $customerInvoiceSettlement){
 				$OdooPaymentService->reCreatePayment($customerInvoiceSettlement);
 		}
-		
-		/**
-		 * @var CustomerInvoice $customerInvoice 
-		 */
-		// foreach($customerInvoices as $customerInvoice){
-		// 	}
 		return redirect()->back()->with('success',__('Send Collection Or Payment Has Been Completed'));
 		
 	}

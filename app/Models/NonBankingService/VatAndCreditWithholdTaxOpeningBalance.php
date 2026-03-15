@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperVatAndCreditWithholdTaxOpeningBalance
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\VatAndCreditWithholdTaxOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\VatAndCreditWithholdTaxOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\VatAndCreditWithholdTaxOpeningBalance query()
+ * @mixin \Eloquent
  */
 class VatAndCreditWithholdTaxOpeningBalance extends Model
 {

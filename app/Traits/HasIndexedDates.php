@@ -79,8 +79,8 @@ trait HasIndexedDates
 
 		$studyDurationInYears = $this->getDurationInYears();
 
-		$limitationDate = $operationStartDate;
-		$studyDurationPerYear = $calculateDurationService->calculateMonthsDurationPerYear($studyStartDate, $maxDate, $studyDurationInYears, $limitationDate,true);
+		// $limitationDate = $operationStartDate;
+		$studyDurationPerYear = $calculateDurationService->calculateMonthsDurationPerYear($studyStartDate, $maxDate, $studyDurationInYears,true);
 		$studyDurationPerYear = $this->removeDatesBeforeDate($studyDurationPerYear, $studyStartDate);
 		
 		$dates = [];
@@ -295,10 +295,7 @@ trait HasIndexedDates
 		$studyEndDate = $this->getStudyEndDate();
 		return dateFormatting($studyEndDate, 'M\' Y');
 	}
-	// public function getOperationStartDateAsIndex(array $datesAsStringAndIndex, ?string $operationStartDateFormatted): ?int
-	// {
-	// 	return  $operationStartDateFormatted ? $datesAsStringAndIndex[$operationStartDateFormatted] : null;
-	// }
+
 	protected function replaceYearWithAnotherYear(array $dateAndValues, $newYear, bool $asIndexes,array $dateIndexWithDate,array $dateWithMonthNumber)
 	{
 		$newDatesAndValues   = [];

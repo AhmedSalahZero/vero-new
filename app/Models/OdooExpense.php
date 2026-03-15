@@ -14,7 +14,46 @@ use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 use App\Helpers\HStr;
 
 /**
- * @mixin IdeHelperOdooExpense
+ * @property int $id
+ * @property int $odoo_id
+ * @property int $company_id
+ * @property string $name
+ * @property string $odoo_currency_id
+ * @property string $state
+ * @property string $payment_state
+ * @property int $odoo_employee_id الموظف اللي طلع المصروف دا
+ * @property int $total_amount
+ * @property int $account_move_ids
+ * @property int $journal_id
+ * @property int $payment_method_line_id
+ * @property string $payment_mode
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $account_number
+ * @property string|null $bank_name
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereAccountMoveIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereBankName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereJournalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereOdooCurrencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereOdooEmployeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense wherePaymentMethodLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense wherePaymentMode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense wherePaymentState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereTotalAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OdooExpense whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OdooExpense extends Model
 {
@@ -28,11 +67,7 @@ public static function getAllTypes()
 		];
 	}
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+  
 	public function getId(){
 		return $this->id ;
 	}

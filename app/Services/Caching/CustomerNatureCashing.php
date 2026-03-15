@@ -6,175 +6,172 @@ use App\Models\Company;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CustomerNatureCashing
 {
-	private Company $company;
-	private string $year;
-	private string $month;
-	private array $typesOfCaching;
+    private Company $company;
+    private string $year;
+    private string $month;
+    private array $typesOfCaching;
 
-	public function __construct(Company $company, string $year,string $month)
-	{
-		$this->company = $company;
-		$this->year = $year;
-		$this->month = $month ;
-		$this->typesOfCaching = getAllColumnsTypesForCaching($this->company->id);
-	}
+    public function __construct(Company $company, string $year, string $month)
+    {
+        $this->company = $company;
+        $this->year = $year;
+        $this->month = $month ;
+        $this->typesOfCaching = getAllColumnsTypesForCaching($this->company->id);
+    }
 
-	function formatDataForType(array $dataOfArray, string  $typeToCache)
-	{
-		$formattedData = [];
+    public function formatDataForType(array $dataOfArray, string  $typeToCache)
+    {
+        $formattedData = [];
 
-		foreach ($dataOfArray as $index => $dataObj) {
-			$groupingKey  = $dataObj->{$typeToCache};
+        foreach ($dataOfArray as $index => $dataObj) {
+            $groupingKey  = $dataObj->{$typeToCache};
 
-			isset($formattedData[$groupingKey]) ?  array_push($formattedData[$groupingKey], $dataObj) : $formattedData[$groupingKey] = [$dataObj];
-		}
-		return $formattedData;
-	}
-	public function cacheNewCustomersForTypes()
+            isset($formattedData[$groupingKey]) ?  array_push($formattedData[$groupingKey], $dataObj) : $formattedData[$groupingKey] = [$dataObj];
+        }
+        return $formattedData;
+    }
+    protected function indexIsExistIn(string $indexName, string $tableName):bool
+    {
+        return collect(Schema::getIndexes($tableName))
+            ->pluck('name')
+            ->contains($indexName);
 
-	{
-		$newCustomersForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
-			$cacheKeyName = getNewCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
-			if (!Cache::has($cacheKeyName)) {
-				$possibleIndexName = 'min__index_' . $typeToCache;
+    }
+    public function cacheNewCustomersForTypes()
+    {
+        $newCustomersForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
+            $cacheKeyName = getNewCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+            if (!Cache::has($cacheKeyName)) {
+                $possibleIndexName = 'min__index_' . $typeToCache;
 
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
-				$newCustomers = DB::select(DB::raw(
-					"
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+                $query = "
                 select  customer_name , " . $typeToCache  . " , count(*) as no_customers,
-                 sum(case when Year = " . $this->year  . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales  from sales_gathering  " . $forceIndex . " 
+                 sum(case when Year = " . $this->year  . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales  from sales_gathering  " . $forceIndex . "
                  
-                  where company_id = " . $this->company->id . " group by customer_name , " . $typeToCache  . " having  min(Year) = " . $this->year   . " order by total_sales desc"
-				)->getValue(DB::connection()->getQueryGrammar())
-			);
+                  where company_id = " . $this->company->id . " group by customer_name , " . $typeToCache  . " having  min(Year) = " . $this->year   . " order by total_sales desc";
+                $newCustomers = DB::select($query);
 
-				$newCustomers = $this->formatDataForType($newCustomers, $typeToCache);
+                $newCustomers = $this->formatDataForType($newCustomers, $typeToCache);
 
-				Cache::forever($cacheKeyName, $newCustomers);
-			} else {
-				$newCustomers = Cache::get($cacheKeyName);
-			}
+                Cache::forever($cacheKeyName, $newCustomers);
+            } else {
+                $newCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $newCustomersForTypes)) {
-				array_push($newCustomersForTypes[$typeToCache], $newCustomers);
-			} else {
-				$newCustomersForTypes[$typeToCache] = $newCustomers;
-			}
-		}
+            if (\array_key_exists($typeToCache, $newCustomersForTypes)) {
+                array_push($newCustomersForTypes[$typeToCache], $newCustomers);
+            } else {
+                $newCustomersForTypes[$typeToCache] = $newCustomers;
+            }
+        }
 
-		return $newCustomersForTypes;
-	}
-
+        return $newCustomersForTypes;
+    }
 
 
 
 
-	public function cacheRepeatingCustomersForType()
-	{
-		$newRepeatingForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
-			$cacheKeyName = getRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
-			if (!Cache::has($cacheKeyName)) {
+
+    public function cacheRepeatingCustomersForType()
+    {
+        $newRepeatingForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
+            $cacheKeyName = getRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+            if (!Cache::has($cacheKeyName)) {
 
 
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
 
 
-				$RepeatingCustomers = DB::select(
-					DB::raw(
-						"
+                $query = "
         select  customer_name , " . $typeToCache . " ,count(*) as no_customers, sum(case when Year = " . $this->year . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales  from sales_gathering
           " . $forceIndex . "
         
         where company_id = " . $this->company->id . " group by customer_name , " . $typeToCache . " having  min(Year) = " . ($this->year - 1) . " and 
         max(case when Year = " . $this->year . " then 1 else 0 end ) = 1 order by total_sales desc
-        "
-					)
-				);
-				$RepeatingCustomers = $this->formatDataForType($RepeatingCustomers, $typeToCache);
+        ";
+                $RepeatingCustomers = DB::select($query);
+                $RepeatingCustomers = $this->formatDataForType($RepeatingCustomers, $typeToCache);
 
-				Cache::forever($cacheKeyName, $RepeatingCustomers);
-			} else {
-				$RepeatingCustomers = Cache::get($cacheKeyName);
-			}
+                Cache::forever($cacheKeyName, $RepeatingCustomers);
+            } else {
+                $RepeatingCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $newRepeatingForTypes)) {
-				array_push($newRepeatingForTypes[$typeToCache], $RepeatingCustomers);
-			} else {
-				$newRepeatingForTypes[$typeToCache] = $RepeatingCustomers;
-			}
-		}
-		return $newRepeatingForTypes;
-	}
-
+            if (\array_key_exists($typeToCache, $newRepeatingForTypes)) {
+                array_push($newRepeatingForTypes[$typeToCache], $RepeatingCustomers);
+            } else {
+                $newRepeatingForTypes[$typeToCache] = $RepeatingCustomers;
+            }
+        }
+        return $newRepeatingForTypes;
+    }
 
 
 
-	public function cacheActiveCustomersForType()
-	{
-		$newActiveForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
 
-			$cacheKeyName = getActiveCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
-			if (!Cache::has($cacheKeyName)) {
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+    public function cacheActiveCustomersForType()
+    {
+        $newActiveForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
 
-				$ActiveCustomers = DB::select(
-					DB::raw(
-						"
+            $cacheKeyName = getActiveCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+            if (!Cache::has($cacheKeyName)) {
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+
+                $query = "
                 select (customer_name) , " . $typeToCache . " ,count(*) as no_customers, sum(case when Year = " . $this->year . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales
                 from sales_gathering " . $forceIndex . "
                 
-                where company_id = " . $this->company->id . " 
+                where company_id = " . $this->company->id . "
                 GROUP by customer_name , " . $typeToCache . "
                 having max(case when Year = " . $this->year . " then 1 else 0 end ) = 1 
                 and max(case when  Year = " . ($this->year - 1) . " then 1 else 0 end ) = 1 
                 and max(case when Year = " . ($this->year - 2) . " then 1 else 0 end ) = 1
                 ORDER BY total_sales DESC
-                "
-					)
-				);
-				$ActiveCustomers = $this->formatDataForType($ActiveCustomers, $typeToCache);
+                ";
+                $ActiveCustomers = DB::select($query);
+                $ActiveCustomers = $this->formatDataForType($ActiveCustomers, $typeToCache);
 
-				Cache::forever($cacheKeyName, $ActiveCustomers);
-			} else {
-				$ActiveCustomers = Cache::get($cacheKeyName);
-			}
+                Cache::forever($cacheKeyName, $ActiveCustomers);
+            } else {
+                $ActiveCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $newActiveForTypes)) {
-				array_push($newActiveForTypes[$typeToCache], $ActiveCustomers);
-			} else {
-				$newActiveForTypes[$typeToCache] = $ActiveCustomers;
-			}
-		}
+            if (\array_key_exists($typeToCache, $newActiveForTypes)) {
+                array_push($newActiveForTypes[$typeToCache], $ActiveCustomers);
+            } else {
+                $newActiveForTypes[$typeToCache] = $ActiveCustomers;
+            }
+        }
 
 
-		return $newActiveForTypes;
-	}
-
+        return $newActiveForTypes;
+    }
 
 
 
 
 
-	public function cacheStopReactivatedCustomersForType()
-	{
-		$newStopReactivatedForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
-			$cacheKeyName = getStopReactivatedCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
 
-			if (!Cache::has($cacheKeyName)) {
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
-				$StopReactivatedCustomers = DB::select(
-					DB::raw(
-						"
+    public function cacheStopReactivatedCustomersForType()
+    {
+        $newStopReactivatedForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
+            $cacheKeyName = getStopReactivatedCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+
+            if (!Cache::has($cacheKeyName)) {
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+                $query = "
                     select (customer_name) , " . $typeToCache  . " ,count(*) as no_customers, sum(case when Year = " . $this->year . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales from sales_gathering 
                      " . $forceIndex . "
                     where company_id = " . $this->company->id . "
@@ -183,88 +180,81 @@ class CustomerNatureCashing
                     and max(case when Year = " . ($this->year - 1) . " then 1 else 0 end ) = 0
                     and max(case when Year = " . ($this->year - 2) . " then 1 else 0 end ) = 1
                     order by total_sales desc 
-                    "
-					)
-				);
+                    ";
+                $StopReactivatedCustomers = DB::select($query);
 
-				$StopReactivatedCustomers = $this->formatDataForType($StopReactivatedCustomers, $typeToCache);
-				Cache::forever($cacheKeyName, $StopReactivatedCustomers);
-			} else {
-				$StopReactivatedCustomers = Cache::get($cacheKeyName);
-			}
+                $StopReactivatedCustomers = $this->formatDataForType($StopReactivatedCustomers, $typeToCache);
+                Cache::forever($cacheKeyName, $StopReactivatedCustomers);
+            } else {
+                $StopReactivatedCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $newStopReactivatedForTypes)) {
-				array_push($newStopReactivatedForTypes[$typeToCache], $StopReactivatedCustomers);
-			} else {
-				$newStopReactivatedForTypes[$typeToCache] = $StopReactivatedCustomers;
-			}
-		}
+            if (\array_key_exists($typeToCache, $newStopReactivatedForTypes)) {
+                array_push($newStopReactivatedForTypes[$typeToCache], $StopReactivatedCustomers);
+            } else {
+                $newStopReactivatedForTypes[$typeToCache] = $StopReactivatedCustomers;
+            }
+        }
 
 
-		return $newStopReactivatedForTypes;
-	}
-
+        return $newStopReactivatedForTypes;
+    }
 
 
 
-	public function cacheDeadReactivatedCustomersForType()
-	{
-		$deadReactivatedForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
 
-			$cacheKeyName = getDeadReactiveCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
+    public function cacheDeadReactivatedCustomersForType()
+    {
+        $deadReactivatedForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
 
-			if (!Cache::has($cacheKeyName)) {
+            $cacheKeyName = getDeadReactiveCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
 
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
-				$havingCondition = getHavingConditionForDeadReactivated($this->year);
-				$deadReactivatedCustomers = DB::select(
-					DB::raw(
+            if (!Cache::has($cacheKeyName)) {
 
-						"
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+                $havingCondition = getHavingConditionForDeadReactivated($this->year);
+                $query = "
                     select (customer_name) , " . $typeToCache . " ,count(*) as no_customers, sum(case when year = " .  $this->year   . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales
                     from sales_gathering " . $forceIndex . "
-                    where company_id = " . $this->company->id  . "  
-                    GROUP by customer_name ," . $typeToCache . $havingCondition
-					)
-				);
-				$deadReactivatedCustomers = $this->formatDataForType($deadReactivatedCustomers, $typeToCache);
+                    where company_id = " . $this->company->id  . "
+                    GROUP by customer_name ," . $typeToCache . $havingCondition;
+                $deadReactivatedCustomers = DB::select($query);
+                $deadReactivatedCustomers = $this->formatDataForType($deadReactivatedCustomers, $typeToCache);
 
-				Cache::forever($cacheKeyName, $deadReactivatedCustomers);
-			} else {
-				$deadReactivatedCustomers = Cache::get($cacheKeyName);
-			}
+                Cache::forever($cacheKeyName, $deadReactivatedCustomers);
+            } else {
+                $deadReactivatedCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $deadReactivatedForTypes)) {
-				array_push($deadReactivatedForTypes[$typeToCache], $deadReactivatedCustomers);
-			} else {
-				$deadReactivatedForTypes[$typeToCache] = $deadReactivatedCustomers;
-			}
-		}
+            if (\array_key_exists($typeToCache, $deadReactivatedForTypes)) {
+                array_push($deadReactivatedForTypes[$typeToCache], $deadReactivatedCustomers);
+            } else {
+                $deadReactivatedForTypes[$typeToCache] = $deadReactivatedCustomers;
+            }
+        }
 
 
-		return $deadReactivatedForTypes;
-	}
-
+        return $deadReactivatedForTypes;
+    }
 
 
 
-	public function cacheStopRepeatingCustomersForType()
-	{
-		$deadRepeatingForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
 
-			$cacheKeyName = getStopRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
+    public function cacheStopRepeatingCustomersForType()
+    {
+        $deadRepeatingForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
 
-			if (!Cache::has($cacheKeyName)) {
+            $cacheKeyName = getStopRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
 
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+            if (!Cache::has($cacheKeyName)) {
 
-				$StopRepeatingCustomers = DB::select(
-					DB::raw(
-						"
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+
+                $query = "
                 
                 select (customer_name) , " . $typeToCache . ", count(*) as no_customers,sum(case when year = " .  $this->year   . " and Month <= ". $this->month ." then net_sales_value else 0 end) total_sales
                 from sales_gathering " . $forceIndex . "
@@ -276,127 +266,119 @@ class CustomerNatureCashing
                 and max(case when Year = " . ($this->year - 3)  . " then 1 else 0 end ) = 1 
                 order by total_sales desc
                 
-                "
-					)
-				);
+                ";
+                $StopRepeatingCustomers = DB::select($query);
 
-				$StopRepeatingCustomers = $this->formatDataForType($StopRepeatingCustomers, $typeToCache);
-				Cache::forever($cacheKeyName, $StopRepeatingCustomers);
-			} else {
-				$StopRepeatingCustomers = Cache::get($cacheKeyName);
-			}
+                $StopRepeatingCustomers = $this->formatDataForType($StopRepeatingCustomers, $typeToCache);
+                Cache::forever($cacheKeyName, $StopRepeatingCustomers);
+            } else {
+                $StopRepeatingCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $deadRepeatingForTypes)) {
-				array_push($deadRepeatingForTypes[$typeToCache], $StopRepeatingCustomers);
-			} else {
-				$deadRepeatingForTypes[$typeToCache] = $StopRepeatingCustomers;
-			}
-		}
+            if (\array_key_exists($typeToCache, $deadRepeatingForTypes)) {
+                array_push($deadRepeatingForTypes[$typeToCache], $StopRepeatingCustomers);
+            } else {
+                $deadRepeatingForTypes[$typeToCache] = $StopRepeatingCustomers;
+            }
+        }
 
 
-		return $deadRepeatingForTypes;
-	}
-	protected function getDeadRepeatingCustomersCacheNameForCompanyInYearForType(Company $companyId, string $year, string $type, string $month)
-{
-    return 'dead_repeating_reactivated_customers_for_company_' . $companyId->id . '_for_year_' . $year . 'for_type_' . $type.'_'.$month;
-}
+        return $deadRepeatingForTypes;
+    }
+    protected function getDeadRepeatingCustomersCacheNameForCompanyInYearForType(Company $companyId, string $year, string $type, string $month)
+    {
+        return 'dead_repeating_reactivated_customers_for_company_' . $companyId->id . '_for_year_' . $year . 'for_type_' . $type.'_'.$month;
+    }
 
-	public function cacheDeadRepeatingCustomersForType()
-	{
-		$deadRepeatingForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
-			$cacheKeyName = $this->getDeadRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
+    public function cacheDeadRepeatingCustomersForType()
+    {
+        $deadRepeatingForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
+            $cacheKeyName = $this->getDeadRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
 
-			if (!Cache::has($cacheKeyName)) {
+            if (!Cache::has($cacheKeyName)) {
 
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
-				$havingCondition = getHavingConditionForDeadRepeating($this->year);
-				$deadRepeatingCustomers = DB::select(
-					DB::raw(
-
-						"
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+                $havingCondition = getHavingConditionForDeadRepeating($this->year);
+                $query = "
                     select (customer_name) , " . $typeToCache . " ,count(*) as no_customers, sum(case when year = " .  $this->year   . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales
                     from sales_gathering " . $forceIndex . "
-                    where company_id = " . $this->company->id  . "  
-                    GROUP by customer_name ," . $typeToCache . $havingCondition
-					)
-				);
-				$deadRepeatingCustomers = $this->formatDataForType($deadRepeatingCustomers, $typeToCache);
+                    where company_id = " . $this->company->id  . "
+                    GROUP by customer_name ," . $typeToCache . $havingCondition;
+                $deadRepeatingCustomers = DB::select($query);
+                $deadRepeatingCustomers = $this->formatDataForType($deadRepeatingCustomers, $typeToCache);
 
-				Cache::forever($cacheKeyName, $deadRepeatingCustomers);
-			} else {
-				$deadRepeatingCustomers = Cache::get($cacheKeyName);
-			}
+                Cache::forever($cacheKeyName, $deadRepeatingCustomers);
+            } else {
+                $deadRepeatingCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $deadRepeatingForTypes)) {
-				array_push($deadRepeatingForTypes[$typeToCache], $deadRepeatingCustomers);
-			} else {
-				$deadRepeatingForTypes[$typeToCache] = $deadRepeatingCustomers;
-			}
-		}
-
-
-		return $deadRepeatingForTypes;
-	}
+            if (\array_key_exists($typeToCache, $deadRepeatingForTypes)) {
+                array_push($deadRepeatingForTypes[$typeToCache], $deadRepeatingCustomers);
+            } else {
+                $deadRepeatingForTypes[$typeToCache] = $deadRepeatingCustomers;
+            }
+        }
 
 
+        return $deadRepeatingForTypes;
+    }
 
-	public function cacheStopCustomersForType()
-	{
 
-		$newStopForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
-			$cacheKeyName = getStopCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
 
-			if (!Cache::has($cacheKeyName)) {
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+    public function cacheStopCustomersForType()
+    {
 
-				$StopCustomers = DB::select(
-					DB::raw("
+        $newStopForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
+            $cacheKeyName = getStopCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+
+            if (!Cache::has($cacheKeyName)) {
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+
+                $query = "
             select (customer_name) , " . $typeToCache . " , count(*) as no_customers, sum(case when year = " .  ($this->year - 1)   . " and Month <= ". $this->month ." then net_sales_value else 0 end) total_sales
             from  sales_gathering " . $forceIndex . "
-            where company_id = " . $this->company->id  . " 
-            GROUP by customer_name , " . $typeToCache . " 
+            where company_id = " . $this->company->id  . "
+            GROUP by customer_name , " . $typeToCache . "
             having max(case when Year = " . $this->year .  " then 1 else 0 end ) = 0
             and max(case when Year = " . ($this->year - 1) . " then 1 else 0 end ) = 1 
             order by total_sales desc
-            ")
-				);
+            ";
+                $StopCustomers = DB::select($query);
 
-				$StopCustomers = $this->formatDataForType($StopCustomers, $typeToCache);
-				Cache::forever($cacheKeyName, $StopCustomers);
-			} else {
-				$StopCustomers = Cache::get($cacheKeyName);
-			}
+                $StopCustomers = $this->formatDataForType($StopCustomers, $typeToCache);
+                Cache::forever($cacheKeyName, $StopCustomers);
+            } else {
+                $StopCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $newStopForTypes)) {
-				array_push($newStopForTypes[$typeToCache], $StopCustomers);
-			} else {
-				$newStopForTypes[$typeToCache] = $StopCustomers;
-			}
-		}
-
-
-		return $newStopForTypes;
-	}
+            if (\array_key_exists($typeToCache, $newStopForTypes)) {
+                array_push($newStopForTypes[$typeToCache], $StopCustomers);
+            } else {
+                $newStopForTypes[$typeToCache] = $StopCustomers;
+            }
+        }
 
 
+        return $newStopForTypes;
+    }
 
-	public function cacheDeadCustomersForType()
-	{
-		$newDeadForTypes = [];
-		foreach ($this->typesOfCaching as $typeToCache) {
 
-			$cacheKeyName = getDeadCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
-			if (!Cache::has($cacheKeyName)) {
-				$possibleIndexName = 'min__index_' . $typeToCache;
-				$forceIndex = \indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
 
-				$DeadCustomers = DB::select(
-					DB::raw(
-						"
+    public function cacheDeadCustomersForType()
+    {
+        $newDeadForTypes = [];
+        foreach ($this->typesOfCaching as $typeToCache) {
+
+            $cacheKeyName = getDeadCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+            if (!Cache::has($cacheKeyName)) {
+                $possibleIndexName = 'min__index_' . $typeToCache;
+                $forceIndex = $this->indexIsExistIn($possibleIndexName, 'sales_gathering') ? "force index (" . $possibleIndexName . ")" : '';
+
+                $query = "
                 select (customer_name) , " .  $typeToCache . " , count(*) as no_customers, sum(case when Year = " . ($this->year - 2)  . " and Month <= ". $this->month ." then net_sales_value else 0 end ) total_sales
                 from sales_gathering " . $forceIndex . "
                 where company_id = " . $this->company->id . "
@@ -407,99 +389,96 @@ class CustomerNatureCashing
                 and max(case when Year = " . ($this->year - 2) . " then 1 else 0 end ) = 1 
                 order by total_sales desc;
                 
-                "
-					)
-				);
-				$DeadCustomers = $this->formatDataForType($DeadCustomers, $typeToCache);
+                ";
+                $DeadCustomers = DB::select($query);
+                $DeadCustomers = $this->formatDataForType($DeadCustomers, $typeToCache);
 
-				Cache::forever($cacheKeyName, $DeadCustomers);
-			} else {
-				$DeadCustomers = Cache::get($cacheKeyName);
-			}
+                Cache::forever($cacheKeyName, $DeadCustomers);
+            } else {
+                $DeadCustomers = Cache::get($cacheKeyName);
+            }
 
-			if (\array_key_exists($typeToCache, $newDeadForTypes)) {
-				array_push($newDeadForTypes[$typeToCache], $DeadCustomers);
-			} else {
-				$newDeadForTypes[$typeToCache] = $DeadCustomers;
-			}
-		}
+            if (\array_key_exists($typeToCache, $newDeadForTypes)) {
+                array_push($newDeadForTypes[$typeToCache], $DeadCustomers);
+            } else {
+                $newDeadForTypes[$typeToCache] = $DeadCustomers;
+            }
+        }
 
 
-		return $newDeadForTypes;
-	}
-
+        return $newDeadForTypes;
+    }
 
 
 
-	public function cacheTotalCustomersForType()
-	{
-		$totalForTypes = [];
 
-		foreach ($this->typesOfCaching as $typeToCache) {
+    public function cacheTotalCustomersForType()
+    {
+        $totalForTypes = [];
 
-			$cacheKeyName = getTotalCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month);
+        foreach ($this->typesOfCaching as $typeToCache) {
 
-			if (!Cache::has($cacheKeyName)) {
-				$totals = DB::select(DB::raw(
-					"
+            $cacheKeyName = getTotalCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
+
+            if (!Cache::has($cacheKeyName)) {
+                $query = "
                 select customer_name ,
              sum(net_sales_value) as val , " . $typeToCache . "  , count(*) as no_customers,
               FORMAT((sum(net_sales_value) / (select sum(net_sales_value)  from sales_gathering force index (min__index) where company_id
                = " . $this->company->id . "  and  Year = " . $this->year . " and Month <= ". $this->month ." ) * 100) , 1) as percentage
-                from sales_gathering force index (min__index) where company_id = " . $this->company->id  . " and Year = " . $this->year . " 
+                from sales_gathering force index (min__index) where company_id = " . $this->company->id  . " and Year = " . $this->year . "
                 group by customer_name  , " . $typeToCache . "
-                order by val desc "
-				)->getValue(DB::connection()->getQueryGrammar())
-			);
-				$totals = $this->formatDataForType($totals, $typeToCache);
-				Cache::forever($cacheKeyName, $totals);
-			} else {
-				$totals = Cache::get($cacheKeyName);
-			}
+                order by val desc ";
+                $totals = DB::select($query);
+                $totals = $this->formatDataForType($totals, $typeToCache);
+                Cache::forever($cacheKeyName, $totals);
+            } else {
+                $totals = Cache::get($cacheKeyName);
+            }
 
 
-			if (\array_key_exists($typeToCache, $totalForTypes)) {
-				array_push($totalForTypes[$typeToCache], $totals);
-			} else {
-				$newDeadForTypes[$typeToCache] = $totals;
-			}
-		}
+            if (\array_key_exists($typeToCache, $totalForTypes)) {
+                array_push($totalForTypes[$typeToCache], $totals);
+            } else {
+                $newDeadForTypes[$typeToCache] = $totals;
+            }
+        }
 
-		return $newDeadForTypes;
-	}
+        return $newDeadForTypes;
+    }
 
 
 
-	public function cacheAll(): array
-	{
-		return [
+    public function cacheAll(): array
+    {
+        return [
 
-			'newCustomersForType' => $this->cacheNewCustomersForTypes(),
-			'RepeatingForType' => $this->cacheRepeatingCustomersForType(),
-			'ActiveForType' => $this->cacheActiveCustomersForType(),
-			'StopForType' => $this->cacheStopCustomersForType(),
-			'StopReactivatedForType' => $this->cacheStopReactivatedCustomersForType(),
-			'deadReactivatedForType' => $this->cacheDeadReactivatedCustomersForType(),
-			'StopRepeatingForType' => $this->cacheStopRepeatingCustomersForType(),
-			'DeadRepeatingForType' => $this->cacheDeadRepeatingCustomersForType(),
-			'DeadForType' => $this->cacheDeadCustomersForType(),
-			'totalsForType' => $this->cacheTotalCustomersForType(),
-		];
-	}
+            'newCustomersForType' => $this->cacheNewCustomersForTypes(),
+            'RepeatingForType' => $this->cacheRepeatingCustomersForType(),
+            'ActiveForType' => $this->cacheActiveCustomersForType(),
+            'StopForType' => $this->cacheStopCustomersForType(),
+            'StopReactivatedForType' => $this->cacheStopReactivatedCustomersForType(),
+            'deadReactivatedForType' => $this->cacheDeadReactivatedCustomersForType(),
+            'StopRepeatingForType' => $this->cacheStopRepeatingCustomersForType(),
+            'DeadRepeatingForType' => $this->cacheDeadRepeatingCustomersForType(),
+            'DeadForType' => $this->cacheDeadCustomersForType(),
+            'totalsForType' => $this->cacheTotalCustomersForType(),
+        ];
+    }
 
-	public function deleteAll()
-	{
-		foreach ($this->typesOfCaching as $typeToCache) {
-			Cache::forget(getNewCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getActiveCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getStopCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getStopReactivatedCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getDeadReactiveCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getStopRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget($this->getDeadRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getDeadCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-			Cache::forget(getTotalCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache,$this->month));
-		}
-	}
+    public function deleteAll()
+    {
+        foreach ($this->typesOfCaching as $typeToCache) {
+            Cache::forget(getNewCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getActiveCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getStopCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getStopReactivatedCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getDeadReactiveCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getStopRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget($this->getDeadRepeatingCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getDeadCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+            Cache::forget(getTotalCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month));
+        }
+    }
 }

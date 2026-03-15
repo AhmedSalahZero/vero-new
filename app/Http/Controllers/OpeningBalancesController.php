@@ -176,7 +176,7 @@ class OpeningBalancesController
                     'cheque_number' => $payableChequeArr['cheque_number'] ?: null,
                     'delivery_bank_id' => $financialInstitutionId,
                     'due_date' => $dueDate,
-                    'delivery_date' => $openingBalanceDate ?: null,
+                    'delivery_date' => $openingBalanceDate ,
                     'company_id'=>$company->id,
                     'account_type' => $accountType,
                     'account_number' => $accountNumber ,
@@ -284,9 +284,12 @@ class OpeningBalancesController
             $dataToUpdate['receiving_date'] =  $openingBalanceDate ;
             $dataToUpdate['company_id'] =  $company->id ;
             $dataToUpdate['receiving_currency'] = $dataToUpdate['currency'] ;
+			/**
+			 * @var MoneyReceived $currentChequeInSafe
+			 */
             $currentChequeInSafe = $openingBalance->chequeInSafe()->where('money_received.id', $id)->first() ;
             $currentChequeInSafe->update($dataToUpdate);
-            $openingBalance->chequeInSafe()->where('money_received.id', $id)->first()->cheque->update($pivotData);
+            $currentChequeInSafe->cheque->update($pivotData);
         }
         foreach ($request->get(MoneyReceived::CHEQUE, []) as $data) {
             if (!isset($data['id']) || (isset($data['id']) && $data['id'] == '0')) {
@@ -303,7 +306,9 @@ class OpeningBalancesController
                 $data['receiving_date'] = $openingBalanceDate ;
                 $data['receiving_currency'] = $data['currency'] ;
                 $data['company_id'] = $company->id ;
-
+				/**
+				 * @var MoneyReceived $moneyReceived
+				 */
                 $moneyReceived = $openingBalance->chequeInSafe()->create(array_merge($data, [
                     'type' => MoneyReceived::CHEQUE,
                     'user_id' => auth()->id()
@@ -356,8 +361,12 @@ class OpeningBalancesController
             $dataToUpdate['receiving_date'] = $openingBalanceDate;
             $dataToUpdate['receiving_currency'] = $dataToUpdate['currency'];
             $dataToUpdate['company_id']=$company->id;
-            $openingBalance->chequeUnderCollections()->where('money_received.id', $id)->first()->update(array_merge($dataToUpdate, ['updated_at'=>now()]));
-            $openingBalance->chequeUnderCollections()->where('money_received.id', $id)->first()->cheque->update(array_merge($pivotData, ['updated_at'=>now()]));
+			/**
+			 * @var MoneyReceived $currentChequeUnderCollection
+			 */
+			$currentChequeUnderCollection = $openingBalance->chequeUnderCollections()->where('money_received.id', $id)->first();
+            $currentChequeUnderCollection->update(array_merge($dataToUpdate, ['updated_at'=>now()]));
+            $currentChequeUnderCollection->cheque->update(array_merge($pivotData, ['updated_at'=>now()]));
         
         }
 
@@ -391,6 +400,9 @@ class OpeningBalancesController
                     'user_id' => auth()->id(),
                     'company_id'=>$company->id
                 ]));
+				/**
+				 * @var MoneyReceived $moneyReceived
+				 */
                 $cheque = $moneyReceived->cheque()->create($pivotData);
                 $cheque->update(['updated_at'=>now()]);
             }
@@ -411,7 +423,11 @@ class OpeningBalancesController
 
         $elementsToUpdate = array_intersect($idsFromRequest, $oldIdsFromDatabase); // origin one
         foreach ($elementsToDelete as $elementToDeleteId) {
+			/**
+			 * @var MoneyPayment $currentMoneyPayment
+			 */
             $currentMoneyPayment = MoneyPayment::find($elementToDeleteId);
+			
             $currentMoneyPayment->deleteRelations();
             $currentMoneyPayment->delete();
         }
@@ -441,6 +457,9 @@ class OpeningBalancesController
              
             $dataToUpdate['payment_currency'] = $dataToUpdate['currency'];
             $dataToUpdate['amount_in_invoice_currency'] = $dataToUpdate['paid_amount'];
+			/**
+			 * @var MoneyPayment $currentMoneyPayment
+			 */
             $currentMoneyPayment = $openingBalance->payableCheques()->where('money_payments.id', $id)->first() ;
             $currentMoneyPayment->update(array_merge($dataToUpdate, ['updated_at'=>now()]));
             $currentMoneyPayment->payableCheque->update(array_merge($pivotData, ['updated_at'=>now()]));
@@ -462,6 +481,9 @@ class OpeningBalancesController
                     'financial_institution_account_id' =>  $financialInstitutionAccount->id
                 ]);
             } else {
+				/**
+				 * @var MoneyPayment $currentMoneyPayment
+				 */
                 $currentMoneyPayment->handleCreditStatement($company->id, $financialInstitutionId, $accountType, $accountNumber, $moneyType, $statementDate, $amountInPaymentCurrency, $deliveryBranchId, $paymentCurrency);
             }
 
@@ -492,10 +514,13 @@ class OpeningBalancesController
                         unset($data[$key]);
                     }
                 }
-                $data['partner_id'] = is_numeric($data['supplier_id']) ? Partner::find($data['supplier_id'])->id : Partner::where('is_supplier', 1)->where('name', $dataToUpdate['supplier_id'])->first()->id ;
+                $data['partner_id'] = is_numeric($data['supplier_id']) ? Partner::find($data['supplier_id'])->id : Partner::where('is_supplier', 1)->where('name', $data['supplier_id'])->first()->id ;
                 $data['paid_amount'] = isset($data['paid_amount']) ? number_unformat($data['paid_amount']) : 0 ;
                 $data['amount_in_invoice_currency'] = $data['paid_amount'];
                 $amountInPaymentCurrency = $data['amount_in_invoice_currency'];
+				/**
+				 * @var MoneyPayment $moneyPayment
+				 */
                 $moneyPayment = $openingBalance->payableCheques()->create(array_merge($data, [
                     'type' => MoneyPayment::PAYABLE_CHEQUE,
                     'user_id' => auth()->id(),

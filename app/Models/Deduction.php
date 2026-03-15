@@ -10,7 +10,21 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperDeduction
+ * @property int $id
+ * @property string $name
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction onlyForCompany(int $companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Deduction whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Deduction extends Model
 {

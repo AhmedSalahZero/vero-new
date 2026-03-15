@@ -30,14 +30,13 @@ class HomeController extends Controller
 {
 	use GeneralFunctions;
 
-	/**
-	 * Show the application dashboard.
-	 *
-	 * @return \Illuminate\Contracts\Support\Renderable
-	 */
+	
 	public function index(Request $request)
 	{
 		$user =  Auth::user();
+		/**
+		 * @var User $user
+		 */
 		$companies = $user->companies;
 		if (count($user->companies) > 1) {
 			return view('client_view.home', compact('companies'));
@@ -91,20 +90,17 @@ class HomeController extends Controller
 		$previous_month = date('m-Y', strtotime($previous_month));
 		$currentMonth = explode('-', $end_date_month)[0];
 		$currentYear = explode('-', $end_date_month)[1];
-		$daySales = DB::select(DB::raw(
-			"
+		$query = "
             select sum(net_sales_value) as day_sales from sales_gathering where date = '" . $end_date . "' and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+            " . $company->id;
+		$daySales = DB::select($query);
 
 		$daySales = $daySales[0]->day_sales ?: 0;
 
-		$currentMonthSales = DB::select(DB::raw(
-
-			"
+		$query = "
             select sum(net_sales_value) as current_month_sales from sales_gathering where Year = " . $currentYear . " and Month=" . $currentMonth . " and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+            " . $company->id;
+		$currentMonthSales = DB::select($query);
 
 		$currentMonthSales = $currentMonthSales[0]->current_month_sales ?: 0;
 		$previousMonth = Carbon::make($end_date)->startOfMonth()->subMonths(1)->month;
@@ -116,18 +112,14 @@ class HomeController extends Controller
 		$previous3MonthYear = Carbon::make($end_date)->startOfMonth()->subMonths(3)->year;
 
 
-		$perviousMonthSales = DB::select(DB::raw(
-
-			"
+		$query = "
             select sum(net_sales_value) as previous_month_sales from sales_gathering where Year = " . $previousMonthYear . " and Month=" . $previousMonth . " and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
-		$salesToDate = DB::select(DB::raw(
-			"select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date . "' and date <= '" . $end_date . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+            " . $company->id;
+		$perviousMonthSales = DB::select($query);
+		$query = "select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date . "' and date <= '" . $end_date . "' and company_id = " . $company->id;
+		$salesToDate = DB::select($query);
 
-		$perviousThreeMonthsSales = DB::select(DB::raw(
-			"select sum(net_sales_value ) previous_three_months_sales from sales_gathering 
+		$query = "select sum(net_sales_value ) previous_three_months_sales from sales_gathering 
             where (
             (Year  =  " . $previousMonthYear  . " and Month=  " . $previousMonth . " ) 
             OR 
@@ -135,8 +127,8 @@ class HomeController extends Controller
             OR 
             (Year  = " .  $previous3MonthYear  . " and Month= " . ($previous3Month) . ") 
             )
-                and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+                and company_id = " . $company->id;
+		$perviousThreeMonthsSales = DB::select($query);
 
 		$perviousThreeMonthsSales = $perviousThreeMonthsSales[0]->previous_three_months_sales ?: 0;
 
@@ -190,11 +182,10 @@ class HomeController extends Controller
 		$currentYear = explode('-', $end_date_month)[1];
 		
 
-		$currentMonthSales = DB::select(DB::raw(
-			"
+		$query = "
             select sum(net_sales_value) as current_month_sales from sales_gathering where Year = " . $currentYear . " and Month=" . $currentMonth . " and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+            " . $company->id;
+		$currentMonthSales = DB::select($query);
 		$currentMonthSales = $currentMonthSales[0]->current_month_sales ?: 0;
 		$previousMonth = Carbon::make($end_date)->startOfMonth()->subMonths(1)->month;
 
@@ -205,17 +196,14 @@ class HomeController extends Controller
 		$previous3MonthYear = Carbon::make($end_date)->startOfMonth()->subMonths(3)->year;
 
 
-		$perviousMonthSales = DB::select(DB::raw(
-			"
+		$query = "
             select sum(net_sales_value) as previous_month_sales from sales_gathering where Year = " . $previousMonthYear . " and Month=" . $previousMonth . " and company_id = 
-            " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
-		$salesToDate = DB::select(DB::raw(
-			"select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date . "' and date <= '" . $end_date . "' and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+            " . $company->id;
+		$perviousMonthSales = DB::select($query);
+		$query = "select sum(net_sales_value) total_sales_to_date from sales_gathering where date >= '" . $start_date . "' and date <= '" . $end_date . "' and company_id = " . $company->id;
+		$salesToDate = DB::select($query);
 
-		$perviousThreeMonthsSales = DB::select(DB::raw(
-			"select sum(net_sales_value ) previous_three_months_sales from sales_gathering 
+		$query = "select sum(net_sales_value ) previous_three_months_sales from sales_gathering 
             where (
             (Year  =  " . $previousMonthYear  . " and Month=  " . $previousMonth . " ) 
             OR 
@@ -223,8 +211,8 @@ class HomeController extends Controller
             OR 
             (Year  = " .  $previous3MonthYear  . " and Month= " . ($previous3Month) . ") 
             )
-                and company_id = " . $company->id
-		)->getValue(DB::connection()->getQueryGrammar()));
+                and company_id = " . $company->id;
+		$perviousThreeMonthsSales = DB::select($query);
 
 		$perviousThreeMonthsSales = $perviousThreeMonthsSales[0]->previous_three_months_sales ?: 0;
 
@@ -259,11 +247,11 @@ class HomeController extends Controller
 
 	public function formatMonthlyChars($company, $start_date, $end_date)
 	{
-		$months = DB::select(DB::RAW(
-			"select sum(net_sales_value) 'Sales Values' , month , count(*) as dd, year  , concat(date_format(LAST_DAY(concat(year , '-' ,month ,'-',1)) , '%d') , '-', MONTHNAME(concat(year , '-' ,month ,'-',1)) , '-', year  ) as date  
-         from sales_gathering where company_id = " . $company->id . " 
-            and  date between '" . $start_date . "' and '" . $end_date . "' group by month , year  order by 'sales values' desc"
-		)->getValue(DB::connection()->getQueryGrammar()));
+		$accumulatedSalesValue=0;
+		$query = "select sum(net_sales_value) 'Sales Values' , month , count(*) as dd, year  , concat(date_format(LAST_DAY(concat(year , '-' ,month ,'-',1)) , '%d') , '-', MONTHNAME(concat(year , '-' ,month ,'-',1)) , '-', year  ) as date  
+         from sales_gathering where company_id = " . $company->id . "
+            and  date between '" . $start_date . "' and '" . $end_date . "' group by month , year  order by 'sales values' desc";
+		$months = DB::select($query);
 		$totalSums = array_sum(array_column($months, 'Sales Values'));
 
 		$formattedData = [];
@@ -409,7 +397,7 @@ class HomeController extends Controller
 					$first_item = collect($breakdown_data['report_view_data']??[])->sortByDesc(function ($data, $key) {
 						return [$data['Sales Value']];
 					})->toArray();
-					$first_item = ($first_item ?? []);
+					// $first_item = ($first_item ?? []);
 					$top_data[$type] = array_shift($first_item);
 				} else {
 					$top_data[$type] = $breakdown_data[0] ?? '-';

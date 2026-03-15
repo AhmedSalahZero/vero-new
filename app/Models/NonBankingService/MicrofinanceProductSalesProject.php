@@ -9,7 +9,60 @@ use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperMicrofinanceProductSalesProject
+ * @property int $id
+ * @property string $type all-branches , new-branches,by-branch
+ * @property int|null $branch_id
+ * @property int $microfinance_product_id
+ * @property int $tenor
+ * @property numeric $avg_amount
+ * @property int $early_payment_installment_counts
+ * @property array<array-key, mixed>|null $monthly_amounts
+ * @property string $funded_by by-odas , by-mtls
+ * @property array<array-key, mixed>|null $product_mixes
+ * @property array<array-key, mixed>|null $monthly_product_mixes
+ * @property array<array-key, mixed>|null $monthly_loan_amounts
+ * @property array<array-key, mixed>|null $total_cases_counts
+ * @property array<array-key, mixed>|null $seasonality
+ * @property array<array-key, mixed>|null $monthly_seasonality
+ * @property array<array-key, mixed>|null $flat_rates
+ * @property array<array-key, mixed>|null $decrease_rates
+ * @property array<array-key, mixed>|null $setup_fees_durations
+ * @property array<array-key, mixed>|null $fees_rates
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $increase_rates
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereAvgAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereDecreaseRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereEarlyPaymentInstallmentCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereFeesRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereFlatRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereFundedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereIncreaseRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereMicrofinanceProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereMonthlyAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereMonthlyLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereMonthlyProductMixes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereMonthlySeasonality($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereProductMixes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereSeasonality($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereSetupFeesDurations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereTenor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereTotalCasesCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\MicrofinanceProductSalesProject whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class MicrofinanceProductSalesProject extends Model
 {

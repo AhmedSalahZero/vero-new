@@ -26,7 +26,7 @@ class StoreMoneyReceivedRequest extends FormRequest
         return true;
     }
 	
-	protected function prepareForValidation()
+	protected function prepareForValidation():array 
 	{
 		$receivedAmounts = $this->received_amount ;
 		$receivedAmounts = collect($receivedAmounts)->map(function($item){
@@ -49,11 +49,6 @@ class StoreMoneyReceivedRequest extends FormRequest
 	}
 
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
 		$companyId = getCurrentCompanyId();

@@ -15,11 +15,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PropertyFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+ 
     public function definition()
     {
 		$natureId = $this->faker->randomElement([Property::UNIT]);
@@ -35,15 +31,15 @@ class PropertyFactory extends Factory
 				'value'=>$this->faker->numberBetween(100000,1000000)
 			],
 			[
-				'date'=>$date = Carbon::make($date)->addMonth(1)->format('Y-m-d'),
+				'date'=>$date = Carbon::make($date)->addMonths(1)->format('Y-m-d'),
 				'value'=>$this->faker->numberBetween(100000,1000000)
 			],
 			[
-				'date'=>$date = Carbon::make($date)->addMonth(1)->format('Y-m-d'),
+				'date'=>$date = Carbon::make($date)->addMonths(1)->format('Y-m-d'),
 				'value'=>$this->faker->numberBetween(100000,1000000)
 			],
 			[
-				'date'=>$date = Carbon::make($date)->addMonth(1)->format('Y-m-d'),
+				'date'=>$date = Carbon::make($date)->addMonths(1)->format('Y-m-d'),
 				'value'=>$this->faker->numberBetween(100000,1000000)
 			]
 			];

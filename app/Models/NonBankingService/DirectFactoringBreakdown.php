@@ -6,7 +6,69 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  DirectFactoringBreakdown extends Model
+/**
+ * @property int $id
+ * @property int $category
+ * @property numeric $margin_rate
+ * @property array<array-key, mixed>|null $percentage_payload
+ * @property array<array-key, mixed>|null $loan_amounts
+ * @property string|null $monthly_loan_amounts
+ * @property array<array-key, mixed>|null $disbursement_amounts
+ * @property array<array-key, mixed>|null $beginning_balance
+ * @property array<array-key, mixed>|null $interest_revenue
+ * @property array<array-key, mixed>|null $unearned_interest
+ * @property array<array-key, mixed>|null $end_balance
+ * @property array<array-key, mixed>|null $net_funding_amounts
+ * @property array<array-key, mixed>|null $statement_beginning_balance
+ * @property array<array-key, mixed>|null $direct_factoring_amounts
+ * @property array<array-key, mixed>|null $direct_factoring_settlements
+ * @property array<array-key, mixed>|null $statement_end_balance
+ * @property array<array-key, mixed>|null $bank_beginning_balance
+ * @property array<array-key, mixed>|null $bank_loan_amounts
+ * @property array<array-key, mixed>|null $bank_loan_settlements
+ * @property array<array-key, mixed>|null $bank_interest_expense_payments
+ * @property array<array-key, mixed>|null $bank_total_dues
+ * @property array<array-key, mixed>|null $bank_interest_expense
+ * @property array<array-key, mixed>|null $bank_end_balance
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankInterestExpense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankInterestExpensePayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankLoanSettlements($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBankTotalDues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereDirectFactoringAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereDirectFactoringSettlements($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereDisbursementAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereInterestRevenue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereMonthlyLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereNetFundingAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown wherePercentagePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereStatementBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereStatementEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereUnearnedInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringBreakdown whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class DirectFactoringBreakdown extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

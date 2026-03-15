@@ -157,6 +157,9 @@ class MediumTermLoanController
 		$currentAccountNumber = $request->get('current_account_number');
 		$amount = $request->get('amount');
 		$date = $request->get('date');
+		/**
+		 * @var LoanScheduleSettlement $loanScheduleSettlement
+		 */
 		$loanScheduleSettlement=$loanSchedule->settlements()->create([
 			'current_account_number'=>$currentAccountNumber,
 			'amount'=>$amount,

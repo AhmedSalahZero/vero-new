@@ -17,11 +17,7 @@ class UpdateCertificateOfDepositRequest extends StoreCertificateOfDepositRequest
         return true ;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules(array $excludeAccountNumbers = [])
     {
 		$certificatesOfDeposit = Request()->route('certificatesOfDeposit') ;

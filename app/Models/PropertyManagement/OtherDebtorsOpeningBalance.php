@@ -7,7 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperOtherDebtorsOpeningBalance
+ * @property int $id
+ * @property string|null $name
+ * @property numeric $amount
+ * @property array<array-key, mixed>|null $payload
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $statement (DC2Type:json)
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherDebtorsOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OtherDebtorsOpeningBalance extends Model
 {	use HasCollectionOrPaymentStatement;	

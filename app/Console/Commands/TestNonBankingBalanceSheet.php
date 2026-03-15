@@ -21,17 +21,9 @@ use Illuminate\Http\Request;
 class TestNonBankingBalanceSheet extends Command
 {
 
-	/**
-	 * The name and signature of the console command.
-	 *
-	 * @var string
-	 */
+	
 	protected $signature = 'run:test-non-banking-balance-sheet';
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
+
 	protected $description = 'Test Balance Sheet Is Zero Or Not In Non Banking';
 
 	/**

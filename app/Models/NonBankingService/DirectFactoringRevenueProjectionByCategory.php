@@ -7,7 +7,29 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  DirectFactoringRevenueProjectionByCategory extends Model
+/**
+ * @property int $id
+ * @property array<array-key, mixed>|null $growth_rates
+ * @property array<array-key, mixed>|null $direct_factoring_transactions_projections
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereDirectFactoringTransactionsProjections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereGrowthRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class DirectFactoringRevenueProjectionByCategory extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

@@ -13,7 +13,104 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperExpense
+ * @property int $id
+ * @property int $expense_name_id
+ * @property string|null $expense_category
+ * @property string|null $category_name
+ * @property int|null $start_date
+ * @property string|null $start_date_type start_date,operation_date in case of microfinance
+ * @property int|null $end_date end date as index
+ * @property string|null $interval
+ * @property string|null $monthly_cost_of_unit
+ * @property string|null $percentage_of
+ * @property array<array-key, mixed>|null $revenue_stream_type
+ * @property array<array-key, mixed>|null $stream_category_ids
+ * @property string|null $monthly_percentage
+ * @property string|null $payment_terms
+ * @property array<array-key, mixed>|null $payment_amounts
+ * @property array<array-key, mixed>|null $collection_statements
+ * @property array<array-key, mixed>|null $withhold_statements
+ * @property string|null $vat_rate
+ * @property int $is_deductible
+ * @property string|null $withhold_tax_rate
+ * @property string|null $increase_interval
+ * @property numeric $amount
+ * @property array<array-key, mixed>|null $monthly_repeating_amounts
+ * @property array<array-key, mixed>|null $withhold_amounts
+ * @property string|null $vat_amounts
+ * @property array<array-key, mixed>|null $expense_as_percentages
+ * @property array<array-key, mixed>|null $total_vat
+ * @property array<array-key, mixed>|null $total_after_vat
+ * @property array<array-key, mixed>|null $withhold_payments
+ * @property array<array-key, mixed>|null $net_payments_after_withhold
+ * @property string|null $sensitivity_expense_as_percentages
+ * @property array<array-key, mixed>|null $payload
+ * @property int $model_id
+ * @property string|null $model_name
+ * @property int|null $study_id
+ * @property string|null $expense_type
+ * @property string|null $relation_name
+ * @property array<array-key, mixed>|null $custom_collection_policy
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $amortization_months
+ * @property array<array-key, mixed>|null $position_ids
+ * @property array<array-key, mixed>|null $increase_rates
+ * @property int|null $branch_id
+ * @property string|null $microfinance_allocation
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereAmortizationMonths($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereCategoryName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereCollectionStatements($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereCustomCollectionPolicy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereExpenseAsPercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereExpenseCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereExpenseNameId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereExpenseType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereIncreaseInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereIncreaseRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereIsDeductible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereMicrofinanceAllocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereModelName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereMonthlyCostOfUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereMonthlyPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereMonthlyRepeatingAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereNetPaymentsAfterWithhold($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense wherePaymentAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense wherePaymentTerms($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense wherePercentageOf($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense wherePositionIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereRelationName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereRevenueStreamType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereSensitivityExpenseAsPercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereStartDateType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereStreamCategoryIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereTotalAfterVat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereTotalVat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereVatAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereVatRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereWithholdAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereWithholdPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereWithholdStatements($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Expense whereWithholdTaxRate($value)
+ * @mixin \Eloquent
  */
 class Expense extends Model
 {

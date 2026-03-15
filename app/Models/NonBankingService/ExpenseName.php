@@ -11,11 +11,32 @@ use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperExpenseName
+ * @property int $id
+ * @property int $company_id
+ * @property string|null $expense_type
+ * @property string $name
+ * @property int $is_employee_expense
+ * @property int $is_branch_expense
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereExpenseType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereIsBranchExpense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereIsEmployeeExpense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ExpenseName whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class ExpenseName extends Model
 {
-	use BelongsToStudy,BelongsToCompany,IsDepartment,HasBasicStoreRequest;
+	use BelongsToStudy,BelongsToCompany,HasBasicStoreRequest;
 	protected $table ='expense_names';
 	protected $connection =NON_BANKING_SERVICE_CONNECTION_NAME;
  	protected $guarded = ['id'];
@@ -28,6 +49,10 @@ class ExpenseName extends Model
 			$row->is_employee_expense = $row->is_employee_expense[0]??0;
 		 });
 	 }
+	 public function getName()
+	{
+		return $this->name ;
+	}
 	public function getExpenseType(): string
 	{
 		return $this->expense_type;

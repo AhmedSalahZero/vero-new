@@ -60,14 +60,13 @@ class ExportAgainstAnalysisReport
         foreach ($firstColumnItems as  $firstColumnItem) {
 
             if ($result == 'view') {
-                $results =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(purchase_order_date),'%d-%m-%Y') as gr_date  , ".$data_type." ,".$firstColumn."," . $secondColumnName ."
                     FROM export_analysis
                     WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = '".$firstColumnItem."' AND purchase_order_date between '".$request->start_date."' and '".$request->end_date."')
 					". $whereIn ."
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->groupBy($type)->map(function($item)use($data_type){
+                    ORDER BY id ";
+                $results =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                         return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
                         
                             return $sub_item->sum($data_type);
@@ -96,8 +95,8 @@ class ExportAgainstAnalysisReport
                     ->selectRaw('DATE_FORMAT(LAST_DAY(purchase_order_date),"%d-%m-%Y") as gr_date ,
                     (IFNULL('.$data_type.',0)  ) as '.$data_type.' , IFNULL(quantity,0) quantity,'.$firstColumn.',' . $type)
                     ->get()
-                    ->groupBy($type)->map(function($item)use($data_type){
-                        return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
+                    ->groupBy($type)->map(function($item){
+                        return $item->groupBy('gr_date')->map(function($sub_item){
                             return ( $sub_item->sum('quantity') ) ;
                         });
                     })->toArray();
@@ -178,7 +177,6 @@ class ExportAgainstAnalysisReport
 
                         elseif($itemKey == 'Growth Rate %'){
                             foreach($values as $datee => $dateVal){
-                                $report_data[$reportType][$dateName]['Avg. Prices'][$datee];
                                 $keys = array_flip(array_keys($report_data[$reportType][$dateName]['Avg. Prices']));
                                 $values = array_values($report_data[$reportType][$dateName]['Avg. Prices']);
                                 $previousValue = isset($values[$keys[$datee]-1]) ? $values[$keys[$datee]-1] : 0 ;

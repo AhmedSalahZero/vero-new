@@ -55,13 +55,12 @@ class TwodimensionalSalesBreakdownAgainstRankingAnalysisReport
         // $main_type_items_totals = [];
 
         
-        $report_data =collect(DB::select(DB::raw("
+        $query = "
             SELECT DATE_FORMAT(date,'%d-%m-%Y') as date, net_sales_value ,sales_value,".$type.",".$main_type ."
             FROM sales_gathering
             WHERE ( company_id = '".$company->id."' AND ".$type." IS NOT NULL AND ".$main_type." IS NOT NULL  AND date between '".$request->start_date."' and '".$request->end_date. " ')
-            ORDER BY id "
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy($type)->map(function($item) use($main_type){
+            ORDER BY id ";
+        $report_data =collect(DB::select($query))->groupBy($type)->map(function($item) use($main_type){
                 return $item->groupBy($main_type)->map(function($sub_item){
                     return $sub_item->sum('net_sales_value');
                 });
@@ -71,7 +70,7 @@ class TwodimensionalSalesBreakdownAgainstRankingAnalysisReport
             foreach($report_data as $productName => $branchValues){
                foreach($branchValues as $branchName => $total){
 				if($total != 0){
-					$data[$branchName][getOrderMaxForBranch($branchName , $branchValues)][$productName] = [
+					$data[$branchName][$this->getOrderMaxForBranch($branchName , $branchValues)][$productName] = [
 						'total'=>$total ,
 					] ;    
 				}
@@ -93,6 +92,23 @@ class TwodimensionalSalesBreakdownAgainstRankingAnalysisReport
         ));
 
     }
+	protected function getOrderMaxForBranch(string $branchName, array $data)
+	{
+		$arr_data = $data;
+		$new = [];
+		uasort($arr_data, function ($a, $b) {
+			return $a < $b;
+		});
+		$uniques = array_unique($arr_data);
+		for ($i = 0; $i < count($uniques); $i++) {
+			$key = array_values($uniques)[$i];
+			$new["$key"] = $i + 1;
+		};
+	
+		$value = $arr_data[$branchName];
+	
+		return $new[strval($value)];
+	}
 
     // public function handleRanking(){}
 

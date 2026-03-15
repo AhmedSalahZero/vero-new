@@ -15,6 +15,7 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
+	use ImageSave;
 	public function __construct()
 	{
 		$this->middleware(['can:view users'])->only(['index']);

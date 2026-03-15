@@ -7,7 +7,12 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperTestCashFlowStatement
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\TestCashFlowStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\TestCashFlowStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\TestCashFlowStatement query()
+ * @mixin \Eloquent
  */
 class TestCashFlowStatement extends Model
 {

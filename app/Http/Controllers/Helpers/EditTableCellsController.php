@@ -25,11 +25,14 @@ class EditTableCellsController extends Controller
         $model = ($modelNamespace.$modelName)::find($modelId);
 		
         $model = $isRelation ? $model->{$relationName} : $model ;
+		if(!is_object($model)){
+			throw new \Exception('Model must be an object');
+		}
 		if($isCollectionRelation)
             {
                 $model = $model->where('id',$collectionItemId)->first();
             }
-        if(get_class($model)::where('company_id',getCurrentCompanyId())->where($columnName , $data)->exists())
+        if($model::where('company_id',getCurrentCompanyId())->where($columnName , $data)->exists())
         {
             // this record already exist ;
             return response()->json([

@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\BalanceSheet;
 use App\Models\CashFlowStatement;
 use App\Models\FinancialStatement;
 use App\Models\IncomeStatement;
@@ -16,10 +15,7 @@ class FinancialStatementObserver
 		if ($incomeStatement) {
 			$incomeStatement->delete();
 		}
-		$balanceSheet = $FinancialStatement->balanceSheet;
-		if ($balanceSheet) {
-			$balanceSheet->delete();
-		}
+		
 		$cashFlowStatement = $FinancialStatement->cashFlowStatement;
 		if ($cashFlowStatement) {
 			$cashFlowStatement->delete();
@@ -29,7 +25,6 @@ class FinancialStatementObserver
 	public function updated(financialStatement $financialStatement)
 	{
 		$incomeStatement = $financialStatement->incomeStatement;
-		$balanceSheet = $financialStatement->balanceSheet;
 		$cashFlowStatement = $financialStatement->cashFlowStatement;
 		if ($incomeStatement) {
 			$incomeStatement->update([
@@ -39,14 +34,7 @@ class FinancialStatementObserver
 				'start_from' => $financialStatement->start_from
 			]);
 		}
-		if ($balanceSheet) {
-			$balanceSheet->update([
-				'name' => $this->generateNameForFinancialStatementRelations($financialStatement->name, $balanceSheet),
-				'duration' => $financialStatement->duration,
-				'duration_type' => $financialStatement->duration_type,
-				'start_from' => $financialStatement->start_from
-			]);
-		}
+		
 
 		if ($cashFlowStatement) {
 
@@ -67,9 +55,7 @@ protected function generateNameForFinancialStatementRelations(string $financialS
     if ($relationObject instanceof CashFlowStatement) {
         return $financialStatementName . ' Cash Flow Statement';
     }
-    if ($relationObject instanceof BalanceSheet) {
-        return $financialStatementName . ' Balance Sheet';
-    }
+   
 
     throw new \Exception('Can Not Generate Name For ' . $financialStatementName . ' Only Allowed [ Income Statement , Cash Flow And Balance Sheet ] Objects');
 }

@@ -11,7 +11,137 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperSupplierInvoice
+ * @property int $id
+ * @property int|null $odoo_id
+ * @property int $company_id
+ * @property int|null $opening_balance_id
+ * @property string|null $supplier_code
+ * @property string|null $sales_person
+ * @property int $supplier_id
+ * @property string|null $supplier_name
+ * @property string|null $business_sector
+ * @property string|null $project_name
+ * @property string|null $site_name
+ * @property string|null $invoice_date
+ * @property string|null $invoice_month
+ * @property int|null $invoice_year
+ * @property string|null $invoice_number
+ * @property string|null $invoice_amount
+ * @property string $currency
+ * @property numeric $exchange_rate
+ * @property float|null $invoice_amount_in_main_currency
+ * @property string|null $vat_amount
+ * @property float|null $vat_amount_in_main_currency
+ * @property numeric $odoo_withhold_amount
+ * @property numeric $odoo_withhold_amount_in_main_currency
+ * @property string|null $withhold_amount
+ * @property float|null $withhold_amount_in_main_currency
+ * @property numeric $total_withhold_amount
+ * @property numeric $total_withhold_amount_in_main_currency
+ * @property string|null $net_invoice_amount
+ * @property float|null $net_invoice_amount_in_main_currency
+ * @property string|null $contracted_payment_days
+ * @property string|null $invoice_due_date
+ * @property string|null $invoice_status
+ * @property numeric $odoo_paid_amount
+ * @property numeric $odoo_paid_amount_in_main_currency
+ * @property string|null $paid_amount
+ * @property float|null $paid_amount_in_main_currency
+ * @property numeric $total_paid_amount
+ * @property numeric $total_paid_amount_in_main_currency
+ * @property numeric $total_deductions
+ * @property numeric $total_deductions_in_main_currency
+ * @property string|null $net_balance
+ * @property float|null $net_balance_in_main_currency
+ * @property int|null $is_period_closed
+ * @property int|null $is_canceled
+ * @property string|null $contract_date
+ * @property string|null $contract_code
+ * @property string|null $contract_name
+ * @property numeric|null $contract_amount
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property numeric|null $discount_amount
+ * @property numeric|null $discount_amount_in_main_currency
+ * @property string|null $purchases_order_number
+ * @property string|null $purchases_order_date
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Deduction> $deductions
+ * @property-read int|null $deductions_count
+ * @property-read bool|null $deductions_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DueDateHistory> $dueDateHistories
+ * @property-read int|null $due_date_histories_count
+ * @property-read bool|null $due_date_histories_exists
+ * @property-read \App\Models\PaymentSettlement|null $letterOfCreditIssuancePaymentSettlements
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyPayment> $moneyPayment
+ * @property-read int|null $money_payment_count
+ * @property-read bool|null $money_payment_exists
+ * @property-read \App\Models\Partner|null $supplier
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice onlyCompany($companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice onlyCurrency(string $currency)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice onlyForPartner($partnerId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereBusinessSector($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereContractAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereContractCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereContractDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereContractName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereContractedPaymentDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereDiscountAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereDiscountAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereInvoiceYear($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereIsCanceled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereIsPeriodClosed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereNetBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereNetBalanceInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereNetInvoiceAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereNetInvoiceAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereOdooPaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereOdooPaidAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereOdooWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereOdooWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice wherePaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice wherePaidAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereProjectName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice wherePurchasesOrderDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice wherePurchasesOrderNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereSalesPerson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereSiteName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereSupplierCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereSupplierId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereSupplierName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereTotalDeductions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereTotalDeductionsInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereTotalPaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereTotalPaidAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereTotalWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereTotalWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereVatAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereVatAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierInvoice whereWithholdAmountInMainCurrency($value)
+ * @mixin \Eloquent
  */
 class SupplierInvoice extends Model implements IInvoice
 {

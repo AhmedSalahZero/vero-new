@@ -101,13 +101,12 @@ class DiscountsRankingAnalysisReport
 
 
 
-        $report_all =collect(DB::select(DB::raw("
+        $query = "
             SELECT special_discount , quantity_discount ,other_discounts ,cash_discount ,sales_value,".$main_type ."
             FROM sales_gathering
             WHERE ( company_id = '".$company->id."'AND ".$main_type." IS NOT NULL  AND date between '".$request->start_date."' and '".$request->end_date."')
-            ORDER BY id "
-        )->getValue(DB::connection()->getQueryGrammar())
-		))->groupBy($main_type);
+            ORDER BY id ";
+        $report_all =collect(DB::select($query))->groupBy($main_type);
         $report_data = $report_all->flatMap(function($item,$name)  {
                 return [
                     $name => [

@@ -4,7 +4,6 @@ namespace App\Models\Repositories;
 
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Jobs\RecalculateIncomeStatementCalculationForTypesJob;
-use App\Models\BalanceSheet;
 use App\Models\CashFlowStatement;
 use App\Models\Company;
 use App\Models\FinancialStatement;
@@ -65,7 +64,7 @@ class FinancialStatementRepository implements IBaseRepository
 
 		$cashFlowStatement = new CashFlowStatement();
 
-		$balanceSheet = new BalanceSheet();
+
 
 		$financialStatementName = $request->name;
 
@@ -80,7 +79,6 @@ class FinancialStatementRepository implements IBaseRepository
 		$cashFlowStatement = $cashFlowStatement->storeMainSection($request)->storeMainItems($request);
 
 		$request['name'] = $financialStatementName . ' Balance Sheet';
-		$balanceSheet = $balanceSheet->storeMainSection($request)->storeMainItems($request);
 
 
 		return $financialStatement;
@@ -146,19 +144,16 @@ class FinancialStatementRepository implements IBaseRepository
 		$allFilterDataCounter = $filterData->count();
 
 		$datePerPage = $filterData->skip(Request('start'))->take(Request('length'))->get()->each(function (FinancialStatement $financialStatement, $index) {
-			$financialStatement->creator_name = $financialStatement->getCreatorName();
+			// $financialStatement->creator_name = $financialStatement->getCreatorName();
 			$financialStatement->cash_flow_statement_id = $financialStatement->cashFlowStatement ? $financialStatement->cashFlowStatement->id : 0;
-			// $financialStatement->balance_sheet_id = $financialStatement->balanceSheet ? $financialStatement->balanceSheet->id : 0;
 			$financialStatement->income_statement_id = $financialStatement->incomeStatement ? $financialStatement->incomeStatement->id : 0;
-			$financialStatement->created_at_formatted = formatDateFromString($financialStatement->created_at);
-			$financialStatement->updated_at_formatted = formatDateFromString($financialStatement->updated_at);
-			$financialStatement->order = $index + 1;
+		//	$financialStatement->created_at_formatted = formatDateFromString($financialStatement->created_at);
+			// $financialStatement->updated_at_formatted = formatDateFromString($financialStatement->updated_at);
+			// $financialStatement->order = $index + 1;
 			$financialStatement->can_view_income_statement_actual_report = $financialStatement->incomeStatement ? $financialStatement->incomeStatement->can_view_actual_report : false;
 
-			// $financialStatement->can_view_balance_sheet_actual_report = $financialStatement->balanceSheet ? $financialStatement->balanceSheet->canViewActualReport() : false;
 			
 			$financialStatement->can_view_cash_flow_statement_actual_report = false;
-			// $financialStatement->can_view_cash_flow_statement_actual_report = $financialStatement->cashFlowStatement ? $financialStatement->cashFlowStatement->canViewActualReport() : false;
 			$financialStatement->duration_type_select = $this->formatSelectFor($financialStatement->duration_type);
 			$financialStatement->can_edit_duration_type = $financialStatement->canEditDurationType();
 		});
@@ -179,10 +174,10 @@ class FinancialStatementRepository implements IBaseRepository
 
 		$dataWithRelations = collect([]);
 		$datePerPage = $filterData->get()->each(function (FinancialStatementItem $financialStatementItem, $index) use ($dataWithRelations, $financialStatement, $request) {
-			$financialStatementItem->creator_name = $financialStatementItem->getCreatorName();
-			$financialStatementItem->created_at_formatted = formatDateFromString($financialStatementItem->created_at);
-			$financialStatementItem->updated_at_formatted = formatDateFromString($financialStatementItem->updated_at);
-			$financialStatementItem->order = $index + 1;
+			// $financialStatementItem->creator_name = $financialStatementItem->getCreatorName();
+			// $financialStatementItem->created_at_formatted = formatDateFromString($financialStatementItem->created_at);
+			// $financialStatementItem->updated_at_formatted = formatDateFromString($financialStatementItem->updated_at);
+			// $financialStatementItem->order = $index + 1;
 
 			$dataWithRelations->add($financialStatementItem);
 			$financialStatementItem->getSubItems($financialStatement->id, $request->get('sub_item_type'), $request->get('sub_item_name'))->each(function ($subItem) use ($dataWithRelations, $financialStatementItem) {

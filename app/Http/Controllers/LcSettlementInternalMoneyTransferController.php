@@ -116,7 +116,7 @@ class LcSettlementInternalMoneyTransferController
 	public function store(Company $company   , Request $request){
 	
 		\DB::enableQueryLog();
-		$type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
+		// $type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
 		$internalMoneyTransfer = new LcSettlementInternalMoneyTransfer ;
 		$companyId = $company->id ;
 		/**
@@ -129,7 +129,6 @@ class LcSettlementInternalMoneyTransferController
 		$lcType = $letterOfCreditIssuance->getLcType();
 		$transactionName =   $letterOfCreditIssuance->getTransactionName();
 		$transferDate = $request->get('transfer_date') ;
-		// $receivingDate = Carbon::make($transferDate)->addDay($request->get('transfer_days',0))->format('Y-m-d');
 		$transferAmount = $request->get('amount') ;
 		$internalMoneyTransfer->type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
 		$internalMoneyTransfer->storeBasicForm($request);
@@ -145,14 +144,14 @@ class LcSettlementInternalMoneyTransferController
 		$fromAccountType = AccountType::find($fromAccountTypeId);
 		// $toAccountType = AccountType::find($toAccountTypeId);
 	
-		if($type === LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ){
+		// if($type === LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ){
 			$commentEn = __('Internal Transfer [ :supplierName ] [ :lcType ] Transaction Name [ :transactionName ]' ,['supplierName'=>$supplierName ,'lcType'=>$lcType,'transactionName'=>$transactionName],'en');
 			$commentAr = __('Internal Transfer [ :supplierName ] [ :lcType ] Transaction Name [ :transactionName ]' ,['supplierName'=>$supplierName ,'lcType'=>$lcType,'transactionName'=>$transactionName],'ar');
 			$internalMoneyTransfer->handleBankToLetterOfCreditTransfer(  $companyId ,$letterOfCreditFacilityId,$lcFacilityLimit,  $fromAccountType ,  $fromAccountNumber ,  $fromFinancialInstitutionId ,  $letterOfCreditIssuance ,  $transferDate , $transferAmount,$commentEn , $commentAr);
-		}
+		// }
 	
 		
-		$activeTab = $type ; 
+		$activeTab = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ; 
 		
 		return redirect()->route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Data Store Successfully'));
 		

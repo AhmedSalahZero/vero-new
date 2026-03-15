@@ -77,7 +77,14 @@ class IntervalsComparingReport
             $type = 'country';
             $view_name = 'Countries Sales Interval Comparing Analysis' ;
         }
-        return view('client_view.reports.sales_gathering_analysis.interval_comparing.sales_form', compact('company', 'view_name','type'));
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
+        return view('client_view.reports.sales_gathering_analysis.interval_comparing.sales_form', [
+            'company' => $company,
+            'view_name' => $view_name,
+            'type' => $type,
+        ]);
     }
 
     public function result(Request $request, Company $company,$result='view')

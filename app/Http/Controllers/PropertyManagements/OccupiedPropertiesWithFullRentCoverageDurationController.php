@@ -67,8 +67,7 @@ class OccupiedPropertiesWithFullRentCoverageDurationController extends Controlle
 			] ;
 			$propertyContractFullRentRenewal = $study->propertyContractFullRentRenewalsForProperty($propertyId)->first();
 			$propertyContractFullRentRenewal ? $propertyContractFullRentRenewal->update($data) : PropertyContractFullRentRenewal::create($data) ;
-			$formattedResult = [];
-			PropertyContractFullRentRenewal::getFullRentCoveragesAmounts($study,$formattedResult);
+			PropertyContractFullRentRenewal::getFullRentCoveragesAmounts($study);
 			$study->createNewAreaProperty($propertyId,Property::FULL_COVERAGE,$propertyArr['area']);
 			$study->updateExpensesPercentageAndCostPerUnitsOfSales();
 		}

@@ -79,7 +79,14 @@ class SalesBreakdownAgainstAnalysisReport
 			$type = 'day';
 			$view_name = 'Days Sales Breakdown Analysis';
 		}
-		return view('client_view.reports.sales_gathering_analysis.breakdown.sales_form', compact('company', 'view_name', 'type'));
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
+		return view('client_view.reports.sales_gathering_analysis.breakdown.sales_form', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+		]);
 	}
 	public function filterDataByDate($items , $startDate){
 		
@@ -110,6 +117,7 @@ class SalesBreakdownAgainstAnalysisReport
 	public function salesBreakdownAnalysisResult(Request $request, Company $company, $result = 'view', $calculated_report_data = null,?string $reportType =null , ?int $numOfTop = null )
 	{
 		$simpleLinearRegressionData =[];
+		$regressionForCompany = [];
 		$predictionArr = [];
 		$breakdownStartDate = $request->start_date ;
 		$breakdownEndDate = $request->end_date ;
@@ -143,16 +151,14 @@ class SalesBreakdownAgainstAnalysisReport
 		
 		$isAI = $result == 'array_with_ai';
 		$simpleLinearRegressionStartDate = $isAI ? $simpleLinearRegressionStartDate  : $breakdownStartDate;
-		$report_data = isset($calculated_report_data) ? $calculated_report_data :  collect(DB::select(DB::raw(
-			"
+		$query = "
 			SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value,service_provider_name," . $type . "
                 FROM sales_gathering
 				force index (sales_channel_index)
 				
                 WHERE ( company_id = '" . $company->id . "'AND " . $type . " IS NOT NULL  AND date between '" . $simpleLinearRegressionStartDate . "' and '" . $breakdownEndDate . " ')
-                ORDER BY id "
-			)->getValue(DB::connection()->getQueryGrammar())
-		));
+                ORDER BY id ";
+		$report_data = isset($calculated_report_data) ? $calculated_report_data :  collect(DB::select($query));
 		
 		
 
@@ -179,15 +185,15 @@ class SalesBreakdownAgainstAnalysisReport
 		$report_data = isset($calculated_report_data) ? $calculated_report_data : $report_data;
 
 		if($isAI){
-			$report_data =     $this->filterDataByDate($report_data,$breakdownStartDate,$breakdownEndDate);
+			$report_data =     $this->filterDataByDate($report_data,$breakdownStartDate);
 		}
 		
 	
 
 	
 		if ($type == 'service_provider_birth_year' || $type == 'service_provider_type') {
-			$data = $report_data->groupBy($type)->map(function ($item, $year) {
-				return  $item->groupBy('service_provider_name')->flatMap(function ($sub_item, $name) use ($item, $year) {
+			$data = $report_data->groupBy($type)->map(function ($item) {
+				return  $item->groupBy('service_provider_name')->flatMap(function ($sub_item, $name)  {
 					return [
 						$name => $sub_item->sum('net_sales_value'),
 					];
@@ -245,8 +251,8 @@ class SalesBreakdownAgainstAnalysisReport
 					} elseif ($age >  60) {
 						$key =  3;
 					}
-					$report_view_data[$key]['Sales Value'] = ($report_view_data[$key]['Sales Value'] ?? 0) + array_sum(($data_per_year ?? []));
-					$report_count_data[$key]['Count'] = ($report_count_data[$key]['Count'] ?? 0) + count(($data_per_year ?? []));
+					$report_view_data[$key]['Sales Value'] = ($report_view_data[$key]['Sales Value'] ) + array_sum(($data_per_year ?? []));
+					$report_count_data[$key]['Count'] = ($report_count_data[$key]['Count'] ) + count(($data_per_year ?? []));
 				}
 			} else {
 				$key = 0;
@@ -278,7 +284,7 @@ class SalesBreakdownAgainstAnalysisReport
 
 		if ((count($report_data) > 0) && ($type !== 'service_provider_birth_year') && $result !== "withOthers") {
 			$key_num = 0;
-			$report_data =  collect($report_data)->sortByDesc(function ($data, $key) use ($key_num) {
+			$report_data =  collect($report_data)->sortByDesc(function ($data)  {
 				return [($data['Sales Value'])];
 			});
 			$viewing_data = $report_data->toArray();
@@ -367,14 +373,12 @@ class SalesBreakdownAgainstAnalysisReport
 			'other_discounts',
 			'cash_discount',
 		];
-		$report_data = collect(DB::select(DB::raw(
-			"
+		$query = "
             SELECT  SUM(special_discount) as special_discount , SUM(quantity_discount) as quantity_discount ,SUM(other_discounts) as other_discounts ,SUM(cash_discount) as cash_discount
             FROM sales_gathering
             WHERE ( company_id = '" . $company->id . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-            ORDER BY id "
-		)->getValue(DB::connection()->getQueryGrammar())
-		))->flatMap(function ($item) {
+            ORDER BY id ";
+		$report_data = collect(DB::select($query))->flatMap(function ($item) {
 
 			return  [
 				0 => [
@@ -408,10 +412,10 @@ class SalesBreakdownAgainstAnalysisReport
 
 
 		if ($result == 'view') {
-			if (count($breakdown_items) == 0) {
-				toastr()->error('No Data Found');
-				return redirect()->back();
-			}
+			// if (count($breakdown_items) == 0) {
+			// 	toastr()->error('No Data Found');
+			// 	return redirect()->back();
+			// }
 			$last_date = null;
 			// Last Date
 			$last_date = SalesGathering::company()->latest('date')->first()->date;
@@ -432,16 +436,14 @@ class SalesBreakdownAgainstAnalysisReport
 		$end_date = $request->get('end_date');
 		$type = $request->get('type');
 		$modal_id = $request->get('modal_id');
-		$db = DB::select(DB::raw(
-			'
+		$query = '
              SELECT "' . $selectedType . '" as selected_type_name , "' . $modal_id . '" as modal_id , FORMAT(sum(net_sales_value) , 0) as total_sales_value , count(DISTINCT(customer_name)) as customer_name , count(DISTINCT(category)) as category , count(DISTINCT(product_or_service)) as product_or_service , count(DISTINCT(product_item)) as product_item, count(DISTINCT(sales_person)) as sales_person ,
               count(DISTINCT(business_sector)) as business_sector, count(DISTINCT(sales_channel)) as sales_channel, count(DISTINCT(zone)) as zone, count(DISTINCT(branch)) as branch
                 FROM sales_gathering
               force index (sales_channel_index)
                 WHERE ( company_id = ' . $companyId  . ' AND ' . $type .  ' =  "'  . $selectedType .  '" AND date between "' . $start_date . '" and "' . $end_date . '"  )
-                ORDER BY id '
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+                ORDER BY id ';
+		$db = DB::select($query);
 
 		$request['branches'] = [$selectedType];
 		$request['type'] = $type;
@@ -473,16 +475,14 @@ class SalesBreakdownAgainstAnalysisReport
 		$request['date'] = $end_date;
 
 
-		$queryResult = DB::select(DB::raw(
-			'
+		$query = '
              SELECT "' . $selectedType . '" as selected_type_name , "' . $modal_id . '" as modal_id , sum(net_sales_value)  as total_sales_value ,  ' . $column . ' as customer_name
                 FROM sales_gathering
            force index (sales_channel_index)
                 WHERE ( company_id = ' . $companyId  . ' AND ' . $type .  ' =  "'  . $selectedType .  '" AND date between "' . $start_date . '" and "' . $end_date . '"  )
                  group by ' . $column . '
-                 ORDER BY total_sales_value ' . ($direction == 'top' ? 'DESC limit 50' : 'ASC limit 50')
-		)->getValue(DB::connection()->getQueryGrammar())
-	);
+                 ORDER BY total_sales_value ' . ($direction == 'top' ? 'DESC limit 50' : 'ASC limit 50');
+		$queryResult = DB::select($query);
 
 		return response()->json([
 			'data' => $queryResult,

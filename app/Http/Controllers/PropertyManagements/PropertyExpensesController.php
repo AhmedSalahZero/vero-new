@@ -134,15 +134,7 @@ class PropertyExpensesController extends Controller
        
     }
 
-    private function formatDues(array $duesAndDays)
-    {
-        $result = [];
-        foreach ($duesAndDays as $day => $due) {
-            $result['due_in_days'][]=$day;
-            $result['rate'][]=$due;
-        }
-        return $result;
-    }
+   
   
     public function getExpenseNamesForCategory(Company $company, Request $request)
     {

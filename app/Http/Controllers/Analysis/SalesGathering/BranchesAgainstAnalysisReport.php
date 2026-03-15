@@ -60,14 +60,26 @@ class BranchesAgainstAnalysisReport
             $type  = 'day_name';
             $view_name = 'Branches Against Day Name Trend Analysis' ;
         }
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
         $name_of_selector_label = str_replace(['Branches Against ' ,' Trend Analysis'],'',$view_name);
-        return view('client_view.reports.sales_gathering_analysis.branches_analysis_form', compact('company','name_of_selector_label','type','view_name'));
+		
+        return view('client_view.reports.sales_gathering_analysis.branches_analysis_form', [
+            'company' => $company,
+            'name_of_selector_label' => $name_of_selector_label,
+            'type' => $type,
+            'view_name' => $view_name,
+        ]);
     }
     public function BranchesSalesAnalysisIndex(Company $company)
     {
         // Get The Selected exportable fields returns a pair of ['field_name' => 'viewing name']
         $selected_fields = (new ExportTable)->customizedTableField($company, 'InventoryStatement', 'selected_fields');
-        return view('client_view.reports.sales_gathering_analysis.branches_sales_form', compact('company', 'selected_fields'));
+        return view('client_view.reports.sales_gathering_analysis.branches_sales_form', [
+            'company' => $company,
+            'selected_fields' => $selected_fields,
+        ]);
     }
     public function result(Request $request, Company $company , $secondReport=true)
     {
@@ -97,13 +109,12 @@ class BranchesAgainstAnalysisReport
         $data_type = ($request->data_type === null || $request->data_type == 'value')? 'net_sales_value' : 'quantity';
         foreach ($branches as  $branchName) {
 
-            $branches_data =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,branch," . $type ."
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND branch = '".$branchName."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy($type)->map(function($item)use($data_type){
+                ORDER BY id ";
+            $branches_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                     return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
 
                         return $sub_item->sum($data_type);
@@ -163,7 +174,14 @@ class BranchesAgainstAnalysisReport
                  'full_date' =>Carbon::make($request->start_date)->format('d M Y') .' '.__('To').' '.Carbon::make($request->end_date)->format('d M Y') 
              ];
         }
-        return view('client_view.reports.sales_gathering_analysis.branches_analysis_report',compact('company','view_name','branches_names','dates','report_data','type'));
+        return view('client_view.reports.sales_gathering_analysis.branches_analysis_report',[
+            'company' => $company,
+            'view_name' => $view_name,
+            'branches_names' => $branches_names,
+            'dates' => $dates,
+            'report_data' => $report_data,
+            'type' => $type,
+        ]);
 
     }
 
@@ -190,13 +208,12 @@ class BranchesAgainstAnalysisReport
 
         foreach ($zones as  $zone) {
 
-            $sales =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." branch
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND branch = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id"
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date');
+                ORDER BY id";
+            $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){
                                     return $sub_item->sum('sales_value');
                                 })->toArray();
@@ -252,7 +269,7 @@ class BranchesAgainstAnalysisReport
                     $final_report_data['Total'] = $this->finalTotal([($final_report_data['Total'] ?? []), (($final_report_data[$zone][$sales_discount_field]['Values']??[]))]);
 
 
-                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]??[]));
+                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]));
 
 
 
@@ -262,7 +279,7 @@ class BranchesAgainstAnalysisReport
             $zones_names[] = (str_replace( ' ','_', $zone));
         }
 
-        $sales_values = $this->finalTotal([$sales_values??[]]);
+        $sales_values = $this->finalTotal([$sales_values]);
         $total = $final_report_data['Total'];
         unset($final_report_data['Total']);
         $final_report_data['Total'] = $total;
@@ -273,9 +290,15 @@ class BranchesAgainstAnalysisReport
         $report_data = $final_report_data;
 
         $dates = array_keys($report_data['Total']);
-//  $dates = formatDateVariable($dates , $request->start_date  , $request->end_date);
         $type_name = 'Branches';
-        return view('client_view.reports.sales_gathering_analysis.sales_discounts_analysis_report',compact('company','view_name','zones_names','dates','report_data','type_name'));
+        return view('client_view.reports.sales_gathering_analysis.sales_discounts_analysis_report',[
+            'company' => $company,
+            'view_name' => $view_name,
+            'zones_names' => $zones_names,
+            'dates' => $dates,
+            'report_data' => $report_data,
+            'type_name' => $type_name,
+        ]);
 
     }
     public function BranchesSalesAnalysisResult(Request $request, Company $company , $array = false )
@@ -291,13 +314,12 @@ class BranchesAgainstAnalysisReport
 
         
 			
-                $branches_data =collect(DB::select(DB::raw("
+                $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,branch
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND branch = '".$branch."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy('gr_date')->map(function($item){
+                ORDER BY id ";
+                $branches_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');
                 })->toArray();
             $interval_data_per_item = [];
@@ -335,7 +357,14 @@ class BranchesAgainstAnalysisReport
 		
 		$dates = array_keys($total_branches ?? []); 
 		$final_report_data = HArr::getKeysSortedDescByKey($final_report_data,'Sales Values');
-        return view('client_view.reports.sales_gathering_analysis.branches_sales_report',compact('company','branches_names','total_branches_growth_rates','final_report_data','total_branches','dates'));
+        return view('client_view.reports.sales_gathering_analysis.branches_sales_report',[
+            'company' => $company,
+            'branches_names' => $branches_names,
+            'total_branches_growth_rates' => $total_branches_growth_rates,
+            'final_report_data' => $final_report_data,
+            'total_branches' => $total_branches,
+            'dates' => $dates,
+        ]);
 
     }
     public function growthRate($data)

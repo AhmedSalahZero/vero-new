@@ -12,7 +12,81 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperFixedAsset
+ * @property int $id
+ * @property int|null $name_id
+ * @property string $type
+ * @property numeric $ffe_item_cost
+ * @property numeric|null $vat_rate
+ * @property numeric|null $withhold_tax_rate
+ * @property numeric $contingency_rate
+ * @property numeric $cost_annual_increase_rate
+ * @property string|null $payment_terms
+ * @property array<array-key, mixed>|null $custom_collection_policy
+ * @property int $depreciation_duration
+ * @property numeric $replacement_cost_rate
+ * @property int $replacement_interval
+ * @property int $counts
+ * @property array<array-key, mixed>|null $ffe_counts
+ * @property array<array-key, mixed>|null $monthly_amounts
+ * @property int $company_id
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $department_ids
+ * @property array<array-key, mixed>|null $position_ids
+ * @property array<array-key, mixed>|null $statement
+ * @property array<array-key, mixed>|null $ffe_equity_payment
+ * @property array<array-key, mixed>|null $ffe_loan_withdrawal
+ * @property array<array-key, mixed>|null $loan_capitalized_interests
+ * @property array<array-key, mixed>|null $income_statement_loan_capitalized_interests
+ * @property array<array-key, mixed>|null $ffe_loan_withdrawal_end_balance
+ * @property array<array-key, mixed>|null $depreciation_statement
+ * @property array<array-key, mixed>|null $total_monthly_depreciations
+ * @property array<array-key, mixed>|null $capitalization_statement
+ * @property array<array-key, mixed>|null $ffe_execution_and_payment
+ * @property array<array-key, mixed>|null $ffe_payable
+ * @property array<array-key, mixed>|null $ffe_payment
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\NonBankingService\FixedAssetName|null $fixedAssetName
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereCapitalizationStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereContingencyRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereCostAnnualIncreaseRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereCustomCollectionPolicy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereDepartmentIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereDepreciationDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereDepreciationStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfeCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfeEquityPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfeExecutionAndPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfeItemCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfeLoanWithdrawal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfeLoanWithdrawalEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfePayable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereFfePayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereIncomeStatementLoanCapitalizedInterests($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereLoanCapitalizedInterests($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereMonthlyAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereNameId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset wherePaymentTerms($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset wherePositionIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereReplacementCostRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereReplacementInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereTotalMonthlyDepreciations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereVatRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAsset whereWithholdTaxRate($value)
+ * @mixin \Eloquent
  */
 class FixedAsset extends Model
 {

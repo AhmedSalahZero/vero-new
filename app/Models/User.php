@@ -14,7 +14,76 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * @mixin IdeHelperUser
+ * @property int $id
+ * @property string $name
+ * @property string|null $odoo_db_password
+ * @property string|null $odoo_username
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $subscription
+ * @property string|null $expiration_date
+ * @property string|null $max_users
+ * @property int|null $acceptance_of_privacy_policy
+ * @property string|null $remember_token
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read int|null $companies_count
+ * @property-read bool|null $companies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $logs
+ * @property-read int|null $logs_count
+ * @property-read bool|null $logs_exists
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, \Spatie\MediaLibrary\MediaCollections\Models\Media> $media
+ * @property-read int|null $media_count
+ * @property-read bool|null $media_exists
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read bool|null $notifications_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContract> $overdraftAgainstAssignmentOfContract
+ * @property-read int|null $overdraft_against_assignment_of_contract_count
+ * @property-read bool|null $overdraft_against_assignment_of_contract_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaper> $overdraftAgainstCommercialPaper
+ * @property-read int|null $overdraft_against_commercial_paper_count
+ * @property-read bool|null $overdraft_against_commercial_paper_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read bool|null $permissions_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read int|null $roles_count
+ * @property-read bool|null $roles_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $usersCreatedBy
+ * @property-read int|null $users_created_by_count
+ * @property-read bool|null $users_created_by_exists
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User permission($permissions, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User role($roles, $guard = null, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereAcceptanceOfPrivacyPolicy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereMaxUsers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereOdooDbPassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereOdooUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereSubscription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User withoutPermission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User withoutRole($roles, $guard = null)
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasMedia
 {
@@ -53,7 +122,7 @@ class User extends Authenticatable implements HasMedia
 		}
 		$firstCompany = $this->companies->first() ;
 		/**
-		 * @var Company $firstCompany
+		 * @var Company|null $firstCompany
 		 */
 		return $firstCompany ? $firstCompany->getSystemsNames() : [] ;
 	}

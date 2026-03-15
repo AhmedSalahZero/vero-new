@@ -6,7 +6,41 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  IjaraMortgageBreakdown extends Model
+/**
+ * @property int $id
+ * @property string $installment_interval
+ * @property numeric $margin_rate
+ * @property numeric $sensitivity_margin_rate
+ * @property int|null $grace_period
+ * @property float $tenor
+ * @property array<array-key, mixed>|null $percentage_payload
+ * @property array<array-key, mixed>|null $loan_amounts
+ * @property string|null $monthly_loan_amounts
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereGracePeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereInstallmentInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereMonthlyLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown wherePercentagePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereSensitivityMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereTenor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\IjaraMortgageBreakdown whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class IjaraMortgageBreakdown extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

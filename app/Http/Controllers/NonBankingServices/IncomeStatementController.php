@@ -140,7 +140,7 @@ class IncomeStatementController extends Controller
 		
 		$yearWithItsIndexes = $study->getOperationDurationPerYearFromIndexes();
 		$monthsWithItsYear = $study->getMonthsWithItsYear($yearWithItsIndexes) ;
-		$monthsWithItsNumbers = $study->getMonthIndexWithMonthNumber($yearWithItsIndexes) ;
+		$monthsWithItsNumbers = $study->getMonthIndexWithMonthNumber() ;
 		 
 		 
         $tableDataFormatted[1]['main_items']['cost-of-service']['options']['title'] = __('Cost Of Service');
@@ -240,7 +240,7 @@ class IncomeStatementController extends Controller
 					$currentYearAsString = $yearIndexWithYear[$currentYearOrMonthIndex] ?? null ;
 				$currentMonthNumber = $monthsWithItsNumbers[$currentMonthIndex]??null;
 				$currentYearOrMonthAsString = $isMonthlyStudy ? $currentMonthNumber : $currentYearAsString; 
-                if (!is_null($currentMonthIndex)) {
+                // if (!is_null($currentMonthIndex)) {
                     $formattedDirectFactoring['interest_revenue'][$currentMonthIndex] = isset($formattedDirectFactoring['interest_revenue'][$currentMonthIndex]) ? $formattedDirectFactoring['interest_revenue'][$currentMonthIndex] +  $currentInterestRevenue : $currentInterestRevenue;
                     $formattedDirectFactoring['bank_interest_expense'][$currentMonthIndex] = isset($formattedDirectFactoring['bank_interest_expense'][$currentMonthIndex]) ? $formattedDirectFactoring['bank_interest_expense'][$currentMonthIndex] +  $currentBankInterestExpense : $currentBankInterestExpense;
                     $resultPerRevenueStreamType['direct-factoring'][$currentYearOrMonthAsString] = $formattedDirectFactoring['interest_revenue'][$currentMonthIndex];
@@ -248,7 +248,7 @@ class IncomeStatementController extends Controller
                     $currentDirectFactoringAtMonth = $salesRevenuePerTypes['direct-factoring'][$currentMonthIndex];
                     $tableDataFormatted[0]['sub_items']['direct-factoring']['data'][$currentMonthIndex] = $currentDirectFactoringAtMonth ;
 					$resultPerRevenueStreamType['all'][$currentYearOrMonthAsString] = isset($resultPerRevenueStreamType['all'][$currentYearOrMonthAsString]) ? $resultPerRevenueStreamType['all'][$currentYearOrMonthAsString] + $currentDirectFactoringAtMonth : $currentDirectFactoringAtMonth;
-                }
+                // }
             }
         }
 		
@@ -284,7 +284,7 @@ class IncomeStatementController extends Controller
 
                     } else {
 						$formattedResult['interest_cogs'][$currentMonthIndex] = isset($formattedResult['interest_cogs'][$currentMonthIndex]) ? $formattedResult['interest_cogs'][$currentMonthIndex] + $interestAmount : $interestAmount ;
-                        $formattedExpenses['cost-of-service']['New Portfolio Interest Expense'][$currentMonthIndex]  = $formattedResult['interest_cogs'][$currentMonthIndex]??0 ;
+                        $formattedExpenses['cost-of-service']['New Portfolio Interest Expense'][$currentMonthIndex]  = $formattedResult['interest_cogs'][$currentMonthIndex] ;
                         $tableDataFormatted[1]['sub_items']['New Portfolio Interest Expense']['data'][$currentMonthIndex] =$formattedExpenses['cost-of-service']['New Portfolio Interest Expense'][$currentMonthIndex] ;
                     }
             }
@@ -370,19 +370,19 @@ class IncomeStatementController extends Controller
 		
 		
 		
-        foreach($tableDataFormatted[0]['sub_items']?? [] as $id => $subItemArr){
+        foreach($tableDataFormatted[0]['sub_items'] as $id => $subItemArr){
 			$tableDataFormatted[0]['sub_items'][$id]['year_total'] =	HArr::sumPerYearIndex($subItemArr['data']??[], $yearWithItsMonths);
 		}
 		
         
-        $totalSalesRevenues = Harr::calculateTotalFromSubItems($tableDataFormatted[0]['sub_items']??[]) ;
+        $totalSalesRevenues = HArr::calculateTotalFromSubItems($tableDataFormatted[0]['sub_items']) ;
         
         $yearWithItsMonths=$study->getYearIndexWithItsMonths();
                
                
         $tableDataFormatted[0]['main_items']['sales-revenue']['data'] = $totalSalesRevenues;
         $tableDataFormatted[0]['main_items']['sales-revenue']['year_total'] =$totalSalesRevenuesPerYears =  HArr::sumPerYearIndex($totalSalesRevenues, $yearWithItsMonths);
-        $tableDataFormatted[0]['main_items']['growth-rate']['data'] = Harr::calculateGrowthRate($totalSalesRevenues);
+        $tableDataFormatted[0]['main_items']['growth-rate']['data'] = HArr::calculateGrowthRate($totalSalesRevenues);
         $tableDataFormatted[0]['main_items']['growth-rate']['year_total'] =  HArr::calculateGrowthRate($totalSalesRevenuesPerYears);
                
    
@@ -452,7 +452,7 @@ class IncomeStatementController extends Controller
    
         }
 
-        $totalCostOfService = Harr::calculateTotalFromSubItems($tableDataFormatted[1]['sub_items']??[]) ;
+        $totalCostOfService = HArr::calculateTotalFromSubItems($tableDataFormatted[1]['sub_items']??[]) ;
         $tableDataFormatted[1]['main_items']['cost-of-service']['data'] = $totalCostOfService;
         $tableDataFormatted[1]['main_items']['cost-of-service']['year_total'] =$totalCostOfServicePerYear =  HArr::sumPerYearIndex($totalCostOfService, $yearWithItsMonths);
         $tableDataFormatted[1]['main_items']['% Of Revenue']['data'] = $currentData =  HArr::calculatePercentageOf($totalSalesRevenues, $totalCostOfService);
@@ -541,7 +541,7 @@ class IncomeStatementController extends Controller
 		
 		//////////////////
 		
-        $totalEclAndDepreciationExpenses = Harr::calculateTotalFromSubItems($tableDataFormatted[$eclAndDepreciationOrderIndex]['sub_items']??[]);
+        $totalEclAndDepreciationExpenses = HArr::calculateTotalFromSubItems($tableDataFormatted[$eclAndDepreciationOrderIndex]['sub_items']);
         
         $tableDataFormatted[$eclAndDepreciationOrderIndex]['main_items'][$eclAndDepreciationKey]['data'] =  $totalEclAndDepreciationExpenses ;
         $tableDataFormatted[$eclAndDepreciationOrderIndex]['main_items'][$eclAndDepreciationKey]['year_total'] = $totalEclAndDepreciationExpensesPerYear = HArr::sumPerYearIndex($totalEclAndDepreciationExpenses, $yearWithItsMonths);
@@ -656,7 +656,7 @@ class IncomeStatementController extends Controller
         }
         
 		$fixedAssetLoanInterestExpenses = $incomeStatementReport ? $incomeStatementReport->fixed_asset_loan_interest_expenses : [];
-		  if ($fixedAssetLoanInterestExpenses && count($fixedAssetLoanInterestExpenses)) {
+		  if ($fixedAssetLoanInterestExpenses) {
             $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][__('Fixed Assets Loans Interests')]['data'] = $fixedAssetLoanInterestExpenses;
             $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][__('Fixed Assets Loans Interests')]['year_total'] = HArr::sumPerYearIndex($fixedAssetLoanInterestExpenses, $yearWithItsMonths);
         }

@@ -16,7 +16,62 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class  IncomeStatement extends Model implements  IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
+/**
+ * @property int $id
+ * @property int $can_view_actual_report
+ * @property int|null $is_caching_modified
+ * @property int|null $is_caching_adjusted
+ * @property int|null $is_caching_actual
+ * @property int|null $is_caching_forecast
+ * @property string $name
+ * @property string $duration
+ * @property string|null $type
+ * @property string $duration_type
+ * @property string $start_from
+ * @property int $company_id
+ * @property int|null $creator_id
+ * @property int|null $financial_statement_id
+ * @property string|null $cash_and_banks_beginning_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $entered_receivables_and_payments_table
+ * @property-read \App\Models\FinancialStatement|null $FinancialStatement
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IncomeStatementItem> $mainItems
+ * @property-read int|null $main_items_count
+ * @property-read bool|null $main_items_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IncomeStatementItem> $mainRows
+ * @property-read int|null $main_rows_count
+ * @property-read bool|null $main_rows_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IncomeStatementItem> $subItems
+ * @property-read int|null $sub_items_count
+ * @property-read bool|null $sub_items_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereCanViewActualReport($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereCashAndBanksBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereCreatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereDurationType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereEnteredReceivablesAndPaymentsTable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereFinancialStatementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereIsCachingActual($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereIsCachingAdjusted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereIsCachingForecast($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereIsCachingModified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereStartFrom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\IncomeStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class IncomeStatement extends Model implements  IHaveAllRelations, IExportable, IFinancialStatementAble
 {
 	use  IncomeStatementAccessor, IncomeStatementMutator, IncomeStatementRelation, CompanyScope;
 
@@ -24,11 +79,7 @@ class  IncomeStatement extends Model implements  IHaveAllRelations, IExportable,
 	protected $guarded = [
 		'id'
 	];
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
+	
 	protected $table = 'financial_statement_ables';
 
 	public static function getShareableEditViewVars($model): array
@@ -64,30 +115,29 @@ class  IncomeStatement extends Model implements  IHaveAllRelations, IExportable,
 		// static::addGlobalScope(new StateCountryScope);
 	}
 
-	public static function getCrudViewName(): string
-	{
-		return 'admin.income-statement.create';
-	}
+	// public static function getCrudViewName(): string
+	// {
+	// 	return 'admin.income-statement.create';
+	// }
 
-	public static function getViewVars(): array
-	{
-		$currentCompanyId =  getCurrentCompanyId();
+	// public static function getViewVars(): array
+	// {
+	// 	$currentCompanyId =  getCurrentCompanyId();
 
-		return [
-			'getDataRoute' => route('admin.get.income.statement', ['company' => $currentCompanyId]),
-			'modelName' => 'IncomeStatement',
-			'exportRoute' => route('admin.export.income.statement', $currentCompanyId),
-			'createRoute' => route('admin.create.income.statement', $currentCompanyId),
-			'storeRoute' => route('admin.store.income.statement', $currentCompanyId),
-			'hasChildRows' => false,
-			'pageTitle' => IncomeStatement::getPageTitle(),
-			// 'redirectAfterSubmitRoute' => route('admin.view.income.statement', $currentCompanyId),
-			'type' => 'create',
-			'company' => Company::find($currentCompanyId),
-			'redirectAfterSubmitRoute' => route('admin.view.income.statement', ['company' => getCurrentCompanyId()]),
-			'durationTypes' => HVero::getDurationIntervalTypesForSelect()
-		];
-	}
+	// 	return [
+	// 		'getDataRoute' => route('admin.get.income.statement', ['company' => $currentCompanyId]),
+	// 		'modelName' => 'IncomeStatement',
+	// 		'exportRoute' => route('admin.export.income.statement', $currentCompanyId),
+	// 		'createRoute' => route('admin.create.income.statement', $currentCompanyId),
+	// 		'storeRoute' => route('admin.store.income.statement', $currentCompanyId),
+	// 		'hasChildRows' => false,
+	// 		'pageTitle' => IncomeStatement::getPageTitle(),
+	// 		'type' => 'create',
+	// 		'company' => Company::find($currentCompanyId),
+	// 		'redirectAfterSubmitRoute' => route('admin.view.income.statement', ['company' => getCurrentCompanyId()]),
+	// 		'durationTypes' => HVero::getDurationIntervalTypesForSelect()
+	// 	];
+	// }
 	public static function getReportViewVars(array $options = []): array
 	{
 
@@ -105,7 +155,7 @@ class  IncomeStatement extends Model implements  IHaveAllRelations, IExportable,
 			'storeRoute' => route('admin.store.income.statement.report', $currentCompanyId),
 			'hasChildRows' => false,
 			'pageTitle' => __('Income Statement Report'),
-			'redirectAfterSubmitRoute' => route('admin.view.income.statement', $currentCompanyId),
+			// 'redirectAfterSubmitRoute' => route('admin.view.income.statement', $currentCompanyId),
 			'type' => 'create',
 			'incomeStatement' => $incomeStatement,
 			// 'cashFlowStatement' => $options['cashFlowStatement'],

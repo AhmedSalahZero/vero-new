@@ -16,18 +16,14 @@ class StoreInternalMoneyTransferRequest extends FormRequest
     {
         return true;
     }
-	protected function prepareForValidation()
+	protected function prepareForValidation():array 
 	{
 		$this->merge([
 			'amount'=>number_unformat($this->get('amount')),
 		]);
 		return [];
 	}
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+ 
     public function rules()
     {
 		$type = $this->get('type');

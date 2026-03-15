@@ -18,7 +18,60 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * @mixin IdeHelperFinancialInstitutionAccount
+ * @property int $id
+ * @property int|null $journal_id
+ * @property int|null $odoo_id
+ * @property string|null $odoo_outbound_cheque_payment_method_id
+ * @property string|null $odoo_inbound_cheque_payment_method_id
+ * @property string|null $odoo_outbound_transfer_payment_method_id
+ * @property string|null $odoo_inbound_transfer_payment_method_id
+ * @property string|null $odoo_code
+ * @property int $is_active
+ * @property int|null $financial_institution_id
+ * @property string|null $balance_date
+ * @property string|null $account_number
+ * @property string|null $currency
+ * @property float|null $balance_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $iban
+ * @property numeric|null $exchange_rate
+ * @property int|null $company_id
+ * @property array<array-key, mixed>|null $synced_end_of_month_years لو عمل حركة مثلا في الفين خمسة وعشرين بنروح ننزل في السنه كاملة صفوف علشان ال
+ * 			end of month interest 
+ * 			ففي الكولوم دا هنسجل ان الفين خمسه وعشرين موجودة علشان ما نروحش ننزلهم تاني
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AccountInterest> $accountInterests
+ * @property-read int|null $account_interests_count
+ * @property-read bool|null $account_interests_exists
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereBalanceAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereBalanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereIban($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereJournalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereOdooCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereOdooInboundChequePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereOdooInboundTransferPaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereOdooOutboundChequePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereOdooOutboundTransferPaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereSyncedEndOfMonthYears($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitutionAccount whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class FinancialInstitutionAccount extends Model
 {

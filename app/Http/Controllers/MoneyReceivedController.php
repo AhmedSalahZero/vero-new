@@ -476,7 +476,7 @@ class MoneyReceivedController
         $data['exchange_rate'] =$exchangeRate ;
         $data['contract_id'] = $contractId ;
         /**
-         * @var MoneyReceived $moneyReceived ;
+         * @var AccountType $accountType ;
          */
         $accountType = AccountType::find($request->input('account_type.'.$moneyType));
         $accountNumber = $request->input('account_number.'.$moneyType);
@@ -527,9 +527,7 @@ class MoneyReceivedController
             $moneyReceived->handlePartnerCreditStatement($partnerType, $partnerId, $moneyReceived->id, $company->id, $statementDate, $amountInReceivingCurrency, $receivingCurrency, $bankNameOrBranchName, $accountType, $accountNumber);
             $moneyReceived->storeNonCustomerOrSupplierOdooExpense(($isDownPayment || $isDownPaymentFromMoneyReceived));
         }
-        /**
-         * @var CustomerInvoice $customerInvoice
-         */
+        
 
         $activeTab = $moneyType;
         if ($returnModel) {
@@ -542,11 +540,7 @@ class MoneyReceivedController
 
         
     }
-    protected function getActiveTab(string $moneyType)
-    {
-        return $moneyType ;
-
-    }
+ 
     public function edit(Company $company, Request $request, MoneyReceived $moneyReceived, $customerInvoiceId = null)
     {
         
@@ -621,10 +615,7 @@ class MoneyReceivedController
         $moneyReceived->delete();
         
         $newMoneyReceived = $this->store($company, $request, true);
-        // $odooPayment = new OdooPayment($company);
-        /**
-         * @var OdooPayment $odooPayment
-         */
+      
         
         
         if (!$moneyReceivedAmountHasChanged) {
@@ -934,7 +925,7 @@ class MoneyReceivedController
         $additionalAmountInEditMode=  0 ;
         // $additionalAmountInEditMode = number_unformat($request->get('additionalBalanceInEditMode',0));
         $model = null ;
-    
+ 
         $netBalanceDate = '' ;
         $accountTypeId = $request->get('accountType', $accountTypeId);
         $accountType = AccountType::find($accountTypeId);
@@ -956,7 +947,7 @@ class MoneyReceivedController
         $accountNumberModel =  ('\App\Models\\'.$accountType->getModelName())::findByAccountNumber($accountNumber, $company->id, $financialInstitutionId);
         
         if (!$accountNumberModel) {
-            if (!$accountType || !$accountNumberModel) {
+            
                 return response()->json(
                     [
                         'status'=>true ,
@@ -964,7 +955,7 @@ class MoneyReceivedController
                         'net_balance'=>0 ,
                     ]
                 );
-            }
+          
         }
         
         if ($request->has('modelId')) {
@@ -982,8 +973,8 @@ class MoneyReceivedController
             }
         }
         
-        $statementTableName = (get_class($accountNumberModel)::getStatementTableName()) ;
-        $foreignKeyName = get_class($accountNumberModel)::getForeignKeyInStatementTable();
+        $statementTableName = ($accountNumberModel::getStatementTableName()) ;
+        $foreignKeyName = $accountNumberModel::getForeignKeyInStatementTable();
         $balanceRow = DB::table($statementTableName)->where($foreignKeyName, $accountNumberModel->id)->where('date', '<=', $statementDate)->orderByRaw('date desc , id desc')->first();
         $NetBalanceRow = DB::table($statementTableName)->where($foreignKeyName, $accountNumberModel->id)->orderByRaw('date desc , id desc')->first();
 		

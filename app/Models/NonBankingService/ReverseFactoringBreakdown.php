@@ -7,7 +7,39 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  ReverseFactoringBreakdown extends Model
+/**
+ * @property int $id
+ * @property string|null $category
+ * @property numeric $margin_rate
+ * @property numeric $sensitivity_margin_rate
+ * @property float $tenor
+ * @property array<array-key, mixed>|null $percentage_payload
+ * @property array<array-key, mixed>|null $loan_amounts
+ * @property string|null $monthly_loan_amounts
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereMonthlyLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown wherePercentagePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereSensitivityMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereTenor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ReverseFactoringBreakdown whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class ReverseFactoringBreakdown extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

@@ -10,7 +10,41 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperPropertyToBeDelivered
+ * @property int $id
+ * @property int $study_id
+ * @property int $property_id
+ * @property int $company_id
+ * @property int $renovate_duration
+ * @property numeric $renovate_cost
+ * @property numeric $monthly_rent_amount
+ * @property string|null $collection_interval
+ * @property int $rent_duration
+ * @property numeric $rent_annual_increase
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $rent_revenues
+ * @property array<array-key, mixed>|null $rent_collections
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\PropertyManagement\Property|null $property
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereCollectionInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereMonthlyRentAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereRenovateCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereRenovateDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereRentAnnualIncrease($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereRentDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereRentRevenues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyToBeDelivered whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class PropertyToBeDelivered extends Model
 {

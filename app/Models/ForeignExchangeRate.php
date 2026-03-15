@@ -7,7 +7,27 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperForeignExchangeRate
+ * @property int $id
+ * @property string $from_currency
+ * @property string $to_currency
+ * @property string $date
+ * @property numeric $exchange_rate
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereFromCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereToCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ForeignExchangeRate whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class ForeignExchangeRate extends Model
 {

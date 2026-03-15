@@ -48,7 +48,8 @@ class AppServiceProvider extends ServiceProvider
 				$companyId = Request()->segment(3); // http://127.0.0.1:8000/en/companySection/140/edit
 			}
 			if(is_null($companyId)){
-				$companyId = Company::first()->id;
+				// $companyId = 0;
+				return Company::first();
 			}
 			return Company::find($companyId);
 		});
@@ -183,31 +184,31 @@ class AppServiceProvider extends ServiceProvider
 		
 		
 		
-		if(false ){
-			app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-			app()->make(\Spatie\Permission\PermissionRegistrar::class)->clearClassPermissions();
-			$permissions = HAuth::getPermissions();
-			foreach($permissions as $permissionArr){
-				try{
-					 Permission::findByName($permissionArr['name']);
-				}
-				catch(\Exception $e){
+		// if(false ){
+		// 	app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+		// 	app()->make(\Spatie\Permission\PermissionRegistrar::class)->clearClassPermissions();
+		// 	$permissions = HAuth::getPermissions();
+		// 	foreach($permissions as $permissionArr){
+		// 		try{
+		// 			 Permission::findByName($permissionArr['name']);
+		// 		}
+		// 		catch(\Exception $e){
 				
-					$permission = Permission::create([
-						'name'=>$permissionArr['name']
-					]);
+		// 			$permission = Permission::create([
+		// 				'name'=>$permissionArr['name']
+		// 			]);
 
-					foreach(User::all() as $user){
-						/**
-						 * @var User $user;
-						 */
+		// 			foreach(User::all() as $user){
+		// 				/**
+		// 				 * @var User $user;
+		// 				 */
 						
-						$user->assignNewPermission($permissionArr,$permission);
+		// 				$user->assignNewPermission($permissionArr,$permission);
 						
-					}
-				}
-			}	
-		}
+		// 			}
+		// 		}
+		// 	}	
+		// }
 		
 
 		View::share('langs', $languages);
@@ -220,6 +221,7 @@ class AppServiceProvider extends ServiceProvider
 		catch(\Exception $e){
 			
 		}
+	
 		if ($currentCompany) {
 			$excelType ='SalesGathering';
 			if(in_array('uploading',Request()->segments())){

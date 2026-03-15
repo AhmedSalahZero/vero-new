@@ -6,7 +6,49 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  EclAndNewPortfolioFundingRate extends Model
+/**
+ * @property int $id
+ * @property string $revenue_stream_type leasing,factoring,...etc
+ * @property array<array-key, mixed>|null $admin_fees_rates
+ * @property array<array-key, mixed>|null $monthly_admin_fees_amounts
+ * @property array<array-key, mixed>|null $ecl_rates
+ * @property array<array-key, mixed>|null $equity_funding_rates
+ * @property array<array-key, mixed>|null $equity_funding_values
+ * @property array<array-key, mixed>|null $new_loans_funding_rates
+ * @property array<array-key, mixed>|null $new_loans_funding_values
+ * @property array<array-key, mixed>|null $monthly_new_loans_funding_values
+ * @property array<array-key, mixed>|null $monthly_new_odas_funding_values
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $monthly_ecl_values
+ * @property array<array-key, mixed>|null $accumulated_ecl_values
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereAccumulatedEclValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereAdminFeesRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereEclRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereEquityFundingRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereEquityFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereMonthlyAdminFeesAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereMonthlyEclValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereMonthlyNewLoansFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereMonthlyNewOdasFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereNewLoansFundingRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereNewLoansFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereRevenueStreamType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\EclAndNewPortfolioFundingRate whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class EclAndNewPortfolioFundingRate extends Model
 {
 	use HasBasicStoreRequest,CompanyScope,BelongsToStudy ;
 	protected $connection= 'non_banking_service';

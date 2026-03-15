@@ -50,7 +50,7 @@ class CashFlowReportController
 		$contract = Contract::find($contractId);
 		
 		/**
-		 * @var Contract $contract 
+		 * @var Contract|null $contract 
 		 */
 		$contractCode = $contract ? $contract->getCode() : null ;
 		$contractName = $contract ? $contract->getName() : null ;
@@ -449,7 +449,7 @@ class CashFlowReportController
 		->whereIn('invoice_status',['past_due','partially_collected_and_past_due'])
 		->where('currency',$currency)
 		->where('invoice_due_date','<',now()->format('Y-m-d'))
-		->when($contractCode , function($query) use($contractCode,$invoiceType) {
+		->when($contractCode , function($query) use($contractCode) {
 			$query->where('contract_code',$contractCode);
 		})
 		->orderBy('invoice_due_date')
@@ -630,6 +630,11 @@ class CashFlowReportController
 	
 	public function saveProjection(Request $request , Company $company )
 	{
+		// just initialize 
+		$allCurrencies = [
+			$company->getMainFunctionalCurrency()
+		];
+		$redirectRouteName= '';
 		$projectionType = $request->get('type');
 		$dates = array_keys((array)json_decode($request->input('dates.0')));
 		$cashflowReportId = $request->get('cashFlowReportId');

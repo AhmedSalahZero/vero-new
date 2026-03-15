@@ -23,7 +23,7 @@ trait FinancialStatementAbleMutator
 {
     $explodedString = explode($separator, $string);
     $countExplodedStringSegments = count($explodedString);
-    if (!$countExplodedStringSegments) {
+    if (trim($string) === '' || $countExplodedStringSegments === 0) {
         throw new \Exception('Invalid String Or Separator');
     }
 
@@ -199,12 +199,17 @@ trait FinancialStatementAbleMutator
 		// names of new added element in add popup
 		$incomeStatementId = $request->input('financial_statement_able_id');
 		$incomeStatement = static::find($incomeStatementId);
+		if (!$incomeStatement) {
+			throw new \RuntimeException('Income statement not found.');
+		}
 		$incomeStatementItemId = $request->get('financial_statement_able_item_id');
 	
 		
 		$formSubItemType = $request->get('sub_item_type');
 		$insertSubItems =  $this->getInsertToSubItemFields($formSubItemType);
-		$datesHelper = $incomeStatement->financialStatement->getDatesIndexesHelper();
+		/** @var \App\Models\FinancialStatement $financialStatement */
+		$financialStatement = $incomeStatement->financialStatement;
+		$datesHelper = $financialStatement->getDatesIndexesHelper();
 		$dateIndexWithDate = $datesHelper['dateIndexWithDate'];
 		$actualDatesAsIndexAndBooleans = HArr::getActualDatesAsIndexAndBoolean($dateIndexWithDate);
 		$rows = $request->get('sub_items',[]);
@@ -216,6 +221,8 @@ trait FinancialStatementAbleMutator
 			 */
 			$financialStatementAbleItemId = is_null($incomeStatementItemId) ? $subItemArr['financial_statement_able_item_id'] :$incomeStatementItemId ;
 			$currentSubItemValues = [];
+			$currentSubItemDataArr = [];
+			$newSubItemName = '';
 			$isSalesRevenue = $financialStatementAbleItemId == 1 ;
 			foreach($insertSubItems as $currentSubItemToBeInserted ){
 				
@@ -255,8 +262,8 @@ trait FinancialStatementAbleMutator
 					if($formSubItemType != $currentSubItemToBeInserted){ 
 						$oldRowForQuantity = $incomeStatement->withSubItemsFor($financialStatementAbleItemId, $currentSubItemToBeInserted,$currentDataForQuantity['sub_item_name'])->first() ;
 						$oldRowForValue = $incomeStatement->withSubItemsFor($financialStatementAbleItemId, $currentSubItemToBeInserted,$newSubItemName)->first() ;
-						$oldPayloadForQuantity = $oldRowForQuantity && $oldRowForQuantity->pivot ? $oldRowForQuantity->pivot->payload : json_encode([]);
-						$oldPayloadForValue = $oldRowForValue && $oldRowForValue->pivot ? $oldRowForValue->pivot->payload : json_encode([]);
+						$oldPayloadForQuantity = (string) data_get($oldRowForQuantity, 'pivot.payload', json_encode([]));
+						$oldPayloadForValue = (string) data_get($oldRowForValue, 'pivot.payload', json_encode([]));
 						$currentDataForQuantity['payload'] = $oldPayloadForQuantity ;
 						$currentDataForQuantity['total'] = array_sum((array) json_decode($oldPayloadForQuantity)) ;
 						$currentSubItemValues = (array) json_decode($oldPayloadForValue);
@@ -299,7 +306,7 @@ trait FinancialStatementAbleMutator
 				}
 				if($formSubItemType != $currentSubItemToBeInserted){
 						$oldRow = $incomeStatement->withSubItemsFor($financialStatementAbleItemId, $currentSubItemToBeInserted,$newSubItemName)->first() ;
-						$currentSubItemValues = $oldRow && $oldRow->pivot ? (array)json_decode($oldRow->pivot->payload) : [];
+						$currentSubItemValues = (array) json_decode((string) data_get($oldRow, 'pivot.payload', json_encode([])));
 				}
 				if(!$isDeductible && $vatRate > 0  && !$isDepreciationOrAmortization && !$isSalesRevenue && !$isPercentage  && !$isCostOfUnit ){
 					$currentSubItemValues = $this->calculatePayloadWithVat($currentSubItemValues,$currentSubItemToBeInserted,$isDeductible,$vatRate,$financialStatementAbleItemId); 
@@ -314,7 +321,9 @@ trait FinancialStatementAbleMutator
 				$incomeStatement->withSubItemsFor($financialStatementAbleItemId, $currentSubItemToBeInserted,$newSubItemName)->$attachOrUpdateExistingMethod($financialStatementAbleItemId,$currentSubItemDataArr);
 				
 			}
-			$incomeStatement->syncPivotFor($actualDatesAsIndexAndBooleans,$financialStatementAbleItemId, $formSubItemType, $newSubItemName,$currentSubItemDataArr,null);
+			if ($newSubItemName !== '' && !empty($currentSubItemDataArr)) {
+				$incomeStatement->syncPivotFor($actualDatesAsIndexAndBooleans,$financialStatementAbleItemId, $formSubItemType, $newSubItemName,$currentSubItemDataArr,null);
+			}
 			
 		}
 		
@@ -439,23 +448,23 @@ trait FinancialStatementAbleMutator
 	public function updateCostOfUnitAndPercentagesOfSubItems(array $actualDatesAsIndexAndBooleans , array $salesRevenuesSubItemsArray,Collection $subItemsForCurrentIncomeStatementItem, array $dates, string $subItemType): void
 	{
 		foreach ($subItemsForCurrentIncomeStatementItem as $subItem) {
-			$financialStatementAbleItemId = $subItem->pivot->financial_statement_able_item_id;
-			$subItemName = $subItem->pivot->sub_item_name;
+			$financialStatementAbleItemId = (int) data_get($subItem, 'pivot.financial_statement_able_item_id', 0);
+			$subItemName = (string) data_get($subItem, 'pivot.sub_item_name', '');
 			$values = [];
 			
-			$payload = json_decode($subItem->pivot->payload);
-			$subItemPivotType = $subItem->pivot->percentage_or_fixed;
+			$payload = json_decode((string) data_get($subItem, 'pivot.payload', json_encode([])));
+			$subItemPivotType = (string) data_get($subItem, 'pivot.percentage_or_fixed', '');
 			$isPercentage = $subItemPivotType == 'percentage';
 			$isCostOfUnit = $subItemPivotType == 'cost_of_unit';
-			$isFinancialExpense = $subItem->pivot->is_financial_expense;
-			$percentageOfValue = $subItem->pivot->percentage_value ?: 0;
-			$costOfUnitValue = $subItem->pivot->cost_of_unit_value ?: 0;
-			$isCostOfUnitOf = $subItem->pivot->is_cost_of_unit_of ?: 0;
-				$isPercentageOf = $subItem->pivot->is_percentage_of;
-				$financialStatementAbleId = $subItem->pivot->financial_statement_able_id ;
-				$currentSubItemType = $subItem->pivot->sub_item_type;
-				$isDeductible = $subItem->pivot->is_deductible;
-				$vatRate = $subItem->pivot->vat_rate;
+			$isFinancialExpense = (bool) data_get($subItem, 'pivot.is_financial_expense', false);
+			$percentageOfValue = (float) data_get($subItem, 'pivot.percentage_value', 0);
+			$costOfUnitValue = (float) data_get($subItem, 'pivot.cost_of_unit_value', 0);
+			$isCostOfUnitOf = data_get($subItem, 'pivot.is_cost_of_unit_of', 0);
+				$isPercentageOf = data_get($subItem, 'pivot.is_percentage_of');
+				$financialStatementAbleId = (int) data_get($subItem, 'pivot.financial_statement_able_id', 0);
+				$currentSubItemType = (string) data_get($subItem, 'pivot.sub_item_type', '');
+				$isDeductible = (bool) data_get($subItem, 'pivot.is_deductible', false);
+				$vatRate = (float) data_get($subItem, 'pivot.vat_rate', 0);
 				
 			if ($isPercentage && $subItemName == 'Corporate Taxes') {
 				// will update it in another place while updating main row for earning before tax
@@ -472,8 +481,8 @@ trait FinancialStatementAbleMutator
 					$this->withSubItemsFor($financialStatementAbleItemId, $subItemType, $subItemName)->updateExistingPivot($financialStatementAbleItemId, [
 						'payload' => json_encode($payload),
 						'total'=>array_sum($payload),
-						'is_deductible'=>$subItem->pivot->is_deductible,
-						'vat_rate'=>$subItem->pivot->vat_rate
+						'is_deductible'=>$isDeductible,
+						'vat_rate'=>$vatRate
 					]);
 				}
 				
@@ -487,8 +496,8 @@ trait FinancialStatementAbleMutator
 					$this->withSubItemsFor($financialStatementAbleItemId, $subItemType, $subItemName)->updateExistingPivot($financialStatementAbleItemId, [
 						'total'=>array_sum($payload),
 						'payload' => json_encode($payload),
-						'is_deductible'=>$subItem->pivot->is_deductible,
-						'vat_rate'=>$subItem->pivot->vat_rate
+						'is_deductible'=>$isDeductible,
+						'vat_rate'=>$vatRate
 					]);
 				}
 				
@@ -526,7 +535,9 @@ trait FinancialStatementAbleMutator
 		// $debug = false ;
 		
 		$salesRevenuesSubItemsArray = $this->getSalesRevenueArr($subItemType);
-		$datesHelper = $this->financialStatement->getDatesIndexesHelper();
+		/** @var \App\Models\FinancialStatement $financialStatement */
+		$financialStatement = $this->financialStatement;
+		$datesHelper = $financialStatement->getDatesIndexesHelper();
 		$dateIndexWithDate = $datesHelper['dateIndexWithDate'];
 		$actualDatesAsIndexAndBooleans = HArr::getActualDatesAsIndexAndBoolean($dateIndexWithDate);
 		$companyId = $this->company_id;
@@ -545,7 +556,7 @@ trait FinancialStatementAbleMutator
 			$this->updateCostOfUnitAndPercentagesOfSubItems($actualDatesAsIndexAndBooleans,$salesRevenuesSubItemsArray,$oldSubItemsForCurrentMainItem, $dates, $subItemType);
 			
 			$subItems = $this->withSubItemsFor($incomeStatementItemId, $subItemType)->get()->keyBy(function ($subItem) {
-				return $subItem->pivot->sub_item_name;
+				return data_get($subItem, 'pivot.sub_item_name');
 			})->map(function ($subItem) {
 				// /**
 				//  * ! remove this
@@ -555,31 +566,52 @@ trait FinancialStatementAbleMutator
 				// 	/**
 				//  * ! end remove this
 				//  */
-				$pivot = $subItem->pivot;
+				$pivotPayload = (string) data_get($subItem, 'pivot.payload', json_encode([]));
+				$pivotPayloadArray = $pivotPayload ? (array) json_decode($pivotPayload, true) : [];
+				$pivotSubItemName = (string) data_get($subItem, 'pivot.sub_item_name', '');
+				$pivotSubItemType = (string) data_get($subItem, 'pivot.sub_item_type', '');
+				$pivotHasCollectionPolicy = (bool) data_get($subItem, 'pivot.has_collection_policy', false);
+				$pivotCollectionPolicyType = data_get($subItem, 'pivot.collection_policy_type');
+				$pivotCollectionPolicyValue = data_get($subItem, 'pivot.collection_policy_value');
+				$pivotIsQuantity = (bool) data_get($subItem, 'pivot.is_quantity', false);
+				$pivotCanBeQuantity = (bool) data_get($subItem, 'pivot.can_be_quantity', false);
+				$pivotIsValueQuantityPrice = data_get($subItem, 'pivot.is_value_quantity_price');
+				$pivotIsDepOrAmort = (bool) data_get($subItem, 'pivot.is_depreciation_or_amortization', false);
+				$pivotPercentageOrFixed = data_get($subItem, 'pivot.percentage_or_fixed');
+				$pivotCanBePercentageOrFixed = (bool) data_get($subItem, 'pivot.can_be_percentage_or_fixed', false);
+				$pivotRepeatingFixedValue = data_get($subItem, 'pivot.repeating_fixed_value');
+				$pivotPercentageValue = (float) data_get($subItem, 'pivot.percentage_value', 0);
+				$pivotCostOfUnitValue = (float) data_get($subItem, 'pivot.cost_of_unit_value', 0);
+				$pivotIsFinancialExpense = (bool) data_get($subItem, 'pivot.is_financial_expense', false);
+				$pivotIsFinancialIncome = (bool) data_get($subItem, 'pivot.is_financial_income', false);
+				$pivotIsDeductible = (bool) data_get($subItem, 'pivot.is_deductible', false);
+				$pivotVatRate = (float) data_get($subItem, 'pivot.vat_rate', 0);
+				$pivotTotal = (float) data_get($subItem, 'pivot.total', 0);
+
 				// cache::fore
 				return [
 					'options' => [
-						'name' => $pivot->sub_item_name,
+						'name' => $pivotSubItemName,
 						// 'sub_item_type' => $pivot->sub_item_type,
-						'payload' => $pivot->payload ? (array)json_decode($pivot->payload) : [],
-						'total'=>$pivot->payload ? array_sum((array)json_decode($pivot->payload)) : 0,
-						'sub_item_type' => $pivot->sub_item_type,
-						'has_collection_policy' => $pivot->has_collection_policy,
-						'collection_policy_type' => $pivot->collection_policy_type,
-						'collection_policy_value' => $pivot->collection_policy_value,
-						'is_quantity' => $pivot->is_quantity,
-						'can_be_quantity' => $pivot->can_be_quantity,
-						'is_value_quantity_price'=>$pivot->is_value_quantity_price,
-						'is_depreciation_or_amortization' => $pivot->is_depreciation_or_amortization ?: 0,
-						'percentage_or_fixed' => $pivot->percentage_or_fixed,
-						'can_be_percentage_or_fixed' => $pivot->can_be_percentage_or_fixed,
-						'repeating_fixed_value' => $pivot->repeating_fixed_value,
-						'percentage_value' => $pivot->percentage_value ?: 0,
-						'cost_of_unit_value' => $pivot->cost_of_unit_value ?: 0,
-						'is_financial_expense' => $pivot->is_financial_expense ?: 0,
-						'is_financial_income' => $pivot->is_financial_income ?: 0,
-						'is_deductible'=>$pivot->is_deductible,
-						'vat_rate'=>$pivot->vat_rate,
+						'payload' => $pivotPayloadArray,
+						'total'=>array_sum($pivotPayloadArray),
+						'sub_item_type' => $pivotSubItemType,
+						'has_collection_policy' => $pivotHasCollectionPolicy,
+						'collection_policy_type' => $pivotCollectionPolicyType,
+						'collection_policy_value' => $pivotCollectionPolicyValue,
+						'is_quantity' => $pivotIsQuantity,
+						'can_be_quantity' => $pivotCanBeQuantity,
+						'is_value_quantity_price'=>$pivotIsValueQuantityPrice,
+						'is_depreciation_or_amortization' => $pivotIsDepOrAmort ? 1 : 0,
+						'percentage_or_fixed' => $pivotPercentageOrFixed,
+						'can_be_percentage_or_fixed' => $pivotCanBePercentageOrFixed,
+						'repeating_fixed_value' => $pivotRepeatingFixedValue,
+						'percentage_value' => $pivotPercentageValue,
+						'cost_of_unit_value' => $pivotCostOfUnitValue,
+						'is_financial_expense' => $pivotIsFinancialExpense ? 1 : 0,
+						'is_financial_income' => $pivotIsFinancialIncome ? 1 : 0,
+						'is_deductible'=>$pivotIsDeductible ? 1 : 0,
+						'vat_rate'=>$pivotVatRate,
 						'parent' => [
 							'name' => $subItem->name,
 							'has_sub_items' => $subItem->has_sub_items,
@@ -596,8 +628,8 @@ trait FinancialStatementAbleMutator
 							'is_accumulated' => $subItem->is_accumulated,
 						]
 					],
-					'values' => $subItem->pivot ? (array)json_decode($subItem->pivot->payload) : [],
-					'total' => $subItem->pivot ? $subItem->pivot->total : 0
+					'values' => $pivotPayloadArray,
+					'total' => $pivotTotal
 
 				];
 			})->toArray();
@@ -699,24 +731,11 @@ trait FinancialStatementAbleMutator
 			$currentItemTotal = $this->calculateTotalPercentageOfSalesRevenueFor($incomeStatementItemId, $allItemsTotals, $dates, $subItemType,$companyId,$mainRows);
 		} elseif (IncomeStatementItem::CORPORATE_TAXES_ID == $incomeStatementItemId) {
 			$corporateTaxesRow = $this->withSubItemsFor($incomeStatementItemId, $subItemType, 'Corporate Taxes')->first() ;
-			
-			$percentageOfCorporateTaxes = $corporateTaxesRow && $corporateTaxesRow->pivot ? $corporateTaxesRow->pivot->percentage_value : 0;
+			$percentageOfCorporateTaxes = (float) data_get($corporateTaxesRow, 'pivot.percentage_value', 0);
 			$percentageOfCorporateTaxes = $percentageOfCorporateTaxes / 100;
-
 			$totalOfEarningBeforeTaxes = $allItemsTotals[IncomeStatementItem::EARNING_BEFORE_TAXES_ID]['total']['total'] ?? 0;
 			$currentItemTotal['total']['total'] = $totalOfEarningBeforeTaxes < 0 ? 0 : $totalOfEarningBeforeTaxes * $percentageOfCorporateTaxes;
-	
-			// $this->withMainRowsFor($incomeStatementItemId, $subItemType)->detach();
-			// $this->withMainRowsFor($incomeStatementItemId, $subItemType)->attach($incomeStatementItemId, [
-			// 	'total' => $currentItemTotal['total']['total'] ?? 0,
-			// 	// update sub items of corporate taxes [needs to be here]
-			// 	// main row will be zero allows
-			// 	'payload' => json_encode([]),
-			// 	'company_id'=>$companyId,
-			// 	'creator_id'=>$creatorId,
-			// 	'sub_item_type'=>$subItemType
-			// ]);
-			$mainRows[]=$this->getMainRowCalculationsArr($incomeStatementItemId,$subItemType, $currentItemTotal['total']['total'] ?? 0,json_encode([]),$companyId,$creatorId);
+			$mainRows[]=$this->getMainRowCalculationsArr($incomeStatementItemId,$subItemType, $currentItemTotal['total']['total'],json_encode([]),$companyId,$creatorId);
 		}
 
 
@@ -744,7 +763,7 @@ trait FinancialStatementAbleMutator
 		// 	'sub_item_type'=>$subItemType,
 		// 	'creator_id'=>$this->creator_id 
 		// ]);
-		$mainRows[] = $this->getMainRowCalculationsArr($incomeStatementItemId,$subItemType,$values['total']['total'] ?? 0,json_encode($values['total']['dates'] ?? []),$companyId,$this->creator_id);
+		$mainRows[] = $this->getMainRowCalculationsArr($incomeStatementItemId,$subItemType,$values['total']['total'] ,json_encode($values['total']['dates'] ?? []),$companyId,$this->creator_id);
 		
 
 		return $values;
@@ -766,7 +785,8 @@ trait FinancialStatementAbleMutator
 		$valuesForCorporateTaxesAtDate = [];
 
 		$equation = IncomeStatementItem::getEquationFor($this, $incomeStatementItemId);
-		$corporateTaxesPercentage = $this->withSubItemsFor($corporateTaxesID, $subItemType, 'Corporate Taxes')->first()->pivot->percentage_value ?? 0;
+		$corporateTaxesRow = $this->withSubItemsFor($corporateTaxesID, $subItemType, 'Corporate Taxes')->first();
+		$corporateTaxesPercentage = (float) data_get($corporateTaxesRow, 'pivot.percentage_value', 0);
 		$corporateTaxesPercentage = $corporateTaxesPercentage / 100;
 
 		if ($incomeStatementItemId === $salesGrowthRateId) {
@@ -859,8 +879,8 @@ trait FinancialStatementAbleMutator
 			// update sub items of corporate taxes [needs to be here]
 			$subItemName = 'Corporate Taxes';
 			$this->withSubItemsFor($corporateTaxesID, $subItemType, $subItemName)->updateExistingPivot($corporateTaxesID, [
-				'payload' => json_encode($valuesForCorporateTaxesAtDate ?? []),
-				'total'=>array_sum($valuesForCorporateTaxesAtDate ?? []),
+				'payload' => json_encode($valuesForCorporateTaxesAtDate ),
+				'total'=>array_sum($valuesForCorporateTaxesAtDate ),
 				'company_id'=>$companyId
 			]);
 		}

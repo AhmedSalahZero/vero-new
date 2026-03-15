@@ -12,7 +12,59 @@ use Illuminate\Database\Eloquent\Model;
  * * letter of credit issuance
  * * عن طريق بسحب كريدت من حساب احطة دبت في حساب اخر
  *
- * @mixin IdeHelperLcSettlementInternalMoneyTransfer
+ * @property int $id
+ * @property string|null $type
+ * @property string|null $transfer_date هو التاريخ اللي اللي هيتم فيه العميله
+ * @property int $transfer_days عدد الايام المتوقع فيها اتمام هذه العمليه
+ * @property int|null $from_bank_id
+ * @property int|null $from_account_type_id
+ * @property string|null $from_account_number
+ * @property string|null $currency
+ * @property int|null $to_letter_of_credit_issuance_id
+ * @property numeric $amount مقدار مبلغ التحويل
+ * @property int $company_id
+ * @property string|null $from_comment_ar
+ * @property string|null $to_comment_ar
+ * @property string|null $from_comment_en
+ * @property string|null $to_comment_en
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LcOverdraftBankStatement> $LcOverdraftBankStatements
+ * @property-read int|null $lc_overdraft_bank_statements_count
+ * @property-read bool|null $lc_overdraft_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\AccountType|null $fromAccountType
+ * @property-read \App\Models\FinancialInstitution|null $fromBank
+ * @property-read \App\Models\LetterOfCreditIssuance|null $letterOfCreditIssuance
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereFromAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereFromAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereFromBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereFromCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereFromCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereToCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereToCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereToLetterOfCreditIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereTransferDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereTransferDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcSettlementInternalMoneyTransfer whereUserComment($value)
+ * @mixin \Eloquent
  */
 class LcSettlementInternalMoneyTransfer extends Model 
 {
@@ -81,7 +133,7 @@ class LcSettlementInternalMoneyTransfer extends Model
 	public function getReceivingDateFormatted()
 	{
 		
-		return Carbon::make($this->getTransferDate())->addDay($this->getTransferDays())->format('d-m-Y') ;
+		return Carbon::make($this->getTransferDate())->addDays($this->getTransferDays())->format('d-m-Y') ;
 	}
     public function setTransferDateAttribute($value)
     {

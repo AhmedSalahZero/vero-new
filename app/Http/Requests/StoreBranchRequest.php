@@ -17,11 +17,6 @@ class StoreBranchRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
 		// foreach(Request()->get('safe') as $safeArr){

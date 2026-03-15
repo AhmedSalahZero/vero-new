@@ -18,7 +18,7 @@ class SharingLinkController extends Controller
     }
     public function index()
     {
-        return view('admin.sharing-links.view' , SharingLink::getViewVars());
+        return view('admin.sharing-links.view' , []);
     }
 
      public function paginate(Request $request)

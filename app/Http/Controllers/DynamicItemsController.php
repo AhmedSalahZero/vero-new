@@ -135,12 +135,12 @@ class DynamicItemsController extends Controller
 	
 	public function storeNewModal(company $company , Request $request){
 	
-		$companyId = $company->id ;
-		$modelName = '\App\Models\\' . $request->get('modalName') ;
-		$model = new $modelName;
+		// $companyId = $company->id ;
+		// $modelName = '\App\Models\\' . $request->get('modalName') ;
+		// $model = new $modelName;
 		$value = $request->get('value');
-		$typeColumn = strtolower($request->get('modalName')) . '_type';
-		$type = $request->get('modalType');
+		// $typeColumn = strtolower($request->get('modalName')) . '_type';
+		// $type = $request->get('modalType');
 		
 		return response()->json([
 			'status'=>true ,
@@ -148,34 +148,34 @@ class DynamicItemsController extends Controller
 			'id'=>1
 		]);
 		
-		$previousSelectorNameInDb = $request->get('previousSelectorNameInDb');
-		$previousSelectorValue = $request->get('previousSelectorValue');
+		// $previousSelectorNameInDb = $request->get('previousSelectorNameInDb');
+		// $previousSelectorValue = $request->get('previousSelectorValue');
 	
-		$modelName = $model->where('company_id',$companyId);
-		if($type){
-			$modelName = $modelName->where($typeColumn,$type)	;
-		}
-		$modelName = $modelName->where('name',$value)->first();
-		if($modelName){
-			return response()->json([
-				'status'=>false ,
-			]);
-		}
-		$model->company_id = $companyId;
-		$model->name = $value;
-		if($type){
-			$model->{$typeColumn} = $type;
-		}
-		if($previousSelectorNameInDb){
+		// $modelName = $model->where('company_id',$companyId);
+		// if($type){
+		// 	$modelName = $modelName->where($typeColumn,$type)	;
+		// }
+		// $modelName = $modelName->where('name',$value)->first();
+		// if($modelName){
+		// 	return response()->json([
+		// 		'status'=>false ,
+		// 	]);
+		// }
+		// $model->company_id = $companyId;
+		// $model->name = $value;
+		// if($type){
+		// 	$model->{$typeColumn} = $type;
+		// }
+		// if($previousSelectorNameInDb){
 			
-			$model->{$previousSelectorNameInDb} = $previousSelectorValue;
-		}
-		$model->save();
-		return response()->json([
-			'status'=>true ,
-			'value'=>$value ,
-			'id'=>$model->id 
-		]);
+		// 	$model->{$previousSelectorNameInDb} = $previousSelectorValue;
+		// }
+		// $model->save();
+		// return response()->json([
+		// 	'status'=>true ,
+		// 	'value'=>$value ,
+		// 	'id'=>$model->id 
+		// ]);
 	}
 	
 	

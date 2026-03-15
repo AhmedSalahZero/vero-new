@@ -5,7 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperInterestRevenueAccount
+ * @property int $id
+ * @property int|null $financial_institution_id في حاله لو كانت null يبقي all
+ * @property string $odoo_code
+ * @property int $odoo_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereOdooCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InterestRevenueAccount whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class InterestRevenueAccount extends Model
 {

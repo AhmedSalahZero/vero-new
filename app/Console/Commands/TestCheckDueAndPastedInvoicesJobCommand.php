@@ -12,18 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class TestCheckDueAndPastedInvoicesJobCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+  
     protected $signature = 'test:test1 {company_id?}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    
     protected $description = 'Seed minimal data and run CheckDueAndPastedInvoicesJob to test all notifications';
 
     /**

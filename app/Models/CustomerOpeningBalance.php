@@ -8,7 +8,27 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperCustomerOpeningBalance
+ * @property int $id
+ * @property string $date
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomerInvoice> $customerInvoices
+ * @property-read int|null $customer_invoices_count
+ * @property-read bool|null $customer_invoices_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $moneyModel
+ * @property-read int|null $money_model_count
+ * @property-read bool|null $money_model_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CustomerOpeningBalance extends Model
 {

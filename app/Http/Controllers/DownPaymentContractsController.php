@@ -8,6 +8,7 @@ use App\Models\Contract;
 use App\Models\Currency;
 use App\Models\CustomerInvoice;
 use App\Models\Log;
+use App\Models\MoneyPayment;
 use App\Models\MoneyReceived;
 use App\Models\Partner;
 use App\Models\SupplierInvoice;
@@ -111,7 +112,7 @@ class DownPaymentContractsController extends Controller
 		$contract = $downPayment->contract;
 		$partnerId = $downPayment->getPartnerId();
 		$partnerName = $downPayment->getPartnerName();
-		$inEditMode = false ;
+		// $inEditMode = false ;
 		$fullClassName = ('\App\Models\\' . $modelType) ;
         $clientIdColumnName = $fullClassName::CLIENT_ID_COLUMN_NAME ;
         $clientNameColumnName = $fullClassName::CLIENT_NAME_COLUMN_NAME ;
@@ -131,13 +132,13 @@ class DownPaymentContractsController extends Controller
 		->where('currency','=',$contractCurrency)
 		->where('company_id',$company->id)
 		->where('net_invoice_amount','>',0);
-		if(!$inEditMode){
+		// if(!$inEditMode){
 			/**
 			 * ! $inEditMode always returns false 
 			 * * وبالتالي لو بتحاول تعدل مش هيجيب اللي اتقفلت خالص
 			 */
 		//	$invoices->where('net_balance','>',0);
-		}
+		// }
 
 		$invoices = $invoices->orderBy('invoice_date','asc')->get() ; 
 		
@@ -271,11 +272,11 @@ public function storeDownPaymentSettlement(
         );
         
         if (!$result['success']) {
-            Log::error('Odoo advance settlement failed', [
-                'down_payment_id' => $odooMoveId,
-                'is_customer' => $isMoneyReceived,
-                'error' => $result['message']
-            ]);
+            // Log::error('Odoo advance settlement failed', [
+            //     'down_payment_id' => $odooMoveId,
+            //     'is_customer' => $isMoneyReceived,
+            //     'error' => $result['message']
+            // ]);
             
             return back()->with('error', 'Odoo settlement failed: ' . $result['message']);
         }

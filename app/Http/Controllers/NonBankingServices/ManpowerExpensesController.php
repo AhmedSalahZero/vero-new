@@ -22,7 +22,7 @@ class ManpowerExpensesController extends Controller
 			return formatDateForView($date);
 		},array_flip($study->getOperationDatesAsDateAndDateAsIndexToStudyEndDate()) );
 		$type = 'manpower';
-		$expenseType = $type;
+		// $expenseType = $type;
 		$departments = $company->generalDepartments->load('positions.manpowers');
 		
 		$yearsWithItsMonths =  $study->getOperationDurationPerYearFromIndexes() ;

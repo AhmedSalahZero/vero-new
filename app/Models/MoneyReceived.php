@@ -26,7 +26,127 @@ use Illuminate\Support\Facades\DB;
  * @property PayableCheque $payableCheque
  */
 /**
- * @mixin IdeHelperMoneyReceived
+ * @property int $id
+ * @property string|null $odoo_reference
+ * @property int|null $journal_entry_id
+ * @property int|null $account_bank_statement_line_id
+ * @property string|null $transaction_type
+ * @property int $has_unapplied_or_down_payment
+ * @property string|null $odoo_error_message
+ * @property int $synced_with_odoo
+ * @property int|null $advanced_opening_balance_id
+ * @property int|null $odoo_id
+ * @property int|null $odoo_move_id
+ * @property string $partner_type
+ * @property int|null $partner_id partner_id
+ * @property int $is_reviewed
+ * @property int|null $reviewed_by المشرف اللي حدد انه راجعه
+ * @property string $money_type
+ * @property string|null $down_payment_type
+ * @property string|null $down_payment_settlement_date
+ * @property int|null $contract_id في حاله لو كان downpayment اي دفعه مقدمة
+ * @property int|null $opening_balance_id
+ * @property string|null $type
+ * @property string|null $receiving_date
+ * @property numeric|null $received_amount
+ * @property numeric $received_amount_in_main_currency
+ * @property float $total_withhold_amount
+ * @property float|null $total_withhold_amount_in_main_currency
+ * @property float|null $amount_in_invoice_currency
+ * @property string|null $currency
+ * @property string|null $receiving_currency
+ * @property float|null $exchange_rate
+ * @property int|null $user_id
+ * @property int|null $company_id
+ * @property string|null $comment_ar
+ * @property string|null $comment_en
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \App\Models\CashInBank|null $cashInBank
+ * @property-read \App\Models\CashInSafe|null $cashInSafe
+ * @property-read \App\Models\CashInSafeStatement|null $cashInSafeCreditStatement
+ * @property-read \App\Models\CashInSafeStatement|null $cashInSafeDebitStatement
+ * @property-read \App\Models\Cheque|null $cheque
+ * @property-read \App\Models\CleanOverdraftBankStatement|null $cleanOverdraftCreditBankStatement
+ * @property-read \App\Models\CleanOverdraftBankStatement|null $cleanOverdraftDebitBankStatement
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountDebitBankStatement
+ * @property-read \App\Models\Partner|null $customer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomerInvoice> $customerInvoices
+ * @property-read int|null $customer_invoices_count
+ * @property-read bool|null $customer_invoices_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DownPaymentSettlement> $downPaymentSettlements
+ * @property-read int|null $down_payment_settlements_count
+ * @property-read bool|null $down_payment_settlements_exists
+ * @property-read \App\Models\EmployeeStatement|null $employeeStatement
+ * @property-read \App\Models\FullySecuredOverdraftBankStatement|null $fullySecuredOverdraftCreditBankStatement
+ * @property-read \App\Models\FullySecuredOverdraftBankStatement|null $fullySecuredOverdraftDebitBankStatement
+ * @property-read \App\Models\IncomingTransfer|null $incomingTransfer
+ * @property-read \App\Models\OpeningBalance|null $openingBalance
+ * @property-read \App\Models\OtherPartnerStatement|null $otherPartnerStatement
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContractBankStatement|null $overdraftAgainstAssignmentOfContractCreditBankStatement
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContractBankStatement|null $overdraftAgainstAssignmentOfContractDebitBankStatement
+ * @property-read \App\Models\OverdraftAgainstCommercialPaperBankStatement|null $overdraftAgainstCommercialPaperCreditBankStatement
+ * @property-read \App\Models\OverdraftAgainstCommercialPaperBankStatement|null $overdraftAgainstCommercialPaperDebitBankStatement
+ * @property-read \App\Models\Partner|null $partner
+ * @property-read \App\Models\User|null $reviewedBy
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Settlement> $settlements
+ * @property-read int|null $settlements_count
+ * @property-read bool|null $settlements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Settlement> $settlementsForDownPaymentThatComeFromMoneyModel
+ * @property-read int|null $settlements_for_down_payment_that_come_from_money_model_count
+ * @property-read bool|null $settlements_for_down_payment_that_come_from_money_model_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Settlement> $settlementsForMoneyReceived
+ * @property-read int|null $settlements_for_money_received_count
+ * @property-read bool|null $settlements_for_money_received_exists
+ * @property-read \App\Models\ShareholderStatement|null $shareholderStatement
+ * @property-read \App\Models\SubsidiaryCompanyStatement|null $subsidiaryCompanyStatement
+ * @property-read \App\Models\TaxStatement|null $taxStatement
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived filterByReceivingDate(?string $startDate = null, ?string $endDate = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereAdvancedOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereAmountInInvoiceCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereDownPaymentSettlementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereDownPaymentType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereHasUnappliedOrDownPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereIsReviewed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereMoneyType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereOdooErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereOdooMoveId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived wherePartnerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereReceivedAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereReceivedAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereReceivingCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereReceivingDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereReviewedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereSyncedWithOdoo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereTotalWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereTotalWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereTransactionType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereUserComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereUserId($value)
+ * @mixin \Eloquent
  */
 class MoneyReceived extends Model
 {
@@ -62,6 +182,20 @@ class MoneyReceived extends Model
 		
 		if($moneyReceived->isCheque()){
 			$chequeNumber = $moneyReceived->getChequeNumber()?:Request('cheque_number');
+			
+			if($moneyReceived->isGeneralDownPayment()&&$moneyReceived->isDownPayment()){
+				return __('Cheque :name With Number [ :number ] - General Down Payment',['name'=>$customerName,'number'=>$chequeNumber],$lang) ;
+			}
+			if($moneyReceived->isSettlementOfOpeningBalance()&&$moneyReceived->isDownPayment()){
+				return __('Cheque :name With Number [ :number ] - Opening Balance Settlement',['name'=>$customerName,'number'=>$chequeNumber],$lang) ;
+			}
+			if($moneyReceived->isOverContractDownPayment() && $moneyReceived->isDownPayment()){
+				return __('Cheque :name With Number [ :number ] - Contract Down Payment [ :contractName ] [ :contractCode ]',['name'=>$customerName,'number'=>$chequeNumber,
+				'contractName'=>$moneyReceived->getContractName(),
+			'contractCode'=>$moneyReceived->getContractCode()
+			],$lang) ;
+				
+			}
 			if($moneyReceived->isOpenBalance()){
 				return __('Opening Balance Cheque From [ :customerName ]' , ['customerName'=>$customerName],$lang);
 			}
@@ -87,19 +221,7 @@ class MoneyReceived extends Model
 			if($moneyReceived->getPartnerType()!='is_customer'){
 				return __('Cheque :name [ :partnerType ] With Number [ :number ]',['name'=>$customerName,'number'=>$chequeNumber,'partnerType'=>$moneyReceived->getPartnerTypeFormatted()],$lang);
 			}
-			if($moneyReceived->isGeneralDownPayment()&&$moneyReceived->isDownPayment()){
-				return __('Cheque :name With Number [ :number ] - General Down Payment',['name'=>$customerName,'number'=>$chequeNumber],$lang) ;
-			}
-			if($moneyReceived->isSettlementOfOpeningBalance()&&$moneyReceived->isDownPayment()){
-				return __('Cheque :name With Number [ :number ] - Opening Balance Settlement',['name'=>$customerName,'number'=>$chequeNumber],$lang) ;
-			}
-			if($moneyReceived->isOverContractDownPayment() && $moneyReceived->isDownPayment()){
-				return __('Cheque :name With Number [ :number ] - Contract Down Payment [ :contractName ] [ :contractCode ]',['name'=>$customerName,'number'=>$chequeNumber,
-				'contractName'=>$moneyReceived->getContractName(),
-			'contractCode'=>$moneyReceived->getContractCode()
-			],$lang) ;
-				
-			}
+			
 			return __('Cheque :name With Number [ :number ] Settled Invoices [ :numbers ] [ :currency ]',['name'=>$customerName,'number'=>$chequeNumber,'numbers'=>$settledInvoiceNumbers,'currency'=>$moneyReceived->getCurrency()],$lang) ;
 		}
 		if($moneyReceived->isCashInSafe()){
@@ -410,10 +532,10 @@ class MoneyReceived extends Model
 			return $this->cheque ? $this->cheque->getDraweeBankName() : __('N/A') ;
 		}
 		if($this->isIncomingTransfer()){
-			return $this->getIncomingTransferReceivingBankName(app()->getLocale());
+			return $this->getIncomingTransferReceivingBankName();
 		}
 		if($this->isCashInBank()){
-			return $this->getCashInBankReceivingBankName(app()->getLocale());
+			return $this->getCashInBankReceivingBankName();
 		}
 	}
 	

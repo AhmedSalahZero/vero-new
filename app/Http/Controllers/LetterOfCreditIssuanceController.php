@@ -405,7 +405,9 @@ class LetterOfCreditIssuanceController
 		$letterOfCreditIssuance->handleLetterOfCreditStatement($financialInstitutionId,$source,$letterOfCreditFacilityId,$lcType,$company->id,$paymentDate,0,$lcRemainingAmount , 0,$letterOfCreditCurrency,0,$letterOfCreditIssuance->getCdOrTdId(),LetterOfCreditIssuance::FOR_PAID,$commentEn,$commentAr);
 		$commentEn = __('LC Cash Cover Payment [:lcType] [:transactionName]',['lcType'=>$lcType,'transactionName'=>$transactionName],'en');
 		$commentAr = __('LC Cash Cover Payment [:lcType] [:transactionName]',['lcType'=>$lcType,'transactionName'=>$transactionName],'ar');
-		$letterOfCreditIssuance->handleLetterOfCreditCashCoverStatement($financialInstitutionId,$source,$letterOfCreditFacilityId,$lcType,$company->id,$paymentDate,0,0 , $cashCoverAmount ,$letterOfCreditIssuance->getLcCashCoverCurrency(),0,LetterOfCreditIssuance::FOR_PAID,$commentEn,$commentAr);
+		$letterOfCreditIssuance->handleLetterOfCreditCashCoverStatement($financialInstitutionId,$source,$letterOfCreditFacilityId,$lcType,$company->id,$paymentDate,0,0 , $cashCoverAmount ,$letterOfCreditIssuance->getLcCashCoverCurrency(),0,LetterOfCreditIssuance::FOR_PAID
+		// ,$commentEn,$commentAr
+	);
 		if($interestAmount > 0 ){
 			$letterOfCreditIssuance->storeCurrentAccountLcInterestPaymentCreditBankStatement($paymentDate,$interestAmount , $paymentAccountNumberId,0,1,__('LC Interest Payment [ :supplierName ] [ :lcType ] Transaction Name [ :transactionName ]'  ,['lcType'=>__($lcType,[],'en'),'supplierName'=>$supplierName,'transactionName'=>$transactionName],'en') , __('LC Payment [ :supplierName ] [ :lcType ] Transaction Name [ :transactionName ]'  ,['lcType'=>__($lcType,[],'ar'),'supplierName'=>$supplierName,'transactionName'=>$transactionName],'ar') );
 		}
@@ -463,9 +465,7 @@ class LetterOfCreditIssuanceController
 	}
 	public function applyExpense(Company $company,Request $request,LetterOfCreditIssuance $letterOfCreditIssuance , $type='create')
 	{
-		/**
-		 * @var LcIssuanceExpense $lcIssuanceExpense
-		 */
+	
 		$date = Carbon::make($request->input('date.'.$type))->format('Y-m-d') ;
 		$amount = $request->input('amount.'.$type,0);
 	
@@ -518,9 +518,6 @@ class LetterOfCreditIssuanceController
 		$letterOfCreditIssuance = LetterOfCreditIssuance::find($request->get('letterOfCreditIssuanceId'));
 		$lcSettlementInternalTransfer = LcSettlementInternalMoneyTransfer::find($request->get('internalMoneyTransferId'));
 		$currentLcAmountInEditMode = $lcSettlementInternalTransfer->getAmount();
-		/**
-		 * @var LetterOfCreditIssuance $letterOfCreditIssuance
-		 */
 		$remainingBalance = $letterOfCreditIssuance ? $letterOfCreditIssuance->getRemainingBalance($currentLcAmountInEditMode) : 0;
 		return response()->json([
 			'status'=>true ,

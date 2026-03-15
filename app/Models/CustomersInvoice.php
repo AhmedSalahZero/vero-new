@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\StaticBoot;
 /**
- * @mixin IdeHelperCustomersInvoice
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomersInvoice withoutTrashed()
+ * @mixin \Eloquent
  */
 class CustomersInvoice extends Model
 {

@@ -11,7 +11,78 @@ use Illuminate\Support\Facades\DB;
 
 
 /**
- * @mixin IdeHelperCleanOverdraftBankStatement
+ * @property int $id
+ * @property string $type وليكن مثلا beginning_balance,incoming_transfer,cheque_payment  , etc
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property int $priority عباره عن اولويه التسديد بمعني لما يحين وقت التسديد مين هيتسدد الاول لان الفؤائد بتسدد الاول
+ * @property int $clean_overdraft_id
+ * @property int $money_received_id
+ * @property int|null $buy_or_sell_currency_id
+ * @property int|null $money_payment_id
+ * @property int|null $cash_expense_id
+ * @property int|null $internal_money_transfer_id
+ * @property int $company_id
+ * @property string $date
+ * @property numeric $limit
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property numeric $room
+ * @property string $interest_type الفايدة اما بتنزل بعد كل سحبة او ايداع او بتنزل بشكل اوتوماتك اخر كل شهر
+ * @property numeric $interest_rate_annually
+ * @property numeric $interest_rate_daily
+ * @property int $days_count
+ * @property numeric $interest_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $full_date دا هنستخدمة علشان نرتب بيه ونجيب ال الرو السابق بناء علي التاريخ و الوقت
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @property string|null $outstanding_withdrawal_date
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\CleanOverdraft|null $cleanOverdraft
+ * @property-read \App\Models\InternalMoneyTransfer|null $internalMoneyTransfer
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\MoneyReceived|null $moneyReceived
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraftWithdrawal> $withdrawals
+ * @property-read int|null $withdrawals_count
+ * @property-read bool|null $withdrawals_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereBuyOrSellCurrencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCashExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCleanOverdraftId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereDaysCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereInterestRateAnnually($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereInterestRateDaily($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereInterestType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereInternalMoneyTransferId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereOutstandingWithdrawalDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereRoom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraftBankStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CleanOverdraftBankStatement extends Model
 {

@@ -98,7 +98,7 @@ class FixedAssetsController extends Controller
             'empty_rows'=>[
                 'ffe'=>FixedAsset::generateFFERow(null, $dates),
                 'per-employee'=>FixedAsset::generatePerEmployeeRow(null, $dates),
-                'new-branch'=>FixedAsset::generateNewBranchRow(null, $dates),
+                'new-branch'=>FixedAsset::generateNewBranchRow(null),
 				
             ],
             'model'=>[

@@ -9,7 +9,59 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperCashAndBankOpeningBalance
+ * @property int $id
+ * @property numeric $ecl_existing_rate
+ * @property numeric $cash_and_bank_amount
+ * @property numeric $customer_receivable_amount
+ * @property numeric $expected_credit_loss
+ * @property array<array-key, mixed>|null $ecl_existing_expenses
+ * @property array<array-key, mixed>|null $accumulated_ecl_existing_expenses
+ * @property array<array-key, mixed>|null $interests
+ * @property string|null $interests_before_adjustment
+ * @property array<array-key, mixed>|null $payload
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $statement (DC2Type:json)
+ * @property numeric $non_performing_outstanding
+ * @property numeric $non_performing_ecl_existing_rate
+ * @property numeric $non_performing_expected_credit_loss
+ * @property array<array-key, mixed>|null $non_performing_payload
+ * @property array<array-key, mixed>|null $non_performing_interests
+ * @property string|null $non_performing_interests_before_adjustment
+ * @property array<array-key, mixed>|null $non_performing_ecl_existing_expenses
+ * @property array<array-key, mixed>|null $non_performing_accumulated_ecl_existing_expenses
+ * @property string|null $interest_revenue_corridor_changes
+ * @property array<array-key, mixed>|null $non_performing_statement
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereAccumulatedEclExistingExpenses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereCashAndBankAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereCustomerReceivableAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereEclExistingExpenses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereEclExistingRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereExpectedCreditLoss($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereInterestRevenueCorridorChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereInterests($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereInterestsBeforeAdjustment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingAccumulatedEclExistingExpenses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingEclExistingExpenses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingEclExistingRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingExpectedCreditLoss($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingInterests($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingInterestsBeforeAdjustment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingOutstanding($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingPayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereNonPerformingStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashAndBankOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CashAndBankOpeningBalance extends Model
 {

@@ -370,7 +370,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 
 
 
-			if ($product_seasonality !== null && count($product_seasonality) > 0) {
+			if ( count($product_seasonality) > 0) {
 
 				foreach ($request->product_items_name as $key => $name) {
 					if (isset($product_seasonality[$key])) {
@@ -506,14 +506,12 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 		if ($sales_forecast->seasonality == "last_3_years") {
 			$request['start_date']  = ($sales_forecast->previous_year - 2) . '-01-01';
 			$request['end_date']    = $sales_forecast->previous_year . '-12-31';
-			$products_data = collect(DB::select(DB::raw(
-				"
+			$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value,service_provider_name,product_item
                 FROM sales_gathering
                 WHERE ( company_id = '" . $company->id . "'AND product_item IS NOT NULL  AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                ORDER BY id "
-			)->getValue(DB::connection()->getQueryGrammar())
-			))->whereIn($type, $products);
+                ORDER BY id ";
+			$products_data = collect(DB::select($query))->whereIn($type, $products);
 		} elseif ($sales_forecast->seasonality == "previous_year") {
 
 			$request['start_date']  = $sales_forecast->previous_year . '-01-01';
@@ -523,7 +521,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 
 
 
-		if (($request->submit == 'Show') || (count(($modified_targets->others_target ?? [])) > 0) || (($request->isMethod('GET')) && isset($modified_targets) && $modified_targets !== null)) {
+		if (($request->submit == 'Show') || (count(($modified_targets->others_target ?? [])) > 0) || (($request->isMethod('GET')) && isset($modified_targets) )) {
 
 
 			$product_item_breakdown_data = (new SalesBreakdownAgainstAnalysisReport)->salesBreakdownAnalysisResult($request, $company, 'withOthers', $products_data);
@@ -633,7 +631,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 			$new_products_seasonalities[$product_seasonality->name] =
 
 
-				$this->seasonalityFun($seasonality, $seasonality_data, $monthly_dates, $sales_target_value, $product_seasonality, $year);
+				$this->seasonalityFun($seasonality, $seasonality_data, $monthly_dates, $sales_target_value, $year);
 
 		}
 
@@ -696,14 +694,12 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 
 				$request['start_date']  = ($sales_forecast->previous_year - 2) . '-01-01';
 				$request['end_date']    = $sales_forecast->previous_year . '-12-31';
-				$products_data = collect(DB::select(DB::raw(
-					"
+				$query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value,service_provider_name,product_item
                     FROM sales_gathering
                     WHERE ( company_id = '" . $company->id . "'AND product_item IS NOT NULL  AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                    ORDER BY id "
-				)->getValue(DB::connection()->getQueryGrammar())
-				))->whereIn($type, $products);
+                    ORDER BY id ";
+				$products_data = collect(DB::select($query))->whereIn($type, $products);
 			} elseif ($sales_forecast->seasonality == "previous_year") {
 
 				$request['start_date']  = $sales_forecast->previous_year . '-01-01';
@@ -743,10 +739,10 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 						'original_seasonality' => $products_items_monthly_percentage,
 					]);
 				}
-			} elseif (isset($modified_seasonality) && $modified_seasonality->use_modified_seasonality == 1) {
+			} elseif ($modified_seasonality && $modified_seasonality->use_modified_seasonality == 1) {
 
 				$products_items_monthly_percentage = $modified_seasonality->modified_seasonality;
-			} elseif (isset($modified_seasonality) && $modified_seasonality->use_modified_seasonality == 0) {
+			} elseif ($modified_seasonality && $modified_seasonality->use_modified_seasonality == 0) {
 
 				$products_items_monthly_percentage = $modified_seasonality->original_seasonality;
 			}
@@ -803,7 +799,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 			}
 
 
-			$totals_per_month = $totals_per_month ?? [];
+		
 
 
 			if ($noReturn) {
@@ -850,7 +846,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 	public function addingOthersToData($product_item_breakdown_data, $others_target)
 	{
 		$key_num = 0;
-		$report_data =  collect($product_item_breakdown_data)->sortByDesc(function ($data, $key) use ($key_num) {
+		$report_data =  collect($product_item_breakdown_data)->sortByDesc(function ($data) {
 			return [$data['Sales Value']];
 		});
 
@@ -895,7 +891,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 					$num_of_quarter = 6;
 				} elseif ($month <= 9) {
 					$num_of_quarter = 9;
-				} elseif ($month <= 12) {
+				} else  {
 					$num_of_quarter = 12;
 				}
 				$seasonality_percentage = ($quarters_percentages[$num_of_quarter] ?? 0) / 3;

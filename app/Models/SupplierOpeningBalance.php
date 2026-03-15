@@ -6,7 +6,27 @@ use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperSupplierOpeningBalance
+ * @property int $id
+ * @property string $date
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyPayment> $moneyModel
+ * @property-read int|null $money_model_count
+ * @property-read bool|null $money_model_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SupplierInvoice> $supplierInvoices
+ * @property-read int|null $supplier_invoices_count
+ * @property-read bool|null $supplier_invoices_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SupplierOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class SupplierOpeningBalance extends Model
 {

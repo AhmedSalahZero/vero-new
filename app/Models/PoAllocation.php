@@ -7,7 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperPoAllocation
+ * @property int $id
+ * @property int|null $contract_id
+ * @property int|null $purchase_order_id
+ * @property int|null $partner_id
+ * @property numeric $allocation_percentage
+ * @property numeric $allocation_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \App\Models\LetterOfCreditIssuance|null $letterOfCreditIssuance
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\SupplierInvoice|null $supplierInvoice
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation whereAllocationAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation whereAllocationPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation wherePurchaseOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PoAllocation whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class PoAllocation extends Model
 {

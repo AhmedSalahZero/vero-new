@@ -55,13 +55,12 @@ class SeasonalityReport
             $request['start_date']  = ($sales_forecast->previous_year - 2) . '-01-01';
             $request['end_date']    = $sales_forecast->previous_year . '-12-31';
 			
-            $products_data = collect(DB::select(DB::raw("
+            $query = "
                         SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value,service_provider_name," . $type ."
                         FROM sales_gathering
                         WHERE ( company_id = '" . $company->id . "'AND " . $type ." IS NOT NULL  AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                        ORDER BY id "
-            ) ->getValue(DB::connection()->getQueryGrammar())
-			))->whereIn($type, $products);
+                        ORDER BY id ";
+            $products_data = collect(DB::select($query))->whereIn($type, $products);
         } elseif ($sales_forecast->seasonality == "previous_year") {
 
             $request['start_date']  = $sales_forecast->previous_year . '-01-01';
@@ -100,7 +99,7 @@ class SeasonalityReport
                 ]);
                 $modified_seasonality->save();
             }
-        } elseif (isset($modified_seasonality) && $modified_seasonality->modified_seasonality !== null ) {
+        } elseif ( $modified_seasonality->modified_seasonality !== null ) {
 
             $products_items_monthly_percentage = $modified_seasonality->modified_seasonality;
         }else{
@@ -147,15 +146,13 @@ class SeasonalityReport
             $mainData_data = [];
             $others = [];
             if ($sales_forecast->seasonality == "last_3_years") {
-                $mainData_data =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN net_sales_value < 0 THEN 0 ELSE net_sales_value END) as net_sales_value," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request->start_date."' and '".$request->end_date."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					
-					))->whereIn($type,$products)
+                    ORDER BY id ";
+                $mainData_data =collect(DB::select($query))->whereIn($type,$products)
                     ->groupBy($type)->map(function($item){
                         $total = $item->sum('net_sales_value');
 
@@ -164,29 +161,26 @@ class SeasonalityReport
                             return ($total == 0 ) ? 0 :  ((($net_sales_value??0)/$total)) ;
                         });
                     })->toArray();
-                $others =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN net_sales_value < 0 THEN 0 ELSE net_sales_value END) as net_sales_value," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request->start_date."' and '".$request->end_date."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					
-					))->whereNotIn($type,$products)
+                    ORDER BY id ";
+                $others =collect(DB::select($query))->whereNotIn($type,$products)
                        ->groupBy('gr_date')->map(function($sub_item) {
                             return  $sub_item->sum('net_sales_value'); ;
 
                     })->toArray();
             } elseif($sales_forecast->seasonality == "previous_year") {
 
-                $mainData_data =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN net_sales_value < 0 THEN 0 ELSE net_sales_value END) as net_sales_value," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request->start_date."' and '".$request->end_date."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->whereIn($type,$products)
+                    ORDER BY id ";
+                $mainData_data =collect(DB::select($query))->whereIn($type,$products)
                     ->groupBy($type)->map(function($item){
 
                         $total = $item->sum('net_sales_value');
@@ -196,14 +190,13 @@ class SeasonalityReport
                         });
                     })->toArray();
 
-                $others =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN net_sales_value < 0 THEN 0 ELSE net_sales_value END) as net_sales_value
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request->start_date."' and '".$request->end_date."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->whereNotIn($type,$products)
+                    ORDER BY id ";
+                $others =collect(DB::select($query))->whereNotIn($type,$products)
                     ->groupBy('gr_date')->map(function($sub_item)  {
 
                         return  $sub_item->sum('net_sales_value');

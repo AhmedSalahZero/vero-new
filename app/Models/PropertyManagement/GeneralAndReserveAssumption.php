@@ -10,7 +10,53 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class  GeneralAndReserveAssumption extends Model
+/**
+ * @property int $id
+ * @property int $study_id
+ * @property numeric $legal_reserve_rate
+ * @property numeric $max_legal_reserve_rate
+ * @property array<array-key, mixed> $employee_profit_share_rates
+ * @property array<array-key, mixed> $border_of_directors_profit_share_rates
+ * @property array<array-key, mixed> $shareholders_first_dividend_portions
+ * @property array<array-key, mixed> $shareholders_dividend_payout_ratios
+ * @property array<array-key, mixed>|null $salaries_annual_increase_rates (DC2Type:json)
+ * @property array<array-key, mixed> $cbe_lending_corridor_rates
+ * @property array<array-key, mixed> $bank_lending_margin_rates
+ * @property array<array-key, mixed>|null $odas_bank_lending_margin_rates
+ * @property array<array-key, mixed> $credit_interest_rate_for_surplus_cash
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $to_cover_cost
+ * @property array<array-key, mixed>|null $to_cover_cost_rates
+ * @property array<array-key, mixed>|null $min_cash_balances
+ * @property-read \App\Models\PropertyManagement\Study $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereBankLendingMarginRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereBorderOfDirectorsProfitShareRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereCbeLendingCorridorRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereCreditInterestRateForSurplusCash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereEmployeeProfitShareRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereLegalReserveRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereMaxLegalReserveRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereMinCashBalances($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereOdasBankLendingMarginRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereSalariesAnnualIncreaseRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereShareholdersDividendPayoutRatios($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereShareholdersFirstDividendPortions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereToCoverCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereToCoverCostRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\GeneralAndReserveAssumption whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class GeneralAndReserveAssumption extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy,HasCollectionOrPaymentStatement;
 	protected $connection= 'property_management';
@@ -146,7 +192,7 @@ class  GeneralAndReserveAssumption extends Model
                 $baseRatesPerMonths[Carbon::make($dateIndexWithDate[$monthIndex])->format('Y-m-d')] = $baseRates[$monthIndex];
             }
         }
-		$baseRatesMapping =  $study->isMonthlyStudy() ? $baseRatesPerMonths  : HArr::getFirstOfYear($baseRatesPerMonths);
+		$baseRatesMapping =  $baseRatesPerMonths  ;
         $bankLendingMarginRates=$this->getBankLendingMarginRates();
         $baseRatesMapping = HArr::isAllValuesEqual($baseRatesMapping, $bankLendingMarginRates);
 		

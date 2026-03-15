@@ -329,25 +329,6 @@ export default {
 			title: 'Expense Per Employee'
 		}
 		]
-	},getExpenseTypesForTradings() {
-		return [{
-			id: 'fixed_monthly_repeating_amount',
-			title: 'Fixed Monthly Amount'
-		}, {
-			id: 'percentage_of_sales',
-			title: 'Expense As Percentage'
-		}, {
-			id: 'cost_per_unit',
-			title: 'Cost Per Unit',
-		}, {
-			id: 'one_time_expense',
-			title: 'One Time Expense'
-		},
-		{
-			id: 'expense_per_employee',
-			title: 'Expense Per Employee'
-		}
-		]
 	},
 	getPercentageOf() {
 		return [
@@ -381,18 +362,7 @@ export default {
 			}
 		]
 	}
-	,getTradingsPercentageOf() {
-		return [
-			{
-				id: 'revenue',
-				title: 'Revenue'
-			},
-			{
-				id: 'collection',
-				title: 'Collection'
-			}
-		]
-	}
+	
 	,
 	loanNatures() {
 		return [

@@ -14,7 +14,103 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * * هنا لو معايا عملة ورايح اغيرها وليكن مثلا من البنك وحطها في حسابي الجاري
  *
- * @mixin IdeHelperBuyOrSellCurrency
+ * @property int $id
+ * @property string|null $outbound_odoo_reference
+ * @property string|null $inbound_odoo_reference
+ * @property string|null $synced_with_odoo
+ * @property string|null $odoo_error_message
+ * @property int|null $inbound_journal_entry_id
+ * @property int|null $outbound_journal_entry_id
+ * @property int|null $outbound_account_bank_statement_odoo_id
+ * @property int|null $inbound_account_bank_statement_odoo_id
+ * @property string|null $type
+ * @property string|null $transaction_date هو التاريخ اللي اللي هيتم فيه العميله
+ * @property string|null $currency_to_sell
+ * @property string|null $currency_to_buy
+ * @property numeric|null $currency_to_sell_amount
+ * @property numeric|null $exchange_rate
+ * @property numeric|null $currency_to_buy_amount
+ * @property int|null $from_bank_id
+ * @property int|null $from_account_type_id
+ * @property string|null $from_account_number
+ * @property int $to_bank_id بنوكي
+ * @property int|null $to_account_type_id
+ * @property string|null $to_account_number
+ * @property int|null $to_branch_id
+ * @property int|null $from_branch_id
+ * @property int $company_id
+ * @property string|null $buy_comment_ar
+ * @property string|null $buy_comment_en
+ * @property string|null $sell_comment_ar
+ * @property string|null $sell_comment_en
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashInSafeStatement> $cashInSafeStatements
+ * @property-read int|null $cash_in_safe_statements_count
+ * @property-read bool|null $cash_in_safe_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraftBankStatement> $cleanOverdraftBankStatements
+ * @property-read int|null $clean_overdraft_bank_statements_count
+ * @property-read bool|null $clean_overdraft_bank_statements_exists
+ * @property-read \App\Models\Company $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\AccountType|null $fromAccountType
+ * @property-read \App\Models\FinancialInstitution|null $fromBank
+ * @property-read \App\Models\Branch|null $fromBranch
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraftBankStatement> $fullySecuredOverdraftBankStatements
+ * @property-read int|null $fully_secured_overdraft_bank_statements_count
+ * @property-read bool|null $fully_secured_overdraft_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractBankStatement> $overdraftAgainstAssignmentOfContractBankStatements
+ * @property-read int|null $overdraft_against_assignment_of_contract_bank_statements_count
+ * @property-read bool|null $overdraft_against_assignment_of_contract_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperBankStatement> $overdraftAgainstCommercialPaperBankStatements
+ * @property-read int|null $overdraft_against_commercial_paper_bank_statements_count
+ * @property-read bool|null $overdraft_against_commercial_paper_bank_statements_exists
+ * @property-read \App\Models\AccountType|null $toAccountType
+ * @property-read \App\Models\FinancialInstitution|null $toBank
+ * @property-read \App\Models\Branch|null $toBranch
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereBuyCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereBuyCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCurrencyToBuy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCurrencyToBuyAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCurrencyToSell($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereCurrencyToSellAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereFromAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereFromAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereFromBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereFromBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereInboundAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereInboundJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereInboundOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereOdooErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereOutboundAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereOutboundJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereOutboundOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereSellCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereSellCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereSyncedWithOdoo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereToAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereToAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereToBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereToBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereTransactionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereUserComment($value)
+ * @mixin \Eloquent
  */
 class BuyOrSellCurrency extends Model
 {

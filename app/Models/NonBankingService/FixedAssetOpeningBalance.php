@@ -9,7 +9,48 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperFixedAssetOpeningBalance
+ * @property int $id
+ * @property int|null $name_id
+ * @property numeric $gross_amount
+ * @property numeric $accumulated_depreciation
+ * @property int $monthly_counts
+ * @property numeric $admin_depreciation_percentage
+ * @property numeric $manufacturing_depreciation_percentage
+ * @property array<array-key, mixed>|null $product_allocations
+ * @property array<array-key, mixed>|null $monthly_product_allocations
+ * @property int $is_as_revenue_percentages
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property numeric $monthly_depreciation
+ * @property array<array-key, mixed>|null $admin_depreciations
+ * @property array<array-key, mixed>|null $statement
+ * @property array<array-key, mixed>|null $manufacturing_depreciations
+ * @property array<array-key, mixed>|null $monthly_accumulated_depreciations
+ * @property-read \App\Models\NonBankingService\FixedAssetName|null $fixedAssetName
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereAccumulatedDepreciation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereAdminDepreciationPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereAdminDepreciations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereGrossAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereIsAsRevenuePercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereManufacturingDepreciationPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereManufacturingDepreciations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereMonthlyAccumulatedDepreciations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereMonthlyCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereMonthlyDepreciation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereMonthlyProductAllocations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereNameId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereProductAllocations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class FixedAssetOpeningBalance extends Model
 {

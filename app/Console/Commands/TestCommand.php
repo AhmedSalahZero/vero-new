@@ -36,17 +36,9 @@ use Str;
 class TestCommand extends Command
 {
 
-	/**
-	 * The name and signature of the console command.
-	 *
-	 * @var string
-	 */
+
 	protected $signature = 'run:test';
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
+
 	protected $description = 'Test Code Command';
 
 	/**

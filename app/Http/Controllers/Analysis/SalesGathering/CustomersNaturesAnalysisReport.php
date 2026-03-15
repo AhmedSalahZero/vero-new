@@ -141,9 +141,15 @@ class CustomersNaturesAnalysisReport
 			$type = 'country';
 			$view_name = 'Countries Versus Customers Natures Analysis';
 		}
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
 
-
-		return view('client_view.reports.sales_gathering_analysis.customer_nature.sales_form', compact('company', 'view_name', 'type'));
+		return view('client_view.reports.sales_gathering_analysis.customer_nature.sales_form', [
+			'company' => $company,
+			'view_name' => $view_name,
+			'type' => $type,
+		]);
 	}
 
 

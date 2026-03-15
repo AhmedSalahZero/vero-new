@@ -9,7 +9,39 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperOpeningBalance
+ * @property int $id
+ * @property string|null $date
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashInSafeStatement> $cashInSafeStatements
+ * @property-read int|null $cash_in_safe_statements_count
+ * @property-read bool|null $cash_in_safe_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $chequeInSafe
+ * @property-read int|null $cheque_in_safe_count
+ * @property-read bool|null $cheque_in_safe_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $chequeUnderCollections
+ * @property-read int|null $cheque_under_collections_count
+ * @property-read bool|null $cheque_under_collections_exists
+ * @property-read \App\Models\Company $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyPayment> $moneyPayments
+ * @property-read int|null $money_payments_count
+ * @property-read bool|null $money_payments_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $moneyReceived
+ * @property-read int|null $money_received_count
+ * @property-read bool|null $money_received_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyPayment> $payableCheques
+ * @property-read int|null $payable_cheques_count
+ * @property-read bool|null $payable_cheques_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OpeningBalance extends Model
 {

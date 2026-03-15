@@ -6,7 +6,31 @@ use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperLgHundredPercentageCashCoverOpeningBalance
+ * @property int $id
+ * @property string $currency
+ * @property string $lg_type
+ * @property int $financial_institution_id
+ * @property int $lg_opening_balance_id
+ * @property string $lg_expiry_date
+ * @property string $current_account_number
+ * @property numeric $amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereCurrentAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereLgExpiryDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereLgOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereLgType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgHundredPercentageCashCoverOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LgHundredPercentageCashCoverOpeningBalance extends Model
 {

@@ -36,7 +36,6 @@ class HArr
         if (!$itemsCount) {
             return [];
         }
-    
         if (!isset($items[0])) {
             throw new Exception('Custom Exception .. First Parameter Must Be Indexes Array That Contains Arrays like [ [] , [] , [] ]');
         }
@@ -451,31 +450,31 @@ class HArr
         }
         return $result;
     }
-    public static function getFirstOfYear(array $items):array
-    {
-        $result = [];
-        $years = [];
-        foreach ($items as $date => $value) {
-            $year = explode('-', $date)[0];
-            if (!isset($years[$year])) {
-                $years[$year] = $year ;
-                $result[$date] = $value ;
-            }
-        }
-        return $result;
-    }
-    public static function getFirstOfMonth(array $items):array
-    {
-        $result = [];
-        $previousValue = null ;
-        foreach ($items as $date => $value) {
-            if ($previousValue != $value) {
-                $result[$date] = $value ;
-            }
-            $previousValue = $value;
-        }
-        return $result;
-    }
+    // public static function getFirstOfYear(array $items):array
+    // {
+    //     $result = [];
+    //     $years = [];
+    //     foreach ($items as $date => $value) {
+    //         $year = explode('-', $date)[0];
+    //         if (!isset($years[$year])) {
+    //             $years[$year] = $year ;
+    //             $result[$date] = $value ;
+    //         }
+    //     }
+    //     return $result;
+    // }
+    // public static function getFirstOfMonth(array $items):array
+    // {
+    //     $result = [];
+    //     $previousValue = null ;
+    //     foreach ($items as $date => $value) {
+    //         if ($previousValue != $value) {
+    //             $result[$date] = $value ;
+    //         }
+    //         $previousValue = $value;
+    //     }
+    //     return $result;
+    // }
     public static function getPreviousKey(array $array, $currentKey)
     {
         $keys = array_keys($array); // Get all keys
@@ -576,6 +575,7 @@ class HArr
 
         $firstIsEqual = true ;
         $previousVal = null ;
+		$val1 = 0;
         foreach ($items as $val1) {
             if (!is_null($previousVal)) {
                 if ($val1 != $previousVal) {

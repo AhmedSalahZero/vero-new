@@ -278,15 +278,6 @@ class ExpensesController extends Controller
        
     }
 
-    private function formatDues(array $duesAndDays)
-    {
-        $result = [];
-        foreach ($duesAndDays as $day => $due) {
-            $result['due_in_days'][]=$day;
-            $result['rate'][]=$due;
-        }
-        return $result;
-    }
     public function calculateStatement(array $expenses, array $vats, array $netPaymentsAfterWithhold, array $withholdPayments, array $dateIndexWithDate, Study $study, float $beginningBalance = 0)
     {
         $expensesForIntervals = [

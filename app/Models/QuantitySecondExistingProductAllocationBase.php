@@ -5,15 +5,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperQuantitySecondExistingProductAllocationBase
+ * @property int $id
+ * @property int|null $company_id
+ * @property string $allocation_base
+ * @property array<array-key, mixed>|null $existing_products_target
+ * @property numeric|null $total_existing_target
+ * @property int $use_modified_targets
+ * @property array<array-key, mixed> $allocation_base_percentages
+ * @property string|null $updated_by
+ * @property string|null $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereAllocationBase($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereAllocationBasePercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereExistingProductsTarget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereTotalExistingTarget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySecondExistingProductAllocationBase whereUseModifiedTargets($value)
+ * @mixin \Eloquent
  */
 class QuantitySecondExistingProductAllocationBase extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+   
     protected $table = 'quantity_second_existing_products_allocation_base';
     
     protected $guarded = [];

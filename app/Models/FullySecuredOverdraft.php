@@ -22,7 +22,75 @@ use Illuminate\Support\Str;
  * * وعموما في حالة انك مدان للبنك وليكن مثلا لو انت سالف من البنك عشر الالف وسحبت تسعه ونزل عليك فايدة خمس مئة جنية
  * * وقتها ال خمس مئة جنية دول بينسحبوا من حسابك علطول وبالتالي انت ما عتش فاضلك غير خمس مئة مثلا
  *
- * @mixin IdeHelperFullySecuredOverdraft
+ * @property int $id
+ * @property int|null $financial_institution_id
+ * @property int|null $cd_or_td_account_type_id هو هو حساب سي دي ولا تي دي
+ * @property int $cd_or_td_account_id الاي دي بتاع الحساب اللي اختارة وليكن 5
+ * @property numeric|null $cd_or_td_lending_percentage
+ * @property int $company_id
+ * @property string|null $contract_start_date
+ * @property string|null $contract_end_date
+ * @property string|null $account_number
+ * @property string|null $currency
+ * @property string|null $limit
+ * @property string|null $outstanding_balance
+ * @property string|null $balance_date
+ * @property float|null $highest_debt_balance_rate
+ * @property float|null $admin_fees_rate
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $to_be_setteled_max_within_days
+ * @property string|null $start_settlement_from_bank_statement_date
+ * @property string|null $oldest_date
+ * @property int|null $origin_update_row_is_debit دلوقت احنا لما بنحدث وليكن ماني ريسيفد .. عايز نعرف ان الرو الاصلي اللي عدلناه كان ماني ريسيفد
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraftBankStatement> $bankStatements
+ * @property-read int|null $bank_statements_count
+ * @property-read bool|null $bank_statements_exists
+ * @property-read \App\Models\AccountType|null $cdOrTdAccountType
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraftBankStatement> $fullySecuredOverdraftBankStatements
+ * @property-read int|null $fully_secured_overdraft_bank_statements_count
+ * @property-read bool|null $fully_secured_overdraft_bank_statements_exists
+ * @property-read \App\Models\InternalMoneyTransfer|null $internalMoneyTransfer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LendingInformation> $lendingInformation
+ * @property-read int|null $lending_information_count
+ * @property-read bool|null $lending_information_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\OutstandingBreakdown> $outstandingBreakdowns
+ * @property-read int|null $outstanding_breakdowns_count
+ * @property-read bool|null $outstanding_breakdowns_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraftRate> $rates
+ * @property-read int|null $rates_count
+ * @property-read bool|null $rates_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereAdminFeesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereBalanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCdOrTdAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCdOrTdAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCdOrTdLendingPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereContractEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereContractStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereHighestDebtBalanceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereOldestDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereOriginUpdateRowIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereStartSettlementFromBankStatementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereToBeSetteledMaxWithinDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FullySecuredOverdraft whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class FullySecuredOverdraft extends Model implements IHaveStatement
 {

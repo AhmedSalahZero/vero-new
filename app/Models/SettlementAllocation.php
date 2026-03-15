@@ -8,7 +8,32 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 /**
- * @mixin IdeHelperSettlementAllocation
+ * @property int $id
+ * @property int|null $invoice_id
+ * @property int|null $money_payment_id
+ * @property int|null $letter_of_credit_issuance_id
+ * @property int|null $contract_id
+ * @property int|null $partner_id
+ * @property numeric $allocation_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \App\Models\LetterOfCreditIssuance|null $letterOfCreditIssuance
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\SupplierInvoice|null $supplierInvoice
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereAllocationAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereLetterOfCreditIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SettlementAllocation whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class SettlementAllocation extends Model
 {

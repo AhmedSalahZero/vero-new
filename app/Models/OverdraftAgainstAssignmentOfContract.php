@@ -15,7 +15,72 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * @mixin IdeHelperOverdraftAgainstAssignmentOfContract
+ * @property int $id
+ * @property int|null $financial_institution_id
+ * @property int $company_id
+ * @property string|null $contract_start_date
+ * @property string|null $contract_end_date
+ * @property string|null $account_number
+ * @property string|null $currency
+ * @property string|null $limit
+ * @property string|null $outstanding_balance
+ * @property string|null $balance_date
+ * @property float|null $highest_debt_balance_rate
+ * @property float|null $admin_fees_rate
+ * @property numeric $max_lending_limit_per_contract
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $to_be_setteled_max_within_days
+ * @property string|null $start_settlement_from_bank_statement_date
+ * @property string|null $oldest_date
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractBankStatement> $bankStatements
+ * @property-read int|null $bank_statements_count
+ * @property-read bool|null $bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contract> $contracts
+ * @property-read int|null $contracts_count
+ * @property-read bool|null $contracts_exists
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LendingInformationAgainstAssignmentOfContract> $lendingInformation
+ * @property-read int|null $lending_information_count
+ * @property-read bool|null $lending_information_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\OutstandingBreakdown> $outstandingBreakdowns
+ * @property-read int|null $outstanding_breakdowns_count
+ * @property-read bool|null $outstanding_breakdowns_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractLimit> $overdraftAgainstAssignmentOfContractBankLimits
+ * @property-read int|null $overdraft_against_assignment_of_contract_bank_limits_count
+ * @property-read bool|null $overdraft_against_assignment_of_contract_bank_limits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractBankStatement> $overdraftAgainstAssignmentOfContractBankStatements
+ * @property-read int|null $overdraft_against_assignment_of_contract_bank_statements_count
+ * @property-read bool|null $overdraft_against_assignment_of_contract_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractRate> $rates
+ * @property-read int|null $rates_count
+ * @property-read bool|null $rates_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereAdminFeesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereBalanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereContractEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereContractStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereHighestDebtBalanceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereMaxLendingLimitPerContract($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereOldestDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereStartSettlementFromBankStatementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereToBeSetteledMaxWithinDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContract whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class OverdraftAgainstAssignmentOfContract extends Model implements IHaveStatement
 {

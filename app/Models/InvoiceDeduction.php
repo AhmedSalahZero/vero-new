@@ -6,7 +6,32 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperInvoiceDeduction
+ * @property int $id
+ * @property int $invoice_id
+ * @property string $invoice_type
+ * @property int $deduction_id
+ * @property numeric $amount deduction amount
+ * @property string $date
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\CustomerInvoice|null $customerInvoice
+ * @property-read \App\Models\Deduction|null $deduction
+ * @property-read \App\Models\SupplierInvoice|null $supplierInvoice
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereDeductionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereInvoiceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InvoiceDeduction whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class InvoiceDeduction extends Model
 {

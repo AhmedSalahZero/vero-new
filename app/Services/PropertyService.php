@@ -5,8 +5,7 @@ namespace App\Services;
 use App\Http\Requests\StorePropertyRequest;
 use App\Models\Company;
 use App\Models\PropertyManagement\Property;
-use App\Models\PropertyManagement\PropertyMarketValue;
-use App\Models\PropertyManagement\PropertyTax;
+
 use App\Repositories\PropertyRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,10 +18,7 @@ class PropertyService
 	private const TYPE_COMPLEX = 'complex';
 	private const TYPE_BUILDING = 'building';
 	
-	// Property type groups
-	private const TYPES_UNIT_LAND = [self::TYPE_UNIT, self::TYPE_LAND];
-	private const TYPES_COMPLEX_BUILDING = [self::TYPE_COMPLEX, self::TYPE_BUILDING];
-	
+
 	// Fields to exclude from storeBasicForm
 	private const EXCLUDED_FIELDS = ['_token', 'save', '_method'];
 	
@@ -99,13 +95,7 @@ class PropertyService
         });
     }
 
-  
-    /**
-     * Get formatted property for Vue component
-     * 
-     * @param Property|null $property
-     * @return array
-     */
+ 
     public function getModelDataFormatted(Company $company, ?Property $property): array
     {
 		

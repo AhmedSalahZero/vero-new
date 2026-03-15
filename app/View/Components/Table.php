@@ -32,10 +32,10 @@ class Table extends Component
         $this->href                 = $href;
         $this->icon                 = $icon;
         $this->firstButtonName      = $firstButtonName;
-        $this->class                = $class;
+        $this->class               = $class;
         $this->importHref           = $importHref;
         $this->exportHref           = $exportHref;
-        $this->tableClass           = $tableClass;
+        $this->tableClass          = $tableClass;
         $this->exportTableHref      = $exportTableHref;
         $this->truncateHref             = $truncateHref;
         $this->lastUploadFailedHref             = $lastUploadFailedHref;

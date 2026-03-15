@@ -36,6 +36,7 @@ trait HasDueInstallment
 			$intervalNumber = $intervals[$installmentPaymentInterval];
 			for($i = 0; $i < $installmentCount; $i++){
 		        $currentDateIndex =  $i * $intervalNumber;
+				/** @phpstan-ignore-next-line */
 				$dateAsString = is_numeric($startDate) ? $startDate+$currentDateIndex  : Carbon::make($startDate)->addMonths($currentDateIndex)->format('Y-m-d') ;
 				$installmentAmountsFormatted[$dateAsString] = $amount;
 				if(!isset($allDates[$dateAsString])){
@@ -55,6 +56,7 @@ trait HasDueInstallment
 				$intervalNumber = $intervals['annually'];
 				for($i = 0; $i < $installmentCount; $i++){
 					$currentDateIndex = $i * $intervalNumber;
+					/** @phpstan-ignore-next-line */
 					$dateAsString = is_numeric($startDate) ? $startDate+$currentDateIndex  : Carbon::make($startDate)->addMonths($currentDateIndex)->format('Y-m-d') ;
 					$annualAmountsFormatted[$dateAsString] = $amount;
 					if(!isset($allDates[$dateAsString])){
@@ -78,6 +80,7 @@ trait HasDueInstallment
 				$intervalNumber = $intervals[$installmentPaymentInterval];
 				for($i = 0; $i < $installmentCount; $i++){
 					$currentDateIndex = $i * $intervalNumber;
+					/** @phpstan-ignore-next-line */
 					$dateAsString = is_numeric($startDate) ? $startDate+$currentDateIndex  : Carbon::make($startDate)->addMonths($currentDateIndex)->format('Y-m-d') ;
 					$deliveryPaymentsAmountsFormatted[$dateAsString] = $amount;
 					if(!isset($allDates[$dateAsString])){
@@ -96,8 +99,9 @@ trait HasDueInstallment
 				$intervalNumber = $intervals[$installmentPaymentInterval];
 				for($i = 0; $i < $installmentCount; $i++){
 					$currentDateIndex = $i * $intervalNumber;
+					/** @phpstan-ignore-next-line */
 					$dateAsString = is_numeric($startDate) ? $startDate+$currentDateIndex  : Carbon::make($startDate)->addMonths($currentDateIndex)->format('Y-m-d') ;
-					$maintenancePaymentsAmountsFormatted[$index][$dateAsString] = $amount;
+					$maintenancePaymentsAmountsFormatted[$dateAsString] = $amount;
 					if(!isset($allDates[$dateAsString])){
 						$allDates[$dateAsString] = $dateAsString;
 					}

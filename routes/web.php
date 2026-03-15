@@ -136,13 +136,13 @@ Route::middleware([])->group(function () {
 
                 Route::post('get-type-based-on-dates', [FilterMainTypeBasedOnDatesController::class, '__invoke'])->name('get.type.based.on.dates');
 
-                Route::get('income-statement', [IncomeStatementController::class, 'view'])->name('admin.view.income.statement');
-                Route::get('income-statement/create', [IncomeStatementController::class, 'create'])->name('admin.create.income.statement');
-                Route::get('income-statement-report/{incomeStatement}/edit', [IncomeStatementController::class, 'editItems']);
-                Route::post('income-statement/{incomeStatement}/update', [IncomeStatementController::class, 'update'])->name('admin.update.income.statement');
+                // Route::get('income-statement', [IncomeStatementController::class, 'view'])->name('admin.view.income.statement');
+                // Route::get('income-statement/create', [IncomeStatementController::class, 'create'])->name('admin.create.income.statement');
+                // Route::get('income-statement-report/{incomeStatement}/edit', [IncomeStatementController::class, 'editItems']);
+                // Route::post('income-statement/{incomeStatement}/update', [IncomeStatementController::class, 'update'])->name('admin.update.income.statement');
                 Route::post('income-statement/store', [IncomeStatementController::class, 'store'])->name('admin.store.income.statement');
-                Route::get('export-income-statement', 'IncomeStatementController@export')->name('admin.export.income.statement');
-                Route::get('get-income-statement', 'IncomeStatementController@paginate')->name('admin.get.income.statement');
+                // Route::get('export-income-statement', 'IncomeStatementController@export')->name('admin.export.income.statement');
+                // Route::get('get-income-statement', 'IncomeStatementController@paginate')->name('admin.get.income.statement');
                 
                 Route::get('income-statement/{incomeStatement}/actual-report', [IncomeStatementController::class, 'createReport'])->name('admin.create.income.statement.actual.report');
                 Route::get('income-statement/{incomeStatement}/forecast-report', [IncomeStatementController::class, 'createReport'])->name('admin.create.income.statement.forecast.report');
@@ -158,38 +158,38 @@ Route::middleware([])->group(function () {
                 Route::get('/expense-dashboard', 'Analysis\SalesGathering\ExpenseAgainstAnalysisReport@viewDashboard')->name('view.expense.analysis.dashboard');
                 // balance sheet
 
-                Route::get('balance-sheet', [BalanceSheetController::class, 'view'])->name('admin.view.balance.sheet');
-                Route::get('balance-sheet/create', [BalanceSheetController::class, 'create'])->name('admin.create.balance.sheet');
-                Route::get('balance-sheet-report/{balanceSheet}/edit', [BalanceSheetController::class, 'editItems']);
-                Route::post('balance-sheet/{balanceSheet}/update', [BalanceSheetController::class, 'update'])->name('admin.update.balance.sheet');
-                Route::post('balance-sheet/store', [BalanceSheetController::class, 'store'])->name('admin.store.balance.sheet');
-                Route::get('export-balance-sheet', 'BalanceSheetController@export')->name('admin.export.balance.sheet');
-                Route::get('get-balance-sheet', 'BalanceSheetController@paginate')->name('admin.get.balance.sheet');
-                Route::get('balance-sheet/{balanceSheet}/actual-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.actual.report');
+                // Route::get('balance-sheet', [BalanceSheetController::class, 'view'])->name('admin.view.balance.sheet');
+                // Route::get('balance-sheet/create', [BalanceSheetController::class, 'create'])->name('admin.create.balance.sheet');
+                // Route::get('balance-sheet-report/{balanceSheet}/edit', [BalanceSheetController::class, 'editItems']);
+                // Route::post('balance-sheet/{balanceSheet}/update', [BalanceSheetController::class, 'update'])->name('admin.update.balance.sheet');
+                // Route::post('balance-sheet/store', [BalanceSheetController::class, 'store'])->name('admin.store.balance.sheet');
+                // Route::get('export-balance-sheet', 'BalanceSheetController@export')->name('admin.export.balance.sheet');
+                // Route::get('get-balance-sheet', 'BalanceSheetController@paginate')->name('admin.get.balance.sheet');
+                // Route::get('balance-sheet/{balanceSheet}/actual-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.actual.report');
 
-                // actual.report the first segment represent type so do not change it
-                Route::get('balance-sheet/{balanceSheet}/actual-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.actual.report');
+                // // actual.report the first segment represent type so do not change it
+                // Route::get('balance-sheet/{balanceSheet}/actual-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.actual.report');
 
-                // forecast.report the first segment represent type so do not change it
-                Route::get('balance-sheet/{balanceSheet}/forecast-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.forecast.report');
-                // adjusted.report the first segment represent type so do not change it
+                // // forecast.report the first segment represent type so do not change it
+                // Route::get('balance-sheet/{balanceSheet}/forecast-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.forecast.report');
+                // // adjusted.report the first segment represent type so do not change it
 
-                Route::get('balance-sheet/{balanceSheet}/adjusted-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.adjusted.report');
+                // Route::get('balance-sheet/{balanceSheet}/adjusted-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.adjusted.report');
 
-                Route::get('balance-sheet/{balanceSheet}/modified-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.modified.report');
+                // Route::get('balance-sheet/{balanceSheet}/modified-report', [BalanceSheetController::class, 'createReport'])->name('admin.create.balance.sheet.modified.report');
 
-                Route::post('balance-sheet-report/update', [BalanceSheetController::class, 'updateReport'])->name('admin.update.balance.sheet.report');
-                Route::post('balance-sheet-report/delete', [BalanceSheetController::class, 'deleteReport'])->name('admin.destroy.balance.sheet.report');
-                Route::post('balance-sheet/storeReport', [BalanceSheetController::class, 'storeReport'])->name('admin.store.balance.sheet.report');
-                Route::post('export-balance-sheet-report', 'BalanceSheetController@exportReport')->name('admin.export.balance.sheet.report');
-                Route::post('get-balance-sheet-report/{balanceSheet}', 'BalanceSheetController@paginateReport')->name('admin.get.balance.sheet.report');
+                // Route::post('balance-sheet-report/update', [BalanceSheetController::class, 'updateReport'])->name('admin.update.balance.sheet.report');
+                // Route::post('balance-sheet-report/delete', [BalanceSheetController::class, 'deleteReport'])->name('admin.destroy.balance.sheet.report');
+                // Route::post('balance-sheet/storeReport', [BalanceSheetController::class, 'storeReport'])->name('admin.store.balance.sheet.report');
+                // Route::post('export-balance-sheet-report', 'BalanceSheetController@exportReport')->name('admin.export.balance.sheet.report');
+                // Route::post('get-balance-sheet-report/{balanceSheet}', 'BalanceSheetController@paginateReport')->name('admin.get.balance.sheet.report');
 
                 // cash flow statement
 
-                Route::get('cash-flow-statement', [CashFlowStatementController::class, 'view'])->name('admin.view.cash.flow.statement');
-                Route::get('cash-flow-statement/create', [CashFlowStatementController::class, 'create'])->name('admin.create.cash.flow.statement');
-                Route::get('cash-flow-statement-report/{cashFlowStatement}/edit', [CashFlowStatementController::class, 'editItems']);
-                Route::post('cash-flow-statement/{cashFlowStatement}/update', [CashFlowStatementController::class, 'update'])->name('admin.update.cash.flow.statement');
+                // Route::get('cash-flow-statement', [CashFlowStatementController::class, 'view'])->name('admin.view.cash.flow.statement');
+                // Route::get('cash-flow-statement/create', [CashFlowStatementController::class, 'create'])->name('admin.create.cash.flow.statement');
+                // Route::get('cash-flow-statement-report/{cashFlowStatement}/edit', [CashFlowStatementController::class, 'editItems']);
+                // Route::post('cash-flow-statement/{cashFlowStatement}/update', [CashFlowStatementController::class, 'update'])->name('admin.update.cash.flow.statement');
                 Route::post('cash-flow-statement/store', [CashFlowStatementController::class, 'store'])->name('admin.store.cash.flow.statement');
                 Route::get('export-cash-flow-statement', 'CashFlowStatementController@export')->name('admin.export.cash.flow.statement');
                 Route::get('get-cash-flow-statement', 'CashFlowStatementController@paginate')->name('admin.get.cash.flow.statement');
@@ -198,7 +198,7 @@ Route::middleware([])->group(function () {
                 Route::get('cash-and-banks/{cashFlowStatement}/{reportType}', 'CashFlowStatementController@createReport')->name('admin.show-cash-and-banks');
                 Route::post('store-cash-and-banks', 'CashFlowStatementController@storeCashAndBanks')->name('admin.store-cash-and-banks');
                 // actual.report the first segment represent type so do not change it
-                Route::get('cash-flow-statement/{cashFlowStatement}/actual-report', [CashFlowStatementController::class, 'createReport'])->name('admin.create.cash.flow.statement.actual.report');
+                // Route::get('cash-flow-statement/{cashFlowStatement}/actual-report', [CashFlowStatementController::class, 'createReport'])->name('admin.create.cash.flow.statement.actual.report');
 
                 // forecast.report the first segment represent type so do not change it
                 Route::get('cash-flow-statement/{cashFlowStatement}/forecast-report', [CashFlowStatementController::class, 'createReport'])->name('admin.create.cash.flow.statement.forecast.report');
@@ -208,8 +208,8 @@ Route::middleware([])->group(function () {
 
                 Route::get('cash-flow-statement/{cashFlowStatement}/modified-report', [CashFlowStatementController::class, 'createReport'])->name('admin.create.cash.flow.statement.modified.report');
 
-                Route::post('cash-flow-statement-report/update', [CashFlowStatementController::class, 'updateReport'])->name('admin.update.cash.flow.statement.report');
-                Route::post('cash-flow-statement-report/delete', [CashFlowStatementController::class, 'deleteReport'])->name('admin.destroy.cash.flow.statement.report');
+                // Route::post('cash-flow-statement-report/update', [CashFlowStatementController::class, 'updateReport'])->name('admin.update.cash.flow.statement.report');
+                // Route::post('cash-flow-statement-report/delete', [CashFlowStatementController::class, 'deleteReport'])->name('admin.destroy.cash.flow.statement.report');
                 Route::post('cash-flow-statement/storeReport', [CashFlowStatementController::class, 'storeReport'])->name('admin.store.cash.flow.statement.report');
                 Route::post('export-cash-flow-statement-report', 'CashFlowStatementController@exportReport')->name('admin.export.cash.flow.statement.report');
                 Route::post('get-cash-flow-statement-report/{cashFlowStatement}', 'CashFlowStatementController@paginateReport')->name('admin.get.cash.flow.statement.report');
@@ -229,12 +229,12 @@ Route::middleware([])->group(function () {
                 Route::get('export-financial-statement', 'FinancialStatementController@export')->name('admin.export.financial.statement');
 
                 Route::get('get-financial-statement', 'FinancialStatementController@paginate')->name('admin.get.financial.statement');
-                Route::get('financial-statement/{financialStatement}/report', [FinancialStatementController::class, 'createReport'])->name('admin.create.financial.statement.report');
-                Route::post('financial-statement-report/update', [FinancialStatementController::class, 'updateReport'])->name('admin.update.financial.statement.report');
-                Route::post('financial-statement-report/delete', [FinancialStatementController::class, 'deleteReport'])->name('admin.destroy.financial.statement.report');
-                Route::post('financial-statement/storeReport', [FinancialStatementController::class, 'storeReport'])->name('admin.store.financial.statement.report');
-                Route::post('export-financial-statement-report', 'FinancialStatementController@exportReport')->name('admin.export.financial.statement.report');
-                Route::post('get-financial-statement-report/{financialStatement}', 'FinancialStatementController@paginateReport')->name('admin.get.financial.statement.report');
+                // Route::get('financial-statement/{financialStatement}/report', [FinancialStatementController::class, 'createReport'])->name('admin.create.financial.statement.report');
+                // Route::post('financial-statement-report/update', [FinancialStatementController::class, 'updateReport'])->name('admin.update.financial.statement.report');
+                // Route::post('financial-statement-report/delete', [FinancialStatementController::class, 'deleteReport'])->name('admin.destroy.financial.statement.report');
+                // Route::post('financial-statement/storeReport', [FinancialStatementController::class, 'storeReport'])->name('admin.store.financial.statement.report');
+                // Route::post('export-financial-statement-report', 'FinancialStatementController@exportReport')->name('admin.export.financial.statement.report');
+                // Route::post('get-financial-statement-report/{financialStatement}', 'FinancialStatementController@paginateReport')->name('admin.get.financial.statement.report');
 
                 Route::get('expense-form/create', [ExpenseController::class, 'create'])->name('admin.create.expense');
                 Route::post('expense-form/store', [ExpenseController::class, 'store'])->name('admin.store.expense');
@@ -325,10 +325,7 @@ Route::middleware([])->group(function () {
                  */
                 include('propertyManagement.php');
 				
-				/**
-                 * * Trading
-                 */
-                include('trading.php');
+				
                 
                 /**
                  * * Budget
@@ -373,7 +370,7 @@ Route::middleware([])->group(function () {
                     Route::put('financial-institutions/update/{financialInstitution}', 'FinancialInstitutionController@update')->name('update.financial.institutions');
                     Route::delete('financial-institutions/delete/{financialInstitution}', 'FinancialInstitutionController@destroy')->name('delete.financial.institutions');
 
-                    Route::get('get-financial-institution-accounts-number-based-on-currency/{financialInstitution}/{currency}', 'FinancialInstitutionController@getAccountNumbersBasedOnCurrency');
+                    // Route::get('get-financial-institution-accounts-number-based-on-currency/{financialInstitution}/{currency}', 'FinancialInstitutionController@getAccountNumbersBasedOnCurrency');
 
                     Route::get('financial-institutions', 'FinancialInstitutionController@index')->name('view.financial.institutions');
                     Route::get('financial-institutions/create/{model?}', 'FinancialInstitutionController@create')->name('create.financial.institutions');
@@ -978,7 +975,7 @@ Route::middleware([])->group(function () {
 
 
 
-                Route::post('edit-table-cell', [EditTableCellsController::class, '__invoke'])->name('admin.edit.table.cell');
+                // Route::post('edit-table-cell', [EditTableCellsController::class, '__invoke'])->name('admin.edit.table.cell');
                 Route::delete('delete-revenue-business-line/{revenueBusinessLine}', [RevenueBusinessLineController::class, 'deleteRevenueBusinessLine'])->name('admin.delete.revenue.business.line');
                 Route::delete('delete-service-category/{serviceCategory}', [RevenueBusinessLineController::class, 'deleteServiceCategory'])->name('admin.delete.service.category');
                 Route::delete('delete-service-item/{serviceItem}', [RevenueBusinessLineController::class, 'deleteServiceItem'])->name('admin.delete.service.item');

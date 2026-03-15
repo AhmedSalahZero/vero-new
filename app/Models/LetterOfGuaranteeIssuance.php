@@ -18,7 +18,149 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLetterOfGuaranteeIssuance
+ * @property int $id
+ * @property int|null $cancel_journal_entry_id
+ * @property string|null $cash_cover_fees_reference
+ * @property string|null $odoo_issuance_fees_reference
+ * @property string|null $odoo_commission_fees_reference
+ * @property string|null $issuance_fees_account_bank_statement_odoo_id
+ * @property int|null $issuance_fees_journal_entry_id
+ * @property string|null $commission_fees_account_bank_statement_odoo_id
+ * @property int|null $commission_fees_journal_entry_id
+ * @property string|null $odoo_error_message
+ * @property int $synced_with_odoo
+ * @property int|null $journal_entry_id
+ * @property int|null $account_bank_statement_odoo_id
+ * @property int|null $lg_facility_id
+ * @property string $category_name
+ * @property string|null $source هو المكان او الطريقه يعني اللي انت انشاتة بيها وانت عندك ثلاث او اربع زراير دول عباره عن المصدر اللي هو قيمة الكولوم دا
+ * @property string $status
+ * @property string|null $transaction_name
+ * @property string|null $transaction_reference
+ * @property string|null $transaction_date
+ * @property int|null $financial_institution_id
+ * @property string|null $cd_or_td_account_type_id
+ * @property string|null $cd_or_td_id
+ * @property numeric $total_lg_outstanding_balance
+ * @property string|null $lg_type
+ * @property numeric $lg_type_outstanding_balance
+ * @property string|null $lg_code
+ * @property int|null $partner_id
+ * @property int|null $contract_id
+ * @property int|null $purchase_order_id
+ * @property string|null $purchase_order_date
+ * @property string|null $issuance_date
+ * @property int|null $lg_duration_months
+ * @property string|null $renewal_date
+ * @property numeric $lg_amount
+ * @property string|null $lg_currency
+ * @property numeric $issuance_fees
+ * @property numeric $min_lg_commission_fees
+ * @property numeric $cash_cover_rate
+ * @property numeric $cash_cover_amount
+ * @property string|null $cash_cover_deducted_from_account_type
+ * @property string|null $lg_fees_and_commission_account_type
+ * @property string|null $cash_cover_deducted_from_account_id
+ * @property string|null $lg_fees_and_commission_account_id
+ * @property numeric $lg_commission_rate
+ * @property numeric $lg_commission_amount
+ * @property string|null $lg_commission_interval
+ * @property string|null $cash_cover_account_number
+ * @property int $company_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeIssuanceAdvancedPaymentHistory> $advancedPaymentHistories
+ * @property-read int|null $advanced_payment_histories_count
+ * @property-read bool|null $advanced_payment_histories_exists
+ * @property-read \App\Models\Partner|null $beneficiary
+ * @property-read \App\Models\AccountType|null $cashCoverDeductedFromAccountType
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountCreditBankStatements
+ * @property-read int|null $current_account_credit_bank_statements_count
+ * @property-read bool|null $current_account_credit_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountDebitBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountDebitBankStatements
+ * @property-read int|null $current_account_debit_bank_statements_count
+ * @property-read bool|null $current_account_debit_bank_statements_exists
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitutionBank
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeCashCoverStatement> $letterOfGuaranteeCashCoverStatements
+ * @property-read int|null $letter_of_guarantee_cash_cover_statements_count
+ * @property-read bool|null $letter_of_guarantee_cash_cover_statements_exists
+ * @property-read \App\Models\LetterOfGuaranteeFacility|null $letterOfGuaranteeFacility
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeStatement> $letterOfGuaranteeStatements
+ * @property-read int|null $letter_of_guarantee_statements_count
+ * @property-read bool|null $letter_of_guarantee_statements_exists
+ * @property-read \App\Models\FinancialInstitutionAccount|null $lgFeesAndCommissionAccount
+ * @property-read \App\Models\SalesOrder|null $purchaseOrder
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LgRenewalDateHistory> $renewalDateHistories
+ * @property-read int|null $renewal_date_histories_count
+ * @property-read bool|null $renewal_date_histories_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCancelJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCashCoverAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCashCoverAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCashCoverDeductedFromAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCashCoverDeductedFromAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCashCoverFeesReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCashCoverRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCategoryName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCdOrTdAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCdOrTdId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCommissionFeesAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCommissionFeesJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereIssuanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereIssuanceFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereIssuanceFeesAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereIssuanceFeesJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgCommissionAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgCommissionInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgCommissionRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgDurationMonths($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgFeesAndCommissionAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgFeesAndCommissionAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereLgTypeOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereMinLgCommissionFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereOdooCommissionFeesReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereOdooErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereOdooIssuanceFeesReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance wherePurchaseOrderDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance wherePurchaseOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereRenewalDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereSyncedWithOdoo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereTotalLgOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereTransactionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereTransactionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereTransactionReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeIssuance whereUserComment($value)
+ * @mixin \Eloquent
  */
 class LetterOfGuaranteeIssuance extends Model
 {

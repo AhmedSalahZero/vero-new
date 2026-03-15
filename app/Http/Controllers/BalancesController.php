@@ -19,8 +19,14 @@ class BalancesController
     use GeneralFunctions;
 	protected function sumNetBalancePerCurrency(array $items, string $mainCurrency,string $clientNameColumnName ):array 
 	{
-		$total = [];
 
+		$total = [
+			'currencies' => [],
+			'customers_per_currency' => [],
+			'customers_per_main_currency' => [],
+		];
+
+		
 		$id = 0 ;
 		foreach($items as $item){
 			$currencyName = $item->currency ;
@@ -40,7 +46,7 @@ class BalancesController
 		}
 		$valueAtMainCurrency = $total['currencies'][$mainCurrency] ?? 0;
 		unset($total['currencies'][$mainCurrency]);
-		$totalOfCurrency  = $total['currencies'] ?? [];
+		$totalOfCurrency  = $total['currencies'] ;
 		$total['currencies'] = [$mainCurrency => $valueAtMainCurrency]+$totalOfCurrency ;
 		return $total ;
 	}
@@ -62,12 +68,12 @@ class BalancesController
 		$downPaymentSettlementModelName=$fullClassName::DOWN_PAYMENT_SETTLEMENT_MODEL_NAME;
 		$moneyModelName=$fullClassName::MONEY_MODEL_NAME;
 		$invoiceNetBalanceSqlQuery = 'select partners.id as '. $clientIdColumnName .' , partners.name as '.$clientNameColumnName.' , currency , ifnull(sum(net_balance),0) as net_balance , ifnull(sum(net_balance_in_main_currency),0) as net_balance_in_main_currency from partners   left join  '. $tableName .' on partners.id = '.$tableName.'.'.$clientIdColumnName.' where '.$isCustomerOrSupplierColumnName.'=1 and '.$netBalanceCondition.'   partners.company_id = '. $company->id  .'  group by partners.id, '.$clientIdColumnName.' , currency order by net_balance desc;';
-		$invoicesBalances =DB::select(DB::raw($invoiceNetBalanceSqlQuery)->getValue(DB::connection()->getQueryGrammar()));
+		$invoicesBalances = DB::select($invoiceNetBalanceSqlQuery);
 		$downPaymentSqlQuery =  'select  '.  $clientIdColumnName .' , currency , sum(down_payment_balance) as down_payment_balance from '. $downPaymentTableName .' where   company_id = '. $company->id .' group by '. $clientIdColumnName .' , currency  order by down_payment_balance desc;';
 		$partnerIds = collect($invoicesBalances)->pluck($clientIdColumnName,$clientIdColumnName)->toArray() ;
 		$downPaymentsInMainCurrency = $this->getDownPaymentInMainCurrency($partnerIds,$mainFunctionalCurrency,$clientIdColumnName,$downPaymentSettlementModelName,$moneyModelName,$company);
 
-		$downPayments =DB::select(DB::raw($downPaymentSqlQuery)->getValue(DB::connection()->getQueryGrammar()));
+		$downPayments = DB::select($downPaymentSqlQuery);
 		
 		$invoicesBalancesWithPartnersWithoutInvoices = $this->subtractQuery($invoicesBalances,$downPayments,$clientIdColumnName,$clientNameColumnName);
 		$invoicesBalances = $invoicesBalancesWithPartnersWithoutInvoices['data'] ?? [];
@@ -91,7 +97,7 @@ class BalancesController
 		foreach($downPaymentSettlements as $downPaymentSettlement){
 			$moneyReceived = $downPaymentSettlement->{$moneyModelName} ;
 			/**
-			 * @var MoneyReceived|MoneyPayment $moneyReceived
+			 * @var MoneyReceived|MoneyPayment|null $moneyReceived
 			 */
 			$partnerId = $downPaymentSettlement->{$clientIdColumnName};
 			$downPaymentCurrency = $downPaymentSettlement->currency ;
@@ -190,7 +196,7 @@ class BalancesController
 		
 			
 		
-		return $result;
+		// return $result;
 	}
 	
 	public function showTotalNetBalanceDetailsReport(Request $request,Company $company , string $currency , string $modelType)
@@ -209,7 +215,8 @@ class BalancesController
 		$moneyReceivedOrPaidUrlName = (new $fullClassName)->getMoneyReceivedOrPaidUrlName();
 		$moneyReceivedOrPaidText = (new $fullClassName)->getMoneyReceivedOrPaidText();
 		$clientNameText = (new $fullClassName)->getClientNameText();
-		$invoicesBalances=DB::select(DB::raw('select id,'. $clientNameColumnName .' ,invoice_due_date,invoice_status,invoice_number,DATE_FORMAT(invoice_date,"%d-%m-%Y") as invoice_date, currency , net_balance   from '. $tableName .' where '.$netBalanceCondition.'  currency = "'. $currency .'" and company_id = '. $company->id . ' ' . $additionalWhereClause . ' order by invoice_due_date asc , net_balance desc ;')->getValue(DB::connection()->getQueryGrammar()));
+		$query = 'select id,'. $clientNameColumnName .' ,invoice_due_date,invoice_status,invoice_number,DATE_FORMAT(invoice_date,"%d-%m-%Y") as invoice_date, currency , net_balance   from '. $tableName .' where '.$netBalanceCondition.'  currency = "'. $currency .'" and company_id = '. $company->id . ' ' . $additionalWhereClause . ' order by invoice_due_date asc , net_balance desc ;';
+		$invoicesBalances = DB::select($query);
         return view('admin.reports.total_net_balance_details', compact('company','invoicesBalances','currency','moneyReceivedOrPaidUrlName','moneyReceivedOrPaidText','clientNameColumnName','clientNameText'));
     }
 

@@ -9,7 +9,48 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperLetterOfGuaranteeFacility
+ * @property int $id
+ * @property string|null $name
+ * @property int|null $financial_institution_id
+ * @property int $company_id
+ * @property string|null $contract_start_date
+ * @property string|null $contract_end_date
+ * @property string|null $currency
+ * @property string|null $limit
+ * @property string|null $outstanding_date
+ * @property numeric $outstanding_amount
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeCashCoverStatement> $letterOfGuaranteeCashCoverStatements
+ * @property-read int|null $letter_of_guarantee_cash_cover_statements_count
+ * @property-read bool|null $letter_of_guarantee_cash_cover_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeStatement> $letterOfGuaranteeStatements
+ * @property-read int|null $letter_of_guarantee_statements_count
+ * @property-read bool|null $letter_of_guarantee_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeFacilityTermAndCondition> $termAndConditions
+ * @property-read int|null $term_and_conditions_count
+ * @property-read bool|null $term_and_conditions_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereContractEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereContractStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereOutstandingAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereOutstandingDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeFacility whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class LetterOfGuaranteeFacility extends Model
 {

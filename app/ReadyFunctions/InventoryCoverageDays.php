@@ -200,16 +200,16 @@ class InventoryCoverageDays
 			
 			$purchasesForInterval = [
 				'monthly'=>$purchases,
-				'quarterly'=>sumIntervals($purchases,'quarterly' , $hospitalitySector->financialYearStartMonth()),
-				'semi-annually'=>sumIntervals($purchases,'semi-annually' , $hospitalitySector->financialYearStartMonth()),
-				'annually'=>sumIntervals($purchases,'annually' , $hospitalitySector->financialYearStartMonth()),
+				'quarterly'=>sumIntervals($purchases,'quarterly'),
+				'semi-annually'=>sumIntervals($purchases,'semi-annually'),
+				'annually'=>sumIntervals($purchases,'annually'),
 			];
 			
 			$dispensedDisposableCostForInterval = [
 				'monthly'=>$dispensedDisposableCost,
-				'quarterly'=>sumIntervals($dispensedDisposableCost,'quarterly' , $hospitalitySector->financialYearStartMonth()),
-				'semi-annually'=>sumIntervals($dispensedDisposableCost,'semi-annually' , $hospitalitySector->financialYearStartMonth()),
-				'annually'=>sumIntervals($dispensedDisposableCost,'annually' , $hospitalitySector->financialYearStartMonth()),
+				'quarterly'=>sumIntervals($dispensedDisposableCost,'quarterly'),
+				'semi-annually'=>sumIntervals($dispensedDisposableCost,'semi-annually'),
+				'annually'=>sumIntervals($dispensedDisposableCost,'annually'),
 			];
 			foreach(getIntervalFormatted() as $intervalName=>$intervalNameFormatted){
 				$beginningBalance = $initialBalance ;

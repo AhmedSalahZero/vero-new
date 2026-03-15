@@ -7,7 +7,56 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  LeasingRevenueStreamBreakdown extends Model
+/**
+ * @property int $id
+ * @property int $category_id
+ * @property string $loan_nature
+ * @property string $loan_type
+ * @property int $tenor
+ * @property int $grace_period
+ * @property numeric $margin_rate
+ * @property numeric $sensitivity_margin_rate
+ * @property numeric $sensitivity_1_margin_rate هيتحكم فيه من الداش بورد
+ * @property numeric $sensitivity_2_margin_rate هيتحكم فيه من الداش بورد
+ * @property string $installment_interval
+ * @property numeric $step_up
+ * @property numeric $step_down
+ * @property string|null $step_interval
+ * @property array<array-key, mixed>|null $loan_amounts
+ * @property array<array-key, mixed>|null $monthly_loan_amounts
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\LeasingCategory|null $category
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereGracePeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereInstallmentInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereLoanNature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereLoanType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereMonthlyLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereSensitivity1MarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereSensitivity2MarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereSensitivityMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereStepDown($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereStepInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereStepUp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereTenor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeasingRevenueStreamBreakdown whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class LeasingRevenueStreamBreakdown extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy , IsRevenueStream;
 	protected $connection= 'non_banking_service';

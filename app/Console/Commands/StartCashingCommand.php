@@ -11,18 +11,9 @@ use Illuminate\Console\Command;
 
 class StartCashingCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+ 
     protected $signature = 'caching:run {company_id?*}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Start Caching For Testing';
 
     /**

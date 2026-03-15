@@ -7,7 +7,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperSupplierPayableOpeningBalance
+ * @property int $id
+ * @property numeric $amount
+ * @property array<array-key, mixed>|null $payload
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $statement (DC2Type:json)
+ * @property numeric $odas_outstanding_opening_amount
+ * @property array<array-key, mixed>|null $portfolio_interest_expenses
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereOdasOutstandingOpeningAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance wherePortfolioInterestExpenses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\SupplierPayableOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class SupplierPayableOpeningBalance extends Model
 {

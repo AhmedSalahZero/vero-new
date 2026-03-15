@@ -10,7 +10,53 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLetterOfGuaranteeCashCoverStatement
+ * @property int $id
+ * @property string|null $type
+ * @property string $source هو المكان او الطريقه يعني اللي انت انشاتة بيها وانت عندك ثلاث او اربع زراير دول عباره عن المصدر اللي هو قيمة الكولوم دا
+ * @property int $financial_institution_id
+ * @property int $letter_of_guarantee_issuance_id
+ * @property int|null $lg_facility_id
+ * @property string $lg_type
+ * @property int|null $lg_advanced_payment_history_id
+ * @property string|null $currency
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property int $company_id
+ * @property string|null $date
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\MoneyReceived|null $moneyReceived
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereLetterOfGuaranteeIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereLgAdvancedPaymentHistoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereLgFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereLgType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeCashCoverStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LetterOfGuaranteeCashCoverStatement extends Model
 {

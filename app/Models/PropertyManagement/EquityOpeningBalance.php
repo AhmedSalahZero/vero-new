@@ -9,7 +9,37 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperEquityOpeningBalance
+ * @property int $id
+ * @property array<array-key, mixed>|null $dividend_statement
+ * @property numeric $paid_up_capital_amount
+ * @property array<array-key, mixed>|null $legal_reserve_extended
+ * @property array<array-key, mixed>|null $paid_up_capital_extended
+ * @property numeric $legal_reserve
+ * @property numeric $retained_earnings
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $statement (DC2Type:json)
+ * @property array<array-key, mixed>|null $retained_earning_distribution_amounts
+ * @property array<array-key, mixed>|null $retained_earning_distribution_payments
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereDividendStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereLegalReserve($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereLegalReserveExtended($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance wherePaidUpCapitalAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance wherePaidUpCapitalExtended($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereRetainedEarningDistributionAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereRetainedEarningDistributionPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereRetainedEarnings($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\EquityOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class EquityOpeningBalance extends Model
 {

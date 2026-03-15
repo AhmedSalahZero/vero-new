@@ -17,12 +17,8 @@ use App\Http\Controllers\Analysis\SalesGathering\SalesPersonsAgainstAnalysisRepo
 use App\Http\Controllers\Analysis\SalesGathering\SKUsAgainstAnalysisReport;
 use App\Http\Controllers\Analysis\SalesGathering\ZoneAgainstAnalysisReport;
 use App\Http\Controllers\ExportTable;
-use App\Models\AllocationSetting;
-use App\Models\BalanceSheet;
 use App\Models\Branch;
 use App\Models\CachingCompany;
-use App\Models\CashFlowStatement;
-use App\Models\CashVeroBusinessSector;
 use App\Models\CollectionSetting;
 use App\Models\Company;
 use App\Models\Country;
@@ -65,8 +61,6 @@ use Illuminate\Validation\Rule;
 
 const FINANCIAL_PLANNING_CONNECTION_NAME='financial_planning';
 const PROPERTY_MANAGEMENT_CONNECTION_NAME='property_management';
-const TRADING_CONNECTION_NAME='trading';
-const TRADING='trading';
 const NON_BANKING_SERVICE_CONNECTION_NAME='non_banking_service';
 const Customers_Against_Products_Trend_Analysis = 'Customers Against Products Trend Analysis';
 const Customers_Against_Categories_Trend_Analysis = 'Customers Against Categories Trend Analysis';
@@ -123,7 +117,6 @@ const MAX_YEARS_COUNT = 7 ;
 const quantityIdentifier = ' ( Quantity )';
 
 const PROPERTY_MANAGEMENT_SERVICE_URL_PREFIX = 'property-managements';
-const TRADING_URL_PREFIX = 'trading';
 const NON_BANKING_SERVICE_URL_PREFIX = 'non-banking-financial-services';
 const FINANCIAL_PLANNING_URL_PREFIX = 'financial-planning';
 
@@ -290,19 +283,18 @@ if (!function_exists('lang')) {
     }
 }
 
-if (!function_exists('company')) {
-    function company()
-    {
-        if (Auth::check()) {
-            $company =   Auth::user()->companies()->where('type', 'single')->first();
+// if (!function_exists('company')) {
+//     function company()
+//     {
+//         if (Auth::check()) {
+//             $company =   Auth::user()->companies()->where('type', 'single')->first();
 
-            $company = $company ?? Auth::user()->companies()->where('type', 'group')->first()->subCompanies()->first();
-
-            return  $company;
-        }
-    }
-}
-if (!function_exists('company')) {
+//             $company = $company ?? Auth::user()->companies()->where('type', 'group')->first()->subCompanies()->first();
+//             return  $company;
+//         }
+//     }
+// }
+if (!function_exists('setCompany')) {
     function setCompany($company_id)
     {
         if (Auth::check()) {
@@ -346,23 +338,7 @@ if (!function_exists('routeName')) {
         return $route;
     }
 }
-function getOrderMaxForBranch(string $branchName, array $data)
-{
-    $arr_data = $data;
 
-    uasort($arr_data, function ($a, $b) {
-        return $a < $b;
-    });
-    $uniques = array_unique($arr_data);
-    for ($i = 0; $i < count($uniques); $i++) {
-        $key = array_values($uniques)[$i];
-        $new["$key"] = $i + 1;
-    };
-
-    $value = $arr_data[$branchName];
-
-    return $new[strval($value)];
-}
 function array_sort_multi_levels(&$array)
 {
     uasort($array, function ($a, $b) {
@@ -401,7 +377,7 @@ function getExportableFields($companyId = null): array
 
 function getExportableFieldsKeysAsValues($companyId)
 {
-    return array_keys(getExportableFields($companyId)) ?? [];
+    return array_keys(getExportableFields($companyId));
 }
 function getExportableFieldsForModel($companyId, $modelName): array
 {
@@ -547,7 +523,7 @@ function sortReportForTotals(&$report_data)
     (
         uasort(
             $report_data,
-            function ($a, $b) use (&$report_data) {
+            function ($a, $b)  {
                 if (isset($b['Total'], $a['Total'])) {
                     $a = array_sum($a['Total']);
                     $b = array_sum($b['Total']);
@@ -999,13 +975,15 @@ function failAllocationMessage($allocation_type)
 }
 function hasProductsItems($company)
 {
-    $productItems = DB::select(DB::raw('select count(*) as has_product_item from sales_gathering where company_id = ' . $company->id . ' and product_item is not null')->getValue(DB::connection()->getQueryGrammar()));
+    $query = 'select count(*) as has_product_item from sales_gathering where company_id = ' . $company->id . ' and product_item is not null';
+    $productItems = DB::select($query);
 
     return $productItems[0]->has_product_item ?? 0;
 }
 function hasAtLeastOneOfType($company, $type)
 {
-    $productItems = DB::select(DB::raw('select count(*) as has_product_item from sales_gathering where company_id = ' . $company->id . ' and ' . $type . ' is not null')->getValue(DB::connection()->getQueryGrammar()));
+    $query = 'select count(*) as has_product_item from sales_gathering where company_id = ' . $company->id . ' and ' . $type . ' is not null';
+    $productItems = DB::select($query);
 
     return $productItems[0]->has_product_item ?? 0;
 }
@@ -1020,7 +998,8 @@ function count_array_values(array $array)
 }
 function countExistingTypeFor($type, $company)
 {
-    $productItems = DB::select(DB::raw('select count(*) as has_product_item from sales_gathering where company_id = ' . $company->id . ' and ' . $type . ' is not null')->getValue(DB::connection()->getQueryGrammar()));
+    $query = 'select count(*) as has_product_item from sales_gathering where company_id = ' . $company->id . ' and ' . $type . ' is not null';
+    $productItems = DB::select($query);
 
     return $productItems[0]->has_product_item ?? 0;
 }
@@ -1031,7 +1010,6 @@ function countExistingTypeFor($type, $company)
 function getTypeSalesAnalysisData(Request $request, Company $company, $type)
 {
     $dimension = $request->report_type;
-
     $report_data = [];
     $growth_rate_data = [];
 
@@ -1039,14 +1017,12 @@ function getTypeSalesAnalysisData(Request $request, Company $company, $type)
 
     foreach ($sales_channels as $sales_channel) {
         $sales_channel = str_replace("'", "\'", $sales_channel);
-        $sales_channels_data = collect(DB::select(DB::raw(
-            "
+        $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ," . $type . "
                 FROM sales_gathering
                 WHERE ( company_id = '" . $company->id . "'AND " . $type . " = '" . $sales_channel . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                ORDER BY id "
-        )->getValue(DB::connection()->getQueryGrammar())
-		))->groupBy('gr_date')->map(function ($item) {
+                ORDER BY id ";
+        $sales_channels_data = collect(DB::select($query))->groupBy('gr_date')->map(function ($item) {
             return $item->sum('net_sales_value');
         })->toArray();
 
@@ -1062,6 +1038,8 @@ function getTypeSalesAnalysisData(Request $request, Company $company, $type)
             $interval_data = Intervals::intervals($interval_data_per_item, $years, $request->interval);
 
             $report_data[$sales_channel] = $interval_data['data_intervals'][$request->interval][$sales_channel] ?? [];
+			$report_data[$sales_channel]['31-01-2026'] = 100;
+			$growth_rate_data[$sales_channel] = HArr::calculateGrowthRate($report_data[$sales_channel]);
         }
     }
 
@@ -1069,7 +1047,7 @@ function getTypeSalesAnalysisData(Request $request, Company $company, $type)
     $sales_channels_names = [];
     foreach ($sales_channels as $sales_channel) {
         $final_report_data[$sales_channel]['Sales Values'] = ($report_data[$sales_channel] ?? []);
-        $final_report_data[$sales_channel]['Growth Rate %'] = ($growth_rate_data[$sales_channel] ?? []);
+        $final_report_data[$sales_channel]['Growth Rate %'] = ($growth_rate_data[$sales_channel] );
         $sales_channels_names[] = (str_replace(' ', '_', $sales_channel));
     }
 
@@ -1089,12 +1067,7 @@ function sumBasedOnQuarterNumber($array, array $quarters, $total)
     return $result ? number_format($result / $total  * 100, 2) . ' % ' : '-';
 }
 
-function indexIsExistIn(string $indexName, string $tableName)
-{
-    $indexesFound = (Schema::getConnection()->getDoctrineSchemaManager())->listTableIndexes($tableName);
 
-    return array_key_exists($indexName, $indexesFound);
-}
 
 function getAllColumnsTypesForCaching($companyId)
 {
@@ -1259,15 +1232,15 @@ function formatInvoiceForEachInterval(array $array, $selectedType)
         'avg_invoice_value' => 0
     ];
     foreach ($array['sumForEachInterval'][$selectedType] ?? [] as $year => $data) {
-        $result['product_item'] =  isset($result['product_item']) ? $result['product_item'] + $data[12]['product_item'] : $data[12]['product_item'];
-        $result['invoice_number'] =  isset($result['invoice_number']) ? $result['invoice_number'] + $data[12]['invoice_number'] : $data[12]['invoice_number'];
+        $result['product_item'] =   $result['product_item'] + $data[12]['product_item'] ;
+        $result['invoice_number'] =  $result['invoice_number'] + $data[12]['invoice_number'] ;
     }
     $resultForSales = 0;
     foreach ($array['reportSalesValues'][$selectedType] ?? [] as $data => $saleValue) {
         $resultForSales += $saleValue;
     }
 
-    $finalResult['invoice_count'] = $result['invoice_number'] ?? 0;
+    $finalResult['invoice_count'] = $result['invoice_number'] ;
     $finalResult['product_item_avg_count'] = $result['invoice_number'] ? round($result['product_item'] / $result['invoice_number']) : 0;
     $finalResult['avg_invoice_value'] = $result['invoice_number'] ? number_format($resultForSales / $result['invoice_number'], 0) : 0;
 
@@ -1584,7 +1557,7 @@ function getComparingReportForAnalysis($request, $report_data, $secondReport, $c
             $type = __($modelType);
         } else {
             return [];
-            throw new \Exception('custom exception .. not supported type ' . $modelType);
+            // throw new \Exception('custom exception .. not supported type ' . $modelType);
         }
 
         $secondReportData = $secondReportDataResult['report_data'] ?? [];
@@ -2170,9 +2143,7 @@ function getExportDateTime(): string
 }
 function getExportUserName()
 {
-    /**
-     * @var User $user
-     */
+   
     $user = Auth()->user() ;
     return  $user ? $user->getName() : null;
 }
@@ -2306,7 +2277,7 @@ function getPercentageColorOfSubTypes($val, $type): string
     // } elseif ($val < 0) {
     // 	return 'red ';
     // }
-    return '';
+    // return '';
 }
 
 function convertStringToClass(string $str): string
@@ -2351,9 +2322,12 @@ function getTotalPerYears(array $array)
 }
 function getPreviousDate(?array $array, ?string $date, $datesExistsAsKeys = true)
 {
+	if (empty($array) || $date === null) {
+        return null;
+    }
     $searched = array_search($date, $datesExistsAsKeys ? array_keys($array) : $array);
     $arrayPlusOne = $datesExistsAsKeys ? @array_keys($array)[$searched - 1] : @($array)[$searched - 1];
-    if ($searched !== null &&  isset($arrayPlusOne)) {
+    if ($searched !== false &&  isset($arrayPlusOne)) {
         return $datesExistsAsKeys ? array_keys($array)[$searched - 1] : ($array)[$searched - 1];
     }
 
@@ -2872,8 +2846,8 @@ function validateDate($date, $format = 'Y-m-d')
 {
     return $d = DateTime::createFromFormat($format, $date);
     // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
-    return $d && $d->format($format) === $date;
-    ;
+    // return $d && $d->format($format) === $date;
+    // ;
 }
 function formatDateForView($date)
 {
@@ -3013,38 +2987,7 @@ function getTypesForValuesForPropertyManagement():array
 
     ];
 }
-function getTypesForValuesForTrading():array
-{
-    return [
-        'fixed_monthly_repeating_amount'=>[
-            'title'=>__('Fixed Monthly Amount'),
-            'value'=>'fixed_monthly_repeating_amount',
-        ],
-      
-        'percentage_of_sales'=>[
-            'title'=>__('Expense As Percentage'),
-            'value'=>'percentage_of_sales',
-        ],
-      
-        'cost_per_unit'=>[
-            'title'=>__('Cost Per Sqm'),
-            'value'=>'cost_per_unit',
-        ],
-      
-        'one_time_expense'=>[
-            'title'=>__('One Time Expense'),
-            'value'=>'one_time_expense',
-        ],
-        'expense_per_employee'=>[
-            'title'=>__('Expense Per Employee'),
-            'value'=>'expense_per_employee',
-        ],
 
-
-
-
-    ];
-}
 function getTypesForValuesForFinancialPlanning():array
 {
     return [
@@ -3163,7 +3106,7 @@ function getNextDate(?array $array, ?string $date, $datesExistsAsKeys = true)
 
     $searched = array_search($date, $datesExistsAsKeys ? array_keys($array) : $array);
     $arrayPlusOne = $datesExistsAsKeys ? @array_keys($array)[$searched +1] : @($array)[$searched +1];
-    if ($searched !== null &&  isset($arrayPlusOne)) {
+    if ($searched !== false &&  isset($arrayPlusOne)) {
         return $datesExistsAsKeys ? array_keys($array)[$searched +1] : ($array)[$searched +1];
     }
     return null;
@@ -3735,7 +3678,7 @@ function formatDateForDatePicker(?string $date)
     if (!$date) {
         return null ;
     }
-    return $date ? Carbon::make($date)->format('m/d/Y') : null;
+    return Carbon::make($date)->format('m/d/Y');
 }
 function stdToArray($items)
 {
@@ -3808,10 +3751,10 @@ function getSalesForecastValueBaseSubmenu(User $user, int $companyId)
     $salesForecast = SalesForecast::where('company_id', $companyId)->first() ;
     $modified_seasonality = ModifiedSeasonality::where('company_id', $companyId)->first() && $salesForecast;
     $canViewProductSalesTargetReport = $modified_seasonality ;
-    $canViewFirstAllocation = isset($modified_seasonality) && ExistingProductAllocationBase::where('company_id', $companyId)->first() !== null && $salesForecast ;
-    $canViewSecondAllocation = isset($modified_seasonality) && SecondExistingProductAllocationBase::where('company_id', $companyId)->first() !== null && $salesForecast;
-    $canViewCollectionReport = isset($modified_seasonality) && CollectionSetting::where('company_id', $companyId)->first() !== null && $salesForecast;
-    $viewSummaryReport = isset($modified_seasonality) && $salesForecast;
+    $canViewFirstAllocation = $modified_seasonality && ExistingProductAllocationBase::where('company_id', $companyId)->first() !== null  ;
+    $canViewSecondAllocation = $modified_seasonality && SecondExistingProductAllocationBase::where('company_id', $companyId)->first() !== null ;
+    $canViewCollectionReport = $modified_seasonality && CollectionSetting::where('company_id', $companyId)->first() !== null ;
+    $viewSummaryReport = $modified_seasonality ;
     $canViewSalesForecastValueBase = $canViewSalesForecastFactSheet || $canViewProductSalesTargetReport || $canViewFirstAllocation || $canViewSecondAllocation || $canViewCollectionReport || $viewSummaryReport;
     if (!$canViewSalesForecastValueBase) {
         return [];
@@ -3855,10 +3798,10 @@ function getSalesForecastQuantityBaseSubmenu(User $user, int $companyId):array
     $canViewFactSheet = $user->can('view sales forecast quantity') ;
     $sales_forecast = QuantitySalesForecast::where('company_id', $companyId)->first();
     $canViewProductSalesTargetReport = $modified_seasonality = QuantityModifiedSeasonality::where('company_id', $companyId)->first() && $sales_forecast ;
-    $canViewFirstAllocation = isset($modified_seasonality) && QuantityExistingProductAllocationBase::where('company_id', $companyId)->first() !== null && $sales_forecast;
-    $canViewSecondAllocation = isset($modified_seasonality) && QuantitySecondExistingProductAllocationBase::where('company_id', $companyId)->first() !== null && $sales_forecast;
-    $canViewCollectionReport = isset($modified_seasonality) && CollectionSetting::where('company_id', $companyId)->first() !== null && $sales_forecast;
-    $canViewSummaryReport   = isset($modified_seasonality) && $sales_forecast;
+    $canViewFirstAllocation = $modified_seasonality && QuantityExistingProductAllocationBase::where('company_id', $companyId)->first() !== null && $sales_forecast;
+    $canViewSecondAllocation = $modified_seasonality && QuantitySecondExistingProductAllocationBase::where('company_id', $companyId)->first() !== null && $sales_forecast;
+    $canViewCollectionReport = $modified_seasonality && CollectionSetting::where('company_id', $companyId)->first() !== null && $sales_forecast;
+    $canViewSummaryReport   = $modified_seasonality && $sales_forecast;
     $canViewSalesForecastQuantityBase =  $canViewFactSheet || $canViewProductSalesTargetReport || $canViewFirstAllocation || $canViewSecondAllocation || $canViewCollectionReport || $canViewSummaryReport;
     if (!$canViewSalesForecastQuantityBase) {
         return [];
@@ -4252,180 +4195,19 @@ function getPropertyManagementNavigation(Company $company, User $user):array
     
 
 }
-function getTradingNavigation(Company $company, User $user):array
-{
-    $studyId = getStudyIdFromUrl();
-    $study = \App\Models\Trading\Study::find($studyId);
-    
-    $urls = [
-        'home'=>generateMenuItem(__('Home'), $user->can('view home'), route('home'), []),
-    
-        'studies'=>[
-            'title'=>__('Settings <br> & Studies'),
-            'show'=>true ,
-            'link'=>route('trading.view.study', ['company'=>$company->id])
-		],
-		'dashboard'=>[
-            'title'=>__('Dashboard'),
-            'show'=>true ,
-			'link'=>route('trading.view.trading.dashboard', ['company'=>$company->id]),
-            'submenu'=>[
-			
-			]
-        ]
-            
-    ];
-    if ($study) {
-        $isExistingCompany =$study->isExistingCompany();
-        // $microfinanceFirstPageRoute = $study->getMicrofinanceFirstPage();
-        $urls['study-info']= [
-            'title'=>__('Study <br> Information'),
-            'show'=>true ,
-            'link'=>route('trading.edit.study', ['company'=>$company->id , 'study'=>$studyId])
-        ];
-        $urls['opening-balances']= [
-            'title'=>__('Opening <br> Balances'),
-            'show'=>$isExistingCompany ,
-            'link'=>'#'
-        ];
-        $urls['general-assumption']= [
-            'title'=>__('General <br> Assumptions'),
-            'show'=>true ,
-            'link'=>route('trading.create.general.assumption', ['company'=>$company->id , 'study'=>$studyId])
-        ];
-     
-        $urls['sales-projects'] = [
-            'title'=>__('Sales <br> Projections'),
-            'show'=>true ,
-            'link'=>'#',
-            // 'submenu'=>[
-            //     [
-            //         'title'=>__('Full Rent Coverage'),
-            //         'show'=>true,
-            //         'link'=>route('property.management.create.occupied.properties.with.full.rent.coverage.duration', ['company'=>$company->id,'study'=>$studyId]),
-            //         'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-            //     ],[
-            //         'title'=>__('Partial Rent Coverage & Vacant Properties'),
-            //         'show'=>true,
-            //         'link'=>route('property.management.create.occupied.properties.with.partial.rent.coverage.duration', ['company'=>$company->id,'study'=>$studyId]),
-            //         'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-            //     ],[
-            //         'title'=>__('Properties To Be Delivered'),
-            //         'show'=>true,
-            //         'link'=>route('property.management.create.properties.to.be.delivered', ['company'=>$company->id,'study'=>$studyId]),
-            //         'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-            //     ],[
-            //         'title'=>__('Forecasted Properties Investments'),
-            //         'show'=>true,
-            //         'link'=>route('property.management.create.forecasted.properties', ['company'=>$company->id,'study'=>$studyId]),
-            //         'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-            //     ],
-          
-            // ]
-        ];
 
-        $urls['manpower-projection'] = [
-            'title'=>__('Manpower <br> Projection'),
-            'show'=>true ,
-            'link'=>route('view.manpower.for.trading', ['company'=>$company->id , 'study'=>$studyId]),
-        ];
-        
-        $urls['expense-projection'] = [
-            'title'=>__('Expenses <br> Projection'),
-            'show'=>true ,
-            'link'=>route('trading.create.expenses', ['company'=>$company->id , 'study'=>$studyId]),
-        ];
-
-        $urls['fixed-assets'] = [
-            'title'=>__('Fixed <br> Assets'),
-            'show'=>true ,
-            'link'=>route('trading.create.ffe.fixed.assets', ['company'=>$company->id , 'study'=>$studyId]),
-        ];
-        $urls['financial-results'] = [
-            'title'=>__('Financial <br> Results'),
-            'show'=>true ,
-            'link'=>route('view.trading.forecast.income.statement', ['company'=>$company->id , 'study'=>$study->id]),
-        ];
-        $urls['analytical-reports'] = [
-            'title'=>__('Reports'),
-            'show'=>true ,
-            'link'=>'#',
-            'submenu'=>[
-            
-        [
-                    'title'=>__('Expense Report'),
-                    'show'=>true ,
-                    'link'=>route('trading.view.expense.statement.reports', ['company'=>$company->id,'study'=>$study->id]),
-                    'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-                ]
-            ]
-        ];
-        
-        $urls['calculators'] = [
-            'title'=>__('Calculators'),
-            'show'=>true ,
-            'link'=>'#',
-            'submenu'=>[
-            
-        [
-                    'title'=>__('Fixed Loan Payments At End'),
-                    'show'=>true ,
-                    'link'=>route('trading.fixed.loan.fixed.at.end', ['company'=>$company->id,'study'=>$study->id]),
-                    'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-                ]    , [
-                    'title'=>__('Fixed Loan Payments At Beginning'),
-                    'show'=>true ,
-                    'link'=>route('trading.fixed.loan.fixed.at.beginning', ['company'=>$company->id,'study'=>$study->id]),
-                    'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-				],[
-					// Route::get('variable-payments', 'Loans2Controller@create')->name('variable.payments');
-                    'title'=>__('Variable Loans'),
-                    'show'=>true ,
-                    'link'=>route('trading.variable.payments', ['company'=>$company->id,'study'=>$study->id]),
-                    'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-				],
-				[
-                    'title'=>__('Calculate Loan Amount'),
-                    'show'=>true ,
-                    'link'=>route('trading.calc.loan.amount', ['company'=>$company->id,'study'=>$study->id]),
-                    'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-                ],
-				[
-                    'title'=>__('Calculate Interest Rate'),
-                    'show'=>true ,
-                    'link'=>route('trading.calc.interest.percentage', ['company'=>$company->id,'study'=>$study->id]),
-                    'icon'=>'kt-menu__link-icon fa fa-crosshairs font-size-15px'
-                ]
-            ]
-        ];
-        
-
-       
-        $urls['opening-balances'] = [
-            'title'=>__('Opening <br> Balances'),
-            'show'=>true ,
-            // 'show'=>$isExistingCompany ,
-            'link'=>route('view.opening.balances.for.trading', ['company'=>$company->id , 'study'=>$studyId]),
-            
-        ];
-       
-    }
-    return $urls;
-    
-
-}
 
 function getHeaderMenu($currentCompany = null)
 {
 	
 
 	
+	/**
+	 * @var Company|null $company
+	 */
 	$company = app(Company::class);
-    $company = $company ?: $currentCompany;
 
-    /**
-     * @var User $user
-     */
+    $company = $company ?: $currentCompany;
     $user = auth()->user();
     if (!$company) {
         return [
@@ -4437,16 +4219,13 @@ function getHeaderMenu($currentCompany = null)
 	
     $isNonBankingService = hasMiddleware('isNonBankingService') ;
     $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-    $isTrading = hasMiddleware('isTrading') ;
     if ($isNonBankingService) {
         return getNonBankingNavigation($company, $user);
     }
 	if ($isPropertyManagement) {
 		return getPropertyManagementNavigation($company, $user);
 	}
-	if ($isTrading) {
-		return getTradingNavigation($company, $user);
-	}
+	
     $exportablesForSalesGathering = (new ExportTable)->customizedTableField($company, 'SalesGathering', 'selected_fields');
     $hasSelectSalesPersonInTemplate = isset($exportablesForSalesGathering['sales_person']);
     $hasSelectCustomerNameInTemplate = isset($exportablesForSalesGathering['customer_name']);
@@ -5176,7 +4955,6 @@ function getHeaderMenu($currentCompany = null)
                                                                 'revenue-business-line'=>generateMenuItem(__('Revenue Business Line'), $user->can('view revenue business line'), route('admin.view.revenue.business.line', ['company'=>$companyId]), []),
                                                                 'positions'=>generateMenuItem(__('Positions'), $user->can('view positions'), route('positions.index', ['company'=>$companyId]), []),
                                                                 'expenses'=>generateMenuItem(__('Expenses'), $user->can('view expenses'), route('pricing-expenses.index', ['company'=>$companyId]), []),
-
                                                             ]
                                                         ],
 
@@ -5517,10 +5295,7 @@ function getAllPercentageOfRevenuesIds(int $incomeStatementId, string $subItemTy
 function getMappingFromForecastToAdjustedOrModified($isPercentageOfs, $currentSubItemType)
 {
 
-    /**
-     * @var IncomeStatement $incomeStatement
-     * *
-     */
+  
     $newPercentageOf = [];
 
     // $isPercentageOfs = $incomeStatement->pivot->{$propertyName} ;
@@ -5741,14 +5516,7 @@ function getAllDataKey(array $items):array
     }
     return $result ;
 }
-function getTableNames()
-{
-    return collect(DB::select('show tables'))->map(function ($val) {
-        foreach ($val as $key => $tbl) {
-            return $tbl;
-        }
-    });
-}
+
 function formatAccumulatedNetCash(array $netCashItems, array $dates)
 {
     $formattedResult = [];
@@ -5976,8 +5744,7 @@ function getExpenseTypes():array
 {
     $isNonBanking = hasMiddleware('isNonBankingService') ;
     $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-    $isTrading = hasMiddleware('isTrading') ;
-    $costOfGoodsText = $isNonBanking||$isPropertyManagement||$isTrading ? __('Cost Of Service') : __('Cost Of Goods Sold');
+    $costOfGoodsText = $isNonBanking||$isPropertyManagement ? __('Cost Of Service') : __('Cost Of Goods Sold');
     return [
         'cost-of-service'=>$costOfGoodsText,
         'marketing-expense'=>__('Marketing Expense'),
@@ -6098,18 +5865,30 @@ function getExpensesTypes():array
             'one_time_expense'
     ];
 }
+function getTableNames(?string $connectionName = null):array
+{
+    $connectionName = $connectionName ?? config('database.default');
+    $database = DB::connection($connectionName)->getDatabaseName();
+    // $tableName = config('app.env') == 'local' ? 'TABLE_NAME': 'table_name';
+    return DB::connection($connectionName)->table('information_schema.tables')
+	->selectRaw('TABLE_NAME as table_name')
+        ->where('table_schema', $database)
+        ->where('table_type', 'BASE TABLE')
+        ->pluck('table_name')->toArray();
+}
 function getTableNamesThatHasColumn(string $columnName, ?string $connectionName = null)
 {
     $database = DB::connection($connectionName)->getDatabaseName();
-    $tableName = config('app.env') == 'local' ? 'TABLE_NAME': 'table_name';
+    // $tableName = config('app.env') == 'local' ? 'TABLE_NAME': 'table_name';
   
     return DB::connection($connectionName)->table('information_schema.columns')
-        ->select($tableName)
+	    ->selectRaw('TABLE_NAME as table_name')
         ->where('column_name', $columnName)
         ->where('table_schema', $database)
-        ->distinct()->pluck($tableName)->toArray();
+        ->distinct()->pluck('table_name')->toArray();
 
 }
+
 
 
 

@@ -132,14 +132,6 @@ class TwodimensionalSalesBreakdownAgainstAnalysisReport
             $main_type = 'business_unit';
             $type = 'sales_channel';
             $view_name = 'Business Units Versus Sales Channels' ;
-        }elseif (request()->route()->named('businessUnits.vs.salesChannels.view')) {
-            $main_type = 'business_unit';
-            $type = 'sales_channel';
-            $view_name = 'Business Units Versus Sales Channels' ;
-        }elseif (request()->route()->named('customers.vs.salesChannels.view')) {
-            $main_type = 'customer_name';
-            $type = 'sales_channel';
-            $view_name = 'Customers Versus Sales Channels' ;
         }elseif (request()->route()->named('countries.vs.salesChannels.view')) {
             $main_type = 'country';
             $type = 'sales_channel';
@@ -200,15 +192,14 @@ class TwodimensionalSalesBreakdownAgainstAnalysisReport
 	public function getBundlingData(Request $request  ,Company $company,$main_type)
 	{
 		$allNames = [];
-			$report_data =collect(DB::select(DB::raw("
+			$query = "
             SELECT  document_number ,sum(quantity) as group_quantity,sum(net_sales_value) as group_net_sales_value , ".$main_type."
-            FROM sales_gathering 
+            FROM sales_gathering
 			where  company_id = '".$company->id."'   AND date between '".$request->start_date."' and '".$request->end_date."'
 			group by ".$main_type." , document_number
-			
-			"
-            )->getValue(DB::connection()->getQueryGrammar())
-			))
+
+			";
+			$report_data =collect(DB::select($query))
 			->groupBy(['document_number'])
 			->toArray();
 			$quantity = 0 ;
@@ -286,19 +277,18 @@ class TwodimensionalSalesBreakdownAgainstAnalysisReport
 		
 		
 
-			$report_data =collect(DB::select(DB::raw("
+			$query = "
             SELECT DATE_FORMAT(date,'%d-%m-%Y') as date, net_sales_value ,sales_value,document_number,".$type.",".$main_type ."
             FROM sales_gathering
             WHERE ( company_id = '".$company->id."' AND ".$type." IS NOT NULL AND ".$main_type." IS NOT NULL  AND date between '".$request->start_date."' and '".$request->end_date."')
-             ORDER BY id "
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy($main_type)->map(function($item) use($type){
+             ORDER BY id ";
+			$report_data =collect(DB::select($query))->groupBy($main_type)->map(function($item) use($type){
                 return $item->groupBy($type)->map(function($sub_item){
                     return $sub_item->sum('net_sales_value');
                 });
             })->toArray();
 
-        $main_type_items = array_keys(($report_data??[]));
+        $main_type_items = array_keys(($report_data));
 	
         foreach ($report_data as  $main_type_item_name => $sales_gathering_data) {
             $main_type_items_totals[$main_type_item_name] = array_sum($report_data[$main_type_item_name]??[]);
@@ -340,7 +330,7 @@ class TwodimensionalSalesBreakdownAgainstAnalysisReport
     public function discountsResult(Request $request, Company $company)
     {
         {
-
+			$main_type_items_totals = [];
             $report_data =[];
             $main_type = $request->main_type;
             $type = 'discounts';
@@ -385,7 +375,7 @@ class TwodimensionalSalesBreakdownAgainstAnalysisReport
                     }
 
 
-                $main_type_items_totals[$main_type_item_name] = array_sum($report_data[$main_type_item_name]??[]);
+                $main_type_items_totals[$main_type_item_name] = array_sum($report_data[$main_type_item_name]);
             }
 
             $items_totals = $this->finalTotal([$report_data]);

@@ -8,7 +8,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperGovernorate
+ * @property int $id
+ * @property int $country_id
+ * @property string $name_en
+ * @property string $name_ar
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\City> $cities
+ * @property-read int|null $cities_count
+ * @property-read bool|null $cities_exists
+ * @property-read \App\Models\PropertyManagement\Country $country
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate whereNameAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Governorate whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Governorate extends Model
 {

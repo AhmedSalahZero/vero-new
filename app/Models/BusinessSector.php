@@ -12,7 +12,31 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperBusinessSector
+ * @property int $id
+ * @property string $name
+ * @property int $company_id
+ * @property int|null $creator_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServiceCategory> $serviceCategories
+ * @property-read int|null $service_categories_count
+ * @property-read bool|null $service_categories_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServiceItem> $serviceItems
+ * @property-read int|null $service_items_count
+ * @property-read bool|null $service_items_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector whereCreatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BusinessSector whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class BusinessSector extends Model  
 {

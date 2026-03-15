@@ -6,7 +6,37 @@ use App\Traits\StaticBoot;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperExpenseAnalysis
+ * @property int $id
+ * @property string $date
+ * @property int $company_id
+ * @property string|null $category_name
+ * @property string|null $sub_category_name
+ * @property string|null $expense_name
+ * @property string|null $quantity_measurement_unit
+ * @property string|null $quantity
+ * @property string|null $cost_per_unit
+ * @property string|null $total_cost
+ * @property int|null $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereCategoryName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereCostPerUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereExpenseName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereQuantityMeasurementUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereSubCategoryName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereTotalCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ExpenseAnalysis whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class ExpenseAnalysis extends Model
 {
@@ -16,24 +46,13 @@ class ExpenseAnalysis extends Model
     protected $guarded = [];
 
 
-    //  protected $connection= 'mysql2';
-    // protected $table = 'sales_gathering';
-    // protected $primaryKey  = 'user_id';
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+  
     protected $table = 'expense_analysis';
     public function scopeCompany($query)
     {
         return $query->where('company_id', request()->company->id?? Request('company_id') );
     }
-	private static function generateSubTabArr()
-	{
-		return [];
-	}
+
 	public static function getTabs(int $companyId)
 	{
 		return [

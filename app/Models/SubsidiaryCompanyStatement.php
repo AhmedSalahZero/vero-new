@@ -10,7 +10,46 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperSubsidiaryCompanyStatement
+ * @property int $id
+ * @property int $company_id
+ * @property string $currency_name
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property string|null $date
+ * @property int $partner_id
+ * @property int|null $money_received_id
+ * @property int|null $money_payment_id
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereCurrencyName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\SubsidiaryCompanyStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class SubsidiaryCompanyStatement extends Model  implements IHaveStatement
 {

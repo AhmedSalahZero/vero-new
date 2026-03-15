@@ -244,7 +244,7 @@
 								
 								 	<td>
                                 <input type="hidden" name="id" value="1">
-                                    <x-form.select-with-modal-abb :add-new-modal="true" class="text-center repeater-select" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="__('Governorate')" :options="[]" :add-new="false" :label="__('Governorate')" class="select2-select revenue_business_line_class  " data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="1"></x-form.select-with-modal-abb>
+                                    <x-form.select-with-modal-abb :add-new-modal="true" class="text-center repeater-select" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="__('Governorate')" :options="[]" :add-new="false" :label="__('Governorate')" class="select2-select revenue_business_line_class " data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="1"></x-form.select-with-modal-abb>
 
                                     </td>
 
@@ -259,7 +259,7 @@
 									
 									{{-- @foreach($subItemsNames as $subItemName)
 									<td>
-                                    <x-form.select-with-modal-abb :add-new-modal="true" class="text-center" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="$subItemName" :options="[]" :add-new="false" :label="$subItemName" class="select2-select revenue_business_line_class  " data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="1"></x-form.select-with-modal-abb>
+                                    <x-form.select-with-modal-abb :add-new-modal="true" class="text-center" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="$subItemName" :options="[]" :add-new="false" :label="$subItemName" class="select2-select revenue_business_line_class " data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="1"></x-form.select-with-modal-abb>
 
                                     </td>
 

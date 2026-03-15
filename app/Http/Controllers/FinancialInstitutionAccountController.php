@@ -147,14 +147,11 @@ class FinancialInstitutionAccountController
 	}
 	public function lockOrUnlock(Company $company , FinancialInstitutionAccount $financialInstitutionAccount)
 	{
-		$financialInstitutionAccount->is_active = ! $financialInstitutionAccount->isActive();
+		$financialInstitutionAccount->is_active = (int) (! $financialInstitutionAccount->isActive());
 		$financialInstitutionAccount->save();
 		return redirect()->back()->with('success',__('Item Has Been Updated Successfully'));
 	}
-	public function getAccountNumbersBasedOnCurrency(Company $company , Request $request , FinancialInstitution $financialInstitution,?string $currency)
-	{
-		$financialInstitution->accounts;
-	}
+	
 
 	
 	

@@ -64,15 +64,7 @@ class Loans2Controller extends Controller
         $company = Company::find($company_id);
         $longTermFunding = null ;
         $loan = null ; 
-        // if($longTermFunding)
-        // {
-        //     $loan = null;
-        //     // $loan = Loan2::where('long_term_funding_id' , $longTermFunding->id)->first();
-        // }
-        // else{
-        //     $loan = null ; 
-        // }
-        // fixed.loan.fixed.at.end
+       
 		if(
 			str_contains($routeName, 'fixed.loan.fixed.at.end')
 	){
@@ -90,7 +82,7 @@ class Loans2Controller extends Controller
             $title = __('Fixed Loan At Beginning');
             $type ='fixed';
             $position = 'at_beginning';
-            return view('admin.loan2.create_at_begining', compact('company' ,'title', 'type'
+            return view('admin.loan2.create_at_begining', compact('company' ,'title', 'type','routeName'
             ,'position','storeByAjax','loanType','longTermFunding','loan','triggerClick'
         
          ));       
@@ -134,84 +126,45 @@ class Loans2Controller extends Controller
 
     public function store(Request $request, $company_id, Loan $loan)
     {
-        $company = Company::find($company_id);
-        // $financial = FinancialPlan::with(['fundingRequired', 'loans'])->findOrFail($financial_id);
-        // $remaining = $financial->fundingRequired->funding_required  - $financial->loans()->sum('loan_amount');
-        // $this->validation($request);
+        // $company = Company::find($company_id);
 
-        $loan->name                      = $request->name;
-        // $loan->financial_plan_id         = $financial_id;
-        $loan->company_id                = $company_id;
-        $loan->loan_start_month          = $request->start_month;
-        $loan->loan_amount               = $request->loan_amount;
+        // $loan->name                      = $request->name;
 
-        $loan->borrowing_rate            = $request->loan_type == 'variable' ? $request->borrowing_rate : 0;
-        $loan->margin_interest           = $request->margin_interest;
-        $loan->min_interest              = $request->loan_type == 'variable' ? $request->min_interest : 0;
-        $loan->loan_type                 = $request->loan_type;
+        // $loan->company_id                = $company_id;
+        // $loan->loan_start_month          = $request->start_month;
+        // $loan->loan_amount               = $request->loan_amount;
 
-        $loan->duration               = $request->repayment_duration;
-        $loan->grace_period           = $request->grace_period;
-        $loan->installment_interval   = $request->installment_interval;
-        $loan->interest_interval      = $request->loan_type == 'variable' ? $request->interest_interval : $request->installment_interval;
+        // $loan->borrowing_rate            = $request->loan_type == 'variable' ? $request->borrowing_rate : 0;
+        // $loan->margin_interest           = $request->margin_interest;
+        // $loan->min_interest              = $request->loan_type == 'variable' ? $request->min_interest : 0;
+        // $loan->loan_type                 = $request->loan_type;
 
-        $loan->created_by                = auth()->user()->id;
-        // $loan->save();
-        //////////////// LONG LOAN DISTRIBUTION ////////////////////////
+        // $loan->duration               = $request->repayment_duration;
+        // $loan->grace_period           = $request->grace_period;
+        // $loan->installment_interval   = $request->installment_interval;
+        // $loan->interest_interval      = $request->loan_type == 'variable' ? $request->interest_interval : $request->installment_interval;
 
-        //if the margin and borrowing rate sum are less than the min interest the intrest rate will be the min interest
-        $margin_borrowing_rate = $request->borrowing_rate + $request->margin_interest;
-        $interest_rate = $margin_borrowing_rate > $request->min_interest ? $margin_borrowing_rate : $request->min_interest;
-        //total duration is to add the repayment_duration to the grace period
-        $total_duration = $loan->duration  + $loan->grace_period;
-        $loan_start_date = $request->get('start_date');
-        // $loanLongDistribution = [];
-        // for ($month = 0; $month < $total_duration; $month++) {
+        // $loan->created_by                = auth()->user()->id;
+        // // $loan->save();
+        // //////////////// LONG LOAN DISTRIBUTION ////////////////////////
 
-        //     $loanLongDistribution[] = Loan_long_distribution::make([
-        //         'month' => $month,
-        //         'loan_id' => $loan->id,
-        //         'created_by' => Auth::id()
-        //     ]);
-
-        // }
-        // $loan->setRelation('longDistributions' , $loanLongDistribution );
-        $loan->start_date = $loan_start_date ;
-        // Saving Distribution data
-        // $loan_distributions = (new LoansDistributionController)->loanLongDistribution($company_id, null, $loan, 'array' , $request->get('start_date'));
-        
-        $loan_type = $loan->loan_type;
-
-        // $distribution_data = $this->loanSavingDistributionData($loan_distributions, $loan_type);
-
-        // $loan->distribution_data = $distribution_data;
+        // //if the margin and borrowing rate sum are less than the min interest the intrest rate will be the min interest
+        // $margin_borrowing_rate = $request->borrowing_rate + $request->margin_interest;
+        // $interest_rate = $margin_borrowing_rate > $request->min_interest ? $margin_borrowing_rate : $request->min_interest;
+        // //total duration is to add the repayment_duration to the grace period
+        // $total_duration = $loan->duration  + $loan->grace_period;
+        // $loan_start_date = $request->get('start_date');
+        // $loan->start_date = $loan_start_date ;
+        // $loan_type = $loan->loan_type;
 
 
-        // if($loan->loan_type == "fixed"){
-        //     return (new LoansDistributionController())->loanLongDistribution($company->id , 0 , $loan , 'view' , $loan->start_date);
-        // }
-        // elseif($loan->loan_type == 'variable'){
-        //     return (new LoansDistributionController())->loanLongDistribution($company->id , 0 , $loan , 'view' , $loan->start_date);
-        // }
-        // $loan->save()
-        // return view('admin.loan2.index' , [
-        //     'loans'=> [$loan] ,
-        //     'type'=>$loan_type ,
-        //     'company'=>$company ,
-            
-        // ]);
-
-        return redirect()->route('loans2.index' , ['company_id'=> $company_id , 'type'=>$loan_type])->with([
+        // return redirect()->route('loans2.index' , ['company_id'=> $company_id , 'type'=>$loan_type])->with([
        
         
-        ]);
+        // ]);
         
 
-        if ($request->get('submit') == 'Submit') {
-            return redirect()->route('loan2.create', compact('company', 'loans','type'))->with('success', __('Created Successfully'));
-        } elseif ($request->get('submit') == 'Submit And Close') {
-            return redirect()->route('loan2.index', compact('company', 'loans','type'))->with('success', __('Created Successfully'));
-        }
+     
     }
   
     // public function update(Request $request, $company_id, $financial_id, Loan $loan)
@@ -297,12 +250,12 @@ class Loans2Controller extends Controller
 
     //     return view('admin.loan.edit', compact('loan', 'company', 'financial'));
     // }
-    /**
-     * get phase assigned to project.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \json
-     */
+    // /**
+    //  * get phase assigned to project.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return \json
+    //  */
 
  
     // public function destroy($company_id, $financial_id, Loan $loan)
@@ -434,7 +387,7 @@ class Loans2Controller extends Controller
 		 $loan->base_rate =$baseRate; 
 		 $marginRate = $request->get('margin_rate');
 		 $loan->margin_rate =$marginRate; 
-		 $loan->pricing = $marginRate +$baseRate ; 
+		 $loan->pricing = strval($marginRate +$baseRate) ; 
 		 $tenor = $request->get('duration');
 		 $loan->duration =$tenor; 
 		 $gracePeriod = $request->get('grace_period',0);
@@ -452,76 +405,12 @@ class Loans2Controller extends Controller
 		 $loan->step_down_interval =$stepDownIntervalName; 
 		 $calculateFixedLoanAtEndService = new CalculateFixedLoanAtEndService();	
 		 $calculateFixedLoanAtBeginningService = new CalculateFixedLoanAtBeginningService();	
-		 $loan->is_with_capitalization = Loan::isWithCapitalization($loanType);
+		 $loan->is_with_capitalization = (int)Loan::isWithCapitalization($loanType);
 		 $loan->save();
-		//  $loan->storeBasicForm($request);
-		// $baseRatesMapping = [
-		// 	"01-01-2025"=>31.75,  
-		// 	// "01-02-2025"=>0.3175,  
-		// 	// "01-03-2025"=>0.3175,  
-		// 	// "01-04-2025"=>0.3175,  
-		// 	// "01-05-2025"=>0.3175,  
-		// 	// "01-06-2025"=>0.3175,  
-		// 	// "01-07-2025"=>0.3175,  
-		// 	// "01-08-2025"=>0.3175,  
-		// 	// "01-09-2025"=>0.3175,  
-		// 	// "01-10-2025"=>0.3175,  
-		// 	// "01-11-2025"=>0.3175,  
-		// 	// "01-12-2025"=>0.3175,  
-		// 	"01-01-2026"=>29.25,  
-		// 	// "01-02-2026"=>0.2925,  
-		// 	// "01-03-2026"=>0.2925,  
-		// 	// "01-04-2026"=>0.2925,  
-		// 	// "01-05-2026"=>0.2925,  
-		// 	// "01-06-2026"=>0.2925,  
-		// 	// "01-07-2026"=>0.2925,  
-		// 	// "01-08-2026"=>0.2925,  
-		// 	// "01-09-2026"=>0.2925,  
-		// 	// "01-10-2026"=>0.2925,  
-		// 	// "01-11-2026"=>0.2925,  
-		// 	// "01-12-2026"=>0.2925,  
-		// 	"01-01-2027"=>26.75,  
-		// 	// "01-02-2027"=>0.2675,  
-		// 	// "01-03-2027"=>0.2675,  
-		// 	// "01-04-2027"=>0.2675,  
-		// 	// "01-05-2027"=>0.2675,  
-		// 	// "01-06-2027"=>0.2675,  
-		// 	// "01-07-2027"=>0.2675,  
-		// 	// "01-08-2027"=>0.2675,  
-		// 	// "01-09-2027"=>0.2675,  
-		// 	// "01-10-2027"=>0.2675,  
-		// 	// "01-11-2027"=>0.2675,  
-		// 	// "01-12-2027"=>0.2675,  
-		// 	"01-01-2028"=>24.25,  
-		// 	// "01-02-2028"=>0.2425,  
-		// 	// "01-03-2028"=>0.2425,  
-		// 	// "01-04-2028"=>0.2425,  
-		// 	// "01-05-2028"=>0.2425,  
-		// 	// "01-06-2028"=>0.2425,  
-		// 	// "01-07-2028"=>0.2425,  
-		// 	// "01-08-2028"=>0.2425,  
-		// 	// "01-09-2028"=>0.2425,  
-		// 	// "01-10-2028"=>0.2425,  
-		// 	// "01-11-2028"=>0.2425,  
-		// 	// "01-12-2028"=>0.2425,  
-		// 	"01-01-2029"=>21.75,  
-		// 	// "01-02-2029"=>0.2175,  
-		// 	// "01-03-2029"=>0.2175,  
-		// 	// "01-04-2029"=>0.2175,  
-		// 	// "01-05-2029"=>0.2175,  
-		// 	// "01-06-2029"=>0.2175,  
-		// 	// "01-07-2029"=>0.2175,  
-		// 	// "01-08-2029"=>0.2175,  
-		// 	// "01-09-2029"=>0.2175,  
-		// 	// "01-10-2029"=>0.2175,  
-		// 	// "01-11-2029"=>0.2175,  
-		// 	// "01-12-2029"=>0.2175,  
-		// 	// "01-01-2030"=>0.2175,  	
-		// ];
-		//	$time = 0 ;
+		
 			$currentNatureType = $request->get('nature_type');
 			$isAtEnd = $request->get('nature_type') == 'fixed_at_end' ;
-		//	$time  = microtime(true);
+
 			$datesAsIndexString=HDate::generateDatesBetweenStartDateAndDuration(0,$loanStartDate,$tenor,$installmentPaymentIntervalName);
 	
 		// for($i = 0 ; $i <= 600 ; $i++){
@@ -570,7 +459,7 @@ class Loans2Controller extends Controller
 		 $loan->base_rate =$baseRate; 
 		 $marginRate = $request->get('margin_rate');
 		 $loan->margin_rate =$marginRate; 
-		 $loan->pricing = $marginRate +$baseRate ; 
+		 $loan->pricing = strval($marginRate +$baseRate) ; 
 		 $tenor = $request->get('duration');
 		 $loan->duration =$tenor; 
 		 $gracePeriod = $request->get('grace_period',0);
@@ -590,7 +479,7 @@ class Loans2Controller extends Controller
 		 $loan->step_down_interval =$stepDownIntervalName; 
 		 $calculateVariableLoanAtEndService = new CalculateVariableLoanAtEndService();	
 		 $calculateVariableLoanAtBeginningService = new CalculateVariableLoanAtBeginningService();	
-		 $loan->is_with_capitalization = Loan::isWithCapitalization($loanType);
+		 $loan->is_with_capitalization = (int)Loan::isWithCapitalization($loanType);
 		 $loan->save();
 		//  $loan->storeBasicForm($request);
 		// $baseRatesMapping = [

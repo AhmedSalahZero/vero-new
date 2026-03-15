@@ -7,18 +7,11 @@ use App\Http\Middleware\CheckIfAccountExpired;
 use App\Http\Middleware\FinancialPlanningMiddleware;
 use App\Http\Middleware\NonBankingServiceMiddleware;
 use App\Http\Middleware\PropertyManagementServiceMiddleware;
-use App\Http\Middleware\TradingMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
-    /**
-     * The application's global HTTP middleware stack.
-     *
-     * These middleware are run during every request to your application.
-     *
-     * @var array
-     */
+  
     protected $middleware = [
         \App\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
@@ -26,11 +19,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
-    /**
-     * The application's route middleware groups.
-     *
-     * @var array
-     */
+  
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
@@ -39,7 +28,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-            \App\Http\Middleware\SetCompany::class,
+
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\canViewCurrentCompany::class,
 			
@@ -52,13 +41,6 @@ class Kernel extends HttpKernel
         ],
     ];
 
-    /**
-     * The application's route middleware.
-     *
-     * These middleware may be assigned to groups or used individually.
-     *
-     * @var array
-     */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
@@ -80,7 +62,6 @@ class Kernel extends HttpKernel
 		'isCashManagement'=>CashManagementMiddleware::class,
 		'isNonBankingService'=>NonBankingServiceMiddleware::class,
 		'isPropertyManagement'=>PropertyManagementServiceMiddleware::class,
-		'isTrading'=>TradingMiddleware::class,
 		'isFinancialPlanning'=>FinancialPlanningMiddleware::class
     ];
 }

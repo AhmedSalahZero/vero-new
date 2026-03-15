@@ -147,9 +147,7 @@ class DashboardController extends Controller
     {
         
         $withSensitivity = $request->routeIs('non.banking.view.results.dashboard.with.sensitivity') ;
-        // if($study->duration_in_years>=2){
-        // 	$study->force_yearly = true;
-        // }
+      
         $dashboardData = $this->generateDashboardData($study, $company, false);
         
         

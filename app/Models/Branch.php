@@ -7,7 +7,44 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperBranch
+ * @property int $id
+ * @property int|null $journal_id
+ * @property int|null $odoo_id
+ * @property string|null $odoo_outbound_cheque_payment_method_id
+ * @property string|null $odoo_inbound_cheque_payment_method_id
+ * @property string|null $odoo_outbound_transfer_payment_method_id
+ * @property string|null $odoo_inbound_transfer_payment_method_id
+ * @property string|null $odoo_code
+ * @property string|null $name
+ * @property string|null $currency
+ * @property int|null $company_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashInSafeStatement> $cashInSafeStatements
+ * @property-read int|null $cash_in_safe_statements_count
+ * @property-read bool|null $cash_in_safe_statements_exists
+ * @property-read \App\Models\User|null $creator
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereJournalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereOdooCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereOdooInboundChequePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereOdooInboundTransferPaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereOdooOutboundChequePaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereOdooOutboundTransferPaymentMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Branch whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class Branch extends Model
 {

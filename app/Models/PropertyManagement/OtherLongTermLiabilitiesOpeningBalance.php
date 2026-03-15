@@ -6,7 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperOtherLongTermLiabilitiesOpeningBalance
+ * @property int $id
+ * @property string|null $name
+ * @property numeric $amount
+ * @property array<array-key, mixed>|null $payload
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $statement (DC2Type:json)
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance wherePayload($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OtherLongTermLiabilitiesOpeningBalance extends Model
 {

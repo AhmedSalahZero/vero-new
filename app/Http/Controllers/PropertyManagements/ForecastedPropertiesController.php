@@ -74,13 +74,17 @@ class ForecastedPropertiesController extends Controller
 			unset($forecastedPropertyArr['id']);
 			$forecastedPropertyArr['forecastedDueInstallment']['company_id'] = $company->id;
 			$forecastedProperty=$study->forecastedProperties()->create($forecastedPropertyArr);
+			/**
+			 * @var ForecastedProperty $forecastedProperty
+			 */
 			$forecastedProperty->forecastedDueInstallment()->create($forecastedPropertyArr['forecastedDueInstallment']);
 			$forecastedProperty->calculateToBeDeliveredRentRevenue();
+			$forecastedProperty->calculatePropertyDueInstallments();
 			$study->createNewAreaProperty($forecastedProperty['id'],Property::PROPERTY_FORECASTED,$forecastedProperty['area']);
 		}
-		$formattedResult = [];
-		ForecastedProperty::getForecastedPropertiesCoveragesAmounts($study, $formattedResult);
-		$forecastedProperty->calculatePropertyDueInstallments();
+	
+		ForecastedProperty::getForecastedPropertiesCoveragesAmounts($study);
+		
 		ForecastedProperty::recalculateDueInstallments($study);
 	//	$study->recalculateDueInstallments();
 		$study->updateExpensesPercentageAndCostPerUnitsOfSales();
@@ -97,15 +101,6 @@ class ForecastedPropertiesController extends Controller
        
     }
 
-    private function formatDues(array $duesAndDays)
-    {
-        $result = [];
-        foreach ($duesAndDays as $day => $due) {
-            $result['due_in_days'][]=$day;
-            $result['rate'][]=$due;
-        }
-        return $result;
-    }
     public function calculateStatement(array $expenses, array $vats, array $netPaymentsAfterWithhold, array $withholdPayments, array $dateIndexWithDate, Study $study, float $beginningBalance = 0)
     {
         $expensesForIntervals = [

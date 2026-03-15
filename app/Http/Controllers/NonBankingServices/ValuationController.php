@@ -145,7 +145,7 @@ $incomeStatement = $study->incomeStatement;
 		 $studyDates = array_keys($study->getStudyDates()) ;
         $sumKeys = $studyDates;
 		
-		$fixedAssetPayments = HArr::sumAtDates([$cashflowReport->fixed_asset_payments , $cashflowReport->total_fixed_asset_replacement_costs ],$sumKeys); 
+		$fixedAssetPayments = HArr::sumAtDates([$cashflowReport->fixed_asset_payments?:[] , $cashflowReport->total_fixed_asset_replacement_costs?:[] ],$sumKeys); 
 		$yearWithItsMonths=$study->getYearIndexWithItsMonths();
 		$fixedAssetPayments = HArr::sumPerYearIndex($fixedAssetPayments,$yearWithItsMonths);
 		$fixedAssetPayments = $study->replaceMonthIndexWithYearIndex($fixedAssetPayments);
@@ -181,8 +181,8 @@ $incomeStatement = $study->incomeStatement;
         //     }
         // }
         $costOfDebit = array_sum($totalAfterInterest);
-        $debitFundingPercentages = $balanceSheet ? (array)$balanceSheet->debit_funding_percentages  : [];
-        $equityFundingPercentages = $balanceSheet ? (array)$balanceSheet->equity_funding_percentages  : [1,1,1,1,1];
+        $debitFundingPercentages = $balanceSheet && isset($balanceSheet->debit_funding_percentages) ? (array)$balanceSheet->debit_funding_percentages  : [];
+        $equityFundingPercentages = $balanceSheet && isset($balanceSheet->equity_funding_percentages) ? (array)$balanceSheet->equity_funding_percentages  : [1,1,1,1,1];
         $debitFundingPercentages = HArr::MultiplyWithNumber($debitFundingPercentages, $costOfDebit);
         $equityFundingPercentages = HArr::MultiplyWithNumber($equityFundingPercentages, $returnRate);
         $wacc = HArr::sumAtDates([$equityFundingPercentages,$debitFundingPercentages],$years);
@@ -192,7 +192,8 @@ $incomeStatement = $study->incomeStatement;
         foreach ($years as $index => $yearIndex) {
             $terminalValues[$yearIndex] = 0 ;
             if ($index == count($years)-1) {
-                $terminalValues[$yearIndex] = $lastValueFreeCashflow /($lastKeyInWacc-$perptual);
+				$lastKeyInWaccMinusPerptual = $lastKeyInWacc-$perptual;
+                $terminalValues[$yearIndex] = $lastKeyInWaccMinusPerptual ?  $lastValueFreeCashflow /$lastKeyInWaccMinusPerptual : 0;
             }
         }
         $formattedDcfMethod['terminal-value'] = $terminalValues ;
@@ -214,7 +215,7 @@ $incomeStatement = $study->incomeStatement;
 			'model'=>$study ,
 			'title'=>$title,
 			'tableTitle'=>$title,
-			'formattedDcfMethod'=>$formattedDcfMethod??[],
+			'formattedDcfMethod'=>$formattedDcfMethod,
 			    'studyDates'=>$yearOrMonthsIndexesFromStudy,
 				 'yearWithItsIndexes'=>$yearWithItsIndexes,
 				 

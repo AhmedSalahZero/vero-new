@@ -11,7 +11,48 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperPropertyContractPartialRentRenewal
+ * @property int $id
+ * @property int $study_id
+ * @property int $property_id
+ * @property int|null $contract_id
+ * @property string|null $collection_interval
+ * @property array<array-key, mixed>|null $rent_revenues
+ * @property array<array-key, mixed>|null $rent_collections
+ * @property int $company_id
+ * @property int|null $renewal_type 1 for renew or 2 for renovate-and-revenue
+ * @property int $renovate_duration
+ * @property numeric $renovate_cost
+ * @property numeric $renewal_increase_rate
+ * @property numeric $new_rent_amount
+ * @property int $renewal_duration
+ * @property numeric $renewal_annual_increase
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\PropertyManagement\Contract|null $contract
+ * @property-read \App\Models\PropertyManagement\Property|null $property
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereCollectionInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereNewRentAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRenewalAnnualIncrease($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRenewalDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRenewalIncreaseRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRenewalType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRenovateCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRenovateDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereRentRevenues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractPartialRentRenewal whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class PropertyContractPartialRentRenewal extends Model
 {

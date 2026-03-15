@@ -13,7 +13,66 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * @mixin IdeHelperPartner
+ * @property int $id
+ * @property int|null $odoo_id
+ * @property int $company_id
+ * @property string $name
+ * @property int $is_customer
+ * @property int $is_supplier
+ * @property int $is_employee
+ * @property int $is_shareholder
+ * @property int $is_other_partner
+ * @property int $is_subsidiary_company
+ * @property int $is_tax هنضيف حساب
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $due_to_chart_of_account_number_odoo_code خاصين بال subsidiary
+ * @property int|null $due_to_chart_of_account_number_odoo_id خاصين بال subsidiary
+ * @property int|null $due_from_chart_of_account_number_odoo_code خاصين بال subsidiary
+ * @property int|null $due_from_chart_of_account_number_odoo_id خاصين بال subsidiary
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomerInvoice> $CustomerInvoice
+ * @property-read int|null $customer_invoice_count
+ * @property-read bool|null $customer_invoice_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SupplierInvoice> $SupplierInvoice
+ * @property-read int|null $supplier_invoice_count
+ * @property-read bool|null $supplier_invoice_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contract> $contracts
+ * @property-read int|null $contracts_count
+ * @property-read bool|null $contracts_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyCompany($companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyCustomers()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyCustomersOrOtherPartners()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyEmployees()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyForCompany($companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyHasInvoicesWithCurrency(string $currencyName)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyOtherPartners()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyShareholders()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlySubsidiaryCompanies()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlySuppliers()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyTaxes()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyThatHaveContracts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner onlyThatHaveCustomerContracts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereDueFromChartOfAccountNumberOdooCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereDueFromChartOfAccountNumberOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereDueToChartOfAccountNumberOdooCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereDueToChartOfAccountNumberOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsCustomer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsEmployee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsOtherPartner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsShareholder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsSubsidiaryCompany($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsSupplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereIsTax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Partner whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Partner extends Model
 {
@@ -37,11 +96,7 @@ class Partner extends Model
     protected $guarded = [];
 
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+  
     public function getId()
     {
         return $this->id ;
@@ -186,7 +241,7 @@ class Partner extends Model
     }
     public function updateNamesInAllTables(array $columnNames, string $oldPartnerName, string $newPartnerName, int $companyId, array $additionalWhere = [])
     {
-        $tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+        $tables = getTableNames();
         foreach ($tables as $tableName) {
             foreach ($columnNames as $columnName) {
                 if (Schema::hasColumn($tableName, $columnName)) {
@@ -324,9 +379,7 @@ class Partner extends Model
     public static function createNewForOdoo(int $id, string $partnerName, int $companyId, int $isCustomer, int $isSupplier, int $isEmployee, int $isOtherPartner)
     {
         
-        /**
-         * @var Company $company
-         */
+       
         $partner = Partner::create([
             'odoo_id'=>$id ,
             'is_customer'=>$isCustomer ,

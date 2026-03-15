@@ -46,7 +46,7 @@
 									visibility-hidden
 									 @endif 
 									 
-									 btn-1-bg btn-sm btn-brand add-btn-class  text-center add-btn-js">
+									 btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
                                         <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
                                     </a>
                                 </td>

@@ -49,7 +49,7 @@ class NotificationsController
 	}
 	public function index(Company $company,Request $request,string $currentType )
 	{
-		
+		$models = [];
 		$numberOfMonthsBetweenEndDateAndStartDate = 100 ;
 		// $numberOfMonthsBetweenEndDateAndStartDate = 18 ;
 		// $currentType = $request->get('active',Notification::CUSTOMER);

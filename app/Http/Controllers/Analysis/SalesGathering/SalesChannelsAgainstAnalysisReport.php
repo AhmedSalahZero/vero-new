@@ -66,6 +66,9 @@ class SalesChannelsAgainstAnalysisReport
 			$type  = 'day_name';
 			$view_name = 'Sales Channel Against Days Trend Analysis';
 		}
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
 
         $name_of_selector_label = str_replace(['Sales Channels Against ' ,' Trend Analysis'],'',$view_name);
         if ($type == 'averagePrices') {
@@ -77,7 +80,12 @@ class SalesChannelsAgainstAnalysisReport
 		}
 
         // $name_of_selector_label = ($type == 'averagePrices') ? 'Products / Services' : str_replace(['Sales Channels Against ' ,' Trend Analysis'],'',$view_name);
-        return view('client_view.reports.sales_gathering_analysis.salesChannels_analysis_form', compact('company','name_of_selector_label','type','view_name'));
+        return view('client_view.reports.sales_gathering_analysis.salesChannels_analysis_form', [
+			'company' => $company,
+			'name_of_selector_label' => $name_of_selector_label,
+			'type' => $type,
+			'view_name' => $view_name,
+		]);
     }
     public function SalesChannelsSalesAnalysisIndex(Company $company)
     {
@@ -114,13 +122,12 @@ class SalesChannelsAgainstAnalysisReport
         $data_type = ($request->data_type === null || $request->data_type == 'value')? 'net_sales_value' : 'quantity';
         foreach ($salesChannels as  $salesChannelName) {
             if ($result == 'view') {
-                   $salesChannels_data =collect(DB::select(DB::raw("
+                   $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,sales_channel," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."'AND sales_channel = '".$salesChannelName."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->groupBy($type)->map(function($item)use($data_type){
+                    ORDER BY id ";
+                   $salesChannels_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                         return $item->groupBy('gr_date')->map(function($sub_item) use($data_type){
 
                             return $sub_item->sum($data_type);
@@ -134,16 +141,19 @@ class SalesChannelsAgainstAnalysisReport
                     $salesChannels_data = DB::table('sales_gathering')
                     ->where('company_id',$company->id)
                       ->when($request->has('sales_channels') , function($query) use ($request){
-                        $query->whereIn('product_item',$request->get('sales_channels'));
+                        $salesChannels = $request->get('sales_channels', []);
+                        $query->whereIn('product_item', is_array($salesChannels) ? $salesChannels : [$salesChannels]);
                     })
                     ->when($request->has('products') , function($query) use ($request){
-                        $query->whereIn('product_or_service',$request->get('products'));
+                        $products = $request->get('products', []);
+                        $query->whereIn('product_or_service', is_array($products) ? $products : [$products]);
                     })
-					->when($request->has('salesChannels') , function($query) use ($request , $salesChannelName){
+					->when($request->has('salesChannels') , function($query) use ( $salesChannelName){
 						   $query->whereIn('sales_channel',(array)$salesChannelName);
 						})
 					->when($request->has('categories') , function($query) use ($request){
-                        $query->whereIn('category' , $request->get('categories'));
+                        $categories = $request->get('categories', []);
+                        $query->whereIn('category', is_array($categories) ? $categories : [$categories]);
                     })
                     // ->where('sales_channel', $salesChannelName)
                     ->whereNotNull($type)
@@ -153,8 +163,8 @@ class SalesChannelsAgainstAnalysisReport
                     
                      ->get() 
 					 
-                    ->groupBy($type)->map(function($item)use($data_type){
-                        return $item->groupBy('gr_date')->map(function($sub_item)use($data_type,$item){
+                    ->groupBy($type)->map(function($item){
+                        return $item->groupBy('gr_date')->map(function($sub_item){
                             return 
                             $sub_item->sum('net_sales_value'); 
                         });
@@ -163,16 +173,19 @@ class SalesChannelsAgainstAnalysisReport
                     $qq = DB::table('sales_gathering')
                     ->where('company_id',$company->id)
                       ->when($request->has('sales_channels') , function($query) use ($request){
-                        $query->whereIn('product_item',$request->get('sales_channels'));
+                        $salesChannels = $request->get('sales_channels', []);
+                        $query->whereIn('product_item', is_array($salesChannels) ? $salesChannels : [$salesChannels]);
                     })
                     ->when($request->has('products') , function($query) use ($request){
-                        $query->whereIn('product_or_service',$request->get('products'));
+                        $products = $request->get('products', []);
+                        $query->whereIn('product_or_service', is_array($products) ? $products : [$products]);
                     })
-                       ->when($request->has('salesChannels') , function($query) use ($request,$salesChannelName){
+                       ->when($request->has('salesChannels') , function($query) use ($salesChannelName){
                         $query->whereIn('sales_channel',[$salesChannelName]);
                     })
                     ->when($request->has('categories') , function($query) use ($request){
-                        $query->whereIn('category' , $request->get('categories'));
+                        $categories = $request->get('categories', []);
+                        $query->whereIn('category', is_array($categories) ? $categories : [$categories]);
                     })
 
                     // ->where('sales_channel', $salesChannelName)
@@ -182,8 +195,8 @@ class SalesChannelsAgainstAnalysisReport
                      sales_channel,' . $type)
                     
                      ->get() 
-                    ->groupBy($type)->map(function($item)use($data_type){
-                        return $item->groupBy('gr_date')->map(function($sub_item)use($data_type,$item){
+                    ->groupBy($type)->map(function($item){
+                        return $item->groupBy('gr_date')->map(function($sub_item){
                             
                             return 
                             ($sub_item->sum('quantity_bonus') + $sub_item->sum('quantity') ) ;
@@ -229,7 +242,7 @@ class SalesChannelsAgainstAnalysisReport
                     $interval_data_quantity = Intervals::intervalsWithoutDouble($request->get('end_date'),$report_data_quantity[$salesChannelName][$sales_channel], $years_quantity, $request->interval);
                     $report_data_quantity[$salesChannelName][$sales_channel] = $interval_data_quantity['data_intervals'][$request->interval] ?? [];
 
-                    $report_data_quantity[$salesChannelName]['Total']  = $this->finalTotal([($report_data_quantity[$salesChannelName]['Total']  ?? []) ,($report_data_quantity[$salesChannelName][$sales_channel][$name_of_report_item]??[]) ],'dates', 20);
+                    $report_data_quantity[$salesChannelName]['Total']  = $this->finalTotal([($report_data_quantity[$salesChannelName]['Total']  ?? []) ,($report_data_quantity[$salesChannelName][$sales_channel][$name_of_report_item]??[]) ],'dates');
                     $report_data_quantity[$salesChannelName][$sales_channel]['Growth Rate %'] = $this->growthRate(($report_data_quantity[$salesChannelName][$sales_channel][$name_of_report_item] ?? []));
 
                 }
@@ -266,7 +279,6 @@ class SalesChannelsAgainstAnalysisReport
 
                         elseif($itemKey == 'Growth Rate %'){
                             foreach($values as $datee => $dateVal){
-                                $report_data[$reportType][$dateName]['Avg. Prices'][$datee];
                                 $keys = array_flip(array_keys($report_data[$reportType][$dateName]['Avg. Prices']));
                                 $values = array_values($report_data[$reportType][$dateName]['Avg. Prices']);
                                 $previousValue = isset($values[$keys[$datee]-1]) ? $values[$keys[$datee]-1] : 0 ;
@@ -355,13 +367,12 @@ class SalesChannelsAgainstAnalysisReport
 
         foreach ($zones as  $zone) {
 
-            $sales =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." sales_channel
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND sales_channel = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id"
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date');
+                ORDER BY id";
+            $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){
                                     return $sub_item->sum('sales_value');
                                 })->toArray();
@@ -415,13 +426,13 @@ class SalesChannelsAgainstAnalysisReport
 
 
                     $final_report_data['Total'] = $this->finalTotal([($final_report_data['Total'] ?? []), (($final_report_data[$zone][$sales_discount_field]['Values']??[]))]);
-                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]??[]));
+                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]));
                 }
             }
             $zones_names[] = (str_replace( ' ','_', $zone));
         }
 
-        $sales_values = $this->finalTotal([$sales_values??[]]);
+        $sales_values = $this->finalTotal([$sales_values]);
         $total = $final_report_data['Total'];
         unset($final_report_data['Total']);
         $final_report_data['Total'] = $total;
@@ -452,13 +463,12 @@ class SalesChannelsAgainstAnalysisReport
         $sales_channels = is_array(json_decode(($request->sales_channels[0]))) ? json_decode(($request->sales_channels[0])) :$request->sales_channels ;
         foreach ($sales_channels as  $sales_channel) {
 
-            $sales_channels_data =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,sales_channel
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND sales_channel = '".$sales_channel."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy('gr_date')->map(function($item){
+                ORDER BY id ";
+            $sales_channels_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');
                 })->toArray();
          

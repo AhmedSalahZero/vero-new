@@ -16,7 +16,41 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @mixin IdeHelperForecastedProperty
+ * @property int $id
+ * @property int $counts
+ * @property int $category_id
+ * @property int $type_id
+ * @property int|null $acquisition_date
+ * @property numeric $area
+ * @property numeric $sqr_price
+ * @property int $company_id
+ * @property int $study_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $rent_revenues
+ * @property array<array-key, mixed>|null $rent_collections
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\PropertyManagement\ForecastedPropertyDueInstallment|null $dueInstallment
+ * @property-read \App\Models\PropertyManagement\ForecastedPropertyDueInstallment|null $forecastedDueInstallment
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @property-read \App\Models\PropertyManagement\PropertyType|null $type
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereAcquisitionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereRentRevenues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereSqrPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class ForecastedProperty extends Model
 {

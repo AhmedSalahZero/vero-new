@@ -7,6 +7,7 @@ use App\Models\OutgoingTransfer;
 use App\Models\Settlement;
 use App\Services\Api\CashExpenseOdooService;
 use App\Services\Api\OdooPayment;
+use App\Traits\HasCompany;
 use App\Traits\Models\HasCreditStatements;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasNonCustomerOrSupplier;
@@ -20,14 +21,88 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 
-/**
- * @mixin IdeHelperCashExpense
- */
 
+/**
+ * @property int $id
+ * @property string|null $odoo_reference
+ * @property string|null $odoo_error_message
+ * @property int $synced_with_odoo
+ * @property int|null $journal_entry_id
+ * @property int|null $account_bank_statement_line_id
+ * @property int|null $odoo_id
+ * @property int $is_reviewed
+ * @property int|null $reviewed_by المشرف اللي حدد انه راجعه
+ * @property int|null $cash_expense_category_name_id
+ * @property int|null $opening_balance_id
+ * @property string|null $type
+ * @property string|null $supplier_name
+ * @property string|null $payment_date
+ * @property numeric|null $paid_amount
+ * @property float $total_withhold_amount
+ * @property float|null $total_withhold_amount_in_main_currency
+ * @property float|null $amount_in_paying_currency
+ * @property string|null $currency
+ * @property float|null $exchange_rate
+ * @property int|null $user_id
+ * @property int|null $company_id
+ * @property string|null $comment_ar
+ * @property string|null $comment_en
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \App\Models\CashExpenseCategoryName|null $cashExpenseCategoryName
+ * @property-read \App\Models\CashInSafeStatement|null $cashInSafeCreditStatement
+ * @property-read \App\Models\CashPayment|null $cashPayment
+ * @property-read \App\Models\CleanOverdraftBankStatement|null $cleanOverdraftCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contract> $contracts
+ * @property-read int|null $contracts_count
+ * @property-read bool|null $contracts_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \App\Models\FullySecuredOverdraftBankStatement|null $fullySecuredOverdraftCreditBankStatement
+ * @property-read \App\Models\OpeningBalance|null $openingBalance
+ * @property-read \App\Models\OutgoingTransfer|null $outgoingTransfer
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContractBankStatement|null $overdraftAgainstAssignmentOfContractCreditBankStatement
+ * @property-read \App\Models\OverdraftAgainstCommercialPaperBankStatement|null $overdraftAgainstCommercialPaperCreditBankStatement
+ * @property-read \App\Models\Partner|null $partner
+ * @property-read \App\Models\PayableCheque|null $payableCheque
+ * @property-read \App\Models\User|null $reviewedBy
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereAmountInPayingCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereCashExpenseCategoryNameId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereIsReviewed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereOdooErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense wherePaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense wherePaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereReviewedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereSupplierName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereSyncedWithOdoo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereTotalWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereTotalWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereUserComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereUserId($value)
+ * @property-read \App\Models\Company|null $company
+ * @mixin \Eloquent
+ */
 class CashExpense extends Model
 {
 	
-	use IsMoneyOut ,HasForeignExchangeGainOrLoss,HasCreditStatements,HasReviewedBy,HasUserComment,HasNonCustomerOrSupplier;
+	use IsMoneyOut ,HasForeignExchangeGainOrLoss,HasCreditStatements,HasReviewedBy,HasUserComment,HasNonCustomerOrSupplier,HasCompany;
 	const CASH_PAYMENT  = 'cash_payment';
 	const PAYABLE_CHEQUE  = 'payable_cheque';
 	const OUTGOING_TRANSFER  = 'outgoing-transfer';
@@ -37,6 +112,7 @@ class CashExpense extends Model
 	
 	public static function generateComment(self $cashExpense,string $lang)
 	{
+		
 		if($cashExpense->isPayableCheque()){
 			return __('Payable Cheque To Pay [:expenseName - :expenseNameName] [ :chequeNumber ]',['expenseName'=>$cashExpense->getExpenseCategoryName(),'expenseNameName'=>$cashExpense->getExpenseName(),'chequeNumber'=>Request('cheque_number')],$lang) ;
 		}
@@ -239,7 +315,7 @@ class CashExpense extends Model
 			return $this->payableCheque->getDeliveryBankName();
 		}
 		if($this->isOutgoingTransfer()){
-			return $this->getOutgoingTransferDeliveryBankName(app()->getLocale());
+			return $this->getOutgoingTransferDeliveryBankName();
 		}
 		
 	}

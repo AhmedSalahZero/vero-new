@@ -17,7 +17,66 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperContract
+ * @property int $id
+ * @property int|null $tenant_id
+ * @property int $property_id
+ * @property numeric $monthly_rent
+ * @property array<array-key, mixed>|null $rent_revenues
+ * @property array<array-key, mixed>|null $rent_collections
+ * @property numeric|null $variable_from_tenant_revenues_percentage
+ * @property numeric|null $min_amount
+ * @property string|null $contract_currency
+ * @property string|null $collection_currency
+ * @property \Illuminate\Support\Carbon $contract_start_date
+ * @property \Illuminate\Support\Carbon $contract_end_date
+ * @property string $collection_interval
+ * @property int $insurance_months_count
+ * @property numeric $insurance_amount
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $finished_date
+ * @property numeric|null $annually_increase_rate
+ * @property string|null $collection_policy
+ * @property int $company_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\User|null $creator
+ * @property-read \App\Models\PropertyManagement\Property|null $property
+ * @property-read \App\Models\PropertyManagement\Tenant|null $tenant
+ * @property-read \App\Models\User|null $updater
+ * @method static \Database\Factories\ContractFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereAnnuallyIncreaseRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereCollectionCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereCollectionInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereCollectionPolicy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereContractCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereContractEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereContractStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereFinishedDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereInsuranceAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereInsuranceMonthsCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereMinAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereMonthlyRent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereRentRevenues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereTenantId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Contract whereVariableFromTenantRevenuesPercentage($value)
+ * @mixin \Eloquent
  */
 class Contract extends Model
 {

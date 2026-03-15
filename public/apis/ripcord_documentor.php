@@ -488,11 +488,6 @@ class Ripcord_Documentor implements Ripcord_Documentor_Interface
  */
 interface Ripcord_Documentor_Parser 
 {
-	/**
-	 * This method parses a given docComment block and returns an array with information.
-	 * @param string $commentBlock The docComment block.
-	 * @return array The parsed information.
-	 */
 	public function parse( $commentBlock );
 }
 
@@ -504,11 +499,7 @@ interface Ripcord_Documentor_Parser
 class Ripcord_Documentor_Parser_phpdoc implements Ripcord_Documentor_Parser 
 {
 	
-	/**
-	 * This method parses a given docComment block and returns an array with information.
-	 * @param string $commentBlock The docComment block.
-	 * @return array The parsed information.
-	 */
+
 	public function parse( $commentBlock) 
 	{
 		$this->currentTag = 'description';

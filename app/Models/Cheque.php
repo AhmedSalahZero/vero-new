@@ -7,7 +7,58 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperCheque
+ * @property int $id
+ * @property int|null $branch_id
+ * @property string|null $cheque_number
+ * @property string $status
+ * @property int $money_received_id
+ * @property int|null $drawee_bank_id هو البنك اللي جالي منة الشيك من العميل فا مش شرط يكون من بنوكي
+ * @property int|null $drawl_bank_id هو البنك اللي انا باخد الشيك واسحبة منة وبالتالي لازم يكون من بنوكي
+ * @property string $account_type نوع الحساب اللي هينزلك عليه فلوس الشيك بعد اما تودية البنك
+ * @property string|null $account_number رقم الحساب اللي هينزلك عليه فلوس الشيك بعد اما تودية البنك
+ * @property string|null $due_date هو تاريخ استحقاق الشيك .. يعني اقدر اسحبة امتة
+ * @property string|null $deposit_date هو تاريخ ايداع الشيك في البنك.. يعني ممكن يكون تاريخ الاستحقاق بكرا بس هطيته في البنك النهاردا
+ * @property int $days_count
+ * @property string|null $expected_collection_date هو تاريخ اللي متوقع ان البنك يحطلي فيه قيمة الشيك في حسابي
+ * @property string|null $actual_collection_date هو تاريخ اللي البنك حطلي فيه قيمة الشيك في حسابي بشكل فعلي لاني ممكن اتوقع في يوم بس فعليا البنك حطة في يوم تاني بس وجود اجازة مثلا في اليوم اللي انا توقعته
+ * @property int|null $clearance_days
+ * @property numeric $account_balance دي اجمالي اللي معايا في الحساب بعد اما الشيك مثلا انسحب ودي احنا اللي بنجسبها افتراضيا
+ * @property numeric $collection_fees الرسوم اللي البنك بياخدها منك لتحصيل الشيك
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $company_id
+ * @property-read \App\Models\AccountType|null $accountType
+ * @property-read \App\Models\Branch|null $branch
+ * @property-read \App\Models\Bank|null $draweeBank
+ * @property-read \App\Models\FinancialInstitution|null $drawlBank
+ * @property-read \App\Models\MoneyReceived $moneyReceived
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperLimit> $overdraftAgainstCommercialPaperLimits
+ * @property-read int|null $overdraft_against_commercial_paper_limits_count
+ * @property-read bool|null $overdraft_against_commercial_paper_limits_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereAccountBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereActualCollectionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereChequeNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereClearanceDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereCollectionFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereDaysCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereDepositDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereDraweeBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereDrawlBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereExpectedCollectionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Cheque whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Cheque extends Model
 {

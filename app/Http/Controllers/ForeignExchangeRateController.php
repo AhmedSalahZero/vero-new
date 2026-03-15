@@ -27,7 +27,7 @@ class ForeignExchangeRateController
         $value = $request->query('value');
         
         $collection = $collection
-        ->when($request->has('value'), function ($collection) use ($request, $value, $searchFieldName) {
+        ->when($request->has('value'), function ($collection) use ( $value, $searchFieldName) {
             return $collection->filter(function ($letterOfCreditIssuance) use ($value, $searchFieldName) {
                 $currentValue = $letterOfCreditIssuance->{$searchFieldName} ;
                 return false !== stristr($currentValue, $value);

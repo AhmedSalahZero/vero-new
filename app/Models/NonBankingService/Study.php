@@ -29,13 +29,223 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use MathPHP\Finance;
-
 /**
- * @mixin IdeHelperStudy
+  * @property int $force_yearly
+ */
+/**
+ * @property int $id
+ * @property numeric $revenue_multiplier
+ * @property numeric $ebitda_multiplier
+ * @property numeric $cost_of_equity_rate
+ * @property string $name اسم الدراسة
+ * @property int $existing_branches_counts
+ * @property string $company_nature نوع الشركة
+ * @property int|null $to_be_consolidated_from_study_id هيكون رقم الدراسة اللي هيختارها
+ * @property string $study_start_date
+ * @property int $duration_in_years
+ * @property string $study_end_date
+ * @property float $operation_start_month
+ * @property string $operation_start_date
+ * @property string $financial_year_start_month
+ * @property numeric $corporate_taxes_rate
+ * @property numeric $salary_taxes_rate
+ * @property numeric $social_insurance_rate
+ * @property numeric $perpetual_growth_rate
+ * @property numeric $shareholder_equity_multiplier
+ * @property array<array-key, mixed>|null $operation_dates
+ * @property array<array-key, mixed>|null $study_dates
+ * @property int $consumerfinance_loan_officer_count
+ * @property int $consumerfinance_branches_count
+ * @property int $microfinance_loan_officer_count
+ * @property array<array-key, mixed>|null $microfinance_branch_ids (DC2Type:json)
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $has_leasing
+ * @property int $has_direct_factoring
+ * @property int $has_reverse_factoring
+ * @property int $has_ijara_mortgage
+ * @property int $has_portfolio_mortgage
+ * @property int $has_micro_finance
+ * @property string|null $microfinance_type
+ * @property string|null $microfinance_no_branches
+ * @property int $has_securitization
+ * @property int $has_consumer_finance
+ * @property int|null $deleted_it
+ * @property int|null $deleted_it2
+ * @property array<array-key, mixed>|null $leasing_growth_rates
+ * @property int $microfinance_product_mix_count
+ * @property string|null $microfinance_product_mix_or_existing_branch
+ * @property array<array-key, mixed>|null $product_mix_senior_loan_officers
+ * @property array<array-key, mixed>|null $product_mix_loan_officers
+ * @property array<array-key, mixed>|null $previous_years_income_statement
+ * @property array<array-key, mixed>|null $right_of_use_rent
+ * @property-read \App\Models\NonBankingService\BalanceSheet|null $balanceSheet
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\CashAndBankOpeningBalance> $cashAndBankOpeningBalances
+ * @property-read int|null $cash_and_bank_opening_balances_count
+ * @property-read bool|null $cash_and_bank_opening_balances_exists
+ * @property-read \App\Models\NonBankingService\CashInOutStatement|null $cashInOutStatement
+ * @property-read \App\Models\NonBankingService\CashflowStatementReport|null $cashflowStatementReport
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ConsumerfinanceProductSalesProject> $consumerfinanceProductSalesProjects
+ * @property-read int|null $consumerfinance_product_sales_projects_count
+ * @property-read bool|null $consumerfinance_product_sales_projects_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\DirectFactoringBreakdown> $directFactoringBreakdowns
+ * @property-read int|null $direct_factoring_breakdowns_count
+ * @property-read bool|null $direct_factoring_breakdowns_exists
+ * @property-read \App\Models\NonBankingService\EclAndNewPortfolioFundingRate|null $directFactoringEclAndNewPortfolioFundingRate
+ * @property-read \App\Models\NonBankingService\DirectFactoringRevenueProjectionByCategory|null $directFactoringRevenueProjectionByCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\EclAndNewPortfolioFundingRate> $eclAndNewPortfolioFundingRates
+ * @property-read int|null $ecl_and_new_portfolio_funding_rates_count
+ * @property-read bool|null $ecl_and_new_portfolio_funding_rates_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\EquityOpeningBalance> $equityOpeningBalances
+ * @property-read int|null $equity_opening_balances_count
+ * @property-read bool|null $equity_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ExistingBranchesLoanCaseProjection> $existingBranchesLoanCases
+ * @property-read int|null $existing_branches_loan_cases_count
+ * @property-read bool|null $existing_branches_loan_cases_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Expense> $expenses
+ * @property-read int|null $expenses_count
+ * @property-read bool|null $expenses_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\FixedAssetOpeningBalance> $fixedAssetOpeningBalances
+ * @property-read int|null $fixed_asset_opening_balances_count
+ * @property-read bool|null $fixed_asset_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\FixedAsset> $fixedAssets
+ * @property-read int|null $fixed_assets_count
+ * @property-read bool|null $fixed_assets_exists
+ * @property-read \App\Models\NonBankingService\GeneralAndReserveAssumption|null $generalAndReserveAssumption
+ * @property-read \App\Models\NonBankingService\FixedAssetsFundingStructure|null $generalFixedAssetsFundingStructure
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\IjaraMortgageBreakdown> $ijaraMortgageBreakdowns
+ * @property-read int|null $ijara_mortgage_breakdowns_count
+ * @property-read bool|null $ijara_mortgage_breakdowns_exists
+ * @property-read \App\Models\NonBankingService\IjaraMortgageRevenueProjectionByCategory|null $ijaraMortgageRevenueProjectionByCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\IjaraMortgageRevenueStreamBreakdown> $ijaraMortgageRevenueStreamBreakdown
+ * @property-read int|null $ijara_mortgage_revenue_stream_breakdown_count
+ * @property-read bool|null $ijara_mortgage_revenue_stream_breakdown_exists
+ * @property-read \App\Models\NonBankingService\IncomeStatement|null $incomeStatement
+ * @property-read \App\Models\NonBankingService\IncomeStatementReport|null $incomeStatementReport
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance> $leaseRentLiabilityOpeningBalances
+ * @property-read int|null $lease_rent_liability_opening_balances_count
+ * @property-read bool|null $lease_rent_liability_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\LeasingRevenueStreamBreakdown> $leasingRevenueStreamBreakdown
+ * @property-read int|null $leasing_revenue_stream_breakdown_count
+ * @property-read bool|null $leasing_revenue_stream_breakdown_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\LongTermInvestmentsOpeningBalance> $longTermInvestmentsOpeningBalances
+ * @property-read int|null $long_term_investments_opening_balances_count
+ * @property-read bool|null $long_term_investments_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\LongTermLoanOpeningBalance> $longTermLoanOpeningBalances
+ * @property-read int|null $long_term_loan_opening_balances_count
+ * @property-read bool|null $long_term_loan_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Manpower> $manpowers
+ * @property-read int|null $manpowers_count
+ * @property-read bool|null $manpowers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\MicrofinanceByBranchProductMix> $microfinanceByBranchProductMixes
+ * @property-read int|null $microfinance_by_branch_product_mixes_count
+ * @property-read bool|null $microfinance_by_branch_product_mixes_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\MicrofinanceLoanOfficerCasesProjection> $microfinanceLoanOfficerCases
+ * @property-read int|null $microfinance_loan_officer_cases_count
+ * @property-read bool|null $microfinance_loan_officer_cases_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\MicrofinanceProductSalesProject> $microfinanceProductSalesProjects
+ * @property-read int|null $microfinance_product_sales_projects_count
+ * @property-read bool|null $microfinance_product_sales_projects_exists
+ * @property-read \App\Models\NonBankingService\FixedAssetsFundingStructure|null $newBranchFixedAssetsFundingStructure
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection> $newBranchMicrofinanceOpeningProjections
+ * @property-read int|null $new_branch_microfinance_opening_projections_count
+ * @property-read bool|null $new_branch_microfinance_opening_projections_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\OtherCreditsOpeningBalance> $otherCreditorsOpeningBalances
+ * @property-read int|null $other_creditors_opening_balances_count
+ * @property-read bool|null $other_creditors_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\OtherDebtorsOpeningBalance> $otherDebtorsOpeningBalances
+ * @property-read int|null $other_debtors_opening_balances_count
+ * @property-read bool|null $other_debtors_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\OtherLongTermAssetsOpeningBalance> $otherLongTermAssetsOpeningBalances
+ * @property-read int|null $other_long_term_assets_opening_balances_count
+ * @property-read bool|null $other_long_term_assets_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\OtherLongTermLiabilitiesOpeningBalance> $otherLongTermLiabilitiesOpeningBalances
+ * @property-read int|null $other_long_term_liabilities_opening_balances_count
+ * @property-read bool|null $other_long_term_liabilities_opening_balances_exists
+ * @property-read \App\Models\NonBankingService\FixedAssetsFundingStructure|null $perEmployeeFixedAssetsFundingStructure
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory> $portfolioMortgageRevenueProjectionByCategories
+ * @property-read int|null $portfolio_mortgage_revenue_projection_by_categories_count
+ * @property-read bool|null $portfolio_mortgage_revenue_projection_by_categories_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\RevenueContract> $revenueContracts
+ * @property-read int|null $revenue_contracts_count
+ * @property-read bool|null $revenue_contracts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ReverseFactoringBreakdown> $reverseFactoringBreakdowns
+ * @property-read int|null $reverse_factoring_breakdowns_count
+ * @property-read bool|null $reverse_factoring_breakdowns_exists
+ * @property-read \App\Models\NonBankingService\EclAndNewPortfolioFundingRate|null $reverseFactoringEclAndNewPortfolioFundingRate
+ * @property-read \App\Models\NonBankingService\ReverseFactoringRevenueProjectionByCategory|null $reverseFactoringRevenueProjectionByCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ReverseFactoringRevenueStreamBreakdown> $reverseFactoringRevenueStreamBreakdown
+ * @property-read int|null $reverse_factoring_revenue_stream_breakdown_count
+ * @property-read bool|null $reverse_factoring_revenue_stream_breakdown_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\RightOfUseAssetOpeningBalance> $rightOfUseAssetOpeningBalances
+ * @property-read int|null $right_of_use_asset_opening_balances_count
+ * @property-read bool|null $right_of_use_asset_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Securitization> $securitizations
+ * @property-read int|null $securitizations_count
+ * @property-read bool|null $securitizations_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\SupplierPayableOpeningBalance> $supplierPayableOpeningBalances
+ * @property-read int|null $supplier_payable_opening_balances_count
+ * @property-read bool|null $supplier_payable_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\VatAndCreditWithholdTaxOpeningBalance> $vatAndCreditWithholdTaxesOpeningBalances
+ * @property-read int|null $vat_and_credit_withhold_taxes_opening_balances_count
+ * @property-read bool|null $vat_and_credit_withhold_taxes_opening_balances_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereCompanyNature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereConsumerfinanceBranchesCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereConsumerfinanceLoanOfficerCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereCorporateTaxesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereCostOfEquityRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereDeletedIt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereDeletedIt2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereDurationInYears($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereEbitdaMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereExistingBranchesCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereFinancialYearStartMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasConsumerFinance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasDirectFactoring($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasIjaraMortgage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasLeasing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasMicroFinance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasPortfolioMortgage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasReverseFactoring($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereHasSecuritization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereLeasingGrowthRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereMicrofinanceBranchIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereMicrofinanceLoanOfficerCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereMicrofinanceNoBranches($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereMicrofinanceProductMixCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereMicrofinanceProductMixOrExistingBranch($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereMicrofinanceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereOperationDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereOperationStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereOperationStartMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study wherePerpetualGrowthRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study wherePreviousYearsIncomeStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereProductMixLoanOfficers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereProductMixSeniorLoanOfficers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereRevenueMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereRightOfUseRent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereSalaryTaxesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereShareholderEquityMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereSocialInsuranceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereStudyDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereStudyEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereStudyStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereToBeConsolidatedFromStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Study whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Study extends Model
 {
@@ -61,7 +271,7 @@ class Study extends Model
         
     protected $connection= 'non_banking_service';
     protected $table = 'studies';
-
+	public $force_yearly = false;
     protected $guarded = [
         'id'
     ];
@@ -260,7 +470,7 @@ class Study extends Model
     }
 
    
-    public function getOperationStartDateAsIndex():string
+    public function getOperationStartDateAsIndex(): ?int
     {
         
         return $this->getIndexDateFromString($this->getOperationStartDate());
@@ -338,8 +548,8 @@ class Study extends Model
 
         $studyDurationInYears = $this->getDurationInYears();
 
-        $limitationDate = $operationStartDate;
-        $studyDurationPerYear = $calculateDurationService->calculateMonthsDurationPerYear($studyStartDate, $maxDate, $studyDurationInYears, $limitationDate, true);
+     //   $limitationDate = $operationStartDate;
+        $studyDurationPerYear = $calculateDurationService->calculateMonthsDurationPerYear($studyStartDate, $maxDate, $studyDurationInYears, true);
         
         $studyDurationPerYear = $this->removeDatesBeforeDate($studyDurationPerYear, $studyStartDate);
         
@@ -1192,8 +1402,6 @@ class Study extends Model
                 }
             }
         }
-    
-    
         DB::connection('non_banking_service')->table($loanSchedulePaymentTableName)->insert($portfolioLoans);
         DB::connection('non_banking_service')->table('income_statement_reports')->where('study_id', $this->id)->update([
             $revenueStreamType.'_revenue'=>json_encode($totalInterests),
@@ -1296,7 +1504,7 @@ class Study extends Model
                     if ($isExpensePerEmployee) {
                         $positionIds = (array) $tableDataArr['position_ids'] ;
                         $manpowers = Manpower::whereIn('position_id', $positionIds)->where('study_id', $this->id)->where('monthly_net_salary', '>', 0)->pluck('accumulated_manpower_counts')->toArray();
-                        $accumulatedManpowerPowersForAllSelectedPositions = HArr::sumAtDates($manpowers, $monthsAsIndexes);
+                        $accumulatedManpowerPowersForAllSelectedPositions = HArr::sumAtDates(array_values($manpowers), $monthsAsIndexes);
                         $amount = $tableDataArr['monthly_cost_of_unit'];
                     } elseif ($isCostPerUnit) {
                         $amount = $tableDataArr['monthly_cost_of_unit'];
@@ -1308,7 +1516,7 @@ class Study extends Model
                         $contractResult = Expense::getExpensePerContract($revenueStreamTypes, $categoryIds, $studyId, 'contract_counts', true);
                         $contractCount = $contractResult['result'];
                         $sumKeys = $this->getOperationDatesAsDateAndDateAsIndexToStudyEndDate();
-                        $contractCount = HArr::sumAtDates($contractCount, $sumKeys);
+                        $contractCount = HArr::sumAtDates(array_values($contractCount), $sumKeys);
                         $monthlyFixedRepeatingResults = $monthlyFixedRepeatingAmountEquation->calculate($amount, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['increase_interval']??'annually', $tableDataArr['increase_rates']??0, $isDeductible, $vatRate, $withholdRate, $dateIndexWithYearIndex, $contractCount);
                     } elseif ($isExpensePerEmployee) {
                         $monthlyFixedRepeatingResults = $monthlyFixedRepeatingAmountEquation->calculate($amount, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['increase_interval']??'annually', $tableDataArr['increase_rates']??0, $isDeductible, $vatRate, $withholdRate, $dateIndexWithYearIndex, $accumulatedManpowerPowersForAllSelectedPositions);
@@ -1361,7 +1569,7 @@ class Study extends Model
                  * * Expense As Percentage
                  */
                 if ($tableId =='percentage_of_sales' || $tableId =='expense_as_percentage') {
-                    $expenseAsPercentageResults = $expenseAsPercentageEquation->calculate($studyId, $tableDataArr['percentage_of'], $revenueStreamTypes, $categoryIds, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['monthly_percentage'], $tableDataArr['payment_terms'], $vatRate, $isDeductible, $tableDataArr['withhold_tax_rate'], $isSensitivity) ;
+                    $expenseAsPercentageResults = $expenseAsPercentageEquation->calculate($studyId, $tableDataArr['percentage_of'], $revenueStreamTypes, $categoryIds, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['monthly_percentage']??0, $tableDataArr['payment_terms'], $vatRate, $isDeductible, $tableDataArr['withhold_tax_rate'], $isSensitivity) ;
                     $tableDataArr['expense_as_percentages']  =$expenseAsPercentageResults['total_before_vat']  ;
                     $tableDataArr['total_vat']  =$expenseAsPercentageResults['total_vat']  ;
                     $tableDataArr['total_after_vat']  =$expenseAsPercentageResults['total_after_vat']  ;
@@ -1424,7 +1632,9 @@ class Study extends Model
     }
 	protected function refreshTotalExpensePaymentsInIncomeStatement()
 	{
-		$totalPerTypes=[];
+		$totalPerTypes=[
+			
+		];
         $expenseColumnNames = Expense::getColumnMapping();
         $studyDates = array_keys($this->getStudyDates()) ;
 		
@@ -1628,8 +1838,8 @@ class Study extends Model
         $this->storeVariableLoans($request, Study::REVERSE_FACTORING, 'reverseFactoringBreakdowns', $isSensitivity);
         $this->storeFixedLoans($request, Study::IJARA, 'ijaraMortgageBreakdowns', $isSensitivity);
         $this->recalculatePortfolioMortgage($request);
-        $this->calculateMicrofinanceLoans($request);
-        $this->calculateConsumerfinanceLoans($request);
+        $this->calculateMicrofinanceLoans();
+        $this->calculateConsumerfinanceLoans();
         $this->updateExpensesPercentageAndCostPerUnitsOfSales();
     }
     public function getProductMixSeniorLoanOfficersAt(int $yearOrDateIndex, $isSenior = null)
@@ -1705,6 +1915,7 @@ class Study extends Model
         $expenseColumnArr = [];
         
         foreach ($revenues as $revenueColumnName) {
+			/** @phpstan-ignore-next-line */
             $currentRevenueArr = (array)$incomeStatementReport->{$revenueColumnName};
             $revenueColumnArr[] = $currentRevenueArr;
         }
@@ -3733,7 +3944,7 @@ class Study extends Model
         
         $totalFixedAssetEquity = [];
     
-        $totalCashIn = HArr::sumAtDates(array_column($tableDataFormatted[0]['sub_items']??[], 'data'), $sumKeys);
+        $totalCashIn = HArr::sumAtDates(array_column($tableDataFormatted[0]['sub_items'], 'data'), $sumKeys);
         $tableDataFormatted[0]['main_items']['cash-in-flow']['data'] = $totalCashIn;
         $tableDataFormatted[0]['main_items']['cash-in-flow']['year_total'] = $totalCashInflowPerYear = HArr::sumPerYearIndex($totalCashIn, $yearWithItsMonths);
         // cash out

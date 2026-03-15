@@ -69,7 +69,7 @@ class TimeOfDepositRenewalDateController
 		$commentEn = __('Renewal For Time Deposit',[],'en');
 		$commentAr = __('Renewal For Time Deposit',[],'ar');
 		$interestAmount = $timeOfDeposit->storeRenewalDebitCurrentAccount($expiryDate,$renewalDate,$newInterestRate,$commentEn,$commentAr);
-		$timeOfDeposit->storeRenewal($expiryDate,$interestAmount);
+		$timeOfDeposit->storeRenewal($expiryDate,$newInterestRate);
 		$timeOfDeposit->update([
 			'end_date'=>$renewalDate,
 			'start_date'=>$expiryDate,

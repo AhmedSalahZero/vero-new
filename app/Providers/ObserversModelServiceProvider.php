@@ -2,12 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\BalanceSheet;
 use App\Models\CashFlowStatement;
-use App\Models\CustomersInvoice;
 use App\Models\FinancialStatement;
 use App\Models\IncomeStatement;
-use App\Observers\BalanceSheetObserver;
 use App\Observers\CashFlowStatementObserver;
 use App\Observers\FinancialStatementObserver;
 use App\Observers\IncomeStatementObserver;
@@ -33,7 +30,6 @@ class ObserversModelServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		IncomeStatement::observe(IncomeStatementObserver::class);
-		BalanceSheet::observe(BalanceSheetObserver::class);
 		CashFlowStatement::observe(CashFlowStatementObserver::class);
 		FinancialStatement::observe(FinancialStatementObserver::class);
 	}

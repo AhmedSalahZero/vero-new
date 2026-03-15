@@ -14,14 +14,7 @@ class CalculateProfitsEquationsService
 		return array_values(array_unique(array_merge(array_keys($firstArray), array_keys($secondArray), array_keys($thirdArray))));
 	}
 
-	/**
-	 * Calculate Gross Profit
-	 *
-	 * @param array $revenues [01-01-25=>5 , 01-02-2025=>5,..etc] with dimensions
-	 * @param array $cogs [01-01-25=>5 , 01-02-2025=>5,..etc] with dimensions
-	 *
-	 * @return array [ 'value'=>['01-01-2020'=>5] , 'percentages'=>['01-01-2025'=>15]  ]
-	 */
+
 	public function __calculateGrossProfit(array $revenues, array $cogs):array
 	{
 		$grossProfit = [];
@@ -40,18 +33,10 @@ class CalculateProfitsEquationsService
 		];
 	}
 
-	/**
-	 * Calculate EBITDA
-	 *
-	 * @param array $grossProfit [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $sga [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $otherDeductions [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $revenues [01-01-2025=>10,01-02-2025=>20] single dim array
-	 *
-	 * @return array [ 'values'=>['01-01-2020'=>5] , 'percentages'=>['01-01-2025'=>15]  ]
-	 */
+
 	public function __calculateEBITDA(array $grossProfit, array $sga, array $otherDeductions, array $revenues):array
 	{
+		$ebitdaPercentages = [];
 		$ebitda = [];
 		$dates = $this->getDatesFromThreeArrays($grossProfit, $sga, $otherDeductions);
 		foreach ($dates as $date) {
@@ -69,18 +54,10 @@ class CalculateProfitsEquationsService
 		];
 	}
 
-	/**
-	 * Calculate EBIT
-	 *
-	 * @param array $ebitda  [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $depreciation  [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $revenues  [01-01-2025=>10,01-02-2025=>20] single dim array
-	 *
-	 * @return array [ 'values'=>['01-01-2020'=>5] , 'percentages'=>['01-01-2025'=>15]  ]
-	 */
 	public function __calculateEBIT(array $ebitda, array $depreciation, array $incentiveManagementAmounts,array $revenues):array
 	{
 		$ebit = [];
+		$ebitPercentages = [];
 		$dates = $this->getDatesFromTwoArrays($ebitda, $depreciation);
 		foreach ($dates as $date) {
 			$ebitdaAtDate = $ebitda[$date]??0;
@@ -97,17 +74,11 @@ class CalculateProfitsEquationsService
 		];
 	}
 
-	/**
-	 * Calculate EBT
-	 *
-	 * @param array $ebit  [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $loanInterest  [01-01-2025=>10,01-02-2025=>20] single dim array
-	 *
-	 * @return array [ 'values'=>['01-01-2020'=>5] , 'percentages'=>['01-01-2025'=>15]  ]
-	 */
+
 	public function __calculateEBT(array $ebit, array $loanInterest, array $revenues):array
 	{
 		$ebt = [];
+		$ebtPercentages = [];
 		$dates = array_keys($ebit);
 		foreach ($dates as $date) {
 			$ebitAtDate = $ebit[$date]??0;
@@ -123,18 +94,11 @@ class CalculateProfitsEquationsService
 		];
 	}
 
-	/**
-	 * Calculate Net Profit
-	 *
-	 * @param array $ebt [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $taxes [01-01-2025=>10,01-02-2025=>20] single dim array
-	 * @param array $revenues [01-01-2025=>10,01-02-2025=>20] single dim array
-	 *
-	 * @return array [ 'values'=>['01-01-2020'=>5] , 'percentages'=>['01-01-2025'=>15]  ]
-	 */
+
 	public function __calculateNetProfit(array $ebt, array $corporateTaxes  ,array $revenues):array
 	{
-		
+		$netProfit = [];
+		$netProfitPercentages = [];
 		$dates = $this->getDatesFromTwoArrays($ebt, $corporateTaxes);
 		foreach ($dates as $date) {
 			$ebtAtDate = $ebt[$date]??0;

@@ -6,12 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StorePropertyRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-	protected function prepareForValidation()
+   
+	protected function prepareForValidation():array 
 	{
 		if($this->nature_id == 'unit' || $this->nature_id == 'land'){
 			$this->merge([
@@ -26,11 +22,7 @@ class StorePropertyRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
         $propertyId = $this->route('property') ? $this->route('property')->id : null;
@@ -88,11 +80,7 @@ class StorePropertyRequest extends FormRequest
         return $rules;
     }
 
-    /**
-     * Get custom attribute names for validator errors.
-     *
-     * @return array
-     */
+  
     public function attributes()
     {
         return [
@@ -132,11 +120,7 @@ class StorePropertyRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
+
     public function messages()
     {
         return [

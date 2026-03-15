@@ -12,7 +12,72 @@ use Illuminate\Support\Facades\DB;
 
 
 /**
- * @mixin IdeHelperLcOverdraftBankStatement
+ * @property int $id
+ * @property string $source
+ * @property string $type وليكن مثلا beginning_balance,incoming_transfer,cheque_payment  , etc
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property int $priority عباره عن اولويه التسديد بمعني لما يحين وقت التسديد مين هيتسدد الاول لان الفؤائد بتسدد الاول
+ * @property int|null $lc_facility_id
+ * @property int $lc_issuance_id
+ * @property int|null $lc_settlement_internal_money_transfer_id
+ * @property int $company_id
+ * @property string $date
+ * @property numeric $limit
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property numeric $room
+ * @property string $interest_type الفايدة اما بتنزل بعد كل سحبة او ايداع او بتنزل بشكل اوتوماتك اخر كل شهر
+ * @property numeric $interest_rate_annually
+ * @property numeric $interest_rate_daily
+ * @property int $days_count
+ * @property numeric $interest_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $full_date دا هنستخدمة علشان نرتب بيه ونجيب ال الرو السابق بناء علي التاريخ و الوقت
+ * @property string|null $outstanding_withdrawal_date
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @property-read \App\Models\LetterOfCreditIssuance|null $lcIssuance
+ * @property-read \App\Models\LcOverdraftBankStatement|null $lcOverdraftCreditBankStatement
+ * @property-read \App\Models\LcSettlementInternalMoneyTransfer|null $lcSettlementInternalMoneyTransfer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LcOverdraftWithdrawal> $withdrawals
+ * @property-read int|null $withdrawals_count
+ * @property-read bool|null $withdrawals_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereDaysCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereInterestRateAnnually($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereInterestRateDaily($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereInterestType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereLcFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereLcIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereLcSettlementInternalMoneyTransferId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereOutstandingWithdrawalDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereRoom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftBankStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LcOverdraftBankStatement extends Model
 {

@@ -6,7 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperLog
+ * @property int $id
+ * @property string $activity
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property int|null $user_id
+ * @property int|null $company_id
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log whereActivity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Log whereUserId($value)
+ * @mixin \Eloquent
  */
 class Log extends Model
 {

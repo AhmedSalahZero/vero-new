@@ -74,7 +74,7 @@ class SalesGatheringTestJob implements ShouldQueue
 					/**
 					 * * insert customer invoices
 					 */
-					$customerId = 0 ;
+					$customerId = null ;
 					$customerName = $value['customer_name'] ;
 					$value['currency'] = isset($value['currency']) ? strtoupper($value['currency']) : null;
 					$customerFound = $customerId ? true : DB::table('partners')->where('company_id',$this->company_id)->where('is_customer',1)->where('name',$customerName)->exists();
@@ -159,7 +159,7 @@ class SalesGatheringTestJob implements ShouldQueue
 			if($modelName == 'SupplierInvoice' && is_array($value)){
 				$supplierId = null ;
 				if($this->modelName == 'SupplierInvoice'){
-					$supplierId = 0 ;
+					$supplierId = null ;
 					$supplierName = $value['supplier_name'] ;
 					$value['currency'] = isset($value['currency']) ? strtoupper($value['currency']) : null;
 					$supplierFound = $supplierId ? true : DB::table('partners')->where('company_id',$this->company_id)->where('is_supplier',1)->where('name',$supplierName)->exists();

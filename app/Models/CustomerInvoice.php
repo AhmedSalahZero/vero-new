@@ -11,7 +11,140 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperCustomerInvoice
+ * @property int $id
+ * @property int|null $odoo_id
+ * @property int $company_id
+ * @property int|null $opening_balance_id
+ * @property string|null $customer_code
+ * @property string|null $sales_person
+ * @property string|null $business_unit
+ * @property int $customer_id
+ * @property string|null $customer_name
+ * @property string|null $business_sector
+ * @property string|null $project_name
+ * @property string|null $site_name
+ * @property string|null $invoice_date
+ * @property string|null $sales_order_date
+ * @property string|null $sales_order_number
+ * @property string|null $invoice_month
+ * @property int|null $invoice_year
+ * @property string|null $invoice_number
+ * @property string|null $invoice_amount
+ * @property string $currency
+ * @property numeric $exchange_rate
+ * @property float|null $invoice_amount_in_main_currency
+ * @property string|null $vat_amount
+ * @property float|null $vat_amount_in_main_currency
+ * @property numeric $odoo_withhold_amount
+ * @property numeric $odoo_withhold_amount_in_main_currency
+ * @property string|null $withhold_amount
+ * @property float|null $withhold_amount_in_main_currency
+ * @property numeric $total_withhold_amount
+ * @property numeric $total_withhold_amount_in_main_currency
+ * @property string|null $net_invoice_amount
+ * @property float|null $net_invoice_amount_in_main_currency
+ * @property string|null $contracted_collection_days
+ * @property string|null $expected_collection_days
+ * @property string|null $invoice_due_date
+ * @property string|null $invoice_status
+ * @property numeric $odoo_collected_amount
+ * @property numeric $odoo_collected_amount_in_main_currency
+ * @property string|null $collected_amount
+ * @property float|null $collected_amount_in_main_currency
+ * @property numeric $total_collected_amount
+ * @property numeric $total_collected_amount_in_main_currency
+ * @property numeric $total_deductions
+ * @property numeric $total_deductions_in_main_currency
+ * @property string|null $net_balance
+ * @property float|null $net_balance_in_main_currency
+ * @property int|null $is_period_closed
+ * @property int|null $is_canceled
+ * @property string|null $contract_date
+ * @property string|null $contract_code
+ * @property string|null $contract_name
+ * @property numeric|null $contract_amount
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property numeric|null $discount_amount
+ * @property numeric|null $discount_amount_in_main_currency
+ * @property-read \App\Models\Partner|null $customer
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Deduction> $deductions
+ * @property-read int|null $deductions_count
+ * @property-read bool|null $deductions_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DueDateHistory> $dueDateHistories
+ * @property-read int|null $due_date_histories_count
+ * @property-read bool|null $due_date_histories_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $moneyReceived
+ * @property-read int|null $money_received_count
+ * @property-read bool|null $money_received_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice onlyCompany($companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice onlyCurrency(string $currency)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice onlyForPartner($partnerId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereBusinessSector($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereBusinessUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCollectedAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCollectedAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereContractAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereContractCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereContractDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereContractName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereContractedCollectionDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCustomerCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCustomerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereCustomerName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereDiscountAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereDiscountAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereExpectedCollectionDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereInvoiceYear($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereIsCanceled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereIsPeriodClosed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereNetBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereNetBalanceInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereNetInvoiceAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereNetInvoiceAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereOdooCollectedAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereOdooCollectedAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereOdooWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereOdooWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereProjectName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereSalesOrderDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereSalesOrderNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereSalesPerson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereSiteName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereTotalCollectedAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereTotalCollectedAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereTotalDeductions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereTotalDeductionsInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereTotalWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereTotalWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereVatAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereVatAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerInvoice whereWithholdAmountInMainCurrency($value)
+ * @mixin \Eloquent
  */
 class CustomerInvoice extends Model implements IInvoice
 {

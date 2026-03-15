@@ -51,7 +51,8 @@ class HelpersController {
 	}
 	
 	public function deleteMulti(Company $company , Request $request){
-		QuickPricingCalculator::where('company_id',$company->id)->whereIn('quick_pricing_calculators.id',$request->get('ids',[]))->delete();
+		$ids = $request->get('ids', []);
+		QuickPricingCalculator::where('company_id',$company->id)->whereIn('quick_pricing_calculators.id', is_array($ids) ? $ids : [$ids])->delete();
 		return response()->json([
 			'status'=>true ,
 			'link'=> route('admin.view.quick.pricing.calculator',['company'=>$company->id , 'active'=>'quick-price-calculator'])

@@ -326,7 +326,7 @@ use App\Models\LetterOfCreditIssuance;
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <x-form.input :readonly="false" :default-value="1" :model="$model??null" :label="__('Exchange Rate')" :type="'text'" :placeholder="__('Exchange Rate')" :name="'exchange_rate'" :class="'exchange-rate-class  recalculate-amount-in-main-currency exchange-rate-js only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
+                                    <x-form.input :readonly="false" :default-value="1" :model="$model??null" :label="__('Exchange Rate')" :type="'text'" :placeholder="__('Exchange Rate')" :name="'exchange_rate'" :class="'exchange-rate-class recalculate-amount-in-main-currency exchange-rate-js only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
                                 </div>
                                 <div class="col-md-3">
                                     <x-form.input :readonly="true" :default-value="0" :model="$model??null" :label="__('Amount In Payment Currency')" :type="'text'" :placeholder="__('Amount In Payment Currency')" :name="'amount_in_main_currency'" :class="'amount-in-main-currency-js-hidden recalculate-cash-cover-amount-js '" :required="true"></x-form.input>

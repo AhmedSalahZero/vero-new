@@ -34,7 +34,121 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperStudy
+ * @property int $id
+ * @property numeric $revenue_multiplier
+ * @property numeric $ebitda_multiplier
+ * @property numeric $cost_of_equity_rate
+ * @property string $name اسم الدراسة
+ * @property string $company_nature نوع الشركة
+ * @property string $study_start_date
+ * @property int $duration_in_years
+ * @property string $study_end_date
+ * @property float $operation_start_month
+ * @property string $operation_start_date
+ * @property string $financial_year_start_month
+ * @property numeric $corporate_taxes_rate
+ * @property numeric $salary_taxes_rate
+ * @property numeric $social_insurance_rate
+ * @property numeric $perpetual_growth_rate
+ * @property numeric $shareholder_equity_multiplier
+ * @property array<array-key, mixed>|null $operation_dates
+ * @property array<array-key, mixed>|null $study_dates
+ * @property int $consumerfinance_branches_count
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\AreaProperty> $areaProperties
+ * @property-read int|null $area_properties_count
+ * @property-read bool|null $area_properties_exists
+ * @property-read \App\Models\PropertyManagement\BalanceSheet|null $balanceSheet
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\CashAndBankOpeningBalance> $cashAndBankOpeningBalances
+ * @property-read int|null $cash_and_bank_opening_balances_count
+ * @property-read bool|null $cash_and_bank_opening_balances_exists
+ * @property-read \App\Models\PropertyManagement\CashInOutStatement|null $cashInOutStatement
+ * @property-read \App\Models\PropertyManagement\CashflowStatementReport|null $cashflowStatementReport
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\EquityOpeningBalance> $equityOpeningBalances
+ * @property-read int|null $equity_opening_balances_count
+ * @property-read bool|null $equity_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Expense> $expenses
+ * @property-read int|null $expenses_count
+ * @property-read bool|null $expenses_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\FixedAssetOpeningBalance> $fixedAssetOpeningBalances
+ * @property-read int|null $fixed_asset_opening_balances_count
+ * @property-read bool|null $fixed_asset_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\FixedAsset> $fixedAssets
+ * @property-read int|null $fixed_assets_count
+ * @property-read bool|null $fixed_assets_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\ForecastedProperty> $forecastedProperties
+ * @property-read int|null $forecasted_properties_count
+ * @property-read bool|null $forecasted_properties_exists
+ * @property-read \App\Models\PropertyManagement\GeneralAndReserveAssumption|null $generalAndReserveAssumption
+ * @property-read \App\Models\PropertyManagement\FixedAssetsFundingStructure|null $generalFixedAssetsFundingStructure
+ * @property-read \App\Models\PropertyManagement\IncomeStatement|null $incomeStatement
+ * @property-read \App\Models\PropertyManagement\IncomeStatementReport|null $incomeStatementReport
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\LongTermLoanOpeningBalance> $longTermLoanOpeningBalances
+ * @property-read int|null $long_term_loan_opening_balances_count
+ * @property-read bool|null $long_term_loan_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\OtherCreditsOpeningBalance> $otherCreditorsOpeningBalances
+ * @property-read int|null $other_creditors_opening_balances_count
+ * @property-read bool|null $other_creditors_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\OtherDebtorsOpeningBalance> $otherDebtorsOpeningBalances
+ * @property-read int|null $other_debtors_opening_balances_count
+ * @property-read bool|null $other_debtors_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\OtherLongTermAssetsOpeningBalance> $otherLongTermAssetsOpeningBalances
+ * @property-read int|null $other_long_term_assets_opening_balances_count
+ * @property-read bool|null $other_long_term_assets_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\OtherLongTermLiabilitiesOpeningBalance> $otherLongTermLiabilitiesOpeningBalances
+ * @property-read int|null $other_long_term_liabilities_opening_balances_count
+ * @property-read bool|null $other_long_term_liabilities_opening_balances_exists
+ * @property-read \App\Models\PropertyManagement\FixedAssetsFundingStructure|null $perEmployeeFixedAssetsFundingStructure
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Position> $positions
+ * @property-read int|null $positions_count
+ * @property-read bool|null $positions_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyContractFullRentRenewal> $propertyContractFullRentRenewals
+ * @property-read int|null $property_contract_full_rent_renewals_count
+ * @property-read bool|null $property_contract_full_rent_renewals_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyContractPartialRentRenewal> $propertyContractPartialRentRenewals
+ * @property-read int|null $property_contract_partial_rent_renewals_count
+ * @property-read bool|null $property_contract_partial_rent_renewals_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyToBeDelivered> $propertyToBeDelivered
+ * @property-read int|null $property_to_be_delivered_count
+ * @property-read bool|null $property_to_be_delivered_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\SupplierPayableOpeningBalance> $supplierPayableOpeningBalances
+ * @property-read int|null $supplier_payable_opening_balances_count
+ * @property-read bool|null $supplier_payable_opening_balances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\VatAndCreditWithholdTaxOpeningBalance> $vatAndCreditWithholdTaxesOpeningBalances
+ * @property-read int|null $vat_and_credit_withhold_taxes_opening_balances_count
+ * @property-read bool|null $vat_and_credit_withhold_taxes_opening_balances_exists
+ * @method static \Database\Factories\PropertyManagement\StudyFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereCompanyNature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereConsumerfinanceBranchesCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereCorporateTaxesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereCostOfEquityRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereDurationInYears($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereEbitdaMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereFinancialYearStartMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereOperationDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereOperationStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereOperationStartMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study wherePerpetualGrowthRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereRevenueMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereSalaryTaxesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereShareholderEquityMultiplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereSocialInsuranceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereStudyDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereStudyEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereStudyStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Study extends Model
 {
@@ -60,7 +174,7 @@ class Study extends Model
         
     protected $connection= 'property_management';
     protected $table = 'studies';
-
+	public $force_yearly = false;
     protected $guarded = [
         'id'
     ];
@@ -256,7 +370,7 @@ class Study extends Model
         return $startDate;
     }
 
-    public function getOperationStartDateAsIndex():string
+    public function getOperationStartDateAsIndex(): ?int
     {
         
         return $this->getIndexDateFromString($this->getOperationStartDate());
@@ -333,8 +447,8 @@ class Study extends Model
 
         $studyDurationInYears = $this->getDurationInYears();
 
-        $limitationDate = $operationStartDate;
-        $studyDurationPerYear = $calculateDurationService->calculateMonthsDurationPerYear($studyStartDate, $maxDate, $studyDurationInYears, $limitationDate, true);
+     //   $limitationDate = $operationStartDate;
+        $studyDurationPerYear = $calculateDurationService->calculateMonthsDurationPerYear($studyStartDate, $maxDate, $studyDurationInYears, true);
         
         $studyDurationPerYear = $this->removeDatesBeforeDate($studyDurationPerYear, $studyStartDate);
         
@@ -1225,7 +1339,7 @@ class Study extends Model
         //    $operationStartDateAsIndex = $datesAsStringDateIndex[$this->getOperationStartDate()];
         $studyExtendedEndDateAsIndex = Arr::last($datesAsStringDateIndex);
         $dateIndexWithDate = $this->getDateIndexWithDate();
-        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex($datesAsStringDateIndex, $this->getStudyEndDate());
+        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex();
         foreach ($expenseTypes as $tableId) {
             
             #::delete all
@@ -1292,7 +1406,7 @@ class Study extends Model
                     if ($isExpensePerEmployee) {
                         $positionIds = (array) $tableDataArr['position_ids'] ;
                         $manpowers = Manpower::whereIn('position_id', $positionIds)->where('study_id', $this->id)->where('monthly_net_salary', '>', 0)->pluck('accumulated_manpower_counts')->toArray();
-                        $accumulatedManpowerPowersForAllSelectedPositions = HArr::sumAtDates($manpowers, $monthsAsIndexes);
+                        $accumulatedManpowerPowersForAllSelectedPositions = HArr::sumAtDates(array_values($manpowers), $monthsAsIndexes);
                         $amount = $tableDataArr['monthly_cost_of_unit'];
                     } elseif ($isCostPerUnit) {
                         $amount = $tableDataArr['monthly_cost_of_unit'];
@@ -1301,11 +1415,11 @@ class Study extends Model
                    
                     $monthlyFixedRepeatingResults = [];
                     if ($isCostPerUnit) {
-                        $contractResult = Expense::getExpensePerContract($revenueStreamTypes, $categoryIds, $studyId, true);
+                        $contractResult = Expense::getExpensePerContract($revenueStreamTypes, $categoryIds, $studyId);
                         $contractCount = $contractResult['result'];
 						
                         $sumKeys = $this->getOperationDatesAsDateAndDateAsIndexToStudyEndDate();
-                        $contractCount = HArr::sumAtDates($contractCount, $sumKeys);
+                        $contractCount = HArr::sumAtDates(array_values($contractCount), $sumKeys);
 						foreach($sumKeys as $dateAsIndex){
 							$contractCount[$dateAsIndex] = $contractCount[0]??0;
 						}
@@ -1361,7 +1475,7 @@ class Study extends Model
                  * * Expense As Percentage
                  */
                 if ($tableId =='percentage_of_sales' || $tableId =='expense_as_percentage') {
-                    $expenseAsPercentageResults = $expenseAsPercentageOfPropertyEquation->calculate($studyId, $tableDataArr['percentage_of'], $revenueStreamTypes, $categoryIds, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['monthly_percentage'], $tableDataArr['payment_terms'], $vatRate, $isDeductible, $tableDataArr['withhold_tax_rate'], $isSensitivity) ;
+                    $expenseAsPercentageResults = $expenseAsPercentageOfPropertyEquation->calculate($studyId, $tableDataArr['percentage_of'], $revenueStreamTypes, $categoryIds, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['monthly_percentage']??0, $tableDataArr['payment_terms'], $vatRate, $isDeductible, $tableDataArr['withhold_tax_rate'], $isSensitivity) ;
                     $tableDataArr['expense_as_percentages']  =$expenseAsPercentageResults['total_before_vat']  ;
                     $tableDataArr['total_vat']  =$expenseAsPercentageResults['total_vat']  ;
                     $tableDataArr['total_after_vat']  =$expenseAsPercentageResults['total_after_vat']  ;
@@ -3552,7 +3666,7 @@ class Study extends Model
         
         $totalFixedAssetEquity = [];
     
-        $totalCashIn = HArr::sumAtDates(array_column($tableDataFormatted[0]['sub_items']??[], 'data'), $sumKeys);
+        $totalCashIn = HArr::sumAtDates(array_column($tableDataFormatted[0]['sub_items'], 'data'), $sumKeys);
         $tableDataFormatted[0]['main_items']['cash-in-flow']['data'] = $totalCashIn;
         $tableDataFormatted[0]['main_items']['cash-in-flow']['year_total'] = $totalCashInflowPerYear = HArr::sumPerYearIndex($totalCashIn, $yearWithItsMonths);
         // cash out
@@ -4597,7 +4711,7 @@ class Study extends Model
         foreach ($loansOpeningBalanceEndBalances as $row) {
             $loansOpeningBalanceEndBalance =$row->statement;
             $interestRate =$row->interest_rate;
-            $loansOpeningBalanceEndBalance= ((array)((array)json_decode($loansOpeningBalanceEndBalance))['monthly']??[])['end_balance']??[];
+            $loansOpeningBalanceEndBalance= ((array)((array)json_decode($loansOpeningBalanceEndBalance))['monthly'])['end_balance']??[];
             $totalLoansOpening = HArr::sumAtDates([$totalLoansOpening,$loansOpeningBalanceEndBalance], $sumKeys);
             $loansOpeningBalanceEndBalancePerYear = HArr::getPerYearIndexForEndBalance($loansOpeningBalanceEndBalance, $yearWithItsMonths);
             $totalLoanSubs[]= [
@@ -5250,10 +5364,7 @@ class Study extends Model
             $totalTaxAndSocialInsurances  = HArr::sumAtDates([$totalTaxAndSocialInsurances,$salaryTaxAndSocialInsurance], $sumKeys);
         }
         
-        $totalSalaryPayments;
-      
-        
-        $totalTaxAndSocialInsurances;
+
        
     
         DB::connection('property_management')->table('cashflow_statement_reports')->where('study_id', $this->id)->update([
@@ -6217,7 +6328,7 @@ class Study extends Model
 		$studyEndDateAsString = $study->getStudyEndDate();
 		$studyStartDateAsString = $study->getStudyStartDate();
 		$studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex,$studyStartDateAsString);
-		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex($dateWithDateIndex,$studyEndDateAsString);
+		$studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
 	
 		$totalFixedAssetAmounts = [];
 		$currentFixedAssetAmounts = [];
@@ -6465,7 +6576,7 @@ class Study extends Model
 	
 		$formattedResult = [];
 		foreach(count($occupiedProperties) ? $occupiedProperties : [] as $index=>$occupiedProperty){
-			if($occupiedProperty && $occupiedProperty->contracts->count()  > 0){
+			if($occupiedProperty->contracts->count()  > 0){
 				continue;
 			}
 			$formattedResult[$index]['id']=$occupiedProperty->id ;

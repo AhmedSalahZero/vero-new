@@ -283,7 +283,7 @@ class CustomerInvoiceDashboardController extends Controller
 				
 				
 				
-                $totalCertificateOfDepositsForCurrentFinancialInstitutionAmount += $certificateOfDepositsForCurrentFinancialInstitution ? $certificateOfDepositsForCurrentFinancialInstitution->sum('amount') : 0;
+                $totalCertificateOfDepositsForCurrentFinancialInstitutionAmount += $certificateOfDepositsForCurrentFinancialInstitution->sum('amount');
 				
 				
 				
@@ -640,7 +640,7 @@ class CustomerInvoiceDashboardController extends Controller
 			
         ]);
 
-        return view('admin.dashboard.forecast', ['company' => $company]);
+        // return view('admin.dashboard.forecast', ['company' => $company]);
     }
 
     public function showInvoiceReport(Company $company, Request $request, int $partnerId, string $currency, $modelType)
@@ -712,7 +712,7 @@ class CustomerInvoiceDashboardController extends Controller
 	
 		$details = [];
 		
-		
+		$selectedFinancialInstitutionBankIds = [];
 		
         $selectedCurrencies = $request->get('currencies', $allCurrencies) ;
 		$source = $request->get('lgSource');
@@ -747,7 +747,7 @@ class CustomerInvoiceDashboardController extends Controller
 					'lc'=>array_keys($company->letterOfCreditFacilities->where('currency',$currencyName)->pluck('financialInstitution.bank.name_en','financialInstitution.id')->toArray()),
 					// 'lg'=>array_keys($company->letterOfGuaranteeIssuances->where('status','!=','cancelled')->where('lg_currency',$currencyName)->load('financialInstitutionBank')->pluck('financialInstitutionBank.bank.name_en','financialInstitutionBank.id')->toArray()),
 					// 'lc'=>array_keys($company->letterOfCreditIssuances->where('status','!=','cancelled')->load('financialInstitutionBank')->pluck('financialInstitutionBank.bank.name_en','financialInstitutionBank.id')->toArray()),
-				][$currentLgOrLcType] ??[];
+				][$currentLgOrLcType];
 					
 				$selectedFinancialInstitutionBankIds = $request->ajax() && $request->get('financialInstitutionId') > 0 ? (array)$request->get('financialInstitutionId') : $financialInstitutionBankIds; 
 				
@@ -792,7 +792,7 @@ class CustomerInvoiceDashboardController extends Controller
 								$debug=true;
 								}
 							$details[$currencyName][$currentLgOrLcType][] = [
-								'limit'=>$currentLimit = $currentLastLetterOfGuaranteeOrCreditFacility ? $currentLastLetterOfGuaranteeOrCreditFacility->limit : 0 ,
+								'limit'=>$currentLimit =  $currentLastLetterOfGuaranteeOrCreditFacility->limit  ,
 								'outstanding_balance'=> $currentOutstanding = $statementTableFullClassName::getTotalOutstandingBalanceForAllTypes($currentLastLetterOfGuaranteeOrCreditFacility->id,$company->id,$financialInstitutionBankId,$currencyName,$debug)  , 
 								'room'=> $currentRoom = $currentLimit - $currentOutstanding ,
 								'cash_cover'=> $currentCashCover = $statementTableFullClassName::getTotalCashCoverForAllTypes($currentLastLetterOfGuaranteeOrCreditFacility->id,$company->id,$financialInstitutionBankId,$currencyName)  , 

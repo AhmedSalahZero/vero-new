@@ -24,6 +24,7 @@ use App\Models\PurchaseOrder;
 use App\Models\SalesGatheringTest;
 use App\Models\SalesOrder;
 use App\Models\SupplierInvoice;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -53,7 +54,11 @@ class SalesGatheringTestController extends Controller
 		$uploadParamsType = getUploadParamsFromType($modelName);
 		$importHeaderText = $uploadParamsType['importHeaderText'];
 		$company_id = $company->id;
-		$user_id = Auth::user()->id;
+		$user = Auth::user();
+		/**
+		 * @var User $user
+		 */
+		$user_id = $user->id;
 		$exportableFields = exportableFields($company_id, $modelName);
 
 		/**

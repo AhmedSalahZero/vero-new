@@ -14,7 +14,71 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * @mixin IdeHelperOverdraftAgainstCommercialPaper
+ * @property int $id
+ * @property int|null $financial_institution_id
+ * @property int $company_id
+ * @property string|null $contract_start_date
+ * @property string|null $contract_end_date
+ * @property string|null $account_number
+ * @property string|null $currency
+ * @property string|null $limit
+ * @property string|null $outstanding_balance
+ * @property string|null $balance_date
+ * @property float|null $highest_debt_balance_rate
+ * @property float|null $admin_fees_rate
+ * @property numeric $max_lending_limit_per_customer
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $to_be_setteled_max_within_days
+ * @property string|null $start_settlement_from_bank_statement_date
+ * @property string|null $oldest_date
+ * @property int|null $origin_update_row_is_debit دلوقت احنا لما بنحدث وليكن ماني ريسيفد .. عايز نعرف ان الرو الاصلي اللي عدلناه كان ماني ريسيفد
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperBankStatement> $bankStatements
+ * @property-read int|null $bank_statements_count
+ * @property-read bool|null $bank_statements_exists
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LendingInformation> $lendingInformation
+ * @property-read int|null $lending_information_count
+ * @property-read bool|null $lending_information_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\OutstandingBreakdown> $outstandingBreakdowns
+ * @property-read int|null $outstanding_breakdowns_count
+ * @property-read bool|null $outstanding_breakdowns_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperLimit> $overdraftAgainstCommercialPaperBankLimits
+ * @property-read int|null $overdraft_against_commercial_paper_bank_limits_count
+ * @property-read bool|null $overdraft_against_commercial_paper_bank_limits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperBankStatement> $overdraftAgainstCommercialPaperBankStatements
+ * @property-read int|null $overdraft_against_commercial_paper_bank_statements_count
+ * @property-read bool|null $overdraft_against_commercial_paper_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperRate> $rates
+ * @property-read int|null $rates_count
+ * @property-read bool|null $rates_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereAdminFeesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereBalanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereContractEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereContractStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereHighestDebtBalanceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereMaxLendingLimitPerCustomer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereOldestDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereOriginUpdateRowIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereStartSettlementFromBankStatementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereToBeSetteledMaxWithinDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaper whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class OverdraftAgainstCommercialPaper extends Model implements IHaveStatement
 {

@@ -23,7 +23,7 @@ class StoreCashExpenseRequest extends FormRequest
         return true;
     }
 
-	protected function prepareForValidation()
+	protected function prepareForValidation():array 
 	{
 		$paidAmounts = $this->paid_amount ;
 		$paidAmounts = collect($paidAmounts)->map(function($item){
@@ -37,11 +37,7 @@ class StoreCashExpenseRequest extends FormRequest
 		return [];
 	}
 	
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
 	
 	 
 	 

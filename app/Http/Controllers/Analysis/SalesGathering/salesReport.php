@@ -26,7 +26,7 @@ class salesReport
         // enhanced in sales dashboard // salah
         $report_data = [];
         $growth_rate_data = [];
-
+		$total_full_data = [];
         $dates = [];
         $gr = [];
         $last_date = null;
@@ -56,7 +56,7 @@ class salesReport
                 $data_per_year = $data_per_year??[];
                 $report_data[$year]['Months'] = array_keys($data_per_year);
                 $report_data[$year]['Sales Values'] = $data_per_year;
-                $report_data[$year]['Month Sales %'] = $this->operationAmongArrayAndNumber($data_per_year,array_sum(($data_per_year??[])));
+                $report_data[$year]['Month Sales %'] = $this->operationAmongArrayAndNumber($data_per_year,array_sum(($data_per_year)));
                 $report_data[$year]['Month Sales %'] = $this->operationAmongArrayAndNumber($report_data[$year]['Month Sales %'] ,100 ,'multiply');
                 if ($year_number == 1) {
                     $report_data[$year]['YoY GR%'] = array_fill_keys(array_keys($data_per_year),0);
@@ -66,7 +66,7 @@ class salesReport
                 $year_number++;
                 $previous_data = $data_per_year;
             }
-            $totals = $this->finalTotal(array_column($report_data,'Sales Values')??[]);
+            $totals = $this->finalTotal(array_column($report_data,'Sales Values'));
             $total_full_data = $this->monthsTotal($totals);
         }else{
             $data = $main_data->groupBy('gr_date')->map(function($item)
@@ -128,9 +128,9 @@ class salesReport
         // Trend Sales Report
         else{
             return ['gr'=>$gr??[],
-                    'dates' => $dates??[],
+                    'dates' => $dates,
                     'last_date' =>$last_date,
-                    'report_data'=> $report_data??[]];
+                    'report_data'=> $report_data];
         }
     }
     public function growthRate($data)

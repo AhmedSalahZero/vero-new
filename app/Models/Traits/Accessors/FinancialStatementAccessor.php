@@ -74,10 +74,6 @@ trait FinancialStatementAccessor
 			return false ;
 		}
 		return  ! $incomeStatement->can_view_actual_report;
-		// $balanceSheet = $this->balanceSheet;
-		// $cashFlowStatement = $this->cashFlowStatement;
-		
-		// $canNotEditDurationType = ($incomeStatement&&$incomeStatement->subItems->count()) || ($balanceSheet&&$balanceSheet->subItems->count()) || ($cashFlowStatement&&$cashFlowStatement->subItems->count());
-		// return !$canNotEditDurationType;
+	
 	}
 }

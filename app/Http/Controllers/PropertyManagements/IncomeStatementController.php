@@ -130,7 +130,7 @@ class IncomeStatementController extends Controller
 		
 		$yearWithItsIndexes = $study->getOperationDurationPerYearFromIndexes();
 		$monthsWithItsYear = $study->getMonthsWithItsYear($yearWithItsIndexes) ;
-		$monthsWithItsNumbers = $study->getMonthIndexWithMonthNumber($yearWithItsIndexes) ;
+		$monthsWithItsNumbers = $study->getMonthIndexWithMonthNumber() ;
 		
         $tableDataFormatted[1]['main_items']['cost-of-service']['options']['title'] = __('Cost Of Service');
         // $tableDataFormatted[1]['sub_items']['Existing Portfolio New Portfolio Interest Expense']['options']['title'] = $existingPortfolioInterestExpenseTitle =  __('Existing Portfolio New Portfolio Interest Expense');
@@ -368,19 +368,19 @@ class IncomeStatementController extends Controller
 		
 		
 		
-        foreach($tableDataFormatted[0]['sub_items']?? [] as $id => $subItemArr){
-			$tableDataFormatted[0]['sub_items'][$id]['year_total'] =	HArr::sumPerYearIndex($subItemArr['data']??[], $yearWithItsMonths);
+        foreach($tableDataFormatted[0]['sub_items'] as $id => $subItemArr){
+			$tableDataFormatted[0]['sub_items'][$id]['year_total'] =	HArr::sumPerYearIndex($subItemArr['data'], $yearWithItsMonths);
 		}
 		
         
-        $totalSalesRevenues = Harr::calculateTotalFromSubItems($tableDataFormatted[0]['sub_items']??[]) ;
+        $totalSalesRevenues = HArr::calculateTotalFromSubItems($tableDataFormatted[0]['sub_items']) ;
         
         $yearWithItsMonths=$study->getYearIndexWithItsMonths();
                
                
         $tableDataFormatted[0]['main_items']['sales-revenue']['data'] = $totalSalesRevenues;
         $tableDataFormatted[0]['main_items']['sales-revenue']['year_total'] =$totalSalesRevenuesPerYears =  HArr::sumPerYearIndex($totalSalesRevenues, $yearWithItsMonths);
-        $tableDataFormatted[0]['main_items']['growth-rate']['data'] = Harr::calculateGrowthRate($totalSalesRevenues);
+        $tableDataFormatted[0]['main_items']['growth-rate']['data'] = HArr::calculateGrowthRate($totalSalesRevenues);
         $tableDataFormatted[0]['main_items']['growth-rate']['year_total'] =  HArr::calculateGrowthRate($totalSalesRevenuesPerYears);
                
    
@@ -449,7 +449,7 @@ class IncomeStatementController extends Controller
    
         }
 
-        $totalCostOfService = Harr::calculateTotalFromSubItems($tableDataFormatted[1]['sub_items']??[]) ;
+        $totalCostOfService = HArr::calculateTotalFromSubItems($tableDataFormatted[1]['sub_items']??[]) ;
         $tableDataFormatted[1]['main_items']['cost-of-service']['data'] = $totalCostOfService;
         $tableDataFormatted[1]['main_items']['cost-of-service']['year_total'] =$totalCostOfServicePerYear =  HArr::sumPerYearIndex($totalCostOfService, $yearWithItsMonths);
         $tableDataFormatted[1]['main_items']['% Of Revenue']['data'] = $currentData =  HArr::calculatePercentageOf($totalSalesRevenues, $totalCostOfService);
@@ -520,7 +520,7 @@ class IncomeStatementController extends Controller
 		
         $tableDataFormatted[$eclAndDepreciationOrderIndex]['sub_items'][$depreciationKey]['data'] = $totalFixedAssetAdminDepreciation;
         $tableDataFormatted[$eclAndDepreciationOrderIndex]['sub_items'][$depreciationKey]['year_total'] = $totalDepreciationExpensesPerYears = HArr::sumPerYearIndex($totalFixedAssetAdminDepreciation, $yearWithItsMonths);
-        $totalEclAndDepreciationExpenses = Harr::calculateTotalFromSubItems($tableDataFormatted[$eclAndDepreciationOrderIndex]['sub_items']??[]);
+        $totalEclAndDepreciationExpenses = HArr::calculateTotalFromSubItems($tableDataFormatted[$eclAndDepreciationOrderIndex]['sub_items']);
         
         $tableDataFormatted[$eclAndDepreciationOrderIndex]['main_items'][$eclAndDepreciationKey]['data'] =  $totalEclAndDepreciationExpenses ;
         $tableDataFormatted[$eclAndDepreciationOrderIndex]['main_items'][$eclAndDepreciationKey]['year_total'] = $totalEclAndDepreciationExpensesPerYear = HArr::sumPerYearIndex($totalEclAndDepreciationExpenses, $yearWithItsMonths);
@@ -635,7 +635,7 @@ class IncomeStatementController extends Controller
         }
         
 		$fixedAssetLoanInterestExpenses = $incomeStatementReport ? $incomeStatementReport->fixed_asset_loan_interest_expenses : [];
-		  if ($fixedAssetLoanInterestExpenses && count($fixedAssetLoanInterestExpenses)) {
+		  if ($fixedAssetLoanInterestExpenses ) {
             $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][__('Fixed Assets Loans Interests')]['data'] = $fixedAssetLoanInterestExpenses;
             $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][__('Fixed Assets Loans Interests')]['year_total'] = HArr::sumPerYearIndex($fixedAssetLoanInterestExpenses, $yearWithItsMonths);
         }
@@ -747,7 +747,7 @@ class IncomeStatementController extends Controller
 		if($onlyViewVars){
 			return [
 				'tableDataFormatted'=>$tableDataFormatted,
-				'resultPerRevenueStreamType'=>$resultPerRevenueStreamType??[],
+				// 'resultPerRevenueStreamType'=>$resultPerRevenueStreamType??[],
 				'studyMonthsForViews'=>$studyMonthsForViews,
 				'defaultClasses'=>$defaultClasses
 			];
@@ -782,28 +782,28 @@ class IncomeStatementController extends Controller
 		$studyName = $study->getName();
 		return (new IncomeStatementExport(collect($formattedData),$dates,$studyName,$reportType))->download();
 	}
-	public function viewPreviousTwoYearsIncomeStatement(Company $company , Study $study)
-	{
+	// public function viewPreviousTwoYearsIncomeStatement(Company $company , Study $study)
+	// {
 		
-		$viewVars = $this->index($company,$study,true);
-		$viewVars = array_merge($viewVars , [
-			'title'=>$title = __('Previous Two Years Income Statements'),
-			'tableTitle'=>$title,
-			'study'=>$study,
-			'previous_years_income_statement'=>$study->previous_years_income_statement,
-			'financialYearEndMonthNumber'=>$study->getFinancialYearEndMonthNumber(),
-			'studyMonthsForViews'=>[
-				2023,2024
-			]
-		]);
-		  return view('property_managements.income-statement.previous_two_years_income_statements',$viewVars );
-	}
-	public function storePreviousTwoYearsIncomeStatement(Request $request, Company $company,Study $study )
-	{
-		$study->update([
-			'previous_years_income_statement'=>$request->except(['_token'])
-		]);
-		return redirect()->back()->with('success',__('Saved'));
-	}
+	// 	$viewVars = $this->index($company,$study,true);
+	// 	$viewVars = array_merge($viewVars , [
+	// 		'title'=>$title = __('Previous Two Years Income Statements'),
+	// 		'tableTitle'=>$title,
+	// 		'study'=>$study,
+	// 		'previous_years_income_statement'=>$study->previous_years_income_statement,
+	// 		'financialYearEndMonthNumber'=>$study->getFinancialYearEndMonthNumber(),
+	// 		'studyMonthsForViews'=>[
+	// 			2023,2024
+	// 		]
+	// 	]);
+	// 	  return view('property_managements.income-statement.previous_two_years_income_statements',$viewVars );
+	// }
+	// public function storePreviousTwoYearsIncomeStatement(Request $request, Company $company,Study $study )
+	// {
+	// 	$study->update([
+	// 		'previous_years_income_statement'=>$request->except(['_token'])
+	// 	]);
+	// 	return redirect()->back()->with('success',__('Saved'));
+	// }
  
 }

@@ -24,7 +24,7 @@ class FinancialPlanningServiceProvider extends ServiceProvider
 		if(is_numeric($studyId) && in_array(FINANCIAL_PLANNING_URL_PREFIX,Request()->segments())){
 			$study = Study::find($studyId);
 			/**
-			 * @var Study $study 
+			 * @var Study|null $study 
 			 */
 			if($study){
 				$datesAndIndexesHelpers = $study->getDatesIndexesHelper();

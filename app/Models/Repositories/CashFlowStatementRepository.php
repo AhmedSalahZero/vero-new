@@ -12,44 +12,10 @@ use Illuminate\Http\Request;
 class CashFlowStatementRepository implements IBaseRepository
 {
 
-	public function all(): Collection
-	{
-		return CashFlowStatement::withAllRelations()->onlyCurrentCompany()->get();
-	}
 
-	public function allFormatted(): array
-	{
-		return CashFlowStatement::onlyCurrentCompany()->get()->pluck('name', 'id')->toArray();
-	}
-	public function allFormattedForSelect()
-	{
-		$cashFlowStatements = $this->all();
-		return formatOptionsForSelect($cashFlowStatements, 'getId', 'getName');
-	}
 
-	public function getAllExcept($id): ?Collection
-	{
-		return CashFlowStatement::onlyCurrentCompany()->where('id', '!=', $id)->get();
-	}
 
-	public function query(): Builder
-	{
-		return CashFlowStatement::onlyCurrentCompany()->query();
-	}
-	public function Random(): Builder
-	{
-		return CashFlowStatement::onlyCurrentCompany()->inRandomOrder();
-	}
 
-	public function find(?int $id)
-	{
-		return CashFlowStatement::onlyCurrentCompany()->find($id);
-	}
-
-	public function getLatest($column = 'id'): ?CashFlowStatement
-	{
-		return CashFlowStatement::onlyCurrentCompany()->latest($column)->first();
-	}
 	public function store(Request $request)
 	{
 		$cashFlowStatement = App(CashFlowStatement::class);
@@ -66,11 +32,6 @@ class CashFlowStatementRepository implements IBaseRepository
 		return $cashFlowStatement;
 	}
 
-	public function update( $cashFlowStatement, Request $request): void
-	{
-		// $cashFlowStatement
-		// 	->updateProfitability($request);
-	}
 
 	public function paginate(Request $request): array
 	{
@@ -80,10 +41,10 @@ class CashFlowStatementRepository implements IBaseRepository
 		$allFilterDataCounter = $filterData->count();
 
 		$datePerPage = $filterData->skip(Request('start'))->take(Request('length'))->get()->each(function (CashFlowStatement $cashFlowStatement, $index) {
-			$cashFlowStatement->creator_name = $cashFlowStatement->getCreatorName();
-			$cashFlowStatement->created_at_formatted = formatDateFromString($cashFlowStatement->created_at);
-			$cashFlowStatement->updated_at_formatted = formatDateFromString($cashFlowStatement->updated_at);
-			$cashFlowStatement->order = $index + 1;
+			// $cashFlowStatement->creator_name = $cashFlowStatement->getCreatorName();
+			// $cashFlowStatement->created_at_formatted = formatDateFromString($cashFlowStatement->created_at);
+			// $cashFlowStatement->updated_at_formatted = formatDateFromString($cashFlowStatement->updated_at);
+			// $cashFlowStatement->order = $index + 1;
 		});
 		return [
 			'data' => $datePerPage,
@@ -103,10 +64,10 @@ class CashFlowStatementRepository implements IBaseRepository
 		$dataWithRelations = collect([]);
 
 		$datePerPage = $filterData->get()->each(function (CashFlowStatementItem $cashFlowStatementItem, $index) use ($dataWithRelations, $cashFlowStatement, $subItemType) {
-			$cashFlowStatementItem->creator_name = $cashFlowStatementItem->getCreatorName();
-			$cashFlowStatementItem->created_at_formatted = formatDateFromString($cashFlowStatementItem->created_at);
-			$cashFlowStatementItem->updated_at_formatted = formatDateFromString($cashFlowStatementItem->updated_at);
-			$cashFlowStatementItem->order = $index + 1;
+			// $cashFlowStatementItem->creator_name = $cashFlowStatementItem->getCreatorName();
+			// $cashFlowStatementItem->created_at_formatted = formatDateFromString($cashFlowStatementItem->created_at);
+			// $cashFlowStatementItem->updated_at_formatted = formatDateFromString($cashFlowStatementItem->updated_at);
+			// $cashFlowStatementItem->order = $index + 1;
 			$cashFlowStatementItem['main_rows'] = $cashFlowStatementItem->getMainRows($cashFlowStatement->id, $subItemType);
 			$dataWithRelations->add($cashFlowStatementItem);
 			$cashFlowStatementItem->getSubItems($cashFlowStatement->id, $subItemType)->each(function ($subItem) use ($dataWithRelations, $cashFlowStatementItem) {
@@ -156,11 +117,6 @@ class CashFlowStatementRepository implements IBaseRepository
 			// })
 			->orderBy('financial_statement_able_items.id', 'asc');
 
-		// return CashFlowStatementItem::with(['subItems' => function ($builder) use ($cashFlowStatement) {
-		// 	$builder->where('financial_statement_able_id', $cashFlowStatement->id);
-		// }])->whereHas('financialStatementAbles', function (Builder $builder) use ($cashFlowStatement) {
-		// 	$builder->where('financial_statement_ables.id', $cashFlowStatement->id);
-		// })
-		// 	->orderBy('financial_statement_able_items.id', 'asc');
+		
 	}
 }

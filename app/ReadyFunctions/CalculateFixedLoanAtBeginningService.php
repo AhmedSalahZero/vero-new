@@ -110,6 +110,7 @@ class CalculateFixedLoanAtBeginningService
         }
         $loanFactors = [];
         $installmentFactors = [];
+		$interestFactors=[];
         $datesAsIndexString=HDate::generateDatesBetweenStartDateAndDuration($currentStartDateAsIndex, $startDate, $tenor, $installmentPaymentIntervalName, false);
         $installmentPaymentIntervalValue = $this->getInstallmentPaymentIntervalValue($installmentPaymentIntervalName);
         $datesIndexAndDaysCount =HDate::calculateDaysCountAtBeginning($datesAsIndexString, $installmentPaymentIntervalValue);
@@ -174,7 +175,7 @@ class CalculateFixedLoanAtBeginningService
         }
         $installmentAmounts = $this->calculateInstallmentAmount($installmentPaymentIntervalValue, $loanFactors, $installmentFactors, $stepRate, $installmentStartDateAsIndex, $endDateAsIndex, $tenor, $installmentPaymentIntervalValue, $appliedStepValue);
 
-        $loanScheduleResult = $this->calculateLoanScheduleResult($installmentPaymentIntervalValue, $datesIndexAndDaysCount, $loanType, $loanAmount, $interestFactors, $installmentAmounts, $currentStartDateAsIndex);
+        $loanScheduleResult = $this->calculateLoanScheduleResult($installmentPaymentIntervalValue, $datesIndexAndDaysCount, $loanType, $loanAmount, $interestFactors, $installmentAmounts);
         
         $loanScheduleResult['accured_interest'] = [];
         
@@ -197,7 +198,7 @@ class CalculateFixedLoanAtBeginningService
             if ($key == 'totals') {
                 continue;
             }
-            $mergedResult[$key]=HArr::mergeTwoAssocArr($previousResult[$key], $loanScheduleResult[$key], $key);
+            $mergedResult[$key]=HArr::mergeTwoAssocArr($previousResult[$key], $loanScheduleResult[$key]);
         }
         return [
             'result'=>$loanScheduleResult ,
@@ -334,7 +335,7 @@ class CalculateFixedLoanAtBeginningService
         }
         $currentInterestAmountArr = $result['interestAmount']??[];
         ksort($currentInterestAmountArr);
-        $dateAsIndexes = array_keys($result['beginning']??[]);
+        $dateAsIndexes = array_keys($result['beginning']);
         if (app()->bound('dateIndexWithDate')) {
             $result['accured_interest']=Loan::calculateSettlementStatement($dateAsIndexes, $loanScheduleResult['interestAmount'], $result['interestAmount']??[], 0, false, true);
         }

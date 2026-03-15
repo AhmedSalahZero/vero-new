@@ -10,7 +10,45 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperManpower
+ * @property int $id
+ * @property int|null $branch_id
+ * @property string $type general , branch , all-branches
+ * @property int|null $position_id
+ * @property int $existing_count
+ * @property numeric $monthly_net_salary
+ * @property array<array-key, mixed>|null $hiring_counts
+ * @property int $company_id
+ * @property int|null $study_id
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $manpower_salaries
+ * @property array<array-key, mixed>|null $accumulated_manpower_counts
+ * @property array<array-key, mixed>|null $salary_expenses
+ * @property array<array-key, mixed>|null $salary_payments
+ * @property array<array-key, mixed>|null $tax_and_social_insurance_statement
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\NonBankingService\Position|null $position
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereAccumulatedManpowerCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereExistingCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereHiringCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereManpowerSalaries($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereMonthlyNetSalary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower wherePositionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereSalaryExpenses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereSalaryPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereTaxAndSocialInsuranceStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Manpower whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Manpower extends Model
 {

@@ -11,9 +11,7 @@ class AdjustedDueDateHistoriesController
     use GeneralFunctions;
 	public function index(Company $company,Request $request,$invoiceId,$invoiceModelName)
 	{
-		/**
-		 * @var IInvoice $invoice ;
-		 */
+		
 		$fullClassName = 'App\Models\\'.$invoiceModelName;
 		$invoice = ('App\Models\\'.$invoiceModelName)::find($invoiceId);
 		$customerNameOrSupplierNameText  =(new $fullClassName) ->getClientNameText();

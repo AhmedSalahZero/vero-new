@@ -6,7 +6,24 @@ use App\Models\Traits\Relations\Commons\StateRelations;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperState
+ * @property int $id
+ * @property int $country_id
+ * @property string $name_ar
+ * @property string $name_en
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Country|null $country
+ * @property-read \App\Models\State|null $state
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State whereNameAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\State whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class State extends Model  
 {
@@ -17,11 +34,6 @@ class State extends Model
     
     use StateRelations;
     
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'name' => 'array',
     ];

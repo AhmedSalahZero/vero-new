@@ -21,6 +21,7 @@ class AnalysisReports
 	
     public function salesAnalysisReports(Company $company)
     {
+		$id = null;
         if (request()->segment(4) == 'SalesBreakdownAnalysis') {
 			Log::storeNewLogRecord('enterSection',null,__('Sales Breakdown Analysis'));
             $id = 60;

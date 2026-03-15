@@ -16,7 +16,7 @@ class StoreBuyOrSellCurrencyRequest extends FormRequest
     {
         return true;
     }
-	protected function prepareForValidation()
+	protected function prepareForValidation():array 
 	{
 		$this->merge([
 			'currency_to_sell_amount'=>number_unformat($this->get('currency_to_sell_amount')),
@@ -25,11 +25,6 @@ class StoreBuyOrSellCurrencyRequest extends FormRequest
 		]);
 		return [];
 	}
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
 		$type = $this->get('type');

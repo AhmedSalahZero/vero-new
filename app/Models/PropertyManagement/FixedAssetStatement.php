@@ -8,7 +8,12 @@ use App\Models\Traits\Scopes\PropertyManagements\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperFixedAssetStatement
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetStatement query()
+ * @mixin \Eloquent
  */
 class FixedAssetStatement extends Model
 {

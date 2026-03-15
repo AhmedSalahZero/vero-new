@@ -159,15 +159,13 @@ class QuantitySeasonalityReport
 
             $others = [];
             if ($sales_forecast->seasonality == "last_3_years") {
-                $mainData_data =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN quantity < 0 THEN 0 ELSE quantity END) as quantity," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request['start_date']."' and '". $request['end_date']."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					
-					))->whereIn($type,$products)
+                    ORDER BY id ";
+                $mainData_data =collect(DB::select($query))->whereIn($type,$products)
                     ->groupBy($type)->map(function($item){
                         $total = $item->sum('quantity');
 
@@ -176,30 +174,26 @@ class QuantitySeasonalityReport
                             return ($total == 0 ) ? 0 :  ((($quantity??0)/$total)) ;
                         });
                     })->toArray();
-                $others =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN quantity < 0 THEN 0 ELSE quantity END) as quantity," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request['start_date']."' and '". $request['end_date']."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					
-					))->whereNotIn($type,$products)
+                    ORDER BY id ";
+                $others =collect(DB::select($query))->whereNotIn($type,$products)
                        ->groupBy('gr_date')->map(function($sub_item) {
                             return  $sub_item->sum('quantity'); ;
 
                     })->toArray();
             } elseif($sales_forecast->seasonality == "previous_year") {
 
-                $mainData_data =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN quantity < 0 THEN 0 ELSE quantity END) as quantity," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request['start_date']."' and '". $request['end_date']."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					
-					))->whereIn($type,$products)
+                    ORDER BY id ";
+                $mainData_data =collect(DB::select($query))->whereIn($type,$products)
                     ->groupBy($type)->map(function($item){
 
                         $total = $item->sum('quantity');
@@ -208,14 +202,13 @@ class QuantitySeasonalityReport
                             return ($total == 0 ) ? 0 :  ((($quantity??0)/$total)) ;
                         });
                     })->toArray();
-                $others =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%M') as gr_date ,id,(CASE WHEN quantity < 0 THEN 0 ELSE quantity END) as quantity
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."' AND date between '".$request['start_date']."' and '". $request['end_date']."')
 
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->whereNotIn($type,$products)
+                    ORDER BY id ";
+                $others =collect(DB::select($query))->whereNotIn($type,$products)
                     ->groupBy('gr_date')->map(function($sub_item) {
                          return  $sub_item->sum('quantity');
 

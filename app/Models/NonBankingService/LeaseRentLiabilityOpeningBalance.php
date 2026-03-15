@@ -7,7 +7,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLeaseRentLiabilityOpeningBalance
+ * @property int $id
+ * @property int $study_id
+ * @property string|null $name
+ * @property numeric $amount
+ * @property array<array-key, mixed>|null $rent_payment
+ * @property array<array-key, mixed>|null $rent_interest
+ * @property array<array-key, mixed> $statement
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereRentInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereRentPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\LeaseRentLiabilityOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LeaseRentLiabilityOpeningBalance extends Model
 {

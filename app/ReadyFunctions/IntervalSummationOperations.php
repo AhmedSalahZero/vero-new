@@ -5,14 +5,7 @@ use Carbon\Carbon;
 
 class IntervalSummationOperations 
 {
-	/**
-	 * Sum An Array As Intervals  
-	 *
-	 * @param array $dateValues date and value array [01-01-2025=>20,01-02-2025=>30,etc]
-	 * @param string $intervalName monthly , quarterly , semi-annually , annually
-	 * @param string $financialYearStartMonth january , 01 or april , 04 or july , 07 
-	 * @return array [01-01-2025=>20,01-02-2025=>30]
-	 */
+	
 	
 	public function sumForInterval(array $dateValues, string $intervalName,$financialYearStartMonth='january' ):array 
 	{

@@ -54,10 +54,6 @@ class TimeOfDepositsController
 	}
 	public function index(Company $company,Request $request,FinancialInstitution $financialInstitution)
 	{
-		/**
-		 * @var Collection $runningTimeOfDeposits 
-		 */
-		
 		$numberOfMonthsBetweenEndDateAndStartDate = 36 ;
 		$currentType = $request->input('active',TimeOfDeposit::RUNNING);
 		$filterDates = [];

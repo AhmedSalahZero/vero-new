@@ -11,7 +11,51 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * @mixin IdeHelperSection
+ * @property int $id
+ * @property array<array-key, mixed> $name
+ * @property string $sub_of
+ * @property string $icon
+ * @property string|null $route
+ * @property int $order
+ * @property int $trash
+ * @property string $section_side
+ * @property int|null $updated_by
+ * @property int|null $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Branch> $branches
+ * @property-read int|null $branches_count
+ * @property-read bool|null $branches_exists
+ * @property-read mixed $route_name
+ * @property-read \App\Models\Section|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Section> $subSections
+ * @property-read int|null $sub_sections_count
+ * @property-read bool|null $sub_sections_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section mainClientSideSections()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section mainCompanyAdminSections()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section mainSections()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section mainSuperAdminSections()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereRoute($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereSectionSide($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereSubOf($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereTrash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Section withoutTrashed()
+ * @mixin \Eloquent
  */
 class Section extends Model
 {

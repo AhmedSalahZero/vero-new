@@ -102,13 +102,12 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
 
 
 
-        $report_data =collect(DB::select(DB::raw("
+        $query = "
             SELECT DATE_FORMAT(date,'%d-%m-%Y') as date, net_sales_value ,sales_value,service_provider_name,".$type.",".$main_type ."
             FROM sales_gathering
             WHERE ( company_id = '".$company->id."' AND ".$type." IS NOT NULL AND ".$main_type." IS NOT NULL  AND date between '".$request->start_date."' and '".$request->end_date."')
-            ORDER BY id "
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy($main_type)->map(function($item) use($type){
+            ORDER BY id ";
+        $report_data =collect(DB::select($query))->groupBy($main_type)->map(function($item) use($type){
                 return $item->groupBy($type)->map(function($sub_item){
                     return $sub_item->sum('net_sales_value');
                 });
@@ -127,6 +126,7 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
                     foreach ($data_per_type as $year => $data_per_year) {
 
                         $age = $current_date - $year ;
+						$age_range= '';
                         if ($age <= 40) {
                             $age_range ='Age Range Less Than 40';
                         }elseif ($age >= 41 && $age <= 50) {
@@ -152,7 +152,7 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
             }
 
 
-        $main_type_items = array_keys(($report_data??[]));
+        $main_type_items = array_keys(($report_data));
         foreach ($report_data as  $main_type_item_name => $sales_gathering_data) {
             $main_type_items_totals[$main_type_item_name] = array_sum($report_data[$main_type_item_name]??[]);
         }
@@ -198,8 +198,7 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
 
     public function discountsResult(Request $request, Company $company)
     {
-        {
-
+			$main_type_items_totals = [];
             $report_data =[];
             $main_type = $request->main_type;
             $type = 'discounts';
@@ -244,7 +243,7 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
                     }
 
 
-                $main_type_items_totals[$main_type_item_name] = array_sum($report_data[$main_type_item_name]??[]);
+                $main_type_items_totals[$main_type_item_name] = array_sum($report_data[$main_type_item_name]);
             }
 
             $items_totals = $this->finalTotal([$report_data]);
@@ -272,6 +271,5 @@ class ProvidersTwodimensionalSalesBreakdownAgainstAnalysisReport
 
             return view('client_view.reports.sales_gathering_analysis.two_dimensional_breakdown.sales_report',compact('company','view_name', 'main_type','type','all_items','main_type_items','report_data','last_date','dates','items_totals','main_type_items_totals','totals_sales_per_main_type','items_totals'));
 
-        }
     }
 }

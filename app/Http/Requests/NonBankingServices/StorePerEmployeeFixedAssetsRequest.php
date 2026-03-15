@@ -23,12 +23,8 @@ class StorePerEmployeeFixedAssetsRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-	public function prepareForValidation()
+   
+	public function prepareForValidation():array 
 	{
 	
 		$fixedAssets = $this->get('fixedAssets');

@@ -60,8 +60,16 @@ class SKUsAgainstAnalysisReport
             $type  = 'day_name';
             $view_name = 'Products Items Against Days Trend Analysis';
         }
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
         $name_of_selector_label = str_replace(['Products Items Against ', ' Trend Analysis'], '', $view_name);
-        return view('client_view.reports.sales_gathering_analysis.skus_analysis_form', compact('company', 'name_of_selector_label', 'type', 'view_name'));
+        return view('client_view.reports.sales_gathering_analysis.skus_analysis_form', [
+			'company' => $company,
+			'name_of_selector_label' => $name_of_selector_label,
+			'type' => $type,
+			'view_name' => $view_name,
+		]);
     }
 	public function viewBundlingReport(Request $request , Company $company)
 	{
@@ -95,13 +103,12 @@ class SKUsAgainstAnalysisReport
 			$branch  = replaceSingleQuote($branch);
 			
 		
-                $branches_data =collect(DB::select(DB::raw("
+                $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_item
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND product_item = '".$branch."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy('gr_date')->map(function($item){
+                ORDER BY id ";
+                $branches_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');
                 })->toArray();
 
@@ -186,13 +193,12 @@ class SKUsAgainstAnalysisReport
         foreach ($mainData as  $main_row) {
                 // $main_row = str_replace("'" , "''",$main_row);
 				$main_row  = replaceSingleQuote($main_row);
-            $mainData_data =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,product_item," . $type ."
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND product_item = '".$main_row."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy($type)->map(function($item)use($data_type){
+                ORDER BY id ";
+            $mainData_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                     return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
 
                         return $sub_item->sum($data_type);
@@ -281,13 +287,12 @@ class SKUsAgainstAnalysisReport
 
         foreach ($mainData as  $zone) {
 			$zone  = replaceSingleQuote($zone);
-            $sales =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." product_item
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND product_item = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id"
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date');
+                ORDER BY id";
+            $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){
                                     return $sub_item->sum('sales_value');
                                 })->toArray();
@@ -343,7 +348,7 @@ class SKUsAgainstAnalysisReport
                     $final_report_data['Total'] = $this->finalTotal([($final_report_data['Total'] ?? []), (($final_report_data[$zone][$sales_discount_field]['Values']??[]))]);
 
 
-                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]??[]));
+                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]));
 
 
 
@@ -352,7 +357,7 @@ class SKUsAgainstAnalysisReport
             }
             $zones_names[] = (str_replace( ' ','_', $zone));
         }
-        $sales_values = $this->finalTotal([$sales_values??[]]);
+        $sales_values = $this->finalTotal([$sales_values]);
         $total = ($final_report_data['Total']??[]);
         unset($final_report_data['Total']);
         $final_report_data['Total'] = $total;
@@ -522,13 +527,12 @@ class SKUsAgainstAnalysisReport
             foreach ($interval_dates as $key => $date) {
 
 
-                $report_data[$main_row]['Total'][date('d-m-Y',strtotime($date))] =collect(DB::select(DB::raw("
+                $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_item
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND product_item = '".$main_row."' AND date between '".$previous_date."' and '".$date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->sum('net_sales_value');
+                ORDER BY id ";
+                $report_data[$main_row]['Total'][date('d-m-Y',strtotime($date))] =collect(DB::select($query))->sum('net_sales_value');
 
                 $previous_date =$date;
             }
@@ -574,13 +578,12 @@ class SKUsAgainstAnalysisReport
 			$main_row  = replaceSingleQuote($main_row);
 
 
-            $mainData_data =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,sku," . $type ."
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND sku = '".$main_row."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))-> groupBy('gr_date')->map(function($sub_item){
+                ORDER BY id ";
+            $mainData_data =collect(DB::select($query))-> groupBy('gr_date')->map(function($sub_item){
 
                         return $sub_item->sum('net_sales_value');
 
@@ -614,7 +617,7 @@ class SKUsAgainstAnalysisReport
             // }
             // Total & Growth Rate Per Zone
 
-            $final_report_total = $this->finalTotal( [($report_data[$main_row]['Total']??[]) , ($final_report_total??[]) ]);
+            $final_report_total = $this->finalTotal( [($report_data[$main_row]['Total']) , ($final_report_total??[]) ]);
             $report_data[$main_row]['Growth Rate %'] =[];
             // $this->growthRate(($report_data[$main_row]['Total'] ?? []));
 
@@ -735,13 +738,12 @@ class SKUsAgainstAnalysisReport
             foreach ($interval_dates as $key => $date) {
 
 
-                $report_data[$main_row]['Total'][date('d-m-Y',strtotime($date))] =collect(DB::select(DB::raw("
+                $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_item
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND product_item = '".$main_row."' AND date between '".$previous_date."' and '".$date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->sum('net_sales_value');
+                ORDER BY id ";
+                $report_data[$main_row]['Total'][date('d-m-Y',strtotime($date))] =collect(DB::select($query))->sum('net_sales_value');
 
                 $previous_date =$date;
             }
@@ -752,7 +754,7 @@ class SKUsAgainstAnalysisReport
 
 
 
-        $report_data['Total'] = $final_report_total??[];
+        $report_data['Total'] = $final_report_total;
         $report_data['Growth Rate %'] =  $this->growthRate($report_data['Total']);
         $dates = array_keys($report_data['Total']);
 

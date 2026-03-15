@@ -1,6 +1,6 @@
                                          <x-form.wrapper class="col-lg-3 col-md-4">
                                              {{-- must have all --}}
-                                              <x-form.select  :options="[]" :add-new="false"  :label="__('Service Item')" :is-select2="false" class="repeater-select service_item_class  service-item-class-append" data-filter-type="{{ $type }}" :all="true" name="service_item_id" id="{{$type.'_'.'service_item_id' }}"  :selected-value="isset($quotationPricingCalculator) ? $quotationPricingCalculator->getServiceItemId() : 0" ></x-form.select>
+                                              <x-form.select  :options="[]" :add-new="false"  :label="__('Service Item')" :is-select2="false" class="repeater-select service_item_class service-item-class-append" data-filter-type="{{ $type }}" :all="true" name="service_item_id" id="{{$type.'_'.'service_item_id' }}"  :selected-value="isset($quotationPricingCalculator) ? $quotationPricingCalculator->getServiceItemId() : 0" ></x-form.select>
                                         </x-form.wrapper>
                                         
 

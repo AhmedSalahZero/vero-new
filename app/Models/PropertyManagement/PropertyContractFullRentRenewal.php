@@ -9,7 +9,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperPropertyContractFullRentRenewal
+ * @property int $id
+ * @property int $company_id
+ * @property int $study_id
+ * @property int $property_id
+ * @property int|null $contract_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\PropertyManagement\Contract|null $contract
+ * @property-read \App\Models\PropertyManagement\Property|null $property
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\PropertyContractFullRentRenewal whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class PropertyContractFullRentRenewal extends Model
 {
@@ -33,12 +54,7 @@ class PropertyContractFullRentRenewal extends Model
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
-    /**
-     * @param Study $study
-     * @param string $columnName rent_revenues or rent_collections
-     * @param array &$formattedResult
-     * @return array
-     */
+  
     public static function getFullRentCoveragesAmounts(Study $study):array
     {
         $propertyContractFullRentCoverages = self::with(['property','contract'])->where('study_id', $study->id)->get();

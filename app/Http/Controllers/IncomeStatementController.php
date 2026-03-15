@@ -10,7 +10,6 @@ use App\Jobs\RecalculateIncomeStatementCalculationForTypesJob;
 use App\Models\Company;
 use App\Models\IncomeStatement;
 use App\Models\IncomeStatementItem;
-use App\Models\Repositories\CashFlowStatementRepository;
 use App\Models\Repositories\IncomeStatementRepository;
 use App\Rules\MustBeUniqueToIncomeStatementExceptMine;
 use Illuminate\Http\Request;
@@ -30,15 +29,15 @@ class IncomeStatementController extends Controller
 		$this->incomeStatementRepository = $incomeStatementRepository;
 	}
 
-	public function view()
-	{
-		return view('admin.income-statement.view', IncomeStatement::getViewVars());
-	}
-	public function create()
-	{
+	// public function view()
+	// {
+	// 	return view('admin.income-statement.view', IncomeStatement::getViewVars());
+	// }
+	// public function create()
+	// {
 		
-		return view('admin.income-statement.create', IncomeStatement::getViewVars());
-	}
+	// 	return view('admin.income-statement.create', IncomeStatement::getViewVars());
+	// }
 
 	public function createReport(Company $company, IncomeStatement $incomeStatement)
 	{
@@ -58,26 +57,26 @@ class IncomeStatementController extends Controller
 		return view('admin.income-statement.report.view', IncomeStatement::getReportViewVars($additionalVarOptions));
 	}
 
-	public function paginate(Request $request)
-	{
-		return $this->incomeStatementRepository->paginate($request);
-	}
+	// public function paginate(Request $request)
+	// {
+	// 	return $this->incomeStatementRepository->paginate($request);
+	// }
 	public function paginateReport(Request $request, Company $company, IncomeStatement $incomeStatement)
 	{
 		return $this->incomeStatementRepository->paginateReport($request, $incomeStatement);
 	}
 
 
-	public function store(IncomeStatementRequest $request)
-	{
-		$incomeStatement = $this->incomeStatementRepository->store($request);
+	// public function store(IncomeStatementRequest $request)
+	// {
+	// 	$incomeStatement = $this->incomeStatementRepository->store($request);
 		
-		return response()->json([
-			'status' => true,
-			'message' => __('Income Statement Has Been Stored Successfully'),
-			'redirectTo' => route('admin.create.income.statement.report', ['company' => getCurrentCompanyId(), 'incomeStatement' => $incomeStatement->id])
-		]);
-	}
+	// 	return response()->json([
+	// 		'status' => true,
+	// 		'message' => __('Income Statement Has Been Stored Successfully'),
+	// 		'redirectTo' => route('admin.create.income.statement.report', ['company' => getCurrentCompanyId(), 'incomeStatement' => $incomeStatement->id])
+	// 	]);
+	// }
 
 	public function storeReport(StoreIncomeStatementReportRequest $request)
 	{
@@ -94,23 +93,22 @@ class IncomeStatementController extends Controller
 		// ]);
 	}
 
-	public function edit(Company $company, Request $request, IncomeStatement $incomeStatement)
-	{
-		return view(IncomeStatement::getCrudViewName(), array_merge(IncomeStatement::getViewVars(), [
-			'type' => 'edit',
-			'model' => $incomeStatement
-		]));
-	}
+	// public function edit(Company $company, Request $request, IncomeStatement $incomeStatement)
+	// {
+	// 	return view(IncomeStatement::getCrudViewName(), array_merge(IncomeStatement::getViewVars(), [
+	// 		'type' => 'edit',
+	// 		'model' => $incomeStatement
+	// 	]));
+	// }
 
-	public function update(Company $company, Request $request, IncomeStatement $incomeStatement)
-	{
-		
-		$this->incomeStatementRepository->update($incomeStatement, $request);
-		return response()->json([
-			'status' => true,
-			'message' => __('Income Statement Has Been Updated Successfully')
-		]);
-	}
+	// public function update(Company $company, Request $request, IncomeStatement $incomeStatement)
+	// {
+	// 	$this->incomeStatementRepository->update($incomeStatement, $request);
+	// 	return response()->json([
+	// 		'status' => true,
+	// 		'message' => __('Income Statement Has Been Updated Successfully')
+	// 	]);
+	// }
 
 	public function updateReport(Company $company, Request $request)
 	{
@@ -246,10 +244,7 @@ class IncomeStatementController extends Controller
 			'message' => __('Item Has Been Deleted Successfully')
 		]);
 	}
-	public function export(Request $request)
-	{
-		// return (new IncomeStatementExport($this->incomeStatementRepository->export($request), $request))->download();
-	}
+	
 	public function exportReport(Request $request,Company $company , int $incomeStatementId , string $subItemType)
 	{
 		$formattedData = $this->formatReportDataForExport($request,$incomeStatementId,$subItemType)['data'];
@@ -276,28 +271,29 @@ class IncomeStatementController extends Controller
 		return (new IncomeStatementExportAsPdf(collect($formattedData), $request, $incomeStatement,$mainRowsIndexes,$percentageRowsIndexes,$maxColsCount,$maxRowsCount,$reportType))->download($incomeStatement->getName().'.pdf','Dompdf');
 		
 	}
-	protected function combineMainValuesWithItsPercentageRows(array $firstItems, array $secondItems): array
-	{
-		$mergeArray = [];
-		foreach ($firstItems as $incomeStatementId => $incomeStatementValues) {
-			foreach ($incomeStatementValues as $incomeStatementItemId => $incomeStatementItemsValues) {
-				foreach ($incomeStatementItemsValues as $date => $value) {
-					$mergeArray[$incomeStatementId][$incomeStatementItemId][$date] = $value;
-				}
-			}
-		}
-		foreach ($secondItems as $incomeStatementId => $incomeStatementValues) {
-			foreach ($incomeStatementValues as $incomeStatementItemId => $incomeStatementItemsValues) {
-				foreach ($incomeStatementItemsValues as $date => $value) {
-					$mergeArray[$incomeStatementId][$incomeStatementItemId][$date] = $value;
-				}
-			}
-		}
+	// protected function combineMainValuesWithItsPercentageRows(array $firstItems, array $secondItems): array
+	// {
 
-		$mergeArray[$incomeStatementId] = orderArrayByItemsKeys($mergeArray[$incomeStatementId]);
+	// 	$mergeArray = [];
+	// 	foreach ($firstItems as $incomeStatementId => $incomeStatementValues) {
+	// 		foreach ($incomeStatementValues as $incomeStatementItemId => $incomeStatementItemsValues) {
+	// 			foreach ($incomeStatementItemsValues as $date => $value) {
+	// 				$mergeArray[$incomeStatementId][$incomeStatementItemId][$date] = $value;
+	// 			}
+	// 		}
+	// 	}
+	// 	foreach ($secondItems as $incomeStatementId => $incomeStatementValues) {
+	// 		foreach ($incomeStatementValues as $incomeStatementItemId => $incomeStatementItemsValues) {
+	// 			foreach ($incomeStatementItemsValues as $date => $value) {
+	// 				$mergeArray[$incomeStatementId][$incomeStatementItemId][$date] = $value;
+	// 			}
+	// 		}
+	// 	}
 
-		return $mergeArray;
-	}
+	// 	$mergeArray[$incomeStatementId] = orderArrayByItemsKeys($mergeArray[$incomeStatementId]);
+
+	// 	return $mergeArray;
+	// }
 	public function formatReportDataForExport(Request $request,int $incomeStatementId, string $subItemType)
 	{
 		$dynamicRowsShow = (bool) $request->get('dynamic_rows_shown');
@@ -320,9 +316,14 @@ class IncomeStatementController extends Controller
 		$combineMainValuesWithItsPercentageRows = [];
 		$currentPayload = [];
 		foreach($allMainItems as $mainItem){
+			/**
+			 * @var IncomeStatementItem $mainItem
+			 */
 			$incomeStatementItemId = $mainItem->id ;
 			$mainRowWithAuthCalculation = $incomeStatement->withMainRowsFor($incomeStatementItemId, $subItemType)->first();
-			$mainRowWithAuthCalculation->pivot->payload;
+			if(!$mainRowWithAuthCalculation){
+				continue;
+			}
 			$currentPayload = (array) json_decode($mainRowWithAuthCalculation->pivot->payload) ;
 			$combineMainValuesWithItsPercentageRows[$incomeStatementId][$incomeStatementItemId] =$currentPayload ;
 		}

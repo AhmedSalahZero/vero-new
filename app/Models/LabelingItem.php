@@ -7,9 +7,167 @@ use App\Traits\StaticBoot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 
 /**
- * @mixin IdeHelperLabelingItem
+ * @property int $id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property string|null $update_at
+ * @property string|null $building_name
+ * @property string|null $c1
+ * @property string|null $sub_2
+ * @property string|null $c2
+ * @property string|null $location
+ * @property string|null $c3
+ * @property string|null $sub_3
+ * @property string|null $c4
+ * @property string|null $classification
+ * @property string|null $c5
+ * @property string|null $sub_22
+ * @property string|null $c6
+ * @property string|null $sub_32
+ * @property string|null $c7
+ * @property string|null $qty
+ * @property string|null $code
+ * @property string|null $item
+ * @property string|null $17
+ * @property string|null $ahmed_salah
+ * @property string|null $serial_number
+ * @property string|null $floor_number
+ * @property string|null $furniture
+ * @property string|null $muneera_experience_center
+ * @property string|null $14
+ * @property string|null $21
+ * @property string|null $28
+ * @property string|null $name_code&part_number
+ * @property string|null $qr_code
+ * @property string|null $depratment
+ * @property string|null $abc
+ * @property string|null $27
+ * @property string|null $sn
+ * @property string|null $cod_location
+ * @property string|null $sub-location
+ * @property string|null $codsub-location
+ * @property string|null $items
+ * @property string|null $items_summary
+ * @property string|null $items_code
+ * @property string|null $qty_cod
+ * @property string|null $supplier
+ * @property string|null $supplier_cod
+ * @property string|null $dimension
+ * @property string|null $condition-stored
+ * @property string|null $stored
+ * @property string|null $condition_stored_cod
+ * @property string|null $name_code
+ * @property string|null $part_number
+ * @property string|null $location_cod_
+ * @property string|null $sub-location_cod
+ * @property string|null $item_summary
+ * @property string|null $condition-furnished
+ * @property string|null $furnished
+ * @property string|null $code_name_&_nuber
+ * @property string|null $name
+ * @property string|null $dimension_
+ * @property string|null $details
+ * @property string|null $code_and_part_number
+ * @property string|null $name_and_part_number
+ * @property string|null $name&part_number
+ * @property string|null $word_
+ * @property string|null $word
+ * @property string|null $number
+ * @property string|null $print
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem where14($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem where17($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem where21($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem where27($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem where28($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereAbc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereAhmedSalah($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereBuildingName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC5($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC6($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereC7($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereClassification($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeAndPartNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodsubLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereConditionFurnished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereConditionStored($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereConditionStoredCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereDepratment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereDetails($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereDimension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereFloorNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereFurnished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereFurniture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereItem($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereItemSummary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereItems($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereItemsCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereItemsSummary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereLocationCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereMuneeraExperienceCenter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameAndPartNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem wherePartNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem wherePrint($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereQrCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereQty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereQtyCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSerialNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereStored($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSub2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSub22($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSub3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSub32($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSubLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSubLocationCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSupplier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSupplierCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereUpdateAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereWord($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @mixin \Eloquent
  */
 class LabelingItem extends Model
 {
@@ -24,10 +182,7 @@ class LabelingItem extends Model
     {
         return $query->where('company_id', request()->company->id?? Request('company_id') );
     }
-	private static function generateSubTabArr()
-	{
-		return [];
-	}
+	
 	public function getPreviousRowsQuantities()
 	{
 		return self::where('id', '<',$this['id'])->where('company_id',$this['company_id'])->sum('qty');
@@ -119,7 +274,7 @@ class LabelingItem extends Model
 	public function getCode(int $index,$returnQuantityString=false)
 	{
 		if($returnQuantityString){
-			return  $this->generateCodeForRow(1,$returnQuantityString);
+			return  $this->generateCodeForRow();
 		}
 		if($this->code){
 			return $this->removeUnwantedChars($this->code) ;
@@ -127,7 +282,7 @@ class LabelingItem extends Model
 		if($this->Code){
 			return $this->removeUnwantedChars($this->Code); 
 		}
-		return $this->removeUnwantedChars($this->generateCodeForRow($index));
+		return $this->removeUnwantedChars($this->generateCodeForRow());
 	}
 	protected function removeUnwantedChars($code)
 	{

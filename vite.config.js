@@ -35,14 +35,7 @@ export default defineConfig({
 		
 		'resources/js/NonBanking/Views/Spreadsheet/spread-sheet.js',
 		
-		
-		'resources/js/Trading/Views/Expenses/expenses.js',
-		'resources/js/Trading/Views/FixedAssets/fixed-assets.ts',
-		'resources/js/Trading/Views/Dashboard/cashflow-forecast.ts',
-		'resources/js/Trading/Views/ManpowerExpenses/manpower-expenses.js',
-		'resources/js/Trading/Views/GeneralAssumptions/general-assumptions.ts',
-
-		
+	
 		
 		
 	],

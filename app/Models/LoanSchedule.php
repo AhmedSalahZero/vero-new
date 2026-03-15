@@ -12,7 +12,45 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperLoanSchedule
+ * @property int $id
+ * @property int $medium_term_loan_id
+ * @property string|null $date
+ * @property numeric|null $beginning_balance
+ * @property numeric|null $schedule_payment
+ * @property numeric|null $interest_amount
+ * @property numeric|null $principle_amount
+ * @property numeric|null $end_balance
+ * @property numeric $remaining
+ * @property string|null $status
+ * @property int|null $created_by
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $updated_by
+ * @property-read \App\Models\MediumTermLoan|null $mediumTermLoan
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LoanScheduleSettlement> $settlements
+ * @property-read int|null $settlements_count
+ * @property-read bool|null $settlements_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereMediumTermLoanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule wherePrincipleAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereRemaining($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereSchedulePayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanSchedule whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class LoanSchedule extends Model
 {
@@ -22,25 +60,14 @@ class LoanSchedule extends Model
     protected $guarded = [];
 
 
-    //  protected $connection= 'mysql2';
-    // protected $table = 'sales_gathering';
-    // protected $primaryKey  = 'user_id';
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    
     protected $table = 'loan_schedules';
 	
     public function scopeCompany($query)
     {
         return $query->where('company_id', request()->company->id?? Request('company_id') );
     }
-	private static function generateSubTabArr()
-	{
-		return [];
-	}
+	
 	public function getMediumTermLoanName()
 	{
 		return $this->mediumTermLoan->getName();

@@ -23,7 +23,7 @@ class PropertyManagementServiceProvider extends ServiceProvider
 		if(is_numeric($studyId) && in_array( PROPERTY_MANAGEMENT_SERVICE_URL_PREFIX,Request()->segments())){
 			$study = Study::find($studyId);
 			/**
-			 * @var Study $study 
+			 * @var Study|null $study 
 			 */
 			if($study){
 				$datesAndIndexesHelpers = $study->getDatesIndexesHelper();

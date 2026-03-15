@@ -38,13 +38,12 @@ class FinancialStatementController extends Controller
 		return view('admin.financial-statement.create', FinancialStatement::getViewVars());
 	}
 
-	public function createReport(Company $company, FinancialStatement $financialStatement)
-	{
-		return view('admin.financial-statement.report.view', FinancialStatement::getReportViewVars([
-			'financial_statement_id' => $financialStatement->id, 'financialStatement' => $financialStatement,
-			// ''
-		]));
-	}
+	// public function createReport(Company $company, FinancialStatement $financialStatement)
+	// {
+	// 	return view('admin.financial-statement.report.view', FinancialStatement::getReportViewVars([
+	// 		'financial_statement_id' => $financialStatement->id, 'financialStatement' => $financialStatement,
+	// 	]));
+	// }
 
 	public function paginate(Request $request)
 	{
@@ -52,10 +51,10 @@ class FinancialStatementController extends Controller
 
 		return $data ;
 	}
-	public function paginateReport(Request $request, Company $company, FinancialStatement $financialStatement)
-	{
-		return $this->financialStatementRepository->paginateReport($request, $financialStatement);
-	}
+	// public function paginateReport(Request $request, Company $company, FinancialStatement $financialStatement)
+	// {
+	// 	return $this->financialStatementRepository->paginateReport($request, $financialStatement);
+	// }
 
 
 	public function store(FinancialStatementRequest $request)
@@ -73,15 +72,15 @@ class FinancialStatementController extends Controller
 		]);
 	}
 
-	public function storeReport(Request $request)
-	{
-		$this->financialStatementRepository->storeReport($request);
+	// public function storeReport(Request $request)
+	// {
+	// 	$this->financialStatementRepository->storeReport($request);
 
-		return response()->json([
-			'status' => true,
-			'message' => __('Financial Statement Has Been Stored Successfully')
-		]);
-	}
+	// 	return response()->json([
+	// 		'status' => true,
+	// 		'message' => __('Financial Statement Has Been Stored Successfully')
+	// 	]);
+	// }
 
 	public function edit(Company $company, Request $request, FinancialStatement $financialStatement)
 	{
@@ -127,111 +126,103 @@ class FinancialStatementController extends Controller
 		]);
 	}
 
-	public function updateReport(Company $company, Request $request)
-	{
+	// public function updateReport(Company $company, Request $request)
+	// {
 		
 
-		$financialStatementId = $request->get('financial_statement_id');
-		$financialStatementItemId = $request->get('financial_statement_item_id');
-		$financialStatement = FinancialStatement::find($financialStatementId);
-		$financialStatementItem = $financialStatement->withMainItemsFor($financialStatementItemId)->first();
-		$financialStatementItem->withSubItemsFor($financialStatementId, $request->get('sub_item_type'), $request->get('sub_item_name'))
-			->updateExistingPivot($financialStatementId, [
-				'sub_item_name' => html_entity_decode($request->get('new_sub_item_name')),
-				'financial_statement_item_id' => $request->get('sub_of_id'),
-				'is_depreciation_or_amortization' => $request->get('is_depreciation_or_amortization',0)
-			]);
+	// 	$financialStatementId = $request->get('financial_statement_id');
+	// 	$financialStatementItemId = $request->get('financial_statement_item_id');
+	// 	$financialStatement = FinancialStatement::find($financialStatementId);
+	// 	/**
+	// 	 * @var FinancialStatement $financialStatement
+	// 	 */
+	// 	$financialStatementItem = $financialStatement->withMainItemsFor($financialStatementItemId)->first();
+	// 	$financialStatementItem->withSubItemsFor($financialStatementId, $request->get('sub_item_type'), $request->get('sub_item_name'))
+	// 		->updateExistingPivot($financialStatementId, [
+	// 			'sub_item_name' => html_entity_decode($request->get('new_sub_item_name')),
+	// 			'financial_statement_item_id' => $request->get('sub_of_id'),
+	// 			'is_depreciation_or_amortization' => $request->get('is_depreciation_or_amortization',0)
+	// 		]);
 
 
 
 
 
-		return response()->json([
-			'status' => true,
-			'message' => __('Item Has Been Updated Successfully')
-		]);
-	}
+	// 	return response()->json([
+	// 		'status' => true,
+	// 		'message' => __('Item Has Been Updated Successfully')
+	// 	]);
+	// }
 
-	public function deleteReport(Company $company, Request $request)
-	{
+	// public function deleteReport(Company $company, Request $request)
+	// {
 		
-		$financialStatementId = $request->get('financial_statement_id');
-		$financialStatementItemId = $request->get('financial_statement_item_id');
-		$financialStatement = FinancialStatement::find($financialStatementId);
-		$financialStatementItem = $financialStatement->withMainItemsFor($financialStatementItemId)->first();
-		$financialStatementItem->withSubItemsFor($financialStatementId, $request->get('sub_item_type'), $request->get('sub_item_name'))->detach($financialStatementId);
-		return response()->json([
-			'status' => true,
-			'message' => __('Item Has Been Deleted Successfully')
-		]);
-	}
+	// 	$financialStatementId = $request->get('financial_statement_id');
+	// 	$financialStatementItemId = $request->get('financial_statement_item_id');
+	// 	$financialStatement = FinancialStatement::find($financialStatementId);
+	// 	$financialStatementItem = $financialStatement->withMainItemsFor($financialStatementItemId)->first();
+	// 	$financialStatementItem->withSubItemsFor($financialStatementId, $request->get('sub_item_type'), $request->get('sub_item_name'))->detach($financialStatementId);
+	// 	return response()->json([
+	// 		'status' => true,
+	// 		'message' => __('Item Has Been Deleted Successfully')
+	// 	]);
+	// }
 
 
-	public function export(Request $request)
-	{
-		// return (new FinancialStatementExport($this->financialStatementRepository->export($request), $request))->download();
-	}
-	public function exportReport(Request $request)
-	{
-		// $formattedData = $this->formatReportDataForExport($request);
-		// $financialStatementId = array_key_first($request->get('valueMainRowThatHasSubItems'));
-		// $financialStatement = FinancialStatement::find($financialStatementId);
-		// return (new FinancialStatementExport(collect($formattedData), $request, $financialStatement))->download();
-	}
-	protected function combineMainValuesWithItsPercentageRows(array $firstItems, array $secondItems): array
-	{
-		$mergeArray = [];
-		foreach ($firstItems as $financialStatementId => $financialStatementValues) {
-			foreach ($financialStatementValues as $financialStatementItemId => $financialStatementItemsValues) {
-				foreach ($financialStatementItemsValues as $date => $value) {
-					$mergeArray[$financialStatementId][$financialStatementItemId][$date] = $value;
-				}
-			}
-		}
-		foreach ($secondItems as $financialStatementId => $financialStatementValues) {
-			foreach ($financialStatementValues as $financialStatementItemId => $financialStatementItemsValues) {
-				foreach ($financialStatementItemsValues as $date => $value) {
-					$mergeArray[$financialStatementId][$financialStatementItemId][$date] = $value;
-				}
-			}
-		}
+	
+	// protected function combineMainValuesWithItsPercentageRows(array $firstItems, array $secondItems): array
+	// {
+	// 	$mergeArray = [];
+	// 	foreach ($firstItems as $financialStatementId => $financialStatementValues) {
+	// 		foreach ($financialStatementValues as $financialStatementItemId => $financialStatementItemsValues) {
+	// 			foreach ($financialStatementItemsValues as $date => $value) {
+	// 				$mergeArray[$financialStatementId][$financialStatementItemId][$date] = $value;
+	// 			}
+	// 		}
+	// 	}
+	// 	foreach ($secondItems as $financialStatementId => $financialStatementValues) {
+	// 		foreach ($financialStatementValues as $financialStatementItemId => $financialStatementItemsValues) {
+	// 			foreach ($financialStatementItemsValues as $date => $value) {
+	// 				$mergeArray[$financialStatementId][$financialStatementItemId][$date] = $value;
+	// 			}
+	// 		}
+	// 	}
 
-		$mergeArray[$financialStatementId] = orderArrayByItemsKeys($mergeArray[$financialStatementId]);
+	// 	$mergeArray[$financialStatementId] = orderArrayByItemsKeys($mergeArray[$financialStatementId]);
 
-		return $mergeArray;
-	}
-	public function formatReportDataForExport(Request $request)
-	{
-		// $financial
+	// 	return $mergeArray;
+	// }
+	// public function formatReportDataForExport(Request $request)
+	// {
 		
-		$formattedData = [];
-		$totals = $request->get('totals');
-		$subTotals = $request->get('subTotals');
-		$rateFinancialStatementItemsIds = FinancialStatementItem::rateFieldsIds();
-		$combineMainValuesWithItsPercentageRows = $this->combineMainValuesWithItsPercentageRows($request->get('valueMainRowThatHasSubItems'), $request->get('valueMainRowWithoutSubItems'));
-		foreach ($combineMainValuesWithItsPercentageRows as $financialStatementId => $financialStatementValues) {
-			foreach ($financialStatementValues as $financialStatementItemId => $financialStatementItemsValues) {
-				$financialStatementItem = FinancialStatementItem::find($financialStatementItemId);
-				$formattedData[$financialStatementItem->name]['Name'] = $financialStatementItem->name;
-				foreach ($financialStatementItemsValues as $date => $value) {
-					$formattedData[$financialStatementItem->name][$date] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($value, 2) . ' %' : number_format($value);
-				}
-				$total = $totals[$financialStatementId][$financialStatementItemId];
-				$formattedData[$financialStatementItem->name]['Total'] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($total, 2) . ' %' : number_format($total);
-				if (isset($request->get('value')[$financialStatementId][$financialStatementItemId])) {
-					foreach ($financialStatementItemSubItems = $request->get('value')[$financialStatementId][$financialStatementItemId] as $financialStatementItemSubItemName => $financialStatementItemSubItemValues) {
-						$formattedData[$financialStatementItemSubItemName]['Name'] = $financialStatementItemSubItemName;
-						foreach ($financialStatementItemSubItemValues as $financialStatementItemSubItemDate => $financialStatementItemSubItemValue) {
-							$formattedData[$financialStatementItemSubItemName][$financialStatementItemSubItemDate] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($financialStatementItemSubItemValue, 2) . ' %' : number_format($financialStatementItemSubItemValue);
-						}
-						$total = $subTotals[$financialStatementId][$financialStatementItemId][$financialStatementItemSubItemName];
-						$formattedData[$financialStatementItemSubItemName]['Total'] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($total, 2) . ' %' : number_format($total);
-					}
-				}
-			}
-		}
-		return $formattedData;
-	}
+	// 	$formattedData = [];
+	// 	$totals = $request->get('totals');
+	// 	$subTotals = $request->get('subTotals');
+	// 	$rateFinancialStatementItemsIds = FinancialStatementItem::rateFieldsIds();
+	// 	$combineMainValuesWithItsPercentageRows = $this->combineMainValuesWithItsPercentageRows($request->get('valueMainRowThatHasSubItems'), $request->get('valueMainRowWithoutSubItems'));
+	// 	foreach ($combineMainValuesWithItsPercentageRows as $financialStatementId => $financialStatementValues) {
+	// 		foreach ($financialStatementValues as $financialStatementItemId => $financialStatementItemsValues) {
+	// 			$financialStatementItem = FinancialStatementItem::find($financialStatementItemId);
+	// 			$formattedData[$financialStatementItem->name]['Name'] = $financialStatementItem->name;
+	// 			foreach ($financialStatementItemsValues as $date => $value) {
+	// 				$formattedData[$financialStatementItem->name][$date] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($value, 2) . ' %' : number_format($value);
+	// 			}
+	// 			$total = $totals[$financialStatementId][$financialStatementItemId];
+	// 			$formattedData[$financialStatementItem->name]['Total'] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($total, 2) . ' %' : number_format($total);
+	// 			if (isset($request->get('value')[$financialStatementId][$financialStatementItemId])) {
+	// 				foreach ($financialStatementItemSubItems = $request->get('value')[$financialStatementId][$financialStatementItemId] as $financialStatementItemSubItemName => $financialStatementItemSubItemValues) {
+	// 					$formattedData[$financialStatementItemSubItemName]['Name'] = $financialStatementItemSubItemName;
+	// 					foreach ($financialStatementItemSubItemValues as $financialStatementItemSubItemDate => $financialStatementItemSubItemValue) {
+	// 						$formattedData[$financialStatementItemSubItemName][$financialStatementItemSubItemDate] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($financialStatementItemSubItemValue, 2) . ' %' : number_format($financialStatementItemSubItemValue);
+	// 					}
+	// 					$total = $subTotals[$financialStatementId][$financialStatementItemId][$financialStatementItemSubItemName];
+	// 					$formattedData[$financialStatementItemSubItemName]['Total'] = in_array($financialStatementItemId, $rateFinancialStatementItemsIds) ? number_format($total, 2) . ' %' : number_format($total);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	return $formattedData;
+	// }
 	
 	public function downloadExcelTemplateForActual(Company $company, Request $request,IncomeStatement $incomeStatement)
 	{

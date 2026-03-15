@@ -145,7 +145,7 @@ $incomeStatement = $study->incomeStatement;
 		 $studyDates = array_keys($study->getStudyDates()) ;
         $sumKeys = $studyDates;
 		
-		$fixedAssetPayments = HArr::sumAtDates([$cashflowReport->fixed_asset_payments , $cashflowReport->total_fixed_asset_replacement_costs ],$sumKeys); 
+		$fixedAssetPayments = HArr::sumAtDates([$cashflowReport->fixed_asset_payments?:[] , $cashflowReport->total_fixed_asset_replacement_costs ],$sumKeys); 
 		$yearWithItsMonths=$study->getYearIndexWithItsMonths();
 		$fixedAssetPayments = HArr::sumPerYearIndex($fixedAssetPayments,$yearWithItsMonths);
 		$fixedAssetPayments = $study->replaceMonthIndexWithYearIndex($fixedAssetPayments);
@@ -192,7 +192,8 @@ $incomeStatement = $study->incomeStatement;
         foreach ($years as $index => $yearIndex) {
             $terminalValues[$yearIndex] = 0 ;
             if ($index == count($years)-1) {
-                $terminalValues[$yearIndex] = $lastValueFreeCashflow /($lastKeyInWacc-$perptual);
+				$lastKeyInWaccMinusPerptual = $lastKeyInWacc-$perptual;
+                $terminalValues[$yearIndex] = $lastKeyInWaccMinusPerptual ?  $lastValueFreeCashflow /$lastKeyInWaccMinusPerptual : 0;
             }
         }
         $formattedDcfMethod['terminal-value'] = $terminalValues ;
@@ -214,7 +215,7 @@ $incomeStatement = $study->incomeStatement;
 			'model'=>$study ,
 			'title'=>$title,
 			'tableTitle'=>$title,
-			'formattedDcfMethod'=>$formattedDcfMethod??[],
+			'formattedDcfMethod'=>$formattedDcfMethod,
 			    'studyDates'=>$yearOrMonthsIndexesFromStudy,
 				 'yearWithItsIndexes'=>$yearWithItsIndexes,
 				 

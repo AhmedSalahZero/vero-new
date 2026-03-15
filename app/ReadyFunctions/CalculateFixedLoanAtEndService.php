@@ -6,6 +6,7 @@ use App\Helpers\HArr;
 use App\Helpers\HDate;
 use App\Models\Loan;
 use App\Models\NonBankingService\FixedAsset;
+use App\Models\NonBankingService\Study;
 use App\ReadyFunctions\Date;
 use Arr;
 use Carbon\Carbon;
@@ -90,7 +91,7 @@ class CalculateFixedLoanAtEndService
         $datesAsStringIndex = array_flip($datesAsIndexString);
         $installmentPaymentIntervalValue = $this->getInstallmentPaymentIntervalValue($installmentPaymentIntervalName);
         $datesIndexAndDaysCount =HDate::calculateDaysCountAtEnd($datesAsIndexString, $installmentPaymentIntervalValue, $currentDaysCount);
-        
+        $interestFactors=[];
         $currentPricing =  ($baseRate + $marginRate) /100  ;
         $stepRate = Loan::getStepRate($loanType, $stepUpRate, $stepDownRate);
         $stepRate = $stepRate / 100;
@@ -159,9 +160,9 @@ class CalculateFixedLoanAtEndService
         
         }
         
-        $installmentAmounts = $this->calculateInstallmentAmount($installmentPaymentIntervalValue, $loanFactors, $installmentFactors, $stepRate, $installmentStartDateAsIndex, $endDateAsIndex, $tenor, $installmentPaymentIntervalValue, $appliedStepValue, $pricingPerMonths);
+        $installmentAmounts = $this->calculateInstallmentAmount($installmentPaymentIntervalValue, $loanFactors, $installmentFactors, $stepRate, $installmentStartDateAsIndex, $endDateAsIndex, $tenor, $installmentPaymentIntervalValue, $appliedStepValue);
 
-        $loanScheduleResult = $this->calculateLoanScheduleResult($installmentPaymentIntervalValue, $datesIndexAndDaysCount, $loanType, $loanAmount, $interestFactors, $installmentAmounts, $currentStartDateAsIndex);
+        $loanScheduleResult = $this->calculateLoanScheduleResult($installmentPaymentIntervalValue, $datesIndexAndDaysCount, $loanType, $loanAmount, $interestFactors, $installmentAmounts);
         $loanScheduleResult['accured_interest'] = [];
         // $loanScheduleResult = HArr::replacePreviousValues($loanScheduleResult);
         if ($indexOfLoop == -1) {
@@ -236,7 +237,7 @@ class CalculateFixedLoanAtEndService
         }
         $currentInterestAmountArr = $result['interestAmount']??[];
         ksort($currentInterestAmountArr);
-        $dateAsIndexes = array_keys($result['beginning']??[]);
+        $dateAsIndexes = array_keys($result['beginning']);
         if (app()->bound('dateIndexWithDate')) {
             $result['accured_interest']=Loan::calculateSettlementStatement($dateAsIndexes, $loanScheduleResult['interestAmount'], $result['interestAmount']??[], 0, false, true);
         }
@@ -351,9 +352,7 @@ class CalculateFixedLoanAtEndService
     
     public function calculateExecutionAndPaymentAndLoan(string $fixedAssetType, int $currentDateIndex, float $totalFFECost, int $ffeStartDateAsIndex,  $ffe)
     {
-        /**
-         * @var Project $study
-         */
+       
         $fixedLoanAtEndService = new CalculateFixedLoanAtEndService();
         $ffeExecutionAndPaymentService  = new FfeExecutionAndPayment();
         $contractPaymentService  = new ContractPaymentService();
@@ -426,7 +425,7 @@ class CalculateFixedLoanAtEndService
             'ffeLoanInstallment'=>$ffeLoanInstallment??[],
             'ffeLoanInterestAmounts'=>$ffeLoanInterestAmounts??[],
             'ffeExecutionAndPayment'=>$executionAndPayment??[],
-            'ffeLoanWithdrawalInterest'=>$ffeLoanWithdrawalInterestAmounts??[],
+            'ffeLoanWithdrawalInterest'=>$ffeLoanWithdrawalInterestAmounts,
             'ffeLoanStartDate'=>$ffeLoanStartDate??null,
             'ffeLoanAmount'=>$ffeLoanAmount??0,
             'ffeLoanEndBalanceAtStudyEndDate'=>$ffeLoanEndBalanceAtStudyEndDate??null,

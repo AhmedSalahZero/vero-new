@@ -7,7 +7,13 @@ use App\Traits\StaticBoot;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperCustomerDueCollectionAnalysis
+ * @property-read mixed $collected_amount
+ * @property-read mixed $net_balance
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerDueCollectionAnalysis company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerDueCollectionAnalysis newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerDueCollectionAnalysis newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CustomerDueCollectionAnalysis query()
+ * @mixin \Eloquent
  */
 class CustomerDueCollectionAnalysis extends Model
 {
@@ -16,24 +22,13 @@ class CustomerDueCollectionAnalysis extends Model
     protected $guarded = [];
 
 
-    //  protected $connection= 'mysql2';
-    // protected $table = 'sales_gathering';
-    // protected $primaryKey  = 'user_id';
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+   
     protected $table = 'customer_due_collection_analysis';
     public function scopeCompany($query)
     {
         return $query->where('company_id', request()->company->id?? Request('company_id') );
     }
-	private static function generateSubTabArr()
-	{
-		return [];
-	}
+	
 	public static function getTabs(int $companyId)
 	{
 		return [

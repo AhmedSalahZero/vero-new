@@ -72,7 +72,7 @@ class LabelingItemExport implements
 $company = app(Company::class);
 		$header = [
 			[
-				$company ? $company->getName() : 'test company name',
+				 $company->getName() ,
 			]
 			
 			 ,[

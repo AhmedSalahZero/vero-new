@@ -81,14 +81,6 @@ class ImportData implements
 		$this->userId = $userId;
 		$this->uploadModelName = $uploadModelName;
 	}
-	/**
-	 * @param array $row
-	 *
-	 * @return \Illuminate\Database\Eloquent\Model|null
-	 */
-
-
-
 	public function collection(Collection $chunks)
 	{
 		$dates = [];

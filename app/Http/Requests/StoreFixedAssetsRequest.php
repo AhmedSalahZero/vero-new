@@ -18,18 +18,14 @@ class StoreFixedAssetsRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+  
     public function rules()
     {
         return [
             'fixedAssets.*.'
         ];
     }
-    protected function prepareForValidation()
+    protected function prepareForValidation():array 
     {
 		$study = $this->route('study');
 		$request = Request();

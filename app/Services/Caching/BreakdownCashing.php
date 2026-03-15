@@ -14,16 +14,13 @@ class BreakdownCashing
 	private Company $company;
 	private string $current_start_date;
 	private string $current_end_date;
-	private string $current_end_year;
-	private string $year;
-	private string $end_year;
+
 	private array $typesOfCaching;
 
-	public function __construct(Company $company, string $year,string $end_year)
+	public function __construct(Company $company, string $year)
 	{
 		$this->company = $company;
-		$this->year = $year;
-		$this->end_year = $end_year;
+
 		$this->current_start_date = $year.'-01-01';
 		$this->current_end_date = $year.'-12-31';
 		$this->typesOfCaching = getAllColumnsTypesForCaching($this->company->id);

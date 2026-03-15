@@ -22,7 +22,31 @@ use Illuminate\Database\Eloquent\Model;
  * * بمعني ان مجموع القيم لازم يساوي ال
  * * outstanding balance in clean overdraft
  *
- * @mixin IdeHelperOutstandingBreakdown
+ * @property int $id
+ * @property string $settlement_date
+ * @property numeric $amount
+ * @property int $model_id وليكن مثلا clean_overdraft_id
+ * @property string $model_type
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CleanOverdraft|null $cleanOverdraft
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\FullySecuredOverdraft|null $fullySecuredOverdraft
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContract|null $overdraftAgainstAssignmentOfContract
+ * @property-read \App\Models\OverdraftAgainstCommercialPaper|null $overdraftAgainstCommercialPaper
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereSettlementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\OutstandingBreakdown whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OutstandingBreakdown extends Model
 {

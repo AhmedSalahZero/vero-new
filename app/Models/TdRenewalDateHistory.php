@@ -8,7 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperTdRenewalDateHistory
+ * @property int $id
+ * @property int $time_of_deposit_id
+ * @property string|null $expiry_date تاريخ الانتهاء هنحتاجه هنا علشان نجيب بيه ال start date القديمه
+ * @property string $renewal_date تاريخ التجديد
+ * @property numeric $interest_rate
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property numeric $interest_amount
+ * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereExpiryDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereInterestRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereRenewalDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereTimeOfDepositId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TdRenewalDateHistory whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class TdRenewalDateHistory extends Model
 {

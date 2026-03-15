@@ -15,7 +15,67 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class  CashFlowStatement extends Model implements  IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
+/**
+ * App\Models\CashFlowStatement
+ *
+ * @property int $id
+ * @property int $can_view_actual_report
+ * @property bool|null $is_caching_modified
+ * @property bool|null $is_caching_adjusted
+ * @property bool|null $is_caching_actual
+ * @property bool|null $is_caching_forecast
+ * @property string $name
+ * @property string $duration
+ * @property string|null $type
+ * @property string $duration_type
+ * @property string $start_from
+ * @property int $company_id
+ * @property int|null $creator_id
+ * @property int|null $financial_statement_id
+ * @property string|null $cash_and_banks_beginning_balance
+ * @property string|null $entered_receivables_and_payments_table
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReceivableAndPayment> $receivables_and_payments
+ * @method static \Illuminate\Database\Eloquent\Builder<static> whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static> whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static> whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static> whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static> whereDurationType($value)
+ * @property-read \App\Models\FinancialStatement|null $FinancialStatement
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashFlowStatementItem> $mainItems
+ * @property-read int|null $main_items_count
+ * @property-read bool|null $main_items_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashFlowStatementItem> $mainRows
+ * @property-read int|null $main_rows_count
+ * @property-read bool|null $main_rows_exists
+ * @property-read int|null $receivables_and_payments_count
+ * @property-read bool|null $receivables_and_payments_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashFlowStatementItem> $subItems
+ * @property-read int|null $sub_items_count
+ * @property-read bool|null $sub_items_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereCanViewActualReport($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereCashAndBanksBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereCreatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereEnteredReceivablesAndPaymentsTable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereFinancialStatementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereIsCachingActual($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereIsCachingAdjusted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereIsCachingForecast($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereIsCachingModified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereStartFrom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class CashFlowStatement extends Model implements  IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
 {
 	use CashFlowStatementAccessor,
 		CashFlowStatementMutator,
@@ -26,11 +86,7 @@ class  CashFlowStatement extends Model implements  IHaveAllRelations, IExportabl
 	protected $guarded = [
 		'id'
 	];
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
+	
 	protected $table = 'financial_statement_ables';
 
 	public static function getShareableEditViewVars($model): array
@@ -57,7 +113,7 @@ class  CashFlowStatement extends Model implements  IHaveAllRelations, IExportabl
 	{
 		static::addGlobalScope(function (Builder $builder) {
 			$builder->where('type', 'CashFlowStatement');
-			// ->orderBy('ordered','asc');
+		
 		});
 		static::deleting(function(self $cashFlowStatement) { 
 			DB::table('financial_statement_able_main_item_sub_items')->where('financial_statement_able_id',$cashFlowStatement->id)->delete();
@@ -85,7 +141,7 @@ class  CashFlowStatement extends Model implements  IHaveAllRelations, IExportabl
 			// 'redirectAfterSubmitRoute' => route('admin.view.cash.flow.statement', $currentCompanyId),
 			'type' => 'create',
 			'company' => Company::find($currentCompanyId),
-			'redirectAfterSubmitRoute' => route('admin.view.cash.flow.statement', ['company' => getCurrentCompanyId()]),
+			// 'redirectAfterSubmitRoute' => route('admin.view.cash.flow.statement', ['company' => getCurrentCompanyId()]),
 			'durationTypes' => HVero::getDurationIntervalTypesForSelect()
 		];
 	}
@@ -106,7 +162,7 @@ class  CashFlowStatement extends Model implements  IHaveAllRelations, IExportabl
 			'storeRoute' => route('admin.store.cash.flow.statement.report', $currentCompanyId),
 			'hasChildRows' => false,
 			'pageTitle' => __('Cash Flow Statement Report'),
-			'redirectAfterSubmitRoute' => route('admin.view.cash.flow.statement', $currentCompanyId),
+			// 'redirectAfterSubmitRoute' => route('admin.view.cash.flow.statement', $currentCompanyId),
 			'type' => 'create',
 			'cashFlowStatement' => $options['cashFlowStatement'],
 			'interval' => HVero::getIntervalForSelect($options['cashFlowStatement']->getDurationType()),

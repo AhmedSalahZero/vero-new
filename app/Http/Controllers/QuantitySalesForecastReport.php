@@ -352,7 +352,7 @@ class QuantitySalesForecastReport
 		} elseif ($sales_forecast->target_base == 'previous_3_years') {
 
 
-			$forecasted_sales_date = collect($sales_forecast->last_3_years_seasonality)->flatMap(function ($data, $key) use ($quantity_growth_rate, $prices_increase_rate, $other_products_growth_rate) {
+			$forecasted_sales_date = collect($sales_forecast->last_3_years_seasonality)->flatMap(function ($data) use ($quantity_growth_rate, $prices_increase_rate, $other_products_growth_rate) {
 				$forecasted_quantity = (1 + (($quantity_growth_rate ?? 0) / 100)) * ($data['Sales Quantity']);
 				$forecasted_price = (1 + (($prices_increase_rate ?? 0) / 100)) * ($data['Average Price']);
 				if (str_contains($data['item'], 'Others') === false) {
@@ -404,7 +404,7 @@ class QuantitySalesForecastReport
 			}
 
 
-			$forecasted_sales_date = collect($sales_forecast->previous_year_seasonality)->flatMap(function ($data, $key) use ($quantity_growth_rates, $prices_increase_rates) {
+			$forecasted_sales_date = collect($sales_forecast->previous_year_seasonality)->flatMap(function ($data, $key) use ($quantity_growth_rates, $prices_increase_rates,$other_products_growth_rate) {
 				$forecasted_quantity = (1 + ((($quantity_growth_rates[$key]) ?? 0) / 100)) * ($data['Sales Quantity']);
 				$forecasted_price = (1 + ((($prices_increase_rates[$key]) ?? 0) / 100)) * ($data['Average Price']);
 
@@ -436,7 +436,7 @@ class QuantitySalesForecastReport
 							'quantity_growth_rates' => $quantity_growth_rates[$key] ?? null,
 							'Forecasted Price' => 0,
 							'prices_increase_rates' => $prices_increase_rates[$key] ?? null,
-							'Forecasted Sales Value' => (1 + (($other_products_growth_rate ?? 0) / 100)) * ($data['Sales Value'])
+							'Forecasted Sales Value' => (1 + (($other_products_growth_rate??0 ) / 100)) * ($data['Sales Value'])
 						]
 					];
 				}
@@ -603,7 +603,7 @@ class QuantitySalesForecastReport
 
 
 
-			if ($product_seasonality !== null && count($product_seasonality) > 0) {
+			if ( count($product_seasonality) > 0) {
 
 				foreach ($request->product_items_name as $key => $name) {
 					if (isset($product_seasonality[$key])) {
@@ -739,14 +739,12 @@ class QuantitySalesForecastReport
 		if ($sales_forecast->seasonality == "last_3_years") {
 			$request['start_date']  = ($sales_forecast->previous_year - 2) . '-01-01';
 			$request['end_date']    = $sales_forecast->previous_year . '-12-31';
-			$products_data = collect(DB::select(DB::raw(
-				"
+			$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value,service_provider_name,product_item
                 FROM sales_gathering
                 WHERE ( company_id = '" . $company->id . "'AND product_item IS NOT NULL  AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                ORDER BY id "
-			)->getValue(DB::connection()->getQueryGrammar())
-			))->whereIn($type, $products);
+                ORDER BY id ";
+			$products_data = collect(DB::select($query))->whereIn($type, $products);
 		} elseif ($sales_forecast->seasonality == "previous_year") {
 
 			$request['start_date']  = $sales_forecast->previous_year . '-01-01';
@@ -756,7 +754,7 @@ class QuantitySalesForecastReport
 
 
 
-		if (($request->submit == 'Show') || (count(($modified_targets->others_target ?? [])) > 0) || (($request->isMethod('GET')) && isset($modified_targets) && $modified_targets !== null)) {
+		if (($request->submit == 'Show') || (count(($modified_targets->others_target ?? [])) > 0) || (($request->isMethod('GET')) && isset($modified_targets))) {
 
 
 			// $product_item_breakdown_data = (new SalesBreakdownAgainstAnalysisReport)->salesBreakdownAnalysisResult($request, $company, 'withOthers');
@@ -871,7 +869,7 @@ class QuantitySalesForecastReport
 			$new_products_seasonalities[$product_seasonality->name] =
 
 
-				$this->seasonalityFun($seasonality, $seasonality_data, $monthly_dates, $sales_target_value, $product_seasonality, $year);
+				$this->seasonalityFun($seasonality, $seasonality_data, $monthly_dates, $sales_target_value, $year);
 
 			// }
 
@@ -954,12 +952,7 @@ class QuantitySalesForecastReport
 			$last_key = (array_key_last($products_items));
 			$products_items_monthly_values = [];
 
-			// if (isset($modified_targets->use_modified_targets) && $modified_targets->use_modified_targets == 1) {
-			//     $products_items_monthly_values =  $modified_targets->products_modified_targets;
-			//     $products_items_monthly_values =  array_combine(array_keys($products_items_monthly_values), array_column($products_items_monthly_values, 'value'));
-			// }else{
-
-			// }
+		
 			$product_item_breakdown_data_items = array_combine(array_column($product_item_breakdown_data, 'item'), array_column($product_item_breakdown_data, 'Sales Quantity'));
 
 			$modified_seasonality = QuantityModifiedSeasonality::company()->first();
@@ -1066,7 +1059,7 @@ class QuantitySalesForecastReport
 			}
 
 
-			$totals_per_month = $totals_per_month ?? [];
+			
 
 
 			if ($noReturn) {
@@ -1133,7 +1126,7 @@ class QuantitySalesForecastReport
 	{
 
 		$key_num = 0;
-		$report_data =  collect($product_item_breakdown_data)->sortByDesc(function ($data, $key) use ($key_num) {
+		$report_data =  collect($product_item_breakdown_data)->sortByDesc(function ($data)  {
 			return [$data['Sales Value']];
 		});
 
@@ -1167,18 +1160,18 @@ class QuantitySalesForecastReport
 		if ($seasonality == 'new_seasonality_quarterly') {
 			$quarters_percentages = [];
 			foreach ($seasonality_data as $date => $value) {
-				$quarters_percentages[number_format(date('m', strtotime($date)))] = $value;
+				$quarters_percentages[(int)number_format(date('m', strtotime($date)))] = $value;
 			}
 			$num_of_quarter = 0;
 			foreach ((array)$monthly_dates as $date => $value) {
-				$month = date('m', strtotime($date));
+				$month = (int)date('m', strtotime($date));
 				if ($month <= 3) {
 					$num_of_quarter = 3;
 				} elseif ($month <= 6) {
 					$num_of_quarter = 6;
 				} elseif ($month <= 9) {
 					$num_of_quarter = 9;
-				} elseif ($month <= 12) {
+				} else {
 					$num_of_quarter = 12;
 				}
 				$seasonality_percentage = ($quarters_percentages[$num_of_quarter] ?? 0) / 3;

@@ -8,7 +8,12 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperFixedAssetStatement
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\FixedAssetStatement query()
+ * @mixin \Eloquent
  */
 class FixedAssetStatement extends Model
 {

@@ -11,7 +11,7 @@
          <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Tenant Name')"></x-tables.repeater-table-th>
          <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Nature')"></x-tables.repeater-table-th>
          <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Business Sector')"></x-tables.repeater-table-th>
-         <x-tables.repeater-table-th class=" category-selector-class  header-border-down  " :title="__('Related Party')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Related Party')"></x-tables.repeater-table-th>
      </x-slot>
      <x-slot name="trs">
          @php

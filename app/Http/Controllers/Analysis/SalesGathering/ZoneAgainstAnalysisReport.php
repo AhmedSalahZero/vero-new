@@ -49,10 +49,6 @@ class ZoneAgainstAnalysisReport
 			$type  = 'business_unit';
 			$view_name = 'Zones Against Business Units Trend Analysis';
 		}
-		elseif (request()->route()->named('zone.businessUnits.analysis')) {
-			$type  = 'business_unit';
-			$view_name = 'Zones Against Business Units Trend Analysis';
-		} 
 		elseif (request()->route()->named('zone.branches.analysis')) {
 			$type  = 'branch';
 			$view_name = 'Zones Against Branches Trend Analysis';
@@ -71,7 +67,9 @@ class ZoneAgainstAnalysisReport
 			$type  = 'averagePricesProductItems';
 			$view_name = 'Zones Products Items Average Prices';
 		}
-
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
 		$name_of_selector_label = str_replace(['Zones Against ', ' Trend Analysis'], '', $view_name);
 
 		if ($type == 'averagePrices') {
@@ -79,7 +77,12 @@ class ZoneAgainstAnalysisReport
 		} elseif ($type  == 'averagePricesProductItems') {
 			$name_of_selector_label = 'Products Items';
 		}
-		return view('client_view.reports.sales_gathering_analysis.zone_analysis_form', compact('company', 'name_of_selector_label', 'type', 'view_name'));
+		return view('client_view.reports.sales_gathering_analysis.zone_analysis_form', [
+			'company' => $company,
+			'name_of_selector_label' => $name_of_selector_label,
+			'type' => $type,
+			'view_name' => $view_name,
+		]);
 	}
 	public function ZoneSalesAnalysisIndex(Company $company)
 	{
@@ -124,14 +127,12 @@ class ZoneAgainstAnalysisReport
 		foreach ($zones as  $zone) {
 			if ($result == 'view') {
 				
-				$zones_data = collect(DB::select(DB::raw(
-					"
+				$query = "
                         SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , " . $data_type . " ,zone," . $type . "
                         FROM sales_gathering
                         WHERE ( company_id = '" . $company->id . "'AND zone = '" . $zone . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                        ORDER BY id"
-				)->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy($type)->map(function ($item) use ($data_type) {
+                        ORDER BY id";
+				$zones_data = collect(DB::select($query))->groupBy($type)->map(function ($item) use ($data_type) {
 					return $item->groupBy('gr_date')->map(function ($sub_item) use ($data_type) {
 
 						return $sub_item->sum($data_type);
@@ -161,8 +162,8 @@ class ZoneAgainstAnalysisReport
 					->selectRaw('DATE_FORMAT(LAST_DAY(date),"%d-%m-%Y") as gr_date ,
                     (IFNULL(' . $data_type . ',0) ) as ' . $data_type . ' , IFNULL(quantity_bonus,0) quantity_bonus , IFNULL(quantity,0) quantity,zone,' . $type)
 					->get()
-					->groupBy($type)->map(function ($item) use ($data_type) {
-						return $item->groupBy('gr_date')->map(function ($sub_item) use ($data_type) {
+					->groupBy($type)->map(function ($item)  {
+						return $item->groupBy('gr_date')->map(function ($sub_item)  {
 							return ($sub_item->sum('quantity_bonus') + $sub_item->sum('quantity'));
 						});
 					})->toArray();
@@ -242,7 +243,6 @@ class ZoneAgainstAnalysisReport
 										}
 									} elseif ($itemKey == 'Growth Rate %') {
 										foreach ($values as $datee => $dateVal) {
-											$report_data[$reportType][$dateName]['Avg. Prices'][$datee];
 											$keys = array_flip(array_keys($report_data[$reportType][$dateName]['Avg. Prices']));
 											$values = array_values($report_data[$reportType][$dateName]['Avg. Prices']);
 											$previousValue = isset($values[$keys[$datee] - 1]) ? $values[$keys[$datee] - 1] : 0;
@@ -316,14 +316,12 @@ class ZoneAgainstAnalysisReport
 
 		$zones_discount = [];
 		foreach ($zones as  $zone) {
-			$sales = collect(DB::select(DB::raw(
-				"
+			$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields . " zone
                 FROM sales_gathering
                 WHERE ( company_id = '" . $company->id . "'AND zone = '" . $zone . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                ORDER BY id"
-			)->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date');
+                ORDER BY id";
+			$sales = collect(DB::select($query))->groupBy('gr_date');
 			$sales_values_per_zone[$zone] = $sales->map(function ($sub_item) {
 				return $sub_item->sum('sales_value');
 			})->toArray();
@@ -380,7 +378,7 @@ class ZoneAgainstAnalysisReport
 					$final_report_data['Total'] = $this->finalTotal([($final_report_data['Total'] ?? []), (($final_report_data[$zone][$sales_discount_field]['Values'] ?? []))]);
 
 
-					$final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values'] ?? []), ($sales_values[$zone] ?? []));
+					$final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values'] ?? []), ($sales_values[$zone] ));
 				}
 			}
 			$zones_names[] = (str_replace(' ', '_', $zone));
@@ -388,7 +386,7 @@ class ZoneAgainstAnalysisReport
 		// Intervals For Sales Values
 
 
-		$sales_values = $this->finalTotal([$sales_values ?? []]);
+		$sales_values = $this->finalTotal([$sales_values]);
 
 		$total = $final_report_data['Total'];
 		unset($final_report_data['Total']);
@@ -419,14 +417,12 @@ class ZoneAgainstAnalysisReport
 
 		foreach ($zones as  $zone) {
 
-			$zones_data = collect(DB::select(DB::raw(
-				"
+			$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,zone
                 FROM sales_gathering
                 WHERE ( company_id = '" . $company->id . "'AND zone = '" . $zone . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
-                ORDER BY id "
-			)->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date')->map(function ($item) {
+                ORDER BY id ";
+			$zones_data = collect(DB::select($query))->groupBy('gr_date')->map(function ($item) {
 				return $item->sum('net_sales_value');
 			})->toArray();
 			// $zones_per_month = [];
@@ -536,7 +532,7 @@ class ZoneAgainstAnalysisReport
 					$builder->whereBetween('date', [$start_date, $end_date]);
 				})
 				->whereNotNull($request->main_field)
-				->whereIn($request->main_field, ($request->main_data ?? []))
+				->whereIn($request->main_field, is_array($request->main_data) ? ($request->main_data ?? []) : [$request->main_data])
 				->whereNotNull($request->field ?: 'product_item')
 				->groupBy($request->field ?: 'product_item')
 				->selectRaw($selectRow)
@@ -563,16 +559,16 @@ class ZoneAgainstAnalysisReport
 
 		$data = SalesGathering::company()
 			->whereNotNull($request->main_field)
-			->whereIn($request->main_field, ($request->main_data ?? []))
+			->whereIn($request->main_field, is_array($request->main_data) ? ($request->main_data ?? []) : [$request->main_data])
 			->whereNotNull($request->field)
 			->groupBy($request->field)
 			->selectRaw($request->field)
 			->where(function ($query) use ($request) {
 				if (($request->second_main_data) !== null) {
-					$query->whereNotNull($request->sub_main_field)->whereIn($request->sub_main_field, ($request->second_main_data ?? []));
+					$query->whereNotNull($request->sub_main_field)->whereIn($request->sub_main_field, is_array($request->second_main_data) ? ($request->second_main_data ?? []) : [$request->second_main_data]);
 				}
 				if (($request->third_main_data) !== null) {
-					$query->whereNotNull($request->third_main_field)->whereIn($request->third_main_field, ($request->third_main_data ?? []));
+					$query->whereNotNull($request->third_main_field)->whereIn($request->third_main_field, is_array($request->third_main_data) ? ($request->third_main_data ?? []) : [$request->third_main_data]);
 				}
 			})
 			->get()

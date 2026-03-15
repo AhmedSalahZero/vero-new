@@ -27,7 +27,7 @@ class ContractCashFlowReportController
 		$finalResult = [];
 		$contract = Contract::find($contractId);
 		/**
-		 * @var Contract $contract 
+		 * @var Contract|null $contract 
 		 */
 		$contractCode = $contract ? $contract->getCode() : null ;
 		$contractName = $contract ? $contract->getName() : null ;

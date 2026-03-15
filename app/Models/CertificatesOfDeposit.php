@@ -20,7 +20,108 @@ use Illuminate\Support\Str;
  * * توفر شهادات الإيداع ) (CDsللمدخر ين طر يقة لكسب معدل فائدة أعلى على مدخراتك مقابل الموافقة على حجز
  * *    أموالك لفترة زمنية محددة - مع الحفاظ على أموالك آمنة بفضل حمايتها من البنك المركزي
  *
- * @mixin IdeHelperCertificatesOfDeposit
+ * @property int $id
+ * @property string|null $store_break_journal_entry_id
+ * @property string|null $inbound_break_odoo_reference
+ * @property int $is_at_maturity
+ * @property int|null $inbound_break_journal_entry_id
+ * @property int|null $outbound_break_journal_entry_id
+ * @property int|null $break_account_bank_statement_line_id
+ * @property int|null $break_journal_entry_id
+ * @property int|null $renewal_account_bank_statement_line_id
+ * @property int|null $renewal_journal_entry_id
+ * @property int|null $interest_account_bank_statement_line_id
+ * @property int|null $interest_journal_entry_id
+ * @property int|null $maturity_account_bank_statement_line_id
+ * @property int|null $maturity_journal_entry_id
+ * @property int|null $store_account_bank_statement_line_id
+ * @property int|null $store_journal_entry_id
+ * @property int|null $inbound_journal_entry_id
+ * @property int|null $outbound_journal_entry_id
+ * @property int|null $deducted_from_account_id
+ * @property int|null $odoo_id
+ * @property string|null $odoo_code
+ * @property string $status
+ * @property int $financial_institution_id
+ * @property string|null $account_number
+ * @property numeric|null $amount
+ * @property string|null $currency
+ * @property numeric $interest_rate
+ * @property numeric $interest_amount
+ * @property numeric|null $actual_interest_amount
+ * @property string|null $deposit_date
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property string|null $maturity_amount_added_to_account_id
+ * @property int|null $company_id
+ * @property int|null $created_by
+ * @property int|null $update_by
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $break_date هو عباره عن التاريخ اللي قررت فية تكسر شهادة الايداع
+ * @property numeric|null $break_interest_amount عباره عن الفايدة اللي نزلت علي الحساب بسبب كسرك الشهادة
+ * @property numeric|null $break_charge_amount عبارة عن رسوم ادارية بسبب كسر الشهادة
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountCreditBankStatements
+ * @property-read int|null $current_account_credit_bank_statements_count
+ * @property-read bool|null $current_account_credit_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountDebitBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountDebitBankStatements
+ * @property-read int|null $current_account_debit_bank_statements_count
+ * @property-read bool|null $current_account_debit_bank_statements_exists
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \App\Models\FullySecuredOverdraft|null $fullySecuredCleanOverdraft
+ * @property-read \App\Models\LetterOfGuaranteeIssuance|null $letterOfGuaranteeIssuance
+ * @property-read \App\Models\FinancialInstitutionAccount|null $maturityAmountAddedToAccount
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereActualInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereBreakAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereBreakChargeAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereBreakDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereBreakInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereBreakJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereDeductedFromAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereDepositDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInboundBreakJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInboundBreakOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInboundJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInterestAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInterestJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereInterestRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereIsAtMaturity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereMaturityAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereMaturityAmountAddedToAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereMaturityJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereOdooCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereOutboundBreakJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereOutboundJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereRenewalAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereRenewalJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereStoreAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereStoreBreakJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereStoreJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereUpdateBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CertificatesOfDeposit whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CertificatesOfDeposit extends Model
 {

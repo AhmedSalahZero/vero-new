@@ -146,7 +146,9 @@ class QuantitySecondAllocationsReport
         $allocations_base_row = QuantitySecondNewProductAllocationBase::company()->first();
 
         $product_seasonality = QuantityProductSeasonality::company()->get();
-        $product_seasonality_total = QuantityProductSeasonality::select(DB::raw('sum(sales_target_value * sales_target_quantity) as total'))->first()->total;
+		/** @var object{total: float|null} $result */
+        $product_seasonality_total = QuantityProductSeasonality::select(DB::raw('sum(sales_target_value * sales_target_quantity) as total'))->first();
+		$product_seasonality_total = $product_seasonality_total->total;
         $allocation_bases_items =   SalesGathering::company()
             ->whereNotNull($allocation_base)
             ->where($allocation_base, '!=', '')
@@ -213,7 +215,7 @@ class QuantitySecondAllocationsReport
         // $percentages = [];
         foreach ((array)$allocations_base_row->allocation_base_data as $product_item_name => $item_data) {
             $product = $product_seasonality->where('name', $product_item_name)->first();
-            $sales_target_value = ($product->sales_target_value*$product->sales_target_quantity ?? 0);
+            $sales_target_value = $product->sales_target_value*$product->sales_target_quantity;
 
             foreach ($item_data as $base => $value) {
                 $type = array_key_first($value);
@@ -346,7 +348,7 @@ class QuantitySecondAllocationsReport
         $sales_forecast = QuantitySalesForecast::company()->first();
         $allocations_setting = QuantitySecondAllocationSetting::company()->first();
         $allocation_base_data = isset($new_products_allocations->allocation_base_data) ? collect($new_products_allocations->allocation_base_data)->map(function ($data, $item) {
-            return collect($data)->map(function ($sub_data, $sub_item) use ($item) {
+            return collect($data)->map(function ($sub_data) {
                 return Arr::first($sub_data);
             });
         })->toArray() : [];
@@ -540,21 +542,20 @@ class QuantitySecondAllocationsReport
         $existence_of_allocation_base = (false !== $found = array_search($allocation_base,$db_names)) ? true : false;
 
 
-        $product_items_percentages =collect(DB::select(DB::raw("
+        $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$used_field." ," . $allocation_base .",id,(CASE WHEN ".$used_field." < 0 THEN 0 ELSE ".$used_field." END) as ".$used_field.",".$type."
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."' AND date between '".$start_date."' and '".$end_date."')
-                ORDER BY id "
-                ) ->getValue(DB::connection()->getQueryGrammar())
-				))
+                ORDER BY id ";
+        $product_items_percentages =collect(DB::select($query))
         ->where($allocation_base, '!=', '')
         ->groupBy($allocation_base)
-        ->map(function($item,$name)use($type,$used_field,$products_items,$sales_targets,$products_modified_targets,$others_name_index){
+        ->map(function($item,$name)use($type,$used_field,$products_items,$sales_targets){
             $total = $item->sum($used_field);
             $sales_target = ($sales_targets[$name]??0);
             //1- product_items
 
-            $product_items_top = $item->whereIn($type,$products_items)->groupBy($type)->map(function($sub_item,$product_item) use($total,$used_field,$sales_target,$products_modified_targets){
+            $product_items_top = $item->whereIn($type,$products_items)->groupBy($type)->map(function($sub_item) use($total,$used_field,$sales_target){
                 // if(($use_modified_targets == 1 && $products_modified_targets[$product_item]['percentage'] !== null && $products_modified_targets[$product_item]['percentage'] !== 0) || ($use_modified_targets == 0) ){
                     $sales_value = $sub_item->sum($used_field);
 

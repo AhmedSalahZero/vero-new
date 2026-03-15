@@ -15,11 +15,7 @@ class UpdateFullySecuredOverdraftRequest extends StoreFullySecuredOverdraftReque
         return true ;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules(array $excludeAccountNumbers = [])
     {
 		$excludeAccountNumbers = (array)Request()->route('fullySecuredOverdraft')->getAccountNumber();

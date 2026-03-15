@@ -195,7 +195,7 @@ $months = $study->getMonths() ;
 									visibility-hidden
 								
 									 
-									 btn-1-bg btn-sm btn-brand add-btn-class  text-center add-btn-js">
+									 btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
                                     <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
                                 </a>
                             </td>
@@ -243,7 +243,7 @@ $months = $study->getMonths() ;
 
                                 <a href="#" class="btn 
 									visibility-hidden
-									 btn-1-bg btn-sm btn-brand add-btn-class  text-center add-btn-js">
+									 btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
                                     <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
                                 </a>
                             </td>

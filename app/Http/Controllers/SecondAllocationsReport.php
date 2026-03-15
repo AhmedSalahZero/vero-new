@@ -333,8 +333,8 @@ class SecondAllocationsReport
 
         $sales_forecast = SalesForecast::company()->first();
         $allocations_setting = SecondAllocationSetting::company()->first();
-        $allocation_base_data = isset($new_products_allocations->allocation_base_data) ? collect($new_products_allocations->allocation_base_data)->map(function ($data, $item) {
-            return collect($data)->map(function ($sub_data, $sub_item) use ($item) {
+        $allocation_base_data = isset($new_products_allocations->allocation_base_data) ? collect($new_products_allocations->allocation_base_data)->map(function ($data) {
+            return collect($data)->map(function ($sub_data)  {
                 return Arr::first($sub_data);
             });
         })->toArray() : [];
@@ -540,13 +540,12 @@ foreach ($allocation_data as $base => $data) {
         $existence_of_allocation_base = (false !== $found = array_search($allocation_base,$db_names)) ? true : false;
 
 
-        $product_items_percentages =collect(DB::select(DB::raw("
+        $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$used_field." ," . $allocation_base .",id,(CASE WHEN ".$used_field." < 0 THEN 0 ELSE ".$used_field." END) as ".$used_field.",".$type."
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."' AND date between '".$start_date."' and '".$end_date."')
-                ORDER BY id "
-                ) ->getValue(DB::connection()->getQueryGrammar())
-				))
+                ORDER BY id ";
+        $product_items_percentages =collect(DB::select($query))
         ->where($allocation_base, '!=', '')
         ->groupBy($allocation_base)
         ->map(function($item,$name)use($type,$used_field,$products_items,$sales_targets,$use_modified_targets,$products_modified_targets,$others_name_index){

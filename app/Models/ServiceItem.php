@@ -20,22 +20,24 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $creator_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Company $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuotationPricingCalculator> $QuotationPricingCalculators
+ * @property-read int|null $quotation_pricing_calculators_count
+ * @property-read bool|null $quotation_pricing_calculators_exists
+ * @property-read \App\Models\Company|null $company
  * @property-read \App\Models\User|null $creator
- * @property-read \App\Models\ServiceCategory $serviceCategory
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem onlyCurrentCompany(?int $companyId = null)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem query()
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereCreatorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereServiceCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ServiceItem whereUpdatedAt($value)
+ * @property-read \App\Models\ServiceCategory|null $serviceCategory
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereCreatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereServiceCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\ServiceItem whereUpdatedAt($value)
  * @mixin \Eloquent
- * @mixin IdeHelperServiceItem
  */
 class ServiceItem extends Model implements IHaveCompany,IHaveCreator
 { 

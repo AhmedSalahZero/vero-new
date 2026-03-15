@@ -40,7 +40,6 @@ tbody td{
     @endif
 </div>
 <h3 class="font-weight-bold text-white form-label kt-subheader__title small-caps mr-5 text-nowrap" style="">{{ $title }}</h3>
-
 <form class="kt-form kt-form--label-right" id="create-form" method="POST" action="{{ route('loan2.store',['company' => $company->id]) }}">
     {{ csrf_field() }}
 

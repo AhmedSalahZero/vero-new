@@ -21,7 +21,7 @@ class Date
 		if ($loanStartDateDay == 31) {
 			$newDate =$this->getMonthEndDate($year, $month);
 			
-			$newDate = Carbon::make($newDate)->addMonthNoOverflow($durationInMonths)
+			$newDate = Carbon::make($newDate)->addMonthsNoOverflow($durationInMonths)
 			->endOfMonth()
 			->format('Y-m-d');
 	
@@ -30,7 +30,7 @@ class Date
 		} elseif ($loanStartDateDay == 30 || $loanStartDateDay == 29) {
 			$newDate =$this->getMonthEndDate($year, $month);
 			
-			$newDate = Carbon::make($newDate)->addMonthNoOverflow($durationInMonths)
+			$newDate = Carbon::make($newDate)->addMonthsNoOverflow($durationInMonths)
 			->endOfMonth()
 			->format('Y-m-d');
 			$resultDateMonth = explode('-',$newDate)[1];

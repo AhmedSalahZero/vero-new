@@ -5,7 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperLendingInformationAgainstAssignmentOfContract
+ * @property int $id
+ * @property string|null $assignment_date
+ * @property int|null $overdraft_against_assignment_of_contract_id
+ * @property int|null $customer_id
+ * @property int|null $contract_id
+ * @property float|null $lending_rate
+ * @property int|null $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \App\Models\Partner|null $customer
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContract|null $overdraftAgainstAssignmentOfContract
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereAssignmentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereCustomerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereLendingRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereOverdraftAgainstAssignmentOfContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LendingInformationAgainstAssignmentOfContract whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LendingInformationAgainstAssignmentOfContract extends Model
 {

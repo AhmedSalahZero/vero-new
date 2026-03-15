@@ -28,7 +28,7 @@ class Export extends Component
         $this->href                 = $href;
         $this->icon                 = $icon;
         $this->firstButtonName      = $firstButtonName;
-        $this->class                = $class;
+        $this->class               = $class;
         $this->importHref           = $importHref;
         $this->exportHref           = $exportHref;
         $this->exportTableHref      = $exportTableHref;

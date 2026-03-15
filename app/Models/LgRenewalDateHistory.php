@@ -9,7 +9,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperLgRenewalDateHistory
+ * @property int $id
+ * @property string|null $renewal_fees_account_bank_statement_odoo_id
+ * @property int|null $renewal_fees_journal_entry_id
+ * @property int $letter_of_guarantee_issuance_id
+ * @property string $renewal_date تاريخ التجديد
+ * @property numeric $fees_amount هي عبارة عن المبلغ اللي هيدفعه للبنك علشان يجدد
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $commissionCurrentBankStatements
+ * @property-read int|null $commission_current_bank_statements_count
+ * @property-read bool|null $commission_current_bank_statements_exists
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\LetterOfGuaranteeIssuance $letterOfGuaranteeIssuance
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereFeesAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereLetterOfGuaranteeIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereRenewalDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereRenewalFeesAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereRenewalFeesJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LgRenewalDateHistory whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LgRenewalDateHistory extends Model
 {

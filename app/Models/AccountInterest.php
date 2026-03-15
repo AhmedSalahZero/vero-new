@@ -9,7 +9,25 @@ use Illuminate\Database\Eloquent\Model;
  * * اسعار الفايده المخصصة لهذا الحساب
  * * لانه في حاله تغيرت لابد من تتبعها لان النهاردا ممكن يكون علي الحساب دا سعر فايده معينه وممكن الشهر الجي يتغير وهكذا
  *
- * @mixin IdeHelperAccountInterest
+ * @property int $id
+ * @property int $financial_institution_account_id
+ * @property string|null $start_date
+ * @property numeric|null $interest_rate
+ * @property numeric|null $min_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\FinancialInstitutionAccount $financialInstitutionAccount
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereFinancialInstitutionAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereInterestRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereMinBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountInterest whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class AccountInterest extends Model
 {

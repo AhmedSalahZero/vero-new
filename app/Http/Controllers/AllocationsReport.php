@@ -339,8 +339,8 @@ class AllocationsReport
 		$allocations_setting = AllocationSetting::company()->first();
 		$allocations = $new_products_allocations->allocation_base_data ?? [];
 
-		$allocation_base_data = collect($allocations)->map(function ($data, $item) {
-			return collect($data)->map(function ($sub_data, $sub_item) use ($item) {
+		$allocation_base_data = collect($allocations)->map(function ($data) {
+			return collect($data)->map(function ($sub_data) {
 				return Arr::first($sub_data);
 			});
 		})->toArray();
@@ -486,15 +486,12 @@ class AllocationsReport
 		$db_names = array_keys($exportableFields);
 		$used_field = (false !== $found = array_search('sales_value', $db_names)) ? 'sales_value' : 'net_sales_value';
 
-		$product_items_percentages = collect(DB::select(DB::raw(
-			"
+		$query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , " . $used_field . " ," . $allocation_base . ",id,(CASE WHEN " . $used_field . " < 0 THEN 0 ELSE " . $used_field . " END) as " . $used_field . "," . $type . "
                     FROM sales_gathering
                     WHERE ( company_id = '" . $company->id . "' AND date between '" . $start_date . "' and '" . $end_date . "')
-                    ORDER BY id "
-		)->getValue(DB::connection()->getQueryGrammar())
-		
-		))
+                    ORDER BY id ";
+		$product_items_percentages = collect(DB::select($query))
 			->where($allocation_base, '!=', '')
 			->groupBy($allocation_base)
 			->map(function ($item, $name) use ($type, $used_field, $products_items, $sales_targets, $use_modified_targets, $products_modified_targets, $others_name_index) {
@@ -517,7 +514,17 @@ class AllocationsReport
 					return $sub_item->sum($used_field);
 				});
 				$others_percentage = ($total == 0) ? 0 : (array_sum($others->toArray()) / $total);
-				if (isset($products_modified_targets[$others_name_index]) && ($use_modified_targets == 1 && $products_modified_targets[$others_name_index]['percentage'] !== null && $products_modified_targets[$others_name_index]['percentage'] ?? 0 !== 0) || ($use_modified_targets == 0)) {
+				if (
+					isset($products_modified_targets[$others_name_index]) &&
+					(
+						(
+							$use_modified_targets == 1 &&
+							$products_modified_targets[$others_name_index]['percentage'] !== null &&
+							$products_modified_targets[$others_name_index]['percentage'] !== 0
+						) ||
+						$use_modified_targets == 0
+					)
+				) {
 					$product_items_top["Others " . count($others)] = $others_percentage * $sales_target;
 				} else {
 					$product_items_top["Others " . count($others)] = 0;

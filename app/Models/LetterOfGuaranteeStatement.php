@@ -12,7 +12,59 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLetterOfGuaranteeStatement
+ * @property int $id
+ * @property string|null $type
+ * @property string $source هو المكان او الطريقه يعني اللي انت انشاتة بيها وانت عندك ثلاث او اربع زراير دول عباره عن المصدر اللي هو قيمة الكولوم دا
+ * @property int $cd_or_td_id
+ * @property int $financial_institution_id
+ * @property int $letter_of_guarantee_issuance_id
+ * @property int|null $lg_facility_id
+ * @property string $lg_type
+ * @property int|null $lg_advanced_payment_history_id
+ * @property string|null $currency
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property int $company_id
+ * @property string|null $date
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property string|null $comment_ar
+ * @property string|null $comment_en
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\MoneyReceived|null $moneyReceived
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCdOrTdId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereLetterOfGuaranteeIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereLgAdvancedPaymentHistoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereLgFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereLgType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfGuaranteeStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LetterOfGuaranteeStatement extends Model
 {

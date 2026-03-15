@@ -21,6 +21,7 @@ class DashboardController extends Controller
     
     public function viewPropertyDashboard(Company $company, Request $request)
     {
+		$dueInstallmentsPerTypePieData = [];
         $allProperties = Property::whereNotIn('nature_id', [Property::COMPLEX,Property::BUILDING])->where('company_id', $company->id)->with(['type'])->get();
         $propertiesGroupedByType = $allProperties->groupBy('type_id')->map(fn ($q) =>count($q))->toArray();
         $occupiedPropertiesGroupedByType = $allProperties->filter(function (Property $property) {
@@ -399,6 +400,7 @@ class DashboardController extends Controller
 		
 		$totalCashIn = [];
 		$totalCashOut = [];
+		$values= [];
 		foreach($dates as $dateAsIndex=>$date){
 			$totalCollections[$dateAsIndex] = $totalCollections[$date] ?? 0 ;
 			$currentCollectionAmount = $totalCollections[$date] ?? 0 ;
@@ -593,9 +595,7 @@ class DashboardController extends Controller
     {
         
         $withSensitivity = $request->routeIs('property.management.view.results.dashboard.with.sensitivity') ;
-        // if($study->duration_in_years>=2){
-        // 	$study->force_yearly = true;
-        // }
+       
         $dashboardData = $this->generateDashboardData($study, $company, false);
         
         

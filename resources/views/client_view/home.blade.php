@@ -15,7 +15,7 @@
     </div>
 
     <div class="row">
-        @foreach ($companies as $company)
+        @foreach ($companies as $companyOption)
             <div class="col-md-6">
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-portlet__head">
@@ -32,11 +32,11 @@
                                         <div class="kt-widget5__content">
                                             <div class="kt-widget5__pic">
                                          
-                                                <img class="kt-widget7__img" src="{{$company->getFirstMediaUrl()}}" alt="">
+                                                <img class="kt-widget7__img" src="{{$companyOption->getFirstMediaUrl()}}" alt="">
                                             </div>
                                             <div class="kt-widget5__section">
-                                                <a href="{{ route('home.redirect', $company) }}" class="kt-widget5__title">
-                                                    {{$company->name[$lang]}}
+                                                <a href="{{ route('home.redirect', $companyOption) }}" class="kt-widget5__title">
+                                                    {{$companyOption->name[$lang]}}
                                                 </a>
 
                                                 {{-- <div class="kt-widget5__info">

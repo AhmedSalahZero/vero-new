@@ -58,14 +58,14 @@
                     <x-helpers.repeater :repeater-with-select2="true" :item-classes="'w-full'" :instance-no="'1'" :group-name="'services'" class="w-full d-none repeater-with-select2">
                         <x-form.row class="col-md-12">
                             <x-form.wrapper class="col-lg-2 col-md-4">
-                                <x-form.select :options="$revenueBusinessLines" :add-new="false" :label="__('Revenue Business Line')" :is-select2="false" class="repeater-select revenue_business_line_class  " data-filter-type="{{ $type }}" :all="false" name="revenue_business_line_id" :selected-value="isset($model) ? $model->getRevenueBusinessLineId() : 0"></x-form.select>
+                                <x-form.select :options="$revenueBusinessLines" :add-new="false" :label="__('Revenue Business Line')" :is-select2="false" class="repeater-select revenue_business_line_class " data-filter-type="{{ $type }}" :all="false" name="revenue_business_line_id" :selected-value="isset($model) ? $model->getRevenueBusinessLineId() : 0"></x-form.select>
                             </x-form.wrapper>
                             <x-form.wrapper class="col-lg-3 col-md-4 mb-4">
-                                <x-form.select :is-select2="false" :options="$serviceCategories" :add-new="false" :label="__('Service Category')" class="repeater-select service_category_class  " data-filter-type="{{ $type }}" :all="false" name="service_category_id" :selected-value="isset($model) ? $model->getServiceCategoryId() : 0"></x-form.select>
+                                <x-form.select :is-select2="false" :options="$serviceCategories" :add-new="false" :label="__('Service Category')" class="repeater-select service_category_class " data-filter-type="{{ $type }}" :all="false" name="service_category_id" :selected-value="isset($model) ? $model->getServiceCategoryId() : 0"></x-form.select>
                             </x-form.wrapper>
 
                             <x-form.wrapper class="col-lg-3 col-md-4 mb-4">
-                                <x-form.select :options="$serviceItems" :add-new="false" :label="__('Service Item')" :is-select2="false" class="repeater-select service_item_class  main-service-item" data-filter-type="{{ $type }}" :all="false" name="service_item_id" :selected-value="isset($model) ? $model->getServiceItemId() : 0"></x-form.select>
+                                <x-form.select :options="$serviceItems" :add-new="false" :label="__('Service Item')" :is-select2="false" class="repeater-select service_item_class main-service-item" data-filter-type="{{ $type }}" :all="false" name="service_item_id" :selected-value="isset($model) ? $model->getServiceItemId() : 0"></x-form.select>
                             </x-form.wrapper>
 
                             <x-form.wrapper class="col-lg-2 col-md-4 ">

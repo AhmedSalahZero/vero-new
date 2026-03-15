@@ -5,15 +5,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperQuantityNewProductAllocationBase
+ * @property int $id
+ * @property int|null $company_id
+ * @property string $allocation_base
+ * @property array<array-key, mixed>|null $new_allocation_bases_names
+ * @property array<array-key, mixed>|null $allocation_base_data
+ * @property string|null $updated_by
+ * @property string|null $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereAllocationBase($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereAllocationBaseData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereNewAllocationBasesNames($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantityNewProductAllocationBase whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class QuantityNewProductAllocationBase extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+ 
     protected $table = 'quantity_new_products_allocation_base';
     
     protected $guarded = [];

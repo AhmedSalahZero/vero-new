@@ -8,7 +8,36 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 /**
- * @mixin IdeHelperOutgoingTransfer
+ * @property int $id
+ * @property int|null $money_payment_id
+ * @property int|null $cash_expense_id
+ * @property int $is_bank_charges
+ * @property int|null $delivery_bank_id
+ * @property string|null $account_type
+ * @property string|null $account_number
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $actual_payment_date هو تاريخ التحويل الفعلي لان لازم ياكد
+ * @property string $status
+ * @property-read \App\Models\AccountType|null $accountType
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\FinancialInstitution|null $deliveryBank
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereActualPaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereCashExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereDeliveryBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereIsBankCharges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OutgoingTransfer whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OutgoingTransfer extends Model
 {
@@ -56,10 +85,10 @@ class OutgoingTransfer extends Model
 		$bank = $this->deliveryBank;
 		return $bank ? $bank->getName() : __('N/A') ;
 	}
-	public function getReceiptNumber()
-	{
-		return $this->receipt_number ;
-	}
+	// public function getReceiptNumber()
+	// {
+	// 	return $this->receipt_number ;
+	// }
 	public function accountType()
 	{
 		return $this->belongsTo(AccountType::class,'account_type','id');

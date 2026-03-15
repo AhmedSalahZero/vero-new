@@ -13,7 +13,115 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperCurrentAccountBankStatement
+ * @property int $id
+ * @property int|null $is_break_interest
+ * @property int $is_period_cd_or_td_interest
+ * @property string|null $type
+ * @property int $is_beginning_balance
+ * @property int $is_renewal_fees
+ * @property int $is_commission_fees
+ * @property int $is_issuance_fees
+ * @property int $is_td_renewal
+ * @property int $is_active الكولوم دا انا ضفته علشان ال commission اللي بتنزل كل ثلاث شهور مثلا .. فا لو لسه ميعاد الكومشن ما جاش يبقي هنعتبر الرو دا اكنه مش موجود اصلا ولما يجي ميعادة هنعدل الكولوم دا وهنحط بواحد علشان يدخل معايا في الحسبة بتاعتي
+ * @property int $financial_institution_account_id
+ * @property int $company_id
+ * @property int $money_received_id
+ * @property int $money_payment_id
+ * @property int|null $cash_expense_id
+ * @property int|null $buy_or_sell_currency_id
+ * @property int|null $internal_money_transfer_id
+ * @property int|null $lc_settlement_internal_money_transfer_id
+ * @property int|null $time_of_deposit_id
+ * @property int|null $letter_of_guarantee_issuance_id
+ * @property int|null $lg_renewal_date_history_id
+ * @property int|null $letter_of_credit_issuance_id
+ * @property int|null $lg_advanced_payment_history_id
+ * @property int|null $lc_advanced_payment_history_id
+ * @property int|null $lc_issuance_expense_id
+ * @property int|null $certificate_of_deposit_id
+ * @property int|null $loan_schedule_settlement_id
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property string|null $date
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property string|null $interest_type
+ * @property numeric $interest_rate_annually
+ * @property numeric $interest_rate_daily
+ * @property int $days_count
+ * @property numeric $interest_amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @property int|null $interest_account_bank_statement_odoo_id
+ * @property int|null $interest_journal_entry_id
+ * @property string|null $interest_odoo_reference
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\CertificatesOfDeposit|null $certificateOfDeposit
+ * @property-read \App\Models\CurrentAccountBankStatement|null $financialInstitutionAccount
+ * @property-read \App\Models\InternalMoneyTransfer|null $internalMoneyTransfer
+ * @property-read \App\Models\LcIssuanceExpense|null $lcIssuanceExpense
+ * @property-read \App\Models\LetterOfGuaranteeIssuanceAdvancedPaymentHistory|null $letterOfGuaranteeAdvancedPaymentHistory
+ * @property-read \App\Models\LetterOfGuaranteeIssuance|null $letterOfGuaranteeIssuance
+ * @property-read \App\Models\LoanScheduleSettlement|null $loanScheduleSettlement
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\MoneyReceived|null $moneyReceived
+ * @property-read \App\Models\TimeOfDeposit|null $timeOfDeposit
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereBuyOrSellCurrencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCashExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCertificateOfDepositId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereDaysCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereFinancialInstitutionAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestRateAnnually($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestRateDaily($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInterestType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereInternalMoneyTransferId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsBreakInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsCommissionFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsIssuanceFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsPeriodCdOrTdInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsRenewalFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereIsTdRenewal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLcAdvancedPaymentHistoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLcIssuanceExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLcSettlementInternalMoneyTransferId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLetterOfCreditIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLetterOfGuaranteeIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLgAdvancedPaymentHistoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLgRenewalDateHistoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLoanScheduleSettlementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereTimeOfDepositId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CurrentAccountBankStatement extends Model  implements IHaveStatement
 {

@@ -6,7 +6,33 @@ use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperNotificationSetting
+ * @property int $id
+ * @property int $customer_coming_dues_invoices_notifications_days
+ * @property int $customer_past_dues_invoices_notifications_days
+ * @property int $cheques_in_safe_notifications_days
+ * @property int $cheques_under_collection_notifications_days
+ * @property int $supplier_coming_dues_invoices_notifications_days
+ * @property int $supplier_past_dues_invoices_notifications_days
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $coming_payable_cheques_notifications_days
+ * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereChequesInSafeNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereChequesUnderCollectionNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereComingPayableChequesNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereCustomerComingDuesInvoicesNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereCustomerPastDuesInvoicesNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereSupplierComingDuesInvoicesNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereSupplierPastDuesInvoicesNotificationsDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class NotificationSetting extends Model
 {

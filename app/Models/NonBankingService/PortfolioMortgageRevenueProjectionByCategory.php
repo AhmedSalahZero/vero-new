@@ -7,7 +7,59 @@ use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  PortfolioMortgageRevenueProjectionByCategory extends Model
+/**
+ * @property int $id
+ * @property numeric $monthly_margin_rate
+ * @property numeric $quarterly_margin_rate
+ * @property numeric $annually_margin_rate
+ * @property array<array-key, mixed>|null $monthly_due_cheques_percentages
+ * @property array<array-key, mixed>|null $quarterly_due_cheques_percentages
+ * @property array<array-key, mixed>|null $annually_due_cheques_percentages
+ * @property array<array-key, mixed>|null $growth_rates
+ * @property array<array-key, mixed>|null $portfolio_mortgage_transactions_projections
+ * @property array<array-key, mixed>|null $frequency_per_year
+ * @property array<array-key, mixed>|null $start_from
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property numeric $margin_rate
+ * @property int $portfolio_mortgage_duration
+ * @property string|null $occurrence_dates
+ * @property string|null $statement
+ * @property string|null $loan_amounts
+ * @property array<array-key, mixed>|null $total_monthly_amounts_per_years
+ * @property string|null $portfolio_mortgage_unearned_interest_statement
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereAnnuallyDueChequesPercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereAnnuallyMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereFrequencyPerYear($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereGrowthRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereLoanAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereMonthlyDueChequesPercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereMonthlyMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereOccurrenceDates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory wherePortfolioMortgageDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory wherePortfolioMortgageTransactionsProjections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory wherePortfolioMortgageUnearnedInterestStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereQuarterlyDueChequesPercentages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereQuarterlyMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereStartFrom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereTotalMonthlyAmountsPerYears($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\PortfolioMortgageRevenueProjectionByCategory whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class PortfolioMortgageRevenueProjectionByCategory extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

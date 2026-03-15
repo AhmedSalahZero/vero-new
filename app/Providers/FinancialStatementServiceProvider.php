@@ -2,6 +2,7 @@
 namespace App\Providers;
 
 use App\Models\FinancialPlanning\Study;
+use App\Models\FinancialStatement;
 use App\Models\IncomeStatement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -33,9 +34,16 @@ class FinancialStatementServiceProvider extends ServiceProvider
 			|| in_array('modified-report',$requestSegments) 
 		 )
 		){
+			/**
+			 * @var IncomeStatement|null $incomeStatement
+			 */
 			$incomeStatement = IncomeStatement::find($incomeStatementId);
+			
 			if($incomeStatement){
 				$financialStatement = $incomeStatement->financialStatement ;
+				/**
+				 * @var FinancialStatement|null $financialStatement
+				 */
 				$datesAndIndexesHelpers = $financialStatement->getDatesIndexesHelper();
 				$datesIndexWithYearIndex=$datesAndIndexesHelpers['datesIndexWithYearIndex']; 
 	

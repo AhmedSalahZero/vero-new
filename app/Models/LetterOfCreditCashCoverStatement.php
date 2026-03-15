@@ -10,7 +10,51 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLetterOfCreditCashCoverStatement
+ * @property int $id
+ * @property string|null $type
+ * @property string $source هو المكان او الطريقه يعني اللي انت انشاتة بيها وانت عندك ثلاث او اربع زراير دول عباره عن المصدر اللي هو قيمة الكولوم دا
+ * @property int $financial_institution_id
+ * @property int $letter_of_credit_issuance_id
+ * @property int|null $lc_facility_id
+ * @property string $lc_type
+ * @property string|null $currency
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property int $company_id
+ * @property string|null $date
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\MoneyReceived|null $moneyReceived
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereLcFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereLcType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereLetterOfCreditIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditCashCoverStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LetterOfCreditCashCoverStatement extends Model
 {

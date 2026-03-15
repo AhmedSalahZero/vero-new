@@ -198,10 +198,7 @@ class FinancialInstitutionController
 		$financialInstitution->delete();
 		return redirect()->back()->with('success',__('Item Has Been Delete Successfully'));
 	}
-	public function getAccountNumbersBasedOnCurrency(Company $company , Request $request , FinancialInstitution $financialInstitution,?string $currency)
-	{
-		$financialInstitution->accounts;
-	}
+	
 	public function addAccount(Company $company , Request $request , FinancialInstitution $financialInstitution)
 	{
 		return view('reports.financial-institution.add-account',[

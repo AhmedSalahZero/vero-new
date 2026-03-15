@@ -17,7 +17,7 @@ data-is-parent-row
 			ml-4
 		@endif
 	
-		 btn-1-bg btn-sm btn-brand add-btn-class  text-center 
+		 btn-1-bg btn-sm btn-brand add-btn-class text-center 
 		 @if($hasParent)
 		 add-btn-js
 		 @else

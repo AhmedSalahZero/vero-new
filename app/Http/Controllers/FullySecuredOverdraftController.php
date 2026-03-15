@@ -151,7 +151,7 @@ class FullySecuredOverdraftController
 		
 		$fullySecuredOverdraft->update($data);
 		$fullySecuredOverdraft->storeOutstandingBreakdown($request,$company);
-		$fullySecuredOverdraft->updateLimitRaw($request,$company);
+		$fullySecuredOverdraft->updateLimitRaw();
 		
 		$type = $request->get('type','fully-secured-over-draft');
 		$activeTab = $type ;

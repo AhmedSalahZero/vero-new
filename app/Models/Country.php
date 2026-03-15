@@ -6,7 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperCountry
+ * @property int $id
+ * @property string $name_en
+ * @property string|null $name_ar
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\State> $states
+ * @property-read int|null $states_count
+ * @property-read bool|null $states_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country whereNameAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Country whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Country extends Model  {
 

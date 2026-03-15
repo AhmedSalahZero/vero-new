@@ -73,7 +73,7 @@ use App\Models\FinancialPlanning\Study;
                             @endphp
                             <tr data-is-main-row data-repeat-formatting-decimals="0" data-repeater-style>
                                 <td>
-                                    <a href="#" class="btn btn-1-bg btn-sm btn-brand add-btn-class  text-center add-btn-js">
+                                    <a href="#" class="btn btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
                                         <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
                                     </a>
                                 </td>
@@ -223,7 +223,7 @@ use App\Models\FinancialPlanning\Study;
 
                             @for($i = 0 ; $i<0 ; $i++) <tr data-is-main-row data-repeat-formatting-decimals="0" data-repeater-style>
                                 <td>
-                                    <a href="#" class="btn btn-1-bg btn-sm btn-brand add-btn-class  text-center add-btn-js">
+                                    <a href="#" class="btn btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
                                         <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
                                     </a>
                                 </td>

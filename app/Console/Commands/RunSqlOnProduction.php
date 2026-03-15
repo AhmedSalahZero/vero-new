@@ -7,18 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class RunSqlOnProduction extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+ 
     protected $signature = 'run:sql';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+  
     protected $description = 'To Run Sql File After Migration Run On Production';
 
     /**
@@ -54,9 +46,7 @@ class RunSqlOnProduction extends Command
 	}
     public function handle()
     {
-		/**
-		 * @var array $fileNames
-		 */
+	
 		$fileNames=$this->getAllFilesInFolderForVero();
 		foreach($fileNames as $fileName){
 			$fileContent = file_get_contents(app_path('Triggers/Cashvero').'/'.$fileName.'.sql');

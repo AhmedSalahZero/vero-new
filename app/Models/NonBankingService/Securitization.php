@@ -7,7 +7,39 @@ use App\Traits\HasBasicStoreRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class  Securitization extends Model
+/**
+ * @property int $id
+ * @property string $revenue_stream_type
+ * @property int $disbursement_date
+ * @property int $securitization_date
+ * @property numeric $discount_rate
+ * @property numeric $collection_revenue_rate
+ * @property numeric $early_settlements_expense_rate
+ * @property numeric $expense_amount
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereCollectionRevenueRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereDisbursementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereDiscountRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereEarlySettlementsExpenseRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereExpenseAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereRevenueStreamType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereSecuritizationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\Securitization whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class Securitization extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';
@@ -24,12 +56,21 @@ class  Securitization extends Model
 		parent::boot();
 		static::saving(function(self $model){
 			$study = $model->study ;
+			$model->discount_rate = $model->discount_rate ? $model->discount_rate : 0;
+			$model->collection_revenue_rate = $model->collection_revenue_rate ? $model->collection_revenue_rate  : 0;
+			$model->early_settlements_expense_rate = $model->early_settlements_expense_rate ? $model->early_settlements_expense_rate : 0;
 			foreach([
 				'disbursement_date',
 				'securitization_date'
 			] as $dateColumnName){
+				if(is_null($model->{$dateColumnName})){
+					return false ;
+				}
+				
 				if(!is_numeric($model->{$dateColumnName})){
+					
 				$date = $model->{$dateColumnName}.'-01';
+				
 				$dateAsIndex = $study->convertDateStringToDateIndex($date);
 				$model->{$dateColumnName} = $dateAsIndex;
 			}

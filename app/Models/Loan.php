@@ -9,7 +9,78 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use MathPHP\Finance;
 
-class  Loan extends Model 
+/**
+ * @property int $id
+ * @property int $company_id
+ * @property string|null $section_name
+ * @property int|null $is_with_capitalization
+ * @property int|null $financial_institution_id
+ * @property string|null $model_type
+ * @property string|null $loan_type
+ * @property string|null $grace_period
+ * @property string|null $loan_amount
+ * @property string|null $installment_interval
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property string|null $period
+ * @property string|null $fixedType
+ * @property string|null $base_rate
+ * @property string|null $margin_rate
+ * @property string|null $pricing
+ * @property string|null $duration tenor
+ * @property string|null $step_down_rate
+ * @property string|null $step_up_rate
+ * @property string|null $step_up_interval
+ * @property string|null $step_down_interval
+ * @property string|null $borrowing_rate
+ * @property string|null $capitalization_type
+ * @property string|null $margin_interest
+ * @property string|null $loan_interest
+ * @property string|null $min_interest
+ * @property string|null $repayment_duration
+ * @property string|null $installment_amount
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $interest_interval
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereBaseRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereBorrowingRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereCapitalizationType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereFixedType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereGracePeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereInstallmentAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereInstallmentInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereInterestInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereIsWithCapitalization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereLoanAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereLoanInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereLoanType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereMarginInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereMinInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan wherePeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan wherePricing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereRepaymentDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereSectionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereStepDownInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereStepDownRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereStepUpInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereStepUpRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Loan whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class Loan extends Model 
 {
 	use   CompanyScope , HasBasicStoreRequest,HasCollectionOrPaymentStatement;
 

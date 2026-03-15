@@ -9,7 +9,32 @@ use Illuminate\Support\Facades\DB;
 
 
 /**
- * @mixin IdeHelperOverdraftAgainstAssignmentOfContractLimit
+ * @property int $id
+ * @property int $is_active
+ * @property int $company_id
+ * @property int $overdraft_against_assignment_of_contract_id
+ * @property int $contract_id
+ * @property string $full_date هو عباره عن تاريخ ال actual_collection_date if exist , else  , due_date
+ * @property numeric $limit
+ * @property numeric $accumulated_limit
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContract|null $overdraftAgainstAssignmentOfContract
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereAccumulatedLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereOverdraftAgainstAssignmentOfContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstAssignmentOfContractLimit whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OverdraftAgainstAssignmentOfContractLimit extends Model
 {
@@ -150,7 +175,7 @@ class OverdraftAgainstAssignmentOfContractLimit extends Model
 			static::deleting(function(self $odAgainstAssignmentOfContractLimit){
 				$oldDate = null ;
 
-				if($odAgainstAssignmentOfContractLimit->cheque_id
+				if($odAgainstAssignmentOfContractLimit->contract_id
 				// && Request('receiving_date')||$odAgainstAssignmentOfContractLimit->is_credit && Request('delivery_date')
 				){
 						$oldDate =$odAgainstAssignmentOfContractLimit->getLimitFullDate();

@@ -30,6 +30,7 @@
 							@foreach ($study->{$relationName} as $index=>$currentLeasingRevenueStreamBreakdown)
 							@php
 								$name = $currentLeasingRevenueStreamBreakdown->getReviewForTable();
+								
 								$id = $currentLeasingRevenueStreamBreakdown->id ;
 								$marginRate = $currentLeasingRevenueStreamBreakdown->getMarginRate() ;
 								$sensitivityMarginRate = $currentLeasingRevenueStreamBreakdown->getSensitivityMarginRate() ;

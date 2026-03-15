@@ -17,17 +17,8 @@ require_once(public_path('apis/ripcord.php'));
 class TestConnectionCommand extends Command
 {
 
-	/**
-	 * The name and signature of the console command.
-	 *
-	 * @var string
-	 */
 	protected $signature = 'run:odoo-connection';
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
+	
 	protected $description = 'Test Odoo Connection Code Command';
 
 	/**

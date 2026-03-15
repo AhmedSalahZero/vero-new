@@ -178,7 +178,7 @@ class InternalMoneyTransferController
 		$internalMoneyTransfer = new InternalMoneyTransfer ;
 		$internalMoneyTransfer->type = $type ;
 		$transferDate = Carbon::make($request->get('transfer_date'))->format('Y-m-d') ;
-		$receivingDate = Carbon::make($transferDate)->addDay($request->get('transfer_days',0))->format('Y-m-d');
+		$receivingDate = Carbon::make($transferDate)->addDays($request->get('transfer_days',0))->format('Y-m-d');
 		$transferAmount = $request->get('amount') ;
 		$internalMoneyTransfer->storeBasicForm($request);
 		$fromFinancialInstitutionId = $request->get('from_bank_id');

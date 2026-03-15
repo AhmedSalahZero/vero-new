@@ -88,6 +88,16 @@ class AveragePricesReport
 		$view_name = $full_report_data['view_name'] ?? '';
 		$names = $full_report_data['names'] ?? [];
 		$dates = array_keys(($report_data_interval['Total'] ?? []));
-		return view('client_view.reports.sales_gathering_analysis.average_prices.average_prices_report', compact('company', 'type', 'view_name', 'names', 'dates', 'report_data'));
+		if( !isset($type)){
+			throw new \Exception('type is not set Please Add It Additional else if statement to define them');
+		}
+		return view('client_view.reports.sales_gathering_analysis.average_prices.average_prices_report', [
+			'company' => $company,
+			'type' => $type,
+			'view_name' => $view_name,
+			'names' => $names,
+			'dates' => $dates,
+			'report_data' => $report_data,
+		]);
 	}
 }

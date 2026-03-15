@@ -66,6 +66,9 @@ class BusinessUnitsAgainstAnalysisReport
             $type  = 'day_name';
             $view_name = 'Business Units Against Days Trend Analysis' ;
 		}
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
         $name_of_selector_label = str_replace(['Business Units Against ' ,' Trend Analysis'],'',$view_name);
 
         if ($type == 'averagePrices') {
@@ -74,7 +77,12 @@ class BusinessUnitsAgainstAnalysisReport
             $name_of_selector_label = 'Products Items';
         }
         // $name_of_selector_label = ($type == 'averagePrices') ? 'Products / Services' : str_replace(['Business Units Against ' ,' Trend Analysis'],'',$view_name);
-        return view('client_view.reports.sales_gathering_analysis.businessUnits_analysis_form', compact('company','name_of_selector_label','type','view_name'));
+        return view('client_view.reports.sales_gathering_analysis.businessUnits_analysis_form', [
+            'company' => $company,
+            'name_of_selector_label' => $name_of_selector_label,
+            'type' => $type,
+            'view_name' => $view_name,
+        ]);
     }
     public function BusinessUnitsSalesAnalysisIndex(Company $company)
     {
@@ -113,13 +121,12 @@ class BusinessUnitsAgainstAnalysisReport
         $name_of_report_item  = ($result=='view') ? 'Sales Values' : 'Avg. Prices';
         foreach ($businessUnits as  $businessUnitName) {
             if ($result == 'view') {
-                $businessUnits_data =collect(DB::select(DB::raw("
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,business_unit," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."'AND business_unit = '".$businessUnitName."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                    ORDER BY id "
-                    )->getValue(DB::connection()->getQueryGrammar())
-					))->groupBy($type)->map(function($item)use($data_type){
+                    ORDER BY id ";
+                $businessUnits_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                         return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
 
                             return $sub_item->sum($data_type);
@@ -150,8 +157,8 @@ class BusinessUnitsAgainstAnalysisReport
                     ->selectRaw('DATE_FORMAT(LAST_DAY(date),"%d-%m-%Y") as gr_date ,
                     (IFNULL('.$data_type.',0) ) as '.$data_type.' ,IFNULL(quantity_bonus,0) quantity_bonus , IFNULL(quantity,0) quantity,business_unit,' . $type)
                     ->get()
-                    ->groupBy($type)->map(function($item)use($data_type){
-                        return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
+                    ->groupBy($type)->map(function($item){
+                        return $item->groupBy('gr_date')->map(function($sub_item){
                             return ($sub_item->sum('quantity_bonus') + $sub_item->sum('quantity') );
                         });
                     })->toArray();
@@ -248,7 +255,6 @@ class BusinessUnitsAgainstAnalysisReport
 
                         elseif($itemKey == 'Growth Rate %'){
                             foreach($values as $datee => $dateVal){
-                                $report_data[$reportType][$dateName]['Avg. Prices'][$datee];
                                 $keys = array_flip(array_keys($report_data[$reportType][$dateName]['Avg. Prices']));
                                 $values = array_values($report_data[$reportType][$dateName]['Avg. Prices']);
                                 $previousValue = isset($values[$keys[$datee]-1]) ? $values[$keys[$datee]-1] : 0 ;
@@ -347,13 +353,12 @@ class BusinessUnitsAgainstAnalysisReport
 
         foreach ($zones as  $zone) {
 
-            $sales =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." business_unit
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND business_unit = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id"
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date');
+                ORDER BY id";
+            $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){
                                     return $sub_item->sum('sales_value');
                                 })->toArray();
@@ -409,7 +414,7 @@ class BusinessUnitsAgainstAnalysisReport
                     $final_report_data['Total'] = $this->finalTotal([($final_report_data['Total'] ?? []), (($final_report_data[$zone][$sales_discount_field]['Values']??[]))]);
 
 
-                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]??[]));
+                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]));
 
 
 
@@ -419,7 +424,7 @@ class BusinessUnitsAgainstAnalysisReport
             $zones_names[] = (str_replace( ' ','_', $zone));
         }
 
-        $sales_values = $this->finalTotal([$sales_values??[]]);
+        $sales_values = $this->finalTotal([$sales_values]);
         $total = $final_report_data['Total'];
         unset($final_report_data['Total']);
         $final_report_data['Total'] = $total;
@@ -446,13 +451,12 @@ class BusinessUnitsAgainstAnalysisReport
 
         foreach ($businessUnits as  $businessUnit) {
 
-            $businessUnits_data =collect(DB::select(DB::raw("
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,business_unit
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND business_unit = '".$businessUnit."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy('gr_date')->map(function($item){
+                ORDER BY id ";
+            $businessUnits_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');
                 })->toArray();
 

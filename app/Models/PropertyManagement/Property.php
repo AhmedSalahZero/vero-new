@@ -17,7 +17,88 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @mixin IdeHelperProperty
+ * @property int $id
+ * @property string $name
+ * @property string|null $location
+ * @property string|null $code
+ * @property string|null $nature_id
+ * @property int|null $category_id
+ * @property int|null $type_id
+ * @property int|null $ownership_id
+ * @property numeric|null $area
+ * @property string|null $unit_of_measurement
+ * @property numeric $acquisition_cost
+ * @property string|null $acquisition_date
+ * @property numeric $current_book_value
+ * @property string|null $book_value_date
+ * @property array<array-key, mixed>|null $depreciations
+ * @property numeric $month_depreciation
+ * @property int $duration_in_months
+ * @property int $company_id
+ * @property int|null $country_id
+ * @property int|null $governorate_id
+ * @property int|null $city_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $parent_property_id For units inside complex/building
+ * @property array<array-key, mixed>|null $tax_rates
+ * @property array<array-key, mixed>|null $market_values
+ * @property-read \App\Models\PropertyManagement\Category|null $category
+ * @property-read \App\Models\PropertyManagement\City|null $city
+ * @property-read \App\Models\Company|null $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Contract> $contracts
+ * @property-read int|null $contracts_count
+ * @property-read bool|null $contracts_exists
+ * @property-read \App\Models\PropertyManagement\Country|null $country
+ * @property-read \App\Models\PropertyManagement\PropertyDueInstallment|null $dueInstallment
+ * @property-read float $latest_market_value
+ * @property-read \App\Models\PropertyManagement\Governorate|null $governorate
+ * @property-read \App\Models\PropertyManagement\Property|null $parentProperty
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyToBeDelivered> $propertiesToBeDelivered
+ * @property-read int|null $properties_to_be_delivered_count
+ * @property-read bool|null $properties_to_be_delivered_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyContractPartialRentRenewal> $propertyContractPartialRentRenewals
+ * @property-read int|null $property_contract_partial_rent_renewals_count
+ * @property-read bool|null $property_contract_partial_rent_renewals_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyExpense> $propertyExpenses
+ * @property-read int|null $property_expenses_count
+ * @property-read bool|null $property_expenses_exists
+ * @property-read \App\Models\PropertyManagement\PropertyType|null $type
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Property> $units
+ * @property-read int|null $units_count
+ * @property-read bool|null $units_exists
+ * @method static \Database\Factories\PropertyFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereAcquisitionCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereAcquisitionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereBookValueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereCurrentBookValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereDepreciations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereDurationInMonths($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereGovernorateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereMarketValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereMonthDepreciation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereNatureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereOwnershipId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereParentPropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereTaxRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereUnitOfMeasurement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Property whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Property extends Model
 {
@@ -362,7 +443,7 @@ class Property extends Model
 	{
 		$dueInstallment = $this->dueInstallment;
 		/**
-		 * @var PropertyDueInstallment $dueInstallment
+		 * @var PropertyDueInstallment|null $dueInstallment
 		 */
 		return [
 			'id' => $dueInstallment ? $dueInstallment->id : 0,

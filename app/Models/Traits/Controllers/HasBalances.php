@@ -15,9 +15,7 @@ trait HasBalances
 		$isMainCurrency = $currency == 'main_currency' ;
 		$startDateFormatted = Carbon::make($startDate)->format('d-m-Y');
 		$index = -1 ;
-		/**
-		 * @var CustomerInvoice $firstCustomerInvoice
-		 */
+		
 		$oneDayBeforeStartDate = Carbon::make($startDate)->subDays(1000)->format('Y-m-d');
 	
 		$startDateMinusOne = Carbon::make($startDate)->subDay()->format('Y-m-d');
@@ -155,9 +153,9 @@ trait HasBalances
 		->whereBetween($dateColumnName,[$startDate,$endDate])
 		->where('partner_id',$partnerId)
 		->where('partner_type',$partnerType)
-		->when(!$isMainCurrency , function($q) use ($currency){
-			// $q->where('currency',$currency);
-		})
+		// ->when(!$isMainCurrency , function($q) use ($currency){
+		// 	// $q->where('currency',$currency);
+		// })
 		->get() ; 
 		
 		if($modelType == 'SupplierInvoice'){
@@ -222,7 +220,7 @@ trait HasBalances
 					}
 					}
 					
-					elseif($moneyModel->getReceivingOrPaymentCurrency() == $currency || $isMainCurrency){
+					elseif($moneyModel->getReceivingOrPaymentCurrency() == $currency ){
 						  // start down payment from receiving currency 
 				
 							$receivedAmountOrPaidAmount = $moneyModel->getAmount();

@@ -18,11 +18,6 @@ class StoreStudyRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
 		$operationStartDate = $this->get('operation_start_date').'-01';

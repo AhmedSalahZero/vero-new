@@ -15,7 +15,101 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * * هنا عميلة تحويل الاموال من حساب بنك الي حساب بنكي اخر
  * * عن طريق بسحب كريدت من حساب احطة دبت في حساب تاني
  *
- * @mixin IdeHelperInternalMoneyTransfer
+ * @property int $id
+ * @property string|null $odoo_error_message
+ * @property int|null $synced_with_odoo
+ * @property int|null $inbound_journal_entry_id
+ * @property string|null $inbound_odoo_reference
+ * @property int|null $outbound_journal_entry_id
+ * @property string|null $outbound_odoo_reference
+ * @property int|null $outbound_account_bank_statement_odoo_id
+ * @property int|null $inbound_account_bank_statement_odoo_id
+ * @property string|null $type
+ * @property string|null $transfer_date هو التاريخ اللي اللي هيتم فيه العميله
+ * @property int $transfer_days عدد الايام المتوقع فيها اتمام هذه العمليه
+ * @property int|null $from_bank_id
+ * @property int|null $to_bank_id
+ * @property numeric $amount مقدار مبلغ التحويل
+ * @property int|null $from_account_type_id
+ * @property string|null $from_account_number
+ * @property string|null $currency
+ * @property int|null $to_account_type_id
+ * @property string|null $to_account_number
+ * @property string|null $cheque_number
+ * @property int|null $from_branch_id
+ * @property int|null $to_branch_id
+ * @property int $company_id
+ * @property string|null $from_comment_ar
+ * @property string|null $from_comment_en
+ * @property string|null $to_comment_ar
+ * @property string|null $to_comment_en
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashInSafeStatement> $cashInSafeStatements
+ * @property-read int|null $cash_in_safe_statements_count
+ * @property-read bool|null $cash_in_safe_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraftBankStatement> $cleanOverdraftBankStatements
+ * @property-read int|null $clean_overdraft_bank_statements_count
+ * @property-read bool|null $clean_overdraft_bank_statements_exists
+ * @property-read \App\Models\Company $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\AccountType|null $fromAccountType
+ * @property-read \App\Models\FinancialInstitution|null $fromBank
+ * @property-read \App\Models\Branch|null $fromBranch
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraftBankStatement> $fullySecuredOverdraftBankStatements
+ * @property-read int|null $fully_secured_overdraft_bank_statements_count
+ * @property-read bool|null $fully_secured_overdraft_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractBankStatement> $overdraftAgainstAssignmentOfContractBankStatements
+ * @property-read int|null $overdraft_against_assignment_of_contract_bank_statements_count
+ * @property-read bool|null $overdraft_against_assignment_of_contract_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaperBankStatement> $overdraftAgainstCommercialPaperBankStatements
+ * @property-read int|null $overdraft_against_commercial_paper_bank_statements_count
+ * @property-read bool|null $overdraft_against_commercial_paper_bank_statements_exists
+ * @property-read \App\Models\AccountType|null $toAccountType
+ * @property-read \App\Models\FinancialInstitution|null $toBank
+ * @property-read \App\Models\Branch|null $toBranch
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereChequeNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereFromAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereFromAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereFromBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereFromBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereFromCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereFromCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereInboundAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereInboundJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereInboundOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereOdooErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereOutboundAccountBankStatementOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereOutboundJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereOutboundOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereSyncedWithOdoo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereToAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereToAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereToBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereToBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereToCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereToCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereTransferDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereTransferDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereUserComment($value)
+ * @mixin \Eloquent
  */
 class InternalMoneyTransfer extends Model 
 {
@@ -104,7 +198,7 @@ class InternalMoneyTransfer extends Model
 	public function getReceivingDateFormatted()
 	{
 		
-		return Carbon::make($this->getTransferDate())->addDay($this->getTransferDays())->format('d-m-Y') ;
+		return Carbon::make($this->getTransferDate())->addDays($this->getTransferDays())->format('d-m-Y') ;
 	}
     public function setTransferDateAttribute($value)
     {

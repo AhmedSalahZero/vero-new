@@ -7,7 +7,104 @@ use App\Models\Traits\Scopes\PropertyManagements\BelongsToStudy;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperCashflowStatementReport
+ * @property int $id
+ * @property string|null $total_admin_fees
+ * @property array<array-key, mixed>|null $opening_dividend_payments
+ * @property int|null $opening_cash
+ * @property array<array-key, mixed>|null $other_long_term_asset_collections
+ * @property array<array-key, mixed>|null $total_other_long_term_asset_collections
+ * @property array<array-key, mixed>|null $ffe_loan_withdrawal
+ * @property array<array-key, mixed>|null $existing_other_debtors_collection
+ * @property array<array-key, mixed>|null $total_existing_other_debtors_collection
+ * @property array<array-key, mixed>|null $existing_other_creditors_payment
+ * @property array<array-key, mixed>|null $total_existing_other_creditors_payment
+ * @property array<array-key, mixed>|null $existing_long_term_loans_payment
+ * @property array<array-key, mixed>|null $total_existing_long_term_loans_payment
+ * @property array<array-key, mixed>|null $existing_other_long_term_liabilities_payment
+ * @property array<array-key, mixed>|null $total_existing_other_long_term_liabilities_payment
+ * @property array<array-key, mixed>|null $fixed_asset_loan_schedule_payments
+ * @property array<array-key, mixed>|null $fixed_asset_payments
+ * @property array<array-key, mixed>|null $expense_payments
+ * @property array<array-key, mixed>|null $total_expense_payments
+ * @property array<array-key, mixed>|null $salary_payments
+ * @property array<array-key, mixed>|null $salary_tax_social_insurance_payments
+ * @property array<array-key, mixed>|null $withhold_payments
+ * @property array<array-key, mixed>|null $corporate_taxes_payments
+ * @property array<array-key, mixed>|null $corporate_taxes_end_balances
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $total_fixed_asset_replacement_costs
+ * @property array<array-key, mixed>|null $oda_statements
+ * @property array<array-key, mixed>|null $extra_capital_injection
+ * @property array<array-key, mixed>|null $manual_capital_injection
+ * @property array<array-key, mixed>|null $cash_opening_balances
+ * @property array<array-key, mixed>|null $cash_and_bank_beginning_balances
+ * @property array<array-key, mixed>|null $cash_end_balances
+ * @property int $has_manual_equity_injection
+ * @property array<array-key, mixed>|null $manual_equity_injection
+ * @property array<array-key, mixed>|null $net_cash_before_extra_capital_injection
+ * @property array<array-key, mixed>|null $full_coverage_rent_collections
+ * @property array<array-key, mixed>|null $partial_coverage_rent_collections
+ * @property array<array-key, mixed>|null $to_be_delivered_rent_collections
+ * @property array<array-key, mixed>|null $property_forecasted_rent_collections
+ * @property string|null $existing_properties_installments
+ * @property string|null $new_properties_installments
+ * @property array<array-key, mixed>|null $existing_portfolio_loans_payment
+ * @property array<array-key, mixed>|null $existing_portfolio_collection
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCashAndBankBeginningBalances($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCashEndBalances($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCashOpeningBalances($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCorporateTaxesEndBalances($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCorporateTaxesPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingLongTermLoansPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingOtherCreditorsPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingOtherDebtorsCollection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingOtherLongTermLiabilitiesPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingPortfolioCollection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingPortfolioLoansPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExistingPropertiesInstallments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExpensePayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereExtraCapitalInjection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereFfeLoanWithdrawal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereFixedAssetLoanSchedulePayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereFixedAssetPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereFullCoverageRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereHasManualEquityInjection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereManualCapitalInjection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereManualEquityInjection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereNetCashBeforeExtraCapitalInjection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereNewPropertiesInstallments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereOdaStatements($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereOpeningCash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereOpeningDividendPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereOtherLongTermAssetCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport wherePartialCoverageRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport wherePropertyForecastedRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereSalaryPayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereSalaryTaxSocialInsurancePayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereToBeDeliveredRentCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalAdminFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalExistingLongTermLoansPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalExistingOtherCreditorsPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalExistingOtherDebtorsCollection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalExistingOtherLongTermLiabilitiesPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalExpensePayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalFixedAssetReplacementCosts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereTotalOtherLongTermAssetCollections($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\CashflowStatementReport whereWithholdPayments($value)
+ * @mixin \Eloquent
  */
 class CashflowStatementReport extends Model
 {

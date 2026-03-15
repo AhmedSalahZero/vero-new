@@ -8,7 +8,36 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperLoanScheduleSettlement
+ * @property int $id
+ * @property int|null $company_id
+ * @property string $current_account_number
+ * @property int $loan_schedule_id
+ * @property string $date
+ * @property numeric $amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountCreditBankStatements
+ * @property-read int|null $current_account_credit_bank_statements_count
+ * @property-read bool|null $current_account_credit_bank_statements_exists
+ * @property-read \App\Models\LoanSchedule|null $loanSchedule
+ * @property-read \App\Models\CurrentAccountBankStatement|null $loanStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LoanStatement> $loanStatements
+ * @property-read int|null $loan_statements_count
+ * @property-read bool|null $loan_statements_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement company()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereCurrentAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereLoanScheduleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanScheduleSettlement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LoanScheduleSettlement extends Model
 {
@@ -19,11 +48,6 @@ class LoanScheduleSettlement extends Model
 
 
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
 	public static function boot()
 	{
 		

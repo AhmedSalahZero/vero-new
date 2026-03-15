@@ -9,18 +9,10 @@ use Schema;
 
 class EmptyCashveroCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+   
     protected $signature = 'empty:cashvero';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+   
     protected $description = 'Empty CashVero';
 
     /**

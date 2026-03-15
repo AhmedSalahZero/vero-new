@@ -51,10 +51,9 @@
     47 => 'App\\Providers\\RouteServiceProvider',
     48 => 'App\\Providers\\NonBankingServiceProvider',
     49 => 'App\\Providers\\PropertyManagementServiceProvider',
-    50 => 'App\\Providers\\TradingServiceProvider',
-    51 => 'App\\Providers\\FinancialPlanningServiceProvider',
-    52 => 'App\\Providers\\FinancialStatementServiceProvider',
-    53 => 'App\\Providers\\BlueprintMacroServiceProvider',
+    50 => 'App\\Providers\\FinancialPlanningServiceProvider',
+    51 => 'App\\Providers\\FinancialStatementServiceProvider',
+    52 => 'App\\Providers\\BlueprintMacroServiceProvider',
   ),
   'eager' => 
   array (
@@ -92,10 +91,9 @@
     31 => 'App\\Providers\\RouteServiceProvider',
     32 => 'App\\Providers\\NonBankingServiceProvider',
     33 => 'App\\Providers\\PropertyManagementServiceProvider',
-    34 => 'App\\Providers\\TradingServiceProvider',
-    35 => 'App\\Providers\\FinancialPlanningServiceProvider',
-    36 => 'App\\Providers\\FinancialStatementServiceProvider',
-    37 => 'App\\Providers\\BlueprintMacroServiceProvider',
+    34 => 'App\\Providers\\FinancialPlanningServiceProvider',
+    35 => 'App\\Providers\\FinancialStatementServiceProvider',
+    36 => 'App\\Providers\\BlueprintMacroServiceProvider',
   ),
   'deferred' => 
   array (

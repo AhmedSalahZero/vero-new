@@ -72,11 +72,11 @@ class PricingPlansController extends Controller
 			'status'=>true ,
 			'message'=>'good'
 		]);
-        Session::flash('success',__('Created Successfully'));
-		return redirect()->route('admin.create.quick.pricing.calculator',[
-			'pricingPlanId'=>$pricingPlan->id,
-			'company'=>$company->id
-		]);
+        // Session::flash('success',__('Created Successfully'));
+		// return redirect()->route('admin.create.quick.pricing.calculator',[
+		// 	'pricingPlanId'=>$pricingPlan->id,
+		// 	'company'=>$company->id
+		// ]);
         // return redirect()->route('pricing-plans.index',['company'=>$company->id ]);
 
       

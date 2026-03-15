@@ -10,7 +10,60 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperCashInSafeStatement
+ * @property int $id
+ * @property string|null $type
+ * @property int|null $branch_id
+ * @property string|null $currency
+ * @property numeric $exchange_rate
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property int $company_id
+ * @property int $money_received_id
+ * @property int|null $money_payment_id
+ * @property int|null $cash_expense_id
+ * @property int|null $buy_or_sell_currency_id
+ * @property int|null $internal_money_transfer_id
+ * @property int|null $opening_balance_id
+ * @property string|null $date
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Branch|null $branch
+ * @property-read \App\Models\CashExpense|null $cashExpense
+ * @property-read \App\Models\OpeningBalance|null $cashInSafes
+ * @property-read \App\Models\InternalMoneyTransfer|null $internalMoneyTransfer
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @property-read \App\Models\MoneyReceived|null $moneyReceived
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereBuyOrSellCurrencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereCashExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereInternalMoneyTransferId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashInSafeStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CashInSafeStatement extends Model
 {

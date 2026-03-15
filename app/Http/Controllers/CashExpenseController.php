@@ -195,7 +195,7 @@ class CashExpenseController
 			'filterDates'=>$filterDates,
 
 		]);
-        return view('reports.cashExpenses.index', compact('financialInstitutionBanks','accountTypes'));
+        // return view('reports.cashExpenses.index', compact('financialInstitutionBanks','accountTypes'));
     }
 
 	public function create(Company $company,$supplierInvoiceId = null)
@@ -337,7 +337,7 @@ class CashExpenseController
 			
 		 }else{
 			// cheques 
-			$cashExpense->storeNonCustomerOrSupplierOdooExpense();
+			$cashExpense->storeNonCustomerOrSupplierOdooExpense(false);
 			
 		 }
 		 
@@ -353,11 +353,7 @@ class CashExpenseController
 		]);
 
 	}
-	protected function getActiveTab(string $moneyType)
-	{
-		return $moneyType ;
 
-	}
 	public function edit(Company $company , Request $request , cashExpense $cashExpense ,$supplierInvoiceId = null){
 		$currencies = getCurrencies();
 		$contractsRelationName = 'contracts' ;

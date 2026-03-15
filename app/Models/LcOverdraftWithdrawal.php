@@ -6,7 +6,38 @@ use Illuminate\Database\Eloquent\Model;
 
 
 /**
- * @mixin IdeHelperLcOverdraftWithdrawal
+ * @property int $id
+ * @property int $lc_overdraft_bank_statement_id
+ * @property int|null $lc_facility_id
+ * @property int $company_id
+ * @property int $max_settlement_days
+ * @property string $due_date تاريخ الاستحقاق وهو عباره عن جدول التاريخ 
+ * 			date
+ * 			من جدول ال 
+ * 			bank statement
+ * 			زائد ال
+ * 			max_settlement_days
+ * @property numeric $settlement_amount
+ * @property numeric $net_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CleanOverdraftBankStatement|null $bankStatement
+ * @property-read \App\Models\LetterOfCreditIssuance|null $lcIssuance
+ * @property-write mixed $withdrawal_date
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereLcFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereLcOverdraftBankStatementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereMaxSettlementDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereNetBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereSettlementAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcOverdraftWithdrawal whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LcOverdraftWithdrawal extends Model
 {

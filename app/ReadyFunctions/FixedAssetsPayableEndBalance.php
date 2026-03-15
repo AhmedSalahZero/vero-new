@@ -13,16 +13,16 @@ class FixedAssetsPayableEndBalance
         $financialYearStartMonth = 12 ;
         $purchasesForIntervals = [
             'monthly'=>$purchase,
-            'quarterly'=>sumIntervals($purchase, 'quarterly', $financialYearStartMonth, $dateIndexWithDate),
-            'semi-annually'=>sumIntervals($purchase, 'semi-annually', $financialYearStartMonth, $dateIndexWithDate),
-            'annually'=>sumIntervals($purchase, 'annually', $financialYearStartMonth, $dateIndexWithDate),
+            'quarterly'=>sumIntervals($purchase, 'quarterly'),
+            'semi-annually'=>sumIntervals($purchase, 'semi-annually'),
+            'annually'=>sumIntervals($purchase, 'annually'),
         ];
         
         $collectionForInterval = [
             'monthly'=>$collection,
-            'quarterly'=>sumIntervals($collection, 'quarterly', $financialYearStartMonth, $dateIndexWithDate),
-            'semi-annually'=>sumIntervals($collection, 'semi-annually', $financialYearStartMonth, $dateIndexWithDate),
-            'annually'=>sumIntervals($collection, 'annually', $financialYearStartMonth, $dateIndexWithDate),
+            'quarterly'=>sumIntervals($collection, 'quarterly'),
+            'semi-annually'=>sumIntervals($collection, 'semi-annually'),
+            'annually'=>sumIntervals($collection, 'annually'),
         ];
         
         

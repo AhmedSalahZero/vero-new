@@ -74,8 +74,16 @@ class CategoriesAgainstAnalysisReport
             $type  = 'day_name';
             $view_name = 'Categories Against Days' ;
         }
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
         $name_of_selector_label = str_replace(['Categories Against ' ,' Trend Analysis'], '', $view_name);
-        return view('client_view.reports.sales_gathering_analysis.categories_analysis_form', compact('company', 'name_of_selector_label', 'type', 'view_name'));
+        return view('client_view.reports.sales_gathering_analysis.categories_analysis_form', [
+            'company' => $company,
+            'name_of_selector_label' => $name_of_selector_label,
+            'type' => $type,
+            'view_name' => $view_name,
+        ]);
     }
     public function CategoriesSalesAnalysisIndex(Company $company)
     {
@@ -124,14 +132,12 @@ class CategoriesAgainstAnalysisReport
                     $mainField = 'customer_name';
                 }
                 
-                $zones_data =collect(DB::select(DB::raw(
-                    "
+                $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,category," . $type ."
                     FROM sales_gathering
                     WHERE ( company_id = '".$company->id."'AND ". $mainField ."  = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                    ORDER BY id "
-                )->getValue(DB::connection()->getQueryGrammar())
-				))->groupBy($type)->map(function ($item) use ($data_type) {
+                    ORDER BY id ";
+                $zones_data =collect(DB::select($query))->groupBy($type)->map(function ($item) use ($data_type) {
                     return $item->groupBy('gr_date')->map(function ($sub_item) use ($data_type) {
                         
                         return $sub_item->sum($data_type);
@@ -161,8 +167,8 @@ class CategoriesAgainstAnalysisReport
                     ->selectRaw('DATE_FORMAT(LAST_DAY(date),"%d-%m-%Y") as gr_date ,
                     (IFNULL('.$data_type.',0)  ) as '.$data_type.' ,IFNULL(quantity_bonus,0) quantity_bonus , IFNULL(quantity,0) quantity,category,' . $type)
                     ->get()
-                    ->groupBy($type)->map(function ($item) use ($data_type) {
-                        return $item->groupBy('gr_date')->map(function ($sub_item) use ($data_type) {
+                    ->groupBy($type)->map(function ($item) {
+                        return $item->groupBy('gr_date')->map(function ($sub_item) {
                             return ($sub_item->sum('quantity_bonus') + $sub_item->sum('quantity')) ;
                         });
                     })->toArray();
@@ -240,7 +246,6 @@ class CategoriesAgainstAnalysisReport
                         
                                     } elseif ($itemKey == 'Growth Rate %') {
                                         foreach ($values as $datee => $dateVal) {
-                                            $report_data[$reportType][$dateName]['Avg. Prices'][$datee];
                                             $keys = array_flip(array_keys($report_data[$reportType][$dateName]['Avg. Prices']));
                                             $values = array_values($report_data[$reportType][$dateName]['Avg. Prices']);
                                             $previousValue = isset($values[$keys[$datee]-1]) ? $values[$keys[$datee]-1] : 0 ;
@@ -327,14 +332,12 @@ class CategoriesAgainstAnalysisReport
 
         foreach ($zones as $zone) {
 
-            $sales =collect(DB::select(DB::raw(
-                "
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." category
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND category = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id"
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date');
+                ORDER BY id";
+            $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function ($sub_item) {
                 return $sub_item->sum('sales_value');
             })->toArray();
@@ -390,7 +393,7 @@ class CategoriesAgainstAnalysisReport
                     $final_report_data['Total'] = $this->finalTotal([($final_report_data['Total'] ?? []), (($final_report_data[$zone][$sales_discount_field]['Values']??[]))]);
 
 
-                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]??[]));
+                    $final_report_data[$zone][$sales_discount_field]['Perc.% / Sales'] = $this->operationAmongTwoArrays(($final_report_data[$zone][$sales_discount_field]['Values']??[]), ($sales_values[$zone]));
 
 
                 }
@@ -398,7 +401,7 @@ class CategoriesAgainstAnalysisReport
             $zones_names[] = (str_replace(' ', '_', $zone));
         }
 
-        $sales_values = $this->finalTotal([$sales_values??[]]);
+        $sales_values = $this->finalTotal([$sales_values]);
         $total = $final_report_data['Total'] ?? [];
         unset($final_report_data['Total']);
         $final_report_data['Total'] = $total;
@@ -408,10 +411,17 @@ class CategoriesAgainstAnalysisReport
 
         $report_data = $final_report_data;
 
-        $dates = array_keys(($report_data['Total']??[]));
+        $dates = array_keys(($report_data['Total']));
 
         $type_name = 'Categories';
-        return view('client_view.reports.sales_gathering_analysis.sales_discounts_analysis_report', compact('company', 'view_name', 'zones_names', 'dates', 'report_data', 'type_name'));
+        return view('client_view.reports.sales_gathering_analysis.sales_discounts_analysis_report', [
+            'company' => $company,
+            'view_name' => $view_name,
+            'zones_names' => $zones_names,
+            'dates' => $dates,
+            'report_data' => $report_data,
+            'type_name' => $type_name,
+        ]);
 
     }
 
@@ -430,14 +440,12 @@ class CategoriesAgainstAnalysisReport
 
 
 
-            $categories_data =collect(DB::select(DB::raw(
-                "
+            $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,category
                 FROM sales_gathering
                 WHERE ( company_id = '".$company->id."'AND category = '".$category."' AND date between '".$request->start_date."' and '".$request->end_date."')
-                ORDER BY id "
-            )->getValue(DB::connection()->getQueryGrammar())
-			))->groupBy('gr_date')->map(function ($item) {
+                ORDER BY id ";
+            $categories_data =collect(DB::select($query))->groupBy('gr_date')->map(function ($item) {
                 return $item->sum('net_sales_value');
             })->toArray();
 
@@ -475,7 +483,14 @@ class CategoriesAgainstAnalysisReport
         $dates = array_keys($total_categories ?? []);
         $final_report_data = HArr::getKeysSortedDescByKey($final_report_data, 'Sales Values');
         
-        return view('client_view.reports.sales_gathering_analysis.categories_sales_report', compact('company', 'categories_names', 'total_categories_growth_rates', 'final_report_data', 'total_categories', 'dates'));
+        return view('client_view.reports.sales_gathering_analysis.categories_sales_report', [
+            'company' => $company,
+            'categories_names' => $categories_names,
+            'total_categories_growth_rates' => $total_categories_growth_rates,
+            'final_report_data' => $final_report_data,
+            'total_categories' => $total_categories,
+            'dates' => $dates,
+        ]);
 
     }
     public function growthRate($data)

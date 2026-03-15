@@ -18,7 +18,38 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperRevenueBusinessLine
+ * @property int $id
+ * @property string $name
+ * @property int $company_id
+ * @property int|null $creator_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuotationPricingCalculator> $QuotationPricingCalculators
+ * @property-read int|null $quotation_pricing_calculators_count
+ * @property-read bool|null $quotation_pricing_calculators_exists
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuickPricingCalculator> $quickPricingCalculators
+ * @property-read int|null $quick_pricing_calculators_count
+ * @property-read bool|null $quick_pricing_calculators_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServiceCategory> $serviceCategories
+ * @property-read int|null $service_categories_count
+ * @property-read bool|null $service_categories_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServiceItem> $serviceItems
+ * @property-read int|null $service_items_count
+ * @property-read bool|null $service_items_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine forCurrentCompany()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine whereCreatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\RevenueBusinessLine whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class RevenueBusinessLine extends Model implements IHaveView,IHaveCompany,IHaveCreator, IExportable
 { 

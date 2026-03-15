@@ -9,35 +9,19 @@ use Schema;
 
 class DeleteAllDataFromNonBankingStudyCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+
     protected $signature = 'delete:study {study_id}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+  
     protected $description = 'Delete All Data For Non Banking Study';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+   
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
+  
 	protected function tryToDeleteThisTables(int $studyId, array $tablesNamesToBeDeleted , int $attemptNumber = 1 ):array
 	{
 		$tablesCanNotBeDeletedInFirstAttempt = [];
@@ -56,7 +40,7 @@ class DeleteAllDataFromNonBankingStudyCommand extends Command
     public function handle()
     {
 		$studyId = $this->argument('study_id') ;
-		$tablesNamesToBeDeleted = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->getDoctrineSchemaManager()->listTableNames();
+		$tablesNamesToBeDeleted = getTableNames(NON_BANKING_SERVICE_CONNECTION_NAME);
 		$attemptNumber = 1 ;
 		while($attemptNumber <= 10 && count($tablesNamesToBeDeleted)){
 			$tablesNamesToBeDeleted = $this->tryToDeleteThisTables($studyId,$tablesNamesToBeDeleted,$attemptNumber);

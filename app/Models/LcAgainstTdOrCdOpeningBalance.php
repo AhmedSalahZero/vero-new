@@ -6,7 +6,35 @@ use App\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperLcAgainstTdOrCdOpeningBalance
+ * @property int $id
+ * @property string|null $type CertificateOfDeposit , TimeOfDeposit
+ * @property string $currency
+ * @property string $lc_type
+ * @property int $financial_institution_id
+ * @property int $lc_opening_balance_id
+ * @property string $lc_end_date
+ * @property string $account_type td or cd only
+ * @property string|null $account_number td or cd account number
+ * @property numeric $amount
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereLcEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereLcOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereLcType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcAgainstTdOrCdOpeningBalance whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LcAgainstTdOrCdOpeningBalance extends Model
 {

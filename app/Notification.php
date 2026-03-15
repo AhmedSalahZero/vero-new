@@ -8,7 +8,26 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin IdeHelperNotification
+ * @property int $id
+ * @property string $type
+ * @property string $notifiable_type
+ * @property int $notifiable_id
+ * @property string $data
+ * @property string|null $read_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereNotifiableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereNotifiableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereReadAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Notification whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Notification extends Model
 {
@@ -52,7 +71,7 @@ class Notification extends Model
 	{
 		$user = auth()->user();
 		/**
-		 * @var User $user ;
+		 * @var User|null $user ;
 		 */
 		if(!$user){
 			return [];
@@ -83,7 +102,7 @@ class Notification extends Model
 			$items[self::CUSTOMER]=[
 				'title'=>__('Customer Invoices') ,
 				'subitems'=>HArr::filterTrulyValue([
-					$canViewCustomerInvoicePastDueNotification ? self::CUSTOMER_INVOICE_PAST_DUE : false ,
+					self::CUSTOMER_INVOICE_PAST_DUE  ,
 					$canViewCustomerInvoicesNotifications ? self:: CUSTOMER_INVOICE_COMING_DUE : false,
 					$canViewCustomerInvoiceCurrentDueNotification ? self::CUSTOMER_INVOICE_CURRENT_DUE : false ,
 				])

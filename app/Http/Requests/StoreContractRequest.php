@@ -19,7 +19,7 @@ class StoreContractRequest extends FormRequest
     {
         return true;
     }
-	public function prepareForValidation()
+	public function prepareForValidation():array 
 	{
 		$modelType=$this->route('type');
 		$columnName = 'salesOrders';

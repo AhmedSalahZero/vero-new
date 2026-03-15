@@ -2,7 +2,6 @@
 
 namespace App\Models\Traits\Relations;
 
-use App\Models\BalanceSheet;
 use App\Models\CashFlowStatement;
 use App\Models\FinancialStatementItem;
 use App\Models\IncomeStatement;
@@ -38,10 +37,7 @@ trait FinancialStatementRelation
 	{
 		return $this->hasOne(CashFlowStatement::class, 'financial_statement_id', 'id');
 	}
-	public function balanceSheet():HasOne
-	{
-		return $this->hasOne(BalanceSheet::class, 'financial_statement_id', 'id');
-	}
+
 
 	public function subItems(): BelongsToMany
 	{

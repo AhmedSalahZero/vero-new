@@ -16,6 +16,7 @@ class SalesBreakdownDataWithQuantity
 	{
 		$dimension = $request->report_type;
 		$report_data = [];
+		$total_sales_values = 0 ;
 		$report_view_data = [];
 		$growth_rate_data = [];
 		$report_count_data = [];
@@ -31,21 +32,19 @@ class SalesBreakdownDataWithQuantity
 
 		$view_name = $request->view_name;
 		//   isset($calculated_report_data) ? $calculated_report_data :
-		$report_data =  collect(DB::select(DB::raw(
-			"
+		$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value,service_provider_name,quantity," . $type . "
                 FROM sales_gathering
                 force index (sales_channel_index)
                 WHERE ( company_id = '" . $company->id . "'AND " . $type . " IS NOT NULL  AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
 
-                ORDER BY id "
-		)->getValue(DB::connection()->getQueryGrammar())
-	));
+                ORDER BY id ";
+		$report_data =  collect(DB::select($query));
 
 
 		if ($type == 'service_provider_birth_year' || $type == 'service_provider_type') {
-			$data = $report_data->groupBy($type)->map(function ($item, $year) {
-				return  $item->groupBy('service_provider_name')->flatMap(function ($sub_item, $name) use ($item, $year) {
+			$data = $report_data->groupBy($type)->map(function ($item) {
+				return  $item->groupBy('service_provider_name')->flatMap(function ($sub_item, $name) {
 					return [
 						$name => $sub_item->sum('net_sales_value'),
 					];
@@ -103,8 +102,8 @@ class SalesBreakdownDataWithQuantity
 					} elseif ($age >  60) {
 						$key =  3;
 					}
-					$report_view_data[$key]['Sales Value'] = ($report_view_data[$key]['Sales Value'] ?? 0) + array_sum(($data_per_year ?? []));
-					$report_count_data[$key]['Count'] = ($report_count_data[$key]['Count'] ?? 0) + count(($data_per_year ?? []));
+					$report_view_data[$key]['Sales Value'] = ($report_view_data[$key]['Sales Value'] ) + array_sum(($data_per_year ?? []));
+					$report_count_data[$key]['Count'] = ($report_count_data[$key]['Count'] ) + count(($data_per_year ?? []));
 				}
 			} else {
 				$key = 0;
@@ -140,7 +139,7 @@ class SalesBreakdownDataWithQuantity
 		if ((count($report_data) > 0) && ($type !== 'service_provider_birth_year') && $result !== "withOthers") {
 
 			$key_num = 0;
-			$report_data =  collect($report_data)->sortByDesc(function ($data, $key) use ($key_num) {
+			$report_data =  collect($report_data)->sortByDesc(function ($data)  {
 				return [($data['Sales Value'])];
 			});
 			$viewing_data = $report_data->toArray();

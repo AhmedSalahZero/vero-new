@@ -10,7 +10,32 @@ use Illuminate\Support\Facades\DB;
 
 
 /**
- * @mixin IdeHelperOverdraftAgainstCommercialPaperLimit
+ * @property int $id
+ * @property int $is_active
+ * @property int $company_id
+ * @property int $overdraft_against_commercial_paper_id
+ * @property int $cheque_id
+ * @property string $full_date هو عباره عن تاريخ ال actual_collection_date if exist , else  , due_date
+ * @property numeric $limit
+ * @property numeric $accumulated_limit
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cheque|null $cheque
+ * @property-read \App\Models\OverdraftAgainstCommercialPaper|null $overdraftAgainstCommercialPaper
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereAccumulatedLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereChequeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereOverdraftAgainstCommercialPaperId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperLimit whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OverdraftAgainstCommercialPaperLimit extends Model
 {
@@ -92,7 +117,7 @@ class OverdraftAgainstCommercialPaperLimit extends Model
 			->sortBy('full_date')
 			->first();
 			/**
-			 * @var OverdraftAgainstCommercialPaperBankStatement $firstBankStatementRow ;
+			 * @var OverdraftAgainstCommercialPaperBankStatement|null $firstBankStatementRow ;
 			 */
 			 $firstBankStatementRow ? $firstBankStatementRow->update(['updated_at'=>now()]) : null ;
 			 

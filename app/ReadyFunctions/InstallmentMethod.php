@@ -18,8 +18,8 @@ class InstallmentMethod
 	):array {
 		$downPaymentOneAmount = $downPaymentOneRate / 100 * $amount;
 		$downPaymentOneDateFormatted = Carbon::make($startDate)->format('d-m-Y');
-		$downPaymentTwoDate =  Carbon::make($startDate)->addMonth($downPaymentTwoMonth);
-		$downPaymentTwoDateFormatted =  Carbon::make($startDate)->addMonth($downPaymentTwoMonth)->format('d-m-Y');
+		$downPaymentTwoDate =  Carbon::make($startDate)->addMonths($downPaymentTwoMonth);
+		$downPaymentTwoDateFormatted =  Carbon::make($startDate)->addMonths($downPaymentTwoMonth)->format('d-m-Y');
 		$downPaymentTwoAmount =  $downPaymentTwoRate / 100 * $amount;
 		$balanceAmount = 	$balanceRate / 100 * $amount;
 		$installmentAmount = $balanceAmount / $installmentCount;

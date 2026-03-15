@@ -11,7 +11,44 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLoanStatement
+ * @property int $id
+ * @property int $financial_institution_account_id
+ * @property int $company_id
+ * @property int|null $loan_schedule_settlement_id
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property string|null $date
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @property-read \App\Models\LoanStatement|null $financialInstitutionAccount
+ * @property-read \App\Models\LoanScheduleSettlement|null $loanScheduleSettlement
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereFinancialInstitutionAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereLoanScheduleSettlementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LoanStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LoanStatement extends Model  implements IHaveStatement
 {

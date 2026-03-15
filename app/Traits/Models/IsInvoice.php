@@ -65,28 +65,28 @@ trait IsInvoice
 		if($this instanceof CustomerInvoice){
 			return $this->customer_name ; 
 		}
-		if($this instanceof SupplierInvoice){
+		elseif($this instanceof SupplierInvoice){
 			return $this->supplier_name ; 
 		}
     }
-	public function getRemainingChequeAmount():float
-    {
-        $customerName =	$this->getName();
-        $invoices = $this->getInvoicesFor($customerName);
-        $totalInvoiceAmount = 0;
-        foreach($invoices as $customerInvoice) {
-            $totalInvoiceAmount += $customerInvoice->getNetInvoiceAmount();
-        }
-        return $totalInvoiceAmount;
-    }
+	// public function getRemainingChequeAmount():float
+    // {
+    //     $customerName =	$this->getName();
+    //     $invoices = $this->getInvoicesFor($customerName);
+    //     $totalInvoiceAmount = 0;
+    //     foreach($invoices as $customerInvoice) {
+    //         $totalInvoiceAmount += $customerInvoice->getNetInvoiceAmount();
+    //     }
+    //     return $totalInvoiceAmount;
+    // }
 	/**
 	 * * ال name 
 	 * * هنا اما يكون اسم عميل او اسم مورد
 	 */
-    public function getInvoicesFor(string $name)
-    {
-        return self::where($this->clientNameColumnName, $name)->get() ;
-    }
+    // public function getInvoicesFor(string $name)
+    // {
+    //     return self::where($this->clientNameColumnName, $name)->get() ;
+    // }
 	public function getVatAmount()
 	{
 		return $this->vat_amount ?: 0 ;

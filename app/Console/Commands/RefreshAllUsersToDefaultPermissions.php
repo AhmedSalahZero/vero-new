@@ -11,18 +11,10 @@ use Spatie\Permission\Models\Permission;
 
 class RefreshAllUsersToDefaultPermissions extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+
     protected $signature = 'refresh:permissions';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+ 
     protected $description = 'Refresh All Permissions To Default For All Users';
 
     /**

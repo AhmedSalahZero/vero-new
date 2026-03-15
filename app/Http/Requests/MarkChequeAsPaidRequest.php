@@ -19,11 +19,7 @@ class MarkChequeAsPaidRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
 		$isCashExpense = Request()->route()->getName() == 'cash.expense.payable.cheque.mark.as.paid' ;

@@ -47,7 +47,7 @@ class DeletingClass
                 return $index + 1 >= $request->get('delete_serial_from') && $index + 1 <= $request->get('delete_serial_to') ;
             });
         } else {
-            $all_model_data = $model_obj->company()->whereIn('id', $request->rows)->get();
+            $all_model_data = $model_obj->company()->whereIn('id', is_array($request->rows) ? $request->rows : [$request->rows])->get();
         }
         if (count($all_model_data) > 0) {
             $all_model_data->each->delete();

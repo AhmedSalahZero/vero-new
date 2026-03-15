@@ -2,7 +2,6 @@
 
 namespace App\Models\Repositories;
 
-use App\Helpers\HArr;
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\IncomeStatement;
 use App\Models\IncomeStatementItem;
@@ -13,44 +12,7 @@ use Illuminate\Http\Request;
 class IncomeStatementRepository implements IBaseRepository
 {
 
-	public function all(): Collection
-	{
-		return IncomeStatement::withAllRelations()->onlyCurrentCompany()->get();
-	}
 
-	public function allFormatted(): array
-	{
-		return IncomeStatement::onlyCurrentCompany()->get()->pluck('name', 'id')->toArray();
-	}
-	public function allFormattedForSelect()
-	{
-		$incomeStatements = $this->all();
-		return formatOptionsForSelect($incomeStatements, 'getId', 'getName');
-	}
-
-	public function getAllExcept($id): ?Collection
-	{
-		return IncomeStatement::onlyCurrentCompany()->where('id', '!=', $id)->get();
-	}
-
-	public function query(): Builder
-	{
-		return IncomeStatement::onlyCurrentCompany()->query();
-	}
-	public function Random(): Builder
-	{
-		return IncomeStatement::onlyCurrentCompany()->inRandomOrder();
-	}
-
-	public function find(?int $id)
-	{
-		return IncomeStatement::onlyCurrentCompany()->find($id);
-	}
-
-	public function getLatest($column = 'id'): ?IncomeStatement
-	{
-		return IncomeStatement::onlyCurrentCompany()->latest($column)->first();
-	}
 	public function store(Request $request)
 	{
 		/**
@@ -71,11 +33,7 @@ class IncomeStatementRepository implements IBaseRepository
 		return $incomeStatement;
 	}
 
-	public function update( $incomeStatement, Request $request): void
-	{
-		// $incomeStatement
-		// 	->updateProfitability($request);
-	}
+
 
 	public function paginate(Request $request): array
 	{
@@ -84,12 +42,14 @@ class IncomeStatementRepository implements IBaseRepository
 
 		$allFilterDataCounter = $filterData->count();
 
-		$datePerPage = $filterData->skip(Request('start'))->take(Request('length'))->get()->each(function (IncomeStatement $incomeStatement, $index) {
-			$incomeStatement->creator_name = $incomeStatement->getCreatorName();
-			$incomeStatement->created_at_formatted = formatDateFromString($incomeStatement->created_at);
-			$incomeStatement->updated_at_formatted = formatDateFromString($incomeStatement->updated_at);
-			$incomeStatement->order = $index + 1;
-		});
+		$datePerPage = $filterData->skip(Request('start'))->take(Request('length'))->get()
+		// ->each(function (IncomeStatement $incomeStatement, $index) {
+		// 	$incomeStatement->creator_name = $incomeStatement->getCreatorName();
+		// 	$incomeStatement->created_at_formatted = formatDateFromString($incomeStatement->created_at);
+		// 	$incomeStatement->updated_at_formatted = formatDateFromString($incomeStatement->updated_at);
+		// 	$incomeStatement->order = $index + 1;
+		// })
+		;
 		return [
 			'data' => $datePerPage,
 			"draw" => (int)Request('draw'),
@@ -106,14 +66,14 @@ class IncomeStatementRepository implements IBaseRepository
 		$dataWithRelations = collect([]);
 		
 		$datePerPage = $filterData->get()->each(function (IncomeStatementItem $incomeStatementItem, $index) use ($dataWithRelations, $incomeStatement, $subItemType) {
-			$incomeStatementItem->creator_name = $incomeStatementItem->getCreatorName();
-			$incomeStatementItem->created_at_formatted = formatDateFromString($incomeStatementItem->created_at);
-			$incomeStatementItem->updated_at_formatted = formatDateFromString($incomeStatementItem->updated_at);
-			$incomeStatementItem->order = $index + 1;
+			// $incomeStatementItem->creator_name = $incomeStatementItem->getCreatorName();
+			// $incomeStatementItem->created_at_formatted = formatDateFromString($incomeStatementItem->created_at);
+			// $incomeStatementItem->updated_at_formatted = formatDateFromString($incomeStatementItem->updated_at);
+			// $incomeStatementItem->order = $index + 1;
 			$forecastSubItemNames =$incomeStatementItem->getSubItems($incomeStatement->id, 'forecast')->pluck('pivot.sub_item_name')->toArray(); 
 			$incomeStatementItem['main_rows'] = $incomeStatementItem->getMainRows($incomeStatement->id, $subItemType);
 			$dataWithRelations->add($incomeStatementItem);
-			$quantitiesFor = [];
+			
 			$subItems = $incomeStatementItem->getSubItems($incomeStatement->id, $subItemType);
 			if($subItemType == 'adjusted' || $subItemType == 'modified'){
 				$orderByReferenceArray = $incomeStatementItem->getSubItems($incomeStatement->id, 'actual')->values()->pluck('pivot.sub_item_name')->flip();
@@ -121,7 +81,7 @@ class IncomeStatementRepository implements IBaseRepository
 					return $orderByReferenceArray[$value->pivot->sub_item_name] ?? PHP_INT_MAX;
 				});
 			}
-			$subItems->each(function ($subItem) use ($forecastSubItemNames,$incomeStatement, $subItemType, $dataWithRelations, $incomeStatementItem, &$quantitiesFor) {
+			$subItems->each(function ($subItem) use ($forecastSubItemNames,$incomeStatement, $subItemType, $dataWithRelations, $incomeStatementItem) {
 				
 				$subItem->isSubItem = true; // isSubRow
 				if ($incomeStatementItem->has_depreciation_or_amortization) {
@@ -161,10 +121,10 @@ class IncomeStatementRepository implements IBaseRepository
 
 			$builder
 				->where(function (Builder $builder) use ($request) {
-					$builder->when($request->filled('search_input'), function (Builder $builder) use ($request) {
-						$keyword = "%" . $request->get('search_input') . "%";
-						$builder;
-					});
+					// $builder->when($request->filled('search_input'), function (Builder $builder) use ($request) {
+					// 	$keyword = "%" . $request->get('search_input') . "%";
+					
+					// });
 				});
 		})
 			->orderBy('financial_statement_ables.' . getDefaultOrderBy()['column'], getDefaultOrderBy()['direction']);

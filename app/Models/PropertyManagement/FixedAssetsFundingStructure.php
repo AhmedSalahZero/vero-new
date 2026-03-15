@@ -6,7 +6,47 @@ use App\Models\Traits\Scopes\PropertyManagements\BelongsToStudy;
 use App\Traits\HasBasicStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
-class  FixedAssetsFundingStructure extends Model
+/**
+ * @property int $id
+ * @property string $fixed_asset_type
+ * @property int $is_fully_funded_though_equity
+ * @property array<array-key, mixed>|null $direct_ffe_amounts
+ * @property array<array-key, mixed>|null $equity_funding_rates
+ * @property array<array-key, mixed>|null $equity_funding_values
+ * @property array<array-key, mixed>|null $new_loans_funding_rates
+ * @property array<array-key, mixed>|null $new_loans_funding_values
+ * @property array<array-key, mixed>|null $tenors
+ * @property array<array-key, mixed>|null $grace_periods
+ * @property array<array-key, mixed>|null $interest_rates
+ * @property array<array-key, mixed>|null $installment_intervals
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\PropertyManagement\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereDirectFfeAmounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereEquityFundingRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereEquityFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereFixedAssetType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereGracePeriods($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereInstallmentIntervals($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereInterestRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereIsFullyFundedThoughEquity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereNewLoansFundingRates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereNewLoansFundingValues($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereTenors($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\FixedAssetsFundingStructure whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class FixedAssetsFundingStructure extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'property_management';

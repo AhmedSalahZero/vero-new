@@ -67,9 +67,17 @@ class InvoicesAgainstAnalysisReport
             $view_name = 'Invoices Against Sales Persons Analysis';
         }
       
+		if(!isset($view_name) || !isset($type)){
+			throw new \Exception('View name or type is not set Please Add It Additional else if statement to define them');
+		}
         
         $name_of_selector_label = str_replace(['Categories Against ' ,' Trend Analysis'],'',$view_name);
-        return view('client_view.reports.sales_gathering_analysis.invoices_sales_form', compact('company','name_of_selector_label','type','view_name'));
+        return view('client_view.reports.sales_gathering_analysis.invoices_sales_form', [
+            'company' => $company,
+            'name_of_selector_label' => $name_of_selector_label,
+            'type' => $type,
+            'view_name' => $view_name,
+        ]);
     }
 
 
@@ -129,6 +137,8 @@ class InvoicesAgainstAnalysisReport
            
             if(! $reportSalesValues)
             {
+				
+				
                  $reportSalesValues  =getTypeSalesAnalysisData($request , $company , $type);
             }
           array_sort_multi_levels($sumForEachInterval);

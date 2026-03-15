@@ -11,8 +11,6 @@ $basicTableClasses = 'table table-striped- table-bordered table-hover table-chec
 @endphp
 
 <input type="hidden" id="no-ajax-loader">
-{{ $filter }}
-{{ $export }}
 
 @if($wrapWithForm)
 <form action="{{ $formAction }}" method="{{$method  }}" id="{{$formId  }}">

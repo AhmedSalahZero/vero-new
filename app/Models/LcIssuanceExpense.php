@@ -10,7 +10,40 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperLcIssuanceExpense
+ * @property int $id
+ * @property string|null $expense_name
+ * @property int $company_id
+ * @property int $lc_issuance_id
+ * @property string $date
+ * @property numeric $amount
+ * @property string $currency
+ * @property numeric $exchange_rate
+ * @property numeric $amount_in_main_currency
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountCreditBankStatements
+ * @property-read int|null $current_account_credit_bank_statements_count
+ * @property-read bool|null $current_account_credit_bank_statements_exists
+ * @property-read \App\Models\LetterOfCreditIssuance|null $letterOfCreditIssuance
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereExpenseName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereLcIssuanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LcIssuanceExpense whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class LcIssuanceExpense extends Model
 {

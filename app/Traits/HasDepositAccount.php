@@ -6,6 +6,7 @@ use App\Models\Currency;
 use App\Models\CurrentAccountBankStatement;
 use App\Models\FinancialInstitutionAccount;
 use App\Models\TimeOfDeposit;
+use App\OdooSetting;
 use App\Services\Api\CashExpenseOdooService;
 use App\Services\Api\TimeOrCertificateOfDepositOdooService;
 
@@ -115,6 +116,9 @@ trait HasDepositAccount
 			$currencyName = $this->getCurrency();
 			$date = $expiryDate;
 			$odooCurrencyId = Currency::getOdooId($currencyName);
+			/**
+			 * @var OdooSetting $odooSetting
+			 */
 			$odooSetting = $company->odooSetting ;
 	//		$creditAccountTypeId = $this instanceof TimeOfDeposit ? 28 : 29  ;
 			$debitAccountNumber = FinancialInstitutionAccount::find($this->deducted_from_account_id)->getAccountNumber();

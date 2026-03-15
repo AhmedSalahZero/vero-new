@@ -23,7 +23,67 @@ use Illuminate\Support\Str;
  * * وعموما في حالة انك مدان للبنك وليكن مثلا لو انت سالف من البنك عشر الالف وسحبت تسعه ونزل عليك فايدة خمس مئة جنية
  * * وقتها ال خمس مئة جنية دول بينسحبوا من حسابك علطول وبالتالي انت ما عتش فاضلك غير خمس مئة مثلا
  *
- * @mixin IdeHelperCleanOverdraft
+ * @property int $id
+ * @property int|null $financial_institution_id
+ * @property int $company_id
+ * @property string|null $contract_start_date
+ * @property string|null $contract_end_date
+ * @property string|null $account_number
+ * @property string|null $currency
+ * @property string|null $limit
+ * @property string|null $outstanding_balance
+ * @property string|null $balance_date
+ * @property float|null $highest_debt_balance_rate
+ * @property float|null $admin_fees_rate
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $to_be_setteled_max_within_days
+ * @property string|null $start_settlement_from_bank_statement_date
+ * @property string|null $oldest_date
+ * @property int|null $origin_update_row_is_debit دلوقت احنا لما بنحدث وليكن ماني ريسيفد .. عايز نعرف ان الرو الاصلي اللي عدلناه كان ماني ريسيفد
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraftBankStatement> $bankStatements
+ * @property-read int|null $bank_statements_count
+ * @property-read bool|null $bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraftBankStatement> $cleanOverdraftBankStatements
+ * @property-read int|null $clean_overdraft_bank_statements_count
+ * @property-read bool|null $clean_overdraft_bank_statements_exists
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LendingInformation> $lendingInformation
+ * @property-read int|null $lending_information_count
+ * @property-read bool|null $lending_information_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\OutstandingBreakdown> $outstandingBreakdowns
+ * @property-read int|null $outstanding_breakdowns_count
+ * @property-read bool|null $outstanding_breakdowns_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraftRate> $rates
+ * @property-read int|null $rates_count
+ * @property-read bool|null $rates_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereAdminFeesRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereBalanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereContractEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereContractStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereHighestDebtBalanceRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereOldestDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereOriginUpdateRowIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereStartSettlementFromBankStatementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereToBeSetteledMaxWithinDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CleanOverdraft whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class CleanOverdraft extends Model implements IHaveStatement
 {

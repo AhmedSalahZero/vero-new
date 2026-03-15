@@ -114,7 +114,7 @@ class QuantitySummaryController extends Controller
             $multi_chart_data[] = [
                 'date' => $formated_date,
                 'Sales Values' => number_format(($value ?? 0), 0),
-                'Month Sales %' => number_format(($month_sales ?? 0), 0),
+                'Month Sales %' => number_format(($month_sales ), 0),
                 'Growth Rate %' => number_format(($gr[$date] ?? 0), 1),
             ];
 

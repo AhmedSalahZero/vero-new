@@ -15,7 +15,95 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @mixin IdeHelperFinancialInstitution
+ * @property int $id
+ * @property string|null $type
+ * @property string|null $branch_name
+ * @property int|null $bank_id
+ * @property string|null $name
+ * @property string|null $company_account_number
+ * @property int|null $company_id
+ * @property int|null $created_by
+ * @property int $updated_by
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfCreditFacility> $LetterOfCreditFacilities
+ * @property-read int|null $letter_of_credit_facilities_count
+ * @property-read bool|null $letter_of_credit_facilities_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeFacility> $LetterOfGuaranteeFacilities
+ * @property-read int|null $letter_of_guarantee_facilities_count
+ * @property-read bool|null $letter_of_guarantee_facilities_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialInstitutionAccount> $accounts
+ * @property-read int|null $accounts_count
+ * @property-read bool|null $accounts_exists
+ * @property-read \App\Models\Bank|null $bank
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CertificatesOfDeposit> $brokenCertificatesOfDeposits
+ * @property-read int|null $broken_certificates_of_deposits_count
+ * @property-read bool|null $broken_certificates_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimeOfDeposit> $brokenTimeOfDeposits
+ * @property-read int|null $broken_time_of_deposits_count
+ * @property-read bool|null $broken_time_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CertificatesOfDeposit> $certificatesOfDeposits
+ * @property-read int|null $certificates_of_deposits_count
+ * @property-read bool|null $certificates_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraft> $cleanOverdrafts
+ * @property-read int|null $clean_overdrafts_count
+ * @property-read bool|null $clean_overdrafts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraft> $fullySecuredOverdrafts
+ * @property-read int|null $fully_secured_overdrafts_count
+ * @property-read bool|null $fully_secured_overdrafts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfCreditIssuance> $letterOfCreditIssuances
+ * @property-read int|null $letter_of_credit_issuances_count
+ * @property-read bool|null $letter_of_credit_issuances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MediumTermLoan> $loans
+ * @property-read int|null $loans_count
+ * @property-read bool|null $loans_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CertificatesOfDeposit> $maturedCertificatesOfDeposits
+ * @property-read int|null $matured_certificates_of_deposits_count
+ * @property-read bool|null $matured_certificates_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimeOfDeposit> $maturedTimeOfDeposits
+ * @property-read int|null $matured_time_of_deposits_count
+ * @property-read bool|null $matured_time_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContract> $overdraftAgainstAssignmentOfContracts
+ * @property-read int|null $overdraft_against_assignment_of_contracts_count
+ * @property-read bool|null $overdraft_against_assignment_of_contracts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaper> $overdraftAgainstCommercialPapers
+ * @property-read int|null $overdraft_against_commercial_papers_count
+ * @property-read bool|null $overdraft_against_commercial_papers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CertificatesOfDeposit> $runningCertificatesOfDeposits
+ * @property-read int|null $running_certificates_of_deposits_count
+ * @property-read bool|null $running_certificates_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimeOfDeposit> $runningTimeOfDeposits
+ * @property-read int|null $running_time_of_deposits_count
+ * @property-read bool|null $running_time_of_deposits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TimeOfDeposit> $timeOfDeposits
+ * @property-read int|null $time_of_deposits_count
+ * @property-read bool|null $time_of_deposits_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyBanks()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyCompany($companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyForCompany(int $companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyForSource(string $source)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasCleanOverdrafts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasFullySecuredOverdrafts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasLgFacility()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasMediumTermLoans(string $currency)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasOverdraftAgainstAssignmentOfContracts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasOverdraftAgainstCommercialPapers()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution onlyHasOverdrafts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereBranchName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereCompanyAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialInstitution whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class FinancialInstitution extends Model
 {

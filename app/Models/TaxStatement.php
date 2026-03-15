@@ -10,7 +10,46 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperTaxStatement
+ * @property int $id
+ * @property int $company_id
+ * @property string $currency_name
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property string|null $date
+ * @property int $partner_id
+ * @property int|null $money_received_id
+ * @property int|null $money_payment_id
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereCurrencyName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TaxStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class TaxStatement extends Model  implements IHaveStatement
 {

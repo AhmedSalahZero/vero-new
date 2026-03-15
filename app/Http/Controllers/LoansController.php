@@ -116,7 +116,7 @@ class LoansController
 	public function store(Company $company   , Request $request , FinancialInstitution $financialInstitution){
 		$type = MediumTermLoan::RUNNING;
 		$internalMoneyTransfer = new MediumTermLoan ;
-		$internalMoneyTransfer->type = MediumTermLoan::RUNNING;
+		$internalMoneyTransfer->status = MediumTermLoan::RUNNING;
 		$internalMoneyTransfer->storeBasicForm($request);
 		$activeTab = $type ; 
 		return redirect()->route('loans.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Data Store Successfully'));

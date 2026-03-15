@@ -9,7 +9,50 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @mixin IdeHelperMediumTermLoan
+ * @property int $id
+ * @property int $company_id
+ * @property int $financial_institution_id
+ * @property string $status
+ * @property string|null $name
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property string $currency
+ * @property numeric $limit
+ * @property numeric $paid_amount
+ * @property numeric $outstanding_amount
+ * @property string|null $account_number
+ * @property numeric $borrowing_rate
+ * @property numeric $margin_rate
+ * @property int|null $duration tenor (duration in months)
+ * @property string $installment_payment_interval
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LoanSchedule> $loanSchedules
+ * @property-read int|null $loan_schedules_count
+ * @property-read bool|null $loan_schedules_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereBorrowingRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereInstallmentPaymentInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereOutstandingAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan wherePaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MediumTermLoan whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class MediumTermLoan extends Model 
 {

@@ -10,7 +10,31 @@ use Illuminate\Database\Eloquent\Model;
  * * Rate هنا المقصود بيها
  * * margin rate and so on
  *
- * @mixin IdeHelperOverdraftAgainstCommercialPaperRate
+ * @property int $id
+ * @property int|null $company_id
+ * @property int $overdraft_against_commercial_paper_id
+ * @property string $date
+ * @property numeric $borrowing_rate
+ * @property numeric $margin_rate
+ * @property numeric $interest_rate
+ * @property numeric $min_interest_rate
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\OverdraftAgainstCommercialPaper|null $OverdraftAgainstCommercialPaper
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereBorrowingRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereInterestRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereMarginRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereMinInterestRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereOverdraftAgainstCommercialPaperId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\OverdraftAgainstCommercialPaperRate whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class OverdraftAgainstCommercialPaperRate extends Model  
 {

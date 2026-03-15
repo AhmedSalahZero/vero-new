@@ -144,7 +144,9 @@ class QuantityAllocationsReport
         $allocations_base_row = QuantityNewProductAllocationBase::company()->first();
 
         $product_seasonality = QuantityProductSeasonality::company()->get();
-        $product_seasonality_total = QuantityProductSeasonality::select(DB::raw('sum(sales_target_value * sales_target_quantity) as total'))->first()->total;
+		/** @var object{total: float|null} $result */
+        $product_seasonality_total = QuantityProductSeasonality::select(DB::raw('sum(sales_target_value * sales_target_quantity) as total'))->first();
+        $product_seasonality_total = $product_seasonality_total->total;
 
         $allocation_bases_items =   SalesGathering::company()
             ->whereNotNull($allocation_base)
@@ -210,7 +212,7 @@ class QuantityAllocationsReport
         $allocations = $allocations_base_row->allocation_base_data ?? [];
         foreach ($allocations as $product_item_name => $item_data) {
             $product = $product_seasonality->where('name', $product_item_name)->first();
-            $sales_target_value = ($product->sales_target_value*$product->sales_target_quantity ?? 0);
+            $sales_target_value =$product->sales_target_value*$product->sales_target_quantity;
 
             foreach ($item_data as $base => $value) {
                 $type = array_key_first($value);
@@ -347,8 +349,8 @@ class QuantityAllocationsReport
         $allocations_setting = QuantityAllocationSetting::company()->first();
         $allocations = $new_products_allocations->allocation_base_data ?? [];
 
-        $allocation_base_data = collect($allocations)->map(function ($data, $item) {
-            return collect($data)->map(function ($sub_data, $sub_item) use ($item) {
+        $allocation_base_data = collect($allocations)->map(function ($data) {
+            return collect($data)->map(function ($sub_data)  {
                 return Arr::first($sub_data);
             });
         })->toArray();
@@ -421,22 +423,22 @@ class QuantityAllocationsReport
         }
          else {
 			return $existing_product_data ;
-            $total_sales_targets = [];
-            foreach ($allocation_data_total as $base => $base_data) {
-                foreach ($base_data as $date => $value) {
-                    $month = date('F', strtotime(('01-' . $date)));
-                    $full_date = date('d-m-Y', strtotime(('01-' . $date)));
-                    $total_sales_targets[$base][$full_date] = ($existing_product_data[$base][$month] ?? 0) + $value;
-                }
-            }
-            unset($total_sales_targets['Total']);
-            if(!$total_sales_targets)
-            {
-                unset($existing_product_data['Total']);
-                return $existing_product_data ;
+            // $total_sales_targets = [];
+            // foreach ($allocation_data_total as $base => $base_data) {
+            //     foreach ($base_data as $date => $value) {
+            //         $month = date('F', strtotime(('01-' . $date)));
+            //         $full_date = date('d-m-Y', strtotime(('01-' . $date)));
+            //         $total_sales_targets[$base][$full_date] = ($existing_product_data[$base][$month] ?? 0) + $value;
+            //     }
+            // }
+            // unset($total_sales_targets['Total']);
+            // if(!$total_sales_targets)
+            // {
+            //     unset($existing_product_data['Total']);
+            //     return $existing_product_data ;
 
-            }
-            return $total_sales_targets ;
+            // }
+            // return $total_sales_targets ;
         }
     }
 
@@ -498,23 +500,20 @@ class QuantityAllocationsReport
         $db_names = array_keys($exportableFields);
         $used_field = (false !== $found = array_search('sales_value', $db_names)) ? 'sales_value' : 'net_sales_value';
 
-        $product_items_percentages = collect(DB::select(DB::raw(
-            "
+        $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , " . $used_field . " ," . $allocation_base . ",id,(CASE WHEN " . $used_field . " < 0 THEN 0 ELSE " . $used_field . " END) as " . $used_field . "," . $type . "
                     FROM sales_gathering
                     WHERE ( company_id = '" . $company->id . "' AND date between '" . $start_date . "' and '" . $end_date . "')
-                    ORDER BY id "
-        )->getValue(DB::connection()->getQueryGrammar())
-		
-		))
+                    ORDER BY id ";
+        $product_items_percentages = collect(DB::select($query))
             ->where($allocation_base, '!=', '')
             ->groupBy($allocation_base)
-            ->map(function ($item, $name) use ($type, $used_field, $products_items, $sales_targets , $products_modified_targets, $others_name_index) {
+            ->map(function ($item, $name) use ($type, $used_field, $products_items, $sales_targets ) {
                 $total = $item->sum($used_field);
                 $sales_target = ($sales_targets[$name] ?? 0);
                 //1- product_items
 
-                $product_items_top = $item->whereIn($type, $products_items)->groupBy($type)->map(function ($sub_item, $product_item) use ($total, $used_field, $sales_target, $products_modified_targets) {
+                $product_items_top = $item->whereIn($type, $products_items)->groupBy($type)->map(function ($sub_item) use ($total, $used_field, $sales_target) {
                     // if (($use_modified_targets == 1 && $products_modified_targets[$product_item]['percentage'] !== null && $products_modified_targets[$product_item]['percentage'] !== 0) || ($use_modified_targets == 0)) {
                         $sales_value = $sub_item->sum($used_field);
 

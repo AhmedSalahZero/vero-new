@@ -18,7 +18,84 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperContract
+ * @property int $id
+ * @property int|null $project_account_id
+ * @property int|null $odoo_id
+ * @property int|null $parent_id عباره عن انه مربوط بيه
+ * @property int|null $overdraft_against_assignment_of_contract_id
+ * @property string $status
+ * @property string|null $model_type اما Customer or Supplier
+ * @property int|null $partner_id
+ * @property string|null $name
+ * @property string|null $code
+ * @property int $company_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property numeric $amount
+ * @property string|null $currency
+ * @property numeric|null $exchange_rate
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyPayment> $MoneyPayment
+ * @property-read int|null $money_payment_count
+ * @property-read bool|null $money_payment_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashExpense> $cashExpenses
+ * @property-read int|null $cash_expenses_count
+ * @property-read bool|null $cash_expenses_exists
+ * @property-read \App\Models\Partner|null $client
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomerInvoice> $customerInvoices
+ * @property-read int|null $customer_invoices_count
+ * @property-read bool|null $customer_invoices_exists
+ * @property-read \App\Models\LendingInformationAgainstAssignmentOfContract|null $lendingInformationForAgainstAssignmentContract
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeIssuance> $letterOfGuaranteeIssuances
+ * @property-read int|null $letter_of_guarantee_issuances_count
+ * @property-read bool|null $letter_of_guarantee_issuances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $moneyReceived
+ * @property-read int|null $money_received_count
+ * @property-read bool|null $money_received_exists
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContract|null $overdraftAgainstAssignmentOfContract
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContractLimit> $overdraftAgainstAssignmentOfContractLimits
+ * @property-read int|null $overdraft_against_assignment_of_contract_limits_count
+ * @property-read bool|null $overdraft_against_assignment_of_contract_limits_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PoAllocation> $poAllocations
+ * @property-read int|null $po_allocations_count
+ * @property-read bool|null $po_allocations_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PurchaseOrder> $purchasesOrders
+ * @property-read int|null $purchases_orders_count
+ * @property-read bool|null $purchases_orders_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contract> $relatedContracts
+ * @property-read int|null $related_contracts_count
+ * @property-read bool|null $related_contracts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SalesOrder> $salesOrders
+ * @property-read int|null $sales_orders_count
+ * @property-read bool|null $sales_orders_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract onlyForCompany(int $companyId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereOverdraftAgainstAssignmentOfContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereProjectAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Contract whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class Contract extends Model
 {

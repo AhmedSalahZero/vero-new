@@ -5,7 +5,6 @@ use App\Models\Company;
 use App\Services\Caching\BreakdownCashing;
 use App\Services\Caching\CustomerDashboardCashing;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -26,12 +25,8 @@ class CashingService
              $years = Cache::get($IntervalYearsFormCompanyCacheNameForCompany) ;
         }
         else{
-            $years  = DB::select(DB::raw(
-            "select min(date_format(date , '%Y')) start_date ,max(date_format(date , '%Y')) end_date , max(date) full_end_date from sales_gathering  where company_id = " . $this->company->id 
-        )
-		->getValue(DB::connection()->getQueryGrammar())
-		
-		) ;
+            $query = "select min(date_format(date , '%Y')) start_date ,max(date_format(date , '%Y')) end_date , max(date) full_end_date from sales_gathering  where company_id = " . $this->company->id;
+            $years  = DB::select($query);
 		
         Cache::forever($IntervalYearsFormCompanyCacheNameForCompany , $years);
 
@@ -57,9 +52,8 @@ class CashingService
         }
 
         else{
-            $years  = DB::select(DB::raw(
-            "select min(date_format(date , '%Y')) start_date ,max(date_format(date , '%Y')) end_date , max(date) full_end_date from expense_analysis  where company_id = " . $this->company->id 
-        )->getValue(DB::connection()->getQueryGrammar())) ;
+            $query = "select min(date_format(date , '%Y')) start_date ,max(date_format(date , '%Y')) end_date , max(date) full_end_date from expense_analysis  where company_id = " . $this->company->id;
+            $years  = DB::select($query);
 		
         Cache::forever($IntervalYearsFormCompanyCacheNameForCompany , $years);
 
@@ -89,7 +83,7 @@ class CashingService
                 {
                         (new CustomerDashboardCashing($this->company , $year,$month))->cacheAll();
                         (new CustomerNatureCashing($this->company , $year,$month))->cacheAll();
-                        (new BreakdownCashing($this->company , $year,$endYear))->cacheAll();
+                        (new BreakdownCashing($this->company , $year))->cacheAll();
                 }
             }
     }
@@ -109,7 +103,7 @@ class CashingService
                 {
                         (new CustomerDashboardCashing($this->company , $year,$month))->deleteAll();
                         (new CustomerNatureCashing($this->company , $year,$month))->deleteAll();
-                        (new BreakdownCashing($this->company , $year,$years['end_year']))->deleteAll();
+                        (new BreakdownCashing($this->company , $year))->deleteAll();
                 }
             }
     }
@@ -192,7 +186,7 @@ class CashingService
           // add the following code in class for generic items
         
         $years = $this->getIntervalYearsFormCompany(); 
-        $exportables = getExportableFields($this->company->id);
+      //  $exportables = getExportableFields($this->company->id);
          
             $startYear = $years['start_year'] ; 
             $endYear = $years['end_year'] ; 
@@ -200,7 +194,7 @@ class CashingService
             if($startYear && $endYear){
                 for($year = $startYear ; $year <= $endYear ; $year++)
                 {
-                        $breakdownDashboardCashing = (new BreakdownCashing($this->company , $year,$endYear)); 
+                        $breakdownDashboardCashing = (new BreakdownCashing($this->company , $year)); 
                         $breakdownDashboardCashing->deleteAll();
                         $breakdownDashboardCashing->cacheAll();   
                     

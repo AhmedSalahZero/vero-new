@@ -10,7 +10,46 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperEmployeeStatement
+ * @property int $id
+ * @property int $company_id
+ * @property string $currency_name
+ * @property int $is_debit
+ * @property int $is_credit
+ * @property string|null $date
+ * @property int $partner_id
+ * @property int|null $money_received_id
+ * @property int|null $money_payment_id
+ * @property string|null $full_date
+ * @property numeric $beginning_balance
+ * @property numeric|null $debit
+ * @property numeric|null $credit
+ * @property numeric $end_balance
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $comment_en
+ * @property string|null $comment_ar
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereBeginningBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereCurrencyName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereEndBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereFullDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereIsCredit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereIsDebit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereMoneyReceivedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\EmployeeStatement whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class EmployeeStatement extends Model  implements IHaveStatement
 {

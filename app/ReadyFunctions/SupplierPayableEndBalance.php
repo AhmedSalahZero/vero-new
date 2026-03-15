@@ -9,15 +9,15 @@ class SupplierPayableEndBalance
 	{
 		$purchasesForIntervals = [
 			'monthly'=>$purchase,
-			'quarterly'=>sumIntervals($purchase,'quarterly' , $hospitalitySector->financialYearStartMonth(),$dateIndexWithDate),
-			'semi-annually'=>sumIntervals($purchase,'semi-annually' , $hospitalitySector->financialYearStartMonth(),$dateIndexWithDate),
-			'annually'=>sumIntervals($purchase,'annually' , $hospitalitySector->financialYearStartMonth(),$dateIndexWithDate),
+			'quarterly'=>sumIntervals($purchase,'quarterly'),
+			'semi-annually'=>sumIntervals($purchase,'semi-annually'),
+			'annually'=>sumIntervals($purchase,'annually'),
 		];
 		$collectionForInterval = [
 			'monthly'=>$collection,
-			'quarterly'=>sumIntervals($collection,'quarterly' , $hospitalitySector->financialYearStartMonth(),$dateIndexWithDate),
-			'semi-annually'=>sumIntervals($collection,'semi-annually' , $hospitalitySector->financialYearStartMonth(),$dateIndexWithDate),
-			'annually'=>sumIntervals($collection,'annually' , $hospitalitySector->financialYearStartMonth(),$dateIndexWithDate),
+			'quarterly'=>sumIntervals($collection,'quarterly'),
+			'semi-annually'=>sumIntervals($collection,'semi-annually'),
+			'annually'=>sumIntervals($collection,'annually'),
 		];
 		
 		

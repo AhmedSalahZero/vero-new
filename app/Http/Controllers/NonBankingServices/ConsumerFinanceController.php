@@ -19,9 +19,9 @@ class ConsumerFinanceController extends Controller
     use NonBankingService ;
 	
 		
-    public function create(Company $company, Request $request, Study $study ,  $existingBranchId = null )
+    public function create(Company $company, Request $request, Study $study )
     {
-        return view('non_banking_services.consumer-finance.form', $this->getViewVars($company, $study,$existingBranchId));
+        return view('non_banking_services.consumer-finance.form', $this->getViewVars($company, $study));
     }
     protected function getViewVars(Company $company, Study $study )
     {

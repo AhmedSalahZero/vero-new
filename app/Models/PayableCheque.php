@@ -10,7 +10,45 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * * دا الشيك اللي بدفعه للموردين
  *
- * @mixin IdeHelperPayableCheque
+ * @property int $id
+ * @property int|null $company_id
+ * @property string|null $cheque_number
+ * @property string $status
+ * @property int|null $money_payment_id
+ * @property int|null $cash_expense_id
+ * @property int|null $delivery_bank_id هو البنك اللي انا طلعت منة الشيك للمورد وبالتالي لازم يكون من بنوكي
+ * @property string $account_type نوع الحساب اللي هسحب منة الشيك علشان ادية للمورد
+ * @property string|null $account_number رقم الحساب اللي هسحب منة الشيك علشان ادية للمورد
+ * @property string|null $due_date هو تاريخ استحقاق الشيك .. يعني اقدر اسحبة امتة
+ * @property string|null $delivery_date هو تاريخ الي اديت فيه الشيك للمورد
+ * @property string|null $actual_payment_date هو تاريخ التسليم الفعلي لان لازم ياكد
+ * @property numeric $account_balance دي اجمالي اللي معايا في الحساب بعد اما الشيك مثلا انسحب ودي احنا اللي بنجسبها افتراضيا
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AccountType|null $accountType
+ * @property-read \App\Models\CashExpense|null $cashExpenses
+ * @property-read \App\Models\FinancialInstitution|null $deliveryBank
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitution
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereAccountBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereActualPaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereCashExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereChequeNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereDeliveryBankId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereDeliveryDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 
 class PayableCheque extends Model

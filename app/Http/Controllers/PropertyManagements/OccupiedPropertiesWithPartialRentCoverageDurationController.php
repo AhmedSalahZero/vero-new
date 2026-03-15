@@ -75,8 +75,7 @@ class OccupiedPropertiesWithPartialRentCoverageDurationController extends Contro
 			 */
 			$propertyContractPartialRentRenewal->calculateContractRenewal();
 			
-			$formattedResult = [];
-			PropertyContractPartialRentRenewal::getPartialRentCoveragesAmounts($study, $formattedResult);
+			PropertyContractPartialRentRenewal::getPartialRentCoveragesAmounts($study);
 			$study->createNewAreaProperty($propertyArr['id'],Property::PARTIAL_COVERAGE,$propertyArr['area']);
 			$study->updateExpensesPercentageAndCostPerUnitsOfSales();
 			

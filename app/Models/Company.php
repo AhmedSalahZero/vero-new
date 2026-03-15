@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Formatter\Select2Formatter;
 use App\Helpers\HAuth;
-
 use App\Models\NonBankingService\ConsumerfinanceProduct;
 use App\Models\NonBankingService\LeasingCategory;
 use App\Models\NonBankingService\MicrofinanceProduct;
@@ -25,6 +24,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -32,8 +32,293 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+
 /**
- * @mixin IdeHelperCompany
+ * @property int $id
+ * @property int|null $odoo_id
+ * @property string|null $odoo_integration_start_date
+ * @property string|null $labeling_logo
+ * @property string|null $labeling_report_title
+ * @property string|null $labeling_stamp
+ * @property string|null $labeling_logo_3
+ * @property string|null $labeling_logo_2
+ * @property string|null $labeling_logo_1
+ * @property array<array-key, mixed>|null $labeling_print_headers
+ * @property string|null $no_rows_for_each_page_labeling
+ * @property string|null $print_labeling_type
+ * @property array<array-key, mixed>|null $generate_labeling_code_fields
+ * @property int|null $labeling_use_client_logo
+ * @property string|null $labeling_client_logo
+ * @property string|null $labeling_pagination_per_page
+ * @property string|null $labeling_type
+ * @property string|null $qrcode_height
+ * @property string|null $qrcode_width
+ * @property string|null $label_height
+ * @property string|null $label_width
+ * @property string|null $logo_width
+ * @property string|null $labeling_paper_size
+ * @property array<array-key, mixed> $name
+ * @property string $sub_of
+ * @property int $is_caching_now
+ * @property string|null $main_functional_currency
+ * @property int|null $updated_by
+ * @property int|null $created_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property string|null $odoo_db_url
+ * @property string|null $odoo_db_name
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ConsumerfinanceProduct> $activeConsumerfinanceProducts
+ * @property-read int|null $active_consumerfinance_products_count
+ * @property-read bool|null $active_consumerfinance_products_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BuyOrSellCurrency> $bankToBankBuyOrSellCurrencies
+ * @property-read int|null $bank_to_bank_buy_or_sell_currencies_count
+ * @property-read bool|null $bank_to_bank_buy_or_sell_currencies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InternalMoneyTransfer> $bankToBankInternalMoneyTransfers
+ * @property-read int|null $bank_to_bank_internal_money_transfers_count
+ * @property-read bool|null $bank_to_bank_internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LcSettlementInternalMoneyTransfer> $bankToLcSettlementInternalMoneyTransfers
+ * @property-read int|null $bank_to_lc_settlement_internal_money_transfers_count
+ * @property-read bool|null $bank_to_lc_settlement_internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BuyOrSellCurrency> $bankToSafeBuyOrSellCurrencies
+ * @property-read int|null $bank_to_safe_buy_or_sell_currencies_count
+ * @property-read bool|null $bank_to_safe_buy_or_sell_currencies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InternalMoneyTransfer> $bankToSafeInternalMoneyTransfers
+ * @property-read int|null $bank_to_safe_internal_money_transfers_count
+ * @property-read bool|null $bank_to_safe_internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashVeroBranch> $branches
+ * @property-read int|null $branches_count
+ * @property-read bool|null $branches_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashVeroBusinessSector> $businessSectors
+ * @property-read int|null $business_sectors_count
+ * @property-read bool|null $business_sectors_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashVeroBusinessUnit> $businessUnits
+ * @property-read int|null $business_units_count
+ * @property-read bool|null $business_units_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BuyOrSellCurrency> $buyOrSellCurrencies
+ * @property-read int|null $buy_or_sell_currencies_count
+ * @property-read bool|null $buy_or_sell_currencies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashExpense> $cashExpenses
+ * @property-read int|null $cash_expenses_count
+ * @property-read bool|null $cash_expenses_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashProjection> $cashProjects
+ * @property-read int|null $cash_projects_count
+ * @property-read bool|null $cash_projects_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashflowReport> $cashflowReports
+ * @property-read int|null $cashflow_reports_count
+ * @property-read bool|null $cashflow_reports_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CleanOverdraft> $cleanOverdrafts
+ * @property-read int|null $clean_overdrafts_count
+ * @property-read bool|null $clean_overdrafts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ConsumerfinanceProduct> $consumerfinanceProducts
+ * @property-read int|null $consumerfinance_products_count
+ * @property-read bool|null $consumerfinance_products_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contract> $contracts
+ * @property-read int|null $contracts_count
+ * @property-read bool|null $contracts_exists
+ * @property-read \App\Models\CustomerOpeningBalance|null $customerOpeningBalance
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $customers
+ * @property-read int|null $customers_count
+ * @property-read bool|null $customers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Deduction> $deductions
+ * @property-read int|null $deductions_count
+ * @property-read bool|null $deductions_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Department> $departments
+ * @property-read int|null $departments_count
+ * @property-read bool|null $departments_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $employees
+ * @property-read int|null $employees_count
+ * @property-read bool|null $employees_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ExistingBranch> $existingBranches
+ * @property-read int|null $existing_branches_count
+ * @property-read bool|null $existing_branches_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\ExpenseName> $expenseNames
+ * @property-read int|null $expense_names_count
+ * @property-read bool|null $expense_names_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialInstitution> $financialInstitutions
+ * @property-read int|null $financial_institutions_count
+ * @property-read bool|null $financial_institutions_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialPlanning\Study> $financialPlanningStudies
+ * @property-read int|null $financial_planning_studies_count
+ * @property-read bool|null $financial_planning_studies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\FixedAssetName> $fixedAssetNames
+ * @property-read int|null $fixed_asset_names_count
+ * @property-read bool|null $fixed_asset_names_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FullySecuredOverdraft> $fullySecuredOverdrafts
+ * @property-read int|null $fully_secured_overdrafts_count
+ * @property-read bool|null $fully_secured_overdrafts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Department> $generalDepartments
+ * @property-read int|null $general_departments_count
+ * @property-read bool|null $general_departments_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InterestRevenueAccount> $interestRevenuesAccounts
+ * @property-read int|null $interest_revenues_accounts_count
+ * @property-read bool|null $interest_revenues_accounts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InternalMoneyTransfer> $internalMoneyTransfers
+ * @property-read int|null $internal_money_transfers_count
+ * @property-read bool|null $internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LastUploadFileName> $lastUploadFileNames
+ * @property-read int|null $last_upload_file_names_count
+ * @property-read bool|null $last_upload_file_names_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LcSettlementInternalMoneyTransfer> $lcSettlementInternalMoneyTransfers
+ * @property-read int|null $lc_settlement_internal_money_transfers_count
+ * @property-read bool|null $lc_settlement_internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\LeasingCategory> $leasingCategories
+ * @property-read int|null $leasing_categories_count
+ * @property-read bool|null $leasing_categories_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfCreditFacility> $letterOfCreditFacilities
+ * @property-read int|null $letter_of_credit_facilities_count
+ * @property-read bool|null $letter_of_credit_facilities_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfCreditIssuance> $letterOfCreditIssuances
+ * @property-read int|null $letter_of_credit_issuances_count
+ * @property-read bool|null $letter_of_credit_issuances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeFacility> $letterOfGuaranteeFacilities
+ * @property-read int|null $letter_of_guarantee_facilities_count
+ * @property-read bool|null $letter_of_guarantee_facilities_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfGuaranteeIssuance> $letterOfGuaranteeIssuances
+ * @property-read int|null $letter_of_guarantee_issuances_count
+ * @property-read bool|null $letter_of_guarantee_issuances_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $logs
+ * @property-read int|null $logs_count
+ * @property-read bool|null $logs_exists
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, \Spatie\MediaLibrary\MediaCollections\Models\Media> $media
+ * @property-read int|null $media_count
+ * @property-read bool|null $media_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MediumTermLoan> $mediumTermLoans
+ * @property-read int|null $medium_term_loans_count
+ * @property-read bool|null $medium_term_loans_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Department> $microfinanceDepartments
+ * @property-read int|null $microfinance_departments_count
+ * @property-read bool|null $microfinance_departments_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\MicrofinanceProduct> $microfinanceProducts
+ * @property-read int|null $microfinance_products_count
+ * @property-read bool|null $microfinance_products_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyPayment> $moneyPayments
+ * @property-read int|null $money_payments_count
+ * @property-read bool|null $money_payments_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MoneyReceived> $moneyReceived
+ * @property-read int|null $money_received_count
+ * @property-read bool|null $money_received_exists
+ * @property-read \App\NotificationSetting|null $notificationSetting
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read bool|null $notifications_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OdooExpense> $odooApprovedExpenses
+ * @property-read int|null $odoo_approved_expenses_count
+ * @property-read bool|null $odoo_approved_expenses_exists
+ * @property-read \App\OdooSetting|null $odooSetting
+ * @property-read \App\Models\OpeningBalance|null $openingBalance
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $otherPartners
+ * @property-read int|null $other_partners_count
+ * @property-read bool|null $other_partners_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstAssignmentOfContract> $overdraftAgainstAssignmentOfContracts
+ * @property-read int|null $overdraft_against_assignment_of_contracts_count
+ * @property-read bool|null $overdraft_against_assignment_of_contracts_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OverdraftAgainstCommercialPaper> $overdraftAgainstCommercialPapers
+ * @property-read int|null $overdraft_against_commercial_papers_count
+ * @property-read bool|null $overdraft_against_commercial_papers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $partners
+ * @property-read int|null $partners_count
+ * @property-read bool|null $partners_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Property> $properties
+ * @property-read int|null $properties_count
+ * @property-read bool|null $properties_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Category> $propertyCategories
+ * @property-read int|null $property_categories_count
+ * @property-read bool|null $property_categories_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Nature> $propertyNatures
+ * @property-read int|null $property_natures_count
+ * @property-read bool|null $property_natures_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Ownership> $propertyOwnerships
+ * @property-read int|null $property_ownerships_count
+ * @property-read bool|null $property_ownerships_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\PropertyType> $propertyTypes
+ * @property-read int|null $property_types_count
+ * @property-read bool|null $property_types_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\UsageStatus> $propertyUsageStatues
+ * @property-read int|null $property_usage_statues_count
+ * @property-read bool|null $property_usage_statues_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BuyOrSellCurrency> $safeToBankBuyOrSellCurrencies
+ * @property-read int|null $safe_to_bank_buy_or_sell_currencies_count
+ * @property-read bool|null $safe_to_bank_buy_or_sell_currencies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InternalMoneyTransfer> $safeToBankInternalMoneyTransfers
+ * @property-read int|null $safe_to_bank_internal_money_transfers_count
+ * @property-read bool|null $safe_to_bank_internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BuyOrSellCurrency> $safeToSafeBuyOrSellCurrencies
+ * @property-read int|null $safe_to_safe_buy_or_sell_currencies_count
+ * @property-read bool|null $safe_to_safe_buy_or_sell_currencies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InternalMoneyTransfer> $safeToSafeInternalMoneyTransfers
+ * @property-read int|null $safe_to_safe_internal_money_transfers_count
+ * @property-read bool|null $safe_to_safe_internal_money_transfers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashVeroSalesChannel> $salesChannels
+ * @property-read int|null $sales_channels_count
+ * @property-read bool|null $sales_channels_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CashVeroSalesPerson> $salesPersons
+ * @property-read int|null $sales_persons_count
+ * @property-read bool|null $sales_persons_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $shareholders
+ * @property-read int|null $shareholders_count
+ * @property-read bool|null $shareholders_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\Study> $studies
+ * @property-read int|null $studies_count
+ * @property-read bool|null $studies_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $subsidiaryCompanies
+ * @property-read int|null $subsidiary_companies_count
+ * @property-read bool|null $subsidiary_companies_exists
+ * @property-read \App\Models\SupplierOpeningBalance|null $supplierOpeningBalance
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $suppliers
+ * @property-read int|null $suppliers_count
+ * @property-read bool|null $suppliers_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanySystem> $systems
+ * @property-read int|null $systems_count
+ * @property-read bool|null $systems_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Partner> $taxes
+ * @property-read int|null $taxes_count
+ * @property-read bool|null $taxes_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Tenant> $tenants
+ * @property-read int|null $tenants_count
+ * @property-read bool|null $tenants_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
+ * @property-read bool|null $users_exists
+ * @method static \Database\Factories\CompanyFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereGenerateLabelingCodeFields($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereIsCachingNow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelHeight($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelWidth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingClientLogo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingLogo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingLogo1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingLogo2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingLogo3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingPaginationPerPage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingPaperSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingPrintHeaders($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingReportTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingStamp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLabelingUseClientLogo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereLogoWidth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereMainFunctionalCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereNoRowsForEachPageLabeling($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereOdooDbName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereOdooDbUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereOdooIntegrationStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company wherePrintLabelingType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereQrcodeHeight($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereQrcodeWidth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereSubOf($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereUpdatedBy($value)
+ * @mixin \Eloquent
  */
 class Company extends Model implements HasMedia
 {
@@ -58,10 +343,10 @@ class Company extends Model implements HasMedia
     {
         return $this->belongsToMany(User::class, 'companies_users');
     }
-    public function subCompanies():HasMany
-    {
-        return $this->hasMany(Company::class, 'sub_of');
-    }
+    // public function subCompanies():HasMany
+    // {
+    //     return $this->hasMany(Company::class, 'sub_of');
+    // }
     // public function branches()
     // {
     //     return $this->hasMany(Branch::class);
@@ -187,23 +472,23 @@ class Company extends Model implements HasMedia
         $notificationSetting = $this->notificationSetting ;
         return  $notificationSetting  ? $notificationSetting->getComingPayableChequeNotificationDays() : NotificationSetting::COMING_RECEIVABLE_CHEQUES_NOTIFICATIONS_DAYS ;
     }
-    public function letterOfGuaranteeIssuances()
+    public function letterOfGuaranteeIssuances():HasMany
     {
         return $this->hasMany(LetterOfGuaranteeIssuance::class, 'company_id', 'id')->orderByRaw("case status when 'cancelled' then 2 else 1 end , renewal_date asc ");
     }
-    public function letterOfCreditIssuances()
+    public function letterOfCreditIssuances():HasMany
     {
         return $this->hasMany(LetterOfCreditIssuance::class, 'company_id', 'id');
     }
-    public function openingBalance()
+    public function openingBalance():HasOne
     {
         return $this->hasOne(OpeningBalance::class, 'company_id');
     }
-    public function customerOpeningBalance()
+    public function customerOpeningBalance():HasOne
     {
         return $this->hasOne(CustomerOpeningBalance::class, 'company_id');
     }
-    public function supplierOpeningBalance()
+    public function supplierOpeningBalance():HasOne
     {
         return $this->hasOne(SupplierOpeningBalance::class, 'company_id');
     }
@@ -212,31 +497,31 @@ class Company extends Model implements HasMedia
     {
         return $this->hasMany(Contract::class, 'company_id', 'id');
     }
-    public function lcSettlementInternalMoneyTransfers()
+    public function lcSettlementInternalMoneyTransfers():HasMany
     {
         return $this->hasMany(LcSettlementInternalMoneyTransfer::class, 'company_id', 'id');
     }
-    public function internalMoneyTransfers()
+    public function internalMoneyTransfers():HasMany
     {
         return $this->hasMany(InternalMoneyTransfer::class, 'company_id', 'id');
     }
-    public function bankToBankInternalMoneyTransfers()
+    public function bankToBankInternalMoneyTransfers():HasMany
     {
         return $this->internalMoneyTransfers()->where('type', InternalMoneyTransfer::BANK_TO_BANK);
     }
-    public function safeToBankInternalMoneyTransfers()
+    public function safeToBankInternalMoneyTransfers():HasMany
     {
         return $this->internalMoneyTransfers()->where('type', InternalMoneyTransfer::SAFE_TO_BANK);
     }
-    public function bankToSafeInternalMoneyTransfers()
+    public function bankToSafeInternalMoneyTransfers():HasMany
     {
         return $this->internalMoneyTransfers()->where('type', InternalMoneyTransfer::BANK_TO_SAFE);
     }
-    public function safeToSafeInternalMoneyTransfers()
+    public function safeToSafeInternalMoneyTransfers():HasMany
     {
         return $this->internalMoneyTransfers()->where('type', InternalMoneyTransfer::SAFE_TO_SAFE);
     }
-    public function bankToLcSettlementInternalMoneyTransfers()
+    public function bankToLcSettlementInternalMoneyTransfers():HasMany
     {
         return $this->lcSettlementInternalMoneyTransfers()->where('type', LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT);
     }
@@ -246,23 +531,23 @@ class Company extends Model implements HasMedia
     
     
     
-    public function buyOrSellCurrencies()
+    public function buyOrSellCurrencies():HasMany
     {
         return $this->hasMany(BuyOrSellCurrency::class, 'company_id', 'id');
     }
-    public function bankToBankBuyOrSellCurrencies()
+    public function bankToBankBuyOrSellCurrencies():HasMany
     {
         return $this->buyOrSellCurrencies()->where('type', BuyOrSellCurrency::BANK_TO_BANK);
     }
-    public function safeToBankBuyOrSellCurrencies()
+    public function safeToBankBuyOrSellCurrencies():HasMany
     {
         return $this->buyOrSellCurrencies()->where('type', BuyOrSellCurrency::SAFE_TO_BANK);
     }
-    public function bankToSafeBuyOrSellCurrencies()
+    public function bankToSafeBuyOrSellCurrencies():HasMany
     {
         return $this->buyOrSellCurrencies()->where('type', BuyOrSellCurrency::BANK_TO_SAFE);
     }
-    public function safeToSafeBuyOrSellCurrencies()
+    public function safeToSafeBuyOrSellCurrencies():HasMany
     {
         return $this->buyOrSellCurrencies()->where('type', BuyOrSellCurrency::SAFE_TO_SAFE);
     }
@@ -532,11 +817,7 @@ class Company extends Model implements HasMedia
         return in_array(PROPERTY_MANAGEMENT, $this->getSystemsNames())
         || (auth()->check() && auth()->user()->isSuperAdmin());
     }
-	public function hasTrading():bool
-    {
-        return in_array(TRADING, $this->getSystemsNames())
-        || (auth()->check() && auth()->user()->isSuperAdmin());
-    }
+	
     public function hasVero():bool
     {
         return in_array(VERO, $this->getSystemsNames())
@@ -764,7 +1045,7 @@ class Company extends Model implements HasMedia
     {
         return $this->moneyReceived()->whereNull('advanced_opening_balance_id')->where('type', MoneyReceived::CHEQUE)
             ->filterByReceivingDate($startDate, $endDate)
-           ->whereHas('cheque',function($query) use ($activeTab){
+           ->whereHas('cheque',function($query) {
 			$query->where('status', Cheque::COLLECTED);
 		})
 		->when($activeTab == MoneyReceived::CHEQUE_COLLECTED, function ($query) {
@@ -819,7 +1100,7 @@ class Company extends Model implements HasMedia
     {
         return $this->moneyReceived()->whereNull('advanced_opening_balance_id')->where('type', MoneyReceived::CHEQUE)
             ->filterByReceivingDate($startDate, $endDate)
-           ->whereHas('cheque',function($query) use ($activeTab){
+           ->whereHas('cheque',function($query) {
 			$query->where('status', Cheque::UNDER_COLLECTION);
 		})
 		->when($activeTab == MoneyReceived::CHEQUE_UNDER_COLLECTION, function ($query) {
@@ -1123,10 +1404,10 @@ class Company extends Model implements HasMedia
     }
     public function existingBranches()
     {
-        $isNonBanking = hasMiddleware('isNonBankingService') ;
-        if ($isNonBanking) {
-            return $this->hasMany(\App\Models\NonBankingService\ExistingBranch::class, 'company_id', 'id');
-        }
+        // $isNonBanking = hasMiddleware('isNonBankingService') ;
+        // if ($isNonBanking) {
+		// }
+		return $this->hasMany(\App\Models\NonBankingService\ExistingBranch::class, 'company_id', 'id');
        
         
     }
@@ -1163,16 +1444,11 @@ class Company extends Model implements HasMedia
     {
         $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-        $isTrading = hasMiddleware('isTrading') ;
-        if ($isNonBanking) {
-            return $this->hasMany(\App\Models\NonBankingService\Study::class, 'company_id', 'id');
-        }
         if ($isPropertyManagement) {
-            return $this->hasMany(\App\Models\PropertyManagement\Study::class, 'company_id', 'id');
+			return $this->hasMany(\App\Models\PropertyManagement\Study::class, 'company_id', 'id');
         }
-		if ($isTrading) {
-            return $this->hasMany(\App\Models\Trading\Study::class, 'company_id', 'id');
-        }
+		return $this->hasMany(\App\Models\NonBankingService\Study::class, 'company_id', 'id');
+	
     }
     public function financialPlanningStudies():HasMany
     {
@@ -1221,33 +1497,22 @@ class Company extends Model implements HasMedia
 
     public function departments()
     {
-        $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-		$isTrading = hasMiddleware('isTrading') ;
-        if ($isNonBanking) {
-            return $this->hasMany(\App\Models\NonBankingService\Department::class, 'company_id', 'id');
-        }
         if ($isPropertyManagement) {
-            return $this->hasMany(\App\Models\PropertyManagement\Department::class, 'company_id', 'id');
+			return $this->hasMany(\App\Models\PropertyManagement\Department::class, 'company_id', 'id');
         }
-		if ($isTrading) {
-            return $this->hasMany(\App\Models\Trading\Department::class, 'company_id', 'id');
-        }
+		return $this->hasMany(\App\Models\NonBankingService\Department::class, 'company_id', 'id');
+		
     }
     public function generalDepartments()
     {
-        $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-		$isTrading = hasMiddleware('isTrading') ;
-        if ($isNonBanking) {
-            return $this->hasMany(\App\Models\NonBankingService\Department::class, 'company_id', 'id')->where('type', \App\Models\NonBankingService\Department::GENERAL);
-        }
+    
         if ($isPropertyManagement) {
-            return $this->hasMany(\App\Models\PropertyManagement\Department::class, 'company_id', 'id')->where('type', \App\Models\PropertyManagement\Department::GENERAL);
+			return $this->hasMany(\App\Models\PropertyManagement\Department::class, 'company_id', 'id')->where('type', \App\Models\PropertyManagement\Department::GENERAL);
         }
-		if ($isTrading) {
-            return $this->hasMany(\App\Models\Trading\Department::class, 'company_id', 'id')->where('type', \App\Models\Trading\Department::GENERAL);
-        }
+		
+		return $this->hasMany(\App\Models\NonBankingService\Department::class, 'company_id', 'id')->where('type', \App\Models\NonBankingService\Department::GENERAL);
     }
     
     public function microfinanceDepartments()
@@ -1257,50 +1522,36 @@ class Company extends Model implements HasMedia
     
     public function expenseNames()
     {
-        $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-		$isTrading = hasMiddleware('isTrading') ;
-        if ($isNonBanking) {
-            return $this->hasMany(\App\Models\NonBankingService\ExpenseName::class, 'company_id', 'id');
-        }
         if ($isPropertyManagement) {
-            return $this->hasMany(\App\Models\PropertyManagement\ExpenseName::class, 'company_id', 'id');
+			return $this->hasMany(\App\Models\PropertyManagement\ExpenseName::class, 'company_id', 'id');
         }
-		if ($isTrading) {
-            return $this->hasMany(\App\Models\Trading\ExpenseName::class, 'company_id', 'id');
-        }
+		
+		return $this->hasMany(\App\Models\NonBankingService\ExpenseName::class, 'company_id', 'id');
       
     }
     
     public function expenseNamesFor(string $type, int $companyId)
     {
-        $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-		$isTrading = hasMiddleware('isTrading') ;
-        if ($isNonBanking) {
-            return \App\Models\NonBankingService\ExpenseName::where('expense_type', $type)->where('company_id', $companyId)->get();
-        }
+		
         if ($isPropertyManagement) {
-            return \App\Models\PropertyManagement\ExpenseName::where('expense_type', $type)->where('company_id', $companyId)->get();
+			return \App\Models\PropertyManagement\ExpenseName::where('expense_type', $type)->where('company_id', $companyId)->get();
         }
-		if ($isTrading) {
-            return \App\Models\Trading\ExpenseName::where('expense_type', $type)->where('company_id', $companyId)->get();
-        }
+		return \App\Models\NonBankingService\ExpenseName::where('expense_type', $type)->where('company_id', $companyId)->get();
+		
     }
-    public function fixedAssetNames()
+    public function fixedAssetNames():HasMany
     {
-        $isNonBanking = hasMiddleware('isNonBankingService') ;
+    //    $isNonBanking = hasMiddleware('isNonBankingService') ;
         $isPropertyManagement = hasMiddleware('isPropertyManagement') ;
-		$isTrading = hasMiddleware('isTrading') ;
-        if ($isNonBanking) {
-            return $this->hasMany(\App\Models\NonBankingService\FixedAssetName::class, 'company_id', 'id');
-        }
+      
         if ($isPropertyManagement) {
             return $this->hasMany(\App\Models\PropertyManagement\FixedAssetName::class, 'company_id', 'id');
         }
-		if ($isTrading) {
-            return $this->hasMany(\App\Models\Trading\FixedAssetName::class, 'company_id', 'id');
-        }
+		
+		return $this->hasMany(\App\Models\NonBankingService\FixedAssetName::class, 'company_id', 'id');
+
     }
     
     public function cashflowReports():HasMany

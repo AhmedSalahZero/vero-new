@@ -12,11 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ContractFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+ 
     public function definition()
     {
         return [
@@ -25,7 +21,7 @@ class ContractFactory extends Factory
 		   'tenant_type'=>$this->faker->randomElement(['individual','corporate']),
 		   'monthly_rent'=>$this->faker->numberBetween(100000,1000000),
 		   'contract_start_date'=>$date = $this->faker->dateTimeBetween('-1 year', '+2 years')->format('Y-m-d'),
-		   'contract_end_date'=>Carbon::make($date)->addMonth(12)->format('Y-m-d'),
+		   'contract_end_date'=>Carbon::make($date)->addMonths(12)->format('Y-m-d'),
 		   'contract_currency'=>'EGP',
 		   'collection_currency'=>'EGP',
 		   'collection_interval'=>'monthly',

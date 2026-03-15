@@ -22,19 +22,19 @@ trait DirectManpowerExpenseAccessor
 
     public function getPositionId():int  
     {
-        return $this->pivot ? $this->pivot->position_id : 0 ;
+		return (int) data_get($this, 'pivot.position_id', 0);
     }
     public function getWorkingDays():float 
     {
-        return $this->pivot ? $this->pivot->working_days : 0 ;
+		return (float) data_get($this, 'pivot.working_days', 0);
     }
      public function getCostPerDay():float 
     {
-        return $this->pivot ? $this->pivot->cost_per_day : 0 ;
+		return (float) data_get($this, 'pivot.cost_per_day', 0);
     }
     public function getTotalCost():float 
     {
-        return $this->pivot ? $this->pivot->total_cost : 0 ;
+		return (float) data_get($this, 'pivot.total_cost', 0);
     }
 
 }

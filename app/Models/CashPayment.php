@@ -7,7 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * * هو عباره عن الكاش اللي بدفعه للمورد
  *
- * @mixin IdeHelperCashPayment
+ * @property int $id
+ * @property string $company_id
+ * @property int|null $money_payment_id
+ * @property int|null $cash_expense_id
+ * @property int|null $delivery_branch_id
+ * @property string|null $receipt_number
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Branch|null $deliveryBranch
+ * @property-read \App\Models\MoneyPayment|null $moneyPayment
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereCashExpenseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereDeliveryBranchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereMoneyPaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereReceiptNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashPayment whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CashPayment extends Model
 {

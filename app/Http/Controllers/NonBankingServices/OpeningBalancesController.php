@@ -50,10 +50,10 @@ class OpeningBalancesController extends Controller
         $study->otherLongTermAssetsOpeningBalances->each(function (OtherLongTermAssetsOpeningBalance $otherLongTermAssetOpeningBalance) use (&$totalOtherLongTermAssetOpeningBalances) {
             $totalOtherLongTermAssetOpeningBalances[$otherLongTermAssetOpeningBalance->id] = (array)$otherLongTermAssetOpeningBalance->payload;
         }); 
-		$totalLongTermInvestmentsOpeningBalances=[];
-        $study->longTermInvestmentsOpeningBalances->each(function (LongTermInvestmentsOpeningBalance $longTermInvestmentsOpeningBalance) use (&$totalLongTermInvestmentsOpeningBalances) {
-            $totalLongTermInvestmentsOpeningBalances[$longTermInvestmentsOpeningBalance->id] = (array)$longTermInvestmentsOpeningBalance->payload;
-        });
+		// $totalLongTermInvestmentsOpeningBalances=[];
+        // $study->longTermInvestmentsOpeningBalances->each(function (LongTermInvestmentsOpeningBalance $longTermInvestmentsOpeningBalance) use (&$totalLongTermInvestmentsOpeningBalances) {
+        //     $totalLongTermInvestmentsOpeningBalances[$longTermInvestmentsOpeningBalance->id] = (array)$longTermInvestmentsOpeningBalance->payload;
+        // });
         
         $existingOtherLongTermLiabilitiesPayment=[];
         $study->otherLongTermLiabilitiesOpeningBalances->each(function (OtherLongTermLiabilitiesOpeningBalance $otherLongTermLiability) use (&$existingOtherLongTermLiabilitiesPayment) {

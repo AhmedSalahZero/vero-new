@@ -7,7 +7,41 @@ use App\Traits\HasBasicStoreRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class  NewBranchMicrofinanceOpeningProjection extends Model
+/**
+ * @property int $id
+ * @property int $counts
+ * @property int $start_date
+ * @property int $study_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $operation_date
+ * @property int $total_branches
+ * @property array<array-key, mixed>|null $rent_payment_amount
+ * @property array<array-key, mixed>|null $right_of_use_interest
+ * @property array<array-key, mixed>|null $rent_liability_statement
+ * @property array<array-key, mixed>|null $right_of_use_statement
+ * @property-read \App\Models\NonBankingService\Study|null $study
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection onlyCurrentCompany(?int $companyId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereCounts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereOperationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereRentLiabilityStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereRentPaymentAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereRightOfUseInterest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereRightOfUseStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereStudyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereTotalBranches($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\NewBranchMicrofinanceOpeningProjection whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+class NewBranchMicrofinanceOpeningProjection extends Model
 {
 	use HasBasicStoreRequest,CompanyScope , BelongsToStudy ;
 	protected $connection= 'non_banking_service';

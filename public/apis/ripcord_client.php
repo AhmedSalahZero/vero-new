@@ -404,10 +404,7 @@ class Ripcord_Client_Call
 		return $this;
 	}
 
-	/**
-	 * This method returns the correct format for a multiCall argument.
-	 * @return array An array with the methodName and params
-	 */
+	
 	public function encode() {
 		return array(
 			'methodName' => $this->method,
@@ -437,7 +434,7 @@ interface Ripcord_Transport
  * This class implements the Ripcord_Transport interface using PHP streams.
  * @package Ripcord
  */
-class  Ripcord_Transport_Stream implements Ripcord_Transport 
+class Ripcord_Transport_Stream implements Ripcord_Transport 
 {
 	/**
 	 * A list of stream context options.

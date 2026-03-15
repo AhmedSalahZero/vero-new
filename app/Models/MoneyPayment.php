@@ -24,7 +24,123 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperMoneyPayment
+ * @property int $id
+ * @property string|null $odoo_reference
+ * @property int|null $journal_entry_id
+ * @property int|null $account_bank_statement_line_id
+ * @property string|null $transaction_type
+ * @property int $has_unapplied_or_down_payment
+ * @property string|null $odoo_error_message
+ * @property int $synced_with_odoo
+ * @property int|null $advanced_opening_balance_id
+ * @property int|null $odoo_id
+ * @property int|null $odoo_move_id
+ * @property string $partner_type
+ * @property int|null $partner_id partner_id
+ * @property int $is_reviewed
+ * @property int|null $reviewed_by المشرف اللي حدد انه راجعه
+ * @property string $money_type
+ * @property string|null $down_payment_type
+ * @property string|null $down_payment_settlement_date
+ * @property int|null $contract_id
+ * @property int|null $opening_balance_id
+ * @property string|null $type
+ * @property string|null $delivery_date
+ * @property numeric|null $paid_amount
+ * @property numeric $paid_amount_in_main_currency
+ * @property float $total_withhold_amount
+ * @property float|null $total_withhold_amount_in_main_currency
+ * @property float|null $amount_in_invoice_currency
+ * @property string|null $currency
+ * @property string|null $payment_currency
+ * @property float|null $exchange_rate
+ * @property int|null $user_id
+ * @property int|null $company_id
+ * @property string|null $comment_ar
+ * @property string|null $comment_en
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_comment
+ * @property-read \App\Models\CashInSafeStatement|null $cashInSafeCreditStatement
+ * @property-read \App\Models\CashPayment|null $cashPayment
+ * @property-read \App\Models\CleanOverdraftBankStatement|null $cleanOverdraftCreditBankStatement
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DownPaymentMoneyPaymentSettlement> $downPaymentSettlements
+ * @property-read int|null $down_payment_settlements_count
+ * @property-read bool|null $down_payment_settlements_exists
+ * @property-read \App\Models\EmployeeStatement|null $employeeStatement
+ * @property-read \App\Models\FullySecuredOverdraftBankStatement|null $fullySecuredOverdraftCreditBankStatement
+ * @property-read \App\Models\OpeningBalance|null $openingBalance
+ * @property-read \App\Models\OtherPartnerStatement|null $otherPartnerStatement
+ * @property-read \App\Models\OutgoingTransfer|null $outgoingTransfer
+ * @property-read \App\Models\OverdraftAgainstAssignmentOfContractBankStatement|null $overdraftAgainstAssignmentOfContractCreditBankStatement
+ * @property-read \App\Models\OverdraftAgainstCommercialPaperBankStatement|null $overdraftAgainstCommercialPaperCreditBankStatement
+ * @property-read \App\Models\Partner|null $partner
+ * @property-read \App\Models\PayableCheque|null $payableCheque
+ * @property-read \App\Models\User|null $reviewedBy
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SettlementAllocation> $settlementAllocations
+ * @property-read int|null $settlement_allocations_count
+ * @property-read bool|null $settlement_allocations_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentSettlement> $settlements
+ * @property-read int|null $settlements_count
+ * @property-read bool|null $settlements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentSettlement> $settlementsForDownPaymentThatComeFromMoneyModel
+ * @property-read int|null $settlements_for_down_payment_that_come_from_money_model_count
+ * @property-read bool|null $settlements_for_down_payment_that_come_from_money_model_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentSettlement> $settlementsForMoneyPayment
+ * @property-read int|null $settlements_for_money_payment_count
+ * @property-read bool|null $settlements_for_money_payment_exists
+ * @property-read \App\Models\ShareholderStatement|null $shareholderStatement
+ * @property-read \App\Models\SubsidiaryCompanyStatement|null $subsidiaryCompanyStatement
+ * @property-read \App\Models\Partner|null $supplier
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SupplierInvoice> $supplierInvoices
+ * @property-read int|null $supplier_invoices_count
+ * @property-read bool|null $supplier_invoices_exists
+ * @property-read \App\Models\TaxStatement|null $taxStatement
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment filterByDeliveryDate(?string $startDate = null, ?string $endDate = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereAccountBankStatementLineId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereAdvancedOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereAmountInInvoiceCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereCommentAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereCommentEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereDeliveryDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereDownPaymentSettlementDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereDownPaymentType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereHasUnappliedOrDownPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereIsReviewed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereMoneyType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereOdooErrorMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereOdooId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereOdooMoveId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereOdooReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereOpeningBalanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment wherePaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment wherePaidAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment wherePartnerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment wherePaymentCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereReviewedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereSyncedWithOdoo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereTotalWithholdAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereTotalWithholdAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereTransactionType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereUserComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereUserId($value)
+ * @mixin \Eloquent
  */
 class MoneyPayment extends Model
 {
@@ -318,7 +434,7 @@ class MoneyPayment extends Model
             return $this->payableCheque->getDeliveryBankName();
         }
         if ($this->isOutgoingTransfer()) {
-            return $this->getOutgoingTransferDeliveryBankName(app()->getLocale());
+            return $this->getOutgoingTransferDeliveryBankName();
         }
         
     }

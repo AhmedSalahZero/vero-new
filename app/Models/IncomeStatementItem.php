@@ -1,16 +1,67 @@
 <?php
-
 namespace App\Models;
-
 use App\Interfaces\Models\Interfaces\IFinancialStatementAbleItem;
 use App\Models\Traits\Accessors\IncomeStatementItemAccessor;
 use App\Models\Traits\Relations\IncomeStatementItemRelation;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class  IncomeStatementItem extends Model implements IFinancialStatementAbleItem
+/**
+ * App\Models\IncomeStatementItem
+ *
+ * @property int                             $id
+ * @property string                          $name
+ * @property bool                            $has_sub_items
+ * @property bool                            $has_depreciation_or_amortization
+ * @property bool                            $has_percentage_or_fixed_sub_items
+ * @property string                          $financial_statement_able_type
+ * @property bool                            $is_main_for_all_calculations
+ * @property bool                            $is_sales_rate
+ * @property bool                            $for_interval_comparing
+ * @property string|null                     $depends_on                         Auto-calculated dependencies
+ * @property string|null                     $equation
+ * @property bool                            $has_auto_depreciation
+ * @property int                             $is_auto_depreciation_for
+ * @property bool|null                       $is_accumulated
+ * @property int|null                        $has_vat_rate
+ * @property int|null                        $can_be_dedictiable
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static Builder|IncomeStatementItem newModelQuery()
+ * @method static Builder|IncomeStatementItem newQuery()
+ * @method static Builder|IncomeStatementItem query()
+ * @method static Builder|IncomeStatementItem whereId($value)
+ * @method static Builder|IncomeStatementItem whereName($value)
+ * @method static Builder|IncomeStatementItem whereHasSubItems($value)
+ * @method static Builder|IncomeStatementItem whereHasDepreciationOrAmortization($value)
+ * @method static Builder|IncomeStatementItem whereHasPercentageOrFixedSubItems($value)
+ * @method static Builder|IncomeStatementItem whereFinancialStatementAbleType($value)
+ * @method static Builder|IncomeStatementItem whereIsMainForAllCalculations($value)
+ * @method static Builder|IncomeStatementItem whereIsSalesRate($value)
+ * @method static Builder|IncomeStatementItem whereForIntervalComparing($value)
+ * @method static Builder|IncomeStatementItem whereDependsOn($value)
+ * @method static Builder|IncomeStatementItem whereEquation($value)
+ * @method static Builder|IncomeStatementItem whereHasAutoDepreciation($value)
+ * @method static Builder|IncomeStatementItem whereIsAutoDepreciationFor($value)
+ * @method static Builder|IncomeStatementItem whereIsAccumulated($value)
+ * @method static Builder|IncomeStatementItem whereHasVatRate($value)
+ * @method static Builder|IncomeStatementItem whereCanBeDedictiable($value)
+ * @method static Builder|IncomeStatementItem whereCreatedAt($value)
+ * @method static Builder|IncomeStatementItem whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IncomeStatement> $financialStatementAbles
+ * @property-read int|null $financial_statement_ables_count
+ * @property-read bool|null $financial_statement_ables_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IncomeStatement> $mainRowsPivot
+ * @property-read int|null $main_rows_pivot_count
+ * @property-read bool|null $main_rows_pivot_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IncomeStatement> $subItems
+ * @property-read int|null $sub_items_count
+ * @property-read bool|null $sub_items_exists
+ * @property-read \App\Models\IncomeStatementSubItem|null $pivot
+ * @mixin \Eloquent
+ */
+class IncomeStatementItem extends Model implements IFinancialStatementAbleItem
 {
 	protected $table = 'financial_statement_able_items';
 
@@ -88,8 +139,6 @@ class  IncomeStatementItem extends Model implements IFinancialStatementAbleItem
 		$incomeStatementItem = IncomeStatementItem::find($incomeStatementItemId);
 		if ($financialStatementAble->type == 'CashFlowStatement') {
 			$incomeStatementItem = CashFlowStatementItem::find($incomeStatementItemId);
-		} elseif ($financialStatementAble->type == 'BalanceSheet') {
-			$incomeStatementItem = BalanceSheetItem::find($incomeStatementItemId);
 		}
 		return $incomeStatementItem->equation;
 	}

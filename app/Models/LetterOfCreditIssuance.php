@@ -17,7 +17,160 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @mixin IdeHelperLetterOfCreditIssuance
+ * @property int $id
+ * @property int|null $lc_facility_id
+ * @property string|null $category_name
+ * @property string|null $source هو المكان او الطريقه يعني اللي انت انشاتة بيها وانت عندك ثلاث او اربع زراير دول عباره عن المصدر اللي هو قيمة الكولوم دا
+ * @property string $status
+ * @property string|null $financed_by_bank_or_self
+ * @property string|null $transaction_name
+ * @property string|null $transaction_reference
+ * @property string|null $transaction_date
+ * @property int|null $financial_institution_id
+ * @property string|null $cd_or_td_account_type_id
+ * @property string|null $cd_or_td_id
+ * @property numeric $total_lc_outstanding_balance
+ * @property string|null $lc_type
+ * @property numeric $lc_type_outstanding_balance
+ * @property string|null $lc_code
+ * @property int|null $partner_id
+ * @property string|null $contract_type
+ * @property int|null $contract_id
+ * @property int|null $purchase_order_id
+ * @property string|null $purchase_order_date
+ * @property string|null $issuance_date
+ * @property int|null $lc_duration_days
+ * @property string|null $due_date
+ * @property string|null $payment_date
+ * @property int|null $payment_account_number_id
+ * @property int|null $payment_account_type_id
+ * @property string|null $payment_currency
+ * @property int|null $supplier_invoice_id
+ * @property numeric $lc_amount
+ * @property string|null $lc_currency
+ * @property numeric $issuance_fees
+ * @property numeric $min_lc_commission_fees
+ * @property numeric $cash_cover_rate
+ * @property numeric $cash_cover_amount
+ * @property string|null $cash_cover_deducted_from_account_type
+ * @property string|null $cash_cover_deducted_from_account_id
+ * @property int|null $lc_fees_and_commission_account_id
+ * @property numeric $lc_commission_rate
+ * @property numeric $lc_commission_amount
+ * @property string|null $cash_cover_account_number
+ * @property int $financing_duration
+ * @property int $company_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $lc_cash_cover_currency
+ * @property numeric|null $amount_in_main_currency
+ * @property numeric|null $exchange_rate
+ * @property string|null $user_comment
+ * @property numeric $interest_amount
+ * @property string|null $interest_currency
+ * @property-read \App\Models\Partner|null $beneficiary
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Contract|null $contract
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountBankStatements
+ * @property-read int|null $current_account_bank_statements_count
+ * @property-read bool|null $current_account_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountCreditBankStatements
+ * @property-read int|null $current_account_credit_bank_statements_count
+ * @property-read bool|null $current_account_credit_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountDebitBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountDebitBankStatements
+ * @property-read int|null $current_account_debit_bank_statements_count
+ * @property-read bool|null $current_account_debit_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountLcInterestCreditBankStatements
+ * @property-read int|null $current_account_lc_interest_credit_bank_statements_count
+ * @property-read bool|null $current_account_lc_interest_credit_bank_statements_exists
+ * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountPaymentCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CurrentAccountBankStatement> $currentAccountPaymentCreditBankStatements
+ * @property-read int|null $current_account_payment_credit_bank_statements_count
+ * @property-read bool|null $current_account_payment_credit_bank_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LcIssuanceExpense> $expenses
+ * @property-read int|null $expenses_count
+ * @property-read bool|null $expenses_exists
+ * @property-read \App\Models\FinancialInstitution|null $financialInstitutionBank
+ * @property-read \App\Models\FinancialInstitutionAccount|null $lcFeesAndCommissionAccount
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LcOverdraftBankStatement> $lcOverdraftBankStatements
+ * @property-read int|null $lc_overdraft_bank_statements_count
+ * @property-read bool|null $lc_overdraft_bank_statements_exists
+ * @property-read \App\Models\LcOverdraftBankStatement|null $lcOverdraftCreditBankStatement
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfCreditCashCoverStatement> $letterOfCreditCashCoverStatements
+ * @property-read int|null $letter_of_credit_cash_cover_statements_count
+ * @property-read bool|null $letter_of_credit_cash_cover_statements_exists
+ * @property-read \App\Models\LetterOfCreditFacility|null $letterOfCreditFacility
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LetterOfCreditStatement> $letterOfCreditStatements
+ * @property-read int|null $letter_of_credit_statements_count
+ * @property-read bool|null $letter_of_credit_statements_exists
+ * @property-read \App\Models\PurchaseOrder|null $purchaseOrder
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SettlementAllocation> $settlementAllocations
+ * @property-read int|null $settlement_allocations_count
+ * @property-read bool|null $settlement_allocations_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PaymentSettlement> $settlements
+ * @property-read int|null $settlements_count
+ * @property-read bool|null $settlements_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereAmountInMainCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCashCoverAccountNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCashCoverAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCashCoverDeductedFromAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCashCoverDeductedFromAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCashCoverRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCategoryName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCdOrTdAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCdOrTdId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereContractId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereContractType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereExchangeRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereFinancedByBankOrSelf($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereFinancialInstitutionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereFinancingDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereInterestAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereInterestCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereIssuanceDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereIssuanceFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcCashCoverCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcCommissionAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcCommissionRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcDurationDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcFeesAndCommissionAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcTypeOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereMinLcCommissionFees($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePartnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePaymentAccountNumberId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePaymentAccountTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePaymentCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePurchaseOrderDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance wherePurchaseOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereSupplierInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereTotalLcOutstandingBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereTransactionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereTransactionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereTransactionReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereUserComment($value)
+ * @mixin \Eloquent
  */
 class LetterOfCreditIssuance extends Model
 {

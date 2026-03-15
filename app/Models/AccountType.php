@@ -10,7 +10,39 @@ use Illuminate\Database\Eloquent\Model;
  * * debit  (فلوس ليا عند البنك)-> current , time deposit , certificate of deposit الحساب الجاري الحساب الودايع حساب الشهادات
  * * credit التسهيلات البنكية (فلوس عليا) ->
  *
- * @mixin IdeHelperAccountType
+ * @property int $id
+ * @property string $name_en
+ * @property string $name_ar
+ * @property string $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property string|null $model_name
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyAgainstAssignmentOfContract()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyCashAccounts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyCashCoverAccounts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyCdAccounts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyCdOrTdAccounts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyCleanOverdraft()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyCurrentAccount()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyFullySecuredOverdraft()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyOverdraftAgainstAssignmentOfContract()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyOverdraftAgainstCommercialPaper()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyOverdraftsAccounts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlySlugs(array $slugs)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType onlyTdAccounts()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereModelName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereNameAr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereNameEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\AccountType whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class AccountType extends Model
 {

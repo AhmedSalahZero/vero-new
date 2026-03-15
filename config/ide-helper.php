@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'include_fluent' => false,
+    'include_fluent' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ return [
     |
     */
 
-    'include_factory_builders' => false,
+    'include_factory_builders' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ return [
     */
 
     'write_model_relation_count_properties' => true,
-    'write_model_relation_exists_properties' => false,
+    'write_model_relation_exists_properties' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
     |
     */
 
-    'write_eloquent_model_mixins' => false,
+    'write_eloquent_model_mixins' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'include_helpers' => false,
+    'include_helpers' => true,
 
     'helper_files' => [
         base_path() . '/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
@@ -155,7 +155,6 @@ return [
     */
 
     'ignored_models' => [
-        // App\MyModel::class,
     ],
 
     /*
@@ -263,7 +262,7 @@ return [
     | or there is an import (use className) of the class.
     |
     */
-    'force_fqn' => false,
+    'force_fqn' => true,
 
     /*
     |--------------------------------------------------------------------------

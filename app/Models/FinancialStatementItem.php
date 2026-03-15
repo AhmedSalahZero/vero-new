@@ -9,7 +9,22 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class  FinancialStatementItem extends Model
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialStatement> $financialStatements
+ * @property-read int|null $financial_statements_count
+ * @property-read bool|null $financial_statements_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialStatement> $mainRowsPivot
+ * @property-read int|null $main_rows_pivot_count
+ * @property-read bool|null $main_rows_pivot_exists
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialStatement> $subItems
+ * @property-read int|null $sub_items_count
+ * @property-read bool|null $sub_items_exists
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialStatementItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialStatementItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialStatementItem query()
+ * @mixin \Eloquent
+ */
+class FinancialStatementItem extends Model
 {
 	use  FinancialStatementItemRelation, FinancialStatementItemAccessor;
 	const PERCENTAGE_OF_SALES = '[ % Of Sales ]';

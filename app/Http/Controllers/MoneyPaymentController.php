@@ -207,9 +207,7 @@ class MoneyPaymentController
     public function create(Company $company, $supplierInvoiceId = null)
     {
         $clientsWithContracts = Partner::orderBy('name')->onlyCompany($company->id)	->onlyCustomers()->onlyThatHaveContracts()->get();
-        
-        
-        $currencies = SupplierInvoice::getCurrencies($supplierInvoiceId);
+        $currencies = SupplierInvoice::getCurrencies();
         $isDownPayment = Request()->has('type');
         $viewName = $isDownPayment  ?  'reports.moneyPayments.down-payments-form' : 'reports.moneyPayments.form';
         
@@ -462,22 +460,13 @@ class MoneyPaymentController
         $data['contract_id'] = $contractId ;
         // $data['money_payment_id'] = $moneyPaymentId;
 
-        /**
-         * @var MoneyPayment $moneyPayment ;
-         */
+    
         if (!$isDownPayment && !$isDownPaymentFromMoneyPayment) {
             unset($data['contract_id']);
         }
-        /**
-         * @var MoneyPayment $moneyPayment
-         */
-        // $mainFunctionCurrency = $company->getMainFunctionalCurrency();
-      
-        // $foreignExchangeRate = ForeignExchangeRate::getExchangeRateForCurrencyAndClosestDate($currencyName,$mainFunctionCurrency,$paymentDate,$company->id);
-        /**
-         * @var MoneyPayment $moneyPayment
-         */
-	
+		/**
+		 * @var MoneyPayment $moneyPayment
+		 */
         $moneyPayment = MoneyPayment::create($data);
 
         $relationData['company_id'] = $company->id ;
@@ -530,10 +519,7 @@ class MoneyPaymentController
             $moneyPayment->handlePartnerDebitStatement($partnerType, $partnerId, $moneyPayment->id, $company->id, $statementDate, $invoiceCurrencyAmount, $paymentCurrency, $bankNameOrBranchName, $accountType, $accountNumber);
             $moneyPayment->storeNonCustomerOrSupplierOdooExpense(($isDownPayment || $isDownPaymentFromMoneyPayment  ));
         }
-		
-        /**
-         * @var SupplierInvoice $supplierInvoice
-         */
+	
         $activeTab = $moneyType;
         if ($returnModel) {
             return $moneyPayment;
@@ -546,17 +532,13 @@ class MoneyPaymentController
         return redirect()->route('view.money.payment', ['company'=>$company->id,'active'=>$activeTab])->with('success', __('Data Store Successfully'));
 
     }
-    protected function getActiveTab(string $moneyType)
-    {
-        return $moneyType ;
-
-    }
+  
 	
     public function edit(Company $company, Request $request, moneyPayment $moneyPayment, $supplierInvoiceId = null)
     {
 		
         $clientsWithContracts = Partner::onlyCompany($company->id)	->onlyCustomers()->onlyThatHaveContracts()->get();
-        $currencies = SupplierInvoice::getCurrencies($supplierInvoiceId);
+        $currencies = SupplierInvoice::getCurrencies();
         $selectedCurrency = $supplierInvoiceId ? SupplierInvoice::where('id', $supplierInvoiceId)->first()->getCurrency() : null;
         $isDownPayment = $moneyPayment->isDownPayment();
         $viewName = $isDownPayment  ?  'reports.moneyPayments.down-payments-form' : 'reports.moneyPayments.form';
@@ -568,11 +550,18 @@ class MoneyPaymentController
         $accountTypes = AccountType::onlyCashAccounts()->get();
         $financialInstitutionBanks = FinancialInstitution::onlyForCompany($company->id)->onlyBanks()->get();
         $partnerType = $moneyPayment->partner->getSupplierType();
-        $suppliers =  $supplierInvoiceId ?  Partner::orderBy('name')->where('id', CustomerInvoice::find($supplierInvoiceId)->supplier_id)->where('company_id', $company->id)->has('contracts')->pluck('name', 'id')->toArray() :Partner::where('is_supplier', 1)->where('company_id', $company->id)->has('contracts')->pluck('name', 'id')->toArray();
+		
+		// $customerInvoice = CustomerInvoice::find($supplierInvoiceId);
+        // $suppliers =  $supplierInvoiceId ?  Partner::orderBy('name')->where('id', $customerInvoice->supplier_id)->where('company_id', $company->id)->has('contracts')->pluck('name', 'id')->toArray() :Partner::where('is_supplier', 1)->where('company_id', $company->id)->has('contracts')->pluck('name', 'id')->toArray();
         /**
          * * for contracts
          */
-        $suppliers =  $supplierInvoiceId ?  Partner::orderBy('name')->where('id', SupplierInvoice::find($supplierInvoiceId)->supplier_id)
+		/**
+		 * @var SupplierInvoice $supplierInvoice
+		 */
+		$supplierInvoice = SupplierInvoice::find($supplierInvoiceId);
+		
+        $suppliers =  $supplierInvoiceId ?  Partner::orderBy('name')->where('id', $supplierInvoice->supplier_id)
         ->when($isDownPayment, function (Builder $q) {
             $q->has('contracts');
         })
@@ -775,7 +764,7 @@ class MoneyPaymentController
         $additionalAmountInEditMode = 0 ;
         // $additionalAmountInEditMode = number_unformat($request->get('additionalBalanceInEditMode',0));
         /**
-         * @var Branch $branch
+         * @var Branch|null $branch
          */
         $branch = Branch::find($branchId);
         $model = null ;
