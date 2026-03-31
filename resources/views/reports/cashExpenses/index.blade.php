@@ -208,7 +208,7 @@ td{
                                 @endforeach
                             </tbody>
                         </table>
-
+						{{ $payableCheques->appends(array_merge(request()->all(),['active' => CashExpense::PAYABLE_CHEQUE]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -313,7 +313,7 @@ td{
 
                             </tbody>
                         </table>
-
+						{{ $outgoingTransfer->appends(array_merge(request()->all(),['active' => CashExpense::OUTGOING_TRANSFER]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -416,7 +416,7 @@ td{
 
                             </tbody>
                         </table>
-
+						{{ $cashPayments->appends(array_merge(request()->all(),['active' => CashExpense::CASH_PAYMENT]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>

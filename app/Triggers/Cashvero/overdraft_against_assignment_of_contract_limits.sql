@@ -3,7 +3,7 @@ delimiter //
 create  trigger before_insert_overdraft_against_assignment_of_contract_limits before insert on `overdraft_against_assignment_of_contract_limits` for each row 
 begin 
 	
-		declare _contract_status varchar(255) default null ;
+		declare _contract_status varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default null ;
 		declare _days_count integer default 0 ;
 		declare _lending_rate decimal(10,4) default 0 ;
 		declare _contract_amount decimal(14,2) default 0 ;
@@ -68,7 +68,7 @@ delimiter //
 create  trigger before_update_overdraft_against_ass_of_contract_limits before update on `overdraft_against_assignment_of_contract_limits` for each row 
 begin 
 
-		declare _contract_status varchar(255) default null ;
+		declare _contract_status varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default null ;
 		-- declare _days_count integer default 0 ;
 		declare _lending_rate decimal(10,4) default 0 ;
 		declare _contract_amount decimal(14,2) default 0 ;

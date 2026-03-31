@@ -585,20 +585,153 @@ class Company extends Model implements HasMedia
     {
         return $this->hasMany(CashExpense::class, 'company_id', 'id');
     }
-    public function getCashExpenseCashPayments(?string $startDate = null, ?string $endDate = null):Collection
+    public function getCashExpenseCashPayments(?string $startDate = null, ?string $endDate = null,$activeTab = null):HasMany
     {
-        return $this->cashExpenses->where('type', CashExpense::CASH_PAYMENT)->whereNull('opening_balance_id')->filterByPaymentDate($startDate, $endDate)->sortByDesc('payment_date') ;
+        return $this->cashExpenses()->where('type', CashExpense::CASH_PAYMENT)->whereNull('opening_balance_id')->filterByPaymentDate($startDate, $endDate)
+		->when($activeTab == CashExpense::CASH_PAYMENT, function ($query) {
+			$searchFieldName = Request('field');
+			$value = Request('value');
+			$from = Request('from');
+			$to = Request('to');
+			$query->when($searchFieldName == 'partner_name',function() use ($query,$value){
+				$query->whereHas('partner',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'payment_date',function() use ($query,$from,$to){
+				$query->whereBetween('payment_date', [$from, $to]);
+			})
+			->when($searchFieldName == 'paid_amount',function() use ($query,$value){
+				$query->where('paid_amount', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'expense_name',function() use ($query,$value){
+				$query->whereHas('cashExpenseCategoryName',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'delivery_branch_name',function() use ($query,$value){
+				$query->whereHas('cashPayment.deliveryBranch',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'currency',function() use ($query,$value){
+				$query->where('currency', 'like', '%'.$value.'%');
+			})
+			// ->when($searchFieldName == 'payment_currency',function() use ($query,$value){
+			// 	$query->where('payment_currency', 'like', '%'.$value.'%');
+			// })
+			->when($searchFieldName == 'receipt_number',function() use ($query,$value){
+				$query->whereHas('cashPayment',function($query) use ($value){
+					$query->where('receipt_number', 'like', '%'.$value.'%');
+				});
+			});
+		})
+		->with([
+			'partner:id,name',
+			'cashPayment.deliveryBranch:id,name',
+			'cashExpenseCategoryName:id,name,cash_expense_category_id',
+			'cashExpenseCategoryName.cashExpenseCategory:id,name',
+		])
+		->orderByDesc('payment_date');
+
     }
-    public function getCashExpenseOutgoingTransfer(?string $startDate = null, ?string $endDate = null):Collection
+    public function getCashExpenseOutgoingTransfer(?string $startDate = null, ?string $endDate = null,$activeTab = null):HasMany
     {
-        return $this->cashExpenses->where('type', CashExpense::OUTGOING_TRANSFER)->filterByPaymentDate($startDate, $endDate)->sortByDesc('payment_date') ;
+        return $this->cashExpenses()->where('type', CashExpense::OUTGOING_TRANSFER)->filterByPaymentDate($startDate, $endDate)
+		->when($activeTab == CashExpense::OUTGOING_TRANSFER, function ($query) {
+			$searchFieldName = Request('field');
+			$value = Request('value');
+			$from = Request('from');
+			$to = Request('to');
+			$query->when($searchFieldName == 'partner_name',function() use ($query,$value){
+				$query->whereHas('partner',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'payment_date',function() use ($query,$from,$to){
+				$query->whereBetween('payment_date', [$from, $to]);
+			})
+			->when($searchFieldName == 'paid_amount',function() use ($query,$value){
+				$query->where('paid_amount', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'expense_name',function() use ($query,$value){
+				$query->whereHas('cashExpenseCategoryName',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'delivery_branch_name',function() use ($query,$value){
+				$query->whereHas('cashPayment.deliveryBranch',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'currency',function() use ($query,$value){
+				$query->where('currency', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'payment_currency',function() use ($query,$value){
+				$query->where('payment_currency', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'receipt_number',function() use ($query,$value){
+				$query->whereHas('cashPayment',function($query) use ($value){
+					$query->where('receipt_number', 'like', '%'.$value.'%');
+				});
+			});
+		})
+		->with([
+			'partner:id,name',
+			'outgoingTransfer.deliveryBank.bank:id,view_name',
+			'cashExpenseCategoryName:id,name,cash_expense_category_id',
+			'cashExpenseCategoryName.cashExpenseCategory:id,name',
+		])
+		->orderByDesc('payment_date') ;
     }
-    public function getCashExpensePayableCheques(?string $startDate = null, ?string $endDate = null):Collection
+    public function getCashExpensePayableCheques(?string $startDate = null, ?string $endDate = null,$activeTab = null):HasMany
     {
-        return $this->cashExpenses->where('type', CashExpense::PAYABLE_CHEQUE)->filterByPaymentDate($startDate, $endDate)->sortByDesc('payment_date')->filter(function (CashExpense $cashExpense) {
-            $payableCheque = $cashExpense->payableCheque ;
-            return $payableCheque && in_array($payableCheque->getStatus(), [PayableCheque::PENDING,PayableCheque::PAID]) ;
-        })->values();
+        return $this->cashExpenses()->where('type', CashExpense::PAYABLE_CHEQUE)->filterByPaymentDate($startDate, $endDate)
+		->when($activeTab == CashExpense::PAYABLE_CHEQUE, function ($query) {
+			$searchFieldName = Request('field');
+			$value = Request('value');
+			$from = Request('from');
+			$to = Request('to');
+			$query->when($searchFieldName == 'partner_name',function() use ($query,$value){
+				$query->whereHas('partner',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'payment_date',function() use ($query,$from,$to){
+				$query->whereBetween('payment_date', [$from, $to]);
+			})
+			->when($searchFieldName == 'paid_amount',function() use ($query,$value){
+				$query->where('paid_amount', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'expense_name',function() use ($query,$value){
+				$query->whereHas('cashExpenseCategoryName',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'delivery_branch_name',function() use ($query,$value){
+				$query->whereHas('cashPayment.deliveryBranch',function($query) use ($value){
+					$query->where('name', 'like', '%'.$value.'%');
+				});
+			})
+			->when($searchFieldName == 'currency',function() use ($query,$value){
+				$query->where('currency', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'payment_currency',function() use ($query,$value){
+				$query->where('payment_currency', 'like', '%'.$value.'%');
+			})
+			->when($searchFieldName == 'receipt_number',function() use ($query,$value){
+				$query->whereHas('cashPayment',function($query) use ($value){
+					$query->where('receipt_number', 'like', '%'.$value.'%');
+				});
+			});
+		})
+		->with([
+			'partner:id,name',
+			'payableCheque:id,cash_expense_id,money_payment_id,status,cheque_number,delivery_bank_id,account_type,account_number,due_date',
+			'cashExpenseCategoryName:id,name,cash_expense_category_id',
+			'cashExpenseCategoryName.cashExpenseCategory:id,name',
+		])
+		->orderByDesc('payment_date') ;
     }
     
     /**

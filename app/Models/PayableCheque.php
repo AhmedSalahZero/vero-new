@@ -54,13 +54,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PayableCheque extends Model
 {
-	protected $with = [
-		'deliveryBank',
-		'accountType',
-		'moneyPayment',
-		'cashExpense',
-		'financialInstitution.bank'
-	];
+	// protected $with = [
+	// 	'deliveryBank',
+	// 	'accountType',
+	// 	'moneyPayment',
+	// 	'cashExpense',
+	// 	'financialInstitution.bank'
+	// ];
 	const PENDING = 'pending';
 	const PAID = 'paid';
 		 

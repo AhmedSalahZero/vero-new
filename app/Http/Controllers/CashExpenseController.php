@@ -25,57 +25,57 @@ use Illuminate\Support\Collection;
 class CashExpenseController
 {
     use GeneralFunctions;
-    protected function applyFilter(Request $request,Collection $collection):Collection{
-		if(!count($collection)){
-			return $collection;
-		}
-		$searchFieldName = $request->get('field');
-		$dateFieldName = $searchFieldName === 'due_date' ? 'due_date' : 'payment_date';
-		if($searchFieldName =='payment_date'){
-			$dateFieldName = 'payment_date';
-		}
-		$from = $request->get('from');
-		$to = $request->get('to');
-		$value = $request->query('value');
-		$collection = $collection
-		->when($request->has('value'),function($collection) use ($value,$searchFieldName){
-			return $collection->filter(function($cashExpense) use ($value,$searchFieldName){
-				/**
-				 * @var CashExpense $cashExpense
-				 */
-				$currentValue = $cashExpense->{$searchFieldName} ;
-				$cashExpenseRelationName = dashesToCamelCase(Request('active')) ;
-				$relationRecord = $cashExpense->$cashExpenseRelationName ;
-				/**
-				 * * بمعني لو مالقناش القيمة في جدول ال
-				 * * cashExpense
-				 * * هندور عليها في العلاقه
-				 */
-				$currentValue = is_null($currentValue) && $relationRecord ? $relationRecord->{$searchFieldName}  :$currentValue ;
-				if($searchFieldName == 'delivery_branch_id'){
-					$currentValue = $cashExpense->getCashPaymentBranchName() ;
-				}
-				if($searchFieldName == 'delivery_bank_id'){
-					$currentValue = $cashExpense->payableCheque ? $cashExpense->payableCheque->getDeliveryBankName() :0 ;
-				}
-				return false !== stristr($currentValue , $value);
-			});
-		})
-		->when($request->get('from') , function($collection) use($dateFieldName,$from){
-			return $collection->where($dateFieldName,'>=',$from);
-		})
-		->when($request->get('to') , function($collection) use($dateFieldName,$to){
-			return $collection->where($dateFieldName,'<=',$to);
-		})
-		->sortByDesc('payment_date')->values();
-		return $collection;
-	}
+    // protected function applyFilter(Request $request,Collection $collection):Collection{
+	// 	if(!count($collection)){
+	// 		return $collection;
+	// 	}
+	// 	$searchFieldName = $request->get('field');
+	// 	$dateFieldName = $searchFieldName === 'due_date' ? 'due_date' : 'payment_date';
+	// 	if($searchFieldName =='payment_date'){
+	// 		$dateFieldName = 'payment_date';
+	// 	}
+	// 	$from = $request->get('from');
+	// 	$to = $request->get('to');
+	// 	$value = $request->query('value');
+	// 	$collection = $collection
+	// 	->when($request->has('value'),function($collection) use ($value,$searchFieldName){
+	// 		return $collection->filter(function($cashExpense) use ($value,$searchFieldName){
+	// 			/**
+	// 			 * @var CashExpense $cashExpense
+	// 			 */
+	// 			$currentValue = $cashExpense->{$searchFieldName} ;
+	// 			$cashExpenseRelationName = dashesToCamelCase(Request('active')) ;
+	// 			$relationRecord = $cashExpense->$cashExpenseRelationName ;
+	// 			/**
+	// 			 * * بمعني لو مالقناش القيمة في جدول ال
+	// 			 * * cashExpense
+	// 			 * * هندور عليها في العلاقه
+	// 			 */
+	// 			$currentValue = is_null($currentValue) && $relationRecord ? $relationRecord->{$searchFieldName}  :$currentValue ;
+	// 			if($searchFieldName == 'delivery_branch_id'){
+	// 				$currentValue = $cashExpense->getCashPaymentBranchName() ;
+	// 			}
+	// 			if($searchFieldName == 'delivery_bank_id'){
+	// 				$currentValue = $cashExpense->payableCheque ? $cashExpense->payableCheque->getDeliveryBankName() :0 ;
+	// 			}
+	// 			return false !== stristr($currentValue , $value);
+	// 		});
+	// 	})
+	// 	->when($request->get('from') , function($collection) use($dateFieldName,$from){
+	// 		return $collection->where($dateFieldName,'>=',$from);
+	// 	})
+	// 	->when($request->get('to') , function($collection) use($dateFieldName,$to){
+	// 		return $collection->where($dateFieldName,'<=',$to);
+	// 	})
+	// 	->sortByDesc('payment_date')->values();
+	// 	return $collection;
+	// }
 	public function index(Company $company,Request $request)
 	{
-		$company->load(['cashExpenses.payableCheque','cashExpenses.partner','cashExpenses.outgoingTransfer','cashExpenses.cashPayment.deliveryBranch','cashExpenses.cashExpenseCategoryName']);
-		
+		// $company->load(['cashExpenses.payableCheque','cashExpenses.partner','cashExpenses.outgoingTransfer','cashExpenses.cashPayment.deliveryBranch','cashExpenses.cashExpenseCategoryName']);
+		$paginationPerPage = GeneralFunctions::getPaginationLimit();
 		$numberOfMonthsBetweenEndDateAndStartDate = 18 ;
-		$moneyType = $request->get('active',CashExpense::CASH_PAYMENT) ;
+		$activeTab = $request->get('active',CashExpense::CASH_PAYMENT) ;
 		$filterDates = [];
 		foreach(CashExpense::getAllTypes() as $type){
 			$startDate = $request->has('startDate') ? $request->input('startDate.'.$type) : now()->subMonths($numberOfMonthsBetweenEndDateAndStartDate)->format('Y-m-d');
@@ -101,34 +101,22 @@ class CashExpenseController
 		$payableChequesStartDate = $filterDates[CashExpense::PAYABLE_CHEQUE]['startDate'] ?? null ;
 		$payableChequesEndDate = $filterDates[CashExpense::PAYABLE_CHEQUE]['endDate'] ?? null ;
 
-		/**
-		 * * rejected cheques
-		 */
-		// $chequesRejectedStartDate = $filterDates[CashExpense::CHEQUE_REJECTED]['startDate'] ?? null ;
-		// $chequesRejectedEndDate = $filterDates[CashExpense::CHEQUE_REJECTED]['endDate'] ?? null ;
-
-
-
-
-
-
-	
 		
-		$cashPayments = $company->getCashExpenseCashPayments($cashPaymentsStartDate ,$cashPaymentsEndDate ) ;
+		$cashPayments = $company->getCashExpenseCashPayments($cashPaymentsStartDate ,$cashPaymentsEndDate ,$activeTab)->paginate($paginationPerPage,['*'],'cashPaymentsPage') ;
 
-		$outgoingTransfer = $company->getCashExpenseOutgoingTransfer($outgoingTransferStartDate,$outgoingTransferEndDate) ;
-		$payableCheques = $company->getCashExpensePayableCheques($payableChequesStartDate,$payableChequesEndDate);
+		$outgoingTransfer = $company->getCashExpenseOutgoingTransfer($outgoingTransferStartDate,$outgoingTransferEndDate,$activeTab)->paginate($paginationPerPage,['*'],'outgoingTransferPage') ;
+		$payableCheques = $company->getCashExpensePayableCheques($payableChequesStartDate,$payableChequesEndDate,$activeTab)->paginate($paginationPerPage,['*'],'payableChequesPage') ;
 		// $receivedRejectedChequesInSafe = $user->getReceivedRejectedChequesInSafe($chequesRejectedStartDate,$chequesRejectedEndDate);
 		// $receivedChequesUnderCollection=  $user->getReceivedChequesUnderCollection($chequesUnderCollectionStartDate,$chequesUnderCollectionEndDate);
 		// $collectedCheques=  $user->getCollectedCheques($chequesCollectedStartDate,$chequesCollectedEndDate);
 		$financialInstitutionBanks = FinancialInstitution::onlyForCompany($company->id)->onlyBanks()->get();
 
 		$accountTypes = AccountType::onlyCashAccounts()->get();
-		$cashPayments = $moneyType == CashExpense::CASH_PAYMENT ? $this->applyFilter($request,$cashPayments) :$cashPayments  ;
-		$outgoingTransfer = $moneyType === CashExpense::OUTGOING_TRANSFER ? $this->applyFilter($request,$outgoingTransfer) : $outgoingTransfer  ;
+		// $cashPayments = $activeTab == CashExpense::CASH_PAYMENT ? $this->applyFilter($request,$cashPayments) :$cashPayments  ;
+		// $outgoingTransfer = $activeTab === CashExpense::OUTGOING_TRANSFER ? $this->applyFilter($request,$outgoingTransfer) : $outgoingTransfer  ;
 
 
-		$payableCheques = $moneyType == CashExpense::PAYABLE_CHEQUE ? $this->applyFilter($request,$payableCheques) : $payableCheques;
+		// $payableCheques = $activeTab == CashExpense::PAYABLE_CHEQUE ? $this->applyFilter($request,$payableCheques) : $payableCheques;
 
 
 		// $receivedRejectedChequesInSafe = $moneyType == CashExpense::CHEQUE_REJECTED ? $this->applyFilter($request,$receivedRejectedChequesInSafe) : $receivedRejectedChequesInSafe;
@@ -153,6 +141,7 @@ class CashExpenseController
 
 		$outgoingTransferTableSearchFields = [
 			// 'supplier_name'=>__('Supplier Name'),
+			'expense_name'=>__('Expense Name'),
 			'payment_date'=>__('Payment Date'),
 			'delivery_bank_id'=>__('Payment Bank'),
 			'paid_amount'=>__('Transfer Amount'),
@@ -164,8 +153,9 @@ class CashExpenseController
 
 		$payableCashTableSearchFields = [
 			// 'supplier_name'=>__('Supplier Name'),
+			'expense_name'=>__('Expense Name'),
 			'payment_date'=>__('Payment Date'),
-			'delivery_branch_id'=>__('Branch'),
+			'delivery_branch_name'=>__('Branch'),
 			'paid_amount'=>__('Paid Amount'),
 			'currency'=>__('Currency'),
 			'receipt_number'=>__('Receipt Number')
@@ -175,7 +165,7 @@ class CashExpenseController
 
 
 
-		$accountTypes = AccountType::onlyCashAccounts()->get();
+		// $accountTypes = AccountType::onlyCashAccounts()->get();
         return view('reports.cashExpenses.index', [
 			'company'=>$company ,
 			'payableCheques'=>$payableCheques,

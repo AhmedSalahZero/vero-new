@@ -821,6 +821,10 @@ class CashExpense extends Model  implements IHaveCreditOverdraftStatement
 	{
 		return false;
 	}
+	public static function scopeFilterByPaymentDate( $query, ?string $startDate = null, ?string $endDate = null)
+	{
+		return $query->whereBetween('payment_date', [$startDate, $endDate]);
+	}
 	
 	public $settlements = null;
 	public $contract = null ;

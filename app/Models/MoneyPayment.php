@@ -165,6 +165,7 @@ class MoneyPayment extends Model implements IHaveCreditOverdraftStatement
 	{
 		return $query->whereBetween('delivery_date', [$startDate, $endDate]);
 	}
+	
     public static function generateComment(self $moneyPayment, string $lang, ?string $invoiceNumbers = '', ?string $supplierName = null)
     {
         $paidInvoiceNumbers = getKeysWithSettlementAmount(Request()->get('settlements', []), 'settlement_amount');

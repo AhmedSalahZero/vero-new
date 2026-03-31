@@ -209,6 +209,10 @@ class OdooPayment
         
             
         $invoice = $customerInvoiceSettlement->invoice;
+		if(!$invoice){
+			Log::error('Invoice not found for customer invoice settlement: ' . $customerInvoiceSettlement->id);
+			return ;
+		}
         $moneyModel = $customerInvoiceSettlement->getMoney();
         $amountInInReceivingCurrency = $customerInvoiceSettlement->getAmountInReceivingCurrency();
         if ($invoice->opening_balance_id) {

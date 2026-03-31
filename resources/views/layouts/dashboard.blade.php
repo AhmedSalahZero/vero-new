@@ -2273,7 +2273,6 @@ data-study-id="{{ $study->id }}"
                         }
                         if (res.redirectTo) {
 
-
                             window.location.href = res.redirectTo;
                             return
                         }
@@ -2325,7 +2324,7 @@ data-study-id="{{ $study->id }}"
                             }
 
                         } else {
-                            $('#submit-form-btn').prop('disabled', false)
+                            $('.submit-form-btn').prop('disabled', false)
                             Swal.fire({
                                 icon: 'error'
                                 , title: res.message,

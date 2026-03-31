@@ -236,7 +236,8 @@
             </div>
 			@include('user_comment',['model'=>$model??null])
 			
-            <x-submitting />
+            {{-- <x-submitting /> --}}
+			<x-submitting-by-ajax :backTo="route('lc-settlement-internal-money-transfers.index',['company'=>$company->id])" />
         </form>
 
         @endsection

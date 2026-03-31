@@ -10,8 +10,8 @@
 						declare _interest_rate decimal(5,2) default 0 ;
 						declare _min_interest_rate decimal(5,2) default 0 ; 
 						declare _count_all_rows integer default 0 ; 
-						declare interest_type_text varchar(100) default 'interest';
-						declare highest_debit_balance_text varchar(100) default 'highest_debit_balance';
+						declare interest_type_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'interest';
+						declare highest_debit_balance_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'highest_debit_balance';
 						declare _accumulated_limit decimal (14,2) default 0 ;
 						declare _limit decimal (14,2) default 0 ;
 						-- في حالة الانشاء
@@ -72,7 +72,7 @@
 				
 				
 				delimiter // 
-				create procedure resettlement_overdraft_against_assignment_of_contract_from(in _type varchar(255), in _overdraft_against_assignment_of_contract_id integer , in _current_company_id integer  )
+				create procedure resettlement_overdraft_against_assignment_of_contract_from(in _type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, in _overdraft_against_assignment_of_contract_id integer , in _current_company_id integer  )
 				begin 
 					declare _current_debit decimal(14,2) default 0 ;
 					declare _total_settlements decimal(14,2) default 0 ;
@@ -128,8 +128,8 @@
 							declare _highest_debt_balance_rate decimal(5,2) default 0 ;
 						-- declare _bank_statement_start_from_date datetime default null ;
 							declare _overdraft_against_assignment_of_contract_to_be_settled_after integer default 0 ;
-							declare interest_type_text varchar(100) default 'interest';
-							declare highest_debit_balance_text varchar(100) default 'highest_debit_balance';
+							declare interest_type_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'interest';
+							declare highest_debit_balance_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'highest_debit_balance';
  declare _total_month_interest_amount decimal(14,2) default 0 ;
 
 					if(new.type = 'payable_cheque') then
@@ -265,7 +265,7 @@
 				drop procedure if exists start_settlement_process_overdraft_against_contract;
 				delimiter //
 				-- هنا هنبدا نضيف سحبة جديدة لو البنك استيت منت كان كريدت اما لو كان دبت (يعني) الدبت اكبر من الصفر وقتها هنبدا نسدد 
-				create procedure start_settlement_process_overdraft_against_contract(in _type varchar(255) ,in _bank_statement_id integer , in _overdraft_against_assignment_of_contract_id integer , in _debit decimal , in _credit decimal , in _company_id integer , in _date_for_settlement date)
+				create procedure start_settlement_process_overdraft_against_contract(in _type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,in _bank_statement_id integer , in _overdraft_against_assignment_of_contract_id integer , in _debit decimal , in _credit decimal , in _company_id integer , in _date_for_settlement date)
 				-- new.id , new.overdraft_against_assignment_of_contract_id , new.debit  , new.credit , new.company_id , new.date
 				begin 
 					declare _overdraft_against_assignment_of_contract_to_be_settled_after integer default 0 ;

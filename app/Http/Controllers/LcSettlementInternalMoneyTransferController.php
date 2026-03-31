@@ -115,45 +115,51 @@ class LcSettlementInternalMoneyTransferController
 	
 	public function store(Company $company   , Request $request){
 	
-		\DB::enableQueryLog();
-		// $type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
 		$internalMoneyTransfer = new LcSettlementInternalMoneyTransfer ;
 		$companyId = $company->id ;
 		/**
 		 * @var LetterOfCreditIssuance $letterOfCreditIssuance
 		 */
-		$letterOfCreditIssuance = LetterOfCreditIssuance::find($request->get('to_letter_of_credit_issuance_id'));
+		$letterOfCreditIssuanceId = $request->get('to_letter_of_credit_issuance_id',LetterOfCreditIssuance::first()->id);
+		$letterOfCreditIssuance = LetterOfCreditIssuance::find($letterOfCreditIssuanceId);
+		if(!$letterOfCreditIssuance){
+			return response()->json([
+				'status'=>false,
+				'message'=>__('Letter of Credit Issue not found')
+			]);
+		}
 		$letterOfCreditFacilityId = $letterOfCreditIssuance->getLcFacilityId();
 		$lcFacilityLimit = $letterOfCreditIssuance->getLcFacilityLimit();
 		$supplierName = $letterOfCreditIssuance->getSupplierName();
 		$lcType = $letterOfCreditIssuance->getLcType();
 		$transactionName =   $letterOfCreditIssuance->getTransactionName();
 		$transferDate = $request->get('transfer_date') ;
+		if(!$transferDate){
+			return response()->json([
+				'status'=>false,
+				'message'=>__('Transfer Date is required')
+			]);
+		}
 		$transferAmount = $request->get('amount') ;
 		$internalMoneyTransfer->type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
 		$internalMoneyTransfer->storeBasicForm($request);
 		$fromFinancialInstitutionId = $request->get('from_bank_id');
-		// $toFinancialInstitutionId = $request->get('to_bank_id');
 		$fromAccountTypeId = $request->get('from_account_type_id');
-		// $toAccountTypeId = $request->get('to_account_type_id');
 		$fromAccountNumber = $request->get('from_account_number');
-		// $toAccountNumber = $request->get('to_account_number');
-		// $toBranchId = $request->get('to_branch_id');
-		// $fromBranchId = $request->get('from_branch_id');
-		// $currencyName = $request->get('currency');	
-		$fromAccountType = AccountType::find($fromAccountTypeId);
-		// $toAccountType = AccountType::find($toAccountTypeId);
 	
-		// if($type === LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ){
+		$fromAccountType = AccountType::find($fromAccountTypeId);
+	
 			$commentEn = __('Internal Transfer [ :supplierName ] [ :lcType ] Transaction Name [ :transactionName ]' ,['supplierName'=>$supplierName ,'lcType'=>$lcType,'transactionName'=>$transactionName],'en');
 			$commentAr = __('Internal Transfer [ :supplierName ] [ :lcType ] Transaction Name [ :transactionName ]' ,['supplierName'=>$supplierName ,'lcType'=>$lcType,'transactionName'=>$transactionName],'ar');
 			$internalMoneyTransfer->handleBankToLetterOfCreditTransfer(  $companyId ,$letterOfCreditFacilityId,$lcFacilityLimit,  $fromAccountType ,  $fromAccountNumber ,  $fromFinancialInstitutionId ,  $letterOfCreditIssuance ,  $transferDate , $transferAmount,$commentEn , $commentAr);
-		// }
 	
 		
 		$activeTab = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ; 
 		
-		return redirect()->route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Data Store Successfully'));
+		return response()->json([
+			'status'=>true,
+			'redirectTo'=>route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])
+		]);
 		
 	}
 
@@ -170,7 +176,10 @@ class LcSettlementInternalMoneyTransferController
 		$type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
 		$this->store($company,$request);
 		$activeTab = $type ;
-		return redirect()->route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Item Has Been Updated Successfully'));
+		return response()->json([
+			'status'=>true,
+			'redirectTo'=>route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])
+		]);
 	}
 	
 	public function destroy(Company $company , LcSettlementInternalMoneyTransfer $lcSettlementInternalTransfer)

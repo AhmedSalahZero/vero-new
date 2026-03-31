@@ -745,6 +745,7 @@ class MoneyReceivedController
             $odooSetting = $company->odooSetting;
             $hasSettlements = $moneyReceived->settlements->count();
             $items = $hasSettlements ? $moneyReceived->settlements : [$moneyReceived];
+            $items = $hasSettlements ? $moneyReceived->settlements : [$moneyReceived];
        
             if ($moneyReceived->isInvoiceSettlementWithDownPayment()) {
                 $items->push($moneyReceived);

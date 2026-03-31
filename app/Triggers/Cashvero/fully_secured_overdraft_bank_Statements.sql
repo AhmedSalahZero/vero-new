@@ -9,8 +9,8 @@
 						declare _min_interest_rate decimal(5,2) default 0 ; 
 						declare _count_all_rows integer default 0 ; 
 						declare _last_delete_id integer default 0 ; 
-						declare interest_type_text varchar(100) default 'interest';
-						declare highest_debit_balance_text varchar(100) default 'highest_debit_balance';
+						declare interest_type_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'interest';
+						declare highest_debit_balance_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'highest_debit_balance';
 						-- في حالة الانشاء
 						set new.created_at = CURRENT_TIMESTAMP;
 						select date , end_balance  into _previous_date,_last_end_balance  from fully_secured_overdraft_bank_statements where  fully_secured_overdraft_id = new.fully_secured_overdraft_id and date <= new.date order by date desc , id desc limit 1 ; -- رتبت بالاي دي الاكبر علشان  لو كانوا متساوين في التاريخ بالظبط (ودا احتمال ضعيف ) ياخد اللي ال اي دي بتاعه اكبر
@@ -64,7 +64,7 @@
 				 
 				drop procedure if exists resettlement_fully_secured_overdraft_from ;
 				delimiter // 
-				create procedure resettlement_fully_secured_overdraft_from(in _type varchar(255) , in _fully_secured_overdraft_id integer , in _current_company_id integer  )
+				create procedure resettlement_fully_secured_overdraft_from(in _type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci , in _fully_secured_overdraft_id integer , in _current_company_id integer  )
 				begin 
 					declare _current_debit decimal(14,2) default 0 ;
 					declare _total_settlements decimal(14,2) default 0 ;
@@ -117,8 +117,8 @@
 							declare _highest_debt_balance_rate decimal(5,2) default 0 ;
 						-- declare _bank_statement_start_from_date datetime default null ;
 							declare _fully_secured_overdraft_to_be_settled_after integer default 0 ;
-							declare interest_type_text varchar(100) default 'interest';
-							declare highest_debit_balance_text varchar(100) default 'highest_debit_balance';
+							declare interest_type_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'interest';
+							declare highest_debit_balance_text varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci default 'highest_debit_balance';
  declare _total_month_interest_amount decimal(14,2) default 0 ;
 
 					if(new.type = 'payable_cheque') then
@@ -251,7 +251,7 @@
 				drop procedure if exists start_settlement_process_fully_secured_overdraft;
 				delimiter //
 				-- هنا هنبدا نضيف سحبة جديدة لو البنك استيت منت كان كريدت اما لو كان دبت (يعني) الدبت اكبر من الصفر وقتها هنبدا نسدد 
-				create procedure start_settlement_process_fully_secured_overdraft(in _type varchar(255) ,in _bank_statement_id integer , in _fully_secured_overdraft_id integer , in _debit decimal , in _credit decimal , in _company_id integer , in _date_for_settlement date)
+				create procedure start_settlement_process_fully_secured_overdraft(in _type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,in _bank_statement_id integer , in _fully_secured_overdraft_id integer , in _debit decimal , in _credit decimal , in _company_id integer , in _date_for_settlement date)
 				-- new.id , new.fully_secured_overdraft_id , new.debit  , new.credit , new.company_id , new.date
 				begin 
 					declare _fully_secured_overdraft_to_be_settled_after integer default 0 ;

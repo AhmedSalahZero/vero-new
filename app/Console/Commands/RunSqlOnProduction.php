@@ -53,7 +53,7 @@ class RunSqlOnProduction extends Command
 			$fileContent = str_replace(array("delimiter ;","delimiter //","DELIMITER $$","delimiter $$","DELIMITER ;"), '', $fileContent);
 			$fileContent = str_replace(['//','$$'],';',$fileContent);
 			$fileContent = str_replace(['DELIMITER ;'],'',$fileContent);
-			DB::unprepared(DB::raw($fileContent));
+			DB::unprepared($fileContent);
 		}
 		
 		
@@ -63,7 +63,7 @@ class RunSqlOnProduction extends Command
 			$fileContent = str_replace(array("delimiter ;","delimiter //","DELIMITER $$","delimiter $$","DELIMITER ;"), '', $fileContent);
 			$fileContent = str_replace(['//','$$'],';',$fileContent);
 			$fileContent = str_replace(['DELIMITER ;'],'',$fileContent);
-			DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->unprepared(DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->raw($fileContent));
+			DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->unprepared($fileContent);
 		}
 		$this->info('-> Sql Run Successfully');
 		
