@@ -50,7 +50,7 @@ class InventoryCoverageDays
 			]
 		]
 		*/
-		
+		$store_final_balance = 0;
 		$purchases = [];
 		$ending_balances = [];
 		$result = [];

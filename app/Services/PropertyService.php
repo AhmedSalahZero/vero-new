@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\DB;
 class PropertyService
 {
 	// Property type constants
-	private const TYPE_UNIT = 'unit';
-	private const TYPE_LAND = 'land';
-	private const TYPE_COMPLEX = 'complex';
-	private const TYPE_BUILDING = 'building';
+	// private const TYPE_UNIT = 'unit';
+	// private const TYPE_LAND = 'land';
+	// private const TYPE_COMPLEX = 'complex';
+	// private const TYPE_BUILDING = 'building';
 	
 
 	// Fields to exclude from storeBasicForm
@@ -30,13 +30,7 @@ class PropertyService
 	{
 		$this->propertyRepository = $propertyRepository;
 	}
-    /**
-     * Store a new property with its related data
-     * 
-     * @param Request $request
-     * @param Company $company
-     * @return Property
-     */
+ 
     public function store(StorePropertyRequest $request, Company $company, ?Property $property = null): Property
     {
         return DB::transaction(function () use ($request, $company, $property) {
@@ -72,7 +66,7 @@ class PropertyService
             $property = $property->storeBasicForm($request, self::EXCLUDED_FIELDS,PROPERTY_MANAGEMENT_CONNECTION_NAME);
             $property->storeRelationsWithNoRepeater($request, $company);
             $property->refresh(); 
-            return $property->refresh(['units']);
+            return $property->refresh();
         });
     }
 

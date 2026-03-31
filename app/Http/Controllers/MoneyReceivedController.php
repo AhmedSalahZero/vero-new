@@ -916,7 +916,7 @@ class MoneyReceivedController
         return response()->json([
             'status'=>true ,
             'amount'=>$accountNumberModel ? $accountNumberModel->getAmount($currencyName, $accountNumber, $financialInstitutionId, $company->id) : 0 ,
-            'interest_rate'=>$accountNumberModel ? $accountNumberModel->getInterestRate() : 0,
+       //     'interest_rate'=>$accountNumberModel ? $accountNumberModel->getInterestRate() : 0,
             'currencyName'=>$currencyName
         ]);
     }
@@ -972,9 +972,11 @@ class MoneyReceivedController
                 $additionalAmountInEditMode =  $model->getPaidAmount();
             }
         }
+		
+	
         
-        $statementTableName = ($accountNumberModel::getStatementTableName()) ;
-        $foreignKeyName = $accountNumberModel::getForeignKeyInStatementTable();
+        $statementTableName = $accountNumberModel->getStatementTableName() ;
+        $foreignKeyName = $accountNumberModel->getForeignKeyInStatementTable();
         $balanceRow = DB::table($statementTableName)->where($foreignKeyName, $accountNumberModel->id)->where('date', '<=', $statementDate)->orderByRaw('date desc , id desc')->first();
         $NetBalanceRow = DB::table($statementTableName)->where($foreignKeyName, $accountNumberModel->id)->orderByRaw('date desc , id desc')->first();
 		

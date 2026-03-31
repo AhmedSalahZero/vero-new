@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\DB;
  */
 class OverdraftAgainstCommercialPaperLimit extends Model
 {
-	use IsBankStatement;
+	// use IsBankStatement;
 	protected $table ='overdraft_against_commercial_paper_limits';
 	
 	protected $guarded =[

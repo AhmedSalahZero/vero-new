@@ -199,7 +199,10 @@ class Property extends Model
 		[ 'value' => 0, 'date' => formatDateForVueDatePicker(now()->format('Y-m-d')) ],
 	];
    }
-   public function contracts(): HasMany
+    /**
+     * @return HasMany<Contract, $this>
+     */
+    public function contracts(): HasMany
     {
         return $this->hasMany(Contract::class, 'property_id');
     }
@@ -451,7 +454,7 @@ class Property extends Model
 			'ready_to_use_date'=>$dueInstallment ? $dueInstallment->getReadyToUseDateFormattedForVueDatePicker() : formatDateForVueDatePicker(now()->format('Y-m-d')),
 			'installment_type' => $dueInstallment ? $dueInstallment->getInstallmentType() : 'regular',
 			'signing_payment' => $dueInstallment ? $dueInstallment->getSigningPayment() : 0,
-			'signing_payment_date' =>$dueInstallment ? $dueInstallment->getSigningPaymentFormattedForVueDatePicker() : formatDateForVueDatePicker(now()->format('Y-m-d')),
+			'signing_payment_date' =>$dueInstallment ? $dueInstallment->getSigningPaymentDateFormattedForVueDatePicker() : formatDateForVueDatePicker(now()->format('Y-m-d')),
 			'reservation_payment' => $dueInstallment ? $dueInstallment->getReservationPayment() :0,
 			'reservation_payment_date' => $dueInstallment ? $dueInstallment->getReservationPaymentFormattedForVueDatePicker() : formatDateForVueDatePicker(now()->format('Y-m-d')),
 			'regular_installments_amounts' => $dueInstallment ? $dueInstallment->getRegularInstallmentAmounts() : PropertyDueInstallment::getDefaultRegularInstallmentAmounts(),
@@ -466,7 +469,7 @@ class Property extends Model
 			'maintenance_payments_count' => $dueInstallment ? $dueInstallment->getMaintenancePaymentsCount() : 0,
 			'maintenance_payments_payment_interval' => $dueInstallment ? $dueInstallment->getMaintenancePaymentsPaymentInterval() : 'monthly',
 			'delivery_payments_count' => $dueInstallment ? $dueInstallment->getDeliveryPaymentsCount() : 0,
-			'installment_payments' => $dueInstallment ? $dueInstallment->getInstallmentPayments() : [],
+	//		'installment_payments' => $dueInstallment ? $dueInstallment->getInstallmentPayments() : [],
 			'variable_installment_amounts' => $dueInstallment ? $dueInstallment->getVariableInstallmentAmounts() : PropertyDueInstallment::getDefaultVariableInstallmentAmounts(),
 			'has_annually_installments'=>$dueInstallment ? $dueInstallment->getHasAnnuallyInstallments() : 0,
 			'has_delivery_payments'=>$dueInstallment ? $dueInstallment->getHasDeliveryPayments() : 0,
@@ -528,16 +531,18 @@ class Property extends Model
 		if($this->isOccupied() && $this->hasInstallments()){
 			return __('Occupied / Installments');
 		}
+		elseif(
+			 !$this->isOccupied() &&
+			 $this->hasInstallments()){
+			return __('Vacant / Installments');
+		}
 		elseif($this->isOccupied()){
 			return __('Occupied');
-		}
-		elseif(!$this->isOccupied() && $this->hasInstallments()){
-			return __('Vacant / Installments');
 		}
 		else{
 			return __('Vacant');
 		}
-		return '-';
+		// return '-';
 		
 		// if($this->isReadyToUse()){
 		// 	return 'ready to use';

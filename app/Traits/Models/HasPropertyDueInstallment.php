@@ -108,14 +108,14 @@ trait HasPropertyDueInstallment
     {
         return $this->delivery_payments_count ? number_format($this->getDeliveryPaymentsCount()) : null;
     }
-    public function getInstallmentPayments():array
-    {
-        return $this->installment_payments?:[];
-    }
-    public function getInstallmentPaymentsFormatted():array
-    {
-        return $this->installment_payments?:[];
-    }
+    // public function getInstallmentPayments():array
+    // {
+    //     return $this->installment_payments?:[];
+    // }
+    // public function getInstallmentPaymentsFormatted():array
+    // {
+    //     return $this->installment_payments?:[];
+    // }
    
     
     public function getHasAnnuallyInstallments():bool
@@ -124,7 +124,7 @@ trait HasPropertyDueInstallment
     }
     public function getHasDeliveryPayments():bool
     {
-        return $this->has_delivery_payments?:0;
+        return (bool)$this->has_delivery_payments?:0;
     }
     public function getHasMaintenancePayments():bool
     {

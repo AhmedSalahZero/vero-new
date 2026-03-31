@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property array<array-key, mixed>|null $last_3_years_seasonality
  * @property array<array-key, mixed>|null $forecasted_sales
  * @property string|null $target_base
+ * @property string|null $sales_target
  * @property numeric|null $prices_increase_rate
  * @property numeric|null $other_products_growth_rate
  * @property numeric|null $quantity_growth_rate
@@ -56,6 +57,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast wherePreviousYearSeasonality($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast wherePricesIncreaseRate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast whereQuantityGrowthRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast whereSalesTarget($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast whereSeasonality($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuantitySalesForecast whereTargetBase($value)

@@ -121,7 +121,7 @@ class SalesGatheringTestController extends Controller
 			$fileUpload = new  ImportData($company_id, request()->format, 'SalesGatheringTest', $salesGathering_fields, $active_job->id,auth()->user()->id,$modelName);
 				Excel::queueImport($fileUpload, request()->file('excel_file'))->chain([
 					new NotifyUserOfCompletedImport(request()->user(), $active_job->id,$company_id,$modelName),
-					new ShowCompletedMessageForSuccessJob($company_id, $active_job->id,$modelName)
+					new ShowCompletedMessageForSuccessJob($company_id, $modelName)
 				]);
 				
 				

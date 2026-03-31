@@ -22,11 +22,7 @@ class RevenueBusinessLineRepository
         return formatOptionsForSelect($revenueBusinessLines , 'getId' , 'getName');
     }
 
-     public function oneFormattedForSelect($model)
-    {
-        $revenueBusinessLines = RevenueBusinessLine::where('id',$model->getRevenueBusinessLineId())->get();
-        return formatOptionsForSelect($revenueBusinessLines , 'getId' , 'getName');
-    }
+   
     
      public function store(Request $request )
     {
@@ -86,11 +82,6 @@ class RevenueBusinessLineRepository
     }
 
 
-
-    public function update(  $revenueBusinessLine , Request $request ):void
-    {
-        $revenueBusinessLine->update($request->except('_token'));
-    }
 
     public function paginate(Request $request):array
     {

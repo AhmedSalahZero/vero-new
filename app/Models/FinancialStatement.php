@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Helpers\HVero;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
-use App\Interfaces\Models\IShareable;
 use App\Models\Traits\Accessors\FinancialStatementAccessor;
 use App\Models\Traits\Mutators\FinancialStatementMutator;
 use App\Models\Traits\Relations\FinancialStatementRelation;
@@ -13,9 +12,29 @@ use App\Models\Traits\Scopes\CompanyScope;
 use App\Models\Traits\Scopes\withAllRelationsScope;
 use App\Traits\HasIndexedDates;
 use Illuminate\Database\Eloquent\Model;
+
 /**
  * App\Models\FinancialStatement
  *
+ * @property string $incomeStatementName
+ * @property string $cashFlowStatementName
+ * @property string $created_at_formatted
+ * @property string $updated_at_formatted
+ * @property int $order
+ * @property int $cash_flow_statement_id
+ * @property int $income_statement_id
+ * @property bool $can_view_income_statement_actual_report
+ * @property bool $can_view_cash_flow_statement_actual_report
+ * @property string $duration_type_select
+ * @property bool $can_edit_duration_type
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialStatementItem> $mainItems
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialStatementItem> $subItems
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialStatementItem> $mainRows
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\SharingLink> $sharingLinks
+ * @property-read bool|null $main_items_exists
+ * @property-read bool|null $main_rows_exists
+ * @property-read bool|null $sharing_links_exists
+ * @property-read bool|null $sub_items_exists
  * @property int $id
  * @property string $name
  * @property string $type
@@ -81,7 +100,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\FinancialStatement withAllRelations(?int $companyId = null)
  * @mixin \Eloquent
  */
-class FinancialStatement extends Model implements  IHaveAllRelations, IExportable, IShareable
+class FinancialStatement extends Model implements  IHaveAllRelations, IExportable
 {
 	use HasIndexedDates, FinancialStatementAccessor, FinancialStatementMutator, FinancialStatementRelation, CompanyScope, withAllRelationsScope;
 	protected  $casts = [
@@ -93,14 +112,7 @@ class FinancialStatement extends Model implements  IHaveAllRelations, IExportabl
 		'id'
 	];
 	
-	public static function getShareableEditViewVars($model): array
-	{
-
-		return [
-			'pageTitle' => FinancialStatement::getPageTitle(),
-		];
-	}
-
+	
 	public function getRouteKeyName()
 	{
 		return 'financial_statements.id';

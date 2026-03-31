@@ -4,7 +4,8 @@ trait SharingLinkMutator
 {
     public function toggleActivation()
     {
-        $this->is_active = ! $this->is_active ;
+		$isActive = ! $this->is_active;
+        $this->is_active = (int)$isActive ;
         $this->save();
     }
     public function increaseNumberOfViews()

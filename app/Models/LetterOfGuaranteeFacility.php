@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\LetterOfGuaranteeFacilityTermAndCondition;
-use App\Traits\Models\HasLetterOfGuaranteeCashCoverStatements;
 use App\Traits\Models\HasLetterOfGuaranteeStatements;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -54,7 +53,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LetterOfGuaranteeFacility extends Model
 {
-	use HasLetterOfGuaranteeStatements , HasLetterOfGuaranteeCashCoverStatements;
+	// use HasLetterOfGuaranteeStatements;
     
 	protected $guarded = ['id'];
 	public function getName()

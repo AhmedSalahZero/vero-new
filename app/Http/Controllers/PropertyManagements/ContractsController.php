@@ -199,23 +199,23 @@ class ContractsController extends Controller
     /**
      * Renew a contract
      */
-    public function renew(RenewContractRequest $request, Company $company, 	Property $property, Contract $contract): JsonResponse
-    {
-        try {
-            $newContract = $this->contractService->renew($contract, $request);
+    // public function renew(RenewContractRequest $request, Company $company, 	Property $property, Contract $contract): JsonResponse
+    // {
+    //     try {
+    //         $newContract = $this->contractService->renew($contract, $request);
 
-            return response()->json([
-                'success' => true,
-                'message' => __('Contract renewed successfully'),
-                'contract_id' => $newContract->id,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => __('An error occurred while renewing the contract') . ': ' . $e->getMessage(),
-            ], 500);
-        }
-    }
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => __('Contract renewed successfully'),
+    //             'contract_id' => $newContract->id,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => __('An error occurred while renewing the contract') . ': ' . $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
 
     /**
      * Get select options for forms

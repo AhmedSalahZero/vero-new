@@ -1,4 +1,6 @@
- @if($company->hasOdooIntegrationCredentials() && $model->fullyIntegratedWithOdoo())
+ @if(
+	$company->hasOdooIntegrationCredentials() && 
+ $model->fullyIntegratedWithOdoo())
 <style>
 .modal-header.blue{
 	    border-bottom-color:#a8bcee !important;

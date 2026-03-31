@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Schema;
 class CustomerNatureCashing
 {
     private Company $company;
-    private string $year;
+    private int $year;
     private string $month;
     private array $typesOfCaching;
 
-    public function __construct(Company $company, string $year, string $month)
+    public function __construct(Company $company, int $year, string $month)
     {
         $this->company = $company;
         $this->year = $year;
@@ -415,7 +415,7 @@ class CustomerNatureCashing
     public function cacheTotalCustomersForType()
     {
         $totalForTypes = [];
-
+		$newDeadForTypes = [];
         foreach ($this->typesOfCaching as $typeToCache) {
 
             $cacheKeyName = getTotalCustomersCacheNameForCompanyInYearForType($this->company, $this->year, $typeToCache, $this->month);
@@ -435,8 +435,7 @@ class CustomerNatureCashing
             } else {
                 $totals = Cache::get($cacheKeyName);
             }
-
-
+			/** @phpstan-ignore-next-line */
             if (\array_key_exists($typeToCache, $totalForTypes)) {
                 array_push($totalForTypes[$typeToCache], $totals);
             } else {

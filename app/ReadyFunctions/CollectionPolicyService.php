@@ -75,6 +75,7 @@ class CollectionPolicyService
 		$max = $this->getNumberOfMonthsForInterval($intervalName);
 		$i = 1 ;
 		$currentSum = 0 ;
+		$currentDateIndex = null;
 		foreach($dateValues as $dateAsString => $value){
 			if($i == 1){
 				$currentDateIndex = $dateAsString ;

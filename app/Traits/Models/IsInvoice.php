@@ -60,15 +60,15 @@ trait IsInvoice
 		return $this->net_balance_in_main_currency ;
 	}
     
-	public function getName()
-    {
-		if($this instanceof CustomerInvoice){
-			return $this->customer_name ; 
-		}
-		elseif($this instanceof SupplierInvoice){
-			return $this->supplier_name ; 
-		}
-    }
+	// public function getName()
+    // {
+	// 	if($this instanceof CustomerInvoice){
+	// 		return $this->customer_name ; 
+	// 	}
+	// 	elseif($this instanceof SupplierInvoice){
+	// 		return $this->supplier_name ; 
+	// 	}
+    // }
 	// public function getRemainingChequeAmount():float
     // {
     //     $customerName =	$this->getName();
@@ -142,25 +142,25 @@ trait IsInvoice
 	{
 		return number_format($this->getTotalDeduction());
 	}
-	public function getTotalCollected()
-	{
-		return (float)$this->collected_amount ; 
-	}
-	public function getTotalCollectedFormatted()
-	{
-		return number_format($this->getTotalCollected());
-	}
-	public function getTotalCollectedOrPaid()
-	{
-		if($this instanceof CustomerInvoice){
-			return (float)$this->total_collected_amount ; 
-		}
-		if($this instanceof SupplierInvoice){
-			return (float)$this->total_paid_amount ; 
-		}
-		throw new \Exception('Custom Exception .. Only Instance Customer Invoice Or Supplier Invoice Allowed');
+	// public function getTotalCollected()
+	// {
+	// 	return (float)$this->collected_amount ; 
+	// }
+	// public function getTotalCollectedFormatted()
+	// {
+	// 	return number_format($this->getTotalCollected());
+	// }
+	// public function getTotalCollectedOrPaid()
+	// {
+	// 	if($this instanceof CustomerInvoice){
+	// 		return (float)$this->total_collected_amount ; 
+	// 	}
+	// 	elseif($this instanceof SupplierInvoice){
+	// 		return (float)$this->total_paid_amount ; 
+	// 	}
+	// 	throw new \Exception('Custom Exception .. Only Instance Customer Invoice Or Supplier Invoice Allowed');
 		
-	}
+	// }
 	public function getTotalCollectedOrPaidFormatted()
 	{
 		return number_format($this->getTotalCollectedOrPaid());
@@ -289,12 +289,12 @@ trait IsInvoice
 		return $totalSettlementAmounts + $totalSettlementWithholdAmounts ;
 		
 		
-		return DB::table(self::MONEY_RECEIVED_OR_PAYMENT_TABLE_NAME)
-		->where('company_id',getCurrentCompanyId())
-		->where('partner_id',$partnerId)
-		->where('currency',$currencyName)
-		->where('opening_balance_id',null)
-		->whereBetween(self::RECEIVING_OR_PAYMENT_DATE_COLUMN_NAME,[$startDate,$endDate]);
+		// return DB::table(self::MONEY_RECEIVED_OR_PAYMENT_TABLE_NAME)
+		// ->where('company_id',getCurrentCompanyId())
+		// ->where('partner_id',$partnerId)
+		// ->where('currency',$currencyName)
+		// ->where('opening_balance_id',null)
+		// ->whereBetween(self::RECEIVING_OR_PAYMENT_DATE_COLUMN_NAME,[$startDate,$endDate]);
 	}
 	
 	public function deductions()
@@ -328,16 +328,16 @@ trait IsInvoice
 		}
 		return $netBalance + $totalSettlementAmount +  $totalWithholdAmount ;
 	}
-	public function getCollectedOrPaidAmount()
-	{
-		if($this instanceof CustomerInvoice){
-			return $this->collected_amount ;
-		}
-		if($this instanceof SupplierInvoice){
-			return $this->paid_amount ;
-		}
-		throw new \Exception('Custom Exception .. Not Allowed Money Type');
-	}
+	// public function getCollectedOrPaidAmount()
+	// {
+	// 	if($this instanceof CustomerInvoice){
+	// 		return $this->collected_amount ;
+	// 	}
+	// 	elseif($this instanceof SupplierInvoice){
+	// 		return $this->paid_amount ;
+	// 	}
+	// 	throw new \Exception('Custom Exception .. Not Allowed Money Type');
+	// }
 	public static function getInvoicesForInvoiceStartAndEndDate(string $clientIdColumnName,int $partnerId,Company $company , string $currency , string $startDate , string $endDate)
 	{
 		return self::where('company_id', $company->id)
@@ -404,7 +404,7 @@ trait IsInvoice
 	}
 	public function getInvoiceAmount():float
 	{
-		return $this->invoice_amount ; 
+		return $this->invoice_amount?:0 ; 
 	}
 	public function getInvoiceAmountFormatted():string 
 	{

@@ -228,8 +228,8 @@ class Contract extends Model
 		$startDateAsIndex = 0;
 		$increaseInterval = 'annually';
 		$endDateAsIndex = $this->contract_end_date->diffInMonths($this->contract_start_date)+1;
-		$vatRate = $this->vat_rate?:0;
-		$withholdRate = $this->withhold_rate?:0;
+		$vatRate = 0;
+		$withholdRate =0;
 		$monthlyRevenues = (new MonthlyFixedRepeatingAmountEquation())->calculate($amount, $startDateAsIndex, $endDateAsIndex, $increaseInterval, $this->annually_increase_rate, false, $vatRate, $withholdRate,[],null,1);
 		return [
 			'before_vat'=>$monthlyRevenues['total_before_vat'],

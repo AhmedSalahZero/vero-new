@@ -400,14 +400,14 @@ class SalesGatheringController extends Controller
 			'labeling_logo_3'=>$request->has('labeling_logo_3') ? $request->file('labeling_logo_3')->store('logs','public')  : $company->labeling_logo_3,
 			'labeling_stamp'=>$request->has('labeling_stamp') ? $request->file('labeling_stamp')->store('logs','public')  : $company->labeling_stamp,
 		]);
-        $viewing_names = array_values($exportableFields);
-        $db_names = array_keys($exportableFields);
-		$reportTitle = $company->labeling_report_title ; 
-		$hasCodeColumnForLabelingItem = false ;
+        // $viewing_names = array_values($exportableFields);
+        // $db_names = array_keys($exportableFields);
+		// $reportTitle = $company->labeling_report_title ; 
+		// $hasCodeColumnForLabelingItem = false ;
 		$labeling = LabelingItem::where('company_id',$company->id)->get($headers);
-		if($labeling->first() && ($labeling->first()->code || $labeling->first()->Code)){
-			$hasCodeColumnForLabelingItem= true ; 
-		}
+		// if($labeling->first() && ($labeling->first()->code || $labeling->first()->Code)){
+		// 	$hasCodeColumnForLabelingItem= true ; 
+		// }
 		return (new LabelingItemExportAsPdf($labeling))->download('Labeling Item.pdf','Dompdf');
 		
      

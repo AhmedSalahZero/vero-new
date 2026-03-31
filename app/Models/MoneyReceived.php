@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Interfaces\Models\IHasDebitCurrentAccountStatement;
 use App\Models\OpeningBalance;
 use App\Services\Api\OdooPayment;
-use App\Traits\Models\HasCreditStatements;
+use App\Traits\Models\HasCashInSafe;
+use App\Traits\Models\HasDebitCurrentAccountStatement;
+use App\Traits\Models\HasDebitOverdraftStatement;
 use App\Traits\Models\HasDebitStatements;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasNonCustomerOrSupplier;
@@ -65,14 +68,11 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $user_comment
  * @property-read \App\Models\CashInBank|null $cashInBank
  * @property-read \App\Models\CashInSafe|null $cashInSafe
- * @property-read \App\Models\CashInSafeStatement|null $cashInSafeCreditStatement
  * @property-read \App\Models\CashInSafeStatement|null $cashInSafeDebitStatement
  * @property-read \App\Models\Cheque|null $cheque
- * @property-read \App\Models\CleanOverdraftBankStatement|null $cleanOverdraftCreditBankStatement
  * @property-read \App\Models\CleanOverdraftBankStatement|null $cleanOverdraftDebitBankStatement
  * @property-read \App\Models\Company|null $company
  * @property-read \App\Models\Contract|null $contract
- * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountCreditBankStatement
  * @property-read \App\Models\CurrentAccountBankStatement|null $currentAccountDebitBankStatement
  * @property-read \App\Models\Partner|null $customer
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomerInvoice> $customerInvoices
@@ -82,14 +82,11 @@ use Illuminate\Support\Facades\DB;
  * @property-read int|null $down_payment_settlements_count
  * @property-read bool|null $down_payment_settlements_exists
  * @property-read \App\Models\EmployeeStatement|null $employeeStatement
- * @property-read \App\Models\FullySecuredOverdraftBankStatement|null $fullySecuredOverdraftCreditBankStatement
  * @property-read \App\Models\FullySecuredOverdraftBankStatement|null $fullySecuredOverdraftDebitBankStatement
  * @property-read \App\Models\IncomingTransfer|null $incomingTransfer
  * @property-read \App\Models\OpeningBalance|null $openingBalance
  * @property-read \App\Models\OtherPartnerStatement|null $otherPartnerStatement
- * @property-read \App\Models\OverdraftAgainstAssignmentOfContractBankStatement|null $overdraftAgainstAssignmentOfContractCreditBankStatement
  * @property-read \App\Models\OverdraftAgainstAssignmentOfContractBankStatement|null $overdraftAgainstAssignmentOfContractDebitBankStatement
- * @property-read \App\Models\OverdraftAgainstCommercialPaperBankStatement|null $overdraftAgainstCommercialPaperCreditBankStatement
  * @property-read \App\Models\OverdraftAgainstCommercialPaperBankStatement|null $overdraftAgainstCommercialPaperDebitBankStatement
  * @property-read \App\Models\Partner|null $partner
  * @property-read \App\Models\User|null $reviewedBy
@@ -148,9 +145,9 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyReceived whereUserId($value)
  * @mixin \Eloquent
  */
-class MoneyReceived extends Model
+class MoneyReceived extends Model implements IHasDebitCurrentAccountStatement
 {
-	use IsMoney,HasForeignExchangeGainOrLoss ,HasDebitStatements,HasCreditStatements,HasPartnerStatement,HasReviewedBy , HasUserComment,HasNonCustomerOrSupplier;
+	use HasCashInSafe,HasDebitCurrentAccountStatement,HasDebitOverdraftStatement,IsMoney,HasForeignExchangeGainOrLoss ,HasDebitStatements,HasPartnerStatement,HasReviewedBy , HasUserComment,HasNonCustomerOrSupplier;
 
 	const CASH_IN_SAFE  = 'cash-in-safe';
 	const CASH_IN_BANK  = 'cash-in-bank';
@@ -258,9 +255,7 @@ class MoneyReceived extends Model
 			if($moneyReceived->isGeneralDownPayment()&&$moneyReceived->isDownPayment()){
 				return __('Cash In Safe From :name - General Down Payment',['name'=>$customerName],$lang) ;
 			}
-			if($moneyReceived->isSettlementOfOpeningBalance()&&$moneyReceived->isDownPayment()){
-				return __('Cash In Safe From :name - Opening Balance Settlement',['name'=>$customerName],$lang) ;
-			}
+			
 			return __('Cash In Safe From :name Settled Invoices [ :numbers ]',['name'=>$customerName,'numbers'=>$settledInvoiceNumbers],$lang) ;
 		}
 		if($moneyReceived->isCashInBank()){
@@ -293,16 +288,28 @@ class MoneyReceived extends Model
 		}
 		if($moneyReceived->isIncomingTransfer()){
 			
-			if($moneyReceived->isGeneralDownPayment()){
+			if($moneyReceived->isGeneralDownPayment()&&$moneyReceived->isDownPayment()){
+				return __('Incoming Transfer :name - General Down Payment',['name'=>$customerName],$lang) ;
+			}
+			elseif($moneyReceived->isOverContractDownPayment() && $moneyReceived->isDownPayment()){
+				return __('Incoming Transfer :name - Contract Down Payment [ :contractName ] [ :contractCode ]',['name'=>$customerName,
+			'contractName'=>$moneyReceived->getContractName(),
+			'contractCode'=>$moneyReceived->getContractCode()
+			],$lang) ;
+			}
+			elseif($moneyReceived->isGeneralDownPayment()){
 				return __('General Down Payment - Incoming Transfer :name',['name'=>$customerName],$lang) ;
 			}
-			if($moneyReceived->isSettlementOfOpeningBalance()){
+			elseif($moneyReceived->isSettlementOfOpeningBalance()&&$moneyReceived->isDownPayment()){
+				return __('Incoming Transfer :name - Opening Balance Settlement',['name'=>$customerName],$lang) ;
+			}
+			elseif($moneyReceived->isSettlementOfOpeningBalance()){
 				return __('Opening Balance Settlement - Incoming Transfer :name',['name'=>$customerName],$lang) ;
 			}
-			if($moneyReceived->isOverContractDownPayment()){
+			elseif($moneyReceived->isOverContractDownPayment()){
 				return __('Down Payment - Incoming Transfer :name [ :contractName ] [ :contractCode ]',['name'=>$customerName,'contractName'=>$moneyReceived->getContractName(),'contractCode'=>$moneyReceived->getContractCode()],$lang) ;
 			}
-			if($moneyReceived->isInvoiceSettlementWithDownPayment()){
+			elseif($moneyReceived->isInvoiceSettlementWithDownPayment()){
 				return __('Incoming Transfer :name Settled Invoices [ :numbers ] [ :currency ] | Down Payment - [ :contractName ] [ :contractCode ]',[
 					'name'=>$customerName ,
 					'numbers'=>$settledInvoiceNumbers ,
@@ -311,19 +318,10 @@ class MoneyReceived extends Model
 					'contractCode'=>$moneyReceived->getContractCode()
 				]);
 			}
-			if($moneyReceived->isGeneralDownPayment()&&$moneyReceived->isDownPayment()){
-				return __('Incoming Transfer :name - General Down Payment',['name'=>$customerName],$lang) ;
-			}
-			if($moneyReceived->isSettlementOfOpeningBalance()&&$moneyReceived->isDownPayment()){
-				return __('Incoming Transfer :name - Opening Balance Settlement',['name'=>$customerName],$lang) ;
-			}
-			if($moneyReceived->isOverContractDownPayment() && $moneyReceived->isDownPayment()){
-				return __('Incoming Transfer :name - Contract Down Payment [ :contractName ] [ :contractCode ]',['name'=>$customerName,
-			'contractName'=>$moneyReceived->getContractName(),
-			'contractCode'=>$moneyReceived->getContractCode()
-			],$lang) ;
-			}
-			if($moneyReceived->getPartnerType()!='is_customer'){
+			
+			
+			
+			elseif($moneyReceived->getPartnerType()!='is_customer'){
 				return __('Incoming Transfer :name [ :partnerType ]',['name'=>$customerName,'partnerType'=>$moneyReceived->getPartnerTypeFormatted()],$lang) ;
 			}
 			return __('Incoming Transfer :name Settled Invoices [ :numbers ]',['name'=>$customerName,'numbers'=>$settledInvoiceNumbers],$lang) ;
@@ -486,16 +484,17 @@ class MoneyReceived extends Model
 	{
 		return strtoupper($this->getReceivingCurrency());
 	}
+	public function getReceivingOrPaymentCurrency()
+	{
+		return $this->getReceivingCurrency();
+	}
 
 	public function getExchangeRate()
 	{
 		
 		return $this->exchange_rate?:1;
 	}
-	public function getPaymentBankName()
-	{
-		return '-';
-	}
+
 
 
     public function getCashInSafeReceiptNumber()
@@ -575,11 +574,11 @@ class MoneyReceived extends Model
 		$cashInBank = $this->cashInBank ;
         return $cashInBank ? $cashInBank->getReceivingBankId() : 0 ;
     }
-	public function cashInBankReceivingBank():?FinancialInstitution
-	{
-		$cashInBank = $this->cashInBank ;
-		return $cashInBank ? $cashInBank->receivingBank() : null ;
-	}
+	// public function cashInBankReceivingBank():?FinancialInstitution
+	// {
+	// 	$cashInBank = $this->cashInBank ;
+	// 	return $cashInBank ? $cashInBank->receivingBank: null ;
+	// }
 	public function getFinancialInstitutionId()
 	{
 		if($this->isCashInBank()){
@@ -775,10 +774,7 @@ class MoneyReceived extends Model
 		$date = $this->getChequeDepositDate();
 		return $date ? Carbon::make($date)->format('d-m-Y') : null;
 	}
-	public function getChequeFinancialInstitutionOpeningBalanceDate()
-	{
-		// return $this->cheque && $this->cheque->drawlBank 
-	}
+	
 	
 	
 	
@@ -976,18 +972,18 @@ class MoneyReceived extends Model
 		$this->cashInBank ? $this->cashInBank->delete() :null ;
 		$this->cashInSafe ? $this->cashInSafe->delete() :null ;
 		$this->cheque ? $this->cheque->delete() :null ;
-		$this->cleanOverdraftCreditBankStatement ? $this->cleanOverdraftCreditBankStatement->delete() :null ;
-		$this->fullySecuredOverdraftCreditBankStatement ? $this->fullySecuredOverdraftCreditBankStatement->delete() :null ;
+		// $this->cleanOverdraftCreditBankStatement ? $this->cleanOverdraftCreditBankStatement->delete() :null ;
+		// $this->fullySecuredOverdraftCreditBankStatement ? $this->fullySecuredOverdraftCreditBankStatement->delete() :null ;
+		// $this->cashInSafeCreditStatement ? $this->cashInSafeCreditStatement->delete() :null ;
 		$this->cleanOverdraftDebitBankStatement ? $this->cleanOverdraftDebitBankStatement->delete() :null ;
 		$this->fullySecuredOverdraftDebitBankStatement ? $this->fullySecuredOverdraftDebitBankStatement->delete() :null ;
 		$this->overdraftAgainstCommercialPaperDebitBankStatement ? $this->overdraftAgainstCommercialPaperDebitBankStatement->delete() :null ;
 		$this->overdraftAgainstAssignmentOfContractDebitBankStatement ? $this->overdraftAgainstAssignmentOfContractDebitBankStatement->delete() :null ;
 		$this->cashInSafeDebitStatement ? $this->cashInSafeDebitStatement->delete() :null ;
 		$this->currentAccountDebitBankStatement ? $this->currentAccountDebitBankStatement->delete() :null ;
-		$this->currentAccountCreditBankStatement ? $this->currentAccountCreditBankStatement->delete() :null ;
-		$this->cashInSafeCreditStatement ? $this->cashInSafeCreditStatement->delete() :null ;
-		$this->overdraftAgainstAssignmentOfContractCreditBankStatement ? $this->overdraftAgainstAssignmentOfContractCreditBankStatement->delete() :null ;
-		$this->overdraftAgainstCommercialPaperCreditBankStatement ? $this->overdraftAgainstCommercialPaperCreditBankStatement->delete() :null ;
+		// $this->currentAccountCreditBankStatement ? $this->currentAccountCreditBankStatement->delete() :null ;
+		// $this->overdraftAgainstAssignmentOfContractCreditBankStatement ? $this->overdraftAgainstAssignmentOfContractCreditBankStatement->delete() :null ;
+		// $this->overdraftAgainstCommercialPaperCreditBankStatement ? $this->overdraftAgainstCommercialPaperCreditBankStatement->delete() :null ;
 		// $this->$oldTypeRelationName ? $this->$oldTypeRelationName->delete() : null;
 		
 		$this->downPaymentSettlements->each(function($downPaymentSettlement){
@@ -1010,9 +1006,6 @@ class MoneyReceived extends Model
 		}	
 		if($this->overdraftAgainstAssignmentOfContractDebitBankStatement){
 			return $this->overdraftAgainstAssignmentOfContractDebitBankStatement;
-		}
-		if($this->overdraftDebitBankStatement){
-			return $this->overdraftDebitBankStatement ;
 		}
 		if($this->cashInSafeDebitStatement){
 			return $this->cashInSafeDebitStatement;
@@ -1037,57 +1030,57 @@ class MoneyReceived extends Model
 		}
 		return $this->getReceivingDate();
 	}
-	public function overdraftAgainstCommercialPaperCreditBankStatement()
-	{
-		return $this->hasOne(OverdraftAgainstCommercialPaperBankStatement::class,'money_received_id','id');
-	}
-	public function currentAccountCreditBankStatement()
-	{
-		return $this->hasOne(CurrentAccountBankStatement::class,'money_received_id','id');
-	}
+	// public function overdraftAgainstCommercialPaperCreditBankStatement()
+	// {
+	// 	return $this->hasOne(OverdraftAgainstCommercialPaperBankStatement::class,'money_received_id','id');
+	// }
+	// public function currentAccountCreditBankStatement()
+	// {
+	// 	return $this->hasOne(CurrentAccountBankStatement::class,'money_received_id','id');
+	// }
 	
-	public function cashInSafeCreditStatement()
-	{
-		return $this->hasOne(CashInSafeStatement::class,'money_received_id','id');
-	}
-	public function overdraftAgainstAssignmentOfContractCreditBankStatement()
-	{
-		return $this->hasOne(OverdraftAgainstAssignmentOfContractBankStatement::class,'money_received_id','id');
-	}
-	public static function getChequesCollectedUnderDates(int $companyId , string $startDate , string $endDate,string $currency,string $chequeStatus,string $dateColumnName ) 
-	{
-		return  DB::table('money_received')
-		->where('type',MoneyReceived::CHEQUE)
-		->where('money_received.currency',$currency)
-		->join('cheques','cheques.money_received_id','=','money_received.id')
-		->where('money_received.company_id',$companyId)
-		->whereBetween('cheques.'.$dateColumnName,[$startDate,$endDate])
-		->where('cheques.status',$chequeStatus)
-		->sum('received_amount');
-	}
-	public static function getIncomingTransferUnderDates(int $companyId , string $startDate , string $endDate,string $currency,$customerName = null , $contractCode = null) 
-	{
-		$isContract = $customerName && $contractCode ;
-		$sumColumnName = $isContract ? 'settlement_amount' : 'received_amount' ;
+	// public function cashInSafeCreditStatement()
+	// {
+	// 	return $this->hasOne(CashInSafeStatement::class,'money_received_id','id');
+	// }
+	// public function overdraftAgainstAssignmentOfContractCreditBankStatement()
+	// {
+	// 	return $this->hasOne(OverdraftAgainstAssignmentOfContractBankStatement::class,'money_received_id','id');
+	// }
+	// public static function getChequesCollectedUnderDates(int $companyId , string $startDate , string $endDate,string $currency,string $chequeStatus,string $dateColumnName ) 
+	// {
+	// 	return  DB::table('money_received')
+	// 	->where('type',MoneyReceived::CHEQUE)
+	// 	->where('money_received.currency',$currency)
+	// 	->join('cheques','cheques.money_received_id','=','money_received.id')
+	// 	->where('money_received.company_id',$companyId)
+	// 	->whereBetween('cheques.'.$dateColumnName,[$startDate,$endDate])
+	// 	->where('cheques.status',$chequeStatus)
+	// 	->sum('received_amount');
+	// }
+	// public static function getIncomingTransferUnderDates(int $companyId , string $startDate , string $endDate,string $currency,$customerName = null , $contractCode = null) 
+	// {
+	// 	$isContract = $customerName && $contractCode ;
+	// 	$sumColumnName = $isContract ? 'settlement_amount' : 'received_amount' ;
 		
-			return  DB::table('money_received')
-		->where('type',MoneyReceived::INCOMING_TRANSFER)
-		->where('money_received.company_id',$companyId)
-		->where('money_received.currency',$currency)
-		->join('incoming_transfers','incoming_transfers.money_received_id','=','money_received.id')
-		->where('money_received.company_id',$companyId)
-		->whereBetween('money_received.receiving_date',[$startDate,$endDate])
-		->when($isContract , function(Builder $builder) use ($contractCode){
-			$builder->join('customer_invoices','customer_invoices.customer_id' ,'=','money_received.partner_id')
-			->where('customer_invoices.contract_code',$contractCode)
-			->join('settlements',function(Builder $builder){
-				$builder->on('money_received.id','=','settlements.money_received_id')
-				->on('settlements.invoice_id','customer_invoices.id');
-			})
-			;
-		})
-		->sum($sumColumnName);
-	}
+	// 		return  DB::table('money_received')
+	// 	->where('type',MoneyReceived::INCOMING_TRANSFER)
+	// 	->where('money_received.company_id',$companyId)
+	// 	->where('money_received.currency',$currency)
+	// 	->join('incoming_transfers','incoming_transfers.money_received_id','=','money_received.id')
+	// 	->where('money_received.company_id',$companyId)
+	// 	->whereBetween('money_received.receiving_date',[$startDate,$endDate])
+	// 	->when($isContract , function(Builder $builder) use ($contractCode){
+	// 		$builder->join('customer_invoices','customer_invoices.customer_id' ,'=','money_received.partner_id')
+	// 		->where('customer_invoices.contract_code',$contractCode)
+	// 		->join('settlements',function(Builder $builder){
+	// 			$builder->on('money_received.id','=','settlements.money_received_id')
+	// 			->on('settlements.invoice_id','customer_invoices.id');
+	// 		})
+	// 		;
+	// 	})
+	// 	->sum($sumColumnName);
+	// }
 	public static function getBankDepositsUnderDates(int $companyId , string $startDate , string $endDate,string $currency) 
 	{
 		return  DB::table('money_received')
@@ -1217,14 +1210,14 @@ class MoneyReceived extends Model
 		
 		return $financialInstitution->getJournalIdForAccount($this->getAccountTypeId(),$this->getAccountNumber());
 	}
-	public function cleanOverdraftCreditBankStatement()
-	{
-		return $this->hasOne(CleanOverdraftBankStatement::class,'money_received_id','id');
-	}	
-	public function fullySecuredOverdraftCreditBankStatement()
-	{
-		return $this->hasOne(FullySecuredOverdraftBankStatement::class,'money_received_id','id');
-	}
+	// public function cleanOverdraftCreditBankStatement()
+	// {
+	// 	return $this->hasOne(CleanOverdraftBankStatement::class,'money_received_id','id');
+	// }	
+	// public function fullySecuredOverdraftCreditBankStatement()
+	// {
+	// 	return $this->hasOne(FullySecuredOverdraftBankStatement::class,'money_received_id','id');
+	// }
 	public function getCustomerOrSupplier():string 
 	{
 		return 'customer';
@@ -1305,5 +1298,14 @@ class MoneyReceived extends Model
 	//	throw New Exception('Transaction Type ' . $transactionType . ' Does Not Have Account Id');
 		
 	}
+	public function isChequeOrChequePayment():bool
+	{
+		return $this->isCheque();
+	}
+	public function isChequeAndNotCustomerOrSupplier()
+	{
+		return $this->isChequeOrChequePayment() && (!in_array($this->getPartnerType(),['is_customer','is_supplier']));
+	}
+	
 	
 }

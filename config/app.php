@@ -179,7 +179,6 @@ return [
 		App\Providers\RouteServiceProvider::class,
 		App\Providers\NonBankingServiceProvider::class,
 		App\Providers\PropertyManagementServiceProvider::class,
-		App\Providers\FinancialPlanningServiceProvider::class,
 		App\Providers\FinancialStatementServiceProvider::class,
 		App\Providers\BlueprintMacroServiceProvider::class,
 	

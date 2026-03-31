@@ -172,17 +172,14 @@ trait IsMoney
         return number_format($this->getDownPaymentAmount());
     }
    
-    public function getReceivingOrPaymentCurrency():string
-    {
-        if ($this instanceof MoneyReceived) {
-            return $this->getReceivingCurrency();
-        }
-        return $this->getPaymentCurrency();
-        // if($this instanceof MoneyPayment){
-        // 	return
-        // }
-        // throw new \Exception('Customer Exception Invalid Money Type');
-    }
+    // public function getReceivingOrPaymentCurrency():string
+    // {
+    //     if ($this instanceof MoneyReceived) {
+    //         return $this->getReceivingCurrency();
+    //     }
+    //     return $this->getPaymentCurrency();
+
+    // }
     public function getReceivingOrPaymentMoneyDate():string
     {
         if ($this instanceof MoneyReceived) {
@@ -408,17 +405,18 @@ trait IsMoney
         
         
     }
-    public function isChequeOrChequePayment():bool
-    {
-        if ($this instanceof MoneyReceived) {
-            return $this->isCheque();
-        }
-        return $this->isPayableCheque();
-    }
+    // public function isChequeOrChequePayment():bool
+    // {
+    //     if ($this instanceof MoneyReceived) {
+    //         return $this->isCheque();
+    //     }
+    //     return $this->isPayableCheque();
+    // }
     public function getChequeJournalId()
     {
         $this->refresh();
-        if ($cheque = $this->cheque) {
+        if ($this instanceof MoneyReceived) {
+			$cheque = $this->cheque;
             if ($cheque->isInSafe()) {
                 return $cheque->branch->getJournalId();
             }
@@ -430,7 +428,7 @@ trait IsMoney
             return $financialInstitution->getJournalIdForAccount($accountTypeId, $accountNumber);
                 
         }
-        if ($this instanceof MoneyPayment ) {
+        // elseif ($this instanceof MoneyPayment ) {
 			$payableCheque = $this->payableCheque;
 			if($payableCheque){
 				$financialInstitution = $payableCheque->deliveryBank;
@@ -440,14 +438,15 @@ trait IsMoney
 					
 				
 			}
-        }
+        // }
     
         return 0 ;
     }
     
     public function getChequeOdooId():int
     {
-        if ($cheque = $this->cheque) {
+        if ($this instanceof MoneyReceived) {
+			$cheque = $this->cheque;
             if ($cheque->isInSafe()) {
                 return $cheque->branch->getOdooId();
             }
@@ -476,13 +475,15 @@ trait IsMoney
         
     }
     
-    public function markOpeningPayableChequeAsPaidInOdoo($isMoneyReceived = false)
+    public function markOpeningPayableChequeAsPaidInOdoo(bool $isMoneyReceived)
     {
         $cheque = null;
         if ($this instanceof MoneyReceived) {
+			/** @phpstan-ignore-next-line */
 			$cheque = $this->cheque;
 		}
-		if ($this instanceof MoneyPayment || $this instanceof CashExpense) {
+		if ($this instanceof MoneyPayment) {
+			/** @phpstan-ignore-next-line */
 			$cheque = $this->payableCheque;
 		}
 		if(!$cheque){
@@ -493,7 +494,8 @@ trait IsMoney
         //  $odooPaymentService = new OdooPayment($company);
         $odooSetting = $company->odooSetting;
         $financialInstitution = $isMoneyReceived ? $cheque->drawlBank : $cheque->deliveryBank;
-        $currency = $isMoneyReceived ? $this->getReceivingCurrency() :  $this->getPaymentCurrency();
+		/** @phpstan-ignore-next-line */
+        $currency = $isMoneyReceived  ? $this->getReceivingCurrency() :  $this->getPaymentCurrency();
         $hasSettlements =  $this->settlements->count()  ;
         // $hasSettlements = $this->settlements && $this->settlements->count()  ;
         $items = $hasSettlements ? $this->settlements : [$this];
@@ -554,7 +556,10 @@ trait IsMoney
 			}
 			return $receivingOrPaidToText .' '. $partnerTypeFormatted ;
 	}
-    
+	public function getTransactionType()
+    {
+        return $this->transaction_type;
+    }
     // public function markOpeningReceivedChequeAsPaidInOdoo()
     // {
     //     $actualPaymentDate = $this->payableCheque->actual_payment_date  ;

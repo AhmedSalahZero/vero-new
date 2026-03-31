@@ -584,8 +584,11 @@ class CheckDueAndPastedInvoicesJob implements ShouldQueue
 			foreach ($currentPayableCheques as $currentPayableCheque) {
 				$invoiceDueDate = $currentPayableCheque->due_date ;
 				$chequeNumber = $currentPayableCheque->cheque_number;
-				$chequeAmount = number_format($currentPayableCheque->paid_amount) ;
-				$supplierName = $currentPayableCheque->name ;
+				$chequeAmountValue = $currentPayableCheque->moneyPayment?->getPaidAmount()
+					?? $currentPayableCheque->cashExpenses?->getPaidAmount()
+					?? 0;
+				$chequeAmount = number_format($chequeAmountValue) ;
+				$supplierName = $currentPayableCheque->moneyPayment?->getSupplierName() ?? __('N/A');
 				$bankName = $currentPayableCheque->getDeliveryBankName();
 				$dueDays = Carbon::make(now()->format($dateFormat))->diffInDays(Carbon::make($invoiceDueDate));
 				$messageEn = __('Cheque Number ',[],'en') . $chequeNumber . ' ' . __('Is Past Due Since ',[],'en') . ' ' . $dueDays . ' ' . __('days For Bank',[],'en') . $bankName ;
@@ -604,8 +607,11 @@ class CheckDueAndPastedInvoicesJob implements ShouldQueue
 			foreach ($comingPayableCheques as $comingPayableCheque) {
 				$invoiceDueDate = $comingPayableCheque->due_date ;
 				$chequeNumber = $comingPayableCheque->cheque_number;
-				$chequeAmount = number_format($comingPayableCheque->paid_amount) ;
-				$supplierName = $comingPayableCheque->name ;
+				$chequeAmountValue = $comingPayableCheque->moneyPayment?->getPaidAmount()
+					?? $comingPayableCheque->cashExpense?->getPaidAmount()
+					?? 0;
+				$chequeAmount = number_format($chequeAmountValue) ;
+				$supplierName = $comingPayableCheque->moneyPayment?->getSupplierName() ?? __('N/A');
 				$bankName = $comingPayableCheque->getDeliveryBankName();
 				$dueDays = Carbon::make(now()->format($dateFormat))->diffInDays(Carbon::make($invoiceDueDate));
 				$messageEn = __('Cheque Number ',[],'en') . $chequeNumber . ' ' . __('Is Due After ',[],'en') . ' ' . $dueDays . ' ' . __('days For Bank',[],'en') . $bankName ;

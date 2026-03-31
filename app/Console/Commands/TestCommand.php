@@ -2,21 +2,19 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\CustomerInvoiceDashboardController;
 use App\Http\Controllers\LetterOfGuaranteeIssuanceController;
 use App\Http\Controllers\NonBankingServices\DirectFactoringController;
 use App\Http\Controllers\ReadOdooInvoices;
 use App\Models\Company;
 use App\Models\FinancialStatement;
-
 use App\Models\MoneyPayment;
-
 use App\Models\NonBankingService\CashAndBankOpeningBalance;
 use App\Models\NonBankingService\Expense;
 use App\Models\NonBankingService\Study;
 use App\Models\Partner;
 use App\Models\PropertyManagement\Category;
 use App\Models\PropertyManagement\Contract;
-
 use App\Models\PropertyManagement\Ownership;
 use App\Models\Settlement;
 use App\Models\SupplierInvoice;
@@ -54,13 +52,29 @@ class TestCommand extends Command
 	{
 	
 	}
-	public function testConnectionToOdoo()
-	{
-		
-	}
+	public function testRefreshBankMovementChart(): void
+{
+    $company = Company::find(92); // عدّل الـ ID حسب شركتك
+    if (!$company) {
+        $this->error('Company not found');
+        return;
+    }
+    $request = new Request([
+        'currencyName'  => 'EGP',                   // عدّلها
+        'accountNumber' => '1234567890',            // عدّلها
+        'date'          => '2026-03-18',            // عدّلها
+        'modelName'     => 'FinancialInstitutionAccount', // لازم يكون موجود داخل App\Models
+        'bankId'        => 1,                       // عدّلها
+    ]);
+    $controller = new CustomerInvoiceDashboardController();
+    $response = $controller->refreshBankMovementChart($request, $company);
+    // response()->json(...) يرجّع JsonResponse
+    $this->info($response->getContent());
+}
 	
 	public function handle()
 	{	
+		$this->testRefreshBankMovementChart();
 	// 	$odooPaymentService = (new OdooPayment(Company::find(92)));
 	// 	$res=$fetch->fetchData('account.move',[],[[['id','=',14783]]]);
 	//  $res=$odooPaymentService->fetchData('account.move.line',[],[[['id','=',33960]]]);

@@ -57,13 +57,15 @@ class NewBranchMicrofinanceOpeningProjection extends Model
 		parent::boot();
 		static::saving(function(self $model){
 			$study = $model->study ;
-			if(!is_numeric($model->start_date)){
-				$startDate = $model->start_date.'-01';
+			/** @phpstan-ignore-next-line */
+			if (is_string($model->start_date)) {
+				$startDate = $model->start_date . '-01';
 				$startDateAsIndex = $study->convertDateStringToDateIndex($startDate);
 				$model->start_date = $startDateAsIndex;
 			}
-			if(!is_numeric($model->operation_date)){
-				$operationDate = $model->operation_date.'-01';
+			/** @phpstan-ignore-next-line */
+			if (is_string($model->operation_date)) {
+				$operationDate = $model->operation_date . '-01';
 				$operationDateAsIndex = $study->convertDateStringToDateIndex($operationDate);
 				$model->operation_date = $operationDateAsIndex;
 			}
@@ -81,9 +83,6 @@ class NewBranchMicrofinanceOpeningProjection extends Model
 	 public function getStartDateYearAndMonth()
     {
         $studyStartDate = $this->getStartDateAsString() ;
-        if (is_null($studyStartDate)) {
-            return now()->format('Y-m');
-        }
         return Carbon::make($studyStartDate)->format('Y-m');
     }
 	public function getEndDateAsIndex(int $rightOfUserDuration):int
@@ -107,9 +106,7 @@ class NewBranchMicrofinanceOpeningProjection extends Model
 	 public function getOperationDateYearAndMonth()
     {
         $studyStartDate = $this->getOperationDateAsString() ;
-        if (is_null($studyStartDate)) {
-            return now()->format('Y-m');
-        }
+       
         return Carbon::make($studyStartDate)->format('Y-m');
     }
 	public function getTotalBranches():int

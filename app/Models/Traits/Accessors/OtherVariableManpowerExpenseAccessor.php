@@ -7,14 +7,7 @@ trait OtherVariableManpowerExpenseAccessor
         return $this->id ; 
     }
 
-     public function getCompanyId():int
-    {
-        return $this->company->id ?? $this->company_id ; 
-    }
-    public function getCompanyName():string
-    {
-        return $this->company->getName() ;
-    }
+   
     public function getCreatorName():string
     {
         return $this->creator->name ?? __('N/A');

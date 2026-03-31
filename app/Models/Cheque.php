@@ -521,14 +521,14 @@ class Cheque extends Model
 
     public function handleOverdraftAgainstCommercialPaperLimit(): void
     {
+		$companyId = $this->company_id ?: getCurrentCompanyId();
         /**
          * @var AccountType $accountType
          */
-		$companyId = $this->company_id ?: getCurrentCompanyId();
         $accountType = AccountType::find($this->getAccountType());
         $overdraftAgainstCommercialPaper = OverdraftAgainstCommercialPaper::where('account_number', $this->getAccountNumber())->where('company_id',$companyId)->first();
 
-        if ($accountType && $accountType->isOverdraftAgainstCommercialPaperAccount() && $overdraftAgainstCommercialPaper) {
+        if ($accountType->isOverdraftAgainstCommercialPaperAccount() && $overdraftAgainstCommercialPaper) {
             $currentPaperLimitRow = $this->overdraftAgainstCommercialPaperLimits()->create([
                 'company_id' => $companyId,
                 'overdraft_against_commercial_paper_id' => $overdraftAgainstCommercialPaper->id

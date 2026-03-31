@@ -100,14 +100,14 @@ class LcSettlementInternalMoneyTransfer extends Model
 			$lcMoneyTransfer->to_comment_ar = self::generateToAccountComment($lcMoneyTransfer,'ar');
 		});
 	}
-	public function isCredit()
-	{
-		return (bool) $this->is_credit ;
-	}
-	public function isDebit()
-	{
-		return (bool) $this->is_debit ;
-	}
+	// public function isCredit()
+	// {
+	// 	return (bool) $this->is_credit ;
+	// }
+	// public function isDebit()
+	// {
+	// 	return (bool) $this->is_debit ;
+	// }
 	
 	public static function getAllTypes()
 	{
@@ -126,15 +126,15 @@ class LcSettlementInternalMoneyTransfer extends Model
 		return $this->getType() == self::BANK_TO_LETTER_OF_CREDIT;
 	}
 	
-    public function getTransferDays()
-    {
-        return $this->transfer_days ?: 0 ;
-    }
-	public function getReceivingDateFormatted()
-	{
+    // public function getTransferDays()
+    // {
+    //     return $this->transfer_days ?: 0 ;
+    // }
+	// public function getReceivingDateFormatted()
+	// {
 		
-		return Carbon::make($this->getTransferDate())->addDays($this->getTransferDays())->format('d-m-Y') ;
-	}
+	// 	return Carbon::make($this->getTransferDate())->addDays($this->getTransferDays())->format('d-m-Y') ;
+	// }
     public function setTransferDateAttribute($value)
     {
         if (!$value) {
@@ -216,10 +216,7 @@ class LcSettlementInternalMoneyTransfer extends Model
         return number_format($this->getAmount(), 0);
     }
 
-	public function getChequeNumber()
-	{
-		return $this->cheque_number ; 
-	}
+
 	
 	public function currentAccountBankStatements()
     {
@@ -245,10 +242,8 @@ class LcSettlementInternalMoneyTransfer extends Model
 	 */
 	public function handleBankTransfer(int $companyId , int $fromFinancialInstitutionId , AccountType $fromAccountType , string $fromAccountNumber ,string $transferDate  , $debitAmount , $creditAmount , $commentEn , $commentAr)
 	{
-		if($fromAccountType && $fromAccountType->isCurrentAccount()){
-			/**
-			 * @var CleanOverdraft $fromCleanOverdraft
-			 */
+		if( $fromAccountType->isCurrentAccount()){
+		
 			$fromCurrentAccount = FinancialInstitutionAccount::findByAccountNumber($fromAccountNumber,$companyId,$fromFinancialInstitutionId);
 			CurrentAccountBankStatement::create([
 				'financial_institution_account_id'=>$fromCurrentAccount->id ,

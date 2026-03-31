@@ -47,16 +47,16 @@ class Date
 			// $dates = $this->generateDatesBetweenTwoDates(Carbon::make($date), Carbon::make($date)->addMonthsNoOverflow($durationInMonths));
 			
 		}
-		if (count($dates)) {
+		// if (count($dates)) {
 			
 			
 			
-			$lastKey = array_key_last($dates);
+		// 	$lastKey = array_key_last($dates);
 		
-			return $dates[$lastKey];
-		}
+		// 	return $dates[$lastKey];
+		// }
 
-		return null;
+		// return null;
 	}
 
 	// public function generateDatesBetweenTwoDatesWithLastDay(Carbon $start_date, Carbon $end_date, $method = 'addMonthsNoOverflow',$debug  = false)

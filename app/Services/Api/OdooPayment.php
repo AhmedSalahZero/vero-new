@@ -3,7 +3,6 @@ namespace App\Services\Api;
 
 use App\Models\Company;
 use App\Models\Currency;
-use App\Models\Settlement;
 use App\Services\Api\Traits\AuthTrait;
 use App\Services\Api\Traits\HasJournal;
 use App\Services\Api\Traits\HasPayment;
@@ -345,7 +344,7 @@ class OdooPayment
                 [[$accountPayment_id], ['state', 'move_id', 'reconciled_invoice_ids', 'is_matched']],
                 []
             );
-            if (!$paymentData || !is_array($paymentData) || empty($paymentData)) {
+            if (!$paymentData || !is_array($paymentData) ) {
                 throw new Exception("Payment ID $accountPayment_id not found or invalid response");
             }
 
@@ -564,7 +563,7 @@ class OdooPayment
             );
 
 
-            if (!$paymentData || !is_array($paymentData) || empty($paymentData)) {
+            if (!$paymentData || !is_array($paymentData) ) {
                 throw new Exception("Payment ID $accountPayment_id not found or invalid response");
             }
 
@@ -869,45 +868,39 @@ class OdooPayment
    
 
 
-    /**
-     * Unreconcile (remove reconciliation)
-     * 
-     * @param int $moveId
-     * @return array
-     */
  
 	
- public function getAccountMoveLines($moveId, $accountType = 'receivable')
-{
-    $accountInternalType = $accountType === 'receivable' 
-        ? 'asset_receivable' 
-        : 'liability_payable';
+//  public function getAccountMoveLines($moveId, $accountType = 'receivable')
+// {
+//     $accountInternalType = $accountType === 'receivable' 
+//         ? 'asset_receivable' 
+//         : 'liability_payable';
 
-    $move = $this->execute(
-        'account.move',
-        'search_read',
-        [[['id', '=', $moveId]]],
-        ['fields' => ['line_ids', 'partner_id']]
-    );
+//     $move = $this->execute(
+//         'account.move',
+//         'search_read',
+//         [[['id', '=', $moveId]]],
+//         ['fields' => ['line_ids', 'partner_id']]
+//     );
 
-    if (empty($move)) {
-        throw new \Exception("Move ID {$moveId} not found");
-    }
+//     if (empty($move)) {
+//         throw new \Exception("Move ID {$moveId} not found");
+//     }
 
-    $lineIds = $move[0]['line_ids'];
+//     $lineIds = $move[0]['line_ids'];
 
-    $lines = $this->execute(
-        'account.move.line',
-        'search_read',
-        [[
-            ['id', 'in', $lineIds],
-            ['account_id.account_type', '=', $accountInternalType],
-            ['reconciled', '=', false]
-        ]],
-        ['fields' => ['id', 'debit', 'credit', 'amount_residual', 'account_id', 'name']]
-    );
-    return $lines;
-}
+//     $lines = $this->execute(
+//         'account.move.line',
+//         'search_read',
+//         [[
+//             ['id', 'in', $lineIds],
+//             ['account_id.account_type', '=', $accountInternalType],
+//             ['reconciled', '=', false]
+//         ]],
+//         ['fields' => ['id', 'debit', 'credit', 'amount_residual', 'account_id', 'name']]
+//     );
+//     return $lines;
+// }
 
 
 
@@ -923,15 +916,7 @@ class OdooPayment
 	
 	
 	
-	/**
-     * Partial reconciliation - Match specific amount from down payment to invoice
-     * 
-     * @param int $downPaymentMoveId - The account.move ID of the down payment
-     * @param int $invoiceMoveId - The account.move ID of the invoice
-     * @param float $amountToMatch - The amount to match (e.g., 5000 from 20000)
-     * @param string $accountType - 'receivable' for customer, 'payable' for supplier
-     * @return array
-     */
+	
   
 		
 // 	public function partialReconcile($advanceMoveId, $invoiceMoveId, $amount, $advanceAccountType = 'receivable', $invoiceAccountType = 'payable')
@@ -1076,14 +1061,7 @@ class OdooPayment
 
 	
 
-    /**
-     * Reconcile multiple down payments with one invoice
-     * 
-     * @param array $downPaymentMoveIds - Array of account.move IDs for down payments
-     * @param int $invoiceMoveId - The account.move ID of the invoice
-     * @param string $accountType - 'receivable' for customer, 'payable' for supplier
-     * @return array
-     */
+   
     // public function reconcileMultipleDownPayments($downPaymentMoveIds, $invoiceMoveId, $accountType = 'receivable')
     // {
     //     try {
@@ -1136,128 +1114,118 @@ class OdooPayment
     //     }
     // }
 
-    /**
-     * Get reconciliation status
-     * 
-     * @param int $moveId
-     * @return array
-     */
- public function getReconciliationStatus($moveId)
-{
-    $lines = $this->execute(
-        'account.move.line',
-        'search_read',
-        [[
-            ['move_id', '=', $moveId],
-            ['account_id.account_type', 'in', ['asset_receivable', 'liability_payable']]
-        ]],
-        ['fields' => ['id', 'reconciled', 'full_reconcile_id', 'amount_residual', 'amount_residual_currency', 'matched_debit_ids', 'matched_credit_ids', 'debit', 'credit']]
-    );
+   
+//  public function getReconciliationStatus($moveId)
+// {
+//     $lines = $this->execute(
+//         'account.move.line',
+//         'search_read',
+//         [[
+//             ['move_id', '=', $moveId],
+//             ['account_id.account_type', 'in', ['asset_receivable', 'liability_payable']]
+//         ]],
+//         ['fields' => ['id', 'reconciled', 'full_reconcile_id', 'amount_residual', 'amount_residual_currency', 'matched_debit_ids', 'matched_credit_ids', 'debit', 'credit']]
+//     );
 
-    return $lines;
-}
+//     return $lines;
+// }
 
-    /**
-     * Unreconcile (remove reconciliation)
-     * 
-     * @param int $moveId
-     * @return array
-     */
+   
   
 	
 	
 	// Remove reconciliation - متوافق مع Odoo 18 Enterprise
-	public function removeReconciliation($moveId)
-{
-    try {
-        $lines = $this->getReconciliationStatus($moveId);
+// 	public function removeReconciliation($moveId)
+// {
+//     try {
+//         $lines = $this->getReconciliationStatus($moveId);
         
-        // Get unique full_reconcile_ids from reconciled lines
-        $fullReconcileIds = [];
-        foreach ($lines as $line) {
-            if (!empty($line['full_reconcile_id'])) {
-                $fullReconcileIds[] = $line['full_reconcile_id'][0];
-            }
-        }
+//         // Get unique full_reconcile_ids from reconciled lines
+//         $fullReconcileIds = [];
+//         foreach ($lines as $line) {
+//             if (!empty($line['full_reconcile_id'])) {
+//                 $fullReconcileIds[] = $line['full_reconcile_id'][0];
+//             }
+//         }
         
-        // Remove duplicates
-        $fullReconcileIds = array_unique($fullReconcileIds);
+//         // Remove duplicates
+//         $fullReconcileIds = array_unique($fullReconcileIds);
 
-        if (empty($fullReconcileIds)) {
-            return [
-                'success' => false,
-                'message' => 'No reconciliations found for this move'
-            ];
-        }
+//         if (empty($fullReconcileIds)) {
+//             return [
+//                 'success' => false,
+//                 'message' => 'No reconciliations found for this move'
+//             ];
+//         }
 
-        // Unlink (delete) the reconciliation records
-        $result = $this->execute(
-            'account.full.reconcile',
-            'unlink',
-            [$fullReconcileIds]
-        );
+//         // Unlink (delete) the reconciliation records
+//         $result = $this->execute(
+//             'account.full.reconcile',
+//             'unlink',
+//             [$fullReconcileIds]
+//         );
         
-        return [
-            'success' => true,
-            'message' => 'Reconciliation removed successfully',
-            'removed_reconcile_ids' => $fullReconcileIds
-        ];
+//         return [
+//             'success' => true,
+//             'message' => 'Reconciliation removed successfully',
+//             'removed_reconcile_ids' => $fullReconcileIds
+//         ];
 
-    } catch (\Exception $e) {
-        return [
-            'success' => false,
-            'message' => $e->getMessage()
-        ];
-    }
-}
+//     } catch (\Exception $e) {
+//         return [
+//             'success' => false,
+//             'message' => $e->getMessage()
+//         ];
+//     }
+// }
 
 
-public function removeReconciliationForMultipleMoves($moveIds)
-{
-    try {
-        $allFullReconcileIds = [];
+// public function removeReconciliationForMultipleMoves($moveIds)
+// {
+//     try {
+//         $allFullReconcileIds = [];
         
-        foreach ($moveIds as $moveId) {
-            $lines = $this->getReconciliationStatus($moveId);
+//         foreach ($moveIds as $moveId) {
+//             $lines = $this->getReconciliationStatus($moveId);
             
-            foreach ($lines as $line) {
-                if (!empty($line['full_reconcile_id'])) {
-                    $allFullReconcileIds[] = $line['full_reconcile_id'][0];
-                }
-            }
-        }
+//             foreach ($lines as $line) {
+//                 if (!empty($line['full_reconcile_id'])) {
+//                     $allFullReconcileIds[] = $line['full_reconcile_id'][0];
+//                 }
+//             }
+//         }
         
-        // Remove duplicates
-        $allFullReconcileIds = array_unique($allFullReconcileIds);
+//         // Remove duplicates
+//         $allFullReconcileIds = array_unique($allFullReconcileIds);
 
-        if (empty($allFullReconcileIds)) {
-            return [
-                'success' => false,
-                'message' => 'No reconciliations found'
-            ];
-        }
+//         if (empty($allFullReconcileIds)) {
+//             return [
+//                 'success' => false,
+//                 'message' => 'No reconciliations found'
+//             ];
+//         }
 
-        // Unlink all reconciliations at once
-        $result = $this->execute(
-            'account.full.reconcile',
-            'unlink',
-            [$allFullReconcileIds]
-        );
+//         // Unlink all reconciliations at once
+//         $result = $this->execute(
+//             'account.full.reconcile',
+//             'unlink',
+//             [$allFullReconcileIds]
+//         );
         
-        return [
-            'success' => true,
-            'message' => 'All reconciliations removed successfully',
-            'removed_reconcile_ids' => $allFullReconcileIds,
-            'count' => count($allFullReconcileIds)
-        ];
+//         return [
+//             'success' => true,
+//             'message' => 'All reconciliations removed successfully',
+//             'removed_reconcile_ids' => $allFullReconcileIds,
+//             'count' => count($allFullReconcileIds)
+//         ];
 
-    } catch (\Exception $e) {
-        return [
-            'success' => false,
-            'message' => $e->getMessage()
-        ];
-    }
-}
+//     } catch (\Exception $e) {
+//         return [
+//             'success' => false,
+//             'message' => $e->getMessage()
+//         ];
+//     }
+// }
 
 
 

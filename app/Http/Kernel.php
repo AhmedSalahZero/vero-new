@@ -4,7 +4,6 @@ namespace App\Http;
 
 use App\Http\Middleware\CashManagementMiddleware;
 use App\Http\Middleware\CheckIfAccountExpired;
-use App\Http\Middleware\FinancialPlanningMiddleware;
 use App\Http\Middleware\NonBankingServiceMiddleware;
 use App\Http\Middleware\PropertyManagementServiceMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -62,6 +61,5 @@ class Kernel extends HttpKernel
 		'isCashManagement'=>CashManagementMiddleware::class,
 		'isNonBankingService'=>NonBankingServiceMiddleware::class,
 		'isPropertyManagement'=>PropertyManagementServiceMiddleware::class,
-		'isFinancialPlanning'=>FinancialPlanningMiddleware::class
     ];
 }

@@ -1,0 +1,1 @@
+import{o as a,c as s,a as l,r}from"./sweetalert2.esm.all-rDTa3Qpb.js";const o={class:"label"},_={__name:"Label",props:{required:{required:!1,type:[Boolean],default:!1}},setup(t){return(e,c)=>(a(),s("div",null,[l("label",o,[r(e.$slots,"default")])]))}};export{_};

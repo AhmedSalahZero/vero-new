@@ -144,9 +144,9 @@ class QuantityAllocationsReport
         $allocations_base_row = QuantityNewProductAllocationBase::company()->first();
 
         $product_seasonality = QuantityProductSeasonality::company()->get();
-		/** @var object{total: float|null} $result */
+	
         $product_seasonality_total = QuantityProductSeasonality::select(DB::raw('sum(sales_target_value * sales_target_quantity) as total'))->first();
-        $product_seasonality_total = $product_seasonality_total->total;
+        $product_seasonality_total = $product_seasonality_total->getAttribute('total');
 
         $allocation_bases_items =   SalesGathering::company()
             ->whereNotNull($allocation_base)

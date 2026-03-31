@@ -59,14 +59,26 @@ class AccountType extends Model
 	protected $guarded =[
 		'id'
 	];
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyCashAccounts(Builder $builder)
 	{
 		return $builder->onlySlugs([self::CURRENT_ACCOUNT,self::FULLY_SECURED_OVERDRAFT,self::CLEAN_OVERDRAFT,self::OVERDRAFT_AGAINST_COMMERCIAL_PAPER,self::OVERDRAFT_AGAINST_ASSIGNMENT_OF_CONTRACTS]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyCashCoverAccounts(Builder $builder)
 	{
 		return $builder->onlySlugs([self::CURRENT_ACCOUNT,self::CERTIFICATE_OF_DEPOSIT,self::TIME_OF_DEPOSIT]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyOverdraftsAccounts(Builder $builder)
 	{
 		return $builder->onlySlugs(self::OVERDRAFT_ACCOUNT_SLUGS);
@@ -75,38 +87,74 @@ class AccountType extends Model
 	{
 		return in_array($this->getSlug() , SELF::OVERDRAFT_ACCOUNT_SLUGS);
  	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyCurrentAccount(Builder $builder)
 	{
 		return $builder->onlySlugs([self::CURRENT_ACCOUNT]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
     public function scopeOnlyCdOrTdAccounts(Builder $builder)
 	{
 		return $builder->onlySlugs([self::CERTIFICATE_OF_DEPOSIT,self::TIME_OF_DEPOSIT]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyCleanOverdraft(Builder $builder)
 	{
 		return $builder->onlySlugs([self::CLEAN_OVERDRAFT]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyFullySecuredOverdraft(Builder $builder)
 	{
 		return $builder->onlySlugs([self::FULLY_SECURED_OVERDRAFT]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyOverdraftAgainstCommercialPaper(Builder $builder)
 	{
 		return $builder->onlySlugs([self::OVERDRAFT_AGAINST_COMMERCIAL_PAPER]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyOverdraftAgainstAssignmentOfContract(Builder $builder)
 	{
 		return $builder->onlySlugs([self::OVERDRAFT_AGAINST_ASSIGNMENT_OF_CONTRACTS]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyAgainstAssignmentOfContract(Builder $builder)
 	{
 		return $builder->onlySlugs([self::OVERDRAFT_AGAINST_ASSIGNMENT_OF_CONTRACTS]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyCdAccounts(Builder $builder)
 	{
 		return $builder->onlySlugs([self::CERTIFICATE_OF_DEPOSIT]);
 	}
+	/**
+ * @param Builder<self> $builder
+ * @return Builder<self>
+ */
 	public function scopeOnlyTdAccounts(Builder $builder)
 	{
 		return $builder->onlySlugs([self::TIME_OF_DEPOSIT]);

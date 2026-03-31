@@ -13,5 +13,5 @@ interface IFinancialStatementAble
 	public function mainItems(): BelongsToMany;
 	public function FinancialStatement(): BelongsTo;
 	public function withSubItemsFor(int $financialStatementAbleItemId, string $subItemType = '', string $subItemName = ''): BelongsToMany;
-	public function canViewActualReport(): bool;
+	// public function canViewActualReport(): bool;
 }

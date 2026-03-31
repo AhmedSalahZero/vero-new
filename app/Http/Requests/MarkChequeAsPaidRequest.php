@@ -33,7 +33,7 @@ class MarkChequeAsPaidRequest extends FormRequest
 		->join('payable_cheques','payable_cheques.'.$foreignId,'=',$tableName.'.id')->orderByDesc('due_date')
 		->selectRaw($tableName.'.*,payable_cheques.'.$foreignId.',payable_cheques.due_date')
 		->first() ;
-		$dueDate = $row->due_date ;
+		$dueDate = data_get($row, 'due_date');
 		
         return [
 			'actual_payment_date'=>['required',new DateMustBeGreaterThanOrEqualDate(null,$dueDate,__('Payment Date Must Be Greater Than Or Equal Cheque Due Date'))],

@@ -32,13 +32,7 @@ class FixedAssetStatement extends Model
 	{
 		return $this->belongsTo(Company::class , 'company_id','id');
 	}
-	public function getMonthlyAmounts():array 
-	{
-		return (array)$this->monthly_amounts;
-	}
 
-	public function getMonthlyAmountAtMonthIndex(int $dateAsIndex)
-	{
-		return $this->getMonthlyAmounts()[$dateAsIndex] ?? 0 ;  
-	}
+
+
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits\Models;
 
+use App\Models\CashExpense;
 use App\Models\Currency;
 use App\Models\ForeignExchangeRate;
 use App\Models\MoneyPayment;
@@ -24,7 +25,8 @@ trait HasNonCustomerOrSupplier
             }
 		
             $moneyPaymentOdooService = new MoneyPaymentOdooService($company);
-            $amountInCurrency = $isDownPayment  ? $this->getDownPaymentAmount() :  $this->getAmount();
+			$isNotCashExpense = !($this instanceof CashExpense);
+            $amountInCurrency = $isDownPayment && $isNotCashExpense  ? $this->getDownPaymentAmount() :  $this->getAmount();
             $paidCurrencyName = $this->getReceivingOrPaymentCurrency();
             $mainFunctionalCurrency = $company->getMainFunctionalCurrency();
 			$exchangeRate = $paidCurrencyName != $mainFunctionalCurrency ? ForeignExchangeRate::getExchangeRateForCurrencyAndClosestDate($paidCurrencyName, $mainFunctionalCurrency, $date, $company->id) : $this->getExchangeRate();

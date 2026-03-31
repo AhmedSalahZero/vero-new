@@ -48,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereMoneyPaymentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PayableCheque whereUpdatedAt($value)
+ * @property-read \App\Models\CashExpense|null $cashExpense
  * @mixin \Eloquent
  */
 
@@ -57,7 +58,7 @@ class PayableCheque extends Model
 		'deliveryBank',
 		'accountType',
 		'moneyPayment',
-		'cashExpenses',
+		'cashExpense',
 		'financialInstitution.bank'
 	];
 	const PENDING = 'pending';
@@ -68,7 +69,7 @@ class PayableCheque extends Model
 	{
 		return $this->belongsTo(MoneyPayment::class,'money_payment_id');
 	}
-	public function cashExpenses():BelongsTo
+	public function cashExpense():BelongsTo
 	{
 		return $this->belongsTo(CashExpense::class,'cash_expense_id');
 	}

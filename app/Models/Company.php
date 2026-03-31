@@ -138,9 +138,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialInstitution> $financialInstitutions
  * @property-read int|null $financial_institutions_count
  * @property-read bool|null $financial_institutions_exists
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FinancialPlanning\Study> $financialPlanningStudies
- * @property-read int|null $financial_planning_studies_count
- * @property-read bool|null $financial_planning_studies_exists
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\NonBankingService\FixedAssetName> $fixedAssetNames
  * @property-read int|null $fixed_asset_names_count
  * @property-read bool|null $fixed_asset_names_exists
@@ -1450,10 +1447,7 @@ class Company extends Model implements HasMedia
 		return $this->hasMany(\App\Models\NonBankingService\Study::class, 'company_id', 'id');
 	
     }
-    public function financialPlanningStudies():HasMany
-    {
-        return $this->hasMany(\App\Models\FinancialPlanning\Study::class, 'company_id', 'id');
-    }
+   
     public function getMainPlanningBasesForSelector():array
     {
         $mainColumns = ['customer_name'=>__('Customer Name') , 'sales_channel'=>__('Sales Channel') , 'business_sector'=>__('Business Sector') , 'branch'=>__('Branch')  ,'principle'=>__('Principle') , 'zone'=>__('Zone') ,'sales_person'=>__('Sales Person')];

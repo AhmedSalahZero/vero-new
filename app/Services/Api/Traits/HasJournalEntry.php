@@ -40,9 +40,9 @@ trait HasJournalEntry
             throw new Exception("Failed to retrieve move_id for statement entry: " . $accountBankStatementLineId);
         }
         $journalEntryId = $statementData[0]['move_id'][0];
-        if (!is_numeric($accountBankStatementLineId)) {
-            throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
-        }
+        // if (!is_numeric($accountBankStatementLineId)) {
+        //     throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
+        // }
         return [
             'account_bank_statement_line_id'=>$accountBankStatementLineId,
             'journal_entry_id'=>$journalEntryId,
@@ -53,9 +53,7 @@ trait HasJournalEntry
     {
         $inEditMode = is_null($id) ? 0 : 1;
         $id = is_null($id) ? 0 : $id ;
-        /**
-         * @var HasJournalEntry $this
-         */
+       
         $distribution_analytic_account_ids = HNonBanking::getAnalysisAccountIds($analytic_distribution, $partnerId);
         return [
                'journal_id' => $journalId, // account journal id (safe or bank journal id )

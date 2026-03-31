@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class CustomerDashboardCashing
 {
 	private Company $company;
-	private string $year;
+	private int $year;
 	private string $month;
 	private string $newCustomerCashingName;
 	private string $repeatingCustomerCashingName;
@@ -21,9 +21,8 @@ class CustomerDashboardCashing
 	private string $stopCustomerCashingName;
 	private string $deadCustomerCashingName;
 	private string $totalCustomerCashingName;
-	private array $typesOfCaching;
 
-	public function __construct(Company $company, string $year , string $month)
+	public function __construct(Company $company, int $year , string $month)
 	{
 		$this->company = $company;
 		$this->year = $year;

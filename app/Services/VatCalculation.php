@@ -89,7 +89,7 @@ class VatCalculation
             $vat_taxes_statement['VAT Deduction'] = $vatDeductions;
         }
         // Calculation Of Monthly Debit Balance & End Balance & Due Amounts
-        $vat_beginning = $vatType == 'debit_balance' ? (-1*($balance)) : ($balance??0);
+        $vat_beginning = $vatType == 'debit_balance' ? (-1*($balance)) : ($balance);
         $vat =[ date('d-m-Y',strtotime($studyStartDate)) => $vat_beginning]; 
 		
         $beginning_balance = ($vat_beginning > 0) ? 0 : $vat_beginning;
@@ -107,8 +107,7 @@ class VatCalculation
             // $financial_vat_dates =  array_keys($vatInstallmentDatesAndValues);
 			// $paid_installments $vatInstallmentDatesAndValues
             // $paid_installments = array_combine($financial_vat_dates,$vatInstallmentDatesAndValues);
-        } elseif(($vatType == 'credit_balance') && (!$isPaidInstallment) ) {
-             
+        } elseif(($vatType == 'credit_balance')  ) {
             $paid_installments = [$this->dateCalc($vat_start_date,1) =>$vat_beginning] ;
         } 
  
@@ -127,7 +126,7 @@ class VatCalculation
 			
             $vat_taxes_statement['Opening Credit Balance Payment'][$date] = ($paid_installments[$date]?? 0);
             $payment   = ($vat_taxes_statement['VAT Payment'][$date]?? 0) ;
-            $vat_taxes_statement['Monthly Debit Balance'][$date] =( $beginning_balance ?? 0);
+            $vat_taxes_statement['Monthly Debit Balance'][$date] =$beginning_balance;
             
             // Monthly Due Amounts 
             $monthly_amount_due      = ($beginning_balance > 0) ? ($additions - $deduction) :  ($beginning_balance + $additions - $deduction);

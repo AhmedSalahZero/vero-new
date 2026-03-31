@@ -31,9 +31,7 @@ trait HasPeriodicInterest
     }
     public function applyPeriodicInterestInStatement(FinancialInstitution $financialInstitution, float $periodInterestAmount, string $periodInterestDate)
     {
-        /**
-         * @var TimeOfDeposit|CertificatesOfDeposit $this
-         */
+       
         $accountType = AccountType::where('slug', AccountType::CURRENT_ACCOUNT)->first() ;
         $periodInterestDate = Carbon::make($periodInterestDate)->format('Y-m-d');
         

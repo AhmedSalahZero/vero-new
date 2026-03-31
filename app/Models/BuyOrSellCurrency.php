@@ -2,9 +2,9 @@
 
 namespace App\Models;
 use App\Models\FullySecuredOverdraft;
-use App\Services\Api\InternalMoneyTransfer as OdooInternalMoneyTransfer;
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCompany;
+use App\Traits\Models\HasDeleteOdoo;
 use App\Traits\Models\HasOdooMoneyTransfer;
 use App\Traits\Models\HasUserComment;
 use Carbon\Carbon;
@@ -114,7 +114,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class BuyOrSellCurrency extends Model
 {
-	use HasBasicStoreRequest , HasUserComment,HasOdooMoneyTransfer,HasCompany;
+	use HasBasicStoreRequest , HasUserComment,HasOdooMoneyTransfer,HasDeleteOdoo,HasCompany;
 	const BANK_TO_BANK = 'bank-to-bank';
 	const BANK_TO_SAFE = 'bank-to-safe';
 	const SAFE_TO_BANK = 'safe-to-bank';
@@ -415,10 +415,8 @@ class BuyOrSellCurrency extends Model
 	 */
 	public function handleBankTransfer(int $companyId , int $fromFinancialInstitutionId , AccountType $fromAccountType , string $fromAccountNumber ,string $transactionDate  , $debitAmount , $creditAmount)
 	{
-		if($fromAccountType && $fromAccountType->isCurrentAccount()){
-			/**
-			 * @var CleanOverdraft $fromCleanOverdraft
-			 */
+		if( $fromAccountType->isCurrentAccount()){
+			
 			$fromCurrentAccount = FinancialInstitutionAccount::findByAccountNumber($fromAccountNumber,$companyId,$fromFinancialInstitutionId);
 			CurrentAccountBankStatement::create([
 				'financial_institution_account_id'=>$fromCurrentAccount->id ,
@@ -431,7 +429,7 @@ class BuyOrSellCurrency extends Model
 		}
 		
 		
-		if($fromAccountType && $fromAccountType->isCleanOverdraftAccount()){
+		if( $fromAccountType->isCleanOverdraftAccount()){
 			/**
 			 * @var CleanOverdraft $fromCleanOverdraft
 			 */
@@ -448,7 +446,7 @@ class BuyOrSellCurrency extends Model
 				'debit'=>$debitAmount
 			]);
 		}
-		if($fromAccountType && $fromAccountType->isFullySecuredOverdraftAccount()){
+		if( $fromAccountType->isFullySecuredOverdraftAccount()){
 			/**
 			 * @var FullySecuredOverdraft $fromFullySecuredOverdraft
 			 */
@@ -466,7 +464,7 @@ class BuyOrSellCurrency extends Model
 			]);
 		}
 		
-		if($fromAccountType && $fromAccountType->isOverdraftAgainstCommercialPaperAccount()){
+		if( $fromAccountType->isOverdraftAgainstCommercialPaperAccount()){
 			/**
 			 * @var OverdraftAgainstCommercialPaper $fromOverdraftAgainstCommercialPaper
 			 */
@@ -484,7 +482,7 @@ class BuyOrSellCurrency extends Model
 			]);
 		}
 		
-		if($fromAccountType && $fromAccountType->isOverdraftAgainstAssignmentOfContractAccount()){
+		if( $fromAccountType->isOverdraftAgainstAssignmentOfContractAccount()){
 			/**
 			 * @var OverdraftAgainstAssignmentOfContract $fromOverdraftAgainstAssignmentOfContract
 			 */
@@ -569,10 +567,7 @@ class BuyOrSellCurrency extends Model
 	{
 		return $this->toBranch ? $this->toBranch->id  :0;  
 	}
-	public function getChequeNumber()
-	{
-		return $this->cheque_number ; 
-	}
+
 	
 	public function fullyIntegratedWithOdoo():bool
 	{
@@ -596,6 +591,10 @@ class BuyOrSellCurrency extends Model
 	public function hasOdooError():bool
 	{
 		return !$this->synced_with_odoo && $this->odoo_error_message ;
+	}
+	public function getBreakColumns():array
+	{
+		return [];
 	}
 	
 }

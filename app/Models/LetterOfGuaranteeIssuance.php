@@ -9,6 +9,7 @@ use App\Services\Api\LetterOfGuaranteeService;
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCompany;
 use App\Traits\Models\HasCommissionStatements;
+use App\Traits\Models\HasCurrentAccountCreditStatement;
 use App\Traits\Models\HasLetterOfGuaranteeCashCoverStatements;
 use App\Traits\Models\HasLetterOfGuaranteeStatements;
 use App\Traits\Models\HasUserComment;
@@ -164,7 +165,7 @@ use Illuminate\Support\Facades\DB;
  */
 class LetterOfGuaranteeIssuance extends Model
 {
-    use HasBasicStoreRequest,HasCommissionStatements,HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements,HasUserComment,HasCompany;
+    use HasBasicStoreRequest,HasCommissionStatements,HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements,HasCurrentAccountCreditStatement,HasUserComment,HasCompany;
     const OPENING_BALANCE = 'opening-balance';
     const NEW_ISSUANCE = 'new-issuance';
     const LG_FACILITY = 'lg-facility';
@@ -350,11 +351,11 @@ class LetterOfGuaranteeIssuance extends Model
     {
         return $this->belongsTo(SalesOrder::class, 'purchase_order_id', 'id');
     }
-    public function getPurchaseOrderName()
-    {
-        $purchaseOrder = $this->purchaseOrder ;
-        return  $purchaseOrder ? $purchaseOrder->getName(): 0 ;
-    }
+    // public function getPurchaseOrderName()
+    // {
+    //     $purchaseOrder = $this->purchaseOrder ;
+    //     return  $purchaseOrder ? $purchaseOrder->getName(): 0 ;
+    // }
     public function getPurchaseOrderId()
     {
         $purchaseOrder = $this->purchaseOrder ;
@@ -615,23 +616,21 @@ class LetterOfGuaranteeIssuance extends Model
         $company = $this->company;
         
         if ($company->hasOdooIntegrationCredentials()) {
-            $odooLetterOfGuaranteeIssuance = new LetterOfGuaranteeService($company);
-            foreach (['journal_entry_id','commission_fees_journal_entry_id','issuance_fees_journal_entry_id','renewal_fees_journal_entry_id','cancel_journal_entry_id'] as $journalColumnName) {
+            $odooLetterOfGuaranteeIssuanceService = new LetterOfGuaranteeService($company);
+            foreach (['journal_entry_id','commission_fees_journal_entry_id','issuance_fees_journal_entry_id','cancel_journal_entry_id'] as $journalColumnName) {
                 $currentJournalEntryId = $this->{$journalColumnName};
                 if ($currentJournalEntryId) {
-                    $odooLetterOfGuaranteeIssuance->unlink($currentJournalEntryId);
+                    $odooLetterOfGuaranteeIssuanceService->unlink($currentJournalEntryId);
                 }
                 
             }
         }
-        /**
-         * @var LetterOfGuaranteeIssuanceAdvancedPaymentHistory $advancedPaymentHistory
-         */
+       
         foreach ($this->advancedPaymentHistories as $advancedPaymentHistory) {
             $advancedPaymentHistory->deleteAllRelations();
         }
         foreach ($this->renewalDateHistories as $renewalDateHistory) {
-            (new LetterOfGuaranteeIssuanceRenewalDateController)->destroy($company, $odooLetterOfGuaranteeIssuance, $renewalDateHistory);
+            (new LetterOfGuaranteeIssuanceRenewalDateController)->destroy($company, $this, $renewalDateHistory);
         }
         LetterOfGuaranteeIssuanceAdvancedPaymentHistory::deleteButTriggerChangeOnLastElement($this->advancedPaymentHistories);
         CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($this->currentAccountDebitBankStatements);
@@ -814,7 +813,7 @@ class LetterOfGuaranteeIssuance extends Model
             $message = $ref;
             $debitOdooAccountId = $odooSetting->getLetterOfGuaranteeCommissionFeesId();
             $result = $odooLetterOfGuaranteeIssuance->createLgIssuanceCashCover($issuanceDate, $commissionFees, $journalId, $odooCurrencyId, $debitOdooAccountId, $accountOdooId, $this->getBeneficiaryOdooId(), $ref, $message, $analytic_distribution);
-            $this->commission_fees_account_bank_statement_odoo_id=$result['account_bank_statement_line_id'];
+     //       $this->commission_fees_account_bank_statement_odoo_id=$result['account_bank_statement_line_id'];
             $this->commission_fees_journal_entry_id=$result['journal_entry_id'];
             $this->odoo_commission_fees_reference=$result['reference'];
             $this->save();
@@ -895,10 +894,13 @@ class LetterOfGuaranteeIssuance extends Model
     
     public function getOdooReferenceNames():array
     {
+		/**
+		 * ! odoo_commission_fees_reference should be returned from current_account_bank_statements table
+		 */
         $references = [];
         $i = 0;
         foreach ([
-            'odoo_commission_fees_reference',
+        //    'odoo_commission_fees_reference',
             'odoo_issuance_fees_reference',
             'cash_cover_fees_reference'
         ] as $columnName) {
@@ -907,6 +909,7 @@ class LetterOfGuaranteeIssuance extends Model
                 $references[] = $i .'-'.$this->{$columnName};
             }
         }
+		
         return $references ;
     }
     public function fullyIntegratedWithOdoo()

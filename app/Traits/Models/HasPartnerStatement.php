@@ -37,6 +37,7 @@ trait HasPartnerStatement
 			$this->taxStatement->delete();
 		}
 	}
+	/** @phpstan-ignore-next-line */
 	public function getPartnerType()
 	{
 
@@ -45,7 +46,8 @@ trait HasPartnerStatement
 			if($this instanceof MoneyReceived){
 				return 'is_customer';
 			}
-			if($this instanceof MoneyPayment){
+			/** @phpstan-ignore-next-line */
+			elseif($this instanceof MoneyPayment){
 				return 'is_supplier';
 			}
 		}

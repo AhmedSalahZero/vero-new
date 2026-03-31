@@ -38,94 +38,94 @@ class OdooService
 	/**
 	 * * 
 	 */
-	public function createPaymentFromOdooToInvoice(int $odooInvoiceId,int $invoiceId,int $partnerId,$invoiceCurrencyName,$newMoneyClass )
-	{
-		/**
-		 * @var MoneyReceived|MoneyPayment $newMoneyClass [new MoneyReceived empty class]
-		 */
-		$isMoneyReceived = $newMoneyClass instanceof MoneyReceived;
-		$settlementTableName = $isMoneyReceived ? 'settlements' : 'payment_settlements';
-		$inboundOrOutbound = $isMoneyReceived ? 'inbound' : 'outbound';
-		$isCustomerOrSupplier = $isMoneyReceived ? 'customer' : 'supplier';
-		$partnerType = $isMoneyReceived ? 'is_customer' : 'is_supplier';
-		$customerOrSupplierId = $isMoneyReceived ? 'customer_id' : 'supplier_id';
-		$moneyModel = $isMoneyReceived ? 'App\Models\MoneyReceived': 'App\Models\MoneyPayment';
-		$receivingDate = $isMoneyReceived ? 'receiving_date' : 'delivery_date';
-		$branchIdColumnName = $isMoneyReceived ? 'receiving_branch_id' : 'delivery_branch_id';
-		$amountColumnName = $isMoneyReceived ? 'received_amount' : 'paid_amount';
-		$bankColumnName = $isMoneyReceived ? 'receiving_bank_id' : 'delivery_bank_id';
-		$receivingOrDeliveryCurrencyName = $isMoneyReceived ? 'receiving_currency' : 'payment_currency';
-		$moneyModel = new $moneyModel;
-		$dataFormatted = [];
-		// foreach(['EGP','USD'] as $currencyName){
+	// public function createPaymentFromOdooToInvoice(int $odooInvoiceId,int $invoiceId,int $partnerId,$invoiceCurrencyName,$newMoneyClass )
+	// {
+	// 	/**
+	// 	 * @var MoneyReceived|MoneyPayment $newMoneyClass [new MoneyReceived empty class]
+	// 	 */
+	// 	$isMoneyReceived = $newMoneyClass instanceof MoneyReceived;
+	// 	$settlementTableName = $isMoneyReceived ? 'settlements' : 'payment_settlements';
+	// 	$inboundOrOutbound = $isMoneyReceived ? 'inbound' : 'outbound';
+	// 	$isCustomerOrSupplier = $isMoneyReceived ? 'customer' : 'supplier';
+	// 	$partnerType = $isMoneyReceived ? 'is_customer' : 'is_supplier';
+	// 	$customerOrSupplierId = $isMoneyReceived ? 'customer_id' : 'supplier_id';
+	// 	$moneyModel = $isMoneyReceived ? 'App\Models\MoneyReceived': 'App\Models\MoneyPayment';
+	// 	$receivingDate = $isMoneyReceived ? 'receiving_date' : 'delivery_date';
+	// 	$branchIdColumnName = $isMoneyReceived ? 'receiving_branch_id' : 'delivery_branch_id';
+	// 	$amountColumnName = $isMoneyReceived ? 'received_amount' : 'paid_amount';
+	// 	$bankColumnName = $isMoneyReceived ? 'receiving_bank_id' : 'delivery_bank_id';
+	// 	$receivingOrDeliveryCurrencyName = $isMoneyReceived ? 'receiving_currency' : 'payment_currency';
+	// 	$moneyModel = new $moneyModel;
+	// 	$dataFormatted = [];
+	// 	// foreach(['EGP','USD'] as $currencyName){
 			
-		$currencyOdooId = Currency::getOdooId($invoiceCurrencyName);
-		$payments = $this->fetchData('account.payment',[],[[['invoice_ids','=',$odooInvoiceId],['currency_id','=',$currencyOdooId],['payment_type','=',$inboundOrOutbound],['partner_type','=',$isCustomerOrSupplier]]]);
+	// 	$currencyOdooId = Currency::getOdooId($invoiceCurrencyName);
+	// 	$payments = $this->fetchData('account.payment',[],[[['invoice_ids','=',$odooInvoiceId],['currency_id','=',$currencyOdooId],['payment_type','=',$inboundOrOutbound],['partner_type','=',$isCustomerOrSupplier]]]);
 		
 				
-				foreach($payments as $paymentArr){
-					$paymentOdooId = $paymentArr['id'];
-					$isExist = DB::table($settlementTableName)->where('company_id',$this->company_id)->where('odoo_id',$paymentOdooId)->first();
-					if($isExist){
-						continue ;
-					}
-					$journalId = $paymentArr['journal_id'][0];
-					$date =$paymentArr['date'] ;
-					$currentJournal = $newMoneyClass::getMoneyTypeFromJournalId($journalId,$this->company_id);
-					$moneyType = $currentJournal['type'];
-					$branchId = $currentJournal['branch_id']??null;
-					$financialInstitutionId = $currentJournal['financial_institution_id']??null;
-					$amount  = $paymentArr['amount'];
-					$receiptNumber = HStr::generateReceiptNumber('receipt_number_');
-					$dataFormatted[$moneyType][$date]=[
-						'stop-sync-with-odoo'=> true ,
-						'partner_type'=>$partnerType,
-						'currency'=>$invoiceCurrencyName,
-						$receivingOrDeliveryCurrencyName=>$invoiceCurrencyName,
-						$customerOrSupplierId=>$partnerId,
-						'type'=>$moneyType,
-						$receivingDate=>$date,
-						$branchIdColumnName=>$branchId,
-						$amountColumnName => [
-							$moneyType=>$amount
-						],
-						'receipt_number'=>$receiptNumber,
-						'exchange_rate'=>[$moneyType=>1] , // not found in the model dd
-						'amount_in_invoice_currency'=>[
-							$moneyType=>$amount 
-						],
-						$bankColumnName=>[
-							$moneyType=>$financialInstitutionId 
-						],
-						'account_type'=>[
-							$moneyType => $currentJournal['account_type_id']??null 
-						],
-						'account_number'=>[
-							$moneyType=>$currentJournal['account_number']??null
-						],
-						'drawee_bank_id'=>null, // in case of cheque we have to fill it 
-						'due_date'=>null, // in case of cheque we have to fill it  
-						'cheque_number'=>null, // in case of cheque we have to fill it  
-						'settlements'=>[
-							$invoiceId => [
-								'odoo_id'=>$paymentOdooId,
-								'invoice_id'=>$invoiceId,
-								'settlement_amount'=>$amount ,
-								'withhold_amount'=>0 
-							]
-						]
-					];
+	// 			foreach($payments as $paymentArr){
+	// 				$paymentOdooId = $paymentArr['id'];
+	// 				$isExist = DB::table($settlementTableName)->where('company_id',$this->company_id)->where('odoo_id',$paymentOdooId)->first();
+	// 				if($isExist){
+	// 					continue ;
+	// 				}
+	// 				$journalId = $paymentArr['journal_id'][0];
+	// 				$date =$paymentArr['date'] ;
+	// 				$currentJournal = $newMoneyClass::getMoneyTypeFromJournalId($journalId,$this->company_id);
+	// 				$moneyType = $currentJournal['type'];
+	// 				$branchId = $currentJournal['branch_id']??null;
+	// 				$financialInstitutionId = $currentJournal['financial_institution_id']??null;
+	// 				$amount  = $paymentArr['amount'];
+	// 				$receiptNumber = HStr::generateReceiptNumber('receipt_number_');
+	// 				$dataFormatted[$moneyType][$date]=[
+	// 					'stop-sync-with-odoo'=> true ,
+	// 					'partner_type'=>$partnerType,
+	// 					'currency'=>$invoiceCurrencyName,
+	// 					$receivingOrDeliveryCurrencyName=>$invoiceCurrencyName,
+	// 					$customerOrSupplierId=>$partnerId,
+	// 					'type'=>$moneyType,
+	// 					$receivingDate=>$date,
+	// 					$branchIdColumnName=>$branchId,
+	// 					$amountColumnName => [
+	// 						$moneyType=>$amount
+	// 					],
+	// 					'receipt_number'=>$receiptNumber,
+	// 					'exchange_rate'=>[$moneyType=>1] , // not found in the model dd
+	// 					'amount_in_invoice_currency'=>[
+	// 						$moneyType=>$amount 
+	// 					],
+	// 					$bankColumnName=>[
+	// 						$moneyType=>$financialInstitutionId 
+	// 					],
+	// 					'account_type'=>[
+	// 						$moneyType => $currentJournal['account_type_id']??null 
+	// 					],
+	// 					'account_number'=>[
+	// 						$moneyType=>$currentJournal['account_number']??null
+	// 					],
+	// 					'drawee_bank_id'=>null, // in case of cheque we have to fill it 
+	// 					'due_date'=>null, // in case of cheque we have to fill it  
+	// 					'cheque_number'=>null, // in case of cheque we have to fill it  
+	// 					'settlements'=>[
+	// 						$invoiceId => [
+	// 							'odoo_id'=>$paymentOdooId,
+	// 							'invoice_id'=>$invoiceId,
+	// 							'settlement_amount'=>$amount ,
+	// 							'withhold_amount'=>0 
+	// 						]
+	// 					]
+	// 				];
 					
 					
-				}
-				// }		
-				foreach($dataFormatted as $moneyType => $date){
-					foreach($date as $receivingDate => $moneyArr){
-						(new MoneyReceivedController)->store($this->company,(new StoreMoneyReceivedRequest())->merge($moneyArr));
-					}
-				}
+	// 			}
+	// 			// }		
+	// 			foreach($dataFormatted as $moneyType => $date){
+	// 				foreach($date as $receivingDate => $moneyArr){
+	// 					(new MoneyReceivedController)->store($this->company,(new StoreMoneyReceivedRequest())->merge($moneyArr));
+	// 				}
+	// 			}
 	
-	}
+	// }
 	/**
 	 * * import invoices
 	 */
@@ -539,38 +539,38 @@ class OdooService
 					
 		
 	}
-	public function syncBanks()
-	{
-			$fields = [
-				'id',
-				'code'
-			];
-			$filters = [
-				[
-					['type','=','cash'
-				],
-				]
-		];
-		$banks = $this->fetchData('account.account',$fields,$filters);
+	// public function syncBanks()
+	// {
+	// 		$fields = [
+	// 			'id',
+	// 			'code'
+	// 		];
+	// 		$filters = [
+	// 			[
+	// 				['type','=','cash'
+	// 			],
+	// 			]
+	// 	];
+	// 	$banks = $this->fetchData('account.account',$fields,$filters);
 	
-		$chartOfAccounts = collect($banks)->keyBy('code')->toArray();
-		$banks = CashVeroBranch::where('company_id',$this->company_id)->whereNotNull('odoo_code')->get();
+	// 	$chartOfAccounts = collect($banks)->keyBy('code')->toArray();
+	// 	$banks = CashVeroBranch::where('company_id',$this->company_id)->whereNotNull('odoo_code')->get();
 
-			foreach($banks as $bank){
-				$codeCode = $bank->getOdooCode();
-				if($codeCode){
-					$currentJournal = $chartOfAccounts[$codeCode]??null;
-					$chartOfAccountId = $currentJournal ? $currentJournal['id'] : null;
-					if($chartOfAccountId){
-						$bank->update([
-							'odoo_id'=>$chartOfAccountId,
-							'journal_id'=>$this->getJournalIdFromChartOfAccountId($chartOfAccountId)
-						]);
-					}
+	// 		foreach($banks as $bank){
+	// 			$codeCode = $bank->getOdooCode();
+	// 			if($codeCode){
+	// 				$currentJournal = $chartOfAccounts[$codeCode]??null;
+	// 				$chartOfAccountId = $currentJournal ? $currentJournal['id'] : null;
+	// 				if($chartOfAccountId){
+	// 					$bank->update([
+	// 						'odoo_id'=>$chartOfAccountId,
+	// 						'journal_id'=>$this->getJournalIdFromChartOfAccountId($chartOfAccountId)
+	// 					]);
+	// 				}
 					
-				}
-			}
-	}
+	// 			}
+	// 		}
+	// }
 	public function execute($model, $method, $args, $kwargs = [])
     {
         return $this->models->execute_kw($this->db, $this->uid, $this->password, $model, $method, $args, $kwargs);
@@ -586,12 +586,12 @@ class OdooService
     //     }
     //     return $journal['default_account_id'][0]; // Return account ID
     // }
-	public function getFieldSelection($model, $field)
-    {
-            $fields = $this->models->execute_kw($this->db, $this->uid, $this->password,$model, 'fields_get', [[$field]]);
-            return $fields[$field]['selection'] ?? [];
+	// public function getFieldSelection($model, $field)
+    // {
+    //         $fields = $this->models->execute_kw($this->db, $this->uid, $this->password,$model, 'fields_get', [[$field]]);
+    //         return $fields[$field]['selection'] ?? [];
       
-    }
+    // }
 	
 	
  public function getPartners(string $startDate,string $endDate,int $companyId):array
@@ -634,55 +634,55 @@ class OdooService
             return $partners;
     }
 	
-	 public function getExpenseAccounts(string $startDate, string $endDate, int $companyId): array
-    {
-        // Step 1: Find move lines related to expenses within date range and company
-        $moveLineFields = ['account_id', 'name', 'date', 'amount_currency'];
-		$moveLineFields=[];
+	//  public function getExpenseAccounts(string $startDate, string $endDate, int $companyId): array
+    // {
+    //     // Step 1: Find move lines related to expenses within date range and company
+    //     $moveLineFields = ['account_id', 'name', 'date', 'amount_currency'];
+	// 	$moveLineFields=[];
 		
-        $moveLineFilters = [
-            [
-                // ['date', '>=', $startDate],
-                // ['date', '<=', $endDate],
-                // ['account_type', '=', 'expense_direct_cost'] // Filter for expense accounts
-                ['account_type', '=', 'expense'] // Filter for expense accounts
-            ]
-        ];
-        $moveLines = $this->fetchData('account.account', $moveLineFields, $moveLineFilters);
+    //     $moveLineFilters = [
+    //         [
+    //             // ['date', '>=', $startDate],
+    //             // ['date', '<=', $endDate],
+    //             // ['account_type', '=', 'expense_direct_cost'] // Filter for expense accounts
+    //             ['account_type', '=', 'expense'] // Filter for expense accounts
+    //         ]
+    //     ];
+    //     $moveLines = $this->fetchData('account.account', $moveLineFields, $moveLineFilters);
 
-        // Step 2: Extract unique account IDs
-        $accountIds = [];
-        foreach ($moveLines as $line) {
-            if (!empty($line['account_id'])) {
-                $accountIds[] = $line['account_id'][0];
-            }
-        }
-        $accountIds = array_unique($accountIds);
+    //     // Step 2: Extract unique account IDs
+    //     $accountIds = [];
+    //     foreach ($moveLines as $line) {
+    //         if (!empty($line['account_id'])) {
+    //             $accountIds[] = $line['account_id'][0];
+    //         }
+    //     }
+    //     $accountIds = array_unique($accountIds);
 
-        if (empty($accountIds)) {
-            return [];
-        }
+    //     if (empty($accountIds)) {
+    //         return [];
+    //     }
 
-        // Step 3: Fetch account details from account.account
-        $accountFields = ['id', 'code', 'name', 'account_type'];
-        $accounts = $this->execute('account.account', 'read', [$accountIds, $accountFields]);
+    //     // Step 3: Fetch account details from account.account
+    //     $accountFields = ['id', 'code', 'name', 'account_type'];
+    //     $accounts = $this->execute('account.account', 'read', [$accountIds, $accountFields]);
 
-        // Step 4: Enrich accounts with related expense data
-        $result = [];
-        foreach ($accounts as &$account) {
-            // Find move lines for this account to get expense names
-            $expenseNames = [];
-            foreach ($moveLines as $line) {
-                if ($line['account_id'][0] == $account['id']) {
-                    $expenseNames[] = $line['name'] ?: 'Unnamed Expense';
-                }
-            }
-            $account['expense_names'] = array_unique($expenseNames);
-            $result[] = $account;
-        }
+    //     // Step 4: Enrich accounts with related expense data
+    //     $result = [];
+    //     foreach ($accounts as &$account) {
+    //         // Find move lines for this account to get expense names
+    //         $expenseNames = [];
+    //         foreach ($moveLines as $line) {
+    //             if ($line['account_id'][0] == $account['id']) {
+    //                 $expenseNames[] = $line['name'] ?: 'Unnamed Expense';
+    //             }
+    //         }
+    //         $account['expense_names'] = array_unique($expenseNames);
+    //         $result[] = $account;
+    //     }
 
-        return $result;
-    }
+    //     return $result;
+    // }
 	
 		
 	

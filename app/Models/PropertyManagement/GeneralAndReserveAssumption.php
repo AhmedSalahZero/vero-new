@@ -182,10 +182,10 @@ class GeneralAndReserveAssumption extends Model
 		$operationDurationPerYear = $study->getOperationDurationPerYearFromIndexes();
 		$baseRates = $this->getCbeLendingCorridorRates() ;
 		$baseRatesPerMonths =[];
-		$dateIndexWithDate = $study->getDateIndexWithDate() ;
 		/**
 		 * @var array $dateIndexWithDate
 		 */
+		$dateIndexWithDate = $study->getDateIndexWithDate() ;
 		foreach ($operationDurationPerYear as $yearIndex => $yearMonthIndexes) {
             foreach ($yearMonthIndexes as $monthIndex => $monthlyZeroOrOne) {
       //          $yearOrMonthIndex = $study->isMonthlyStudy() ? $monthIndex : $yearIndex;

@@ -3,6 +3,7 @@ namespace App\Services\Api\Traits;
 use App\Models\Company;
 use App\Models\User;
 use Exception;
+use ripcord;
 require_once(public_path('apis/ripcord.php'));
 
 /**

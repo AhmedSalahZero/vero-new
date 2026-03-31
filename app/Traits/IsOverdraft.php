@@ -69,10 +69,7 @@ trait IsOverdraft
 	// {
 	// 	return number_format($this->getMinInterestRate(),2);
 	// }
-	public function getMaxLendingLimitPerCustomer()
-	{
-		return $this->max_lending_limit_per_customer?:0;
-	}
+
 	public static function findByFinancialInstitutionIds(array $overdraftIds):array
 	{
 		return self::whereIn('financial_institution_id',$overdraftIds)->pluck('id')->toArray();
@@ -125,6 +122,7 @@ trait IsOverdraft
 	 */
 	public function getLatestRate()
 	{
+		/** @phpstan-ignore-next-line */
 		if(is_null($this->rates)){
 			return 0;
 		}
@@ -176,22 +174,7 @@ trait IsOverdraft
 		]);
 	}	
 	
-	public function updateFirstLimitsTableFromDate()
-	{
-		$smallestFullDate = $this->getSmallestLimitTableFullDate() ;
-		if(is_null($smallestFullDate)){
-			return ;
-		}
-		$firstBankStatementToBeUpdated = (self::getLimitTableClassName())::where(self::generateForeignKeyFormModelName(),$this->id)
-		->where('full_date','>=',$smallestFullDate)
-		->orderBy('full_date')
-		->first();	
-		if($firstBankStatementToBeUpdated){
-			$firstBankStatementToBeUpdated->update([
-				'updated_at'=>now()
-			]);
-		}
-	}
+
 	
 	
 }

@@ -144,7 +144,6 @@ td{
                                         <input style="max-height:25px;" id="cash-send-to-collection{{ $cashExpense->id }}" type="checkbox" name="second_to_collection[]" value="{{ $cashExpense->id }}" data-money-type="{{ CashExpense::PAYABLE_CHEQUE }}" class="form-control checkbox js-send-to-collection">
                                     </td>
                                     <td class="bank-max-width @if($cashExpense->payableCheque->getStatus() == 'paid') exclude-td font-weight-bold text-success color-green @endif ">{{ $cashExpense->payableCheque->getStatusFormatted() }}</td>
-                                    {{-- <td class="bank-max-width">{{ $cashExpense->getMoneyTypeFormatted() }}</td> --}}
                                     {{-- <td class="bank-max-width">{{ $cashExpense->getSupplierName() }}</td> --}}
                                     <td class="text-nowrap">{{ $cashExpense->getExpenseCategoryName() }}</td>
                                     <td class="text-nowrap">{{ $cashExpense->getExpenseName() }}</td>
@@ -262,7 +261,6 @@ td{
 								<td>
                                         <input style="max-height:25px;" id="cash-send-to-collection{{ $money->id }}" type="checkbox" name="second_to_collection[]" value="{{ $money->id }}" data-money-type="{{ CashExpense::OUTGOING_TRANSFER }}" class="form-control checkbox js-send-to-collection">
                                     </td>
-								   {{-- <td class="bank-max-width">{{ $money->getMoneyTypeFormatted() }}</td> --}}
                                     {{-- <td class="bank-max-width">{{ $money->getSupplierName() }}</td> --}}
 									   <td class="text-nowrap">{{ $money->getExpenseCategoryName() }}</td>
                                     <td class="text-nowrap">{{ $money->getExpenseName() }}</td>
@@ -364,7 +362,6 @@ td{
 									       <td class="text-nowrap">{{ $cashExpense->getExpenseCategoryName() }}</td>
                                     <td class="text-nowrap">{{ $cashExpense->getExpenseName() }}</td>
                             
-                                    {{-- <td class="bank-max-width">{{ $cashExpense->getMoneyTypeFormatted() }}</td> --}}
                                     {{-- <td class="bank-max-width">{{ $cashExpense->getSupplierName() }}</td> --}}
 									
                                     <td class="text-nowrap">{{ $cashExpense->getPaymentDateFormatted() }}</td>

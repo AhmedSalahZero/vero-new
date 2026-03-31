@@ -108,10 +108,7 @@ class PurchaseOrder extends Model
 	{
 		return $this->po_number;
 	}
-	public function getName()
-	{
-		return $this->name ;
-	}
+	
 	public function letterOfGuaranteeIssuances()
 	{
 		return $this->hasMany(LetterOfGuaranteeIssuance::class , 'purchase_order_id','id');

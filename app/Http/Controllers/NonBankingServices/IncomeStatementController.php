@@ -64,7 +64,6 @@ class IncomeStatementController extends Controller
             'net-profit'=>13
         ];
 		$isMonthlyStudy = $study->isMonthlyStudy();
-        // $financialYearsEndMonths = $study->getFinancialYearsEndMonths();
         $grossProfitOrderIndex = $orderIndexPerExpenseCategory['gross-profit'];
         $ebitdaOrderIndex = $orderIndexPerExpenseCategory['ebitda'];
         $eclAndDepreciationOrderIndex = $orderIndexPerExpenseCategory['ecl'];
@@ -780,7 +779,7 @@ class IncomeStatementController extends Controller
             'studyMonthsForViews'=>$studyMonthsForViews,
             'title'=>__('Forecasted Income Statement'),
             'tableTitle'=>__('Forecasted Income Statement'),
-            'createRoute'=>route('create.financial.planning.study', ['company'=>$company->id]),
+     //       'createRoute'=>route('create.financial.planning.study', ['company'=>$company->id]),
             'studyMonths'=>$study->getStudyDurationPerYearFromIndexes(),
             'study'=>$study,
             'salesRevenuePerTypes'=>$salesRevenuePerTypes,

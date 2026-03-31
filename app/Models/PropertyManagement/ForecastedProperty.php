@@ -50,6 +50,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereStudyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereUpdatedAt($value)
+ * @property int $renovate_duration
+ * @property numeric $renovate_cost
+ * @property numeric $monthly_rent_amount
+ * @property string|null $collection_interval
+ * @property int $rent_duration
+ * @property numeric $rent_annual_increase
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereCollectionInterval($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereMonthlyRentAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereRenovateCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereRenovateDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereRentAnnualIncrease($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedProperty whereRentDuration($value)
  * @mixin \Eloquent
  */
 class ForecastedProperty extends Model
@@ -132,7 +144,7 @@ class ForecastedProperty extends Model
     public function getCollectionInterval():string
     {
         return $this->collection_interval?:'monthly';
-    }public function getRentDuration():string
+    }public function getRentDuration():int
     {
         return $this->rent_duration?:0;
     }
@@ -201,7 +213,7 @@ class ForecastedProperty extends Model
             'maintenance_payments_count' => $forecastedDueInstallment ? $forecastedDueInstallment->getMaintenancePaymentsCount() : 0,
             'maintenance_payments_payment_interval' => $forecastedDueInstallment ? $forecastedDueInstallment->getMaintenancePaymentsPaymentInterval() : 'monthly',
             'delivery_payments_count' => $forecastedDueInstallment ? $forecastedDueInstallment->getDeliveryPaymentsCount() : 0,
-            'installment_payments' => $forecastedDueInstallment ? $forecastedDueInstallment->getInstallmentPayments() : [],
+          //  'installment_payments' => $forecastedDueInstallment ? $forecastedDueInstallment->getInstallmentPayments() : [],
             'variable_installment_amounts' => $forecastedDueInstallment ? $forecastedDueInstallment->getVariableInstallmentAmounts() : PropertyDueInstallment::getDefaultVariableInstallmentAmounts(),
             'has_annually_installments'=>$forecastedDueInstallment ? $forecastedDueInstallment->getHasAnnuallyInstallments() : 0,
             'has_delivery_payments'=>$forecastedDueInstallment ? $forecastedDueInstallment->getHasDeliveryPayments() : 0,

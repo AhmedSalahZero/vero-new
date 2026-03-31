@@ -42,6 +42,15 @@ require_once(dirname(__FILE__).'/ripcord.php');
  * If you want to skip the ripcord::client factory method, you _must_ provide a transport object explicitly.
  *
  * @link  http://wiki.moviemeter.nl/index.php/API Moviemeter API documentation
+ * @method mixed execute_kw(string $db, string $uid, string|null $password, string $model, string $method, array $args, array $kwargs = [])
+ * @method mixed search(string $model, array $filters, array $options = [])
+ * @method mixed read(string $model, array $ids, array $fields = [])
+ * @method mixed create(string $model, array $data)
+ * @method mixed write(string $model, array $data)
+ * @method mixed unlink(string $model, array $ids)
+ * @method mixed search_read(string $model, array $filters, array $fields = [], array $options = [])
+ * @method mixed search_read_group(string $model, array $filters, array $fields = [], array $options = [])
+ * @method mixed search_read_group_count(string $model, array $filters, array $fields = [], array $options = [])
  * @package Ripcord
  */
 class Ripcord_Client 

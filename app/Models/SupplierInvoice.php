@@ -623,4 +623,14 @@ public function getPurchasesOrderNumber()
 		return $this->project_name ?: '--';
 	}
 	
+	public function getCollectedOrPaidAmount()
+	{
+		return $this->paid_amount?:0;
+	}
+	
+	public function getTotalCollectedOrPaid()
+	{
+		return (float)$this->total_paid_amount ; 
+	}
+	
 }

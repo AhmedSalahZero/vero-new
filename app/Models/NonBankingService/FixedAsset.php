@@ -123,11 +123,11 @@ class FixedAsset extends Model
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
-    public function model()
-    {
-        $modelName = '\App\Models\\'.$this->model_name ;
-        return $this->belongsTo($modelName, 'model_id', 'id');
-    }
+    // public function model()
+    // {
+    //     $modelName = '\App\Models\\'.$this->model_name ;
+    //     return $this->belongsTo($modelName, 'model_id', 'id');
+    // }
     public function getNameId():int
     {
         return $this->name_id?:0 ;
@@ -191,10 +191,7 @@ class FixedAsset extends Model
     {
         return $this->getReplacementInterval() * 12 ;
     }
-    public function getMonthlyAmounts():array
-    {
-        return (array)$this->monthly_amounts;
-    }
+
     public function getCount():int
     {
         return $this->counts;
@@ -212,10 +209,7 @@ class FixedAsset extends Model
         }
         return $dates ;
     }
-    public function getMonthlyAmountAtMonthIndex(int $dateAsIndex)
-    {
-        return $this->getMonthlyAmounts()[$dateAsIndex] ?? 0 ;
-    }
+   
     public function getFfeCountsAtDateIndex(int $dateIndex)
     {
         return $this->getFfeCounts()[$dateIndex]??0;
@@ -335,7 +329,7 @@ class FixedAsset extends Model
             $buildingAssets['beginning_balance'][$dateAsIndex]= $beginningBalance;
             $buildingAssets['additions'][$dateAsIndex]=  $dateAsIndex ==$constructionTransferredDateAsIndex ? $constructionTransferredValue : 0;
             $buildingAssets['initial_total_gross'][$dateAsIndex] =  $buildingAssets['additions'][$dateAsIndex] +  $beginningBalance;
-            $currentInitialTotalGross = $buildingAssets['initial_total_gross'][$dateAsIndex] ??0;
+            $currentInitialTotalGross = $buildingAssets['initial_total_gross'][$dateAsIndex] ;
             $replacementCost[$dateAsIndex] =    in_array($dateAsIndex, $replacementDates)  ? $this->calculateReplacementCost($currentInitialTotalGross, $propertyReplacementCostRate) : 0;
             if (in_array($dateAsIndex, $replacementDates) && ($constructionTransferredDateAsIndex <= $operationStartDateAsIndex)) {
                 $depreciationEndDateAsIndex = $dateAsIndex+1+$propertyDepreciationDurationInMonths-1;
@@ -396,15 +390,13 @@ class FixedAsset extends Model
     }
     public function getItemCostAtDateIndex(int $dateAsIndex)
     {
-		/**
-		 * @var Study $study
-		 */
+		
         $itemCost = $this->getItemCost();
         $vatRate = $this->getVatRate();
         $study = $this->study;
         $studyStartDateAsString = $study->getStudyStartDate();
         $dateWithDateIndex = $study->getDateWithDateIndex();
-        $studyEndDateAsString = $study->getStudyEndDate();
+    //    $studyEndDateAsString = $study->getStudyEndDate();
         $studyEndDateAsIndex = $study->getStudyEndDateAsIndex();
         $studyStartDateAsIndex = $study->getStudyStartDateAsIndex($dateWithDateIndex, $studyStartDateAsString);
         $increaseRate = $this->getCostAnnualIncreaseRate();
@@ -426,26 +418,26 @@ class FixedAsset extends Model
     // 	return $total ;
     // 	// return $this->getCounts() * $this->getAmount();
     // }
-    public function getAmount()
-    {
-        return $this->amount ?: 0 ;
-    }
-    public function getDuration()
-    {
-        return 0;
-    }
+    // public function getAmount()
+    // {
+    //     return $this->amount ?: 0 ;
+    // }
+    // public function getDuration()
+    // {
+    //     return 0;
+    // }
 
 
     
-    public function getStartDateAsIndex()
-    {
-        return $this->start_date;
-    
-    }
-    public function getEndDateAsIndex()
-    {
-        return $this->end_date;
-    }
+    // public function getStartDateAsIndex()
+    // {
+	// 		return $this->start_date;
+		
+	// 	}
+    // public function getEndDateAsIndex()
+    // {
+    //     return $this->end_date;
+    // }
     /**
      * return [DateAsIndex => count ]
      */

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\LetterOfCreditIssuance;
+use App\Models\SupplierInvoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Collection;
 
 /**
+ * @property string $contract_code
+ * @property string $contract_amount
  * @property int $id
  * @property int|null $invoice_id
  * @property int|null $money_payment_id
@@ -79,13 +81,24 @@ class SettlementAllocation extends Model
 			->whereBetween($dateFieldName,[$startDate,$endDate])
 			->where('letter_of_credit_issuances.company_id',$companyId)
 			->get(['settlement_allocations.contract_id','invoice_id','settlement_allocations.letter_of_credit_issuance_id','allocation_amount','payment_currency','payment_date']);
+			/**
+			 * @var SettlementAllocation $settlementAllocation
+			 */
 			foreach($settlementAllocations as $settlementAllocation){
-				$supplier = $settlementAllocation->letterOfCreditIssuance->supplier ;
-				$paymentCurrency = $settlementAllocation->payment_currency ;
-				$paymentDate = $settlementAllocation->payment_date ;
+				/**
+				 * @var LetterOfCreditIssuance $letterOfCreditIssuance
+				 */
+				$letterOfCreditIssuance = $settlementAllocation->letterOfCreditIssuance;
+				$supplier = $letterOfCreditIssuance->supplier ;
+				$paymentCurrency = $settlementAllocation->getAttribute('payment_currency') ;
+				$paymentDate = $settlementAllocation->getAttribute('payment_date') ;
 				$exchangeRate =  $paymentCurrency!= $mainFunctionalCurrency ? ForeignExchangeRate::getExchangeRateAt($paymentCurrency,$mainFunctionalCurrency,$paymentDate,$companyId,$foreignExchangeRates) : 1 ;
 				$invoiceId = $settlementAllocation->invoice_id ; 
-				$invoiceNumber = SupplierInvoice::find($invoiceId)->getInvoiceId() ; 
+				/**
+				 * @var SupplierInvoice $currentSupplierInvoice
+				 */
+				$currentSupplierInvoice = SupplierInvoice::find($invoiceId);
+				$invoiceNumber = $currentSupplierInvoice->getInvoiceNumber() ; 
 				$keyNameForCurrentType = $keyNameForCurrentType.' - '. __('Invoice No') .' ' .$invoiceNumber ;
 				$currentAmountAllocationAmount = $settlementAllocation->allocation_amount * $exchangeRate ;
 				$supplierName = $supplier->getName();

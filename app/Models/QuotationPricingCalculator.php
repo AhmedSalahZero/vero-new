@@ -4,9 +4,7 @@ namespace App\Models;
 
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
-use App\Interfaces\Models\IShareable;
 use App\Models\Repositories\CurrencyRepository;
-use App\Models\Repositories\CustomerRepository;
 use App\Models\Repositories\PositionRepository;
 use App\Models\Repositories\RevenueBusinessLineRepository;
 use App\Models\Repositories\ServiceCategoryRepository;
@@ -19,8 +17,19 @@ use App\Models\Traits\Scopes\CompanyScope;
 use App\Models\Traits\Scopes\Globals\StateCountryScope;
 use App\Models\Traits\Scopes\withAllRelationsScope;
 use Illuminate\Database\Eloquent\Model;
-
 /**
+
+ */
+/**
+ * @property string $revenueBusinessLineName
+ * @property string $serviceCategoryName
+ * @property string $serviceItemName
+ * @property string $totalRecommendPriceWithoutVatFormatted
+ * @property string $totalRecommendPriceWithVatFormatted
+ * @property string $totalNetProfitAfterTaxesFormatted
+ * @property string $creator_name
+ * @property string $created_at_formatted
+ * @property int $order
  * @property int $id
  * @property int|null $customer_id
  * @property int|null $business_sector_id
@@ -128,9 +137,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuotationPricingCalculator whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuotationPricingCalculator whereUseFreelancer($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuotationPricingCalculator withAllRelations(?int $companyId = null)
+ * @property float $delivery_days
+ * @property-read \App\Models\ServiceNature|null $serviceNature
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuotationPricingCalculator whereDeliveryDays($value)
  * @mixin \Eloquent
  */
-class QuotationPricingCalculator extends Model implements  IHaveAllRelations , IExportable , IShareable
+class QuotationPricingCalculator extends Model implements  IHaveAllRelations , IExportable 
 {
     use  QuotationPricingCalculatorAccessor,QuotationPricingCalculatorMutator , QuotationPricingCalculatorRelation , CompanyScope , withAllRelationsScope ;
          
@@ -140,22 +152,7 @@ class QuotationPricingCalculator extends Model implements  IHaveAllRelations , I
     {
         return 'quotation_pricing_calculators.id' ;
     }
-    public static function getShareableEditViewVars($model):array 
-    {
-        
-        return [
-            'pageTitle'=>QuotationPricingCalculator::getPageTitle(),
-             'revenueBusinessLines'=>App(RevenueBusinessLineRepository::class)->oneFormattedForSelect($model),
-            'serviceCategories'=>App(ServiceCategoryRepository::class)->oneFormattedForSelect($model),
-            'serviceItems'=>App(ServiceItemRepository::class)->oneFormattedForSelect($model),
-            'serviceNatures'=>App(ServiceNatureRepository::class)->oneFormattedForSelect($model),
-            'positions'=>App(PositionRepository::class)->oneFormattedForSelect($model),
-
-            'currencies'=>App(CurrencyRepository::class)->oneFormattedForSelect($model),
- //           'customersAndLeads'=>App(CustomerRepository::class)->formattedForSelect($model)
-            
-        ];   
-    }
+  
     
     public static function exportViewName():string {
         return __('Quotation Pricing Calculator'); 

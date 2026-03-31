@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereSupplierComingDuesInvoicesNotificationsDays($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereSupplierPastDuesInvoicesNotificationsDays($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereUpdatedAt($value)
+ * @property int $coming_receivable_cheques_notifications_days
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\NotificationSetting whereComingReceivableChequesNotificationsDays($value)
  * @mixin \Eloquent
  */
 class NotificationSetting extends Model

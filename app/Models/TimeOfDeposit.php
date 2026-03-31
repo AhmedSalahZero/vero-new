@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Interfaces\Models\IHasDebitCurrentAccountStatement;
 use App\Models\FinancialInstitutionAccount;
 use App\Traits\HasCompany;
 use App\Traits\HasDepositAccount;
@@ -9,8 +10,9 @@ use App\Traits\HasLastStatementAmount;
 use App\Traits\HasPeriodicInterest;
 use App\Traits\Models\HasBlockedAgainst;
 use App\Traits\Models\HasCreditStatements;
+use App\Traits\Models\HasDebitCurrentAccountStatement;
 use App\Traits\Models\HasDebitStatements;
-use App\Traits\Models\HasOdooMoneyTransfer;
+use App\Traits\Models\HasDeleteOdoo;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -131,9 +133,9 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\TimeOfDeposit whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class TimeOfDeposit extends Model
+class TimeOfDeposit extends Model implements IHasDebitCurrentAccountStatement
 {
-    use HasDebitStatements,HasCreditStatements,HasBlockedAgainst,HasLastStatementAmount,HasDepositAccount,HasOdooMoneyTransfer,HasCompany,HasPeriodicInterest ;
+    use HasDebitStatements,HasDebitCurrentAccountStatement,HasCreditStatements,HasBlockedAgainst,HasLastStatementAmount,HasDepositAccount,HasDeleteOdoo,HasCompany,HasPeriodicInterest ;
     protected $guarded = ['id'];
     const RUNNING = 'running';
     const MATURED = 'matured';
@@ -220,7 +222,7 @@ class TimeOfDeposit extends Model
      */
     public function getMaturityAmountAddedToAccountId():?int
     {
-        return $this->maturity_amount_added_to_account_id ;
+        return (int)$this->maturity_amount_added_to_account_id ;
     }
     public function getMaturityAmountAddedToAccountNumber()
     {
@@ -497,18 +499,14 @@ class TimeOfDeposit extends Model
         }
         return $this->odoo_id;
     }
-    public function getJournalId():?int
-    {
-        return $this->journal_id ;
-    }
+    // public function getJournalId():?int
+    // {
+    //     return $this->journal_id ;
+    // }
     
     public function getExpiryDate()
     {
-        /**
-         * @var TimeOfDeposit $this
-         */
         return $this->getRenewalDateBefore($this->getRenewalDate());
-        
     }
     
     public function fullyIntegratedWithOdoo():bool
@@ -541,4 +539,20 @@ class TimeOfDeposit extends Model
     {
         $this->deleteOdoo($isBreakOrApplyDeposit);
     }
+	public function getCreateReference():string
+	{
+		return __('Create Time Of Deposit');
+	}
+	public function getBreakReference():string
+	{
+		return __('Collect Time Of Deposit');
+	}
+	public function getBreakColumns():array
+	{
+		return ['store_break_journal_entry_id'];
+	}
+	public function getAccountTypeId():int
+	{
+		return 28;
+	}
 }

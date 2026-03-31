@@ -89,8 +89,6 @@
                                 <td class="bank-max-width">{{ $odAgainstAssignmentOfContract->getBorrowingRateFormatted() . ' %'  }}</td>
                                 <td class="text-nowrap">{{ $odAgainstAssignmentOfContract->getMarginRateFormatted() . ' %'  }}</td>
                                 <td>{{ $odAgainstAssignmentOfContract->getInterestRateFormatted() . ' %'  }}</td>
-                                {{-- <td>{{ $odAgainstAssignmentOfContract->getMaxLendingLimitPerCustomer() }}</td> --}}
-                                {{-- <td>{{ $odAgainstAssignmentOfContract->getMaxSettlementDays() }}</td> --}}
                                 <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
                                     @include('reports.overdraft-against-assignment-of-contract.apply-rate')
                                     @if(hasAuthFor('update overdraft against assignment of contract'))

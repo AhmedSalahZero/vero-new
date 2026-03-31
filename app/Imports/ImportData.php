@@ -58,12 +58,11 @@ class ImportData implements
 
 	private $companyId;
 
-	private $batch;
+	// private $batch;
 	private $uploadModelName;
 
 	private $errorMessage='';
 
-	private $dateFailed =false;
 
 	private $userId='';
 
@@ -87,6 +86,7 @@ class ImportData implements
 		$validationRow = null;
 		$isInvalidData = false;
 		$rowId = 2 ;
+		/** @phpstan-ignore-next-line */
 		if($rowId == 2 && $this->uploadModelName == 'LabelingItem'){
 			$firstItem = $chunks->first();
 		

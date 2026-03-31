@@ -48,11 +48,7 @@ class PricingPlan extends Model
         $pricingPlans = PricingPlan::where('company_id',$companyId)->get();
         return formatOptionsForSelect($pricingPlans , 'getId' , 'getName');
     }
-       public static function oneFormattedForSelect($model)
-    {
-        $pricingPlans = PricingPlan::where('id',$model->pricing_plan_id)->get();
-        return formatOptionsForSelect($pricingPlans , 'getId' , 'getName');
-    }
+    
 	
 	
 }

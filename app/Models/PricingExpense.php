@@ -45,10 +45,7 @@ class PricingExpense extends Model
 		$expenses = PricingExpense::where('expense_type',$type)->where('company_id',$companyId)->get();
         return formatOptionsForSelect($expenses , 'getExpenseName' , 'getExpenseName');
     }
-	public static  function oneFormattedForSelect($model,$type){
-		$otherVariableManpowerExpenses = PricingExpense::where('expense_type',$type)->where('company_id',$model->company_id)->get();
-        return formatOptionsForSelect($otherVariableManpowerExpenses , 'getName' , 'getName');
-	}
+	
 	public static function getTypes():array 
 	{
 		return [

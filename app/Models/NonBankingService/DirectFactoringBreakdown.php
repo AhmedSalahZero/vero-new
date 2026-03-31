@@ -27,7 +27,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property array<array-key, mixed>|null $bank_loan_amounts
  * @property array<array-key, mixed>|null $bank_loan_settlements
  * @property array<array-key, mixed>|null $bank_interest_expense_payments
- * @property array<array-key, mixed>|null $bank_total_dues
  * @property array<array-key, mixed>|null $bank_interest_expense
  * @property array<array-key, mixed>|null $bank_end_balance
  * @property int $study_id
@@ -89,7 +88,7 @@ class DirectFactoringBreakdown extends Model
 		'bank_loan_amounts'=>'array',
 		'bank_loan_settlements'=>'array',
 		'bank_interest_expense_payments'=>'array',
-		'bank_total_dues'=>'array',
+//		'bank_total_dues'=>'array',
 		'bank_interest_expense'=>'array',
 		'bank_end_balance'=>'array',
 		'disbursement_amounts'=>'array',
@@ -115,14 +114,14 @@ class DirectFactoringBreakdown extends Model
 	}
 	
 	
-	public function getBankTotalDuePayload():array 
-	{
-		return (array)$this->bank_total_dues;
-	}
-	public function getBankTotalDueAtYearIndex(int $yearIndex)
-	{
-		return $this->getBankTotalDuePayload()[$yearIndex] ?? 0  ; 
-	}
+	// public function getBankTotalDuePayload():array 
+	// {
+	// 	return (array)$this->bank_total_dues;
+	// }
+	// public function getBankTotalDueAtYearIndex(int $yearIndex)
+	// {
+	// 	return $this->getBankTotalDuePayload()[$yearIndex] ?? 0  ; 
+	// }
 	
 	public function getBankInterestExpensePaymentPayload():array 
 	{

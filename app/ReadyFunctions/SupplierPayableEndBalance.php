@@ -38,7 +38,7 @@ class SupplierPayableEndBalance
 				$dueAmounts[$date] = $due_amount ;
 				$end_balance[$date] = $due_amount - ($collectionForInterval[$intervalName][$date]??0);
 				$result[$intervalName]['payment'][$date] = $collectionForInterval[$intervalName][$date]??0 ; 
-				$result[$intervalName]['end_balance'][$date] = $end_balance[$date]??0 ; 
+				$result[$intervalName]['end_balance'][$date] = $end_balance[$date] ; 
 				$beginning_balance = $end_balance[$date];
 			}
 		

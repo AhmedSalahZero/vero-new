@@ -124,37 +124,37 @@ class ContractService
     /**
      * Renew a contract (create new contract from existing one)
      */
-    public function renew(Contract $oldContract, Request $request): Contract
-    {
-        return DB::connection(PROPERTY_MANAGEMENT_CONNECTION_NAME)->transaction(function () use ($oldContract, $request) {
-            // Mark old contract as finished or expired based on its current status
-            if ($oldContract->status === 'running') {
-                $oldContract->update(['status' => 'finished', 'finished_date' => now()]);
-            } elseif ($oldContract->status === 'expired') {
-                // Already expired, no need to update
-            }
+    // public function renew(Contract $oldContract, Request $request): Contract
+    // {
+    //     return DB::connection(PROPERTY_MANAGEMENT_CONNECTION_NAME)->transaction(function () use ($oldContract, $request) {
+    //         // Mark old contract as finished or expired based on its current status
+    //         if ($oldContract->status === 'running') {
+    //             $oldContract->update(['status' => 'finished', 'finished_date' => now()]);
+    //         } elseif ($oldContract->status === 'expired') {
+    //             // Already expired, no need to update
+    //         }
 
-            // Create new contract with updated data
-            $newContractData = [
-                'property_id' => $oldContract->property_id,
-                'tenant_name' => $oldContract->tenant_name,
-                'tenant_type' => $oldContract->tenant_type,
-                'monthly_rent' => $oldContract->monthly_rent,
-                'contract_start_date' => $this->formatDateFromMonthPicker($request->get('contract_start_date')),
-                'contract_end_date' => $this->formatDateFromMonthPicker($request->get('contract_end_date')),
-                'collection_interval' => $request->get('collection_policy') ?? $oldContract->collection_interval,
-                'insurance_months_count' => $oldContract->insurance_months_count,
-                'insurance_amount' => $oldContract->insurance_amount,
-                'annually_increase_rate' => $request->get('annually_increase_rate'),
-                'collection_policy' => $request->get('collection_policy'),
-                'status' => 'running',
-				'contract_currency' => $oldContract->contract_currency,
-				'collection_currency' => $oldContract->collection_currency,
-            ];
+    //         // Create new contract with updated data
+    //         $newContractData = [
+    //             'property_id' => $oldContract->property_id,
+    //             'tenant_name' => $oldContract->tenant_name,
+    //             'tenant_type' => $oldContract->tenant_type,
+    //             'monthly_rent' => $oldContract->monthly_rent,
+    //             'contract_start_date' => $this->formatDateFromMonthPicker($request->get('contract_start_date')),
+    //             'contract_end_date' => $this->formatDateFromMonthPicker($request->get('contract_end_date')),
+    //             'collection_interval' => $request->get('collection_policy') ?? $oldContract->collection_interval,
+    //             'insurance_months_count' => $oldContract->insurance_months_count,
+    //             'insurance_amount' => $oldContract->insurance_amount,
+    //             'annually_increase_rate' => $request->get('annually_increase_rate'),
+    //             'collection_policy' => $request->get('collection_policy'),
+    //             'status' => 'running',
+	// 			'contract_currency' => $oldContract->contract_currency,
+	// 			'collection_currency' => $oldContract->collection_currency,
+    //         ];
 
-            return Contract::create($newContractData);
-        });
-    }
+    //         return Contract::create($newContractData);
+    //     });
+    // }
 
     /**
      * Update expired contracts

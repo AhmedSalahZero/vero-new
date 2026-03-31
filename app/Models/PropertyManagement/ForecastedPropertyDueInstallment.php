@@ -48,9 +48,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
+ * @property int|null $annual_start_date
  * @property-read \App\Models\Company|null $company
  * @property-read \App\Models\PropertyManagement\Property|null $property
- * @property-write mixed $annual_start_date
  * @property-read \App\Models\PropertyManagement\Study|null $study
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment newQuery()
@@ -58,6 +58,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereAnnualAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereAnnualCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereAnnualDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereAnnualStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereCollectionInterval($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\ForecastedPropertyDueInstallment whereCreatedAt($value)
@@ -216,6 +217,10 @@ class ForecastedPropertyDueInstallment extends Model
 	{	
 		return $this->study->getDateFromDateIndex($this->getAnnualStartDateAsIndex());
 	}
+	public function getAnnualStartDateAttribute($value)
+{
+    return $value;
+}
 	public function getAnnualStartDateFormattedForVueDatePicker():array
 	{
 		$annualStartDateAsIndex = $this->getAnnualStartDateAsIndex();

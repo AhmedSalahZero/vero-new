@@ -117,10 +117,10 @@ class IncomeStatementRepository implements IBaseRepository
 	}
 	public function commonScope(Request $request): builder
 	{
-		return IncomeStatement::onlyCurrentCompany()->when($request->filled('search_input'), function (Builder $builder) use ($request) {
+		return IncomeStatement::onlyCurrentCompany()->when($request->filled('search_input'), function (Builder $builder)  {
 
 			$builder
-				->where(function (Builder $builder) use ($request) {
+				->where(function (Builder $builder)  {
 					// $builder->when($request->filled('search_input'), function (Builder $builder) use ($request) {
 					// 	$keyword = "%" . $request->get('search_input') . "%";
 					

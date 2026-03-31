@@ -71,7 +71,9 @@ class ManpowerExpensesController extends Controller
 	
 	
 	public function storeDepartmentPositions(Company $company , Request $request,Study $study){
+		
 		$study->saveManpowerForm($request);
+		$study->recalculateManpower();
 		if($request->get('submit_button') == 'save'){
 			return response()->json([
 				'redirectTo'=>route('view.manpower.for.property.management',['company'=>$company->id,'study'=>$study->id])

@@ -6,7 +6,6 @@ use App\Helpers\HVero;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\Interfaces\IFinancialStatementAble;
-use App\Interfaces\Models\IShareable;
 use App\Models\Traits\Accessors\CashFlowStatementAccessor;
 use App\Models\Traits\Mutators\CashFlowStatementMutator;
 use App\Models\Traits\Relations\CashFlowStatementRelation;
@@ -75,7 +74,7 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashFlowStatement whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class CashFlowStatement extends Model implements  IHaveAllRelations, IExportable, IShareable, IFinancialStatementAble
+class CashFlowStatement extends Model implements  IHaveAllRelations, IExportable, IFinancialStatementAble
 {
 	use CashFlowStatementAccessor,
 		CashFlowStatementMutator,
@@ -89,12 +88,7 @@ class CashFlowStatement extends Model implements  IHaveAllRelations, IExportable
 	
 	protected $table = 'financial_statement_ables';
 
-	public static function getShareableEditViewVars($model): array
-	{
-		return [
-			'pageTitle' => CashFlowStatement::getPageTitle(),
-		];
-	}
+
 
 	public function getRouteKeyName()
 	{

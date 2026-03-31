@@ -10,51 +10,12 @@ use App\Models\FinancialStatement;
 use App\Models\FinancialStatementItem;
 use App\Models\IncomeStatement;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FinancialStatementRepository implements IBaseRepository
 {
 
-	public function all(): Collection
-	{
-		return FinancialStatement::withAllRelations()->onlyCurrentCompany()->get();
-	}
-
-	public function allFormatted(): array
-	{
-		return FinancialStatement::onlyCurrentCompany()->get()->pluck('name', 'id')->toArray();
-	}
-	public function allFormattedForSelect()
-	{
-		$financialStatements = $this->all();
-		return formatOptionsForSelect($financialStatements, 'getId', 'getName');
-	}
-
-	public function getAllExcept($id): ?Collection
-	{
-		return FinancialStatement::onlyCurrentCompany()->where('id', '!=', $id)->get();
-	}
-
-	public function query(): Builder
-	{
-		return FinancialStatement::onlyCurrentCompany()->query();
-	}
-	public function Random(): Builder
-	{
-		return FinancialStatement::onlyCurrentCompany()->inRandomOrder();
-	}
-
-	public function find(?int $id): FinancialStatement
-	{
-		return FinancialStatement::onlyCurrentCompany()->find($id);
-	}
-
-	public function getLatest($column = 'id'): ?FinancialStatement
-	{
-		return FinancialStatement::onlyCurrentCompany()->latest($column)->first();
-	}
 	public function store(Request $request)
 	{
 
@@ -84,14 +45,7 @@ class FinancialStatementRepository implements IBaseRepository
 		return $financialStatement;
 	}
 
-	public function storeReport(Request $request)
-	{
-		$financialStatement = new FinancialStatement();
 
-		$financialStatement->storeReport($request);
-
-		return $financialStatement;
-	}
 
 	public function update( $financialStatement, Request $request): void
 	{
@@ -137,22 +91,16 @@ class FinancialStatementRepository implements IBaseRepository
 	}
 	public function paginate(Request $request): array
 	{
-		$start = microtime(true);
 
 		$filterData = $this->commonScope($request);
 
 		$allFilterDataCounter = $filterData->count();
 
 		$datePerPage = $filterData->skip(Request('start'))->take(Request('length'))->get()->each(function (FinancialStatement $financialStatement, $index) {
-			// $financialStatement->creator_name = $financialStatement->getCreatorName();
 			$financialStatement->cash_flow_statement_id = $financialStatement->cashFlowStatement ? $financialStatement->cashFlowStatement->id : 0;
 			$financialStatement->income_statement_id = $financialStatement->incomeStatement ? $financialStatement->incomeStatement->id : 0;
-		//	$financialStatement->created_at_formatted = formatDateFromString($financialStatement->created_at);
-			// $financialStatement->updated_at_formatted = formatDateFromString($financialStatement->updated_at);
-			// $financialStatement->order = $index + 1;
+			$financialStatement->order = $index + 1;
 			$financialStatement->can_view_income_statement_actual_report = $financialStatement->incomeStatement ? $financialStatement->incomeStatement->can_view_actual_report : false;
-
-			
 			$financialStatement->can_view_cash_flow_statement_actual_report = false;
 			$financialStatement->duration_type_select = $this->formatSelectFor($financialStatement->duration_type);
 			$financialStatement->can_edit_duration_type = $financialStatement->canEditDurationType();
@@ -165,39 +113,34 @@ class FinancialStatementRepository implements IBaseRepository
 		];
 	}
 
-	public function paginateReport(Request $request, FinancialStatement $financialStatement): array
-	{
+	// public function paginateReport(Request $request, FinancialStatement $financialStatement): array
+	// {
 
-		$filterData = $this->commonScopeForReport($request, $financialStatement);
+	// 	$filterData = $this->commonScopeForReport($request, $financialStatement);
 
-		$allFilterDataCounter = $filterData->count();
+	// 	$allFilterDataCounter = $filterData->count();
 
-		$dataWithRelations = collect([]);
-		$datePerPage = $filterData->get()->each(function (FinancialStatementItem $financialStatementItem, $index) use ($dataWithRelations, $financialStatement, $request) {
-			// $financialStatementItem->creator_name = $financialStatementItem->getCreatorName();
-			// $financialStatementItem->created_at_formatted = formatDateFromString($financialStatementItem->created_at);
-			// $financialStatementItem->updated_at_formatted = formatDateFromString($financialStatementItem->updated_at);
-			// $financialStatementItem->order = $index + 1;
+	// 	$dataWithRelations = collect([]);
+	// 	$datePerPage = $filterData->get()->each(function (FinancialStatementItem $financialStatementItem, $index) use ($dataWithRelations, $financialStatement, $request) {
+	// 		$dataWithRelations->add($financialStatementItem);
+	// 		$financialStatementItem->getSubItems($financialStatement->id, $request->get('sub_item_type'), $request->get('sub_item_name'))->each(function ($subItem) use ($dataWithRelations, $financialStatementItem) {
+	// 			$subItem->isSubItem = true; // isSubRow
 
-			$dataWithRelations->add($financialStatementItem);
-			$financialStatementItem->getSubItems($financialStatement->id, $request->get('sub_item_type'), $request->get('sub_item_name'))->each(function ($subItem) use ($dataWithRelations, $financialStatementItem) {
-				$subItem->isSubItem = true; // isSubRow
-
-				if ($financialStatementItem->has_depreciation_or_amortization) {
-					$subItem->pivot->can_be_depreciation = true;
-				}
-				$dataWithRelations->add($subItem);
-			});
-		});
+	// 			if ($financialStatementItem->has_depreciation_or_amortization) {
+	// 				$subItem->pivot->can_be_depreciation = true;
+	// 			}
+	// 			$dataWithRelations->add($subItem);
+	// 		});
+	// 	});
 
 
-		return [
-			'data' => $dataWithRelations,
-			"draw" => (int)Request('draw'),
-			"recordsTotal" => FinancialStatementItem::count(),
-			"recordsFiltered" => $allFilterDataCounter,
-		];
-	}
+	// 	return [
+	// 		'data' => $dataWithRelations,
+	// 		"draw" => (int)Request('draw'),
+	// 		"recordsTotal" => FinancialStatementItem::count(),
+	// 		"recordsFiltered" => $allFilterDataCounter,
+	// 	];
+	// }
 	public function commonScope(Request $request): builder
 	{
 		return FinancialStatement::onlyCurrentCompany()
@@ -208,22 +151,22 @@ class FinancialStatementRepository implements IBaseRepository
 				->where(function (Builder $builder) use ($request) {
 					$builder->when($request->filled('search_input'), function (Builder $builder) use ($request) {
 						$keyword = "%" . $request->get('search_input') . "%";
-						$builder;
+					
 					});
 				});
 		})
 			->orderBy('financial_statements.' . getDefaultOrderBy()['column'], getDefaultOrderBy()['direction']);
 	}
 
-	public function commonScopeForReport(Request $request, FinancialStatement $financialStatement): builder
-	{
+	// public function commonScopeForReport(Request $request, FinancialStatement $financialStatement): builder
+	// {
 
-		return FinancialStatementItem::with(['subItems' => function ($builder) use ($financialStatement) {
-			$builder->where('financial_statement_id', $financialStatement->id);
-			//		->where('is_quantity', 0)
-		}])->whereHas('financialStatements', function (Builder $builder) use ($financialStatement) {
-			$builder->where('financial_statements.id', $financialStatement->id);
-		})
-			->orderBy('financial_statement_items.id', 'asc');
-	}
+	// 	return FinancialStatementItem::with(['subItems' => function ($builder) use ($financialStatement) {
+	// 		$builder->where('financial_statement_id', $financialStatement->id);
+	// 		//		->where('is_quantity', 0)
+	// 	}])->whereHas('financialStatements', function (Builder $builder) use ($financialStatement) {
+	// 		$builder->where('financial_statements.id', $financialStatement->id);
+	// 	})
+	// 		->orderBy('financial_statement_items.id', 'asc');
+	// }
 }

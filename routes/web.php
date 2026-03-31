@@ -71,7 +71,7 @@ Route::middleware([])->group(function () {
             Route::get('user/{user}/edit/{company?}', 'UserController@edit')->middleware('isCashManagement')->name('user.edit');
             Route::put('user/{user}/{company?}', 'UserController@update')->middleware('isCashManagement')->name('user.update');
             Route::delete('user/{user}/{company?}', 'UserController@destroy')->middleware('isCashManagement')->name('user.destroy');
-            Route::resource('toolTipData', 'ToolTipDataController');
+            // Route::resource('toolTipData', 'ToolTipDataController');
 
             
             
@@ -93,7 +93,7 @@ Route::middleware([])->group(function () {
                 Route::get('/edit/{company?}', 'UsersAndPermissionsController@edit')->middleware('isCashManagement')->name('edit');
                 Route::post('/update', 'UsersAndPermissionsController@update')->name('update');
             });
-            Route::get('toolTipSectionsFields/{id}', 'ToolTipDataController@sectionFields')->name('section.fields');
+            // Route::get('toolTipSectionsFields/{id}', 'ToolTipDataController@sectionFields')->name('section.fields');
             Route::get('logs', 'LogController@show')->name('admin.show.logs');
             Route::get('logs/{user}', 'LogController@showDetail')->name('admin.show.logs.detail');
             //########### Client View ############
@@ -327,33 +327,33 @@ Route::middleware([])->group(function () {
 				
 				
                 
-                /**
-                 * * Budget
-                 */
-                Route::group(['prefix'=>FINANCIAL_PLANNING_URL_PREFIX,'namespace'=>'FinancialPlanning','middleware'=>'isFinancialPlanning'], function () {
-                    /**
-                     * * Study Info
-                     */
-                    route::get('study', 'StudyController@index')->name('view.financial.planning.study');
-                    route::get('study/create', 'StudyController@create')->name('create.financial.planning.study');
-                    Route::get('study/{study}/edit', 'StudyController@edit')->name('edit.financial.planning.study');
-                    Route::put('study/{study}/update', 'StudyController@update')->name('update.financial.planning.study');
-                    route::post('study', 'StudyController@store')->name('store.financial.planning.study');
-                    route::delete('study/{study}/delete', 'StudyController@destroy')->name('study.financial.planning.destroy');
+                // /**
+                //  * * Budget
+                //  */
+                // Route::group(['prefix'=>FINANCIAL_PLANNING_URL_PREFIX,'namespace'=>'FinancialPlanning','middleware'=>'isFinancialPlanning'], function () {
+                //     /**
+                //      * * Study Info
+                //      */
+                //     route::get('study', 'StudyController@index')->name('view.financial.planning.study');
+                //     route::get('study/create', 'StudyController@create')->name('create.financial.planning.study');
+                //     Route::get('study/{study}/edit', 'StudyController@edit')->name('edit.financial.planning.study');
+                //     Route::put('study/{study}/update', 'StudyController@update')->name('update.financial.planning.study');
+                //     route::post('study', 'StudyController@store')->name('store.financial.planning.study');
+                //     route::delete('study/{study}/delete', 'StudyController@destroy')->name('study.financial.planning.destroy');
                     
-                    Route::group(['prefix'=>'study/{study}'], function () {
+                //     Route::group(['prefix'=>'study/{study}'], function () {
                         
                 
                     
                         
-                        route::get('income-statement/forecast', 'IncomeStatementController@index')->name('view.financial.planning.income.statement');
-                        route::post('income-statement/forecast', 'IncomeStatementController@store')->name('store.financial.planning.income.statement');
+                //         route::get('income-statement/forecast', 'IncomeStatementController@index')->name('view.financial.planning.income.statement');
+                //         route::post('income-statement/forecast', 'IncomeStatementController@store')->name('store.financial.planning.income.statement');
             
                          
-                    });
+                //     });
                     
                     
-                });
+                // });
                 
 
                 // bank certificate of deposit

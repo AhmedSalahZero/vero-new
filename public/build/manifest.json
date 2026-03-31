@@ -1,144 +1,131 @@
 {
-  "_Helper-CROZLQCe.js": {
-    "file": "assets/Helper-CROZLQCe.js",
+  "_Helper-C2ZGttlC.js": {
+    "file": "assets/Helper-C2ZGttlC.js",
     "name": "Helper"
   },
-  "_Label-CNUstiHv.js": {
-    "file": "assets/Label-CNUstiHv.js",
+  "_Label-C_fgxuKT.js": {
+    "file": "assets/Label-C_fgxuKT.js",
     "name": "Label",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ]
   },
   "__commonjsHelpers-Cpj98o6Y.js": {
     "file": "assets/_commonjsHelpers-Cpj98o6Y.js",
     "name": "_commonjsHelpers"
   },
-  "_animated-Cnyk5Oxs.js": {
-    "file": "assets/animated-Cnyk5Oxs.js",
-    "name": "animated",
+  "_index-B2Lf_vv5.js": {
+    "file": "assets/index-B2Lf_vv5.js",
+    "name": "index",
     "imports": [
-      "_preload-helper-CKkBAq0M.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ],
-    "dynamicImports": [
-      "_pdfmake-RiPKb5ns.js",
-      "node_modules/@amcharts/amcharts4/.internal/pdfmake/vfs_fonts.js",
-      "node_modules/@amcharts/amcharts4/.internal/canvg/index.js",
-      "node_modules/@amcharts/amcharts4/.internal/bundled/xlsx/xlsx.mjs"
+    "css": [
+      "assets/index-CqzI3_Ui.css"
     ]
   },
-  "_index-B5aIMSML.js": {
-    "file": "assets/index-B5aIMSML.js",
+  "_index-B9Y4Emtn.js": {
+    "file": "assets/index-B9Y4Emtn.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-DFvXibSH.js"
+    ],
+    "css": [
+      "assets/index-COPXjxZ8.css"
     ]
   },
-  "_index-B7f3lZUs.js": {
-    "file": "assets/index-B7f3lZUs.js",
+  "_index-BLAju0Qc.js": {
+    "file": "assets/index-BLAju0Qc.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-CapkzRH_.js",
-      "_index-DBPgi4D9.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C3WyCbX3.js",
+      "_index-C0l3Xz9w.js"
     ]
   },
-  "_index-CDdgig7a.js": {
-    "file": "assets/index-CDdgig7a.js",
+  "_index-Bbr-IE-0.js": {
+    "file": "assets/index-Bbr-IE-0.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-CapkzRH_.js",
-      "_index-B7f3lZUs.js",
-      "_index-CGr19XRx.js",
-      "_index-DBPgi4D9.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-DFvXibSH.js",
+      "_index-C3WyCbX3.js",
+      "_index-C0l3Xz9w.js",
+      "_index-CzoAoEky.js"
     ]
   },
-  "_index-CGr19XRx.js": {
-    "file": "assets/index-CGr19XRx.js",
+  "_index-C0l3Xz9w.js": {
+    "file": "assets/index-C0l3Xz9w.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js"
+    ]
+  },
+  "_index-C3WyCbX3.js": {
+    "file": "assets/index-C3WyCbX3.js",
+    "name": "index",
+    "imports": [
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-DFvXibSH.js",
+      "_index-C0l3Xz9w.js"
     ]
   },
   "_index-COPXjxZ8.css": {
     "file": "assets/index-COPXjxZ8.css",
     "src": "_index-COPXjxZ8.css"
   },
-  "_index-CapkzRH_.js": {
-    "file": "assets/index-CapkzRH_.js",
-    "name": "index",
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-CGr19XRx.js",
-      "_index-DBPgi4D9.js"
-    ]
-  },
   "_index-CqzI3_Ui.css": {
     "file": "assets/index-CqzI3_Ui.css",
     "src": "_index-CqzI3_Ui.css"
   },
-  "_index-DBPgi4D9.js": {
-    "file": "assets/index-DBPgi4D9.js",
+  "_index-CvtmZZoA.js": {
+    "file": "assets/index-CvtmZZoA.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C3WyCbX3.js",
+      "_index-BLAju0Qc.js",
+      "_index-DFvXibSH.js",
+      "_index-C0l3Xz9w.js"
     ]
   },
-  "_index-DR7tqKMy.js": {
-    "file": "assets/index-DR7tqKMy.js",
+  "_index-CzoAoEky.js": {
+    "file": "assets/index-CzoAoEky.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-CGr19XRx.js",
-      "_index-CapkzRH_.js",
-      "_index-DBPgi4D9.js",
-      "_index-zhb1fgJ8.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C3WyCbX3.js",
+      "_index-C0l3Xz9w.js"
     ]
   },
-  "_index-DhwZBn-h.js": {
-    "file": "assets/index-DhwZBn-h.js",
+  "_index-DFvXibSH.js": {
+    "file": "assets/index-DFvXibSH.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
-    ],
-    "css": [
-      "assets/index-CqzI3_Ui.css"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js"
     ]
   },
-  "_index-HAmpyfpq.js": {
-    "file": "assets/index-HAmpyfpq.js",
+  "_index-DagIWMBN.js": {
+    "file": "assets/index-DagIWMBN.js",
     "name": "index",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-CGr19XRx.js"
-    ],
-    "css": [
-      "assets/index-COPXjxZ8.css"
-    ]
-  },
-  "_index-zhb1fgJ8.js": {
-    "file": "assets/index-zhb1fgJ8.js",
-    "name": "index",
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-CapkzRH_.js",
-      "_index-DBPgi4D9.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C0l3Xz9w.js"
     ]
   },
   "_main-BSuriRtL.css": {
     "file": "assets/main-BSuriRtL.css",
     "src": "_main-BSuriRtL.css"
   },
-  "_main-DdOLk-SJ.js": {
-    "file": "assets/main-DdOLk-SJ.js",
+  "_main-D492NIr2.js": {
+    "file": "assets/main-D492NIr2.js",
     "name": "main",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ],
     "css": [
       "assets/main-BSuriRtL.css"
@@ -152,26 +139,26 @@
       "__commonjsHelpers-Cpj98o6Y.js"
     ]
   },
-  "_preload-helper-CKkBAq0M.js": {
-    "file": "assets/preload-helper-CKkBAq0M.js",
+  "_preload-helper-BPrmGuLI.js": {
+    "file": "assets/preload-helper-BPrmGuLI.js",
     "name": "preload-helper"
   },
-  "_sweetalert2.esm.all-BvX8fUzu.js": {
-    "file": "assets/sweetalert2.esm.all-BvX8fUzu.js",
+  "_sweetalert2.esm.all-rDTa3Qpb.js": {
+    "file": "assets/sweetalert2.esm.all-rDTa3Qpb.js",
     "name": "sweetalert2.esm.all"
   },
-  "_useDateFormatter-D0Z-N0vp.js": {
-    "file": "assets/useDateFormatter-D0Z-N0vp.js",
+  "_useDateFormatter-D2WQEOwL.js": {
+    "file": "assets/useDateFormatter-D2WQEOwL.js",
     "name": "useDateFormatter",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ]
   },
-  "_useNewLoanFundingCalculator-FO6RZcvi.js": {
-    "file": "assets/useNewLoanFundingCalculator-FO6RZcvi.js",
+  "_useNewLoanFundingCalculator-Xs5wTn3i.js": {
+    "file": "assets/useNewLoanFundingCalculator-Xs5wTn3i.js",
     "name": "useNewLoanFundingCalculator",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ]
   },
   "_useTableExpender-DDuYjOg0.js": {
@@ -182,11 +169,11 @@
     "file": "assets/useTableExpender-DMZmjTb6.js",
     "name": "useTableExpender"
   },
-  "_vue-i18n-DcHQw-KR.js": {
-    "file": "assets/vue-i18n-DcHQw-KR.js",
+  "_vue-i18n-CGHzbtPG.js": {
+    "file": "assets/vue-i18n-CGHzbtPG.js",
     "name": "vue-i18n",
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ]
   },
   "node_modules/@amcharts/amcharts4/.internal/bundled/xlsx/xlsx.mjs": {
@@ -673,209 +660,209 @@
     "isDynamicEntry": true
   },
   "node_modules/vue/dist/vue.runtime.esm-bundler.js": {
-    "file": "assets/vue.runtime.esm-bundler-DP-MtcJj.js",
+    "file": "assets/vue.runtime.esm-bundler-B4g-HlDW.js",
     "name": "vue.runtime.esm-bundler",
     "src": "node_modules/vue/dist/vue.runtime.esm-bundler.js",
     "isDynamicEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js"
     ]
   },
   "resources/js/NonBanking/Views/DirectFactoring/direct-factoring.js": {
-    "file": "assets/direct-factoring-CfXrhB-o.js",
+    "file": "assets/direct-factoring-Bg8EsQoi.js",
     "name": "direct-factoring",
     "src": "resources/js/NonBanking/Views/DirectFactoring/direct-factoring.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
-      "_useDateFormatter-D0Z-N0vp.js",
-      "_useNewLoanFundingCalculator-FO6RZcvi.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
+      "_useDateFormatter-D2WQEOwL.js",
+      "_useNewLoanFundingCalculator-Xs5wTn3i.js",
       "_useTableExpender-DMZmjTb6.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/direct-factoring-B3y_ylaK.css"
     ]
   },
   "resources/js/NonBanking/Views/Expenses/expenses.js": {
-    "file": "assets/expenses-Cc50AXoT.js",
+    "file": "assets/expenses-Duhe9scG.js",
     "name": "expenses",
     "src": "resources/js/NonBanking/Views/Expenses/expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-DR7tqKMy.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js",
-      "_index-zhb1fgJ8.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C0l3Xz9w.js",
+      "_index-Bbr-IE-0.js",
+      "_index-C3WyCbX3.js",
+      "_index-B2Lf_vv5.js",
+      "_Helper-C2ZGttlC.js",
+      "_Label-C_fgxuKT.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js",
+      "_index-CzoAoEky.js"
     ],
     "css": [
       "assets/expenses-DKZhdAFU.css"
     ]
   },
   "resources/js/NonBanking/Views/FixedAssets/fixed-assets.ts": {
-    "file": "assets/fixed-assets-DzHnY3ZW.js",
+    "file": "assets/fixed-assets-BdBx5S2r.js",
     "name": "fixed-assets",
     "src": "resources/js/NonBanking/Views/FixedAssets/fixed-assets.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-DR7tqKMy.js",
-      "_index-B5aIMSML.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js",
-      "_index-zhb1fgJ8.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C0l3Xz9w.js",
+      "_index-Bbr-IE-0.js",
+      "_index-DagIWMBN.js",
+      "_index-C3WyCbX3.js",
+      "_index-B2Lf_vv5.js",
+      "_Helper-C2ZGttlC.js",
+      "_Label-C_fgxuKT.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js",
+      "_index-CzoAoEky.js"
     ],
     "css": [
       "assets/fixed-assets-BAkChtUY.css"
     ]
   },
   "resources/js/NonBanking/Views/GeneralAssumptions/general-assumptions.ts": {
-    "file": "assets/general-assumptions-ChTq9LIA.js",
+    "file": "assets/general-assumptions-BiK3TIPd.js",
     "name": "general-assumptions",
     "src": "resources/js/NonBanking/Views/GeneralAssumptions/general-assumptions.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
+      "_Label-C_fgxuKT.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/general-assumptions-SHUx_2sU.css"
     ]
   },
   "resources/js/NonBanking/Views/IjaraMortgage/ijara-mortgage.js": {
-    "file": "assets/ijara-mortgage-YLen1Tga.js",
+    "file": "assets/ijara-mortgage-B244cxnF.js",
     "name": "ijara-mortgage",
     "src": "resources/js/NonBanking/Views/IjaraMortgage/ijara-mortgage.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
-      "_useNewLoanFundingCalculator-FO6RZcvi.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
+      "_useNewLoanFundingCalculator-Xs5wTn3i.js",
       "_useTableExpender-DMZmjTb6.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/ijara-mortgage-B1qg51XZ.css"
     ]
   },
   "resources/js/NonBanking/Views/LeasingFactoring/leasing.js": {
-    "file": "assets/leasing-DVK0pDI0.js",
+    "file": "assets/leasing-cE5n3wlL.js",
     "name": "leasing",
     "src": "resources/js/NonBanking/Views/LeasingFactoring/leasing.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
-      "_useDateFormatter-D0Z-N0vp.js",
-      "_useNewLoanFundingCalculator-FO6RZcvi.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
+      "_useDateFormatter-D2WQEOwL.js",
+      "_useNewLoanFundingCalculator-Xs5wTn3i.js",
       "_useTableExpender-DMZmjTb6.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/leasing-BRBFRS8Y.css"
     ]
   },
   "resources/js/NonBanking/Views/ManpowerExpenses/manpower-expenses.js": {
-    "file": "assets/manpower-expenses-DpvGdauZ.js",
+    "file": "assets/manpower-expenses-C21rAK1u.js",
     "name": "manpower-expenses",
     "src": "resources/js/NonBanking/Views/ManpowerExpenses/manpower-expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_Helper-CROZLQCe.js",
-      "_useDateFormatter-D0Z-N0vp.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_Helper-C2ZGttlC.js",
+      "_useDateFormatter-D2WQEOwL.js",
       "_useTableExpender-DMZmjTb6.js",
-      "_main-DdOLk-SJ.js"
+      "_main-D492NIr2.js"
     ],
     "css": [
       "assets/manpower-expenses-CDH175L3.css"
     ]
   },
   "resources/js/NonBanking/Views/PortfolioMortgage/portfolio-mortgage.js": {
-    "file": "assets/portfolio-mortgage-s7rkY0GO.js",
+    "file": "assets/portfolio-mortgage-CketJJ3W.js",
     "name": "portfolio-mortgage",
     "src": "resources/js/NonBanking/Views/PortfolioMortgage/portfolio-mortgage.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
-      "_useDateFormatter-D0Z-N0vp.js",
-      "_useNewLoanFundingCalculator-FO6RZcvi.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
+      "_useDateFormatter-D2WQEOwL.js",
+      "_useNewLoanFundingCalculator-Xs5wTn3i.js",
       "_useTableExpender-DMZmjTb6.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/portfolio-mortgage-BAzhOen0.css"
     ]
   },
   "resources/js/NonBanking/Views/ReverseFactoring/reverse-factoring.js": {
-    "file": "assets/reverse-factoring-BLFpIOQv.js",
+    "file": "assets/reverse-factoring-Cc2biJ7b.js",
     "name": "reverse-factoring",
     "src": "resources/js/NonBanking/Views/ReverseFactoring/reverse-factoring.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
-      "_useDateFormatter-D0Z-N0vp.js",
-      "_useNewLoanFundingCalculator-FO6RZcvi.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
+      "_useDateFormatter-D2WQEOwL.js",
+      "_useNewLoanFundingCalculator-Xs5wTn3i.js",
       "_useTableExpender-DMZmjTb6.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/reverse-factoring-CuvoOggZ.css"
     ]
   },
   "resources/js/NonBanking/Views/Spreadsheet/spread-sheet.js": {
-    "file": "assets/spread-sheet-Dx6cX9qH.js",
+    "file": "assets/spread-sheet-B9J1ayJx.js",
     "name": "spread-sheet",
     "src": "resources/js/NonBanking/Views/Spreadsheet/spread-sheet.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
       "__commonjsHelpers-Cpj98o6Y.js",
-      "_preload-helper-CKkBAq0M.js",
-      "_main-DdOLk-SJ.js",
-      "_Helper-CROZLQCe.js"
+      "_preload-helper-BPrmGuLI.js",
+      "_main-D492NIr2.js",
+      "_Helper-C2ZGttlC.js"
     ],
     "dynamicImports": [
       "node_modules/@univerjs/engine-render/lib/af-Cp38c8Xu.mjs",
@@ -962,382 +949,289 @@
     ]
   },
   "resources/js/PropertyManagement/Views/Contracts/form.ts": {
-    "file": "assets/form-BBeKU4Hk.js",
+    "file": "assets/form-DdMTTCbT.js",
     "name": "form",
     "src": "resources/js/PropertyManagement/Views/Contracts/form.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_main-DdOLk-SJ.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Label-CNUstiHv.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_main-D492NIr2.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Label-C_fgxuKT.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/form-BdANud1t.css"
     ]
   },
   "resources/js/PropertyManagement/Views/Contracts/index.ts": {
-    "file": "assets/index-DQG7fSPb.js",
+    "file": "assets/index-B_kYhhAu.js",
     "name": "index",
     "src": "resources/js/PropertyManagement/Views/Contracts/index.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-HAmpyfpq.js",
-      "_index-DhwZBn-h.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_Helper-CROZLQCe.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B9Y4Emtn.js",
+      "_index-B2Lf_vv5.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_Helper-C2ZGttlC.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/index-Bl0dvVRq.css"
     ]
   },
   "resources/js/PropertyManagement/Views/Dashboard/cashflow-forecast.ts": {
-    "file": "assets/cashflow-forecast-CddnTd93.js",
+    "file": "assets/cashflow-forecast-DPS4LcrJ.js",
     "name": "cashflow-forecast",
     "src": "resources/js/PropertyManagement/Views/Dashboard/cashflow-forecast.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_Label-CNUstiHv.js",
-      "_Helper-CROZLQCe.js",
-      "_animated-Cnyk5Oxs.js",
-      "_main-DdOLk-SJ.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_preload-helper-CKkBAq0M.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_Label-C_fgxuKT.js",
+      "_Helper-C2ZGttlC.js",
+      "_preload-helper-BPrmGuLI.js",
+      "_main-D492NIr2.js",
+      "_vue-i18n-CGHzbtPG.js"
+    ],
+    "dynamicImports": [
+      "_pdfmake-RiPKb5ns.js",
+      "node_modules/@amcharts/amcharts4/.internal/pdfmake/vfs_fonts.js",
+      "node_modules/@amcharts/amcharts4/.internal/canvg/index.js",
+      "node_modules/@amcharts/amcharts4/.internal/bundled/xlsx/xlsx.mjs"
     ],
     "css": [
       "assets/cashflow-forecast-Ct_z4LCs.css"
     ]
   },
   "resources/js/PropertyManagement/Views/Expenses/expenses.js": {
-    "file": "assets/expenses-C5Vgdmip.js",
+    "file": "assets/expenses-BIeeS4_v.js",
     "name": "expenses",
     "src": "resources/js/PropertyManagement/Views/Expenses/expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-DR7tqKMy.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js",
-      "_index-zhb1fgJ8.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C0l3Xz9w.js",
+      "_index-Bbr-IE-0.js",
+      "_index-C3WyCbX3.js",
+      "_index-B2Lf_vv5.js",
+      "_Helper-C2ZGttlC.js",
+      "_Label-C_fgxuKT.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js",
+      "_index-CzoAoEky.js"
     ],
     "css": [
       "assets/expenses-D0Snc5XG.css"
     ]
   },
   "resources/js/PropertyManagement/Views/FixedAssets/fixed-assets.ts": {
-    "file": "assets/fixed-assets-BA2m-CPm.js",
+    "file": "assets/fixed-assets-C3elv9Uw.js",
     "name": "fixed-assets",
     "src": "resources/js/PropertyManagement/Views/FixedAssets/fixed-assets.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-DR7tqKMy.js",
-      "_index-B5aIMSML.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js",
-      "_index-zhb1fgJ8.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C0l3Xz9w.js",
+      "_index-Bbr-IE-0.js",
+      "_index-DagIWMBN.js",
+      "_index-C3WyCbX3.js",
+      "_index-B2Lf_vv5.js",
+      "_Helper-C2ZGttlC.js",
+      "_Label-C_fgxuKT.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js",
+      "_index-CzoAoEky.js"
     ],
     "css": [
       "assets/fixed-assets-DFHbOMZf.css"
     ]
   },
   "resources/js/PropertyManagement/Views/ForecastedProperties/forecasted-properties.js": {
-    "file": "assets/forecasted-properties-C2q-KFXc.js",
+    "file": "assets/forecasted-properties-Ddu8brEk.js",
     "name": "forecasted-properties",
     "src": "resources/js/PropertyManagement/Views/ForecastedProperties/forecasted-properties.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-B5aIMSML.js",
-      "_index-B7f3lZUs.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-C0l3Xz9w.js",
+      "_index-DagIWMBN.js",
+      "_index-BLAju0Qc.js",
+      "_index-C3WyCbX3.js",
+      "_index-B2Lf_vv5.js",
+      "_Helper-C2ZGttlC.js",
+      "_Label-C_fgxuKT.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/forecasted-properties-yhW8fROA.css"
     ]
   },
   "resources/js/PropertyManagement/Views/GeneralAssumptions/general-assumptions.ts": {
-    "file": "assets/general-assumptions-pGVLPgOl.js",
+    "file": "assets/general-assumptions-D8GD7_1v.js",
     "name": "general-assumptions",
     "src": "resources/js/PropertyManagement/Views/GeneralAssumptions/general-assumptions.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Label-CNUstiHv.js",
-      "_Helper-CROZLQCe.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Label-C_fgxuKT.js",
+      "_Helper-C2ZGttlC.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/general-assumptions-DV7a9jZq.css"
     ]
   },
   "resources/js/PropertyManagement/Views/ManpowerExpenses/manpower-expenses.js": {
-    "file": "assets/manpower-expenses-DVlGLN4L.js",
+    "file": "assets/manpower-expenses-CVLYez8-.js",
     "name": "manpower-expenses",
     "src": "resources/js/PropertyManagement/Views/ManpowerExpenses/manpower-expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_Helper-CROZLQCe.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_Helper-C2ZGttlC.js",
       "_useTableExpender-DDuYjOg0.js",
-      "_main-DdOLk-SJ.js"
+      "_main-D492NIr2.js"
     ],
     "css": [
       "assets/manpower-expenses-BivB_MTX.css"
     ]
   },
   "resources/js/PropertyManagement/Views/Properties/index.ts": {
-    "file": "assets/index-DBoz4-GH.js",
+    "file": "assets/index-DloxkSCx.js",
     "name": "index",
     "src": "resources/js/PropertyManagement/Views/Properties/index.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-HAmpyfpq.js",
-      "_index-DhwZBn-h.js",
-      "_main-DdOLk-SJ.js",
-      "_index-B7f3lZUs.js",
-      "_index-DBPgi4D9.js",
-      "_index-B5aIMSML.js",
-      "_index-CapkzRH_.js",
-      "_index-CDdgig7a.js",
-      "_Label-CNUstiHv.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_Helper-CROZLQCe.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B9Y4Emtn.js",
+      "_index-B2Lf_vv5.js",
+      "_main-D492NIr2.js",
+      "_index-BLAju0Qc.js",
+      "_index-C0l3Xz9w.js",
+      "_index-DagIWMBN.js",
+      "_index-C3WyCbX3.js",
+      "_index-CvtmZZoA.js",
+      "_Label-C_fgxuKT.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_Helper-C2ZGttlC.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/index-BmNnqUvE.css"
     ]
   },
   "resources/js/PropertyManagement/Views/Properties/properties.ts": {
-    "file": "assets/properties-BsD1zqAd.js",
+    "file": "assets/properties-DYjkGq--.js",
     "name": "properties",
     "src": "resources/js/PropertyManagement/Views/Properties/properties.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-CapkzRH_.js",
-      "_Label-CNUstiHv.js",
-      "_index-DBPgi4D9.js",
-      "_main-DdOLk-SJ.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_Helper-CROZLQCe.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C3WyCbX3.js",
+      "_Label-C_fgxuKT.js",
+      "_index-C0l3Xz9w.js",
+      "_main-D492NIr2.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_Helper-C2ZGttlC.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/properties-BQwC6Ncz.css"
     ]
   },
   "resources/js/PropertyManagement/Views/PropertyExpenses/property-expenses.js": {
-    "file": "assets/property-expenses-DGdtLmwR.js",
+    "file": "assets/property-expenses-BMgwOlW7.js",
     "name": "property-expenses",
     "src": "resources/js/PropertyManagement/Views/PropertyExpenses/property-expenses.js",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-zhb1fgJ8.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_index-CDdgig7a.js",
-      "_index-DhwZBn-h.js",
-      "_Label-CNUstiHv.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_main-DdOLk-SJ.js",
-      "_Helper-CROZLQCe.js",
-      "_index-CGr19XRx.js",
-      "_index-B7f3lZUs.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-CzoAoEky.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_index-CvtmZZoA.js",
+      "_index-B2Lf_vv5.js",
+      "_Label-C_fgxuKT.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_main-D492NIr2.js",
+      "_Helper-C2ZGttlC.js",
+      "_index-DFvXibSH.js",
+      "_index-BLAju0Qc.js"
     ],
     "css": [
       "assets/property-expenses-DHvKl0W_.css"
     ]
   },
   "resources/js/PropertyManagement/Views/occupied-properties/occupied-properties-with-full-rent-coverage-duration.ts": {
-    "file": "assets/occupied-properties-with-full-rent-coverage-duration-_0yXLrPh.js",
+    "file": "assets/occupied-properties-with-full-rent-coverage-duration-Dy97lgr2.js",
     "name": "occupied-properties-with-full-rent-coverage-duration",
     "src": "resources/js/PropertyManagement/Views/occupied-properties/occupied-properties-with-full-rent-coverage-duration.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_Helper-CROZLQCe.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_Helper-C2ZGttlC.js",
       "_useTableExpender-DDuYjOg0.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_main-DdOLk-SJ.js"
+      "_vue-i18n-CGHzbtPG.js",
+      "_main-D492NIr2.js"
     ],
     "css": [
       "assets/occupied-properties-with-full-rent-coverage-duration-CJL8siFc.css"
     ]
   },
   "resources/js/PropertyManagement/Views/occupied-properties/occupied-properties-with-partial-rent-coverage-duration.ts": {
-    "file": "assets/occupied-properties-with-partial-rent-coverage-duration-CgZ5Y0xf.js",
+    "file": "assets/occupied-properties-with-partial-rent-coverage-duration-CnxwplPh.js",
     "name": "occupied-properties-with-partial-rent-coverage-duration",
     "src": "resources/js/PropertyManagement/Views/occupied-properties/occupied-properties-with-partial-rent-coverage-duration.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Helper-CROZLQCe.js",
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_Helper-C2ZGttlC.js",
       "_useTableExpender-DDuYjOg0.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
+      "_vue-i18n-CGHzbtPG.js",
+      "_main-D492NIr2.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/occupied-properties-with-partial-rent-coverage-duration-C64d0wtu.css"
     ]
   },
   "resources/js/PropertyManagement/Views/occupied-properties/properties-to-be-delivered.ts": {
-    "file": "assets/properties-to-be-delivered-Cg7d8iaU.js",
+    "file": "assets/properties-to-be-delivered-DyNpnHot.js",
     "name": "properties-to-be-delivered",
     "src": "resources/js/PropertyManagement/Views/occupied-properties/properties-to-be-delivered.ts",
     "isEntry": true,
     "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_main-DdOLk-SJ.js",
-      "_Helper-CROZLQCe.js",
-      "_index-CGr19XRx.js"
+      "_sweetalert2.esm.all-rDTa3Qpb.js",
+      "_index-B2Lf_vv5.js",
+      "_index-C0l3Xz9w.js",
+      "_index-C3WyCbX3.js",
+      "_vue-i18n-CGHzbtPG.js",
+      "_main-D492NIr2.js",
+      "_Helper-C2ZGttlC.js",
+      "_index-DFvXibSH.js"
     ],
     "css": [
       "assets/properties-to-be-delivered-3CLzN5oh.css"
-    ]
-  },
-  "resources/js/Trading/Views/Dashboard/cashflow-forecast.ts": {
-    "file": "assets/cashflow-forecast-DOmlfcir.js",
-    "name": "cashflow-forecast",
-    "src": "resources/js/Trading/Views/Dashboard/cashflow-forecast.ts",
-    "isEntry": true,
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_animated-Cnyk5Oxs.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_Label-CNUstiHv.js",
-      "_Helper-CROZLQCe.js",
-      "_main-DdOLk-SJ.js",
-      "_vue-i18n-DcHQw-KR.js",
-      "_preload-helper-CKkBAq0M.js"
-    ],
-    "css": [
-      "assets/cashflow-forecast-Bmzzh8Eu.css"
-    ]
-  },
-  "resources/js/Trading/Views/Expenses/expenses.js": {
-    "file": "assets/expenses-BeDz7c2L.js",
-    "name": "expenses",
-    "src": "resources/js/Trading/Views/Expenses/expenses.js",
-    "isEntry": true,
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-DR7tqKMy.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js",
-      "_index-zhb1fgJ8.js"
-    ],
-    "css": [
-      "assets/expenses-C8ICXSZM.css"
-    ]
-  },
-  "resources/js/Trading/Views/FixedAssets/fixed-assets.ts": {
-    "file": "assets/fixed-assets-fm7Z8Nsc.js",
-    "name": "fixed-assets",
-    "src": "resources/js/Trading/Views/FixedAssets/fixed-assets.ts",
-    "isEntry": true,
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DBPgi4D9.js",
-      "_index-DR7tqKMy.js",
-      "_index-B5aIMSML.js",
-      "_index-CapkzRH_.js",
-      "_index-DhwZBn-h.js",
-      "_Helper-CROZLQCe.js",
-      "_Label-CNUstiHv.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js",
-      "_index-zhb1fgJ8.js"
-    ],
-    "css": [
-      "assets/fixed-assets-YqnlQ330.css"
-    ]
-  },
-  "resources/js/Trading/Views/GeneralAssumptions/general-assumptions.ts": {
-    "file": "assets/general-assumptions-CLV1sYUI.js",
-    "name": "general-assumptions",
-    "src": "resources/js/Trading/Views/GeneralAssumptions/general-assumptions.ts",
-    "isEntry": true,
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_index-CapkzRH_.js",
-      "_Label-CNUstiHv.js",
-      "_Helper-CROZLQCe.js",
-      "_main-DdOLk-SJ.js",
-      "_index-CGr19XRx.js"
-    ],
-    "css": [
-      "assets/general-assumptions-DSe6RrKJ.css"
-    ]
-  },
-  "resources/js/Trading/Views/ManpowerExpenses/manpower-expenses.js": {
-    "file": "assets/manpower-expenses-Gq4BOH1M.js",
-    "name": "manpower-expenses",
-    "src": "resources/js/Trading/Views/ManpowerExpenses/manpower-expenses.js",
-    "isEntry": true,
-    "imports": [
-      "_sweetalert2.esm.all-BvX8fUzu.js",
-      "_index-DhwZBn-h.js",
-      "_index-DBPgi4D9.js",
-      "_Helper-CROZLQCe.js",
-      "_main-DdOLk-SJ.js"
-    ],
-    "css": [
-      "assets/manpower-expenses-tjCIXwKb.css"
     ]
   }
 }

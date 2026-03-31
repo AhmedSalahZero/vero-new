@@ -4,7 +4,6 @@ namespace App\Models\Traits\Accessors;
 
 use App\Helpers\HArr;
 use App\Helpers\HVero;
-use Arr;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -22,22 +21,17 @@ trait FinancialStatementAbleAccessor
 	{
 		return $this->duration_type;
 	}
-	public function getCompanyId(): int
-	{
-		return $this->company->id ?? 0;
-	}
-	public function getCompanyName(): string
-	{
-		return $this->company->getName();
-	}
+	
 	public function getCreatorName(): string
 	{
 		return $this->creator->name ?? __('N/A');
 	}
 	public function convertDatesToIndexAndString(array $dates,array $dateWithDateIndex):array 
 	{
+		
+	//	$financialStatement = $this->financialStatement;
 		$result = [];
-		$datesHelper = $this->financialStatement->getDatesIndexesHelper();
+	//	$datesHelper = $financialStatement->getDatesIndexesHelper();
 		foreach($dates as $date => $viewDate){
 			$dateAsIndex = $dateWithDateIndex[$date];
 			$result[$dateAsIndex] = $date ;
@@ -47,7 +41,11 @@ trait FinancialStatementAbleAccessor
 	}
 	public function getIntervalFormatted(): array
 	{
-		$datesHelper = $this->financialStatement->getDatesIndexesHelper();
+		/**
+		 * @var \App\Models\FinancialStatement $financialStatement
+		 */
+		$financialStatement = $this->financialStatement;
+		$datesHelper = $financialStatement->getDatesIndexesHelper();
 		$dateWithDateIndex = $datesHelper['dateWithDateIndex'];
 		$method = 'addMonth';
 		$startDate = Carbon::make($this->start_from);
@@ -55,45 +53,41 @@ trait FinancialStatementAbleAccessor
 			$method = 'addYear';
 			$endDate = Carbon::make($this->start_from)->addYears($this->duration);
 		} elseif ($this->duration_type == 'quarterly') {
-			$endDate = Carbon::make($this->start_from)->addMonths($this->duration - 1);
+			$endDate = Carbon::make($this->start_from)->addMonths(($this->duration) - 1);
 			$dateBetweenTwoIntervals = generateDatesBetweenTwoDates($startDate, $endDate, $method, 'M\'Y', false, 'Y-m-d');
 			return  $this->convertDatesToIndexAndString(HVero::formatDateIntervalFor($dateBetweenTwoIntervals, $this->duration_type),$dateWithDateIndex);
 		} else {
-			$endDate = Carbon::make($this->start_from)->addMonths($this->duration - 1);
+			$endDate = Carbon::make($this->start_from)->addMonths(($this->duration) - 1);
 		}
 		return  $this->convertDatesToIndexAndString(generateDatesBetweenTwoDates($startDate, $endDate, $method, 'M\'Y', false, 'Y-m-d'),$dateWithDateIndex);
 	}
 
-	public function isDependsOn(): bool
-	{
-		return $this->depends_on;
-	}
-	public function canViewActualReport(): bool
-	{
-		if (strEndsWith(get_class($this), 'CashFlowStatement')) {
-			return false;
-		}
+	
+	// public function canViewActualReport(): bool
+	// {
+	// 	if (strEndsWith(get_class($this), 'CashFlowStatement')) {
+	// 		return false;
+	// 	}
 		
-		return $this->subItems()->wherePivot('sub_item_type', 'forecast')->count() > 1;
-		// return $this->subItems()->wherePivot('sub_item_type', 'forecast')->count() > 1;
-	}
+	// 	return $this->subItems()->wherePivot('sub_item_type', 'forecast')->count() > 1;
+	// }
 	public function getSubItems(int $financialStatementAbleItemId, string $subItemType, string $subItemName = ''): Collection
 	{
 		return $this->withSubItemsFor($financialStatementAbleItemId, $subItemType, $subItemName)->get();
 	}
-	public function lastActualDates(?array $dates)
-	{
-		$lastActualDate = null ;
-		if($dates && count($dates))
-		{
-			foreach($dates as $date){
-				if(isActualDate($date)){
-					$lastActualDate =$date; 
-				}
-			}
-		}
-		return $lastActualDate ; 
-	}
+	// public function lastActualDates(?array $dates)
+	// {
+	// 	$lastActualDate = null ;
+	// 	if($dates)
+	// 	{
+	// 		foreach($dates as $date){
+	// 			if(isActualDate($date)){
+	// 				$lastActualDate =$date; 
+	// 			}
+	// 		}
+	// 	}
+	// 	return $lastActualDate ; 
+	// }
 	protected function getLastTrueValueFromArray($datesAsStringAndBoolean ,array $datesAsIndexAndString){
 		$lastActualDate = null ;
 		foreach($datesAsStringAndBoolean as $date => $bool){

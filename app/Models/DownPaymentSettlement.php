@@ -70,36 +70,36 @@ class DownPaymentSettlement extends Model
 	}
 
 
-	public function getAmount()
-	{
-		return $this->settlement_amount ;
-	}	
-	public function getWithhold()
-	{
-		return $this->withhold_amount ;
-	}		
+	// public function getAmount()
+	// {
+	// 	return $this->settlement_amount ;
+	// }	
+	// public function getWithhold()
+	// {
+	// 	return $this->withhold_amount ;
+	// }		
 
-	public function getInvoiceNumber()
-	{
-		return $this->invoice_number ; 
-	}
+	// public function getInvoiceNumber()
+	// {
+	// 	return $this->invoice_number ; 
+	// }
 
 
-	public function getSettlementAmount()
-	{
-		return $this->settlement_amount?:0 ; 
-	}
-	public function getSettlementAmountFormatted()
-	{
-		return number_format($this->getSettlementAmount(),0);
-	}
+	// public function getSettlementAmount()
+	// {
+	// 	return $this->settlement_amount?:0 ; 
+	// }
+	// public function getSettlementAmountFormatted()
+	// {
+	// 	return number_format($this->getSettlementAmount(),0);
+	// }
 	
-	public function getSettlementDateFormatted()
-    {
-        $settlementDate = $this->getSettlementDate() ;
-        if($settlementDate) {
-            return Carbon::make($settlementDate)->format('d-m-Y');
-        }
-    }
+	// public function getSettlementDateFormatted()
+    // {
+    //     $settlementDate = $this->getSettlementDate() ;
+    //     if($settlementDate) {
+    //         return Carbon::make($settlementDate)->format('d-m-Y');
+    //     }
+    // }
 	
 }

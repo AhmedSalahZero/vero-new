@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Helpers\HHelpers;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
-use App\Interfaces\Models\IShareable;
 use App\Models\Repositories\CurrencyRepository;
 use App\Models\Repositories\PositionRepository;
 use App\Models\Repositories\RevenueBusinessLineRepository;
@@ -16,11 +15,19 @@ use App\Models\Traits\Accessors\QuickPricingCalculatorAccessor;
 use App\Models\Traits\Mutators\QuickPricingCalculatorMutator;
 use App\Models\Traits\Relations\QuickPricingCalculatorRelation;
 use App\Models\Traits\Scopes\CompanyScope;
-use App\Models\Traits\Scopes\Globals\StateCountryScope;
 use App\Models\Traits\Scopes\withAllRelationsScope;
 use Illuminate\Database\Eloquent\Model;
-
 /**
+ * @property string|null $customer_name
+ * @property string|null $revenueBusinessLineName
+ * @property string|null $serviceCategoryName
+ * @property string|null $serviceItemName
+ * @property string|null $totalRecommendPriceWithoutVatFormatted
+ * @property string|null $totalRecommendPriceWithVatFormatted
+ * @property string|null $totalNetProfitAfterTaxesFormatted
+ * @property string|null $creator_name
+ * @property string|null $created_at_formatted
+ * @property int $order
  * @property int $id
  * @property int|null $pricing_plan_id
  * @property int $revenue_business_line_id
@@ -131,7 +138,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\QuickPricingCalculator withAllRelations(?int $companyId = null)
  * @mixin \Eloquent
  */
-class QuickPricingCalculator extends Model implements  IHaveAllRelations, IExportable, IShareable
+
+class QuickPricingCalculator extends Model implements  IHaveAllRelations, IExportable
 {
     use   QuickPricingCalculatorAccessor;
     use QuickPricingCalculatorMutator ;
@@ -139,25 +147,7 @@ class QuickPricingCalculator extends Model implements  IHaveAllRelations, IExpor
     use CompanyScope ;
     use withAllRelationsScope ;
 
-    public static function getShareableEditViewVars($model): array
-    {
-        return [
-            'pageTitle' => QuickPricingCalculator::getPageTitle(),
-            'revenueBusinessLines' => App(RevenueBusinessLineRepository::class)->oneFormattedForSelect($model),
-            'serviceCategories' => App(ServiceCategoryRepository::class)->oneFormattedForSelect($model),
-            'serviceItems' => App(ServiceItemRepository::class)->oneFormattedForSelect($model),
-            'serviceNatures' => App(ServiceNatureRepository::class)->oneFormattedForSelect($model),
-            'pricingPlans' => PricingPlan::oneFormattedForSelect($model),
-            'directManpowerExpensePositions' => App(PositionRepository::class)->oneFormattedForSelect($model, 'direct-manpower-expense'),
-            'freelancerExpensePositions' => App(PositionRepository::class)->oneFormattedForSelect($model, 'freelancer-expenses'),
-            'otherVariableManpowerExpenses' => PricingExpense::oneFormattedForSelect($model, 'other-direct-manpower-expense'),
-            'otherDirectOperationsExpenses' => PricingExpense::oneFormattedForSelect($model, 'other-direct-operations-expense'),
-            'salesAndMarketExpenses' => PricingExpense::oneFormattedForSelect($model, 'sales-and-market-expense'),
-            'generalExpenses' => PricingExpense::oneFormattedForSelect($model, 'general-and-administrative-expense'),
-            'currencies' => App(CurrencyRepository::class)->allFormattedForSelect(),
-
-        ];
-    }
+  
 
     public function getRouteKeyName()
     {

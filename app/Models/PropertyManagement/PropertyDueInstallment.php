@@ -146,6 +146,8 @@ class PropertyDueInstallment extends Model
     {
         return formatDateForVueDatePicker($this->getReadyToUseDate());
     }
+
+	
     public function setReadyToUseDateAttribute($value)
     {
         $this->attributes['ready_to_use_date'] = $value ? formatDateFromMonthPicker($value) : null;
@@ -209,10 +211,11 @@ class PropertyDueInstallment extends Model
     {
         return $this->signing_payment_date ? Carbon::make($this->getSigningPaymentDate())->format('d-m-Y') : null;
     }
-    public function getSigningPaymentFormattedForVueDatePicker():array
-    {
-        return  formatDateForVueDatePicker($this->getSigningPaymentDate()) ;
-    }
+	public function getSigningPaymentDateFormattedForVueDatePicker():array
+	{
+		return formatDateForVueDatePicker($this->getSigningPaymentDate());
+	}
+ 
    
     public function getReservationPaymentDate():?string
     {

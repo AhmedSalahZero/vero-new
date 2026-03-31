@@ -137,7 +137,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 	
 	public function sortDates(array &$items){
 	    
-	     uksort($items, function ($a, $b) use(&$items) {
+	     uksort($items, function ($a, $b)  {
 	    
         return \DateTime::createFromFormat('d-m-Y', $a) <=> \DateTime::createFromFormat('d-m-Y', $b);
 });
@@ -327,7 +327,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 					$products->each->delete();
 				}
 				foreach ($request['product_name'] as $key => $product_name) {
-					if ($product_name !== null && isset($request['category'][$key]) && $request['category'][$key] !== null) {
+					if ($product_name !== null && isset($request['category'][$key]) ) {
 						Product::create([
 							'name' => $product_name,
 							'company_id' => $company->id,
@@ -739,7 +739,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 						'original_seasonality' => $products_items_monthly_percentage,
 					]);
 				}
-			} elseif ($modified_seasonality && $modified_seasonality->use_modified_seasonality == 1) {
+			} elseif ( $modified_seasonality->use_modified_seasonality == 1) {
 
 				$products_items_monthly_percentage = $modified_seasonality->modified_seasonality;
 			} elseif ($modified_seasonality && $modified_seasonality->use_modified_seasonality == 0) {
@@ -880,7 +880,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 		if ($seasonality == 'new_seasonality_quarterly') {
 			$quarters_percentages = [];
 			foreach ($seasonality_data as $date => $value) {
-				$quarters_percentages[number_format(date('m', strtotime($date)))] = $value;
+				$quarters_percentages[(int)number_format(date('m', strtotime($date)))] = $value;
 			}
 			$num_of_quarter = 0;
 			foreach ((array)$monthly_dates as $date => $value) {
@@ -894,7 +894,7 @@ $sales_forecast['previous_year_seasonality'] = $previousYearSeasonality;
 				} else  {
 					$num_of_quarter = 12;
 				}
-				$seasonality_percentage = ($quarters_percentages[$num_of_quarter] ?? 0) / 3;
+				$seasonality_percentage = ($quarters_percentages[ $num_of_quarter] ?? 0) / 3;
 				$seasonality_percentage = (($seasonality_percentage) / 100);
 
 				$new_products_seasonalities[date('M-Y', strtotime($date))] = $sales_target_value * $seasonality_percentage;

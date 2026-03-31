@@ -98,7 +98,6 @@ class FullySecuredOverdraftBankStatement extends Model
 		
 		DB::table('fully_secured_overdrafts')->where('id',$model->fully_secured_overdraft_id)->update([
 			'oldest_date'=>$minDate,
-			// 'origin_update_row_is_debit'=>$model->is_debit  
 		]);
 		
 		/**

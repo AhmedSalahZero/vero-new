@@ -65,10 +65,10 @@ trait QuotationPricingCalculatorRelation
    {
        return $this->belongsTo(ServiceItem::class ,'service_item_id','id');
    }
-//    public function serviceNature():BelongsTo
-//    {
-//        return $this->belongsTo(ServiceNature::class ,'service_nature_id','id');
-//    }
+   public function serviceNature():BelongsTo
+   {
+       return $this->belongsTo(ServiceNature::class ,'service_nature_id','id');
+   }
    public function currency():BelongsTo
    {
        return $this->belongsTo(Currency::class , 'currency_id','id');

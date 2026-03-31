@@ -7,7 +7,6 @@ use App\Helpers\HVero;
 use App\Interfaces\Models\IExportable;
 use App\Interfaces\Models\IHaveAllRelations;
 use App\Interfaces\Models\Interfaces\IFinancialStatementAble;
-use App\Interfaces\Models\IShareable;
 use App\Models\Traits\Accessors\IncomeStatementAccessor;
 use App\Models\Traits\Mutators\IncomeStatementMutator;
 use App\Models\Traits\Relations\IncomeStatementRelation;
@@ -82,12 +81,7 @@ class IncomeStatement extends Model implements  IHaveAllRelations, IExportable, 
 	
 	protected $table = 'financial_statement_ables';
 
-	public static function getShareableEditViewVars($model): array
-	{
-		return [
-			'pageTitle' => IncomeStatement::getPageTitle(),
-		];
-	}
+
 
 	public function getRouteKeyName()
 	{

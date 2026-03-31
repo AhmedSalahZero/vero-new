@@ -45,9 +45,7 @@ trait HasDepositAccount
 	}
 	public function handleTdOrCdStoreDepositForOdoo(bool $isBreakOrApplyDeposit)
 	{
-		/**
-		 * @var TimeOfDeposit $this
-		 */
+		
 		$company = $this->company ; 
 		$isOpeningBalance = $this->isOpeningBalance(); 
 		$date = $this->getStartDate();
@@ -61,9 +59,7 @@ trait HasDepositAccount
 	
 	public function handleTdOrCdStoreDepositWithoutJournalForOdoo(bool $isBreakOrApplyDeposit)
 	{
-		/**
-		 * @var TimeOfDeposit $this
-		 */
+		
 		$company = $this->company ; 
 		$isOpeningBalance = $this->isOpeningBalance();
 		$this->deleteOdooRelations($isBreakOrApplyDeposit);
@@ -73,7 +69,7 @@ trait HasDepositAccount
   			$timeOfCertificateOdooService = new TimeOrCertificateOfDepositOdooService($company);
 			$fromFinancialInstitution = $this->financialInstitution;
 			$fromAccountTypeId = 27 ;
-			$toAccountTypeId = $this instanceof TimeOfDeposit ? 28 : 29  ;
+			$toAccountTypeId = $this->getAccountTypeId()  ;
 			$toAccountNumber = $this->getAccountNumber() ;
 			
 			// $toAccountTypeId = $isBreakOrApplyDeposit ? $fromAccountTypeId : ($this instanceof TimeOfDeposit ? 28 : 29  );
@@ -88,12 +84,7 @@ trait HasDepositAccount
 			$fromJournalId = $fromFinancialInstitution->getJournalIdForAccount($fromAccountTypeId,$fromAccountNumber);
 			 $fromOdooId = $fromFinancialInstitution->getOdooIdForAccount($fromAccountTypeId,$fromAccountNumber);
 			$toOdooId = $fromFinancialInstitution->getOdooIdForAccount($toAccountTypeId,$toAccountNumber);
-			$ref = '';
-			if($isBreakOrApplyDeposit){
-				$ref = $this instanceof TimeOfDeposit ?  __('Collect Time Of Deposit') : __('Collect Certificate Of Deposit');
-			}else{
-				$ref = $this instanceof TimeOfDeposit ?  __('Create Time Of Deposit') : __('Create Certificate Of Deposit');
-			}
+			$ref = $isBreakOrApplyDeposit ? $this->getBreakReference() : $this->getCreateReference();
 			$message = $ref;
 			$result = $timeOfCertificateOdooService->createAndPostJournalEntry($date,$amount*-1,$odooCurrencyId,$fromJournalId,$fromOdooId,$toOdooId,$ref,null,$message,$isBreakOrApplyDeposit);
 			// $this->{$storeAccountBankStatementLineColumnName} = $result['account_bank_statement_line_id'];

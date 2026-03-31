@@ -55,7 +55,7 @@
                             <div class="col-md-4 mb-4">
                                 <x-form.select :options="[
 																	
-																	  ]" :add-new="false" :is-required="false" :label="__('To Be Consolidated To Financial Plan: (Optional)')" class="select2-select   " :all="false" name="to_be_consolidated_from_study_id" :selected-value="isset($model) ? $model->getPropertyStatus() : 0"></x-form.select>
+																	  ]" :add-new="false" :is-required="false" :label="__('To Be Consolidated To Financial Plan: (Optional)')" class="select2-select   " :all="false" name="to_be_consolidated_from_study_id" :selected-value="0"></x-form.select>
                             </div>
 
 

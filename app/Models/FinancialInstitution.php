@@ -188,18 +188,18 @@ class FinancialInstitution extends Model
     {
         return $this->getType() == self::BANK;
     }
-    public function isLeasingCompanies():bool
-    {
-        return $this->getType() =='leasing_companies';
-    }
-    public function isFactoringCompanies():bool
-    {
-        return $this->getType() =='factoring_companies';
-    }
-	public function isMortgageCompanies():bool
-    {
-        return $this->getType() =='mortgage_companies';
-    }
+    // public function isLeasingCompanies():bool
+    // {
+    //     return $this->getType() =='leasing_companies';
+    // }
+    // public function isFactoringCompanies():bool
+    // {
+    //     return $this->getType() =='factoring_companies';
+    // }
+	// public function isMortgageCompanies():bool
+    // {
+    //     return $this->getType() =='mortgage_companies';
+    // }
 	public function getName()
 	{
 		
@@ -228,10 +228,10 @@ class FinancialInstitution extends Model
 	// 	$balanceDate = $this->getBalanceDate();
 	// 	return $balanceDate ? Carbon::make($balanceDate)->format('d-m-Y') : null;
 	// }
-	public function getBankId()
-    {
-        return $this->bank_id ;
-    }
+	// public function getBankId()
+    // {
+    //     return $this->bank_id ;
+    // }
 	public function bank():BelongsTo
 	{
 		return $this->belongsTo(Bank::class ,'bank_id','id');
@@ -240,10 +240,10 @@ class FinancialInstitution extends Model
 	{
 		 return $this->bank ? $this->bank->getViewName() : __('N/A');
 	}
-	public function getBankNameIn(string $lang)
-	{
-		 return $this->bank ? $this->bank['name_'.$lang] : __('N/A');
-	}
+	// public function getBankNameIn(string $lang)
+	// {
+	// 	 return $this->bank ? $this->bank['name_'.$lang] : __('N/A');
+	// }
 	public function accounts():HasMany
 	{
 		return $this->hasMany(FinancialInstitutionAccount::class,'financial_institution_id','id');
@@ -314,18 +314,7 @@ class FinancialInstitution extends Model
 					'balance_date'=>$currentBalanceDate,
 					'company_id'=>getCurrentCompanyId(),
 				]);
-			//	$endDate = Carbon::make($balanceDate)->addYear(FinancialInstitutionAccount::NUMBER_OF_YEARS_FOR_INTEREST_IN_CURRENT_STATEMENT)->format('Y-m-d');
-			//	$account->handleEndOfMonthInterest($balanceDate,$endDate,$company->id);
-			}
 				
-			/**
-			 * * لو ال
-			 * * balance amount > 0
-			 * * هنضفله قيمة في ال
-			 * * current account bank Statement
-			 */
-			// $startDate = isset($accountArr['start_date']) && $accountArr['start_date'] ? Carbon::make($accountArr['start_date'])->format('Y-m-d') : $startDate;
-			if($currentBalanceDate){
 				$account->currentAccountBankStatements()->create([
 					'company_id'=>getCurrentCompanyId() ,
 					'beginning_balance'=>0,
@@ -337,18 +326,33 @@ class FinancialInstitution extends Model
 					'comment_en'=>__('Beginning Balance',[],'en'),
 					'comment_ar'=>__('Beginning Balance',[],'ar'),
 				]);
+				
+				$account->accountInterests()->create([
+					'interest_rate'=>$accountArr['interest_rate'],
+					'min_balance'=>$accountArr['min_balance'],
+					'start_date'=>$currentBalanceDate
+				]);
+				
+				$account->updateBankStatementsFromDate($currentBalanceDate);
+				if($company->hasOdooIntegrationCredentials()){
+					$odoo = new OdooService($company);
+					$odoo->syncFinancialInstitutions($account);
+				}
+				
+				
+			//	$endDate = Carbon::make($balanceDate)->addYear(FinancialInstitutionAccount::NUMBER_OF_YEARS_FOR_INTEREST_IN_CURRENT_STATEMENT)->format('Y-m-d');
+			//	$account->handleEndOfMonthInterest($balanceDate,$endDate,$company->id);
 			}
-			$account->accountInterests()->create([
-				'interest_rate'=>$accountArr['interest_rate'],
-				'min_balance'=>$accountArr['min_balance'],
-				'start_date'=>$currentBalanceDate
-			]);
+				
+			/**
+			 * * لو ال
+			 * * balance amount > 0
+			 * * هنضفله قيمة في ال
+			 * * current account bank Statement
+			 */
+			// $startDate = isset($accountArr['start_date']) && $accountArr['start_date'] ? Carbon::make($accountArr['start_date'])->format('Y-m-d') : $startDate;
 			
-			$account->updateBankStatementsFromDate($currentBalanceDate);
-			if($company->hasOdooIntegrationCredentials()){
-				$odoo = new OdooService($company);
-				$odoo->syncFinancialInstitutions($account);
-			}
+			
 		}
 		
 			
@@ -430,9 +434,7 @@ class FinancialInstitution extends Model
 		 */
 		$accountType = AccountType::find($accountTypeId);
 		$accountTypeModelName = $accountType->getModelName();
-		/**
-		 * @var CleanOverdraft|FinancialInstitutionAccount $accountModel 
-		 */
+		
 		$fullModelName = 'App\Models\\'.$accountTypeModelName ;
 	
 		return  $fullModelName::where([

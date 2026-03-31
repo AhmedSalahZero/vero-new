@@ -162,11 +162,11 @@ class OverdraftAgainstAssignmentOfContract extends Model implements IHaveStateme
 	{
 		return __('Overdraft Against Assignment Of Contract');
 	}
-	public static function getStatementTableName():string
+	public  function getStatementTableName():string
 	 {
 		return 'overdraft_against_assignment_of_contract_bank_statements';	
 	}
-	public static function getForeignKeyInStatementTable()
+	public  function getForeignKeyInStatementTable()
 	{
 		 return 'overdraft_against_assignment_of_contract_id';
 	}
@@ -298,4 +298,9 @@ public static function getCashDashboardDataForYear(array &$overdraftAgainstAssig
 			];
 			return $overdraftAgainstAssignmentOfContractCardData;
 }
+public function isOverdraft():bool 
+	{
+		return true;
+	}
+	
 }

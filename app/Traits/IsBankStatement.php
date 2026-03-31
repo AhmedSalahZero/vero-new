@@ -3,7 +3,7 @@ namespace App\Traits;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Schema;
+use Illuminate\Support\Facades\Schema;
 
 trait IsBankStatement
 {

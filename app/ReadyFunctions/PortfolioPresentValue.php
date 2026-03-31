@@ -83,7 +83,7 @@ class PortfolioPresentValue
 
 			$portfolioMortgageLoanSchedulePayments[$currentOccurrenceMonthIndex]['interestAmount'] = $this->calculateInterestRecognition($portfolioMortgageLoanSchedulePayments[$currentOccurrenceMonthIndex]['interestAmount']??[]);
 	
-			$interestRecognition[$currentOccurrenceMonthIndex] = $portfolioMortgageLoanSchedulePayments[$currentOccurrenceMonthIndex]['interestAmount']??[];
+			$interestRecognition[$currentOccurrenceMonthIndex] = $portfolioMortgageLoanSchedulePayments[$currentOccurrenceMonthIndex]['interestAmount'];
 			
 			
             $portfolioLoanFundingRatesAtOccurrenceMonthIndex = $portfolioLoanFundingRatesPerMonths[$currentOccurrenceMonthIndex] / 100;
@@ -97,7 +97,7 @@ class PortfolioPresentValue
         $this->calculateMonthlyAmounts($study,$revenueStreamCategoryId,$interestRecognition, $bankMarginRates, $tenorInMonths, $installmentPaymentIntervalName, $loanType, $dateIndexWithDate, $currentUnearnedInterestStatement, $accumulatedMonthsAmountsDueDates, $bankPortfolioLoans, $calculateFixedLoanAtEndService, $portfolioMortgageCategoryId, $studyId, $companyId,$totalBankInterests,$totalBankSchedulePayments,$operationDates);
         foreach ($portfolioMortgageLoanSchedulePayments as $occurrenceDate => &$portfolioMortgageLoanSchedulePayment) {
 			
-			$totalInterests= HArr::sumAtDates([$totalInterests,$portfolioMortgageLoanSchedulePayment['interestAmount']??[]],$operationDates);
+			$totalInterests= HArr::sumAtDates([$totalInterests,$portfolioMortgageLoanSchedulePayment['interestAmount']],$operationDates);
 			$totalSchedulePayments = HArr::sumAtDates([$totalSchedulePayments,$portfolioMortgageLoanSchedulePayment['schedulePayment']??[]],$operationDates);
             foreach ($portfolioMortgageLoanSchedulePayment as $key => &$value) {
                 if (is_array($value)) {
@@ -175,7 +175,7 @@ class PortfolioPresentValue
 			if(is_array($baseRatesMapping)){
 				$dateWithDateIndex = $study->getDateWithDateIndex();
 				$installmentPaymentIntervalValue = $calculateFixedLoanAtEndService->getInstallmentPaymentIntervalValue($installmentPaymentIntervalName);
-				$bankLoanAmounts[$currentOccurrenceMonthIndex]=$calculateFixedLoanAtEndService->__calculateBasedOnDiffBaseRates($baseRatesMapping,$loanType, $currentLoanDateAsString, $currentBankLoanAmount, $currentBankMarginRate,$tenorInMonths, $installmentPaymentIntervalName, $installmentPaymentIntervalValue, 0, null, 0, null, 0, $currentOccurrenceMonthIndex, $dateWithDateIndex, $dateIndexWithDate)??[];
+				$bankLoanAmounts[$currentOccurrenceMonthIndex]=$calculateFixedLoanAtEndService->__calculateBasedOnDiffBaseRates($baseRatesMapping,$loanType, $currentLoanDateAsString, $currentBankLoanAmount, $currentBankMarginRate,$tenorInMonths, $installmentPaymentIntervalName, $installmentPaymentIntervalValue, 0, null, 0, null, 0, $currentOccurrenceMonthIndex, $dateWithDateIndex, $dateIndexWithDate);
 			}else{
 				$bankLoanAmounts[$currentOccurrenceMonthIndex]=$calculateFixedLoanAtEndService->__calculate([], -1, $loanType, $currentLoanDateAsString, $currentBankLoanAmount, $currentBaseRate, $currentBankMarginRate, $tenorInMonths, $installmentPaymentIntervalName, 0, null, 0, null, 0, $currentOccurrenceMonthIndex, $currentDaysCount)['final_result']??[];
 			}

@@ -57,8 +57,7 @@ class QuotationPricingCalculatorRepository
             $quotationPricingCalculator->totalNetProfitAfterTaxesFormatted = $quotationPricingCalculator->getTotalNetProfitAfterTaxesFormatted();
             $quotationPricingCalculator->creator_name = $quotationPricingCalculator->getCreatorName();
             $quotationPricingCalculator->created_at_formatted = formatDateFromString($quotationPricingCalculator->created_at);
-            $quotationPricingCalculator->updated_at_formatted = formatDateFromString($quotationPricingCalculator->updated_at);
-            // $quotationPricingCalculator->serviceCategories = $quotationPricingCalculator->serviceCategories->load('serviceItems'); 
+            // $quotationPricingCalculator->updated_at_formatted = formatDateFromString($quotationPricingCalculator->updated_at);
             $quotationPricingCalculator->order = $index+1 ;
 
         }) ;

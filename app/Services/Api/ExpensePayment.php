@@ -217,7 +217,7 @@ class ExpensePayment
             }
 
             // Update payment with partner_id only for own_account
-            if ($sheet['payment_mode'] === 'own_account' && (empty($payment['partner_id']) || $payment['partner_id'] === false)) {
+            if ($sheet['payment_mode'] === 'own_account' && (empty($payment['partner_id']))) {
                 Log::info("Odoo: Updating partner_id for payment {$payment['id']}");
                 $this->execute(
                     'account.payment',

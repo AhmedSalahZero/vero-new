@@ -23,10 +23,6 @@ trait FinancialStatementAbleMutator
 {
     $explodedString = explode($separator, $string);
     $countExplodedStringSegments = count($explodedString);
-    if (trim($string) === '' || $countExplodedStringSegments === 0) {
-        throw new \Exception('Invalid String Or Separator');
-    }
-
     return $explodedString[$countExplodedStringSegments - 1];
 }
 
@@ -557,15 +553,10 @@ trait FinancialStatementAbleMutator
 			
 			$subItems = $this->withSubItemsFor($incomeStatementItemId, $subItemType)->get()->keyBy(function ($subItem) {
 				return data_get($subItem, 'pivot.sub_item_name');
-			})->map(function ($subItem) {
-				// /**
-				//  * ! remove this
-				//  */
-				// $payload = $subItem->pivot ? (array)json_decode($subItem->pivot->payload):[];
-				// 	DB::table('financial_statement_able_main_item_sub_items')->where('id',$subItem->pivot->id)->update(['total'=>array_sum($payload)]);
-				// 	/**
-				//  * ! end remove this
-				//  */
+			})->map(function ( $subItem) {
+				/**
+				 * @var \App\Models\IncomeStatementItem $subItem
+				 */
 				$pivotPayload = (string) data_get($subItem, 'pivot.payload', json_encode([]));
 				$pivotPayloadArray = $pivotPayload ? (array) json_decode($pivotPayload, true) : [];
 				$pivotSubItemName = (string) data_get($subItem, 'pivot.sub_item_name', '');

@@ -1,7 +1,6 @@
 <?php 
 namespace App\Providers;
 
-use App\Models\FinancialPlanning\Study;
 use App\Models\FinancialStatement;
 use App\Models\IncomeStatement;
 use Illuminate\Http\Request;

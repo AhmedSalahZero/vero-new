@@ -4,13 +4,12 @@ namespace App\Models\Repositories;
 
 use App\Interfaces\Repositories\IBaseRepository;
 use App\Models\ServiceItem;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class ServiceItemRepository implements IBaseRepository 
 {
-    public function all():Collection
+	public function all():Collection
     {
         return ServiceItem::onlyCurrentCompany()->get();
     }
@@ -19,32 +18,11 @@ class ServiceItemRepository implements IBaseRepository
     {
         return ServiceItem::onlyCurrentCompany()->get()->pluck('name_'.App()->getLocale(),'id')->toArray();
     }
-    public function allFormattedForSelect()
+	public function allFormattedForSelect()
     {
         $serviceItems = $this->all();
         return formatOptionsForSelect($serviceItems , 'getId' , 'getName');
     }
-       public function oneFormattedForSelect($model)
-    {
-        $serviceItems = ServiceItem::where('id',$model->getServiceItemId())->get();
-        return formatOptionsForSelect($serviceItems , 'getId' , 'getName');
-    }
-    
-    public function query():Builder
-    {
-        return ServiceItem::onlyCurrentCompany()->query();
-
-    }
-    public function Random():Builder
-    {
-        return ServiceItem::onlyCurrentCompany()->inRandomOrder();
-    }
-
-    public function find(?int $id)
-    {
-        return ServiceItem::onlyCurrentCompany()->find($id);
-    }
-
     public function store(Request $request )
     {
         
@@ -58,64 +36,8 @@ class ServiceItemRepository implements IBaseRepository
 
 
 
-    public function update(  $serviceItem , Request $request ):void
-    {
-        $serviceItem->update($request->except('_token'));
-    }
+ 
 
-    public function paginate(Request $request):array
-    {
-
-        $filterData = $this->commonScope($request);
-
-        $allFilterDataCounter = $filterData->count();
-
-
-        $datePerPage = $filterData->skip(Request('start'))->take(Request('length'))->get()->each(function(ServiceItem $serviceItem){
-            $serviceItem['name_'.App()->getLocale()] = $serviceItem->getName();
-            $serviceItem->companyName = $serviceItem->getCompanyName();
-            $serviceItem->creator_name = $serviceItem->getCreatorName();
-            $serviceItem->created_at_formatted = formatDateFromString($serviceItem->created_at);
-
-        }) ;
-        return [
-            'data'=>$datePerPage ,
-            "draw"=> (int)Request('draw'),
-            "recordsTotal"=> ServiceItem::onlyCurrentCompany()->count(),
-            "recordsFiltered"=>$allFilterDataCounter,
-        ] ;
-
-    }
-
-    public function commonScope(Request $request):builder
-    {
-        return ServiceItem::onlyCurrentCompany()->when($request->filled('search_input') , function(Builder $builder) use ($request){
-
-            $builder
-            ->where(function(Builder $builder) use ($request){
-                $builder->when($request->filled('search_input'),function(Builder $builder) use ($request){
-                    $keyword = "%".$request->get('search_input')."%";
-                    $builder->where('name_'.App()->getLocale() , 'like' , $keyword)
-                    ->orWhereHas('creator',function(Builder $builder) use($keyword) {
-                        $builder->where('name','like',$keyword);
-                    })->orWhereHas('company',function(Builder $builder) use($keyword) {
-                        $builder->where('name_'.App()->getLocale(),'like',$keyword);
-                    })
-                    ;
-                    
-                })
-                ;
-                
-            });
-        })->when($request->filled('company_id') , function(Builder $builder) use ($request){
-                    $builder->whereHas('company',function(Builder $builder) use ($request){
-                        $builder->where('companies.id',$request->get('company_id'));
-                    });
-                })
-        
-        ->orderBy(getDefaultOrderBy()['column'],getDefaultOrderBy()['direction']) ;
-
-    }
 
 
 

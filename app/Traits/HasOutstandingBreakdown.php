@@ -31,9 +31,7 @@ trait HasOutstandingBreakdown
 		$this->outstandingBreakdowns()->delete();
 		$this->bankStatements()->where('type','outstanding_balance')->delete();
 		if($outstandingBalance >= 0) {
-			/**
-			 * @var CleanOverdraftBankStatement $bankStatement
-			 */
+		
 			foreach($request->get('outstanding_breakdowns',[]) as $outstandingBreakdownArr){
 				$settlementDate = $outstandingBreakdownArr['settlement_date'];
 				if(!$settlementDate){

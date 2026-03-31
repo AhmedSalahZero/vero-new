@@ -208,6 +208,9 @@ class MediumTermLoan extends Model
 	}
 	public function getNextInstallmentDateAndAmount(string $date):array 
 	{
+		/**
+		 * @var LoanSchedule|null $nextInstallment
+		 */
 		$nextInstallment = $this->loanSchedules()->where('date','>=',$date)->orderBy('date')->first() ;
 		$amountFormatted  = $nextInstallment ? $nextInstallment->getSchedulePaymentFormatted() : 0 ;
 		$dateFormatted =  $nextInstallment ? $nextInstallment->getDateFormatted() : null ;

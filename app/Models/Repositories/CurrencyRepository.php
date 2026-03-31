@@ -15,14 +15,9 @@ class CurrencyRepository implements IBaseRepository
     }
     public function allFormattedForSelect()
     {
-        $currencys = $this->all();
-        return formatOptionsForSelect($currencys , 'getId' , 'getName');
+        return formatOptionsForSelect($this->all() , 'getId' , 'getName');
     }
-     public function oneFormattedForSelect($model)
-    {
-        $currencys = Currency::where('id',$model->getPositionId())->get();
-        return formatOptionsForSelect($currencys , 'getId' , 'getName');
-    }
+   
     
    
 

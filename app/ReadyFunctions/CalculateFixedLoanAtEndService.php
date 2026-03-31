@@ -381,7 +381,7 @@ class CalculateFixedLoanAtEndService
          */
             
         $ffeLoanWithdrawal['FFE Loan Withdrawal'] = $ffeExecutionAndPaymentService->calculateFFELoanWithdrawal($contractPayments['FFE Payment'], $totalFFECost, $equityFundingRate);
-        
+        $ffeLoanWithdrawalInterestAmounts = [];
             
         if ($equityFundingRate < 100 &&  $ffeLoan->getTenorsAtMonthIndex($currentDateIndex) >0 ){
             $ffeLoanType = $ffeLoan->getLoanType();
@@ -424,7 +424,7 @@ class CalculateFixedLoanAtEndService
             'ffeLoanWithdrawal'=>$ffeLoanWithdrawal,
             'ffeLoanInstallment'=>$ffeLoanInstallment??[],
             'ffeLoanInterestAmounts'=>$ffeLoanInterestAmounts??[],
-            'ffeExecutionAndPayment'=>$executionAndPayment??[],
+            'ffeExecutionAndPayment'=>$executionAndPayment,
             'ffeLoanWithdrawalInterest'=>$ffeLoanWithdrawalInterestAmounts,
             'ffeLoanStartDate'=>$ffeLoanStartDate??null,
             'ffeLoanAmount'=>$ffeLoanAmount??0,

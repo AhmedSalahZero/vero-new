@@ -241,11 +241,11 @@ class FinancialInstitutionAccount extends Model
 		return $this->hasMany(CurrentAccountBankStatement::class,'financial_institution_account_id','id');
 	}
 	
-	public static function getStatementTableName():string
+	public  function getStatementTableName():string
 	{
 	   return 'current_account_bank_statements';	
    }	
-   public static function getForeignKeyInStatementTable()
+   public  function getForeignKeyInStatementTable()
    {
 		return 'financial_institution_account_id';
    }
@@ -338,6 +338,9 @@ class FinancialInstitutionAccount extends Model
 		return 'financial_institution_account_id';
 	}	
 	
-
+	public function isOverdraft():bool 
+	{
+		return false;
+	}
 	
 }

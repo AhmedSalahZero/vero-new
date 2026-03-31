@@ -185,7 +185,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                                         </div>
                                                     </div>
 													{{-- @endif  --}}
-                                                    {{-- @endif --}}
+                                                    @endif
 	
                                                     
 

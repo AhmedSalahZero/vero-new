@@ -121,6 +121,10 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereTimeOfDepositId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereUpdatedAt($value)
+ * @property int|null $lg_commission_fees_journal_entry_id
+ * @property string|null $odoo_lg_commission_fees_reference
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereLgCommissionFeesJournalEntryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CurrentAccountBankStatement whereOdooLgCommissionFeesReference($value)
  * @mixin \Eloquent
  */
 class CurrentAccountBankStatement extends Model  implements IHaveStatement
@@ -448,7 +452,7 @@ class CurrentAccountBankStatement extends Model  implements IHaveStatement
 				'priority'=>1 ,
 				'type'=>$interestText,
 				'date'=>$currentEndOfMonthDate,
-				'limit'=>$this->limit ,
+			//	'limit'=>$this->limit ,
 				'debit'=>0,
 				'beginning_balance'=>0,
 				'credit'=>0 ,

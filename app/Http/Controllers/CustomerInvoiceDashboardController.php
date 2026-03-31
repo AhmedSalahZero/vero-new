@@ -439,11 +439,11 @@ class CustomerInvoiceDashboardController extends Controller
 		$date = $request->get('date') ;
 		$date = Carbon::make($date)->format('Y-m-d');
 		$modelName = $request->get('modelName');
-		$fullName = '\App\Models\\'.$modelName ;
+		$fullName = new ('\App\Models\\'.$modelName) ;
 		$financialInstitutionBankId = $request->get('bankId');
 		$account = $fullName::findByAccountNumber($accountNumber,$companyId,$financialInstitutionBankId);
 		$bankStatementName = $fullName::getBankStatementTableName() ;
-		$foreignKeyInStatementTable = $fullName::getForeignKeyInStatementTable();
+		$foreignKeyInStatementTable = $fullName->getForeignKeyInStatementTable();
 		$foreignKeyName = $fullName::generateForeignKeyFormModelName();
 		$dateBeforeWeeks = Carbon::make($date)->subWeeks($numberOfWeeks)->format('Y-m-d');
 		$model = new  $fullName ;

@@ -11,8 +11,8 @@ use App\Models\NonBankingService\ExpenseName;
 use App\Models\NonBankingService\Position;
 use App\Models\NonBankingService\Study;
 use App\Traits\NonBankingService;
-use Arr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ExpensesController extends Controller
 {
@@ -188,7 +188,8 @@ class ExpensesController extends Controller
                  */
                 // $vatRate = $tableDataArr['vat_rate']??0;
                 $isDeductible = $tableDataArr['is_deductible'] ?? false;
-                if ($tableDataArr['payment_terms']??null == 'customize') {
+				$paymentTerm = $tableDataArr['payment_terms']??null;
+                if ($paymentTerm == 'customize') {
                     $tableDataArr['custom_collection_policy'] = sumDueDayWithPayment($tableDataArr['payment_rate'], $tableDataArr['due_days']);
                 }
                 // $customCollectionPolicy = $tableDataArr['custom_collection_policy']??[];

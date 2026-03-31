@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\SupplierInvoice;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -106,33 +107,35 @@ class PoAllocation extends Model
 	// }
 	
 	
-	public static function getSettlementAllocationPerContractAndLetterOfCreditIssuance(array &$result  ,string $dateFieldName,int $contractId , int $customerId, string $startDate , string $endDate , string $currentWeekYear , int $companyId  ):void
-	{
-		
-		$keyNameForCurrentType = __('Letter Of Credit');
-		
-		$settlementAllocations  =  self::where('settlement_allocations.contract_id',$contractId)->with(['letterOfCreditIssuance','letterOfCreditIssuance.supplier'])
-			->join('letter_of_credit_issuances','settlement_allocations.letter_of_credit_issuance_id','=','letter_of_credit_issuances.id')
-			->where('settlement_allocations.partner_id',$customerId)
-			->whereBetween($dateFieldName,[$startDate,$endDate])
-			->where('letter_of_credit_issuances.company_id',$companyId)
-			->get(['settlement_allocations.contract_id','invoice_id','settlement_allocations.letter_of_credit_issuance_id','allocation_amount']);
-			foreach($settlementAllocations as $settlementAllocation){
-				$supplier = $settlementAllocation->letterOfCreditIssuance->supplier ;
-				$invoiceId = $settlementAllocation->invoice_id ; 
-				$invoiceNumber = SupplierInvoice::find($invoiceId)->getInvoiceId() ; 
-				$keyNameForCurrentType = $keyNameForCurrentType.' - '. __('Invoice No') .' ' .$invoiceNumber ;
-				$currentAmountAllocationAmount = $settlementAllocation->allocation_amount ;
-				$supplierName = $supplier->getName();
-				$result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear]) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] + $currentAmountAllocationAmount :  $currentAmountAllocationAmount;
-				$result['suppliers'][$supplierName][$keyNameForCurrentType]['total'] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['total']) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['total']  + $currentAmountAllocationAmount : $currentAmountAllocationAmount;
-				$currentTotal = $currentAmountAllocationAmount;
-				$result['suppliers'][$supplierName]['total'][$currentWeekYear] = isset($result['suppliers'][$supplierName]['total'][$currentWeekYear]) ? $result['suppliers'][$supplierName]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
-				// $result['suppliers'][$supplierName]['total']['total_of_total'] = isset($result['suppliers'][$supplierName]['total']['total_of_total']) ? $result['suppliers'][$supplierName]['total']['total_of_total'] + $result['suppliers'][$supplierName]['total'][$currentWeekYear] : $result['suppliers'][$supplierName]['total'][$currentWeekYear];
-	//			$totalCashOutFlowArray[$currentWeekYear] = isset($totalCashOutFlowArray[$currentWeekYear]) ? $totalCashOutFlowArray[$currentWeekYear] +   $currentTotal : $currentTotal ;
-			}
+// public static function getSettlementAllocationPerContractAndLetterOfCreditIssuance(array &$result  ,string $dateFieldName,int $contractId , int $customerId, string $startDate , string $endDate , string $currentWeekYear , int $companyId  ):void
+// {
 	
-	}
+// 	$keyNameForCurrentType = __('Letter Of Credit');
+	
+// 	$settlementAllocations  =  self::where('settlement_allocations.contract_id',$contractId)->with(['letterOfCreditIssuance','letterOfCreditIssuance.supplier'])
+// 		->join('letter_of_credit_issuances','settlement_allocations.letter_of_credit_issuance_id','=','letter_of_credit_issuances.id')
+// 		->where('settlement_allocations.partner_id',$customerId)
+// 		->whereBetween($dateFieldName,[$startDate,$endDate])
+// 		->where('letter_of_credit_issuances.company_id',$companyId)
+// 		->get(['settlement_allocations.contract_id','invoice_id','settlement_allocations.letter_of_credit_issuance_id','allocation_amount']);
+// 		foreach($settlementAllocations as $settlementAllocation){
+// 			$supplier = $settlementAllocation->letterOfCreditIssuance->supplier ;
+// 			$invoiceId = $settlementAllocation->invoice_id ;
+// 			/**
+// 			 * @var SupplierInvoice $currentSupplierInvoice
+// 			 */
+// 			$currentSupplierInvoice = SupplierInvoice::find($invoiceId); 
+// 			$invoiceNumber = $currentSupplierInvoice->getInvoiceId() ; 
+// 			$keyNameForCurrentType = $keyNameForCurrentType.' - '. __('Invoice No') .' ' .$invoiceNumber ;
+// 			$currentAmountAllocationAmount = $settlementAllocation->allocation_amount ;
+// 			$supplierName = $supplier->getName();
+// 			$result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear]) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['weeks'][$currentWeekYear] + $currentAmountAllocationAmount :  $currentAmountAllocationAmount;
+// 			$result['suppliers'][$supplierName][$keyNameForCurrentType]['total'] = isset($result['suppliers'][$supplierName][$keyNameForCurrentType]['total']) ? $result['suppliers'][$supplierName][$keyNameForCurrentType]['total']  + $currentAmountAllocationAmount : $currentAmountAllocationAmount;
+// 			$currentTotal = $currentAmountAllocationAmount;
+// 			$result['suppliers'][$supplierName]['total'][$currentWeekYear] = isset($result['suppliers'][$supplierName]['total'][$currentWeekYear]) ? $result['suppliers'][$supplierName]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
+// 		}
+
+// }
 	
 	
 }	

@@ -77,7 +77,7 @@ class SalesGatheringTestJob implements ShouldQueue
 					$customerId = null ;
 					$customerName = $value['customer_name'] ;
 					$value['currency'] = isset($value['currency']) ? strtoupper($value['currency']) : null;
-					$customerFound = $customerId ? true : DB::table('partners')->where('company_id',$this->company_id)->where('is_customer',1)->where('name',$customerName)->exists();
+					$customerFound = DB::table('partners')->where('company_id',$this->company_id)->where('is_customer',1)->where('name',$customerName)->exists();
 					if($customerFound){
 						$customerId = DB::table('partners')->where('company_id',$this->company_id)->where('is_customer',1)->where('name',$customerName)->first()->id;
 					}else{
@@ -102,7 +102,7 @@ class SalesGatheringTestJob implements ShouldQueue
 						if(is_null($currentColValue)){
 							continue;
 						}
-					$isFound[$columnName] = $currentIds[$columnName] ? true : DB::table($tableName)->where('company_id',$this->company_id)->where('name',$currentColValue)->exists();
+					$isFound[$columnName] = DB::table($tableName)->where('company_id',$this->company_id)->where('name',$currentColValue)->exists();
 					if($isFound[$columnName]){
 						$currentIds[$columnName] = DB::table($tableName)->where('company_id',$this->company_id)->where('name',$currentColValue)->first()->id;
 					}else{
@@ -162,7 +162,7 @@ class SalesGatheringTestJob implements ShouldQueue
 					$supplierId = null ;
 					$supplierName = $value['supplier_name'] ;
 					$value['currency'] = isset($value['currency']) ? strtoupper($value['currency']) : null;
-					$supplierFound = $supplierId ? true : DB::table('partners')->where('company_id',$this->company_id)->where('is_supplier',1)->where('name',$supplierName)->exists();
+					$supplierFound = DB::table('partners')->where('company_id',$this->company_id)->where('is_supplier',1)->where('name',$supplierName)->exists();
 					if($supplierFound){
 						$supplierId = DB::table('partners')->where('company_id',$this->company_id)->where('is_supplier',1)->where('name',$supplierName)->first()->id;
 					}else{

@@ -63,10 +63,11 @@ class Securitization extends Model
 				'disbursement_date',
 				'securitization_date'
 			] as $dateColumnName){
+				/** @phpstan-ignore-next-line */
 				if(is_null($model->{$dateColumnName})){
 					return false ;
 				}
-				
+				/** @phpstan-ignore-next-line */
 				if(!is_numeric($model->{$dateColumnName})){
 					
 				$date = $model->{$dateColumnName}.'-01';
@@ -93,38 +94,32 @@ class Securitization extends Model
 		return $this->expense_amount?:0;
 	}
 	
-	public function getSecuritizationDate():float 
+	public function getSecuritizationDate():int 
 	{
 		return $this->securitization_date?:0;
 	}
     public function getSecuritizationDateFormatted()
     {
-        return !is_null($this->securitization_date) ? app('dateIndexWithDate')[$this->securitization_date] : null;
+        return  app('dateIndexWithDate')[$this->securitization_date] ;
     }
 	 public function getSecuritizationDateYearAndMonth()
     {
         $date = $this->getSecuritizationDateFormatted() ;
-        if (is_null($date)) {
-            return now()->format('Y-m');
-        }
         return Carbon::make($date)->format('Y-m');
     }
 	
 	
-	public function getDisbursementDate():float 
+	public function getDisbursementDate():int 
 	{
 		return $this->disbursement_date?:0;
 	}
     public function getDisbursementDateFormatted()
     {
-        return !is_null($this->disbursement_date)  ? app('dateIndexWithDate')[$this->disbursement_date] : null;
+        return  app('dateIndexWithDate')[$this->disbursement_date];
     }
 	 public function getDisbursementDateYearAndMonth()
     {
         $date = $this->getDisbursementDateFormatted() ;
-        if (is_null($date)) {
-            return now()->format('Y-m');
-        }
         return Carbon::make($date)->format('Y-m');
     }
 	

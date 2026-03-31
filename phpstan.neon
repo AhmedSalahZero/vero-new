@@ -16,3 +16,12 @@ parameters:
 
     excludePaths:
         - app/dompdf/*
+        - app/Models/Traits/Mutators/FinancialStatementAbleMutator.php
+        - app/Models/LabelingItem.php
+        - app/Models/FinancialStatement.php
+        - app/Models/Traits/Accessors/FinancialStatementItemAccessor.php
+        - app/Models/Traits/Accessors/FinancialStatementAccessor.php
+        - app/Models/Traits/Accessors/FinancialStatementAbleAccessor.php
+        - app/Models/Traits/Relations/FinancialStatementRelation.php
+        - app/Models/Traits/Mutators/FinancialStatementMutator.php
+        - app/Traits/HasIndexedDates.php

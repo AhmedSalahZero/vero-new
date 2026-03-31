@@ -79,8 +79,8 @@ class CashAndBankOpeningBalance extends Model
 		'non_performing_statement'=>'array',
 		'non_performing_ecl_existing_expenses'=>'array',
 		'non_performing_accumulated_ecl_existing_expenses'=>'array',
-		'interest_corridor_changes'=>'array',
-		'non_performing_interest_corridor_changes'=>'array',
+	//	'interest_corridor_changes'=>'array',
+//		'non_performing_interest_corridor_changes'=>'array',
 	
 	];
 	public static function getOpeningBalanceColumnName():string
@@ -245,22 +245,22 @@ class CashAndBankOpeningBalance extends Model
 	}
 	
 	
-	public function getInterestCorridorChanges():array
-	{
-		return $this->interest_corridor_changes?:0;
-	}	
-	public function getInterestCorridorChangesAtDateIndex(int $dateAsIndex):float 
-	{
-		return $this->getInterestCorridorChanges()[$dateAsIndex]??0;
-	}
-	public function getNonPerformingInterestCorridorChanges():array
-	{
-		return $this->non_performing_interest_corridor_changes?:[];
-	}	
-	public function getNonPerformingInterestCorridorChangesAtDateIndex(int $dateAsIndex):float 
-	{
-		return $this->getNonPerformingInterestCorridorChanges()[$dateAsIndex]??0;
-	}
+	// public function getInterestCorridorChanges():array
+	// {
+	// 	return $this->interest_corridor_changes?:0;
+	// }	
+	// public function getInterestCorridorChangesAtDateIndex(int $dateAsIndex):float 
+	// {
+	// 	return $this->getInterestCorridorChanges()[$dateAsIndex]??0;
+	// }
+	// public function getNonPerformingInterestCorridorChanges():array
+	// {
+	// 	return $this->non_performing_interest_corridor_changes?:[];
+	// }	
+	// public function getNonPerformingInterestCorridorChangesAtDateIndex(int $dateAsIndex):float 
+	// {
+	// 	return $this->getNonPerformingInterestCorridorChanges()[$dateAsIndex]??0;
+	// }
 	
 	
 	

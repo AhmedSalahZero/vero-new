@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\NonBankingServices;
 
-use App\Models\FinancialPlanning\Position;
-use App\Models\NonBankingService\Study;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreNewBranchFixedAssetsRequest extends FormRequest

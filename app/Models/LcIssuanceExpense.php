@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Traits\Models\HasCurrentAccountCreditStatement;
 use App\Traits\Models\HasLetterOfGuaranteeCashCoverStatements;
 use App\Traits\Models\HasLetterOfGuaranteeStatements;
 use Carbon\Carbon;
@@ -47,7 +48,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class LcIssuanceExpense extends Model
 {
-	use HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements;
+	use HasCurrentAccountCreditStatement;
 	protected $table ='lc_issuance_expenses';
 	protected $guarded =  [
 		'id'

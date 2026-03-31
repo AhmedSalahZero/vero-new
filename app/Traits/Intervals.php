@@ -266,7 +266,7 @@ trait Intervals
 		return $result;
 		
 	}
-	public static function intervalsDatesWithLimitMonths($years_intervals_months, $years,$requested_interval,string $limitDates,string $startDateMonth = null)
+	public static function intervalsDatesWithLimitMonths($years_intervals_months, $years,$requested_interval,string $limitDates,?string $startDateMonth = null)
     {
 
     

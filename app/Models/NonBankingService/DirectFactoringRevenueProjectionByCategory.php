@@ -40,7 +40,7 @@ class DirectFactoringRevenueProjectionByCategory extends Model
 		'direct_factoring_transactions_projections'=>'array',
 	];
 	public function getViewVars(Company $company, Study $study):array{
-		$directFactoringEclAndNewPortfolioFundingRate = $study?  $study->directFactoringEclAndNewPortfolioFundingRate : null;
+		$directFactoringEclAndNewPortfolioFundingRate =   $study->directFactoringEclAndNewPortfolioFundingRate ;
 		return [
 			'company'=>$company ,
 			'study'=>$study,

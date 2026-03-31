@@ -57,9 +57,9 @@ class CashExpenseOdooService
             throw new Exception("Failed to retrieve move_id for statement entry: " . $accountBankStatementLineId);
         }
         $journalEntryId = $statementData[0]['move_id'][0];
-        if (!is_numeric($accountBankStatementLineId)) {
-            throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
-        }
+        // if (!is_numeric($accountBankStatementLineId)) {
+        //     throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
+        // }
             
         return [
             'account_bank_statement_line_id'=>$accountBankStatementLineId,

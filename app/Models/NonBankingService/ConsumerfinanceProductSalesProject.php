@@ -43,6 +43,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ConsumerfinanceProductSalesProject whereStudyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ConsumerfinanceProductSalesProject whereTenor($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ConsumerfinanceProductSalesProject whereUpdatedAt($value)
+ * @property array<array-key, mixed>|null $increase_rates
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\NonBankingService\ConsumerfinanceProductSalesProject whereIncreaseRates($value)
  * @mixin \Eloquent
  */
 class ConsumerfinanceProductSalesProject extends Model

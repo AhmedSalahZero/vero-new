@@ -6,6 +6,7 @@ use App\Enums\LcTypes;
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCompany;
 use App\Traits\Models\HasCommissionStatements;
+use App\Traits\Models\HasCurrentAccountCreditBankStatement;
 use App\Traits\Models\HasDeleteButTriggerChangeOnLastElement;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasLetterOfCreditCashCoverStatements;
@@ -13,6 +14,7 @@ use App\Traits\Models\HasLetterOfCreditStatements;
 use App\Traits\Models\HasUserComment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
@@ -170,11 +172,16 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereUserComment($value)
+ * @property string|null $cd_or_td_currency
+ * @property string|null $lc_fees_and_commission_account_type
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereCdOrTdCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LetterOfCreditIssuance whereLcFeesAndCommissionAccountType($value)
+ * @property-read \App\Models\Partner|null $supplier
  * @mixin \Eloquent
  */
 class LetterOfCreditIssuance extends Model
 {
-	use HasBasicStoreRequest,HasCompany,HasForeignExchangeGainOrLoss,HasCommissionStatements,HasLetterOfCreditStatements,HasLetterOfCreditCashCoverStatements,HasDeleteButTriggerChangeOnLastElement,HasUserComment;
+	use HasBasicStoreRequest,HasCompany,HasForeignExchangeGainOrLoss,HasCommissionStatements,HasLetterOfCreditStatements,HasLetterOfCreditCashCoverStatements,HasCurrentAccountCreditBankStatement,HasDeleteButTriggerChangeOnLastElement,HasUserComment;
 	const LC_FACILITY = 'lc-facility';
 	const AGAINST_TD ='against-td';
 	const AGAINST_CD ='against-cd';
@@ -332,7 +339,7 @@ class LetterOfCreditIssuance extends Model
 	{
 		return $this->getBeneficiaryName();
 	}
-	public function supplier()
+	public function supplier():BelongsTo
 	{
 		return $this->beneficiary();
 	}
@@ -360,11 +367,11 @@ class LetterOfCreditIssuance extends Model
 	{
 		return $this->belongsTo(PurchaseOrder::class , 'purchase_order_id','id');
 	}
-	public function getPurchaseOrderName()
-	{
-		$purchaseOrder = $this->purchaseOrder ;
-		return  $purchaseOrder ? $purchaseOrder->getName(): 0 ;
-	}
+	// public function getPurchaseOrderName()
+	// {
+	// 	$purchaseOrder = $this->purchaseOrder ;
+	// 	return  $purchaseOrder ? $purchaseOrder->getName(): 0 ;
+	// }
 	public function getPurchaseOrderId()
 	{
 		$purchaseOrder = $this->purchaseOrder ;
@@ -523,10 +530,10 @@ class LetterOfCreditIssuance extends Model
 	{
 		return $this->cash_cover_deducted_from_account_id ?: $this->lc_fees_and_commission_account_id;
 	}
-	public function getInterestRate()
-	{
-		return $this->interest_rate ?: 0;
-	}
+	// public function getInterestRate()
+	// {
+	// 	return $this->interest_rate ?: 0;
+	// }
 
 	public function getLcCommissionRate()
 	{

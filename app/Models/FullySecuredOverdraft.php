@@ -143,11 +143,11 @@ class FullySecuredOverdraft extends Model implements IHaveStatement
 	{
 		return $this->cd_or_td_account_id;
 	}
-	public static function getStatementTableName():string
+	public  function getStatementTableName():string
 	 {
 		return 'fully_secured_overdraft_bank_statements';	
 	}
-	public static function getForeignKeyInStatementTable()
+	public  function getForeignKeyInStatementTable()
 	{
 		 return 'fully_secured_overdraft_id';
 	}
@@ -299,4 +299,9 @@ class FullySecuredOverdraft extends Model implements IHaveStatement
 		}
 		
 	}
+	public function isOverdraft():bool 
+	{
+		return true;
+	}
+	
 }

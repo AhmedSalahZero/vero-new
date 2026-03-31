@@ -2,22 +2,9 @@
 namespace App\Models\Traits\Accessors ;
 trait GeneralExpenseAccessor
 {
-    public function getId():int
-    {
-        return $this->id ; 
-    }
-     public function getCompanyId():int
-    {
-        return $this->company->id ?? $this->pivot->company_id ; 
-    }
-    public function getCompanyName():string
-    {
-        return $this->company->getName() ;
-    }
-    public function getCreatorName():string
-    {
-        return $this->creator->name ?? __('N/A');
-    }
+  
+
+
     
     public function getPercentageOfPrice():float 
     {

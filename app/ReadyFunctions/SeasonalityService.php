@@ -42,7 +42,7 @@ class SeasonalityService
 		$sales_seasonality_rates = [];
 
 		foreach ($duration_months_in_years as $year => $months) {
-			if (true) {    // In case of Flat Seasonality
+			   // In case of Flat Seasonality
 				if ($seasonality_type == "flat") {
 					array_walk($months, function (&$value, $date) use ($flatSeasonalityRate) {
 						$value = $flatSeasonalityRate * $value;
@@ -104,7 +104,7 @@ class SeasonalityService
 						$sales_seasonality_rates[$date] = $total_year_percentages == 0 ? 0 : $value / $total_year_percentages;
 					});
 				}
-			}
+			
 		}
 		return $sales_seasonality_rates;
 	}

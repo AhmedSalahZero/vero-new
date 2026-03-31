@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Interfaces\Models\IHaveCreditOverdraftStatement;
 use App\Models\OpeningBalance;
 use App\Models\OutgoingTransfer;
 use App\Models\Settlement;
@@ -11,12 +12,13 @@ use App\Traits\HasCompany;
 use App\Traits\Models\HasCreditStatements;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasNonCustomerOrSupplier;
-use App\Traits\Models\IsMoneyOut;
 use App\Traits\Models\HasReviewedBy;
 use App\Traits\Models\HasUserComment;
+use App\Traits\Models\IsMoneyOut;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -99,7 +101,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read \App\Models\Company|null $company
  * @mixin \Eloquent
  */
-class CashExpense extends Model
+class CashExpense extends Model  implements IHaveCreditOverdraftStatement
 {
 	
 	use IsMoneyOut ,HasForeignExchangeGainOrLoss,HasCreditStatements,HasReviewedBy,HasUserComment,HasNonCustomerOrSupplier,HasCompany;
@@ -183,7 +185,7 @@ class CashExpense extends Model
     protected $guarded = ['id'];
     
 	
-    public function isCashPayment()
+    public function isCashPayment():bool
     {
         return $this->getType() ==self::CASH_PAYMENT;
     }
@@ -257,6 +259,10 @@ class CashExpense extends Model
 	{
 		return $this->getCurrency();
 	}
+	public function getReceivingOrPaymentCurrency()
+	{
+		return $this->getPaymentCurrency();
+	}
 	
 	public function getPaymentCurrencyFormatted()
 	{
@@ -271,18 +277,12 @@ class CashExpense extends Model
 
 	public function getExpenseCategoryName():string
 	{
-		return $this->cashExpenseCategoryName && $this->cashExpenseCategoryName->cashExpenseCategory ? $this->cashExpenseCategoryName->cashExpenseCategory->getName() : __('N/A') ;
+		return $this->cashExpenseCategoryName  ? $this->cashExpenseCategoryName->cashExpenseCategory->getName() : __('N/A') ;
 	}
 	public function getExpenseName()
 	{
 		return  $this->cashExpenseCategoryName ? $this->cashExpenseCategoryName->getName() : __('N/A');
 	}
-	public function getPaymentBankName()
-	{
-		return '-';
-	}
-
-
     public function getCashPaymentReceiptNumber()
     {
 		$cashPayment = $this->cashPayment;
@@ -332,18 +332,11 @@ class CashExpense extends Model
     }
 	public function outgoingTransferDeliveryBank():?FinancialInstitution
 	{
-		/**
-		 * @var OutgoingTransfer $outgoingTransfer 
-		 */
 		$outgoingTransfer = $this->outgoingTransfer ;
-		
 		return $outgoingTransfer ? $outgoingTransfer->deliveryBank : null ;
 	}
 	public function getOutgoingTransferDeliveryBankName()
 	{
-		/**
-		 * @var OutgoingTransfer $outgoingTransfer 
-		 */
 		$outgoingTransfer = $this->outgoingTransfer ;
         return $outgoingTransfer ? $outgoingTransfer->getDeliveryBankName() : __('N/A') ;
 	}
@@ -383,9 +376,6 @@ class CashExpense extends Model
 	
 	public function cashPaymentDeliveryBranch()
 	{
-		/**
-		 * @var CashPayment $cashPayment
-		 */
 		$cashPayment = $this->cashPayment;
 		return $cashPayment ? $cashPayment->deliveryBranch : null ;
 	}
@@ -396,21 +386,21 @@ class CashExpense extends Model
 		return $cashPayment ? $cashPayment->getDeliveryBranchName() : null ;
 	}
 	
-	public function getPayableChequeDeliveryDate()
-	{
-		$payable = $this->payableCheque;
-		return $payable ? $payable->getPaymentDate() : null;
-	}
-	public function getPayableChequeDeliveryDateFormattedForDatePicker()
-	{
-		$date = $this->getPayableChequeDeliveryDate();
-		return $date ? Carbon::make($date)->format('m/d/Y') : null;
-	}
-	public function getChequeDeliveryDateFormatted()
-	{
-		$date = $this->getPayableChequeDeliveryDate();
-		return $date ? Carbon::make($date)->format('d-m-Y') : null;
-	}
+	// public function getPayableChequeDeliveryDate()
+	// {
+	// 	$payable = $this->payableCheque;
+	// 	return $payable ? $payable->getPaymentDate() : null;
+	// }
+	// public function getPayableChequeDeliveryDateFormattedForDatePicker()
+	// {
+	// 	$date = $this->getPayableChequeDeliveryDate();
+	// 	return $date ? Carbon::make($date)->format('m/d/Y') : null;
+	// }
+	// public function getChequeDeliveryDateFormatted()
+	// {
+	// 	$date = $this->getPayableChequeDeliveryDate();
+	// 	return $date ? Carbon::make($date)->format('d-m-Y') : null;
+	// }
 
 	
 	public function getPayableChequePaymentBankId()
@@ -467,23 +457,23 @@ class CashExpense extends Model
 	}
 	
 
-	public function cleanOverdraftCreditBankStatement()
+	public function cleanOverdraftCreditBankStatement():HasOne
 	{
 		return $this->hasOne(CleanOverdraftBankStatement::class,'cash_expense_id','id');
 	}
-	public function fullySecuredOverdraftCreditBankStatement()
+	public function fullySecuredOverdraftCreditBankStatement():HasOne
 	{
 		return $this->hasOne(FullySecuredOverdraftBankStatement::class,'cash_expense_id','id');
 	}
-	public function overdraftAgainstCommercialPaperCreditBankStatement()
+	public function overdraftAgainstCommercialPaperCreditBankStatement():HasOne
 	{
 		return $this->hasOne(OverdraftAgainstCommercialPaperBankStatement::class,'cash_expense_id','id');
 	}
-	public function overdraftAgainstAssignmentOfContractCreditBankStatement()
+	public function overdraftAgainstAssignmentOfContractCreditBankStatement():HasOne
 	{
 		return $this->hasOne(OverdraftAgainstAssignmentOfContractBankStatement::class,'cash_expense_id','id');
 	}
-	public function cashInSafeCreditStatement()
+	public function cashInSafeCreditStatement():HasOne
 	{
 		return $this->hasOne(CashInSafeStatement::class,'cash_expense_id','id');
 	}
@@ -501,22 +491,8 @@ class CashExpense extends Model
 		return $this->opening_balance_id !== null ;
 	}
 	
-	// public function isDownPayment()
-	// {
-	// 	return $this->getMoneyType() == 'down-payment';
-	// }
-	// public function getMoneyType()
-	// {
-	// 	return $this->money_type; 
-	// }
-	public function getMoneyTypeFormatted()
-	{
-		$moneyType = $this->getMoneyType();
-		if($moneyType == 'money-payment'){
-			$moneyType = 'invoice-settlement';
-		}
-		return camelizeWithSpace($moneyType) ;
-	}
+	
+	
 	// public function getContractId()
 	// {
 	// 	return $this->contract_id;
@@ -590,7 +566,7 @@ class CashExpense extends Model
 	}	
 	public function getExpenseCategoryId():int
 	{
-		return $this->cashExpenseCategoryName && $this->cashExpenseCategoryName->cashExpenseCategory ? $this->cashExpenseCategoryName->cashExpenseCategory->id : 0;
+		return $this->cashExpenseCategoryName  ? $this->cashExpenseCategoryName->cashExpenseCategory->id : 0;
 	}
 	public function getCashExpenseCategoryNameId()
 	{
@@ -703,15 +679,19 @@ class CashExpense extends Model
 	public function getBankAccountOdooId():int
 	{
 		$financialInstitution = $this->getFinancialInstitution();
-		
 		return $financialInstitution->getOdooIdForAccount($this->getAccountTypeId(),$this->getAccountNumber());
 	}
+	public function getFinancialInstitution()
+    {
+        return FinancialInstitution::find($this->getFinancialInstitutionId());
+    }
 	public function formatAnalysisDistribution():array 
 	{
 		$amount = $this->getAmount();
 		$result = [];
 		foreach($this->contracts as $contract){
 			$projectAccountId = $contract->project_account_id  ;
+			/** @phpstan-ignore-next-line */
 			$pivotAmount = $contract->pivot->amount ;
 			$pivotPercentage = $pivotAmount / $amount *100 ;
 			if($projectAccountId){
@@ -831,6 +811,15 @@ class CashExpense extends Model
 	public function settlements()
 	{
 		// return $this->hasMany(Settlement::class, 'money_payment_id', 'id');
+	}
+	
+	public function getInvoiceCurrency()
+    {
+        return $this->getCurrency();
+    }
+	public function isOverContractDownPayment():bool
+	{
+		return false;
 	}
 	
 	public $settlements = null;

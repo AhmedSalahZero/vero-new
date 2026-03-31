@@ -14,18 +14,7 @@
 		
 
 
-				 {{-- <div class="col-lg-3">
-                        <label>{{__('Select Customer')}} @include('star')</label>
-                        <div class="input-group">
-                            <select @if($isRepeater) name="customer_id" @else name="infos[0][customer_id]" @endif class="form-control repeater-select">
-                                <option selected >{{__('Any Customer')}}</option>
-                                @foreach($customers as $customerId => $customerName )
-                                <option value="{{ $customerId  }}" @if(isset($infos) && $infos->getCustomerId() == $customerId ) selected @endif > {{ $customerName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div> --}}
-
+				
                    
 
 

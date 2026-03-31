@@ -16,7 +16,6 @@ class SendExceptionMail extends Mailable
 	 * @return void
 	 */
 	private $content;
-	private $css;
 
 	public function __construct($content)
 	{

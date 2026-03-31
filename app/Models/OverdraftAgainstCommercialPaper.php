@@ -118,11 +118,11 @@ class OverdraftAgainstCommercialPaper extends Model implements IHaveStatement
 	{
 		return __('Overdraft Against Commercial Paper');
 	}
-	public static function getStatementTableName():string
+	public  function getStatementTableName():string
 	 {
 		return 'overdraft_against_commercial_paper_bank_statements';	
 	}
-	public static function getForeignKeyInStatementTable()
+	public  function getForeignKeyInStatementTable()
 	{
 		 return 'overdraft_against_commercial_paper_id';
 	}
@@ -282,4 +282,30 @@ public function overdraftAgainstCommercialPaperBankLimits()
 		
 		return $this->overdraftAgainstCommercialPaperBankLimits->min('full_date');
 	}	
+	
+	public function updateFirstLimitsTableFromDate()
+	{
+		$smallestFullDate = $this->getSmallestLimitTableFullDate() ;
+		if(is_null($smallestFullDate)){
+			return ;
+		}
+		$firstBankStatementToBeUpdated = (self::getLimitTableClassName())::where(self::generateForeignKeyFormModelName(),$this->id)
+		->where('full_date','>=',$smallestFullDate)
+		->orderBy('full_date')
+		->first();	
+		if($firstBankStatementToBeUpdated){
+			$firstBankStatementToBeUpdated->update([
+				'updated_at'=>now()
+			]);
+		}
+	}
+	
+	public function isOverdraft():bool 
+	{
+		return true;
+	}
+	public function getMaxLendingLimitPerCustomer()
+	{
+		return $this->max_lending_limit_per_customer?:0;
+	}
 }

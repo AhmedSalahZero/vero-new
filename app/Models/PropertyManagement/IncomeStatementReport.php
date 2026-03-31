@@ -70,6 +70,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\IncomeStatementReport whereTotalOtherOperationExpense($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\IncomeStatementReport whereTotalSalesExpense($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\IncomeStatementReport whereUpdatedAt($value)
+ * @property array<array-key, mixed>|null $interest_corridor_changes
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\IncomeStatementReport whereInterestCorridorChanges($value)
  * @mixin \Eloquent
  */
 class IncomeStatementReport extends Model

@@ -83,7 +83,8 @@ class CashFlowReportController
 		$currencyName = $isContract ? $contract->getCurrency(): $request->get('currency',$mainFunctionalCurrency);
 		$reportInterval = $request->get('report_interval');
 		if (empty($reportInterval) || !in_array($reportInterval, ['daily', 'weekly', 'monthly'], true)) {
-			return redirect()->back()->with('fail', __('Please select Report Interval.'))->withInput($request->only(['report_interval', 'start_date', 'end_date', 'contract_id', 'partner_id']));
+			$reportInterval = 'monthly';
+			// return redirect()->back()->with('fail', __('Please select Report Interval.'))->withInput($request->only(['report_interval', 'start_date', 'end_date', 'contract_id', 'partner_id']));
 		}
 		$customerContractId = $contractId ;
 		

@@ -38,7 +38,7 @@ class IntervalSummationOperations
 	}
 	protected function getPeriodsForStartMonths($interval,$financialYearStartMonth = 'january')
 	{
-		if($financialYearStartMonth == 'january' || $financialYearStartMonth="01"){
+		if($financialYearStartMonth == 'january' || $financialYearStartMonth=="01"){
 			if ($interval == 'monthly') {
 				return  [
 					1 => [1],

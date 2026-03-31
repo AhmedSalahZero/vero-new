@@ -59,7 +59,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-const FINANCIAL_PLANNING_CONNECTION_NAME='financial_planning';
 const PROPERTY_MANAGEMENT_CONNECTION_NAME='property_management';
 const NON_BANKING_SERVICE_CONNECTION_NAME='non_banking_service';
 const Customers_Against_Products_Trend_Analysis = 'Customers Against Products Trend Analysis';
@@ -118,7 +117,7 @@ const quantityIdentifier = ' ( Quantity )';
 
 const PROPERTY_MANAGEMENT_SERVICE_URL_PREFIX = 'property-managements';
 const NON_BANKING_SERVICE_URL_PREFIX = 'non-banking-financial-services';
-const FINANCIAL_PLANNING_URL_PREFIX = 'financial-planning';
+// const FINANCIAL_PLANNING_URL_PREFIX = 'financial-planning';
 
 
 
@@ -2988,38 +2987,7 @@ function getTypesForValuesForPropertyManagement():array
     ];
 }
 
-function getTypesForValuesForFinancialPlanning():array
-{
-    return [
-        'fixed_monthly_repeating_amount'=>[
-            'title'=>__('Fixed Monthly Amount'),
-            'value'=>'fixed_monthly_repeating_amount',
-        ],
-      
-        'percentage_of_sales'=>[
-            'title'=>__('Expense As Percentage'),
-            'value'=>'percentage_of_sales',
-        ],
-      
-        'cost_per_unit'=>[
-            'title'=>__('Cost Per Unit'),
-            'value'=>'cost_per_unit',
-        ],
-      
-        'one_time_expense'=>[
-            'title'=>__('One Time Expense'),
-            'value'=>'one_time_expense',
-        ],
-        // 'expense_per_employee'=>[
-        //     'title'=>__('Expense Per Employee'),
-        //     'value'=>'expense_per_employee',
-        // ],
 
-
-
-
-    ];
-}
 function twoArrayIsEqualValues(array $firstItems, array $secondItems)
 {
     if (count($firstItems) != count($secondItems)) {

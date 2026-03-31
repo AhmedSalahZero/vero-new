@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\Api\LetterOfGuaranteeService;
 use App\Traits\HasCompany;
+use App\Traits\Models\HasCurrentAccountCreditStatement;
 use App\Traits\Models\HasDeleteButTriggerChangeOnLastElement;
 use App\Traits\Models\HasLetterOfGuaranteeCashCoverStatements;
 use App\Traits\Models\HasLetterOfGuaranteeStatements;
@@ -54,7 +55,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class LetterOfGuaranteeIssuanceAdvancedPaymentHistory extends Model
 {
-    use HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements,HasDeleteButTriggerChangeOnLastElement,HasCompany;
+    use HasLetterOfGuaranteeStatements,HasLetterOfGuaranteeCashCoverStatements,HasCurrentAccountCreditStatement,HasDeleteButTriggerChangeOnLastElement,HasCompany;
     protected $table ='lg_issuance_advanced_payment_histories';
     protected $guarded =  [
         'id'

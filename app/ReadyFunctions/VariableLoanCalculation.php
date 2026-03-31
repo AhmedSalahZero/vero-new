@@ -4,6 +4,7 @@ class VariableLoanCalculation
 {
 	public function calculate(string $loanStartDate,float $loanAmount ,float $baseRate , float $marginRate , float $minInterestRate ,int $duration  ,int $InterestIntervalNum,int $InstallmentIntervalNum,  string $installmentIntervalName ,  int $gracePeriod = 0 ):array 
 	{
+		$result = [];
             if ($installmentIntervalName == 'monthly') {
                 $installment_amount = $loanAmount/($duration);
             }elseif ($installmentIntervalName == 'quarterly') {

@@ -77,9 +77,9 @@ class InternalMoneyTransfer
             throw new Exception("Failed to retrieve move_id for statement entry: " . $accountBankStatementLineId);
         }
         $journalEntryId = $statementData[0]['move_id'][0];
-        if (!is_numeric($accountBankStatementLineId)) {
-            throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
-        }
+        // if (!is_numeric($accountBankStatementLineId)) {
+        //     throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
+        // }
         $reference = $statementData[0]['move_id'][1]??null ;
         if ($reference) {
             $reference=explode(' ', $reference)[0];
@@ -100,14 +100,6 @@ class InternalMoneyTransfer
        
     public function storeReceiveMoneyTo(bool $isBreakDeposit, string $date, float $amountInCurrency, float $amountInMainFunctionalCurrency, int $odooCurrencyId, int $journalId, int $bankOdooId, $message,$userComment)
     {
-        /**
-         * @var InternalMoneyTransfer $this
-         */
-        
-        
-        
-        
-        
         $LiquidTransferId = $this->company->odooSetting->getLiquidityAccountOdooId();
     
         
@@ -172,9 +164,7 @@ class InternalMoneyTransfer
             throw new Exception("Failed to retrieve move_id for statement entry: " . $accountBankStatementLineId);
         }
         $journalEntryId = $statementData[0]['move_id'][0];
-        if (!is_numeric($accountBankStatementLineId)) {
-            throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
-        }
+       
         $reference = $statementData[0]['move_id'][1]??null ;
         if ($reference) {
             $reference=explode(' ', $reference)[0];

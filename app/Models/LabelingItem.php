@@ -6,9 +6,6 @@ use App\Helpers\HArr;
 use App\Traits\StaticBoot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
-
 /**
  * @property int $id
  * @property int $company_id
@@ -30,6 +27,7 @@ use Illuminate\Support\Facades\File;
  * @property string|null $c7
  * @property string|null $qty
  * @property string|null $code
+ * @property string|null $Code
  * @property string|null $item
  * @property string|null $17
  * @property string|null $ahmed_salah
@@ -146,6 +144,9 @@ use Illuminate\Support\Facades\File;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereSupplierCod($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereUpdateAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereWord($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)

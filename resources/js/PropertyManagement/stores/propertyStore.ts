@@ -9,7 +9,7 @@ export interface ContractInstallment {
 	installment_amount: number
 	installment_date: string
 	variable_installment_amounts: ContractInstallmentDetail[]
-	installment_payments: ContractInstallmentPayment[]
+//	installment_payments: ContractInstallmentPayment[]
 }
 export interface EmptyRow {
 	regular_installments_amounts: {

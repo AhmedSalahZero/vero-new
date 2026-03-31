@@ -22,16 +22,9 @@ trait SharingLinkAccessor
     }
     public function isActive():bool 
     {
-        return $this->is_active ;
+        return (bool)$this->is_active ;
     }
-    public function getCompanyId():int
-    {
-        return $this->company->id ?? 0; 
-    }
-    public function getCompanyName():string
-    {
-        return $this->company->getName() ;
-    }
+  
     public function getCreatorName():string
     {
         return $this->creator->name ?? __('N/A');

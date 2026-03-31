@@ -201,19 +201,19 @@ class BankStatementController
          */
         $lgType = $letterOfGuaranteeIssuance->getLgTypeFormatted();
         $bankStatementRecord->handleFullDateAfterDateEdit($date, 0, $credit);
-        
+		// $bankStatementRecord->lg_commission_fees_journal_entry_id=1;
+		// $bankStatementRecord->odoo_lg_commission_fees_reference=2;
+		// $bankStatementRecord->save();
+       
         if ($company->hasOdooIntegrationCredentials()) {
-            $odooLetterOfGuaranteeIssuance = new LetterOfGuaranteeService($company);
-            foreach (['commission_fees_journal_entry_id'
-            // ,'issuance_fees_journal_entry_id'
-            // ,'renewal_fees_journal_entry_id'
-            ] as $journalColumnName) {
-                $currentJournalEntryId = $letterOfGuaranteeIssuance->{$journalColumnName};
+            $odooLetterOfGuaranteeIssuanceService = new LetterOfGuaranteeService($company);
+           
+                $currentJournalEntryId = $bankStatementRecord->lg_commission_fees_journal_entry_id;
                 if ($currentJournalEntryId) {
-                    $odooLetterOfGuaranteeIssuance->unlink($currentJournalEntryId);
+                    $odooLetterOfGuaranteeIssuanceService->unlink($currentJournalEntryId);
                 }
                 
-            }
+  
             
             
             
@@ -229,11 +229,11 @@ class BankStatementController
             $currency = $letterOfGuaranteeIssuance->getLgCurrency();
             $odooCurrencyId = Currency::getOdooId($currency);
             $analytic_distribution = $letterOfGuaranteeIssuance->formatAnalysisDistribution();
-            $result = $odooLetterOfGuaranteeIssuance->createLgIssuanceCashCover($date, $commissionFees, $journalId, $odooCurrencyId, $debitOdooAccountId, $accountOdooId, $letterOfGuaranteeIssuance->getBeneficiaryOdooId(), $ref, $message, $analytic_distribution);
-            $letterOfGuaranteeIssuance->commission_fees_account_bank_statement_odoo_id=$result['account_bank_statement_line_id'];
-            $letterOfGuaranteeIssuance->commission_fees_journal_entry_id=$result['journal_entry_id'];
-            $letterOfGuaranteeIssuance->odoo_commission_fees_reference=$result['reference'];
-            $letterOfGuaranteeIssuance->save();
+            $result = $odooLetterOfGuaranteeIssuanceService->createLgIssuanceCashCover($date, $commissionFees, $journalId, $odooCurrencyId, $debitOdooAccountId, $accountOdooId, $letterOfGuaranteeIssuance->getBeneficiaryOdooId(), $ref, $message, $analytic_distribution);
+         //   $letterOfGuaranteeIssuance->commission_fees_account_bank_statement_odoo_id=$result['account_bank_statement_line_id'];
+		      $bankStatementRecord->lg_commission_fees_journal_entry_id=$result['journal_entry_id'];
+		     $bankStatementRecord->odoo_lg_commission_fees_reference=$result['reference'];
+			 $bankStatementRecord->save();
         
             
             

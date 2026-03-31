@@ -31,10 +31,10 @@ class InterestRevenueAccount extends Model
 	protected $guarded = ['id'];
 	public function getOdooId():int 
 	{
-		if(is_null($this->odoo_id)){
-			throw new \Exception('Odoo Code For Branch ' . $this->getName() . ' Not Found');
-		}
-		return $this->odoo_id;
+		// if(is_null($this->odoo_id)){
+		// 	throw new \Exception('Odoo Code For Branch ' . $this->getName() . ' Not Found');
+		// }
+		return $this->odoo_id?:0;
 	}
 	public function financialInstitution()
 	{

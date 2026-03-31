@@ -53,9 +53,9 @@ class MoneyPaymentOdooService
             throw new Exception("Failed to retrieve move_id for statement entry: " . $accountBankStatementLineId);
         }
 			$moveId = $statementData[0]['move_id'][0];
-            if (!is_numeric($accountBankStatementLineId)) {
-                throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
-            }
+            // if (!is_numeric($accountBankStatementLineId)) {
+            //     throw new Exception("Failed to create journal entry: " . json_encode($accountBankStatementLineId));
+            // }
 			if($partner_id){
 				$this->updatePartner($partner_id,$moveId,$context);
 			}

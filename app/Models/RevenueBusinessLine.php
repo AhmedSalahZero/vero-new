@@ -9,7 +9,6 @@ use App\Interfaces\Models\IHaveView;
 use App\Models\Repositories\RevenueBusinessLineRepository;
 use App\Models\Repositories\ServiceCategoryRepository;
 use App\Models\Repositories\ServiceItemRepository;
-use App\Models\Repositories\ServiceNatureRepository;
 use App\Models\Traits\Accessors\RevenueBusinessLineAccessor;
 use App\Models\Traits\Mutators\RevenueBusinessLineMutator;
 use App\Models\Traits\Relations\RevenueBusinessLineRelation;
@@ -18,8 +17,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
  * @property string $name
+ * @property int $id
+ * @property string $revenueBusinessLineName
+ * @property string $creator_name
+ * @property int $order
+ * @property int $company_id
+ * @property int|null $creator_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $created_at_formatted
+ * @property string $updated_at_formatted
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServiceCategory> $serviceCategories
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServiceItem> $serviceItems
  * @property int $company_id
  * @property int|null $creator_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -85,6 +95,7 @@ class RevenueBusinessLine extends Model implements IHaveView,IHaveCompany,IHaveC
     
     public function scopeForCurrentCompany(Builder $builder)
     {
+		/** @phpstan-ignore-next-line */
 		if(!app(Company::class)){
 			return $builder;
 		}

@@ -19,12 +19,12 @@ class ShowCompletedMessageForSuccessJob implements ShouldQueue
 	 *
 	 * @return void
 	 */
-	private $jobId, $companyId,$modelName;
+	private  $companyId,$modelName;
 
-	public function __construct($companyId, $jobId,$modelName)
+	public function __construct($companyId,$modelName)
 	{
 		$this->companyId = $companyId;
-		$this->jobId = $jobId;
+	
 		$this->modelName = $modelName;
 	}
 

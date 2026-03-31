@@ -6,7 +6,6 @@ use App\Models\BuyOrSellCurrency;
 use App\Models\Company;
 use App\Models\Currency;
 use App\Models\FinancialInstitution;
-use App\Models\ForeignExchangeRate;
 use App\Models\InternalMoneyTransfer;
 use App\Services\Api\InternalMoneyTransfer as OdooInternalMoneyTransfer;
 
@@ -32,12 +31,12 @@ trait HasOdooMoneyTransfer
 		$sendMessage = $isInternalMoneyTransfer  ? __('Send - Internal Transfer' ) : __('Sell Currency');
 		$receiveMessage = $isInternalMoneyTransfer  ? __('Receive - Internal Transfer' ) : __('Buy Currency');
         $internalMoneyTransferService = (new OdooInternalMoneyTransfer($company));
-        $outboundStatementColumnName = $isBreakDeposit ? 'outbound_break_account_bank_statement_odoo_id' : 'outbound_account_bank_statement_odoo_id';
-        $outboundJournalColumnName = $isBreakDeposit ? 'outbound_break_journal_entry_id' : 'outbound_journal_entry_id';
-        $inboundStatementColumnName = $isBreakDeposit ? 'inbound_break_account_bank_statement_odoo_id' : 'inbound_account_bank_statement_odoo_id';
-        $inboundJournalColumnName = $isBreakDeposit ? 'inbound_break_journal_entry_id' : 'inbound_journal_entry_id';
-        $inboundReferenceColumnName = $isBreakDeposit ? 'inbound_break_odoo_reference' : 'inbound_odoo_reference';
-        $outboundReferenceColumnName = $isBreakDeposit ? 'outbound_break_odoo_reference' : 'outbound_odoo_reference';
+        $outboundStatementColumnName = 'outbound_account_bank_statement_odoo_id';
+        $outboundJournalColumnName = 'outbound_journal_entry_id';
+        $inboundStatementColumnName =  'inbound_account_bank_statement_odoo_id';
+        $inboundJournalColumnName =  'inbound_journal_entry_id';
+        $inboundReferenceColumnName ='inbound_odoo_reference';
+        $outboundReferenceColumnName =  'outbound_odoo_reference';
         if ($this->{$outboundJournalColumnName}) {
             $receiveResult = $internalMoneyTransferService->unlink($this->{$outboundJournalColumnName});
         }
@@ -67,25 +66,7 @@ trait HasOdooMoneyTransfer
 
         $this->save();
     }
-    public function deleteOdoo($isBreakOrApplyDeposit)
-    {
-        $company = $this->company;
-		$breakColumns = ['inbound_break_journal_entry_id','store_break_journal_entry_id'];
-		$storeColumns = ['inbound_journal_entry_id','outbound_journal_entry_id'] ;
-		$columnsToDelete = $isBreakOrApplyDeposit ? $breakColumns : array_merge(
-			$breakColumns , 
-			$storeColumns
-		);
-        if ($company->hasOdooIntegrationCredentials()) {
-            $internalMoneyTransferService = (new OdooInternalMoneyTransfer($company));
-            foreach ($columnsToDelete as $columnName) {
-                if ($journalEntryId = $this->{$columnName}) {
-                    $internalMoneyTransferService->unlink($journalEntryId);
-                }
-            }
-        
-        }
-    }
+    
     public function handleOdooTransfer()
     {
         /**

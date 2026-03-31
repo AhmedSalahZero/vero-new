@@ -11,46 +11,46 @@ use Illuminate\Http\Request;
 class QuickPricingCalculatorRepository implements IBaseRepository 
 {
     
-    public function all():Collection
-    {
-        return QuickPricingCalculator::withAllRelations()->onlyCurrentCompany()->get();
-    }
+    // public function all():Collection
+    // {
+    //     return QuickPricingCalculator::withAllRelations()->onlyCurrentCompany()->get();
+    // }
 
-    public function allFormatted():array
-    {
-        return QuickPricingCalculator::onlyCurrentCompany()->pluck('name','id')->toArray();
-    }
-    public function allFormattedForSelect()
-    {
-        $quickPricingCalculators = $this->all();
-        return formatOptionsForSelect($quickPricingCalculators , 'getId' , 'getName');
-    }
+    // public function allFormatted():array
+    // {
+    //     return QuickPricingCalculator::onlyCurrentCompany()->pluck('name','id')->toArray();
+    // }
+    // public function allFormattedForSelect()
+    // {
+    //     $quickPricingCalculators = $this->all();
+    //     return formatOptionsForSelect($quickPricingCalculators , 'getId' , 'getName');
+    // }
   
-     public function getAllExcept($id):?Collection
-    {
-        return QuickPricingCalculator::onlyCurrentCompany()->where('id','!=',$id)->get();
-    }
+    //  public function getAllExcept($id):?Collection
+    // {
+    //     return QuickPricingCalculator::onlyCurrentCompany()->where('id','!=',$id)->get();
+    // }
 
-    public function query():Builder
-    {
-        return QuickPricingCalculator::onlyCurrentCompany()->query();
+    // public function query():Builder
+    // {
+    //     return QuickPricingCalculator::onlyCurrentCompany()->query();
 
-    }
-    public function Random():Builder
-    {
-        return QuickPricingCalculator::onlyCurrentCompany()->inRandomOrder();
-    }
+    // }
+    // public function Random():Builder
+    // {
+    //     return QuickPricingCalculator::onlyCurrentCompany()->inRandomOrder();
+    // }
 
-    public function find(?int $id)
-    {
-        return QuickPricingCalculator::onlyCurrentCompany()->find($id);
-    }
+    // public function find(?int $id)
+    // {
+    //     return QuickPricingCalculator::onlyCurrentCompany()->find($id);
+    // }
 
-    public function getLatest($column = 'id'):?QuickPricingCalculator
-    {
-        return QuickPricingCalculator::onlyCurrentCompany()->latest($column)->first();
+    // public function getLatest($column = 'id'):?QuickPricingCalculator
+    // {
+    //     return QuickPricingCalculator::onlyCurrentCompany()->latest($column)->first();
 
-    }
+    // }
      public function store(Request $request )
     {
         $quickPricingCalculator = App(QuickPricingCalculator::class);
@@ -95,8 +95,7 @@ class QuickPricingCalculatorRepository implements IBaseRepository
             $quickPricingCalculator->totalNetProfitAfterTaxesFormatted = $quickPricingCalculator->getTotalNetProfitAfterTaxesFormatted();
             $quickPricingCalculator->creator_name = $quickPricingCalculator->getCreatorName();
             $quickPricingCalculator->created_at_formatted = formatDateFromString($quickPricingCalculator->created_at);
-            $quickPricingCalculator->updated_at_formatted = formatDateFromString($quickPricingCalculator->updated_at);
-            // $quickPricingCalculator->serviceCategories = $quickPricingCalculator->serviceCategories->load('serviceItems'); 
+            // $quickPricingCalculator->updated_at_formatted = formatDateFromString($quickPricingCalculator->updated_at);
             $quickPricingCalculator->order = $index+1 ;
 
         }) ;

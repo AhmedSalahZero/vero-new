@@ -37,13 +37,13 @@ class FixedAssetsPayableEndBalance
                 $result[$intervalName]['beginning_balance'][$dateAsIndex] = $beginning_balance ;
                 $beginning_balances[$dateAsIndex] = $beginning_balance ;
                 $purchaseAtDate = $purchasesForIntervals[$intervalName][$dateAsIndex]??0;
-                $result[$intervalName]['asset_purchases'][$dateAsIndex] = $purchaseAtDate ?? 0 ;
-                $due_amount =($purchaseAtDate??0) + $beginning_balance ;
+                $result[$intervalName]['asset_purchases'][$dateAsIndex] = $purchaseAtDate  ;
+                $due_amount =$purchaseAtDate + $beginning_balance ;
                 $result[$intervalName]['due_amount'][$dateAsIndex] = $due_amount ;
                 $dueAmounts[$dateAsIndex] = $due_amount ;
                 $end_balance[$dateAsIndex] = $due_amount - $currenPayment;
                 $result[$intervalName]['payment'][$dateAsIndex] = $currenPayment ;
-                $result[$intervalName]['end_balance'][$dateAsIndex] = $end_balance[$dateAsIndex]??0 ;
+                $result[$intervalName]['end_balance'][$dateAsIndex] = $end_balance[$dateAsIndex] ;
                 $beginning_balance = $end_balance[$dateAsIndex];
             }
         

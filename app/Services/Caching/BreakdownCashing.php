@@ -17,7 +17,7 @@ class BreakdownCashing
 
 	private array $typesOfCaching;
 
-	public function __construct(Company $company, string $year)
+	public function __construct(Company $company, int $year)
 	{
 		$this->company = $company;
 

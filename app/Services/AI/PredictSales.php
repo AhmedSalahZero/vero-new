@@ -261,7 +261,7 @@ return $newArray;
 			return null;
 		}
 		$previousOfPrevious12ItemsCounter = count($previousOfPrevious12Items);
-		$last12ItemsAvg = $last12ItemsCounter ? array_sum($last12Items) / $last12ItemsCounter : 0;
+		$last12ItemsAvg =array_sum($last12Items) / $last12ItemsCounter;
 		
 		$previousOfPrevious12ItemsAvg =$previousOfPrevious12ItemsCounter ? array_sum($previousOfPrevious12Items) /  $previousOfPrevious12ItemsCounter : 0;
 		$growthRateForItem = $previousOfPrevious12ItemsAvg ? ($last12ItemsAvg / $previousOfPrevious12ItemsAvg) - 1 : 0 ;

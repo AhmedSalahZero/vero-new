@@ -447,8 +447,8 @@ class CustomerInvoice extends Model implements IInvoice
 		$totalCashInFlowKey = __('Total Cash Inflow');
 		
 		$currentTypeText = 'Cash & Banks Balance';
-		$rows = CashInSafeStatement
-		::where('cash_in_safe_statements.company_id',$companyId)
+		$rows = DB::table('cash_in_safe_statements')
+		->where('cash_in_safe_statements.company_id',$companyId)
 		// ->where('cash_in_safe_statements.currency',$currency)
 		->where('cash_in_safe_statements.date','<=',$startDate)
 		->join('branch','branch.id','=','cash_in_safe_statements.branch_id')
@@ -472,8 +472,8 @@ class CustomerInvoice extends Model implements IInvoice
 			$result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] = isset($result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear]) ? $result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] + $amountInExchangeRate : $amountInExchangeRate;
 			}
 		
-		$rows = CurrentAccountBankStatement::
-		where('current_account_bank_statements.company_id',$companyId)
+		$rows = DB::table('current_account_bank_statements')
+		->where('current_account_bank_statements.company_id',$companyId)
 		// ->where('financial_institution_accounts.currency',$currency)
 		->where('current_account_bank_statements.date','<=',$startDate)
 		->join('financial_institution_accounts','financial_institution_accounts.id','=','current_account_bank_statements.financial_institution_account_id')
@@ -702,5 +702,17 @@ class CustomerInvoice extends Model implements IInvoice
 	public function getSalesOrderNumber()
 	{
 		return $this->sales_order_number;
+	}
+	public function getCollectedOrPaidAmount()
+	{
+		return $this->collected_amount?:0;
+	}
+	public function getName()
+	{
+		return $this->customer_name;
+	}
+	public function getTotalCollectedOrPaid()
+	{
+		return (float)$this->total_collected_amount ; 
 	}
 }

@@ -69,9 +69,9 @@ class InvoiceAgingService
                 $dayInterval = 0 ;
             }
             $result[$clientName][$dueName][$dayInterval] = isset($result[$clientName][$dueName][$dayInterval]) ? $result[$clientName][$dueName][$dayInterval] + $netBalance : $netBalance ;
-            if ($netBalance) {
+          
                 $result[$clientName][$dueName]['no_invoices'][$dayInterval] = isset($result[$clientName][$dueName]['no_invoices'][$dayInterval]) ? $result[$clientName][$dueName]['no_invoices'][$dayInterval] + 1 : 1 ;
-            }
+           
 
             $result[$clientName][$dueName]['total'] = isset($result[$clientName][$dueName]['total']) ? $result[$clientName][$dueName]['total'] + $netBalance : $netBalance ;
             $result[$clientName]['total'] = isset($result[$clientName]['total']) ? $result[$clientName]['total'] + $netBalance : $netBalance;
@@ -79,20 +79,20 @@ class InvoiceAgingService
             $result[$clientName]['invoices'][$invoiceNumber][$dueName]['total'] = isset($result[$clientName]['invoices'][$invoiceNumber][$dueName]['total']) ? $result[$clientName]['invoices'][$invoiceNumber][$dueName]['total'] + $netBalance : $netBalance;
             $result[$clientName]['invoices'][$invoiceNumber]['total'] = isset($result[$clientName]['invoices'][$invoiceNumber]['total']) ? $result[$clientName]['invoices'][$invoiceNumber]['total'] + $netBalance : $netBalance;
             $result['total'][$dueName][$dayInterval] = isset($result['total'][$dueName][$dayInterval]) ? $result['total'][$dueName][$dayInterval] + $netBalance : $netBalance ;
-            if ($netBalance) {
+
                 $result['invoice_count'][$dueName][$dayInterval] = isset($result['invoice_count'][$dueName][$dayInterval]) ? $result['invoice_count'][$dueName][$dayInterval] + 1 : 1 ;
                 $result['invoice_count'][$dueName]['clients'][$dayInterval][$clientName] = $clientName;
-            }
+           
 
             $result['grand_total'] = isset($result['grand_total']) ? $result['grand_total'] + $netBalance : $netBalance ;
-            if ($netBalance) {
+   
                 $result['grand_clients_total'][$clientName] = $clientName ;
-            }
+          
             $result['total_of_due'][$dueName] = isset($result['total_of_due'][$dueName]) ? $result['total_of_due'][$dueName] + $netBalance : $netBalance ;
 
-            if ($netBalance) {
+            
                 $result['total_clients_due'][$dueName][$clientName] = $clientName ;
-            }
+            
         }
 
         foreach (['coming_due', 'current_due', 'past_due'] as $dueName) {
@@ -101,8 +101,8 @@ class InvoiceAgingService
                 'item' => $this->getTotalAgainItemNameFromDue($dueName, $this->aging_date),
                 'value' => $totalAgingValue = $result['total_of_due'][$dueName] ?? 0,
                 'percentage' => $totalAgingValue && $totalOfAllDue ? $totalAgingValue / $totalOfAllDue * 100 : 0,
-                'total_for_all_values' => isset($totalOfAllDue) ? $totalOfAllDue : 0,
-                'total_for_all_percentages' => isset($totalOfAllDue) && $totalOfAllDue > 0 ? '100' : 0
+                'total_for_all_values' =>$totalOfAllDue ? $totalOfAllDue : 0,
+                'total_for_all_percentages' => $totalOfAllDue && $totalOfAllDue > 0 ? '100' : 0
             ];
             if ($dueName == 'coming_due' || $dueName == 'past_due') {
                 foreach (array_merge(getInvoiceDayIntervals(), [self::MORE_THAN_150]) as $dayInterval) {

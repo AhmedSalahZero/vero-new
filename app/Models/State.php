@@ -40,18 +40,8 @@ class State extends Model
 
     public function getName(): string
     {
-        if (!$this->name) {
-            return '';
-        }
-        
-        // If name is string, return it directly
-        if (is_string($this->name)) {
-            return $this->name;
-        }
-        
-        // If name is array/JSON, get localized version
-        $locale = App()->getLocale();
-        return $this->name[$locale] ?? $this->name['en'] ?? '';
+		return $this['name_'.App()->getLocale()];
+       
     }
 
     public static function getStoreRoute():string

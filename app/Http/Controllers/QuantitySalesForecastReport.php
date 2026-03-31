@@ -559,7 +559,7 @@ class QuantitySalesForecastReport
 					$products->each->delete();
 				}
 				foreach ($request['product_name'] as $key => $product_name) {
-					if ($product_name !== null && isset($request['category'][$key]) && $request['category'][$key] !== null) {
+					if ($product_name !== null && isset($request['category'][$key]) ) {
 						QuantityProduct::create([
 							'name' => $product_name,
 							'company_id' => $company->id,

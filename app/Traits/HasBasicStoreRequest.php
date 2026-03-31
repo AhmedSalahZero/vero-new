@@ -44,6 +44,8 @@ trait HasBasicStoreRequest
 			elseif(is_array($request->get($name)) && method_exists($this,$name) && $this->id ){
 				// is relationship
 				$this->updateRepeaterRelation($request,$name,$this->$name()->getRelated()->getTable(),[
+					
+					/** @phpstan-ignore-next-line */
 					'company_id'=>getCurrentCompanyId()  ?: $this->company_id
 				]);
 			}

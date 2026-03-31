@@ -72,19 +72,16 @@ class LeaseRentLiabilityOpeningBalance extends Model
 			}
 			
 			
-            $openingBalance = $model->amount;
+            $openingBalance = $model->amount?:0;
             $statementPayload = $model->rent_payment;
 			$additions = $model->rent_interest;
          //   $dateIndexWithDate = $model->study->getDateIndexWithDate();
             // $study = $model->study;
             $extendedStudyEndDate = $model->study->convertDateStringToDateIndex($model->study->getEndDate()) ;
             $dates = range(0, $extendedStudyEndDate);
-            if (!is_null($openingBalance)) {
+      
                 $model->statement = self::calculateSettlementStatement($dates, $statementPayload, $additions, $openingBalance);
               
-                    
-            
-            }
                 
                 
             DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('income_statement_reports')->where('study_id', $model->study->id)->update([

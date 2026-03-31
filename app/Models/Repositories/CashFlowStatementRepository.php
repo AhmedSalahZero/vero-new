@@ -93,7 +93,7 @@ class CashFlowStatementRepository implements IBaseRepository
 				->where(function (Builder $builder) use ($request) {
 					$builder->when($request->filled('search_input'), function (Builder $builder) use ($request) {
 						$keyword = "%" . $request->get('search_input') . "%";
-						$builder;
+						
 					});
 				});
 		})

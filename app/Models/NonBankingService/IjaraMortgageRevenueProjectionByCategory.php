@@ -40,18 +40,7 @@ class IjaraMortgageRevenueProjectionByCategory extends Model
 		'monthly_due_cheques_percentages'=>'array',
 		'ijara_mortgage_transactions_projections'=>'array',
 	];
-	public function getViewVars(Company $company, Study $study):array{
-		$ijaraMortgageEclAndNewPortfolioFundingRate = $study?  $study->ijaraMortgageEclAndNewPortfolioFundingRate : null;
-		return [
-			'company'=>$company ,
-			'study'=>$study,
-			'model'=>$study ,
-			'ijaraMortgageEclAndNewPortfolioFundingRate'=>$ijaraMortgageEclAndNewPortfolioFundingRate,
-			'title'=>__('Ijara Mortgage Revenue Stream Breakdown'),
-			'storeRoute'=>route('store.ijara.mortgage.revenue.stream.breakdown',['company'=>$company->id , 'study'=>$study->id]),
-			'yearsWithItsMonths' => $study->getOperationDurationPerYearFromIndexes(),
-		];
-	}
+	
 	public function getFormName():string
 	{
 		return 'non_banking_services.ijara-mortgage-revenue-stream-breakdown.form';

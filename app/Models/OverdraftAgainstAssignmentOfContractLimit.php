@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\DB;
  */
 class OverdraftAgainstAssignmentOfContractLimit extends Model
 {
-	use IsBankStatement;
+	// use IsBankStatement;
 	protected $table ='overdraft_against_assignment_of_contract_limits';
 	
 	protected $guarded =[

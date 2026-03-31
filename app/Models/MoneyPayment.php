@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Interfaces\Models\IHaveCreditOverdraftStatement;
 use App\Models\OpeningBalance;
 use App\Models\OutgoingTransfer;
 use App\Services\Api\OdooPayment;
@@ -9,10 +10,10 @@ use App\Traits\Models\HasCreditStatements;
 use App\Traits\Models\HasForeignExchangeGainOrLoss;
 use App\Traits\Models\HasNonCustomerOrSupplier;
 use App\Traits\Models\HasPartnerStatement;
-use App\Traits\Models\IsMoneyOut;
 use App\Traits\Models\HasReviewedBy;
 use App\Traits\Models\HasUserComment;
 use App\Traits\Models\IsMoney;
+use App\Traits\Models\IsMoneyOut;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -142,7 +143,7 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\MoneyPayment whereUserId($value)
  * @mixin \Eloquent
  */
-class MoneyPayment extends Model
+class MoneyPayment extends Model implements IHaveCreditOverdraftStatement
 {
     protected $with = [
         // 'payableCheque'
@@ -391,16 +392,17 @@ class MoneyPayment extends Model
     {
         return strtoupper($this->getPaymentCurrency());
     }
+	public function getReceivingOrPaymentCurrency()
+	{
+		return $this->getPaymentCurrency();
+	}
     
     public function getExchangeRate()
     {
         
         return $this->exchange_rate?:1;
     }
-    public function getPaymentBankName()
-    {
-        return '-';
-    }
+
 
 
     public function getCashPaymentReceiptNumber()
@@ -451,18 +453,11 @@ class MoneyPayment extends Model
     }
     public function outgoingTransferDeliveryBank():?FinancialInstitution
     {
-        /**
-         * @var OutgoingTransfer $outgoingTransfer
-         */
         $outgoingTransfer = $this->outgoingTransfer ;
-        
         return $outgoingTransfer ? $outgoingTransfer->deliveryBank : null ;
     }
     public function getOutgoingTransferDeliveryBankName()
     {
-        /**
-         * @var OutgoingTransfer $outgoingTransfer
-         */
         $outgoingTransfer = $this->outgoingTransfer ;
         return $outgoingTransfer ? $outgoingTransfer->getDeliveryBankName() : __('N/A') ;
     }
@@ -577,9 +572,6 @@ class MoneyPayment extends Model
     
     public function cashPaymentDeliveryBranch()
     {
-        /**
-         * @var CashPayment $cashPayment
-         */
         $cashPayment = $this->cashPayment;
         return $cashPayment ? $cashPayment->deliveryBranch : null ;
     }
@@ -590,21 +582,21 @@ class MoneyPayment extends Model
         return $cashPayment ? $cashPayment->getDeliveryBranchName() : null ;
     }
     
-    public function getPayableChequeDeliveryDate()
-    {
-        $payable = $this->payableCheque;
-        return $payable ? $payable->getDeliveryDate() : null;
-    }
-    public function getPayableChequeDeliveryDateFormattedForDatePicker()
-    {
-        $date = $this->getPayableChequeDeliveryDate();
-        return $date ? Carbon::make($date)->format('m/d/Y') : null;
-    }
-    public function getChequeDeliveryDateFormatted()
-    {
-        $date = $this->getPayableChequeDeliveryDate();
-        return $date ? Carbon::make($date)->format('d-m-Y') : null;
-    }
+    // public function getPayableChequeDeliveryDate()
+    // {
+    //     $payable = $this->payableCheque;
+    //     return $payable ? $payable->getDeliveryDate() : null;
+    // }
+    // public function getPayableChequeDeliveryDateFormattedForDatePicker()
+    // {
+    //     $date = $this->getPayableChequeDeliveryDate();
+    //     return $date ? Carbon::make($date)->format('m/d/Y') : null;
+    // }
+    // public function getChequeDeliveryDateFormatted()
+    // {
+    //     $date = $this->getPayableChequeDeliveryDate();
+    //     return $date ? Carbon::make($date)->format('d-m-Y') : null;
+    // }
 
     
     public function getPayableChequePaymentBankId()
@@ -743,7 +735,7 @@ class MoneyPayment extends Model
     {
         return $this->getMoneyType() == self::INVOICE_SETTLEMENT_WITH_DOWN_PAYMENT;
     }
-    public function getMoneyType()
+    public function getMoneyType():string
     {
         return $this->money_type;
     }
@@ -1104,7 +1096,14 @@ class MoneyPayment extends Model
 	{
 		return $this->payableCheque && $this->payableCheque->isPaid();
 	}
+	public function isChequeOrChequePayment():bool
+	{
+		return $this->isPayableCheque();
+	}
+	public function isChequeAndNotCustomerOrSupplier()
+	{
+		return $this->isChequeOrChequePayment() && (!in_array($this->getPartnerType(),['is_customer','is_supplier']));
+	}
 	
-	
-	
+
 }

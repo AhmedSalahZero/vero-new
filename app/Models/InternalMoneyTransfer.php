@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Models\FullySecuredOverdraft;
-
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCompany;
+use App\Traits\Models\HasDeleteOdoo;
 use App\Traits\Models\HasOdooMoneyTransfer;
 use App\Traits\Models\HasUserComment;
 use Carbon\Carbon;
@@ -113,7 +113,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class InternalMoneyTransfer extends Model 
 {
-	use HasBasicStoreRequest ,HasUserComment,HasCompany,HasOdooMoneyTransfer;
+	use HasBasicStoreRequest ,HasUserComment,HasCompany,HasOdooMoneyTransfer,HasDeleteOdoo;
 	const BANK_TO_BANK = 'bank-to-bank';
 	const BANK_TO_SAFE = 'bank-to-safe';
 	const SAFE_TO_BANK = 'safe-to-bank';
@@ -156,14 +156,14 @@ class InternalMoneyTransfer extends Model
 			$internalMoneyTransfer->to_comment_ar = self::generateToAccountComment($internalMoneyTransfer,'ar');
 		});
 	}
-	public function isCredit()
-	{
-		return (bool) $this->is_credit ;
-	}
-	public function isDebit()
-	{
-		return (bool) $this->is_debit ;
-	}
+	// public function isCredit()
+	// {
+	// 	return (bool) $this->is_credit ;
+	// }
+	// public function isDebit()
+	// {
+	// 	return (bool) $this->is_debit ;
+	// }
 	
 	public static function getAllTypes()
 	{
@@ -275,10 +275,10 @@ class InternalMoneyTransfer extends Model
     {
         return $this->currency ;
     }
-	public function getCurrencyInMainName()
-    {
-        return $this->getCurrency() ;
-    }
+	// public function getCurrencyInMainName()
+    // {
+    //     return $this->getCurrency() ;
+    // }
 	public function getCurrencyFormatted()
     {
         return $this->getCurrency() ;
@@ -386,10 +386,8 @@ class InternalMoneyTransfer extends Model
 	 */
 	public function handleBankTransfer(int $companyId , int $fromFinancialInstitutionId , AccountType $fromAccountType , string $fromAccountNumber ,string $transferDate  , $debitAmount , $creditAmount)
 	{
-		if($fromAccountType && $fromAccountType->isCurrentAccount()){
-			/**
-			 * @var CleanOverdraft $fromCleanOverdraft
-			 */
+		if( $fromAccountType->isCurrentAccount()){
+			
 			$fromCurrentAccount = FinancialInstitutionAccount::findByAccountNumber($fromAccountNumber,$companyId,$fromFinancialInstitutionId);
 			CurrentAccountBankStatement::create([
 				'financial_institution_account_id'=>$fromCurrentAccount->id ,
@@ -405,11 +403,11 @@ class InternalMoneyTransfer extends Model
 		}
 		
 		
-		if($fromAccountType && $fromAccountType->isCleanOverdraftAccount()){
-			/**
+		if( $fromAccountType->isCleanOverdraftAccount()){
+			
+/**
 			 * @var CleanOverdraft $fromCleanOverdraft
 			 */
-
 			$fromCleanOverdraft = CleanOverdraft::findByAccountNumber($fromAccountNumber,$companyId,$fromFinancialInstitutionId);
 			CleanOverdraftBankStatement::create([
 				'type'=>CleanOverdraftBankStatement::MONEY_TRANSFER ,
@@ -422,7 +420,7 @@ class InternalMoneyTransfer extends Model
 				'debit'=>$debitAmount
 			]);
 		}
-		if($fromAccountType && $fromAccountType->isFullySecuredOverdraftAccount()){
+		if( $fromAccountType->isFullySecuredOverdraftAccount()){
 			/**
 			 * @var FullySecuredOverdraft $fromFullySecuredOverdraft
 			 */
@@ -440,7 +438,7 @@ class InternalMoneyTransfer extends Model
 			]);
 		}
 		
-		if($fromAccountType && $fromAccountType->isOverdraftAgainstCommercialPaperAccount()){
+		if( $fromAccountType->isOverdraftAgainstCommercialPaperAccount()){
 			/**
 			 * @var OverdraftAgainstCommercialPaper $fromOverdraftAgainstCommercialPaper
 			 */
@@ -458,7 +456,7 @@ class InternalMoneyTransfer extends Model
 			]);
 		}
 		
-		if($fromAccountType && $fromAccountType->isOverdraftAgainstAssignmentOfContractAccount()){
+		if( $fromAccountType->isOverdraftAgainstAssignmentOfContractAccount()){
 			/**
 			 * @var OverdraftAgainstAssignmentOfContract $fromOverdraftAgainstAssignmentOfContract
 			 */
@@ -579,5 +577,8 @@ class InternalMoneyTransfer extends Model
 		return $result;
 	}	
 	
-	
+	public function getBreakColumns():array
+	{
+		return [];
+	}	
 }
