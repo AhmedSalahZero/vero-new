@@ -72,7 +72,7 @@ $banks = [];
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == MoneyPayment::PAYABLE_CHEQUE ?'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::PAYABLE_CHEQUE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == MoneyPayment::PAYABLE_CHEQUE ?'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::PAYABLE_CHEQUE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Payable Cheques') }}
                     </a>
                 </li>
@@ -94,12 +94,12 @@ $banks = [];
 
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyPayment::OUTGOING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::OUTGOING_TRANSFER }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyPayment::OUTGOING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::OUTGOING_TRANSFER }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Outgoing Transfer') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyPayment::CASH_PAYMENT ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::CASH_PAYMENT }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyPayment::CASH_PAYMENT ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::CASH_PAYMENT }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Cash Payment') }}
                     </a>
                 </li>

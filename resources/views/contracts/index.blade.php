@@ -439,20 +439,20 @@ use App\Models\Contract;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == Contract::RUNNING ?'active':'' }}" data-toggle="tab" href="#{{Contract::RUNNING  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == Contract::RUNNING ?'active':'' }}" data-toggle="tab" href="#{{Contract::RUNNING  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Running') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == Contract::RUNNING_AND_AGAINST ?'active':'' }}" data-toggle="tab" href="#{{ Contract::RUNNING_AND_AGAINST }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == Contract::RUNNING_AND_AGAINST ?'active':'' }}" data-toggle="tab" href="#{{ Contract::RUNNING_AND_AGAINST }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Running And Against') }}
                     </a>
                 </li>
 
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == Contract::FINISHED ?'active':'' }}" data-toggle="tab" href="#{{ Contract::FINISHED }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == Contract::FINISHED ?'active':'' }}" data-toggle="tab" href="#{{ Contract::FINISHED }}" role="tab">
                         <i class="fa fa-check-double"></i> {{ __('Finished') }}
                     </a>
                 </li>

@@ -29,41 +29,42 @@ use Illuminate\Support\Collection;
 class LetterOfGuaranteeIssuanceController
 {
     use GeneralFunctions;
-    protected function applyFilter(Request $request, Collection $collection, ?string $filterStartDate = null, ?string $filterEndDate = null):Collection
-    {
-        if (!count($collection)) {
-            return $collection;
-        }
-        $searchFieldName = $request->get('field');
-        $dateFieldName =  'issuance_date' ; // change it
-        // $dateFieldName = $searchFieldName === 'balance_date' ? 'balance_date' : 'created_at';
-        $from = $request->get('from');
-        $to = $request->get('to');
-        $value = $request->query('value');
-        $collection = $collection
-        ->when($request->has('value'), function ($collection) use ( $value, $searchFieldName) {
-            return $collection->filter(function ($letterOfGuaranteeIssuance) use ($value, $searchFieldName) {
-                $currentValue = $letterOfGuaranteeIssuance->{$searchFieldName} ;
-                return false !== stristr($currentValue, $value);
-            });
-        })
-        ->when($request->get('from'), function ($collection) use ($dateFieldName, $from) {
-            return $collection->where($dateFieldName, '>=', $from);
-        })
-        ->when($request->get('to'), function ($collection) use ($dateFieldName, $to) {
-            return $collection->where($dateFieldName, '<=', $to);
-        })
-        ->when($filterStartDate, function ($collection) use ($filterStartDate, $filterEndDate) {
-            return $collection->filterByIssuanceDate($filterStartDate, $filterEndDate);
-        });
-        // ->sortBy('renewal_date')
-        // ->values();
+    // protected function applyFilter(Request $request, Collection $collection, ?string $filterStartDate = null, ?string $filterEndDate = null):Collection
+    // {
+    //     if (!count($collection)) {
+    //         return $collection;
+    //     }
+    //     $searchFieldName = $request->get('field');
+    //     $dateFieldName =  'issuance_date' ; // change it
+    //     $from = $request->get('from');
+    //     $to = $request->get('to');
+    //     $value = $request->query('value');
+    //     $collection = $collection
+    //     ->when($request->has('value'), function ($collection) use ( $value, $searchFieldName) {
+    //         return $collection->filter(function ($letterOfGuaranteeIssuance) use ($value, $searchFieldName) {
+    //             $currentValue = $letterOfGuaranteeIssuance->{$searchFieldName} ;
+    //             return false !== stristr($currentValue, $value);
+    //         });
+    //     })
+    //     ->when($request->get('from'), function ($collection) use ($dateFieldName, $from) {
+    //         return $collection->where($dateFieldName, '>=', $from);
+    //     })
+    //     ->when($request->get('to'), function ($collection) use ($dateFieldName, $to) {
+    //         return $collection->where($dateFieldName, '<=', $to);
+    //     })
+    //     ->when($filterStartDate, function ($collection) use ($filterStartDate, $filterEndDate) {
+    //         return $collection->filterByIssuanceDate($filterStartDate, $filterEndDate);
+    //     });
+    //     // ->sortBy('renewal_date')
+    //     // ->values();
 
-        return $collection;
-    }
+    //     return $collection;
+    // }
     public function index(Company $company, Request $request)
     {
-        $company->load('letterOfGuaranteeIssuances.financialInstitutionBank', 'letterOfGuaranteeIssuances.advancedPaymentHistories', 'letterOfGuaranteeIssuances.beneficiary');
+		$paginationPerPage = GeneralFunctions::getPaginationLimit();
+        // $company->load('letterOfGuaranteeIssuances');
+        // $company->load('letterOfGuaranteeIssuances.financialInstitutionBank', 'letterOfGuaranteeIssuances.advancedPaymentHistories', 'letterOfGuaranteeIssuances.beneficiary');
         $numberOfMonthsBetweenEndDateAndStartDate = 60 ;
         $activeLgType = $request->get('active', LgTypes::BID_BOND) ;
         $filterDates = [];
@@ -76,11 +77,30 @@ class LetterOfGuaranteeIssuanceController
                 'startDate'=>$startDate,
                 'endDate'=>$endDate
             ];
-            $models[$type]   = $company->letterOfGuaranteeIssuances->where('lg_type', $type) ;
-
+            $models[$type]   = $company->letterOfGuaranteeIssuances()
+			->whereBetween('issuance_date', [$startDate, $endDate])
+			->where('lg_type', $type)->with('financialInstitutionBank', 'advancedPaymentHistories', 'beneficiary') ;
             if ($type == $activeLgType) {
-                $models[$type]   = $this->applyFilter($request, $models[$type], $filterDates[$type]['startDate'], $filterDates[$type]['endDate']) ;
+				$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$models[$type] = $models[$type]->when($searchFieldName == 'issuance_date', function ($query) use ( $from, $to) {
+					$query->whereBetween('issuance_date', [$from, $to]);
+				})
+				;
+				$models[$type] = $models[$type]->when($searchFieldName == 'transaction_name', function ($query) use ( $value) {
+					$query->where('transaction_name', 'like', '%'.$value.'%');
+				})
+				->when($searchFieldName == 'lg_code', function ($query) use ( $value) {
+					$query->where('lg_code', 'like', '%'.$value.'%');
+				})
+				->when($searchFieldName == 'purchase_order_date', function ($query) use ( $from, $to) {
+					$query->whereBetween('purchase_order_date', [$from, $to]);
+				});
+                // $models[$type]   = $this->applyFilter($request, $models[$type], $filterDates[$type]['startDate'], $filterDates[$type]['endDate']) ;
             }
+			$models[$type] = $models[$type]->paginate($paginationPerPage,['*'],'bankToLcSettlementInternalMoneyTransfersPage');
             $searchFields[$type] =  [
                 'transaction_name'=>__('Transaction Name'),
                 'lg_code'=>__('LG Code'),
@@ -153,8 +173,8 @@ class LetterOfGuaranteeIssuanceController
         Company $company,
         StoreLetterOfGuaranteeIssuanceRequest $request,
         string $source
-        // ,$inUpdateMode = false
     ) {
+		
         $partner = Partner::find($request->get('partner_id'));
         $customerName = $partner->getName() ;
         $lgCode = $request->get('lg_code');
@@ -164,7 +184,8 @@ class LetterOfGuaranteeIssuanceController
         
         $letterOfGuaranteeFacility = $source == LetterOfGuaranteeIssuance::LG_FACILITY  ? LetterOfGuaranteeFacility::find($letterOfGuaranteeFacilityId) : null;
         if ($source == LetterOfGuaranteeIssuance::LG_FACILITY && is_null($letterOfGuaranteeFacility)) {
-            return redirect()->back()->with('fail', __('No Available Letter Of Guarantee Facility Found !'));
+			return response()->json(['status'=>false,'message'=>__('No Available Letter Of Guarantee Facility Found !')]);
+            // return redirect()->back()->with('fail', __('No Available Letter Of Guarantee Facility Found !'));
         }
         if ($letterOfGuaranteeFacility instanceof LetterOfGuaranteeFacility) {
             $letterOfGuaranteeFacilityId = $letterOfGuaranteeFacility->id ;
@@ -201,11 +222,9 @@ class LetterOfGuaranteeIssuanceController
         
         $financialInstitutionAccountIdForFeesAndCommission = $financialInstitutionAccountForFeesAndCommission->id;
         $isCdOrTdCashCoverAccount = $model->isCdOrTd();
-        // if(!$inUpdateMode){
         $model->handleLgIssuanceCashCoverForOdoo();
         $model->handleIssuanceAndCommissionFeesForOdoo();
             
-        // }
 
         $openingBalanceDateOfCurrentAccount = $financialInstitutionAccountForFeesAndCommission->getOpeningBalanceDate();
         
@@ -236,7 +255,9 @@ class LetterOfGuaranteeIssuanceController
         
         $model->storeCommissionAmountCreditBankStatement($lgCommissionInterval, $numberOfIterationsForQuarter, $issuanceDate, $openingBalanceDateOfCurrentAccount, $maxLgCommissionAmount, $financialInstitutionAccountIdForFeesAndCommission, $transactionName, $lgType, $isOpeningBalance);
         
-        return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type')])->with('success', __('Data Store Successfully'));
+		return response()->json(['redirectTo'=>route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type')])]);
+		
+        // return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type')])->with('success', __('Data Store Successfully'));
 
     }
 
@@ -259,7 +280,8 @@ class LetterOfGuaranteeIssuanceController
     public function update(Company $company, UpdateLetterOfGuaranteeIssuanceRequest $request, LetterOfGuaranteeIssuance $letterOfGuaranteeIssuance, string $source)
     {
         if ($letterOfGuaranteeIssuance->renewalDateHistories->count()  > 1) {
-            return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type', $letterOfGuaranteeIssuance->getLgType())])->with('success', __('Data Store Successfully'));
+			return response()->json(['redirectTo'=>route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type', $letterOfGuaranteeIssuance->getLgType())])]);
+            // return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type', $letterOfGuaranteeIssuance->getLgType())])->with('success', __('Data Store Successfully'));
         }
         /**
          * * لو هو
@@ -269,9 +291,9 @@ class LetterOfGuaranteeIssuanceController
         
         $letterOfGuaranteeIssuance->deleteAllRelations();
         $letterOfGuaranteeIssuance->delete();
-        $this->store($company, $request, $source);
+        return $this->store($company, $request, $source);
     
-        return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type')])->with('success', __('Data Store Successfully'));
+        // return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type')])->with('success', __('Data Store Successfully'));
     }
 
     /**
@@ -283,10 +305,8 @@ class LetterOfGuaranteeIssuanceController
     {
         
         $lgType = $letterOfGuaranteeIssuance->getLgType();
-        // $amount = $letterOfGuaranteeIssuance->getLgAmount();
         $currency = $letterOfGuaranteeIssuance->getLgCurrency();
         $issuanceDate = $letterOfGuaranteeIssuance->getIssuanceDate();
-     //   $cashCoverAmount = $letterOfGuaranteeIssuance->getCashCoverAmount();
         $isCdOrTd = $letterOfGuaranteeIssuance->isCdOrTd();
         $financialInstitutionAccount = FinancialInstitutionAccount::find($letterOfGuaranteeIssuance->getCashCoverDeductedFromAccountId());
        
@@ -307,10 +327,9 @@ class LetterOfGuaranteeIssuanceController
         
         LetterOfGuaranteeCashCoverStatement::deleteButTriggerChangeOnLastElement($letterOfGuaranteeIssuance->letterOfGuaranteeCashCoverStatements->where('type', LetterOfGuaranteeIssuance::FOR_CANCELLATION));
 		
-		$isAdvancedPayment = $letterOfGuaranteeIssuance->isAdvancedPayment();
+	//	$isAdvancedPayment = $letterOfGuaranteeIssuance->isAdvancedPayment();
 		LetterOfGuaranteeCashCoverStatement::deleteButTriggerChangeOnLastElement($letterOfGuaranteeIssuance->letterOfGuaranteeCashCoverStatements->where('type', 'debit-lg-amount'));
-		// if(!$isAdvancedPayment){
-		// }
+		
 		$cashCovertToBeRemovedRow = $letterOfGuaranteeIssuance->currentAccountBankStatements->where('lg_advanced_payment_history_id',0)->where('is_debit', 1)->first() ;
 		$cashCoverAmount  = $cashCovertToBeRemovedRow ? $cashCovertToBeRemovedRow->debit : 0;
 
@@ -350,9 +369,7 @@ class LetterOfGuaranteeIssuanceController
             $letterOfGuaranteeIssuance->save();
             
         }
-		// foreach($letterOfGuaranteeIssuance->advancedPaymentHistories as $advancedPaymentHistory ){
-		// 	$advancedPaymentHistory->deleteOdooRelations();
-		// }
+		
         return redirect()->route('view.letter.of.guarantee.issuance', ['company'=>$company->id,'active'=>$request->get('lg_type', $letterOfGuaranteeIssuance->getLgType())])->with('success', __('Data Store Successfully'));
     }
     

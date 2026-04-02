@@ -39,7 +39,7 @@ i.exclude-icon{
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == 'tenants' ?'active':'' }}" data-toggle="tab" href="#tenants" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == 'tenants' ?'active':'' }}" data-toggle="tab" href="#tenants" role="tab">
                         	<i class="fa fa-users"></i> {{ __('Tenants') }}
                     </a>
                 </li>

@@ -74,19 +74,19 @@ use App\Models\NonBankingService\Study;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == Study::BUSINESS_PLAN ?'active':'' }}" data-toggle="tab" href="#{{Study::BUSINESS_PLAN  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == Study::BUSINESS_PLAN ?'active':'' }}" data-toggle="tab" href="#{{Study::BUSINESS_PLAN  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Business Plan') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{  Request('active') == Study::ANNUALLY_STUDY ?'active':'' }}" data-toggle="tab" href="#{{Study::ANNUALLY_STUDY  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{  Request('active') == Study::ANNUALLY_STUDY ?'active':'' }}" data-toggle="tab" href="#{{Study::ANNUALLY_STUDY  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Annually Study') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{  Request('active') == Study::CONSOLIDATION ?'active':'' }}" data-toggle="tab" href="#{{Study::CONSOLIDATION  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{  Request('active') == Study::CONSOLIDATION ?'active':'' }}" data-toggle="tab" href="#{{Study::CONSOLIDATION  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Consolidations Study') }}
                     </a>
                 </li>

@@ -8,44 +8,13 @@ use App\Models\LcSettlementInternalMoneyTransfer;
 use App\Models\LetterOfCreditIssuance;
 use App\Traits\GeneralFunctions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class LcSettlementInternalMoneyTransferController
 {
     use GeneralFunctions;
-    protected function applyFilter(Request $request,Collection $collection):Collection{
-		if(!count($collection)){
-			return $collection;
-		}
-		$searchFieldName = $request->get('field');
-		$dateFieldName =  'created_at' ; // change it 
-		// $dateFieldName = $searchFieldName === 'balance_date' ? 'balance_date' : 'created_at'; 
-		$from = $request->get('from');
-		$to = $request->get('to');
-		$value = $request->query('value');
-		$collection = $collection
-		->when($request->has('value'),function($collection) use ($value,$searchFieldName){
-			return $collection->filter(function($moneyReceived) use ($value,$searchFieldName){
-				$currentValue = $moneyReceived->{$searchFieldName} ;
-				if($searchFieldName == 'bank_id'){
-					$currentValue = $moneyReceived->getBankName() ;  
-				}
-				return false !== stristr($currentValue , $value);
-			});
-		})
-		->when($request->get('from') , function($collection) use($dateFieldName,$from){
-			return $collection->where($dateFieldName,'>=',$from);
-		})
-		->when($request->get('to') , function($collection) use($dateFieldName,$to){
-			return $collection->where($dateFieldName,'<=',$to);
-		})
-		->sortByDesc('id')->values();
-		
-		return $collection;
-	}
 	public function index(Company $company,Request $request)
 	{
-		
+		$paginationPerPage = GeneralFunctions::getPaginationLimit();
 		$numberOfMonthsBetweenEndDateAndStartDate = 18 ;
 		$currentType = $request->get('active',LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT);
 		
@@ -68,9 +37,11 @@ class LcSettlementInternalMoneyTransferController
 		
 		$bankToSafeStartDate = $filterDates[LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT]['startDate'] ?? null ;
 		$bankToSafeEndDate = $filterDates[LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT]['endDate'] ?? null ;
-		$bankToLcSettlementInternalMoneyTransfers = $company->bankToLcSettlementInternalMoneyTransfers ;
-		$bankToLcSettlementInternalMoneyTransfers =  $bankToLcSettlementInternalMoneyTransfers->filterByTransferDate($bankToSafeStartDate,$bankToSafeEndDate) ;
-		$bankToLcSettlementInternalMoneyTransfers =  $currentType == LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ? $this->applyFilter($request,$bankToLcSettlementInternalMoneyTransfers):$bankToLcSettlementInternalMoneyTransfers ;
+		$bankToLcSettlementInternalMoneyTransfers = $company->getBankToLcSettlementInternalMoneyTransfers(
+			$bankToSafeStartDate,
+			$bankToSafeEndDate,
+			$currentType
+		)->paginate($paginationPerPage,['*'],'bankToLcSettlementInternalMoneyTransfersPage') ;
 
 		/**
 		 * * end of bank to safe internal money transfer 
@@ -120,8 +91,7 @@ class LcSettlementInternalMoneyTransferController
 		/**
 		 * @var LetterOfCreditIssuance $letterOfCreditIssuance
 		 */
-		$letterOfCreditIssuanceId = $request->get('to_letter_of_credit_issuance_id',LetterOfCreditIssuance::first()->id);
-		$letterOfCreditIssuance = LetterOfCreditIssuance::find($letterOfCreditIssuanceId);
+		$letterOfCreditIssuance = LetterOfCreditIssuance::find($request->get('to_letter_of_credit_issuance_id'));
 		if(!$letterOfCreditIssuance){
 			return response()->json([
 				'status'=>false,
@@ -134,12 +104,6 @@ class LcSettlementInternalMoneyTransferController
 		$lcType = $letterOfCreditIssuance->getLcType();
 		$transactionName =   $letterOfCreditIssuance->getTransactionName();
 		$transferDate = $request->get('transfer_date') ;
-		if(!$transferDate){
-			return response()->json([
-				'status'=>false,
-				'message'=>__('Transfer Date is required')
-			]);
-		}
 		$transferAmount = $request->get('amount') ;
 		$internalMoneyTransfer->type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
 		$internalMoneyTransfer->storeBasicForm($request);
@@ -160,6 +124,7 @@ class LcSettlementInternalMoneyTransferController
 			'status'=>true,
 			'redirectTo'=>route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])
 		]);
+		// return redirect()->route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Data Store Successfully'));
 		
 	}
 
@@ -180,6 +145,7 @@ class LcSettlementInternalMoneyTransferController
 			'status'=>true,
 			'redirectTo'=>route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])
 		]);
+		// return redirect()->route('lc-settlement-internal-money-transfers.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Item Has Been Updated Successfully'));
 	}
 	
 	public function destroy(Company $company , LcSettlementInternalMoneyTransfer $lcSettlementInternalTransfer)

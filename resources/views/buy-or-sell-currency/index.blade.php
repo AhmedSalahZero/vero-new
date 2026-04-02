@@ -176,7 +176,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
-
+						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -290,7 +290,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
-
+						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -399,7 +399,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
-
+						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}	 
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -522,7 +522,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
-
+						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}	 
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -583,8 +583,8 @@ use App\Models\BuyOrSellCurrency ;
         if (searchFieldName === 'transfer_date') {
             modal.find('.data-type-span').html('[ {{ __("Transfer Date") }} ]')
             $(modal).find('.search-field').val('').trigger('change').prop('disabled', true);
-        } else if (searchFieldName === 'contract_end_date') {
-            modal.find('.data-type-span').html('[ {{ __("Contract End Date") }} ]')
+        } else if (searchFieldName === 'transaction_date') {
+            modal.find('.data-type-span').html('[ {{ __("Transaction Date") }} ]')
             $(modal).find('.search-field').val('').trigger('change').prop('disabled', true);
         } else if (searchFieldName === 'balance_date') {
             modal.find('.data-type-span').html('[ {{ __("Balance Date") }} ]')

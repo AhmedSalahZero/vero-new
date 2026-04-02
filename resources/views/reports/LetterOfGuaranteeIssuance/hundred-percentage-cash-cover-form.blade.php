@@ -441,7 +441,8 @@ use App\Models\LetterOfGuaranteeIssuance;
 
  @include('user_comment',['model'=>$model??null])
 
-                        <x-submitting />
+                        {{-- <x-submitting /> --}}
+						<x-submitting-by-ajax :validation="1" :backTo="route('view.letter.of.guarantee.issuance',['company'=>$company->id])" />
                     </form>
 
                     <!--end::Form-->

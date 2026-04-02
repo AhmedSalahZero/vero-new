@@ -119,7 +119,10 @@ class BuyOrSellCurrency extends Model
 	const BANK_TO_SAFE = 'bank-to-safe';
 	const SAFE_TO_BANK = 'safe-to-bank';
 	const SAFE_TO_SAFE = 'safe-to-safe';
-	
+	public static function scopeFilterByTransactionDate($query, $startDate, $endDate)
+	{
+		return $query->whereBetween('transaction_date', [$startDate, $endDate]);
+	}
 	public static function generateBuyAccountComment(self $buyOrSellCurrency,string $lang)
 	{
 		if($buyOrSellCurrency->isBankToBank() ){

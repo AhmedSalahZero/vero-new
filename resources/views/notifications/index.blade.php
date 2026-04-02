@@ -42,7 +42,7 @@ use App\Models\Notification ;
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
 				@foreach($notificationTypes as $typeId => $typeTitle)
                 <li class="nav-item">
-                    <a class="nav-link {{ 
+                    <a onclick="return false" class="nav-link {{ 
 						# !Request('active') ||
 						 $activeType == $typeId  ?'active':'' }}" data-toggle="tab" href="#{{$typeId  }}" role="tab">
 					

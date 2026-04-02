@@ -41,7 +41,7 @@ use App\Models\LcSettlementInternalMoneyTransfer ;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ?'active':'' }}" data-toggle="tab" href="#{{LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT ?'active':'' }}" data-toggle="tab" href="#{{LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Bank To Letter Of Credit Transfer Table') }}
                     </a>
                 </li>
@@ -102,7 +102,7 @@ use App\Models\LcSettlementInternalMoneyTransfer ;
                                 @foreach($models[$currentType] as $index=>$model)
                                 <tr>
                                     <td>
-                                        {{ $index+1 }}
+                                        {{ ($models[$currentType]->firstItem() ?? 1) + $index }}
                                     </td>
 
                                     <td class="text-nowrap">{{ $model->getTransferDateFormatted() }}</td>
@@ -150,6 +150,7 @@ use App\Models\LcSettlementInternalMoneyTransfer ;
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
 
                         <!--end: Datatable -->
                     </div>

@@ -16,40 +16,41 @@ use Illuminate\Support\Collection;
 class InternalMoneyTransferController
 {
     use GeneralFunctions;
-    protected function applyFilter(Request $request,Collection $collection):Collection{
-		if(!count($collection)){
-			return $collection;
-		}
-		$searchFieldName = $request->get('field');
-		$dateFieldName =  'created_at' ; // change it 
-		// $dateFieldName = $searchFieldName === 'balance_date' ? 'balance_date' : 'created_at'; 
-		$from = $request->get('from');
-		$to = $request->get('to');
-		$value = $request->query('value');
-		$collection = $collection
-		->when($request->has('value'),function($collection) use ($value,$searchFieldName){
-			return $collection->filter(function($moneyReceived) use ($value,$searchFieldName){
-				$currentValue = $moneyReceived->{$searchFieldName} ;
-				if($searchFieldName == 'bank_id'){
-					$currentValue = $moneyReceived->getBankName() ;  
-				}
-				return false !== stristr($currentValue , $value);
-			});
-		})
-		->when($request->get('from') , function($collection) use($dateFieldName,$from){
-			return $collection->where($dateFieldName,'>=',$from);
-		})
-		->when($request->get('to') , function($collection) use($dateFieldName,$to){
-			return $collection->where($dateFieldName,'<=',$to);
-		})
-		->sortByDesc('id')->values();
+    // protected function applyFilter(Request $request,Collection $collection):Collection{
+	// 	if(!count($collection)){
+	// 		return $collection;
+	// 	}
+	// 	$searchFieldName = $request->get('field');
+	// 	$dateFieldName =  'created_at' ; // change it 
+	// 	// $dateFieldName = $searchFieldName === 'balance_date' ? 'balance_date' : 'created_at'; 
+	// 	$from = $request->get('from');
+	// 	$to = $request->get('to');
+	// 	$value = $request->query('value');
+	// 	$collection = $collection
+	// 	->when($request->has('value'),function($collection) use ($value,$searchFieldName){
+	// 		return $collection->filter(function($moneyReceived) use ($value,$searchFieldName){
+	// 			$currentValue = $moneyReceived->{$searchFieldName} ;
+	// 			if($searchFieldName == 'bank_id'){
+	// 				$currentValue = $moneyReceived->getBankName() ;  
+	// 			}
+	// 			return false !== stristr($currentValue , $value);
+	// 		});
+	// 	})
+	// 	->when($request->get('from') , function($collection) use($dateFieldName,$from){
+	// 		return $collection->where($dateFieldName,'>=',$from);
+	// 	})
+	// 	->when($request->get('to') , function($collection) use($dateFieldName,$to){
+	// 		return $collection->where($dateFieldName,'<=',$to);
+	// 	})
+	// 	->sortByDesc('id')->values();
 		
-		return $collection;
-	}
+	// 	return $collection;
+	// }
 	public function index(Company $company,Request $request)
 	{
 		
 		$numberOfMonthsBetweenEndDateAndStartDate = 18 ;
+		$paginationPerPage = GeneralFunctions::getPaginationLimit();
 		$currentType = $request->get('active',InternalMoneyTransfer::BANK_TO_BANK);
 		
 		$filterDates = [];
@@ -69,9 +70,23 @@ class InternalMoneyTransferController
 		
 		$bankToBankStartDate = $filterDates[InternalMoneyTransfer::BANK_TO_BANK]['startDate'] ?? null ;
 		$bankToBankEndDate = $filterDates[InternalMoneyTransfer::BANK_TO_BANK]['endDate'] ?? null ;
-		$bankToBankInternalMoneyTransfers = $company->bankToBankInternalMoneyTransfers->sortByDesc('transfer_date') ;
-		$bankToBankInternalMoneyTransfers =  $bankToBankInternalMoneyTransfers->filterByTransferDate($bankToBankStartDate,$bankToBankEndDate) ;
-		$bankToBankInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::BANK_TO_BANK ? $this->applyFilter($request,$bankToBankInternalMoneyTransfers):$bankToBankInternalMoneyTransfers ;
+		$bankToBankInternalMoneyTransfers = $company->bankToBankInternalMoneyTransfers()
+		->filterByTransferDate($bankToBankStartDate,$bankToBankEndDate)
+		->when($currentType == InternalMoneyTransfer::BANK_TO_BANK, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transfer_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transfer_date', [$from, $to]);
+				});
+				
+		})
+		->orderByDesc('transfer_date')
+		->paginate($paginationPerPage,['*'],'bankToBankInternalMoneyTransfersPage')
+		 ;
+		// $bankToBankInternalMoneyTransfers =  $bankToBankInternalMoneyTransfers->filterByTransferDate($bankToBankStartDate,$bankToBankEndDate) ;
+		// $bankToBankInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::BANK_TO_BANK ? $this->applyFilter($request,$bankToBankInternalMoneyTransfers):$bankToBankInternalMoneyTransfers ;
 
 		/**
 		 * * end of bank to bank internal money transfer 
@@ -84,9 +99,22 @@ class InternalMoneyTransferController
 		
 		$safeToBankStartDate = $filterDates[InternalMoneyTransfer::SAFE_TO_BANK]['startDate'] ?? null ;
 		$safeToBankEndDate = $filterDates[InternalMoneyTransfer::SAFE_TO_BANK]['endDate'] ?? null ;
-		$safeToBankInternalMoneyTransfers = $company->safeToBankInternalMoneyTransfers ;
-		$safeToBankInternalMoneyTransfers =  $safeToBankInternalMoneyTransfers->filterByTransferDate($safeToBankStartDate,$safeToBankEndDate) ;
-		$safeToBankInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::SAFE_TO_BANK ? $this->applyFilter($request,$safeToBankInternalMoneyTransfers):$safeToBankInternalMoneyTransfers ;
+		$safeToBankInternalMoneyTransfers = $company->safeToBankInternalMoneyTransfers()
+		->filterByTransferDate($safeToBankStartDate,$safeToBankEndDate)
+		->when($currentType == InternalMoneyTransfer::SAFE_TO_BANK, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transfer_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transfer_date', [$from, $to]);
+				});
+		})
+		->orderByDesc('transfer_date')
+		->paginate($paginationPerPage,['*'],'safeToBankInternalMoneyTransfersPage')
+		 ;
+		// $safeToBankInternalMoneyTransfers =  $safeToBankInternalMoneyTransfers->filterByTransferDate($safeToBankStartDate,$safeToBankEndDate) ;
+		// $safeToBankInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::SAFE_TO_BANK ? $this->applyFilter($request,$safeToBankInternalMoneyTransfers):$safeToBankInternalMoneyTransfers ;
 
 		/**
 		 * * end of safe to bank internal money transfer 
@@ -99,9 +127,23 @@ class InternalMoneyTransferController
 		
 		$bankToSafeStartDate = $filterDates[InternalMoneyTransfer::BANK_TO_SAFE]['startDate'] ?? null ;
 		$bankToSafeEndDate = $filterDates[InternalMoneyTransfer::BANK_TO_SAFE]['endDate'] ?? null ;
-		$bankToSafeInternalMoneyTransfers = $company->bankToSafeInternalMoneyTransfers->sortByDesc('transfer_date') ;
-		$bankToSafeInternalMoneyTransfers =  $bankToSafeInternalMoneyTransfers->filterByTransferDate($bankToSafeStartDate,$bankToSafeEndDate) ;
-		$bankToSafeInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::BANK_TO_SAFE ? $this->applyFilter($request,$bankToSafeInternalMoneyTransfers):$bankToSafeInternalMoneyTransfers ;
+		$bankToSafeInternalMoneyTransfers = $company->bankToSafeInternalMoneyTransfers()
+		->filterByTransferDate($bankToSafeStartDate,$bankToSafeEndDate)
+		->when($currentType == InternalMoneyTransfer::BANK_TO_SAFE, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transfer_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transfer_date', [$from, $to]);
+				});
+		})
+		->orderByDesc('transfer_date')
+		->paginate($paginationPerPage,['*'],'bankToSafeInternalMoneyTransfersPage')
+		 ;
+		// $bankToSafeInternalMoneyTransfers = $company->bankToSafeInternalMoneyTransfers->sortByDesc('transfer_date') ;
+		// $bankToSafeInternalMoneyTransfers =  $bankToSafeInternalMoneyTransfers->filterByTransferDate($bankToSafeStartDate,$bankToSafeEndDate) ;
+		// $bankToSafeInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::BANK_TO_SAFE ? $this->applyFilter($request,$bankToSafeInternalMoneyTransfers):$bankToSafeInternalMoneyTransfers ;
 
 		/**
 		 * * end of bank to safe internal money transfer 
@@ -114,9 +156,22 @@ class InternalMoneyTransferController
 		
 		$safeToSafeStartDate = $filterDates[InternalMoneyTransfer::SAFE_TO_SAFE]['startDate'] ?? null ;
 		$safeToSafeEndDate = $filterDates[InternalMoneyTransfer::SAFE_TO_SAFE]['endDate'] ?? null ;
-		$safeToSafeInternalMoneyTransfers = $company->safeToSafeInternalMoneyTransfers->sortByDesc('transfer_date') ;
-		$safeToSafeInternalMoneyTransfers =  $safeToSafeInternalMoneyTransfers->filterByTransferDate($safeToSafeStartDate,$safeToSafeEndDate) ;
-		$safeToSafeInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::SAFE_TO_SAFE ? $this->applyFilter($request,$safeToSafeInternalMoneyTransfers):$safeToSafeInternalMoneyTransfers ;
+		$safeToSafeInternalMoneyTransfers = $company->safeToSafeInternalMoneyTransfers()
+		->filterByTransferDate($safeToSafeStartDate,$safeToSafeEndDate)
+		->when($currentType == InternalMoneyTransfer::SAFE_TO_SAFE, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transfer_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transfer_date', [$from, $to]);
+				});
+		})
+		->orderByDesc('transfer_date')
+		->paginate($paginationPerPage,['*'],'safeToSafeInternalMoneyTransfersPage')
+		 ;
+		// $safeToSafeInternalMoneyTransfers =  $safeToSafeInternalMoneyTransfers->filterByTransferDate($safeToSafeStartDate,$safeToSafeEndDate) ;
+		// $safeToSafeInternalMoneyTransfers =  $currentType == InternalMoneyTransfer::SAFE_TO_SAFE ? $this->applyFilter($request,$safeToSafeInternalMoneyTransfers):$safeToSafeInternalMoneyTransfers ;
 
 		/**
 		 * * end of safe to safe internal money transfer 

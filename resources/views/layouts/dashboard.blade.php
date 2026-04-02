@@ -2245,10 +2245,20 @@ data-study-id="{{ $study->id }}"
 
             $(document).on('click', '.submit-form-btn', function(e) {
                 e.preventDefault();
+				const validationForm = $(this).attr('data-validation') == '1'
+				form = $(this).closest('form')[0]
+				if(validationForm){
+					console.log(this.reportValidity())
+					 if (!form.reportValidity()) {
+      						  return; // لو في error يوقف ويعرض الـ validation messages
+  					  }
+				
+				}
+			
 				  $('.submit-form-btn').prop('disabled',true) ;
                 // Validate form before submit
 
-                form = $(this).closest('form')[0]
+                
 			
 
                 var formData = new FormData(form);

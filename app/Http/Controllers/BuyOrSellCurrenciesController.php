@@ -47,7 +47,7 @@ class BuyOrSellCurrenciesController
 	}
 	public function index(Company $company,Request $request)
 	{
-		
+		$paginationPerPage = GeneralFunctions::getPaginationLimit();
 		$numberOfMonthsBetweenEndDateAndStartDate = 18 ;
 		$currentType = $request->get('active',BuyOrSellCurrency::BANK_TO_BANK);
 		
@@ -68,9 +68,30 @@ class BuyOrSellCurrenciesController
 		
 		$bankToBankStartDate = $filterDates[BuyOrSellCurrency::BANK_TO_BANK]['startDate'] ?? null ;
 		$bankToBankEndDate = $filterDates[BuyOrSellCurrency::BANK_TO_BANK]['endDate'] ?? null ;
-		$bankToBankBuyOrSellCurrencies = $company->bankToBankBuyOrSellCurrencies ;
-		$bankToBankBuyOrSellCurrencies =  $bankToBankBuyOrSellCurrencies->filterByTransactionDate($bankToBankStartDate,$bankToBankEndDate) ;
-		$bankToBankBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::BANK_TO_BANK ? $this->applyFilter($request,$bankToBankBuyOrSellCurrencies):$bankToBankBuyOrSellCurrencies ;
+		$bankToBankBuyOrSellCurrencies = $company->bankToBankBuyOrSellCurrencies()
+		->filterByTransactionDate($bankToBankStartDate,$bankToBankEndDate)
+		->when($currentType == BuyOrSellCurrency::BANK_TO_BANK, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transaction_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transaction_date', [$from, $to]);
+				});
+		})
+		->with([
+			'fromBank',
+			'fromAccountType',
+			'toBank',
+			'toAccountType',
+			'fromBranch',
+			'toBranch',
+		])
+		->orderByDesc('transaction_date')
+		->paginate($paginationPerPage,['*'],'bankToBankBuyOrSellCurrenciesPage')
+		 ;
+		// $bankToBankBuyOrSellCurrencies =  $bankToBankBuyOrSellCurrencies->filterByTransactionDate($bankToBankStartDate,$bankToBankEndDate) ;
+		// $bankToBankBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::BANK_TO_BANK ? $this->applyFilter($request,$bankToBankBuyOrSellCurrencies):$bankToBankBuyOrSellCurrencies ;
 
 
 		/**
@@ -84,9 +105,30 @@ class BuyOrSellCurrenciesController
 		
 		$safeToBankStartDate = $filterDates[BuyOrSellCurrency::SAFE_TO_BANK]['startDate'] ?? null ;
 		$safeToBankEndDate = $filterDates[BuyOrSellCurrency::SAFE_TO_BANK]['endDate'] ?? null ;
-		$safeToBankBuyOrSellCurrencies = $company->safeToBankBuyOrSellCurrencies ;
-		$safeToBankBuyOrSellCurrencies =  $safeToBankBuyOrSellCurrencies->filterByTransactionDate($safeToBankStartDate,$safeToBankEndDate) ;
-		$safeToBankBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::SAFE_TO_BANK ? $this->applyFilter($request,$safeToBankBuyOrSellCurrencies):$safeToBankBuyOrSellCurrencies ;
+		$safeToBankBuyOrSellCurrencies = $company->safeToBankBuyOrSellCurrencies()
+		->filterByTransactionDate($safeToBankStartDate,$safeToBankEndDate)
+		->when($currentType == BuyOrSellCurrency::SAFE_TO_BANK, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transaction_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transaction_date', [$from, $to]);
+				});
+		})
+		->with([
+			'fromBank',
+			'fromAccountType',
+			'toBank',
+			'toAccountType',
+			'fromBranch',
+			'toBranch',
+		])
+		->orderByDesc('transaction_date')
+		->paginate($paginationPerPage,['*'],'safeToBankBuyOrSellCurrenciesPage')
+		 ;
+		// $safeToBankBuyOrSellCurrencies =  $safeToBankBuyOrSellCurrencies->filterByTransactionDate($safeToBankStartDate,$safeToBankEndDate) ;
+		// $safeToBankBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::SAFE_TO_BANK ? $this->applyFilter($request,$safeToBankBuyOrSellCurrencies):$safeToBankBuyOrSellCurrencies ;
 
 		/**
 		 * * end of safe to bank buy or sell currency 
@@ -99,9 +141,30 @@ class BuyOrSellCurrenciesController
 		
 		$bankToSafeStartDate = $filterDates[BuyOrSellCurrency::BANK_TO_SAFE]['startDate'] ?? null ;
 		$bankToSafeEndDate = $filterDates[BuyOrSellCurrency::BANK_TO_SAFE]['endDate'] ?? null ;
-		$bankToSafeBuyOrSellCurrencies = $company->bankToSafeBuyOrSellCurrencies ;
-		$bankToSafeBuyOrSellCurrencies =  $bankToSafeBuyOrSellCurrencies->filterByTransactionDate($bankToSafeStartDate,$bankToSafeEndDate) ;
-		$bankToSafeBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::BANK_TO_SAFE ? $this->applyFilter($request,$bankToSafeBuyOrSellCurrencies):$bankToSafeBuyOrSellCurrencies ;
+		$bankToSafeBuyOrSellCurrencies = $company->bankToSafeBuyOrSellCurrencies()
+		->filterByTransactionDate($bankToSafeStartDate,$bankToSafeEndDate)
+		->when($currentType == BuyOrSellCurrency::BANK_TO_SAFE, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transaction_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transaction_date', [$from, $to]);
+				});
+		})
+		->with([
+			'fromBank',
+			'fromAccountType',
+			'toBank',
+			'toAccountType',
+			'fromBranch',
+			'toBranch',
+		])
+		->orderByDesc('transaction_date')
+		->paginate($paginationPerPage,['*'],'bankToSafeBuyOrSellCurrenciesPage')
+		 ;
+		// $bankToSafeBuyOrSellCurrencies =  $bankToSafeBuyOrSellCurrencies->filterByTransactionDate($bankToSafeStartDate,$bankToSafeEndDate) ;
+		// $bankToSafeBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::BANK_TO_SAFE ? $this->applyFilter($request,$bankToSafeBuyOrSellCurrencies):$bankToSafeBuyOrSellCurrencies ;
 
 		/**
 		 * * end of bank to safe buy or sell currency 
@@ -114,9 +177,30 @@ class BuyOrSellCurrenciesController
 		
 		$safeToSafeStartDate = $filterDates[BuyOrSellCurrency::SAFE_TO_SAFE]['startDate'] ?? null ;
 		$safeToSafeEndDate = $filterDates[BuyOrSellCurrency::SAFE_TO_SAFE]['endDate'] ?? null ;
-		$safeToSafeBuyOrSellCurrencies = $company->safeToSafeBuyOrSellCurrencies ;
-		$safeToSafeBuyOrSellCurrencies =  $safeToSafeBuyOrSellCurrencies->filterByTransactionDate($safeToSafeStartDate,$safeToSafeEndDate) ;
-		$safeToSafeBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::SAFE_TO_SAFE ? $this->applyFilter($request,$safeToSafeBuyOrSellCurrencies):$safeToSafeBuyOrSellCurrencies ;
+		$safeToSafeBuyOrSellCurrencies = $company->safeToSafeBuyOrSellCurrencies()
+		->filterByTransactionDate($safeToSafeStartDate,$safeToSafeEndDate)
+		->when($currentType == BuyOrSellCurrency::SAFE_TO_SAFE, function ($query) use ($request) {
+			$searchFieldName = Request('field');
+				$value = Request('value');
+				$from = Request('from');
+				$to = Request('to');
+				$query->when($searchFieldName == 'transaction_date', function ($query) use ($from, $to) {
+					$query->whereBetween('transaction_date', [$from, $to]);
+				});
+		})
+		->with([
+			'fromBank',
+			'fromAccountType',
+			'toBank',
+			'toAccountType',
+			'fromBranch',
+			'toBranch',
+		])
+		->orderByDesc('transaction_date')
+		->paginate($paginationPerPage,['*'],'safeToSafeBuyOrSellCurrenciesPage')
+		 ;
+		// $safeToSafeBuyOrSellCurrencies =  $safeToSafeBuyOrSellCurrencies->filterByTransactionDate($safeToSafeStartDate,$safeToSafeEndDate) ;
+		// $safeToSafeBuyOrSellCurrencies =  $currentType == BuyOrSellCurrency::SAFE_TO_SAFE ? $this->applyFilter($request,$safeToSafeBuyOrSellCurrencies):$safeToSafeBuyOrSellCurrencies ;
 
 		/**
 		 * * end of safe to safe buy or sell currency 
@@ -211,10 +295,12 @@ class BuyOrSellCurrenciesController
 		$buyOrSellCurrency->handleOdooTransfer();
 	
 		
-		$activeTab = $type ; 
+		$activeTab = $buyOrSellCurrency->getType() ; 
 		
-	
-		return redirect()->route('buy-or-sell-currencies.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Data Store Successfully'));
+		return response()->json([
+			'redirectTo'=>route('buy-or-sell-currencies.index',['company'=>$company->id,'active'=>$activeTab])
+		]);
+		// return redirect()->route('buy-or-sell-currencies.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Data Store Successfully'));
 		
 	}
 
@@ -225,12 +311,12 @@ class BuyOrSellCurrenciesController
 	
 	public function update(Company $company , StoreBuyOrSellCurrencyRequest $request , BuyOrSellCurrency $buyOrSellCurrency){
 
-		$type = $buyOrSellCurrency->getType();
+		// $type = $buyOrSellCurrency->getType();
 		$buyOrSellCurrency->deleteRelations();
 		$buyOrSellCurrency->delete();
-		$this->store($company,$request);
-		$activeTab = $type ;
-		return redirect()->route('buy-or-sell-currencies.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Item Has Been Updated Successfully'));
+		return $this->store($company,$request);
+		// $activeTab = $type ;
+		// return redirect()->route('buy-or-sell-currencies.index',['company'=>$company->id,'active'=>$activeTab])->with('success',__('Item Has Been Updated Successfully'));
 	}
 	
 	public function destroy(Company $company , BuyOrSellCurrency $buyOrSellCurrency)

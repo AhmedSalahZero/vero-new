@@ -208,6 +208,9 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                 @endforeach
                             </tbody>
                         </table>
+					{{ $models[$currentTab]->appends(array_merge(request()->all(),['active' => $currentTab]))->links('pagination::bootstrap-4') }}
+
+						
 
                         <!--end: Datatable -->
                     </div>
@@ -320,6 +323,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                 @endforeach
                             </tbody>
                         </table>
+						{{ $models[$currentTab]->appends(array_merge(request()->all(),['active' => $currentTab]))->links('pagination::bootstrap-4') }}
 
                         <!--end: Datatable -->
                     </div>
@@ -435,7 +439,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                 @endforeach
                             </tbody>
                         </table>
-
+{{ $models[$currentTab]->appends(array_merge(request()->all(),['active' => $currentTab]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -546,7 +550,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                     @endforeach
                     </tbody>
                     </table>
-
+{{ $models[$currentTab]->appends(array_merge(request()->all(),['active' => $currentTab]))->links('pagination::bootstrap-4') }}
                     <!--end: Datatable -->
                 </div>
             </div>

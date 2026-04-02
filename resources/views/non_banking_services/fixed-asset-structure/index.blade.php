@@ -29,7 +29,7 @@ use App\Helpers\HArr;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == FixedAssetName::FIXED_ASSET ?'active':'' }}" data-toggle="tab" href="#{{FixedAssetName::FIXED_ASSET  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == FixedAssetName::FIXED_ASSET ?'active':'' }}" data-toggle="tab" href="#{{FixedAssetName::FIXED_ASSET  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Fixed Asset Names') }}
                     </a>
                 </li>

@@ -72,25 +72,21 @@ td{
                
 
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == CashExpense::OUTGOING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ CashExpense::OUTGOING_TRANSFER }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == CashExpense::OUTGOING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ CashExpense::OUTGOING_TRANSFER }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Outgoing Transfer') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == CashExpense::CASH_PAYMENT ? 'active':''  }}" data-toggle="tab" href="#{{ CashExpense::CASH_PAYMENT }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == CashExpense::CASH_PAYMENT ? 'active':''  }}" data-toggle="tab" href="#{{ CashExpense::CASH_PAYMENT }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Cash Payment') }}
                     </a>
                 </li>
  				<li class="nav-item">
-                    <a class="nav-link {{  Request('active') == CashExpense::PAYABLE_CHEQUE ?'active':'' }}" data-toggle="tab" href="#{{ CashExpense::PAYABLE_CHEQUE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{  Request('active') == CashExpense::PAYABLE_CHEQUE ?'active':'' }}" data-toggle="tab" href="#{{ CashExpense::PAYABLE_CHEQUE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Payable Cheques') }}
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == CashExpense::CASH_IN_BANK ? 'active':''  }}" data-toggle="tab" href="#{{ CashExpense::CASH_IN_BANK }}" role="tab">
-                        <i class="fa fa-money-check-alt"></i>{{ __('Bank Deposit') }}
-                    </a>
-                </li> --}}
+              
 
             </ul>
 			@if(auth()->user()->can('create cash expenses'))

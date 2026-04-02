@@ -311,8 +311,7 @@ use App\Models\MoneyReceived ;
                 </div>
             </div>
     </div>
-
-    <x-submitting />
+	 <x-submitting-by-ajax :validation="1" :backTo="route('view.contracts.down.payments',['company'=>$company->id,'partnerId'=>$partnerId,'modelType'=>$modelType,'currency'=>$downPayment->getCurrency()])" />
 
     </form>
     <!--end::Form-->

@@ -304,6 +304,7 @@ class LcSettlementInternalMoneyTransfer extends Model
 	}
 	public function getLetterOfCreditIssuanceTransactionName():string 
 	{
+	
 		return $this->letterOfCreditIssuance  ? $this->letterOfCreditIssuance->getTransactionName() : __('N/A');
 	}
 	

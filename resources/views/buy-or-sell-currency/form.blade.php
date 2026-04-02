@@ -441,7 +441,9 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                 </div>
             </div>
 			@include('user_comment',['model'=>$model??null])
-            <x-submitting :backTo="route('buy-or-sell-currencies.index',['company'=>$company->id])" />
+									<x-submitting-by-ajax :validation="1" :backTo="route('buy-or-sell-currencies.index',['company'=>$company->id])" />
+
+            {{-- <x-submitting :backTo="route('buy-or-sell-currencies.index',['company'=>$company->id])" /> --}}
         </form>
 
         @endsection

@@ -63,40 +63,40 @@ use App\Models\MoneyReceived;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == MoneyReceived::CHEQUE ?'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == MoneyReceived::CHEQUE ?'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Cheques In Safe') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_UNDER_COLLECTION ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_UNDER_COLLECTION }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_UNDER_COLLECTION ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_UNDER_COLLECTION }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Cheques Under Collection') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_COLLECTED ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_COLLECTED }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_COLLECTED ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_COLLECTED }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Collected Cheques') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{  Request('active') == MoneyReceived::CHEQUE_REJECTED ?'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_REJECTED }}" role="tab">
+                    <a onclick="return false" class="nav-link {{  Request('active') == MoneyReceived::CHEQUE_REJECTED ?'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_REJECTED }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Rejected Cheques') }}
                     </a>
                 </li>
 
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyReceived::INCOMING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::INCOMING_TRANSFER }}" role="tab">
+                    <a  onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::INCOMING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::INCOMING_TRANSFER }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Incoming Transfer') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_SAFE ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_SAFE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_SAFE ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_SAFE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Cash In Safe') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_BANK ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_BANK }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_BANK ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_BANK }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Bank Deposit') }}
                     </a>
                 </li>

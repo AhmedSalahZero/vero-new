@@ -40,20 +40,20 @@ use \App\Models\CertificatesOfDeposit;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == CertificatesOfDeposit::RUNNING ?'active':'' }}" data-toggle="tab" href="#{{ CertificatesOfDeposit::RUNNING }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == CertificatesOfDeposit::RUNNING ?'active':'' }}" data-toggle="tab" href="#{{ CertificatesOfDeposit::RUNNING }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Running Certificates Of Deposit') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == CertificatesOfDeposit::MATURED ?'active':'' }}" data-toggle="tab" href="#{{ CertificatesOfDeposit::MATURED }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == CertificatesOfDeposit::MATURED ?'active':'' }}" data-toggle="tab" href="#{{ CertificatesOfDeposit::MATURED }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Matured Certificates Of Deposit') }}
                     </a>
                 </li>
 
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == CertificatesOfDeposit::BROKEN ?'active':'' }}" data-toggle="tab" href="#{{ CertificatesOfDeposit::BROKEN }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == CertificatesOfDeposit::BROKEN ?'active':'' }}" data-toggle="tab" href="#{{ CertificatesOfDeposit::BROKEN }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Broken Certificates Of Deposit') }}
                     </a>
                 </li>

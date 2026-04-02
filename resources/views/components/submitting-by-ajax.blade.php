@@ -11,7 +11,11 @@
 						@if(isset($backTo))
 						<a href="{{ $backTo }}" type="submit" class="btn active-style">{{__('Close')}}</a>
 						@endif
-						<button type="submit" class="btn active-style submit-form-btn">{{__('Save')}}</button>
+						<button
+						@if(isset($validation))
+						data-validation="1"
+						@endif
+						 type="submit" class="btn active-style submit-form-btn">{{__('Save')}}</button>
 					</div>
             </div>
         </div>

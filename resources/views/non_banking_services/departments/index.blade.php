@@ -29,13 +29,13 @@ use App\Helpers\HArr;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == Department::GENERAL ?'active':'' }}" data-toggle="tab" href="#{{Department::GENERAL  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == Department::GENERAL ?'active':'' }}" data-toggle="tab" href="#{{Department::GENERAL  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Departments') }}
                     </a>
                 </li>
 				
 				 <li class="nav-item">
-                    <a class="nav-link {{  Request('active') == Department::MICROFINANCE ?'active':'' }}" href="{{route('non.banking.edit.departments',['company'=>$company->id,'department'=>$microfinanceDepartment->id,'type'=>Department::MICROFINANCE ])}}" role="tab">
+                    <a onclick="return false" class="nav-link {{  Request('active') == Department::MICROFINANCE ?'active':'' }}" href="{{route('non.banking.edit.departments',['company'=>$company->id,'department'=>$microfinanceDepartment->id,'type'=>Department::MICROFINANCE ])}}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Microfinance Departments') }}
                     </a>
                 </li>

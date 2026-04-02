@@ -41,26 +41,26 @@ use App\Models\InternalMoneyTransfer ;
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == InternalMoneyTransfer::BANK_TO_BANK ?'active':'' }}" data-toggle="tab" href="#{{InternalMoneyTransfer::BANK_TO_BANK  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == InternalMoneyTransfer::BANK_TO_BANK ?'active':'' }}" data-toggle="tab" href="#{{InternalMoneyTransfer::BANK_TO_BANK  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Bank To Bank Transfer Table') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == InternalMoneyTransfer::SAFE_TO_BANK ?'active':'' }}" data-toggle="tab" href="#{{ InternalMoneyTransfer::SAFE_TO_BANK }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == InternalMoneyTransfer::SAFE_TO_BANK ?'active':'' }}" data-toggle="tab" href="#{{ InternalMoneyTransfer::SAFE_TO_BANK }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Safe To Bank Deposit Table') }}
                     </a>
                 </li>
 
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == InternalMoneyTransfer::BANK_TO_SAFE ?'active':'' }}" data-toggle="tab" href="#{{ InternalMoneyTransfer::BANK_TO_SAFE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == InternalMoneyTransfer::BANK_TO_SAFE ?'active':'' }}" data-toggle="tab" href="#{{ InternalMoneyTransfer::BANK_TO_SAFE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Bank To Safe Withdrawal Table') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == InternalMoneyTransfer::SAFE_TO_SAFE ?'active':'' }}" data-toggle="tab" href="#{{ InternalMoneyTransfer::SAFE_TO_SAFE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == InternalMoneyTransfer::SAFE_TO_SAFE ?'active':'' }}" data-toggle="tab" href="#{{ InternalMoneyTransfer::SAFE_TO_SAFE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Safe To Safe Withdrawal Table') }}
                     </a>
                 </li>
@@ -136,6 +136,7 @@ use App\Models\InternalMoneyTransfer ;
                                 </tr>
                             </thead>
                             <tbody>
+							
                                 @foreach($models[$currentType] as $index=>$model)
                                 <tr>
                                     <td>
@@ -196,7 +197,9 @@ use App\Models\InternalMoneyTransfer ;
                                 @endforeach
                             </tbody>
                         </table>
-
+						
+						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
+						
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -281,7 +284,7 @@ use App\Models\InternalMoneyTransfer ;
                                 @endforeach
                             </tbody>
                         </table>
-
+{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -376,7 +379,7 @@ use App\Models\InternalMoneyTransfer ;
                                 @endforeach
                             </tbody>
                         </table>
-
+{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>
@@ -462,7 +465,7 @@ use App\Models\InternalMoneyTransfer ;
                                 @endforeach
                             </tbody>
                         </table>
-
+{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
                 </div>

@@ -44,25 +44,11 @@
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active') || Request('active') == 'bank' ?'active':'' }}" data-toggle="tab" href="#bank" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active') || Request('active') == 'bank' ?'active':'' }}" data-toggle="tab" href="#bank" role="tab">
                         <i class="kt-menu__link-icon fa fa-university"></i> {{ __('Banks Table') }}
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == 'leasing_companies' ? 'active':''  }}" data-toggle="tab" href="#leasing_companies" role="tab">
-                        <i class="kt-menu__link-icon fa fa-university"></i> {{ __('Leasing Companies Table') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == 'factoring_companies' ? 'active':''  }}" data-toggle="tab" href="#factoring_companies" role="tab">
-                        <i class="kt-menu__link-icon fa fa-university"></i>{{ __('Factoring Companies Table') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == 'mortgage_companies' ? 'active':''  }}" data-toggle="tab" href="#mortgage_companies" role="tab">
-                        <i class="kt-menu__link-icon fa fa-university"></i>{{ __('Mortgage Companies Table') }}
-                    </a>
-                </li> --}}
+               
             </ul>
 
            <div class="flex-tabs">

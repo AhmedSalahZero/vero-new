@@ -522,6 +522,48 @@ class Company extends Model implements HasMedia
     {
         return $this->lcSettlementInternalMoneyTransfers()->where('type', LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT);
     }
+    public function getBankToLcSettlementInternalMoneyTransfers(?string $startDate = null, ?string $endDate = null, $activeTab = null):HasMany
+    {
+        return $this->bankToLcSettlementInternalMoneyTransfers()
+        ->whereBetween('transfer_date', [$startDate, $endDate])
+        ->when($activeTab == LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT, function ($query) {
+            $searchFieldName = Request('field');
+            $value = Request('value');
+            $from = Request('from');
+            $to = Request('to');
+            $query->when($searchFieldName == 'transfer_date', function () use ($query, $from, $to) {
+                $query->whereBetween('transfer_date', [$from, $to]);
+            })
+            ->when($searchFieldName == 'from_bank_id', function () use ($query, $value) {
+                $query->whereHas('fromBank', function ($query) use ($value) {
+                    $query->where('name', 'like', '%' . $value . '%');
+                });
+            })
+            ->when($searchFieldName == 'from_account_type_id', function () use ($query, $value) {
+                $query->whereHas('fromAccountType', function ($query) use ($value) {
+                    $query->where('name', 'like', '%' . $value . '%');
+                });
+            })
+            ->when($searchFieldName == 'from_account_number', function () use ($query, $value) {
+                $query->where('from_account_number', 'like', '%' . $value . '%');
+            })
+            ->when($searchFieldName == 'currency', function () use ($query, $value) {
+                $query->where('currency', 'like', '%' . $value . '%');
+            })
+            ->when($searchFieldName == 'to_letter_of_credit_issuance_id', function () use ($query, $value) {
+                $query->whereHas('letterOfCreditIssuance', function ($query) use ($value) {
+                    $query->where('transaction_name', 'like', '%' . $value . '%');
+                });
+            });
+        })
+        ->with([
+            'fromBank:id,name,type,bank_id',
+            'fromAccountType:id,name_en,name_ar',
+            'letterOfCreditIssuance:id,transaction_name',
+        ])
+        ->orderByDesc('transfer_date')
+        ->orderByDesc('id');
+    }
     
     
     

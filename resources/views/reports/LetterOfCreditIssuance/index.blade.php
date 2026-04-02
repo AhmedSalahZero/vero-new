@@ -56,7 +56,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                 @endphp
                 @foreach($allLcs as $type => $name)
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active',$currentActiveTab) && $index==0 || Request('active',$currentActiveTab) == $type ?'active':'' }}" data-toggle="tab" href="#{{ $type }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ !Request('active',$currentActiveTab) && $index==0 || Request('active',$currentActiveTab) == $type ?'active':'' }}" data-toggle="tab" href="#{{ $type }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{$name .' '. __('Table') }}
                     </a>
                 </li>

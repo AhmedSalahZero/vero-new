@@ -119,7 +119,10 @@ class InternalMoneyTransfer extends Model
 	const SAFE_TO_BANK = 'safe-to-bank';
 	const SAFE_TO_SAFE = 'safe-to-safe';
 	
-	
+	public function scopeFilterByTransferDate($query, $startDate, $endDate)
+	{
+		return $query->whereBetween('transfer_date', [$startDate, $endDate]);
+	}
 	public static function generateFromAccountComment(self $internalMoneyTransfer,string $lang)
 	{
 		if($internalMoneyTransfer->isBankToBank() ){

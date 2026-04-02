@@ -190,6 +190,10 @@ public function storeDownPaymentSettlement(
     string $modelType
 )
 {
+	
+	
+	
+	
     $fullClassName = 'App\Models\\' . $modelType;
     $downPaymentModelName = $fullClassName::MONEY_MODEL_NAME;
     $isMoneyReceived = $modelType == 'CustomerInvoice'; // true = customer, false = supplier
@@ -277,17 +281,28 @@ public function storeDownPaymentSettlement(
             //     'is_customer' => $isMoneyReceived,
             //     'error' => $result['message']
             // ]);
-            
-            return back()->with('error', 'Odoo settlement failed: ' . $result['message']);
+			return response()->json([
+				'success' => false,
+				'message' => 'Odoo settlement failed: ' . $result['message']
+			]);
         }
     }
     
-    return redirect()->route('view.contracts.down.payments', [
-        'company' => $company->id,
-        'partnerId' => $partnerId,
-        'modelType' => $modelType,
-        'currency' => $downPayment->getCurrency()
-    ]);
+	return response()->json([
+		'success' => true,
+		'redirectTo' => route('view.contracts.down.payments', [
+			'company' => $company->id,
+			'partnerId' => $partnerId,
+			'modelType' => $modelType,
+			'currency' => $downPayment->getCurrency()
+		])
+	]);
+    // return redirect()->route('view.contracts.down.payments', [
+    //     'company' => $company->id,
+    //     'partnerId' => $partnerId,
+    //     'modelType' => $modelType,
+    //     'currency' => $downPayment->getCurrency()
+    // ]);
 }
 
 
