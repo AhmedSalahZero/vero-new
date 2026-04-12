@@ -1,0 +1,77 @@
+:root {
+  --mr-azure-900: #0a2a66;
+  --mr-azure-700: #0d47a1;
+  --mr-azure-100: #e8f0ff;
+  --mr-gold-600: #c79a00;
+  --mr-gold-500: #d4af37;
+  --mr-text: #1d2433;
+}
+
+.mr-shell {
+  background: #fff;
+  border: 1px solid #dbe3f3;
+  border-radius: 8px;
+}
+
+.mr-header {
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(90deg, var(--mr-azure-700), var(--mr-azure-900));
+  color: #fff;
+}
+
+.mr-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: var(--mr-azure-100);
+}
+
+.mr-tab-btn {
+  border: 1px solid #9fb4da;
+  color: var(--mr-azure-900);
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mr-tab-btn.is-active {
+  background: var(--mr-gold-500);
+  border-color: var(--mr-gold-600);
+  color: #1f1a00;
+}
+
+.mr-content {
+  padding: 16px;
+}
+
+.mr-table thead th {
+  background: var(--mr-azure-700);
+  color: #fff;
+  vertical-align: middle;
+}
+
+.mr-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.mr-page-btn {
+  border: 1px solid #d1d9eb;
+  background: #fff;
+  color: var(--mr-text);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.mr-page-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+

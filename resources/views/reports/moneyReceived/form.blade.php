@@ -7,6 +7,7 @@ use App\Models\MoneyReceived ;
 
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@vite(['resources/css/money-received-form.css'])
 <style>
     label {
         text-align: left !important;
@@ -46,18 +47,13 @@ use App\Models\MoneyReceived ;
         overflow: visible !important;
     }
 
-    input.form-control[disabled]:not(.ignore-global-style),
-    input.form-control:not(.is-date-css)[readonly] {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
-    }
-
 </style>
 @endsection
 @section('sub-header')
 {{ __('Money Received Form') }}
 @endsection
 @section('content')
+<div class="mr-form-page">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -151,16 +147,14 @@ use App\Models\MoneyReceived ;
                         <div class="col-md-3">
                             <label>{{__('Name')}} @include('star')</label>
                             <div class="kt-input-icon">
-                                <div class="kt-input-icon">
-                                    <div class="input-group date">
-                                        <select data-current-selected="{{ isset($model) ? $model->getCustomerName() : '' }}" data-live-search="true" data-actions-box="true" id="customer_name" name="customer_id" class="form-control select2-select ajax-get-invoice-numbers  ajax-update-contracts customer-select">
-                                            {{-- <option value="" selected>{{__('Select')}}</option> --}}
+                                <div class="input-group date">
+                                    <select data-current-selected="{{ isset($model) ? $model->getCustomerName() : '' }}" data-live-search="true" data-actions-box="true" id="customer_name" name="customer_id" class="form-control kt-bootstrap-select select2-select kt_bootstrap_select ajax-get-invoice-numbers ajax-update-contracts customer-select">
+                                        {{-- <option value="" selected>{{__('Select')}}</option> --}}
 
-                                            @foreach($customers as $customerId => $partnerName)
-                                            <option @if($singleModel) selected @endif @if(isset($model) && $model->getPartnerName() == $partnerName ) selected @endif value="{{ $customerId }}">{{$partnerName}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                        @foreach($customers as $customerId => $partnerName)
+                                        <option @if($singleModel) selected @endif @if(isset($model) && $model->getPartnerName() == $partnerName ) selected @endif value="{{ $customerId }}">{{$partnerName}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
@@ -733,6 +727,7 @@ use App\Models\MoneyReceived ;
 <!--end::Form-->
 
 <!--end::Portlet-->
+</div>
 </div>
 </div>
 @endsection

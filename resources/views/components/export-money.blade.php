@@ -99,7 +99,7 @@ use App\Models\MoneyReceived ;
                                         <label>{{__('Cheque Deposit Date')}}</label>
                                         <div class="kt-input-icon">
                                             <div class="input-group date">
-                                                <input required type="text" name="deposit_date" value="{{ formatDateForDatePicker(now()->format('Y-m-d')) }}" max-date="{{ formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control" readonly placeholder="Select date" id="kt_datepicker_max_date_is_today" />
+                                                <input required type="text" name="deposit_date" value="{{ formatDateForDatePicker(now()->format('Y-m-d')) }}" max-date="{{ formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control kt_datepicker_max_date_is_today" readonly placeholder="Select date" id="send-under-collection-deposit-{{ $moneyReceivedType }}" />
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-calendar-check-o"></i>

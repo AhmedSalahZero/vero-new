@@ -290,6 +290,20 @@ class OdooPayment
                 'odoo_id'=>$resId,
 				'odoo_move_id'=>$odooAccountPayment[0]['move_id'][0]??null,
             ]);
+			
+			
+			$this->models->execute_kw(
+				$this->db,
+				$this->uid,
+				$this->password,
+				'account.payment',
+				'write',
+				[
+					[$resId],
+					['ref' => $moneyModel->getUserComment()]
+				]
+			);
+			logger('dddd');
             
             
     

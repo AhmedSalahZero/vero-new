@@ -1,7 +1,6 @@
 <?php
 namespace App\Services\Api\Traits;
 
-use App\OdooSetting;
 use Exception;
 
 trait HasPayment

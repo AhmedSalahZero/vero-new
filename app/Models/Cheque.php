@@ -256,8 +256,16 @@ class Cheque extends Model
     public function getDueStatus(): bool
     {
         $dueDate = $this->getDueDate();
+        if ($dueDate === null || $dueDate === '') {
+            return false;
+        }
 
-        return !Carbon::make($dueDate)->greaterThan(now());
+        $due = Carbon::make($dueDate);
+        if ($due === null) {
+            return false;
+        }
+
+        return ! $due->greaterThan(now());
     }
 
     /**

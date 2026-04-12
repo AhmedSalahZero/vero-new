@@ -6,6 +6,8 @@ export default defineConfig({
   plugins: [
     laravel({
       input: [
+		'resources/css/money-received-form.css',
+		'resources/js/MoneyReceived/index.js',
 		'resources/js/NonBanking/Views/Expenses/expenses.js',
 		'resources/js/NonBanking/Views/FixedAssets/fixed-assets.ts',
 		'resources/js/NonBanking/Views/LeasingFactoring/leasing.js',

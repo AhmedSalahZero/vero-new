@@ -1,1 +1,0 @@
-import{p as o}from"./sweetalert2.esm.all-rDTa3Qpb.js";function s(r){return{yearsFromDates:o(()=>{let e={};return r.value&&Object.keys(r.value).forEach(t=>{e[t]=r.value[t].split("'").pop()}),e})}}export{s as u};

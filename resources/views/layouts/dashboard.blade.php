@@ -196,11 +196,7 @@
             background-color: #fff !important;
         }
 
-        input,
-        select,
-        .filter-option-inner-inner {
-            color: black !important;
-        }
+
 
         html body tr.all-td-white td {
             background-color: white !important;
@@ -893,10 +889,7 @@ const isNonBanking = +("{{ hasMiddleware('isNonBankingService') }}");
             height: 100%;
         }
 
-        table:not(.exclude-table) tbody tr:not(.table-active):not(.active-style):not(.is-rate):not(.is-sub-row):not(.group-color)>td:not(.dtfc-fixed-left):not(.bg-expired):not(.bg-cancelled):not(.active-style):not(.exclude-td):not(.disabled.day) {
-            color: black !important;
-            font-weight: bold !important;
-        }
+       
 
         td {
             vertical-align: middle !important;
