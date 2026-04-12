@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Jobs\CheckDueAndPastedInvoicesJob;
 use App\Models\Cheque;
 use App\Models\Company;
+use App\Models\MoneyPayment;
+use App\Models\MoneyReceived;
 use App\Models\PayableCheque;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -197,7 +199,7 @@ class TestCheckDueAndPastedInvoicesJobCommand extends Command
                 'down_payment_settlement_date' => null,
                 'contract_id' => null,
                 'opening_balance_id' => null,
-                'type' => 'test',
+                'type' => MoneyReceived::CHEQUE,
                 'receiving_date' => $today,
                 'received_amount' => 5000,
                 'received_amount_in_main_currency' => 5000,
@@ -306,7 +308,7 @@ class TestCheckDueAndPastedInvoicesJobCommand extends Command
                 'down_payment_settlement_date' => null,
                 'contract_id' => null,
                 'opening_balance_id' => null,
-                'type' => 'test',
+                'type' => MoneyPayment::PAYABLE_CHEQUE,
                 'delivery_date' => $today,
                 'paid_amount' => 4000,
                 'paid_amount_in_main_currency' => 4000,
@@ -345,7 +347,7 @@ class TestCheckDueAndPastedInvoicesJobCommand extends Command
                 'down_payment_settlement_date' => null,
                 'contract_id' => null,
                 'opening_balance_id' => null,
-                'type' => 'test',
+                'type' => MoneyPayment::PAYABLE_CHEQUE,
                 'delivery_date' => $today,
                 'paid_amount' => 6000,
                 'paid_amount_in_main_currency' => 6000,

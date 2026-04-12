@@ -1082,7 +1082,9 @@ class Company extends Model implements HasMedia
     {
 	
         return $this->moneyReceived()->whereNull('advanced_opening_balance_id')
-		
+		->whereHas('cheque',function($query) {
+			$query->where('status', Cheque::IN_SAFE);
+		})
 		->when($activeTab == MoneyReceived::CHEQUE, function ( $query) {
 			$searchFieldName = Request('field');
 			$value = Request('value');
@@ -1130,9 +1132,7 @@ class Company extends Model implements HasMedia
 			});
 		
 		})
-		->whereHas('cheque',function($query) {
-			$query->where('status', Cheque::IN_SAFE);
-		})
+		
 		->filterByReceivingDate($startDate, $endDate)
 		->orderByDesc('receiving_date')
 		->with([
