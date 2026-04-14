@@ -6,6 +6,7 @@ if (el) {
   let initialFilterDates = {}
   let searchFieldsByTab = {}
   let advancedFilterUi = {}
+  let tabTitles = {}
 
   const cfgNode = document.getElementById('money-received-page-config')
   if (cfgNode && cfgNode.textContent) {
@@ -13,6 +14,7 @@ if (el) {
       const cfg = JSON.parse(cfgNode.textContent)
       searchFieldsByTab = cfg.searchFieldsByTab || {}
       advancedFilterUi = cfg.advancedFilterUi || {}
+      tabTitles = cfg.tabTitles || {}
     } catch {
       /* fall through to dataset */
     }
@@ -39,13 +41,16 @@ if (el) {
   }
 
   createApp(MoneyReceivedApp, {
+    appLang:            el.dataset.appLang || '',
     companyId:          Number(el.dataset.companyId || 0),
     defaultActiveTab:   el.dataset.defaultActiveTab || 'cheque',
     jsonUrl:            el.dataset.jsonUrl || '',
     createUrl:          el.dataset.createUrl || '',
+    createDownPaymentUrl: el.dataset.createDownPaymentUrl || '',
     canCreate:          el.dataset.canCreate === '1',
     initialFilterDates,
     searchFieldsByTab,
     advancedFilterUi,
+    tabTitles,
   }).mount(el)
 }

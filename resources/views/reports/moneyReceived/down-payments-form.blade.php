@@ -7,37 +7,37 @@ use App\Models\Partner;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@vite(['resources/css/money-received-form.css'])
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    label {
+    .money-flow-dark label {
         text-align: left !important;
     }
 
-    .width-8 {
+    .money-flow-dark .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .width-10 {
+    .money-flow-dark .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .width-12 {
+    .money-flow-dark .width-12 {
         max-width: initial !important;
         width: 12.5% !important;
         flex: initial !important;
     }
 
-    .width-45 {
+    .money-flow-dark .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
     }
 
@@ -47,7 +47,7 @@ use App\Models\Partner;
 {{ __('Down Payments Form') }}
 @endsection
 @section('content')
-<div class="mr-form-page">
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->

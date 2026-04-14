@@ -3,15 +3,21 @@ import axios from 'axios'
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
+	/** Matches layout body data-lang / Blade $lang for with-two-dates margins */
+	appLang: { type: String, default: '' },
 	companyId: { type: Number, required: true },
 	defaultActiveTab: { type: String, default: 'cheque' },
 	jsonUrl: { type: String, required: true },
 	createUrl: { type: String, default: '' },
+	/** Same as Blade: create.money.receive?type=down-payment */
+	createDownPaymentUrl: { type: String, default: '' },
 	canCreate: { type: Boolean, default: false },
 	initialFilterDates: { type: Object, default: () => ({}) },
 	/** field key => label (server-translated), keyed by tab — same as legacy export-money modal */
 	searchFieldsByTab: { type: Object, default: () => ({}) },
 	advancedFilterUi: { type: Object, default: () => ({}) },
+	/** Tab key => translated title (same as Blade index nav + table section title) */
+	tabTitles: { type: Object, default: () => ({}) },
 })
 
 /* Dashboard layout uses body data-token=csrf_token(); no meta[name=csrf-token] on many pages */
@@ -24,15 +30,25 @@ const csrf = () =>
 const searchFieldsByTabState = ref({ ...props.searchFieldsByTab })
 const advancedFilterUiState = ref({ ...props.advancedFilterUi })
 
+/** Tab keys + icons; visible titles come from server tabTitles (__()) */
 const TABS = [
 	{ key: 'cheque', label: 'Cheques In Safe', icon: 'fa-money-check-alt' },
-	{ key: 'cheque-under-collection', label: 'Under Collection', icon: 'fa-clock' },
-	{ key: 'cheque-collected', label: 'Collected', icon: 'fa-check-circle' },
-	{ key: 'cheque-rejected', label: 'Rejected', icon: 'fa-ban' },
-	{ key: 'incoming-transfer', label: 'Incoming Transfer', icon: 'fa-exchange-alt' },
-	{ key: 'cash-in-safe', label: 'Cash In Safe', icon: 'fa-box-open' },
-	{ key: 'cash-in-bank', label: 'Bank Deposit', icon: 'fa-university' },
+	{ key: 'cheque-under-collection', label: 'Cheques Under Collection', icon: 'fa-money-check-alt' },
+	{ key: 'cheque-collected', label: 'Collected Cheques', icon: 'fa-money-check-alt' },
+	{ key: 'cheque-rejected', label: 'Rejected Cheques', icon: 'fa-money-check-alt' },
+	{ key: 'incoming-transfer', label: 'Incoming Transfer', icon: 'fa-money-check-alt' },
+	{ key: 'cash-in-safe', label: 'Cash In Safe', icon: 'fa-money-check-alt' },
+	{ key: 'cash-in-bank', label: 'Bank Deposit', icon: 'fa-money-check-alt' },
 ]
+
+const tabTitles = ref({ ...props.tabTitles })
+watch(
+	() => props.tabTitles,
+	(v) => {
+		tabTitles.value = { ...(v || {}) }
+	},
+	{ deep: true },
+)
 
 /* Same column keys & order as reports/moneyReceived/index.blade.php per tab (Vue: no batch checkbox column — single send via actions). */
 const TAB_COLS = {
@@ -100,7 +116,10 @@ const activeTab = ref(props.defaultActiveTab)
 const rows = ref([])
 const pagination = ref({ current_page: 1, last_page: 1, total: 0, from: 0, to: 0 })
 const permissions = ref({ canCreate: props.canCreate })
-const urls = ref({ create: props.createUrl })
+const urls = ref({
+	create: props.createUrl,
+	create_down_payment: props.createDownPaymentUrl || '',
+})
 const searchModalOpen = ref(false)
 
 /** Per-tab advanced filter state (legacy had one modal per tab) */
@@ -182,6 +201,28 @@ watch(activeTab, (t) => {
 
 const columns = computed(() => TAB_COLS[activeTab.value] || TAB_COLS.cheque)
 
+const currentTabTitle = computed(() => {
+	const k = activeTab.value
+	return tabTitles.value[k] || TABS.find((t) => t.key === k)?.label || ''
+})
+
+function tabNavLabel(tab) {
+	return tabTitles.value[tab.key] || tab.label
+}
+
+const isRtl = computed(() => props.appLang === 'ar')
+
+/** Same inline margins as components/table-title/with-two-dates.blade.php */
+const dateFormBlockStyle = computed(() =>
+	isRtl.value ? { marginRight: '5rem' } : { marginLeft: '5rem' },
+)
+const dateFirstColStyle = computed(() =>
+	isRtl.value ? { marginLeft: '5rem' } : { marginRight: '5rem' },
+)
+const dateSubmitColStyle = computed(() =>
+	isRtl.value ? { marginRight: '2rem' } : { marginLeft: '2rem' },
+)
+
 const pages = computed(() => {
 	const { current_page: c, last_page: l } = pagination.value
 	const p = []
@@ -228,6 +269,9 @@ const loadData = async (page = 1) => {
 		}
 		if (data.advancedFilterUi && typeof data.advancedFilterUi === 'object') {
 			advancedFilterUiState.value = { ...advancedFilterUiState.value, ...data.advancedFilterUi }
+		}
+		if (data.tabTitles && typeof data.tabTitles === 'object') {
+			tabTitles.value = { ...tabTitles.value, ...data.tabTitles }
 		}
 	} catch (e) { console.error('loadData error:', e) }
 	finally { loading.value = false }
@@ -357,40 +401,229 @@ onUnmounted(() => {
 </script>
 <template>
 	<div class="mr-page">
-		<!-- Header -->
-		<div class="mr-header">
-			<div class="mr-header-left">
-				<div class="mr-header-icon"><i class="fas fa-hand-holding-usd"></i></div>
-				<div>
-					<h4 class="mr-title">Money Received</h4>
-					<span class="mr-breadcrumb">Dashboard / Reports / Money Received</span>
+		<!-- Shell matches reports/moneyPayments/index + moneyReceived/index (Metronic portlets + nav-tabs) -->
+		<div class="kt-portlet kt-portlet--tabs">
+			<div class="kt-portlet__head">
+				<div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
+					<ul
+						class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand"
+						role="tablist">
+						<li v-for="tab in TABS" :key="tab.key" class="nav-item">
+							<a href="#" role="tab" class="nav-link" :class="{ active: activeTab === tab.key }"
+								@click.prevent="changeTab(tab.key)">
+								<i class="fa" :class="tab.icon"></i> {{ tabNavLabel(tab) }}
+							</a>
+						</li>
+					</ul>
+					<div v-if="permissions.canCreate" class="flex-tabs">
+						<a :href="urls.create" class="btn btn-sm active-style btn-icon-sm align-self-center">
+							<i class="fas fa-plus"></i>
+							{{ ui.indexCreateMoneyReceived || 'Money Received' }}
+						</a>
+						<a v-if="urls.create_down_payment" :href="urls.create_down_payment"
+							class="btn btn-sm active-style btn-icon-sm align-self-center">
+							<i class="fas fa-plus"></i>
+							{{ ui.indexDownPayment || 'Down Payment' }}
+						</a>
+					</div>
 				</div>
 			</div>
-			<div v-if="permissions.canCreate" class="mr-header-right">
-				<a :href="urls.create" class="btn-teal"><i class="fas fa-plus-circle"></i> Add New</a>
+			<div class="kt-portlet__body">
+				<div class="tab-content kt-margin-t-20">
+					<div class="tab-pane active" role="tabpanel">
+						<div class="kt-portlet kt-portlet--mobile">
+							<!-- Mirror components/table-title/with-two-dates.blade.php (title + period row + slot toolbar) -->
+							<div class="kt-portlet__head kt-portlet__head--lg p-0">
+								<div class="kt-portlet__head-label ml-4" style="flex:2.5;">
+									<span class="kt-portlet__head-icon">
+										<i
+											class="kt-font-secondary  text-main-color btn-outline-hover-danger fa fa-layer-group"></i>
+									</span>
+									<h3 style="font-size:20px !important;"
+										class="kt-portlet__head-title text-main-color text-nowrap">
+										{{ currentTabTitle }}
+									</h3>
+									<div class="w-full flex-2" :style="dateFormBlockStyle">
+										<div class="row align-items-center">
+											<div class="col-md-3 d-flex align-items-center" :style="dateFirstColStyle">
+												<label :for="'vue_startDate_' + activeTab" class="text-nowrap mr-3">{{
+													ui.startDate || 'Start Date' }}</label>
+												<input :id="'vue_startDate_' + activeTab"
+													v-model="dateRanges[activeTab].startDate" type="date"
+													class="form-control" />
+											</div>
+											<div class="col-md-3 d-flex align-items-center">
+												<label :for="'vue_endDate_' + activeTab" class="text-nowrap mr-3">{{
+													ui.endDate || 'End Date' }}</label>
+												<input :id="'vue_endDate_' + activeTab"
+													v-model="dateRanges[activeTab].endDate" type="date"
+													class="form-control" />
+											</div>
+											<div class="col-md-2 d-flex justify-content-center" :style="dateSubmitColStyle">
+												<label for="vue_mr_period_submit" class="mb-0"></label>
+												<button id="vue_mr_period_submit" type="button"
+													class="btn block form-control btn-primary btn-sm"
+													style="width:70px !important;font-size:1rem !important;"
+													@click="applyFilter">
+													{{ ui.submit || 'Submit' }}
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="kt-portlet__head-toolbar" style="flex:1 !important;">
+									<div class="kt-portlet__head-wrapper">
+										<div class="kt-portlet__head-actions">
+											<button type="button" class="btn active-style btn-icon-sm"
+												@click="openSearchModal">
+												<i class="fas fa-search"></i>
+												{{ ui.advancedFilter || 'Advanced Filter' }}
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="kt-portlet__body">
+								<div v-if="loading" class="mr-empty py-5">
+									<div class="mr-spinner"></div><span>Loading…</span>
+								</div>
+								<div v-else-if="!rows.length" class="mr-empty py-5">
+									<i class="fas fa-inbox mr-empty-icon"></i>
+									<h5>No records found</h5>
+									<p>Try adjusting the date range or add a new record.</p>
+									<a v-if="permissions.canCreate" :href="urls.create"
+										class="btn btn-sm active-style btn-icon-sm">
+										<i class="fas fa-plus"></i> {{ ui.indexCreateMoneyReceived || 'Money Received' }}
+									</a>
+								</div>
+								<template v-else>
+									<div class="table-responsive">
+										<table
+											class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+											<thead>
+												<tr class="table-standard-color">
+													<th v-for="col in columns" :key="col" class="align-middle">
+														{{ COL_LABELS[col] || col }}
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="row in rows" :key="row.id">
+													<td v-for="col in columns" :key="col + row.id" class="align-middle">
+														<template v-if="col === 'status'">
+															<span v-if="activeTab === 'cheque-rejected'"
+																class="mr-status-plain">{{ row.status || '-' }}</span>
+															<span v-else class="mr-badge"
+																:style="row.due_status_color ? `color:${row.due_status_color};border-color:${row.due_status_color}` : ''">
+																{{ row.status || '-' }}
+															</span>
+														</template>
+														<template v-else-if="col === 'actions'">
+															<span
+																style="overflow: visible; position: relative; min-width: 110px; max-width: 420px; display: inline-block;">
+																<span
+																	class="d-flex flex-wrap align-items-center justify-content-center">
+																	<button
+																		v-if="row.has_user_comment && activeTab !== 'incoming-transfer' && activeTab !== 'cheque-collected'"
+																		type="button"
+																		class="btn btn-secondary btn-outline-hover-brand btn-icon btn-sm"
+																		title="User Comment"
+																		@click="openCommentModal(row.user_comment)"><i
+																			class="fa fa-comment"></i></button>
+																	<button v-if="row.show_odoo_error" type="button"
+																		class="btn btn-secondary btn-outline-hover-danger btn-icon btn-sm ml-1"
+																		title="Odoo Error"
+																		@click="openOdooErrorModal(row.odoo_error_message, row.resend_odoo_url)"><i
+																			class="fa fa-bug"></i></button>
+																	<button v-if="row.show_integrated" type="button"
+																		class="btn btn-secondary btn-outline-hover-success btn-icon btn-sm ml-1"
+																		title="Fully Integrated"
+																		@click="openIntegratedModal(row.odoo_reference_names)"><i
+																			class="fa fa-thumbs-up"></i></button>
+																	<button
+																		v-if="row.show_review && activeTab !== 'cheque-under-collection' && activeTab !== 'cheque-collected'"
+																		type="button"
+																		class="btn btn-secondary btn-outline-hover-success btn-icon btn-sm ml-1"
+																		title="Reviewed" @click="openReviewModal(row)"><i
+																			class="fa fa-check"></i></button>
+																	<a v-if="row.can_edit && row.edit_url"
+																		:href="row.edit_url"
+																		class="btn btn-secondary btn-outline-hover-brand btn-icon btn-sm ml-1"
+																		title="Edit"><i class="fa fa-pen-alt"></i></a>
+																	<a v-if="(activeTab === 'cheque' || activeTab === 'cheque-rejected') && row.can_send_under_collection"
+																		href=""
+																		class="btn btn-secondary btn-outline-hover-primary btn-icon btn-sm ml-1 js-can-trigger-cheque-under-collection-modal"
+																		data-toggle="modal"
+																		:data-target="'#send-to-under-collection-modal' + activeTab"
+																		:data-id="String(row.id)" data-type="single"
+																		:data-currency="row.receiving_currency || ''"
+																		:data-money-type="activeTab"
+																		title="Send Under Collection"><i
+																			class="fa fa-money-bill"></i></a>
+																	<button
+																		v-if="activeTab === 'cheque-under-collection' && row.can_apply_collection"
+																		type="button"
+																		class="btn btn-secondary btn-outline-hover-primary btn-icon btn-sm ml-1"
+																		title="Apply Collection"
+																		@click="openApplyCollection(row)"><i
+																			class="fa fa-coins"></i></button>
+																	<a v-if="row.can_send_to_safe && row.send_to_safe_url"
+																		:href="row.send_to_safe_url"
+																		class="btn btn-secondary btn-outline-hover-brand btn-icon btn-sm ml-1"
+																		title="Send In Safe"><i
+																			class="fa fa-undo"></i></a>
+																	<a v-if="row.can_reject && row.reject_url"
+																		:href="row.reject_url"
+																		class="btn btn-secondary btn-outline-hover-danger btn-icon btn-sm ml-1"
+																		title="Rejected"><i class="fa fa-ban"></i></a>
+																	<a v-if="activeTab === 'cheque-collected' && row.can_send_to_under_collection && row.send_to_under_collection_url"
+																		:href="row.send_to_under_collection_url"
+																		class="btn btn-secondary btn-outline-hover-primary btn-icon btn-sm ml-1"
+																		title="Under Collection"><i
+																			class="fa fa-undo"></i></a>
+																	<button v-if="row.can_delete && row.delete_url"
+																		type="button"
+																		class="btn btn-secondary btn-outline-hover-danger btn-icon btn-sm ml-1"
+																		title="Delete" @click="deleteRow(row)"><i
+																			class="fa fa-trash-alt"></i></button>
+																</span>
+															</span>
+														</template>
+														<template v-else>{{ row[col] ?? '-' }}</template>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<nav v-if="pagination.total > 0"
+										class="d-flex align-items-center justify-content-between flex-wrap mt-3 px-1"
+										aria-label="Pagination">
+										<span class="text-muted small mb-2 mb-sm-0">{{ pagination.from }}–{{ pagination.to }}
+											of {{ pagination.total }}</span>
+										<ul class="pagination pagination-sm mb-0">
+											<li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
+												<a class="page-link" href="#"
+													@click.prevent="pagination.current_page > 1 && loadData(pagination.current_page - 1)"><i
+														class="fa fa-chevron-left"></i></a>
+											</li>
+											<li v-for="p in pages" :key="p" class="page-item"
+												:class="{ active: p === pagination.current_page }">
+												<a class="page-link" href="#" @click.prevent="loadData(p)">{{ p }}</a>
+											</li>
+											<li class="page-item"
+												:class="{ disabled: pagination.current_page === pagination.last_page }">
+												<a class="page-link" href="#"
+													@click.prevent="pagination.current_page < pagination.last_page && loadData(pagination.current_page + 1)"><i
+														class="fa fa-chevron-right"></i></a>
+											</li>
+										</ul>
+									</nav>
+								</template>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<!-- Tabs -->
-		<div class="mr-tabs">
-			<button v-for="tab in TABS" :key="tab.key" :class="['mr-tab', activeTab === tab.key && 'active']"
-				@click="changeTab(tab.key)">
-				<i :class="['fas', tab.icon]"></i> {{ tab.label }}
-			</button>
-		</div>
-		<!-- Filter (per-tab range, same request shape as legacy Blade) -->
-		<div class="mr-filter">
-			<div class="mr-filter-group">
-				<label>From</label>
-				<input type="date" v-model="dateRanges[activeTab].startDate" class="mr-input" />
-			</div>
-			<div class="mr-filter-group">
-				<label>To</label>
-				<input type="date" v-model="dateRanges[activeTab].endDate" class="mr-input" />
-			</div>
-			<button class="btn-teal btn-sm" @click="applyFilter"><i class="fas fa-search"></i> Search</button>
-			<button type="button" class="btn-teal btn-sm btn-teal-outline" @click="openSearchModal">
-				<i class="fas fa-search"></i> {{ ui.advancedFilter || 'Advanced Filter' }}
-			</button>
 		</div>
 		<!-- Advanced filter modal (same fields as components/export-money.blade.php) -->
 		<Teleport to="body">
@@ -437,107 +670,6 @@ onUnmounted(() => {
 				</div>
 			</div>
 		</Teleport>
-		<!-- Card -->
-		<div class="mr-card">
-			<!-- Loading -->
-			<div v-if="loading" class="mr-empty">
-				<div class="mr-spinner"></div><span>Loading…</span>
-			</div>
-			<!-- Empty -->
-			<div v-else-if="!rows.length" class="mr-empty">
-				<i class="fas fa-inbox mr-empty-icon"></i>
-				<h5>No records found</h5>
-				<p>Try adjusting the date range or add a new record.</p>
-				<a v-if="permissions.canCreate" :href="urls.create" class="btn-teal"><i class="fas fa-plus"></i> Add
-					First Record</a>
-			</div>
-			<!-- Table -->
-			<div v-else class="table-responsive">
-				<table class="mr-table">
-					<thead>
-						<tr>
-							<th v-for="col in columns" :key="col">{{ COL_LABELS[col] || col }}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="row in rows" :key="row.id">
-							<td v-for="col in columns" :key="col + row.id">
-								<!-- Status: plain text on rejected tab (Blade uses getStatusFormatted only); badge elsewhere -->
-								<template v-if="col === 'status'">
-									<span v-if="activeTab === 'cheque-rejected'"
-										class="mr-status-plain">{{ row.status || '-' }}</span>
-									<span v-else class="mr-badge"
-										:style="row.due_status_color ? `color:${row.due_status_color};border-color:${row.due_status_color}` : ''">
-										{{ row.status || '-' }}
-									</span>
-								</template>
-								<!-- Actions (parity with reports/moneyReceived/index.blade.php row tools) -->
-								<template v-else-if="col === 'actions'">
-									<div class="mr-actions mr-actions-wrap">
-										<button
-											v-if="row.has_user_comment && activeTab !== 'incoming-transfer' && activeTab !== 'cheque-collected'"
-											type="button" class="btn-act btn-act-msg" title="User Comment"
-											@click="openCommentModal(row.user_comment)"><i
-												class="fas fa-comment"></i></button>
-										<button v-if="row.show_odoo_error" type="button" class="btn-act btn-act-odoo"
-											title="Odoo Error"
-											@click="openOdooErrorModal(row.odoo_error_message, row.resend_odoo_url)"><i
-												class="fas fa-bug"></i></button>
-										<button v-if="row.show_integrated" type="button" class="btn-act btn-act-int"
-											title="Fully Integrated"
-											@click="openIntegratedModal(row.odoo_reference_names)"><i
-												class="fas fa-thumbs-up"></i></button>
-										<button
-											v-if="row.show_review && activeTab !== 'cheque-under-collection' && activeTab !== 'cheque-collected'"
-											type="button" class="btn-act btn-act-review" title="Reviewed"
-											@click="openReviewModal(row)"><i class="fas fa-check"></i></button>
-										<a v-if="row.can_edit && row.edit_url" :href="row.edit_url"
-											class="btn-act btn-act-teal" title="Edit"><i class="fas fa-pen"></i></a>
-										<a v-if="(activeTab === 'cheque' || activeTab === 'cheque-rejected') && row.can_send_under_collection"
-											href=""
-											class="btn-act btn-act-uc js-can-trigger-cheque-under-collection-modal"
-											data-toggle="modal"
-											:data-target="'#send-to-under-collection-modal' + activeTab"
-											:data-id="String(row.id)" data-type="single"
-											:data-currency="row.receiving_currency || ''" :data-money-type="activeTab"
-											title="Send Under Collection"><i class="fas fa-money-bill"></i></a>
-										<button
-											v-if="activeTab === 'cheque-under-collection' && row.can_apply_collection"
-											type="button" class="btn-act btn-act-coins" title="Apply Collection"
-											@click="openApplyCollection(row)"><i class="fas fa-coins"></i></button>
-										<a v-if="row.can_send_to_safe && row.send_to_safe_url"
-											:href="row.send_to_safe_url" class="btn-act btn-act-gold"
-											title="Send In Safe"><i class="fas fa-undo"></i></a>
-										<a v-if="row.can_reject && row.reject_url" :href="row.reject_url"
-											class="btn-act btn-act-red" title="Rejected"><i class="fas fa-ban"></i></a>
-										<a v-if="activeTab === 'cheque-collected' && row.can_send_to_under_collection && row.send_to_under_collection_url"
-											:href="row.send_to_under_collection_url" class="btn-act btn-act-gold"
-											title="Under Collection"><i class="fas fa-undo"></i></a>
-										<button v-if="row.can_delete && row.delete_url" type="button"
-											class="btn-act btn-act-red" title="Delete" @click="deleteRow(row)"><i
-												class="fas fa-trash"></i></button>
-									</div>
-								</template>
-								<!-- Normal cell -->
-								<template v-else>{{ row[col] ?? '-' }}</template>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<!-- Pagination -->
-			<div v-if="!loading && pagination.total > 0" class="mr-pag">
-				<span class="mr-pag-info">{{ pagination.from }}–{{ pagination.to }} of {{ pagination.total }}</span>
-				<div class="mr-pag-btns">
-					<button :disabled="pagination.current_page === 1" @click="loadData(pagination.current_page - 1)"><i
-							class="fas fa-chevron-left"></i></button>
-					<button v-for="p in pages" :key="p" :class="{ active: p === pagination.current_page }"
-						@click="loadData(p)">{{ p }}</button>
-					<button :disabled="pagination.current_page === pagination.last_page"
-						@click="loadData(pagination.current_page + 1)"><i class="fas fa-chevron-right"></i></button>
-				</div>
-			</div>
-		</div>
 		<!-- Row-level modals (same behaviour as reports/_user_*_modal includes) -->
 		<Teleport to="body">
 			<div v-if="commentModal.open" class="mr-modal-backdrop" @click.self="commentModal.open = false">
@@ -661,18 +793,12 @@ onUnmounted(() => {
 	</div>
 </template>
 <style scoped>
-/* ═══ Design Tokens — Dark Navy + Teal + Gold ═══ */
+/* Tokens for modals / small components (Metronic + money-flow-dark handle the index shell) */
 .mr-page {
-	--bg-page: #0C1829;
-	--bg-sidebar: #112240;
-	--bg-card: #112240;
-	--bg-card-hover: #152a4a;
-	--bg-input: #0C1829;
 	--teal: #00b4c8;
 	--teal-dark: #0099aa;
 	--teal-subtle: rgba(20, 144, 168, 0.12);
 	--gold: #c9a84c;
-	--gold-dark: #a6852a;
 	--text-primary: #e2e8f0;
 	--text-secondary: #94a3b8;
 	--text-muted: #64748b;
@@ -680,57 +806,13 @@ onUnmounted(() => {
 	--border-focus: #00b4c8;
 	--danger: #ef4444;
 	--success: #10b981;
+	--bg-input: #0C1829;
 
-	background: var(--bg-page);
-	color: var(--text-primary);
-	min-height: 100vh;
-	padding: 0 0 40px;
-	font-family: 'Segoe UI', system-ui, sans-serif;
-	/* Native date/time/select pickers follow dark UI (Chrome / Safari / Edge) */
+	background: transparent;
+	color: inherit;
+	min-height: 0;
+	padding: 0;
 	color-scheme: dark;
-}
-
-/* ── Header ── */
-.mr-header {
-	background: linear-gradient(90deg, var(--bg-card), var(--bg-sidebar));
-	border-bottom: 3px solid var(--teal);
-	padding: 16px 20px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.mr-header-left {
-	display: flex;
-	align-items: center;
-	gap: 14px;
-}
-
-.mr-header-icon {
-	width: 44px;
-	height: 44px;
-	border-radius: 10px;
-	background: var(--teal-subtle);
-	border: 1px solid var(--teal);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--teal);
-	font-size: 20px;
-}
-
-.mr-title {
-	margin: 0;
-	font-weight: 800;
-	color: var(--text-primary);
-	border-left: 4px solid var(--gold);
-	padding-left: 10px;
-	font-size: 1.15rem;
-}
-
-.mr-breadcrumb {
-	color: var(--text-secondary);
-	font-size: .8rem;
 }
 
 /* ── Buttons ── */
@@ -758,53 +840,6 @@ onUnmounted(() => {
 .btn-sm {
 	padding: 6px 12px;
 	font-size: .85rem;
-}
-
-/* ── Tabs ── */
-.mr-tabs {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-	padding: 10px 20px;
-	background: var(--bg-card);
-	border-bottom: 1px solid var(--border);
-}
-
-.mr-tab {
-	background: var(--bg-input);
-	border: 1px solid var(--border);
-	border-radius: 6px;
-	color: var(--text-secondary);
-	padding: 7px 12px;
-	font-size: .82rem;
-	font-weight: 600;
-	cursor: pointer;
-	transition: all .2s;
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-}
-
-.mr-tab:hover {
-	color: var(--teal);
-	border-color: var(--teal);
-}
-
-.mr-tab.active {
-	background: var(--teal-subtle);
-	color: var(--teal);
-	border-color: var(--teal);
-}
-
-/* ── Filter ── */
-.mr-filter {
-	display: flex;
-	align-items: flex-end;
-	gap: 12px;
-	flex-wrap: wrap;
-	padding: 12px 20px;
-	background: var(--bg-card);
-	border-bottom: 1px solid var(--border);
 }
 
 .mr-filter-group {
@@ -869,48 +904,6 @@ select.mr-input option {
 	color: #e2e8f0;
 }
 
-/* ── Card ── */
-.mr-card {
-	margin: 16px 20px;
-	background: var(--bg-card);
-	border: 1px solid var(--border);
-	border-top: 3px solid var(--teal);
-	border-radius: 10px;
-	box-shadow: 0 4px 24px rgba(0, 0, 0, .4);
-	overflow: hidden;
-}
-
-/* ── Table ── */
-.mr-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-.mr-table thead th {
-	background: var(--bg-sidebar);
-	color: var(--teal);
-	font-size: .75rem;
-	text-transform: uppercase;
-	letter-spacing: .05em;
-	padding: 12px 16px;
-	white-space: nowrap;
-	border-bottom: 1px solid var(--border);
-	text-align: left;
-}
-
-.mr-table tbody td {
-	padding: 12px 16px;
-	border-bottom: 1px solid var(--border);
-	color: var(--text-primary);
-	font-size: .875rem;
-	vertical-align: middle;
-}
-
-.mr-table tbody tr:hover {
-	background: var(--teal-subtle);
-	border-left: 3px solid var(--teal);
-}
-
 /* ── Badges ── */
 .mr-badge {
 	display: inline-block;
@@ -926,58 +919,6 @@ select.mr-input option {
 .mr-status-plain {
 	font-weight: 600;
 	color: var(--text-primary);
-}
-
-/* ── Action buttons ── */
-.mr-actions {
-	display: flex;
-	gap: 5px;
-}
-
-.btn-act {
-	width: 30px;
-	height: 30px;
-	border-radius: 6px;
-	border: none;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	transition: all .15s;
-	font-size: .8rem;
-}
-
-.btn-act-teal {
-	background: var(--teal-subtle);
-	color: var(--teal);
-	border: 1px solid var(--teal);
-}
-
-.btn-act-teal:hover {
-	background: var(--teal);
-	color: #0C1829;
-}
-
-.btn-act-red {
-	background: rgba(239, 68, 68, .15);
-	color: var(--danger);
-	border: 1px solid var(--danger);
-}
-
-.btn-act-red:hover {
-	background: var(--danger);
-	color: #fff;
-}
-
-.btn-act-gold {
-	background: rgba(201, 168, 76, .15);
-	color: var(--gold);
-	border: 1px solid var(--gold);
-}
-
-.btn-act-gold:hover {
-	background: var(--gold);
-	color: #0C1829;
 }
 
 /* ── Empty / Loading ── */
@@ -1017,59 +958,6 @@ select.mr-input option {
 	to {
 		transform: rotate(360deg);
 	}
-}
-
-/* ── Pagination ── */
-.mr-pag {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 12px 20px;
-	border-top: 1px solid var(--border);
-	flex-wrap: wrap;
-	gap: 8px;
-}
-
-.mr-pag-info {
-	color: var(--text-secondary);
-	font-size: .82rem;
-}
-
-.mr-pag-btns {
-	display: flex;
-	gap: 4px;
-}
-
-.mr-pag-btns button {
-	min-width: 32px;
-	height: 32px;
-	border: 1px solid var(--border);
-	border-radius: 6px;
-	background: var(--bg-input);
-	color: var(--text-primary);
-	font-size: .84rem;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	transition: all .15s;
-}
-
-.mr-pag-btns button:hover:not(:disabled) {
-	border-color: var(--teal);
-	color: var(--teal);
-	background: var(--teal-subtle);
-}
-
-.mr-pag-btns button:disabled {
-	opacity: .4;
-	cursor: not-allowed;
-}
-
-.mr-pag-btns button.active {
-	background: var(--teal-subtle);
-	color: var(--teal);
-	border-color: var(--teal);
 }
 
 /* Advanced filter modal (legacy export-money popup) */
@@ -1204,64 +1092,4 @@ select.mr-input option {
 	line-height: 1.6;
 }
 
-.mr-actions-wrap {
-	flex-wrap: wrap;
-	max-width: 320px;
-	gap: 4px;
-}
-
-.btn-act-msg {
-	background: rgba(16, 185, 129, 0.15);
-	color: var(--success);
-	border: 1px solid var(--success);
-}
-
-.btn-act-msg:hover {
-	background: var(--success);
-	color: #0c1829;
-}
-
-.btn-act-odoo {
-	background: #b91c1c;
-	color: #fff;
-	border: 1px solid #fecaca;
-}
-
-.btn-act-odoo:hover {
-	filter: brightness(1.08);
-}
-
-.btn-act-int {
-	background: rgba(59, 130, 246, 0.2);
-	color: #93c5fd;
-	border: 1px solid #3b82f6;
-}
-
-.btn-act-int:hover {
-	background: #3b82f6;
-	color: #0c1829;
-}
-
-.btn-act-review {
-	background: rgba(16, 185, 129, 0.15);
-	color: var(--success);
-	border: 1px solid var(--success);
-}
-
-.btn-act-uc {
-	background: rgba(201, 168, 76, 0.15);
-	color: var(--gold);
-	border: 1px solid var(--gold);
-}
-
-.btn-act-coins {
-	background: rgba(16, 185, 129, 0.12);
-	color: #6ee7b7;
-	border: 1px solid #34d399;
-}
-
-.btn-act-coins:hover {
-	background: #34d399;
-	color: #0c1829;
-}
 </style>

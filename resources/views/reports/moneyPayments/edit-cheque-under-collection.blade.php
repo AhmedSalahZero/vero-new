@@ -5,23 +5,18 @@ use App\Models\MoneyReceived;
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
     }
-
-    input.form-control[disabled]:not(.ignore-global-style),
-    input.form-control:not(.is-date-css)[readonly] {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
-    }
-
 </style>
 @endsection
 @section('sub-header')
 {{ __('Cheque Under Collection') }}
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->

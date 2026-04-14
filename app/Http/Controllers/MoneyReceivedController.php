@@ -141,6 +141,7 @@ class MoneyReceivedController
                 'defaultActiveTab' => $activeTab,
                 'filterDates' => $filterDates,
                 'searchFieldsByTab' => $searchFieldsByTab,
+                'tabTitles' => $this->getMoneyReceivedIndexVueTabTitles(),
                 'advancedFilterUi' => $this->getMoneyReceivedAdvancedFilterUiLabels(),
                 'accountTypes' => $accountTypes,
                 'financialInstitutionBanks' => $financialInstitutionBanks,
@@ -437,10 +438,26 @@ class MoneyReceivedController
             'permissions' => ['canCreate' => $canCreate, 'canUpdate' => $canUpdate, 'canDelete' => $canDelete],
             'urls' => [
                 'create' => route('create.money.receive', ['company' => $company->id]),
+                'create_down_payment' => route('create.money.receive', ['company' => $company->id, 'type' => 'down-payment']),
             ],
             'searchFieldsByTab' => $this->getMoneyReceivedSearchFieldsByTab(),
             'advancedFilterUi' => $this->getMoneyReceivedAdvancedFilterUiLabels(),
+            'tabTitles' => $this->getMoneyReceivedIndexVueTabTitles(),
         ]);
+    }
+
+    /** Same labels as reports/moneyReceived/index.blade.php nav tabs (for Vue index parity). */
+    protected function getMoneyReceivedIndexVueTabTitles(): array
+    {
+        return [
+            MoneyReceived::CHEQUE => __('Cheques In Safe'),
+            MoneyReceived::CHEQUE_UNDER_COLLECTION => __('Cheques Under Collection'),
+            MoneyReceived::CHEQUE_COLLECTED => __('Collected Cheques'),
+            MoneyReceived::CHEQUE_REJECTED => __('Rejected Cheques'),
+            MoneyReceived::INCOMING_TRANSFER => __('Incoming Transfer'),
+            MoneyReceived::CASH_IN_SAFE => __('Cash In Safe'),
+            MoneyReceived::CASH_IN_BANK => __('Bank Deposit'),
+        ];
     }
 
     protected function wantsMoneyReceivedAdvancedFilter(Request $request): bool
@@ -543,9 +560,14 @@ class MoneyReceivedController
             'searchText' => __('Search Text'),
             'from' => __('From'),
             'to' => __('To'),
+            'startDate' => __('Start Date'),
+            'endDate' => __('End Date'),
+            'submit' => __('Submit'),
             'search' => __('Search'),
             'reset' => __('Reset'),
             'advancedFilter' => __('Advanced Filter'),
+            'indexCreateMoneyReceived' => __('Money Received'),
+            'indexDownPayment' => __('Down Payment'),
             'dataTypeReceiving' => __('[ Receiving Date ]'),
             'dataTypeDue' => __('[ Due Date ]'),
             'dataTypeDeposit' => __('[ Deposit Date ]'),

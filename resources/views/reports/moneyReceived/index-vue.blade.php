@@ -4,20 +4,27 @@
 @endsection
 
 @push('css')
-@vite(['resources/css/money-received-form.css'])
+@include('reports.moneyPayments._dark_theme_styles')
 @endpush
 
 @section('content')
-<script type="application/json" id="money-received-page-config">@json([
-    'searchFieldsByTab' => $searchFieldsByTab ?? [],
-    'advancedFilterUi' => $advancedFilterUi ?? [],
-])</script>
+@php
+    $moneyReceivedPageConfig = [
+        'searchFieldsByTab' => $searchFieldsByTab ?? [],
+        'advancedFilterUi' => $advancedFilterUi ?? [],
+        'tabTitles' => $tabTitles ?? [],
+    ];
+@endphp
+<div class="money-flow-dark">
+<script type="application/json" id="money-received-page-config">@json($moneyReceivedPageConfig)</script>
 <div
     id="money-received-vue-app"
+    data-app-lang="{{ app()->getLocale() }}"
     data-company-id="{{ $company->id }}"
     data-default-active-tab="{{ $defaultActiveTab }}"
     data-json-url="{{ route('view.money.receive.json', ['company' => $company->id]) }}"
     data-create-url="{{ route('create.money.receive', ['company' => $company->id]) }}"
+    data-create-down-payment-url="{{ route('create.money.receive', ['company' => $company->id, 'type' => 'down-payment']) }}"
     data-can-create="{{ auth()->user()->can('create money received') ? '1' : '0' }}"
     data-initial-filter-dates="{{ e(json_encode($filterDates ?? [])) }}"
     data-search-fields-by-tab="{{ e(json_encode($searchFieldsByTab ?? [])) }}"
@@ -42,6 +49,7 @@ use App\Models\MoneyReceived;
             :href="route('create.money.receive', ['company' => $company->id])"
         />
     @endforeach
+</div>
 </div>
 @endsection
 
