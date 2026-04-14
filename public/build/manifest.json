@@ -690,7 +690,7 @@
     ]
   },
   "resources/js/MoneyReceived/index.js": {
-    "file": "assets/index-Bi5JsXwC.js",
+    "file": "assets/index-Df_Q9LBZ.js",
     "name": "index",
     "src": "resources/js/MoneyReceived/index.js",
     "isEntry": true,
@@ -699,7 +699,7 @@
       "__plugin-vue_export-helper-UIjDl3KO.js"
     ],
     "css": [
-      "assets/index-DzUSpsvF.css"
+      "assets/index-BTUo9Xee.css"
     ]
   },
   "resources/js/NonBanking/Views/DirectFactoring/direct-factoring.js": {
@@ -1042,19 +1042,19 @@
     ]
   },
   "resources/js/PropertyManagement/Views/Dashboard/cashflow-forecast.ts": {
-    "file": "assets/cashflow-forecast-Dz3v4F1R.js",
+    "file": "assets/cashflow-forecast-DT5s44xW.js",
     "name": "cashflow-forecast",
     "src": "resources/js/PropertyManagement/Views/Dashboard/cashflow-forecast.ts",
     "isEntry": true,
     "imports": [
       "_runtime-dom.esm-bundler-DWM9hgPS.js",
+      "_preload-helper-BPrmGuLI.js",
       "__plugin-vue_export-helper-UIjDl3KO.js",
       "_index-B5nz4CMi.js",
       "_sweetalert2.esm.all-B700UZ0f.js",
-      "_Label-BiCPkmWC.js",
       "_Loading-Cl6ihoCD.js",
+      "_Label-BiCPkmWC.js",
       "_Helper-C2ZGttlC.js",
-      "_preload-helper-BPrmGuLI.js",
       "_main-BBqaCmO3.js",
       "_vue-i18n-Cwj3PLLz.js"
     ],
@@ -1065,7 +1065,7 @@
       "node_modules/@amcharts/amcharts4/.internal/bundled/xlsx/xlsx.mjs"
     ],
     "css": [
-      "assets/cashflow-forecast-Ct_z4LCs.css"
+      "assets/cashflow-forecast-D_O6yx4r.css"
     ]
   },
   "resources/js/PropertyManagement/Views/Expenses/expenses.js": {
