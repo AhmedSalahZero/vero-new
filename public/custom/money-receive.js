@@ -309,8 +309,7 @@ $(document).on('change', '.js-settlement-amount,.settlement-amount-class,[data-m
 	$('#remaining-settlement-taking-js').val(number_format(totalRemainingInRecCurrency,2))
 
 })
-/* Delegated: rows (e.g. Money Received Vue index) mount after this file runs */
-$(document).on('change', '.js-send-to-collection', function () {
+$('.js-send-to-collection').on('change', function () {
 	const noCheckedItems = $('.js-send-to-collection:checked').length
 	const moneyType = $(this).attr('data-money-type')
 	const sendToCollectionTrigger = $('#js-send-to-under-collection-trigger' + moneyType)
@@ -333,18 +332,11 @@ $(document).on('change', '.js-update-account-number-based-on-account-type', func
 	const companyId = $('body').attr('data-current-company-id')
 	const repeaterParentIfExists = $(this).closest('[data-repeater-item]')
 	let parent = repeaterParentIfExists.length ? repeaterParentIfExists : $(this).closest('.kt-portlet__body')
-	/* Send-under-collection modal (export-money): form is in .modal-body, not .kt-portlet__body */
-	if (!parent.length) {
-		parent = $(this).closest('form.ajax-send-cheques-to-collection')
-	}
-	if (!parent.length) {
-		parent = $(this).closest('form')
-	}
 	if($(this).closest('.closest-parent-class').length){
 		parent = $(this).closest('.closest-parent-class');
 	}
 	const moneyType = $(this).closest('form').attr('data-money-type')
-	let currency = $(this).closest('form').find('input.current-currency, select.current-currency').first().val()
+	let currency = $(this).closest('form').find('select.current-currency').val()
 	currency = currency ? currency : $('input[type="hidden"].current-currency').val();	 
 	currency = currency ? currency : $('.js-send-to-collection[data-money-type="' + moneyType + '"]').closest('tr').find('[data-currency]').attr('data-currency')
 	currency = currency ? currency : $(this).closest('.kt-portlet__body').find('.current-currency').val();
@@ -388,15 +380,9 @@ $(document).on('change', '.js-update-account-id-based-on-account-type', function
 	const lang = $('body').attr('data-lang')
 	const companyId = $('body').attr('data-current-company-id')
 	const repeaterParentIfExists = $(this).closest('[data-repeater-item]')
-	let parent = repeaterParentIfExists.length ? repeaterParentIfExists : $(this).closest('.kt-portlet__body')
-	if (!parent.length) {
-		parent = $(this).closest('form.ajax-send-cheques-to-collection')
-	}
-	if (!parent.length) {
-		parent = $(this).closest('form')
-	}
+	const parent = repeaterParentIfExists.length ? repeaterParentIfExists : $(this).closest('.kt-portlet__body')
 	const moneyType = $(this).closest('form').attr('data-money-type')
-	let currency = $(this).closest('form').find('input.current-currency, select.current-currency').first().val()
+	let currency = $(this).closest('form').find('select.current-currency').val()
 	currency = currency ? currency : $('input[type="hidden"].current-currency').val();	 
 	currency = currency ? currency : $('.js-send-to-collection[data-money-type="' + moneyType + '"]').closest('tr').find('[data-currency]').attr('data-currency')
 	currency = currency ? currency : $(this).closest('.kt-portlet__body').find('.current-currency').val();
