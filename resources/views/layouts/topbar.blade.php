@@ -183,7 +183,7 @@
                     @endif
                     @if (isset($company) && !request()->route()->named('home'))
                 </div>
-                <h6><span class="kt-header__topbar text-center p-2" style="color: white;white-space: nowrap;">{{ $company->name[lang()] . ' ' . __('Company') }}</span>
+                <h6><span class="kt-header__topbar text-center " style="color:white;white-space: nowrap;margin-bottom: -20px;">{{ $company->name[lang()] . ' ' . __('Company') }}</span>
                 </h6>
             </div>
             @endif
