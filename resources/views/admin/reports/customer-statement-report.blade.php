@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
 
 
@@ -138,7 +139,7 @@
 @endif 
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
 
@@ -504,6 +505,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     @endsection
     @section('js')

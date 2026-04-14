@@ -8,79 +8,74 @@ $selectedBanks = [];
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    input,
-    select,
-    .dropdown-toggle.bs-placeholder {
+    .money-flow-dark input,
+    .money-flow-dark select,
+    .money-flow-dark .dropdown-toggle.bs-placeholder {
         border: 1px solid #CCE2FD !important
     }
 
-    .form-control:disabled,
-    .form-control[readonly] {
+    .money-flow-dark .form-control:disabled,
+    .money-flow-dark .form-control[readonly] {
         background-color: #f7f8fa;
         opacity: 1;
     }
 
-    .action-class {
+    .money-flow-dark .action-class {
         color: white !important;
         background-color: #0742A6 !important;
     }
 
-    label {
+    .money-flow-dark label {
         text-align: left !important;
     }
 
-    .max-w-6 {
+    .money-flow-dark .max-w-6 {
         max-width: initial !important;
         width: 6% !important;
         flex: initial !important;
     }
 
-    .max-w-15 {
+    .money-flow-dark .max-w-15 {
         max-width: initial !important;
         width: 15% !important;
         flex: initial !important;
     }
 
-    .width-8 {
+    .money-flow-dark .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .width-9-5 {
+    .money-flow-dark .width-9-5 {
         max-width: initial !important;
         width: 9% !important;
         flex: initial !important;
     }
 
-    .width-10 {
+    .money-flow-dark .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .width-12 {
+    .money-flow-dark .width-12 {
         max-width: initial !important;
         width: 12.5% !important;
         flex: initial !important;
     }
 
 
-    .width-40 {
+    .money-flow-dark .width-40 {
         max-width: initial !important;
         width: 40% !important;
         flex: initial !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style),
-    input.form-control:not(.is-date-css)[readonly] {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -89,6 +84,7 @@ $selectedBanks = [];
 {{ __('Payment Form') }}
 @endsection
 @section('content')
+<div class="money-flow-dark">
 @php
 	$routeAction = isset($model) ?  route('update.money.payment',['company'=>$company->id,'moneyPayment'=>$model->id]) :route('store.money.payment',['company'=>$company->id])
 @endphp
@@ -892,6 +888,7 @@ $selectedBanks = [];
     <!--end::Form-->
 
     <!--end::Portlet-->
+</div>
 </div>
 </div>
 @endsection

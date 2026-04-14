@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
     .custom-w-25 {
         width: 23% !important;
@@ -135,7 +136,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ __('Invoices Table') . '[ '. $partnerName .' ] '.'[ '. $currency .' ]' }}</x-main-form-title>
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
 

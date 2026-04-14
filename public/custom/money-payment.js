@@ -420,7 +420,6 @@ $(document).on('change', '.js-settlement-amount,.settlement-amount-class,[data-m
 	}
 	$('#remaining-settlement-js').val(number_format(totalRemaining,2))
 	var totalRemainingInRecCurrency = totalRemaining * exchangeRate-  totalOrdersAmount;
-	console.log(totalRemainingInRecCurrency,totalRemaining ,exchangeRate , totalOrdersAmount );
 	$('#remaining-settlement-taking-js').val(number_format(totalRemainingInRecCurrency,2))
 
 })
