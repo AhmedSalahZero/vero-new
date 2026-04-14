@@ -7,38 +7,43 @@ use App\Models\Partner;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 12.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
+    }
+
+    input.form-control[disabled]:not(.ignore-global-style),
+    input.form-control:not(.is-date-css)[readonly] {
+        background-color: #CCE2FD !important;
+        font-weight: bold !important;
     }
 
 </style>
@@ -47,7 +52,6 @@ use App\Models\Partner;
 {{ __('Down Payments Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -141,7 +145,7 @@ use App\Models\Partner;
                     {{-- {{  }} --}}
                     <div class="kt-input-icon">
                         <div class="input-group date">
-                            <select id="customer_name" data-live-search="true" data-actions-box="true" data-current-selected="{{ isset($model) ? $model->getPartnerId() : '' }}" name="customer_id" class="form-control kt-bootstrap-select select2-select kt_bootstrap_select ajax-get-contracts-for-customer ajax-get-sales-orders-for-contract">
+                            <select id="customer_name" data-live-search="true" data-actions-box="true" data-current-selected="{{ isset($model) ? $model->getPartnerId() : '' }}" name="customer_id" class="form-control select2-select ajax-get-contracts-for-customer ajax-get-sales-orders-for-contract">
                                 <option value="" selected>{{__('Select')}}</option>
                                 @foreach(Partner::getCustomersForCompany($company->id) as $customerId => $customerName)
                                 <option @if($singleModel) selected @endif @if(isset($model) && $model->getCustomerName() == $customerName ) selected @endif value="{{ $customerId }}">{{$customerName}}</option>
@@ -707,7 +711,6 @@ use App\Models\Partner;
 <!--end::Form-->
 
 <!--end::Portlet-->
-</div>
 </div>
 </div>
 @endsection

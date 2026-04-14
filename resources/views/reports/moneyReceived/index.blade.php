@@ -5,14 +5,59 @@ use App\Models\MoneyReceived;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
+
+<style>
+    th:not(.bank-max-width),
+    td:not(.bank-max-width) {
+        text-wrap: nowrap !important;
+    }
+
+</style>
+<style>
+    button[type="submit"],
+    button[type="button"] {
+        font-size: 1rem !important;
+
+    }
+
+    button[type="submit"] {
+        background-color: green !important;
+        border: 1px solid green !important;
+    }
+
+    .kt-portlet__body {
+        padding-top: 0 !important;
+    }
+
+    input[type="checkbox"] {
+        cursor: pointer;
+    }
+
+    th {
+        background-color: #0742A6;
+        color: white;
+    }
+
+    .bank-max-width {
+        max-width: 200px !important;
+    }
+
+    .kt-portlet {
+        overflow: visible !important;
+    }
+
+    input.form-control[disabled]:not(.ignore-global-style) {
+        background-color: #CCE2FD !important;
+        font-weight: bold !important;
+    }
+
+</style>
 @endsection
 @section('sub-header')
 {{ __('Money Received Form') }}
 @endsection
 @section('content')
 
-<div class="money-flow-dark">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -804,7 +849,6 @@ use App\Models\MoneyReceived;
 
         </div>
     </div>
-</div>
 </div>
 
 @endsection

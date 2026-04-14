@@ -37,16 +37,11 @@ class MoneyReceivedController
 		$paginationPerPage = GeneralFunctions::getPaginationLimit();
         // $company->load(['moneyReceived.cheque','moneyReceived.partner','moneyReceived.incomingTransfer','moneyReceived.cashInSafe.receivingBranch']);
         $numberOfMonthsBetweenEndDateAndStartDate = 18 ;
-        $activeTab = $request->get('active', MoneyReceived::CHEQUE);
-        if (! in_array($activeTab, MoneyReceived::getAllTypes(), true)) {
-            $activeTab = MoneyReceived::CHEQUE;
-        }
+        $activeTab = $request->get('active', MoneyReceived::CHEQUE) ;
         $filterDates = [];
         foreach (MoneyReceived::getAllTypes() as $type) {
-            $reqStart = $request->input('startDate.'.$type);
-            $reqEnd = $request->input('endDate.'.$type);
-            $startDate = $request->filled('startDate.'.$type) ? $reqStart : now()->subMonths($numberOfMonthsBetweenEndDateAndStartDate)->format('Y-m-d');
-            $endDate = $request->filled('endDate.'.$type) ? $reqEnd : now()->format('Y-m-d');
+            $startDate = $request->has('startDate') ? $request->input('startDate.'.$type) : now()->subMonths($numberOfMonthsBetweenEndDateAndStartDate)->format('Y-m-d');
+            $endDate = $request->has('endDate') ? $request->input('endDate.'.$type) : now()->format('Y-m-d');
             $filterDates[$type] = [
                 'startDate'=>$startDate,
                 'endDate'=>$endDate
@@ -123,18 +118,80 @@ class MoneyReceivedController
         
         
         $selectedBanks = MoneyReceived::getDrawlBanksForCurrentCompany($company->id) ;
-
+        $chequesReceivedTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'receiving_date'=>__('Receiving Date'),
+            'cheque_number'=>__('Cheque Number'),
+            'currency'=>__('Currency'),
+			'receiving_currency'=>__('Receiving Currency'),
+            'drawee_bank_name'=>__('Drawee Bank'),
+            'due_date'=>__('Due Date'),
+            // 'cheque_status'=>__('Status')
+        ];
+        $chequesRejectedTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'receiving_date'=>__('Receiving Date'),
+            'cheque_number'=>__('Cheque Number'),
+            'currency'=>__('Currency'),
+            'drawee_bank_name'=>__('Drawee Bank'),
+            'due_date'=>__('Due Date'),
+            // 'cheque_status'=>__('Status')
+        ];
+        $chequesUnderCollectionTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'cheque_number'=>__('Cheque Number'),
+            'received_amount'=>__('Cheque Amount'),
+            'deposit_date'=>__('Deposit Date'),
+            'drawl_bank_name'=>__('Drawl Bank'),
+            // 'account_type'=>__('Account Number'),
+            'clearance_days'=>'Clearance Days'
+        ];
+        
+        $collectedChequesTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'cheque_number'=>__('Cheque Number'),
+            'received_amount'=>__('Cheque Amount'),
+			'drawee_bank_name'=>__('Drawee Bank'),
+			'due_date'=>__('Due Date'),
+			'currency'=>__('Currency'),
+			'receiving_currency'=>__('Receiving Currency'),
+			'account_number'=>__('Account Number'),
+        ];
+        
+        $incomingTransferTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'receiving_date'=>__('Receiving Date'),
+            'receiving_bank_name'=>__('Receiving Bank'),
+            'received_amount'=>__('Transfer Amount'),
+            'currency'=>__('Currency'),
+			'receiving_currency'=>__('Receiving Currency'),
+            'account_number'=>__('Account Number')
+        ];
+        
+        $cashInBankTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'receiving_date'=>__('Receiving Date'),
+            'receiving_bank_name'=>__('Receiving Bank'),
+            'received_amount'=>__('Deposit Amount'),
+            'currency'=>__('Currency'),
+			'receiving_currency'=>__('Receiving Currency'),
+            'account_number'=>__('Account Number')
+        ];
+        
+        $cashInSafeReceivedTableSearchFields = [
+            'partner_name'=>__('Customer Name'),
+            'receiving_date'=>__('Receiving Date'),
+            'receiving_branch_name'=>__('Branch'),
+            'received_amount'=>__('Received Amount'),
+            'currency'=>__('Currency'),
+			'receiving_currency'=>__('Receiving Currency'),
+            'receipt_number'=>__('Receipt Number')
+        ];
+        
+        
+        
+        
         $banks = Bank::pluck('view_name', 'id');
-
-        $searchFieldsByTab = $this->getMoneyReceivedSearchFieldsByTab();
-        $chequesReceivedTableSearchFields = $searchFieldsByTab[MoneyReceived::CHEQUE];
-        $chequesRejectedTableSearchFields = $searchFieldsByTab[MoneyReceived::CHEQUE_REJECTED];
-        $chequesUnderCollectionTableSearchFields = $searchFieldsByTab[MoneyReceived::CHEQUE_UNDER_COLLECTION];
-        $collectedChequesTableSearchFields = $searchFieldsByTab[MoneyReceived::CHEQUE_COLLECTED];
-        $incomingTransferTableSearchFields = $searchFieldsByTab[MoneyReceived::INCOMING_TRANSFER];
-        $cashInSafeReceivedTableSearchFields = $searchFieldsByTab[MoneyReceived::CASH_IN_SAFE];
-        $cashInBankTableSearchFields = $searchFieldsByTab[MoneyReceived::CASH_IN_BANK];
-
         return view('reports.moneyReceived.index', [
             'company'=>$company ,
             'selectedBanks'=>$selectedBanks,
@@ -156,458 +213,10 @@ class MoneyReceivedController
             'collectedCheques'=>$collectedCheques,
             'collectedChequesTableSearchFields'=>$collectedChequesTableSearchFields,
             'filterDates'=>$filterDates,
+
         ]);
     }
-
-    public function indexJson(Company $company, Request $request)
-    {
-        $paginationPerPage = GeneralFunctions::getPaginationLimit();
-        $activeTab = $request->get('active', MoneyReceived::CHEQUE);
-
-        $numberOfMonthsBetweenEndDateAndStartDate = 18;
-        $filterDates = [];
-        foreach (MoneyReceived::getAllTypes() as $type) {
-            $reqStart = $request->input('startDate.'.$type);
-            $reqEnd = $request->input('endDate.'.$type);
-            $startDate = $request->filled('startDate.'.$type) ? $reqStart : now()->subMonths($numberOfMonthsBetweenEndDateAndStartDate)->format('Y-m-d');
-            $endDate = $request->filled('endDate.'.$type) ? $reqEnd : now()->format('Y-m-d');
-            $filterDates[$type] = [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ];
-        }
-
-        $receivedCashesInSafeStartDate = $filterDates[MoneyReceived::CASH_IN_SAFE]['startDate'] ?? null;
-        $receivedCashesInSafeEndDate = $filterDates[MoneyReceived::CASH_IN_SAFE]['endDate'] ?? null;
-        $cashesInBankStartDate = $filterDates[MoneyReceived::CASH_IN_BANK]['startDate'] ?? null;
-        $cashesInBankEndDate = $filterDates[MoneyReceived::CASH_IN_BANK]['endDate'] ?? null;
-        $incomingTransferStartDate = $filterDates[MoneyReceived::INCOMING_TRANSFER]['startDate'] ?? null;
-        $incomingTransferEndDate = $filterDates[MoneyReceived::INCOMING_TRANSFER]['endDate'] ?? null;
-        $chequesInSafeStartDate = $filterDates[MoneyReceived::CHEQUE]['startDate'] ?? null;
-        $chequesInSafeEndDate = $filterDates[MoneyReceived::CHEQUE]['endDate'] ?? null;
-        $chequesRejectedStartDate = $filterDates[MoneyReceived::CHEQUE_REJECTED]['startDate'] ?? null;
-        $chequesRejectedEndDate = $filterDates[MoneyReceived::CHEQUE_REJECTED]['endDate'] ?? null;
-        $chequesUnderCollectionStartDate = $filterDates[MoneyReceived::CHEQUE_UNDER_COLLECTION]['startDate'] ?? null;
-        $chequesUnderCollectionEndDate = $filterDates[MoneyReceived::CHEQUE_UNDER_COLLECTION]['endDate'] ?? null;
-        $chequesCollectedStartDate = $filterDates[MoneyReceived::CHEQUE_COLLECTED]['startDate'] ?? null;
-        $chequesCollectedEndDate = $filterDates[MoneyReceived::CHEQUE_COLLECTED]['endDate'] ?? null;
-
-        $canUpdate = auth()->user()->can('update money received');
-        $canDelete = auth()->user()->can('delete money received');
-        $canCreate = auth()->user()->can('create money received');
-
-        $rows = [];
-        $paginated = null;
-
-        /** Must match Vue tab keys / MoneyReceived::getAllTypes() — unknown values used to fall through to CASH_IN_BANK (wrong tab / empty confusion). */
-        if (! in_array($activeTab, MoneyReceived::getAllTypes(), true)) {
-            $activeTab = MoneyReceived::CHEQUE;
-        }
-
-        switch ($activeTab) {
-            case MoneyReceived::CHEQUE:
-                $paginated = $company->getReceivedChequesInSafe($chequesInSafeStartDate, $chequesInSafeEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                foreach ($paginated as $item) {
-                    $dueStatus = $item->cheque ? $item->cheque->getDueStatusFormatted() : ['color' => '', 'status' => ''];
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'receiving_date' => $item->getReceivingDateFormatted(),
-                        'cheque_number' => $item->cheque ? $item->cheque->getChequeNumber() : '',
-                        'amount' => $item->getReceivedAmountFormatted(),
-                        'currency' => $item->getCurrencyToReceivingCurrencyFormatted(),
-                        'drawee_bank' => $item->cheque ? $item->cheque->getDraweeBankName() : '',
-                        'due_date' => $item->cheque ? $item->cheque->getDueDateFormatted() : '',
-                        'due_after_days' => $item->cheque ? $item->cheque->getDueAfterDays() : '',
-                        'status' => $dueStatus['status'],
-                        'due_status_color' => $dueStatus['color'],
-                        'can_edit' => $canUpdate && !$item->isOpenBalance(),
-                        'can_delete' => $canDelete,
-                        'edit_url' => route('edit.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'delete_url' => route('delete.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            case MoneyReceived::CHEQUE_UNDER_COLLECTION:
-                $paginated = $company->getReceivedChequesUnderCollection($chequesUnderCollectionStartDate, $chequesUnderCollectionEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                if ($paginated !== null) {
-                    $paginated->setCollection(
-                        $paginated->getCollection()->sortByDesc(function ($mr) {
-                            return optional($mr->cheque)->deposit_date;
-                        })->values()
-                    );
-                }
-                foreach ($paginated as $item) {
-                    $dueStatus = $item->cheque ? $item->cheque->getDueStatusFormatted() : ['color' => '', 'status' => ''];
-                    $hasDue = $item->cheque && $item->cheque->getDueStatus();
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'cheque_number' => $item->cheque ? $item->cheque->getChequeNumber() : '',
-                        'amount' => $item->getReceivedAmountFormatted() . ' ' . $item->getReceivingCurrency(),
-                        'deposit_date' => $item->cheque ? $item->cheque->getDepositDateFormatted() : '',
-                        'drawl_bank' => $item->cheque ? $item->cheque->getDrawlBankName() : '',
-                        'account_type' => $item->cheque ? $item->cheque->getAccountTypeName() : '',
-                        'account_number' => $item->cheque ? $item->cheque->getAccountNumber() : '',
-                        'due_date' => $item->cheque ? $item->cheque->getDueDateFormatted() : '',
-                        'clearance_days' => $item->cheque ? $item->cheque->getClearanceDays() : '',
-                        'expected_collection_date' => $item->cheque ? $item->cheque->chequeExpectedCollectionDateFormatted() : '',
-                        'status' => $dueStatus['status'],
-                        'due_status_color' => $dueStatus['color'],
-                        'can_edit' => $canUpdate && !$item->isOpenBalance(),
-                        'can_delete' => $canDelete && $hasDue,
-                        'can_apply_collection' => $hasDue,
-                        'can_send_to_safe' => true,
-                        'can_reject' => $canDelete && $hasDue,
-                        'edit_url' => route('edit.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'delete_url' => route('delete.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'send_to_safe_url' => route('cheque.send.to.safe', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'reject_url' => route('cheque.send.to.rejected.safe', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            case MoneyReceived::CHEQUE_COLLECTED:
-                $paginated = $company->getCollectedCheques($chequesCollectedStartDate, $chequesCollectedEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                if ($paginated !== null) {
-                    $paginated->setCollection(
-                        $paginated->getCollection()->sortByDesc(function ($mr) {
-                            return optional($mr->cheque)->deposit_date;
-                        })->values()
-                    );
-                }
-                foreach ($paginated as $item) {
-                    $isCollected = $item->cheque && $item->cheque->isCollected();
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'cheque_number' => $item->cheque ? $item->cheque->getChequeNumber() : '',
-                        'amount' => $item->getReceivedAmountFormatted() . ' ' . $item->getReceivingCurrency(),
-                        'due_date' => $item->cheque ? $item->cheque->getDueDateFormatted() : '',
-                        'deposit_date' => $item->cheque ? $item->cheque->getDepositDateFormatted() : '',
-                        'drawl_bank' => $item->cheque ? $item->cheque->getDrawlBankName() : '',
-                        'account_type' => $item->cheque ? $item->cheque->getAccountTypeName() : '',
-                        'account_number' => $item->cheque ? $item->cheque->getAccountNumber() : '',
-                        'actual_collection_date' => $item->cheque ? $item->cheque->chequeActualCollectionDateFormatted() : '',
-                        'can_edit' => false,
-                        'can_delete' => false,
-                        'can_send_to_under_collection' => $isCollected,
-                        'send_to_under_collection_url' => route('cheque.send.to.under.collection', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            case MoneyReceived::CHEQUE_REJECTED:
-                $paginated = $company->getReceivedRejectedChequesInSafe($chequesRejectedStartDate, $chequesRejectedEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                foreach ($paginated as $item) {
-                    $statusText = $item->cheque ? $item->cheque->getStatusFormatted() : '';
-                    $dueStatus = $item->cheque ? $item->cheque->getDueStatusFormatted() : ['color' => '', 'status' => ''];
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'receiving_date' => $item->getReceivingDateFormatted(),
-                        'cheque_number' => $item->cheque ? $item->cheque->getChequeNumber() : '',
-                        'amount' => $item->getReceivedAmountFormatted(),
-                        'currency' => $item->getCurrencyToReceivingCurrencyFormatted(),
-                        'drawee_bank' => $item->cheque ? $item->cheque->getDraweeBankName() : '',
-                        'due_date' => $item->cheque ? $item->cheque->getDueDateFormatted() : '',
-                        'status' => $statusText,
-                        'due_status_color' => $dueStatus['color'],
-                        'can_edit' => false,
-                        'can_delete' => $canDelete && !$item->isOpenBalance(),
-                        'edit_url' => route('edit.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'delete_url' => route('delete.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            case MoneyReceived::INCOMING_TRANSFER:
-                $paginated = $company->getReceivedTransfer($incomingTransferStartDate, $incomingTransferEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                foreach ($paginated as $item) {
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'receiving_date' => $item->getReceivingDateFormatted(),
-                        'receiving_bank' => $item->getIncomingTransferReceivingBankName(),
-                        'amount' => $item->getReceivedAmountFormatted(),
-                        'currency' => $item->getCurrencyToReceivingCurrencyFormatted(),
-                        'account_type' => $item->getIncomingTransferAccountTypeName(),
-                        'account_number' => $item->getIncomingTransferAccountNumber(),
-                        'can_edit' => $canUpdate && !$item->isOpenBalance(),
-                        'can_delete' => $canDelete && !$item->isOpenBalance(),
-                        'edit_url' => route('edit.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'delete_url' => route('delete.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            case MoneyReceived::CASH_IN_SAFE:
-                $paginated = $company->getReceivedCashesInSafe($receivedCashesInSafeStartDate, $receivedCashesInSafeEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                foreach ($paginated as $item) {
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'receiving_date' => $item->getReceivingDateFormatted(),
-                        'branch' => $item->getCashInSafeBranchName(),
-                        'amount' => $item->getReceivedAmountFormatted(),
-                        'currency' => $item->getCurrencyToReceivingCurrencyFormatted(),
-                        'receipt_number' => $item->getCashInSafeReceiptNumber(),
-                        'can_edit' => $canUpdate && !$item->isOpenBalance(),
-                        'can_delete' => $canDelete && !$item->isOpenBalance(),
-                        'edit_url' => route('edit.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'delete_url' => route('delete.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            case MoneyReceived::CASH_IN_BANK:
-                $paginated = $company->getReceivedCashesInBank($cashesInBankStartDate, $cashesInBankEndDate, $activeTab)->paginate($paginationPerPage);
-                $this->applyAdvancedFilterToPaginator($request, $paginated);
-                foreach ($paginated as $item) {
-                    $row = [
-                        'id' => $item->id,
-                        'type' => $item->getMoneyTypeFormatted(),
-                        'customer_name' => $item->getCustomerName(),
-                        'receiving_date' => $item->getReceivingDateFormatted(),
-                        'receiving_bank' => $item->getCashInBankReceivingBankName(),
-                        'amount' => $item->getReceivedAmountFormatted(),
-                        'currency' => $item->getCurrencyToReceivingCurrencyFormatted(),
-                        'account_type' => $item->getCashInBankAccountTypeName(),
-                        'account_number' => $item->getCashInBankAccountNumber(),
-                        'can_edit' => $canUpdate && !$item->isOpenBalance(),
-                        'can_delete' => $canDelete && !$item->isOpenBalance(),
-                        'edit_url' => route('edit.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                        'delete_url' => route('delete.money.receive', ['company' => $company->id, 'moneyReceived' => $item->id]),
-                    ];
-                    $rows[] = $this->mergeMoneyReceivedActionMeta($company, $item, $activeTab, $row);
-                }
-                break;
-
-            default:
-                $paginated = null;
-                break;
-        }
-
-        $paginationData = $paginated ? [
-            'current_page' => $paginated->currentPage(),
-            'last_page' => $paginated->lastPage(),
-            'total' => $paginated->total(),
-            'from' => $paginated->firstItem() ?? 0,
-            'to' => $paginated->lastItem() ?? 0,
-        ] : ['current_page' => 1, 'last_page' => 1, 'total' => 0, 'from' => 0, 'to' => 0];
-
-        return response()->json([
-            'rows' => $rows,
-            'activeTab' => $activeTab,
-            'pagination' => $paginationData,
-            'filterDates' => $filterDates,
-            'permissions' => ['canCreate' => $canCreate, 'canUpdate' => $canUpdate, 'canDelete' => $canDelete],
-            'urls' => [
-                'create' => route('create.money.receive', ['company' => $company->id]),
-                'create_down_payment' => route('create.money.receive', ['company' => $company->id, 'type' => 'down-payment']),
-            ],
-            'searchFieldsByTab' => $this->getMoneyReceivedSearchFieldsByTab(),
-            'advancedFilterUi' => $this->getMoneyReceivedAdvancedFilterUiLabels(),
-            'tabTitles' => $this->getMoneyReceivedIndexVueTabTitles(),
-        ]);
-    }
-
-    /** Same labels as reports/moneyReceived/index.blade.php nav tabs (for Vue index parity). */
-    protected function getMoneyReceivedIndexVueTabTitles(): array
-    {
-        return [
-            MoneyReceived::CHEQUE => __('Cheques In Safe'),
-            MoneyReceived::CHEQUE_UNDER_COLLECTION => __('Cheques Under Collection'),
-            MoneyReceived::CHEQUE_COLLECTED => __('Collected Cheques'),
-            MoneyReceived::CHEQUE_REJECTED => __('Rejected Cheques'),
-            MoneyReceived::INCOMING_TRANSFER => __('Incoming Transfer'),
-            MoneyReceived::CASH_IN_SAFE => __('Cash In Safe'),
-            MoneyReceived::CASH_IN_BANK => __('Bank Deposit'),
-        ];
-    }
-
-    protected function wantsMoneyReceivedAdvancedFilter(Request $request): bool
-    {
-        foreach (['field', 'value', 'from', 'to'] as $key) {
-            if ($request->filled($key)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Same behaviour as legacy <x-export-money> modal using HasBasicFilter::applyFilter (current page only).
-     */
-    protected function applyAdvancedFilterToPaginator(Request $request, $paginated): void
-    {
-        if ($paginated === null || ! $this->wantsMoneyReceivedAdvancedFilter($request)) {
-            return;
-        }
-        $paginated->setCollection(
-            $this->applyFilter($request, $paginated->getCollection())->values()
-        );
-    }
-
-    protected function getMoneyReceivedSearchFieldsByTab(): array
-    {
-        return [
-            MoneyReceived::CHEQUE => [
-                'partner_name' => __('Customer Name'),
-                'receiving_date' => __('Receiving Date'),
-                'cheque_number' => __('Cheque Number'),
-                'currency' => __('Currency'),
-                'receiving_currency' => __('Receiving Currency'),
-                'drawee_bank_name' => __('Drawee Bank'),
-                'due_date' => __('Due Date'),
-            ],
-            MoneyReceived::CHEQUE_REJECTED => [
-                'partner_name' => __('Customer Name'),
-                'receiving_date' => __('Receiving Date'),
-                'cheque_number' => __('Cheque Number'),
-                'currency' => __('Currency'),
-                'drawee_bank_name' => __('Drawee Bank'),
-                'due_date' => __('Due Date'),
-            ],
-            MoneyReceived::CHEQUE_UNDER_COLLECTION => [
-                'partner_name' => __('Customer Name'),
-                'cheque_number' => __('Cheque Number'),
-                'received_amount' => __('Cheque Amount'),
-                'deposit_date' => __('Deposit Date'),
-                'drawl_bank_name' => __('Drawl Bank'),
-                'clearance_days' => __('Clearance Days'),
-            ],
-            MoneyReceived::CHEQUE_COLLECTED => [
-                'partner_name' => __('Customer Name'),
-                'cheque_number' => __('Cheque Number'),
-                'received_amount' => __('Cheque Amount'),
-                'drawee_bank_name' => __('Drawee Bank'),
-                'due_date' => __('Due Date'),
-                'currency' => __('Currency'),
-                'receiving_currency' => __('Receiving Currency'),
-                'account_number' => __('Account Number'),
-            ],
-            MoneyReceived::INCOMING_TRANSFER => [
-                'partner_name' => __('Customer Name'),
-                'receiving_date' => __('Receiving Date'),
-                'receiving_bank_name' => __('Receiving Bank'),
-                'received_amount' => __('Transfer Amount'),
-                'currency' => __('Currency'),
-                'receiving_currency' => __('Receiving Currency'),
-                'account_number' => __('Account Number'),
-            ],
-            MoneyReceived::CASH_IN_SAFE => [
-                'partner_name' => __('Customer Name'),
-                'receiving_date' => __('Receiving Date'),
-                'receiving_branch_name' => __('Branch'),
-                'received_amount' => __('Received Amount'),
-                'currency' => __('Currency'),
-                'receiving_currency' => __('Receiving Currency'),
-                'receipt_number' => __('Receipt Number'),
-            ],
-            MoneyReceived::CASH_IN_BANK => [
-                'partner_name' => __('Customer Name'),
-                'receiving_date' => __('Receiving Date'),
-                'receiving_bank_name' => __('Receiving Bank'),
-                'received_amount' => __('Deposit Amount'),
-                'currency' => __('Currency'),
-                'receiving_currency' => __('Receiving Currency'),
-                'account_number' => __('Account Number'),
-            ],
-        ];
-    }
-
-    protected function getMoneyReceivedAdvancedFilterUiLabels(): array
-    {
-        return [
-            'filterForm' => __('Filter Form'),
-            'fieldName' => __('Field Name'),
-            'searchText' => __('Search Text'),
-            'from' => __('From'),
-            'to' => __('To'),
-            'startDate' => __('Start Date'),
-            'endDate' => __('End Date'),
-            'submit' => __('Submit'),
-            'search' => __('Search'),
-            'reset' => __('Reset'),
-            'advancedFilter' => __('Advanced Filter'),
-            'indexCreateMoneyReceived' => __('Money Received'),
-            'indexDownPayment' => __('Down Payment'),
-            'dataTypeReceiving' => __('[ Receiving Date ]'),
-            'dataTypeDue' => __('[ Due Date ]'),
-            'dataTypeDeposit' => __('[ Deposit Date ]'),
-        ];
-    }
-
-    /**
-     * Shared comment / Odoo / review metadata for Vue index actions (legacy Blade row includes).
-     */
-    protected function moneyReceivedRowExtras(Company $company, MoneyReceived $mr): array
-    {
-        $modelName = getModelNameWithoutNamespace($mr);
-        $reviewPerm = getReviewPermissionName($modelName);
-        $refs = [];
-        if ($company->hasOdooIntegrationCredentials() && $mr->fullyIntegratedWithOdoo()) {
-            $names = $mr->getOdooReferenceNames();
-            if ($names instanceof \Illuminate\Support\Collection) {
-                $refs = $names->values()->all();
-            } elseif (is_array($names)) {
-                $refs = array_values($names);
-            }
-        }
-
-        return [
-            'receiving_currency' => $mr->getReceivingCurrency(),
-            'has_user_comment' => $mr->hasComment(),
-            'user_comment' => $mr->hasComment() ? $mr->getUserComment() : null,
-            'show_odoo_error' => $company->hasOdooIntegrationCredentials() && $mr->hasOdooError(),
-            'odoo_error_message' => $mr->hasOdooError() ? $mr->getOdooError() : null,
-            'resend_odoo_url' => route('resend.with.odoo', ['company' => $company->id, 'moneyReceived' => $mr->id]),
-            'show_integrated' => $company->hasOdooIntegrationCredentials() && $mr->fullyIntegratedWithOdoo(),
-            'odoo_reference_names' => $refs,
-            'show_review' => ! $mr->isReviewed() && auth()->user()->can($reviewPerm),
-            'review_post_url' => route('confirmed.review', ['company' => $company->id, 'model' => $mr->id]),
-            'review_model_name' => $modelName,
-            'review_table_name' => $mr->getTable(),
-        ];
-    }
-
-    protected function mergeMoneyReceivedActionMeta(Company $company, MoneyReceived $item, string $activeTab, array $row): array
-    {
-        $row = array_merge($row, $this->moneyReceivedRowExtras($company, $item));
-        if ($activeTab === MoneyReceived::CHEQUE) {
-            $row['can_send_under_collection'] = auth()->user()->can('update money received');
-        }
-        if ($activeTab === MoneyReceived::CHEQUE_REJECTED) {
-            $row['can_send_under_collection'] = true;
-        }
-        if ($activeTab === MoneyReceived::CHEQUE_UNDER_COLLECTION) {
-            $row['apply_collection_post_url'] = route('cheque.apply.collection', ['company' => $company->id, 'moneyReceived' => $item->id]);
-        }
-
-        return $row;
-    }
-
+    
     public function create(Company $company, $customerInvoiceId = null)
     {
         $isDownPayment = Request()->has('type');
@@ -1050,22 +659,8 @@ class MoneyReceivedController
         if ($hasOdooIntegration) {
             $OdooPaymentService = new OdooPayment($company);
         }
-        $moneyReceivedIds = $request->get('cheques');
-        $moneyReceivedIds = is_array($moneyReceivedIds) ? $moneyReceivedIds : explode(',', (string) $moneyReceivedIds);
-        $moneyReceivedIds = array_values(array_filter(array_map('intval', $moneyReceivedIds)));
-		
-        // if ($moneyReceivedIds === []) {
-        //     if ($request->ajax()) {
-        //         return response()->json([
-        //             'status' => false,
-        //             'msg' => __('No cheques were submitted. Please try again.'),
-        //             'pageLink' => route('view.money.receive', ['company' => $company->id, 'active' => MoneyReceived::CHEQUE]),
-        //         ]);
-        //     }
-
-        //     return redirect()->route('view.money.receive', ['company' => $company->id, 'active' => MoneyReceived::CHEQUE])
-        //         ->with('error', __('No cheques were submitted.'));
-        // }
+        $moneyReceivedIds = $request->get('cheques') ;
+        $moneyReceivedIds = is_array($moneyReceivedIds) ? $moneyReceivedIds :  explode(',', $moneyReceivedIds);
         $data = $request->only(['deposit_date','drawl_bank_id','account_type','account_number','account_balance','clearance_days']);
         $data['account_type'] =  $request->input('account_type.'.MoneyReceived::CHEQUE_UNDER_COLLECTION);
         $data['account_number'] = $request->input('account_number.'.MoneyReceived::CHEQUE_UNDER_COLLECTION);

@@ -9,38 +9,51 @@ $selectedBanks = [];
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
-    .money-flow-dark .width-8 {
+
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
-    .money-flow-dark .width-10 {
+
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
-    .money-flow-dark .width-12 {
+
+    .width-12 {
         max-width: initial !important;
         width: 12.5% !important;
         flex: initial !important;
     }
-    .money-flow-dark .width-45 {
+
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
+
+    .kt-portlet {
+        overflow: visible !important;
+    }
+
+    input.form-control[disabled]:not(.ignore-global-style),
+    input.form-control:not(.is-date-css)[readonly] {
+        background-color: #CCE2FD !important;
+        font-weight: bold !important;
+    }
+
 </style>
 @endsection
 @section('sub-header')
 {{ __('Money Payment Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -143,14 +156,19 @@ $selectedBanks = [];
 
                     <label>{{__('Supplier Name')}} @include('star')</label>
                     <div class="kt-input-icon">
-                        <div class="input-group date">
-                            <select data-current-selected="{{ isset($model) ? $model->getPartnerId() : '' }}" data-live-search="true" data-actions-box="true" id="supplier_name" name="supplier_id" class="form-control kt-bootstrap-select select2-select kt_bootstrap_select ajax-get-invoice-numbers ajax-get-contracts-for-supplier ajax-get-purchases-orders-for-contract">
-                                <option value="" selected>{{__('Select')}}</option>
-                                {{-- {{  }} --}}
-                                @foreach(Partner::getSuppliersForCompany($company->id) as $supplierId => $supplierName)
-                                <option @if($singleModel) selected @endif @if(isset($model) && $model->getSupplierName() == $supplierName ) selected @endif value="{{ $supplierId }}">{{$supplierName}}</option>
-                                @endforeach
-                            </select>
+                        <div class="kt-input-icon">
+                            <div class="input-group date">
+                                <select data-current-selected="{{ isset($model) ? $model->getPartnerId() : '' }}" data-live-search="true" data-actions-box="true" id="supplier_name" name="supplier_id" class="form-control select2-select  
+								ajax-get-invoice-numbers
+					
+									 ajax-get-contracts-for-supplier ajax-get-purchases-orders-for-contract">
+                                    <option value="" selected>{{__('Select')}}</option>
+                                    {{-- {{  }} --}}
+                                    @foreach(Partner::getSuppliersForCompany($company->id) as $supplierId => $supplierName)
+                                    <option @if($singleModel) selected @endif @if(isset($model) && $model->getSupplierName() == $supplierName ) selected @endif value="{{ $supplierId }}">{{$supplierName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -597,7 +615,6 @@ $selectedBanks = [];
 <!--end::Form-->
 
 <!--end::Portlet-->
-</div>
 </div>
 </div>
 @endsection
