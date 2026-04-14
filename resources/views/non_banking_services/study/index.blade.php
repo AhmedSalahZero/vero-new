@@ -105,7 +105,7 @@ use App\Models\NonBankingService\Study;
 
                             <div class="modal-header header-border">
                                 {{-- btn-3-bg --}}
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle"> {{ __('Business Consolidation') }} </h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle"> {{ __('Business Consolidation') }} </h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -160,7 +160,7 @@ use App\Models\NonBankingService\Study;
                         <div class="modal-content">
 
                             <div class="modal-header header-border">
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle"> {{ __('Annual Consolidation') }} </h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle"> {{ __('Annual Consolidation') }} </h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

@@ -714,7 +714,7 @@ const isNonBanking = +("{{ hasMiddleware('isNonBankingService') }}");
     <!--begin::Global Theme Styles(used by all pages) -->
     <link href="{{url('assets/css/demo4/style.bundle.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url('assets/css/custom.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{url('datatable/datatable.css')}}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{{url('datatable/datatable.css')}}" rel="stylesheet" type="text/css" /> --}}
     <!--end::Global Theme Styles -->
     <style>
         .text-green {
@@ -1269,7 +1269,7 @@ data-study-id="{{ $study->id }}"
 
                             @csrf
                             <div class="modal-header">
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle">{{ __('Read Invoices') }}</h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle">{{ __('Read Invoices') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -1318,7 +1318,7 @@ data-study-id="{{ $study->id }}"
 
                             @csrf
                             <div class="modal-header">
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle">{{ __('Read Contracts') }}</h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle">{{ __('Read Contracts') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -1387,7 +1387,7 @@ data-study-id="{{ $study->id }}"
 
                             @csrf
                             <div class="modal-header">
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle">{{ __('Read Partners') }}</h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle">{{ __('Read Partners') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -1457,7 +1457,7 @@ data-study-id="{{ $study->id }}"
 
                             @csrf
                             <div class="modal-header">
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle">{{ __('Send Collection Or Payments') }}</h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle">{{ __('Send Collection Or Payments') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -1523,7 +1523,7 @@ data-study-id="{{ $study->id }}"
                         <form action="{{ route('read-odoo-expenses',['company'=>$company->id]) }}" class="modal-content" method="post">
                             @csrf
                             <div class="modal-header">
-                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle">{{ __('Read Approved Expenses') }}</h5>
+                                <h5 class="modal-title"  id="exampleModalLongTitle">{{ __('Read Approved Expenses') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

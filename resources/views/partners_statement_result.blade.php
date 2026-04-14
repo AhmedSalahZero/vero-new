@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 
 <style>
     .DataTables_Table_0_filter {
@@ -51,6 +52,7 @@
 @endsection
 
 @section('content')
+<div class="money-flow-dark">
 @php
 	$totalDebit = 0 ;
 	$totalCredit = 0 ;
@@ -216,6 +218,7 @@
     </div>
 </div>
 
+</div>
 @endsection
 
 @push('css')

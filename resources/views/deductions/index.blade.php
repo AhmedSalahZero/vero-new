@@ -3,6 +3,7 @@
 use App\Models\Deduction ;
 @endphp
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 
@@ -35,6 +36,7 @@ use App\Models\Deduction ;
 {{ __('Deductions') }}
 @endsection
 @section('content')
+<div class="money-flow-dark">
 
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
@@ -162,6 +164,7 @@ use App\Models\Deduction ;
     </div>
 </div>
 
+</div>
 @endsection
 @section('js')
 <!--begin::Page Scripts(used by this page) -->

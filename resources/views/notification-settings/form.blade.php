@@ -3,6 +3,7 @@ use App\NotificationSetting ;
 @endphp 
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -62,6 +63,7 @@ use App\NotificationSetting ;
 {{ __('Notifications Settings') }}
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -156,6 +158,7 @@ use App\NotificationSetting ;
             </div>
             <x-submitting />
 
+            </div>
             @endsection
             @section('js')
             <!--begin::Page Scripts(used by this page) -->

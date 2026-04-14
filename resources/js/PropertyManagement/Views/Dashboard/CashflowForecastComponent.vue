@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import * as am4charts from '@amcharts/amcharts4/charts'
+import * as am4core from '@amcharts/amcharts4/core'
+import am4themes_animated from '@amcharts/amcharts4/themes/animated'
 import axios from 'axios'
 import InputNumber from 'primevue/inputnumber'
 import Swal from 'sweetalert2'
-import Label from '../../../components/Form/Label.vue'
-import { computed, onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Loading from '../../../components/Common/Loading.vue'
+import Label from '../../../components/Form/Label.vue'
 import Helper from '../../../Helpers/Helper'
-import * as am4core from '@amcharts/amcharts4/core'
-import * as am4charts from '@amcharts/amcharts4/charts'
-import am4themes_animated from '@amcharts/amcharts4/themes/animated'
 
 am4core.useTheme(am4themes_animated)
 
@@ -380,7 +380,7 @@ onBeforeUnmount(() => {
 							<div class="col-md-2">
 								<label class="visibility-hidden">{{ $t('Currency') }}</label>
 								<h3
-									class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-nowrap">
+									class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap">
 									{{ $t('Dashboard Results') }}
 								</h3>
 							</div>

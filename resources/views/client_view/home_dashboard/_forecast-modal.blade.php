@@ -5,7 +5,7 @@
 
             @csrf
             <div class="modal-header">
-                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle"> {{  __(ucwords(str_replace('_',' ',$type)))  . ' ' . __('- Next Three Months Forecast') }} </h5>
+                <h5 class="modal-title"  id="exampleModalLongTitle"> {{  __(ucwords(str_replace('_',' ',$type)))  . ' ' . __('- Next Three Months Forecast') }} </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

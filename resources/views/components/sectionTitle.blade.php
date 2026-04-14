@@ -3,7 +3,7 @@
 ])
 <style>
 .text-black{
-	color:#0741A5 !important;
+	color:white !important;
 }
 </style>
-                        <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5" style=""> {!! $title !!}</h3>
+                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5" style=""> {!! $title !!}</h3>

@@ -385,7 +385,7 @@ const deleteRow = async (row) => {
 }
 
 /** Called from index-vue.blade.php jQuery after POST send-to-collection succeeds (Bootstrap modal cannot refresh Vue alone). */
-async function reloadFromSendToCollectionJQuery (nextTab) {
+async function reloadFromSendToCollectionJQuery(nextTab) {
 	if (nextTab) activeTab.value = nextTab
 	await loadData(1)
 }
@@ -405,8 +405,7 @@ onUnmounted(() => {
 		<div class="kt-portlet kt-portlet--tabs">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
-					<ul
-						class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand"
+					<ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand"
 						role="tablist">
 						<li v-for="tab in TABS" :key="tab.key" class="nav-item">
 							<a href="#" role="tab" class="nav-link" :class="{ active: activeTab === tab.key }"
@@ -446,20 +445,21 @@ onUnmounted(() => {
 									<div class="w-full flex-2" :style="dateFormBlockStyle">
 										<div class="row align-items-center">
 											<div class="col-md-3 d-flex align-items-center" :style="dateFirstColStyle">
-												<label :for="'vue_startDate_' + activeTab" class="text-nowrap mr-3">{{
-													ui.startDate || 'Start Date' }}</label>
+												<label :for="'vue_startDate_' + activeTab"
+													class="text-nowrap mr-3">{{ ui.startDate || 'Start Date' }}</label>
 												<input :id="'vue_startDate_' + activeTab"
 													v-model="dateRanges[activeTab].startDate" type="date"
 													class="form-control" />
 											</div>
 											<div class="col-md-3 d-flex align-items-center">
-												<label :for="'vue_endDate_' + activeTab" class="text-nowrap mr-3">{{
-													ui.endDate || 'End Date' }}</label>
+												<label :for="'vue_endDate_' + activeTab"
+													class="text-nowrap mr-3">{{ ui.endDate || 'End Date' }}</label>
 												<input :id="'vue_endDate_' + activeTab"
 													v-model="dateRanges[activeTab].endDate" type="date"
 													class="form-control" />
 											</div>
-											<div class="col-md-2 d-flex justify-content-center" :style="dateSubmitColStyle">
+											<div class="col-md-2 d-flex justify-content-center"
+												:style="dateSubmitColStyle">
 												<label for="vue_mr_period_submit" class="mb-0"></label>
 												<button id="vue_mr_period_submit" type="button"
 													class="btn block form-control btn-primary btn-sm"
@@ -493,7 +493,8 @@ onUnmounted(() => {
 									<p>Try adjusting the date range or add a new record.</p>
 									<a v-if="permissions.canCreate" :href="urls.create"
 										class="btn btn-sm active-style btn-icon-sm">
-										<i class="fas fa-plus"></i> {{ ui.indexCreateMoneyReceived || 'Money Received' }}
+										<i class="fas fa-plus"></i>
+										{{ ui.indexCreateMoneyReceived || 'Money Received' }}
 									</a>
 								</div>
 								<template v-else>
@@ -544,7 +545,8 @@ onUnmounted(() => {
 																		v-if="row.show_review && activeTab !== 'cheque-under-collection' && activeTab !== 'cheque-collected'"
 																		type="button"
 																		class="btn btn-secondary btn-outline-hover-success btn-icon btn-sm ml-1"
-																		title="Reviewed" @click="openReviewModal(row)"><i
+																		title="Reviewed"
+																		@click="openReviewModal(row)"><i
 																			class="fa fa-check"></i></button>
 																	<a v-if="row.can_edit && row.edit_url"
 																		:href="row.edit_url"
@@ -598,8 +600,8 @@ onUnmounted(() => {
 									<nav v-if="pagination.total > 0"
 										class="d-flex align-items-center justify-content-between flex-wrap mt-3 px-1"
 										aria-label="Pagination">
-										<span class="text-muted small mb-2 mb-sm-0">{{ pagination.from }}–{{ pagination.to }}
-											of {{ pagination.total }}</span>
+										<span class="text-muted small mb-2 mb-sm-0">{{ pagination.from }}–{{
+											pagination.to }} of {{ pagination.total }}</span>
 										<ul class="pagination pagination-sm mb-0">
 											<li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
 												<a class="page-link" href="#"
@@ -643,7 +645,8 @@ onUnmounted(() => {
 								<select v-model="advForTab(activeTab).field" class="mr-input mr-input-wide"
 									@change="onAdvFieldChange">
 									<option v-for="([k, label]) in currentSearchFieldEntries" :key="k" :value="k">
-										{{ label }}</option>
+										{{ label }}
+									</option>
 								</select>
 							</div>
 							<div class="mr-filter-group">
@@ -800,7 +803,7 @@ onUnmounted(() => {
 	--teal-subtle: rgba(20, 144, 168, 0.12);
 	--gold: #c9a84c;
 	--text-primary: #e2e8f0;
-	--text-secondary: #94a3b8;
+	--text-secondary: white;
 	--text-muted: #64748b;
 	--border: #1490A833;
 	--border-focus: #00b4c8;
@@ -1091,5 +1094,4 @@ select.mr-input option {
 	padding-left: 1.1rem;
 	line-height: 1.6;
 }
-
 </style>

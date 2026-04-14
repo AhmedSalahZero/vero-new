@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 @php
 	use Carbon\Carbon ;
 @endphp
@@ -113,6 +114,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ __('Cash Flow Report') }}</x-main-form-title>
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <div class="kt-portlet">
@@ -582,6 +584,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
 @section('js')

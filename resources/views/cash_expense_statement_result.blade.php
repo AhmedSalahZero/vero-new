@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
     .max-w-serial {
@@ -117,6 +118,7 @@
  </x-main-form-title>
 @endsection
 @section('content')
+<div class="money-flow-dark">
 
 <div class="row">
     <div class="col-md-12">
@@ -410,6 +412,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     @endsection
     @section('js')

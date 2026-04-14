@@ -4,6 +4,7 @@ use App\Models\MoneyReceived ;
 @endphp
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -121,6 +122,7 @@ use App\Models\MoneyReceived ;
 {{ __('Customers Opening Balance') }}
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -574,6 +576,7 @@ use App\Models\MoneyReceived ;
             </div>
             <x-submitting-by-ajax :backTo="route('customers-opening-balance.index',['company'=>$company->id])" />
 
+            </div>
             @endsection
             @section('js')
             <script>

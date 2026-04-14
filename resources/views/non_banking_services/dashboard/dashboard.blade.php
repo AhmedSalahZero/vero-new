@@ -77,7 +77,7 @@ use MathPHP\Statistics\Correlation ;
     }
 
     .kt-widget24__title {
-        color: black !important;
+        color: white !important;
     }
 
 </style>
@@ -139,7 +139,7 @@ use MathPHP\Statistics\Correlation ;
 
                         <div class="row">
                             <div class="col-md-4">
-                                <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Income Statement Summary Fig In Million') }} </h3>
+                                <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Income Statement Summary Fig In Million') }} </h3>
                             </div>
                             <div class="col-md-8 mb-3">
                                 @php
@@ -207,7 +207,7 @@ use MathPHP\Statistics\Correlation ;
 
                                 <div class="row mb-3 ml-4 b-bottom">
                                     <div class="col-6">
-                                        <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Choose Revenue Stream') }} </h3>
+                                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Choose Revenue Stream') }} </h3>
                                     </div>
                                     <div class="col-md-6 ">
                                         <select js-refresh-three-line-chart class="form-control">
@@ -257,7 +257,7 @@ use MathPHP\Statistics\Correlation ;
 
                                 <div class="row mb-3 ml-4 b-bottom">
                                     <div class="col-6">
-                                        <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Revenue Stream Breakdown') }} </h3>
+                                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Revenue Stream Breakdown') }} </h3>
                                     </div>
 
 
@@ -292,7 +292,7 @@ use MathPHP\Statistics\Correlation ;
 
                         <div class="row">
                             <div class="col-md-12">
-                                <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Cost And Expense Summary') }} </h3>
+                                <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Cost And Expense Summary') }} </h3>
                             </div>
 
                        @include('non_banking_services.dashboard._expenses',['formattedExpenses'=>$formattedExpenses])

@@ -2,48 +2,43 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
     hr {}
 
-    .kt-portlet .kt-portlet__head {
-        border-bottom-color: #CCE2FD !important;
+    .money-flow-dark .kt-portlet .kt-portlet__head {
+        border-bottom-color: #1490a833 !important;
     }
 
-    label {
+    .money-flow-dark label {
         text-align: left !important;
     }
 
-    .width-8 {
+    .money-flow-dark .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .width-10 {
+    .money-flow-dark .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .width-12 {
+    .money-flow-dark .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .width-45 {
+    .money-flow-dark .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .kt-portlet {}
-
-    input.form-control[disabled]:not(.ignore-global-style),
-    input.form-control:not(.is-date-css)[readonly]:not(#kt_datepicker_2) {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
-    }
+    .money-flow-dark .kt-portlet {}
 
 </style>
 @endsection
@@ -51,6 +46,7 @@
 {{ __('Financial Institutions Form') }}
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -139,6 +135,7 @@
                 </div>
             </div>
 
+            </div>
             @endsection
             @section('js')
             <!--begin::Page Scripts(used by this page) -->

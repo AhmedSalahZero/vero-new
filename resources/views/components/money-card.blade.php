@@ -6,17 +6,15 @@
 @once
 
 <style>
+.black-card-title-css{
+	color: white !important;
+}
     .report-flex {
         display: flex;
         gap: 5px;
         flex-direction: column;
     }
 
-    .black-card-title-css {
-        color: black !important;
-        font-weight: 600 !important;
-        font-size: 18px !important;
-    }
 
 </style>
 @endonce

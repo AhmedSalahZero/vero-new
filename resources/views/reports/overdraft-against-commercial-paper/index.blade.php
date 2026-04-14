@@ -2,28 +2,19 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 
 <style>
-    input[type="checkbox"] {
+    .money-flow-dark input[type="checkbox"] {
         cursor: pointer;
     }
 
-    th {
-        background-color: #0742A6;
-        color: white;
-    }
-
-    .bank-max-width {
+    .money-flow-dark .bank-max-width {
         max-width: 200px !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style) {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -32,7 +23,7 @@
 {{ __('Overdraft Against Commercial Paper '. $financialInstitution->getName()) }}
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="kt-portlet kt-portlet--tabs">
   <x-back-to-bank-header-btn :create-permission-name="'view overdraft against commercial paper'" :create-route="route('create.overdraft.against.commercial.paper',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id])"></x-back-to-bank-header-btn>
     <div class="kt-portlet__body">
@@ -153,6 +144,7 @@
             <!--End:: Tab Content-->
         </div>
     </div>
+</div>
 </div>
 
 @endsection

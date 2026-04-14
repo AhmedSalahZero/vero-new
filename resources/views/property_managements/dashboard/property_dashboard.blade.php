@@ -71,7 +71,7 @@ html body .header-border-down, html body .action-class{
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
@@ -220,7 +220,7 @@ html body .header-border-down, html body .action-class{
 
                                                             @csrf
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle"> {{ $currentDetailModel['title'] }} </h5>
+                                                                <h5 class="modal-title"  id="exampleModalLongTitle"> {{ $currentDetailModel['title'] }} </h5>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>

@@ -135,21 +135,6 @@ class MoneyReceivedController
         $cashInSafeReceivedTableSearchFields = $searchFieldsByTab[MoneyReceived::CASH_IN_SAFE];
         $cashInBankTableSearchFields = $searchFieldsByTab[MoneyReceived::CASH_IN_BANK];
 
-        if (!$request->boolean('legacy')) {
-            return view('reports.moneyReceived.index-vue', [
-                'company' => $company,
-                'defaultActiveTab' => $activeTab,
-                'filterDates' => $filterDates,
-                'searchFieldsByTab' => $searchFieldsByTab,
-                'tabTitles' => $this->getMoneyReceivedIndexVueTabTitles(),
-                'advancedFilterUi' => $this->getMoneyReceivedAdvancedFilterUiLabels(),
-                'accountTypes' => $accountTypes,
-                'financialInstitutionBanks' => $financialInstitutionBanks,
-                'banks' => $banks,
-                'selectedBanks' => $selectedBanks,
-            ]);
-        }
-
         return view('reports.moneyReceived.index', [
             'company'=>$company ,
             'selectedBanks'=>$selectedBanks,

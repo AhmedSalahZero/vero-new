@@ -18,8 +18,7 @@
 
             @csrf
             <div class="modal-header">
-			  <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Contract Invoices') }}  [{{ $parent['client_name'] }}] [{{ $parent['name'] }}] {{  $parent['amount'] .' '. $parent['currency']  }} </h3>
-                {{-- <h5 class="modal-title" style="color:#0741A5 !important" id="exampleModalLongTitle">  </h5> --}}
+			  <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Contract Invoices') }}  [{{ $parent['client_name'] }}] [{{ $parent['name'] }}] {{  $parent['amount'] .' '. $parent['currency']  }} </h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

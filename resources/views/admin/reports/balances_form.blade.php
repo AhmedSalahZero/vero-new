@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
     .dt-buttons.btn-group.flex-wrap {
         margin-bottom: 5rem !important;
@@ -130,7 +131,7 @@
 
     }
 
-    * {
+    .money-flow-dark * {
         box-sizing: border-box !important;
     }
 
@@ -140,6 +141,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ $title }}</x-main-form-title>
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
 
@@ -489,6 +491,7 @@
 
 
     </div>
+</div>
 </div>
 </div>
 @endsection

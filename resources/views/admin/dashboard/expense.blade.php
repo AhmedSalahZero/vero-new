@@ -30,7 +30,7 @@
     }
 
     .kt-widget24__title {
-        color: black !important;
+        color: white !important;
     }
 
 </style>
@@ -62,7 +62,7 @@
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
@@ -172,7 +172,7 @@
 	<div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
-		 <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Expenses Results')}}</h3>
+		 <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Expenses Results')}}</h3>
            
         </div>
     </div>
@@ -368,7 +368,7 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Year To Date Expense Breakdown')}}</h3>
+                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Year To Date Expense Breakdown')}}</h3>
                 </div>
             </div>
             <div class="kt-portlet__body  kt-portlet__body--fit">
@@ -530,7 +530,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 		  <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Auto calculated Sales Breakeven Value = ' . number_format(HMath::calculateBreakevenPoint($monthlySalesForSalesGathering,$expensesMonthlyTotals)) )}}</h3>
+                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Auto calculated Sales Breakeven Value = ' . number_format(HMath::calculateBreakevenPoint($monthlySalesForSalesGathering,$expensesMonthlyTotals)) )}}</h3>
                 </div>
             </div>
             </div>
@@ -543,7 +543,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                 <div class="kt-portlet ">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Expense') }} </h3>
+                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Expense') }} </h3>
 
                         </div>
                     </div>
@@ -556,7 +556,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
 
-                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('test name here') }} </h3>
+                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('test name here') }} </h3>
 
                 </div>
             </div> --}}
@@ -723,7 +723,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                         {{-- Monthly Chart --}}
                         <div class="row">
                             <div class="col-md-4">
-                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Category Breakdown') }} </h3>
+                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Category Breakdown') }} </h3>
 
                                 {{-- <h4>  </h4> --}}
                                 <div id="pie-chart-general-id" class="chartDiv"></div>
@@ -736,7 +736,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 
                                 <div class="row mb-3 ml-4">
                                     <div class="col-12">
-									 <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
+									 <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
                                     </div>
                                     <div class="col-md-6 ">
                                         <select  js-refresh-three-line-chart class="form-control" data-type="general" id="general-three-line-chart-select">
@@ -822,7 +822,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
         <div class="kt-portlet " style="height:97% ">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label col-8">
-                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $mainCategoriesName . ' ' . __('Category') }} </h3>
+                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $mainCategoriesName . ' ' . __('Category') }} </h3>
                 </div>
             </div>
             <div class="kt-portlet__body">
@@ -996,7 +996,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                         {{-- Monthly Chart --}}
                         <div class="row">
                             <div class="col-md-4">
-				<h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Expense Item Breakdown') }} </h3>
+				<h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Expense Item Breakdown') }} </h3>
                           
 								<div id="{{ 'pie-chart-'.convertStringToClass($mainCategoriesName).'-id' }}" class="chartDiv"></div>
 								<input type="hidden" id="{{ 'pie-chart-'.convertStringToClass($mainCategoriesName).'-data-id' }}" data-chart-data="{{ json_encode($chartData['pie'][$mainCategoriesName]??[]) }}">
@@ -1010,7 +1010,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                             <div class="col-md-8 margin__left">
                                 <div class="row mb-3 ml-4">
                                     <div class="col-12">
-									 <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
+									 <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
                                     </div>
                                     <div class="col-md-6 ">
                                         <select  js-refresh-three-line-chart class="form-control" data-type="{{ convertStringToClass($mainCategoriesName) }}" id="{{ convertStringToClass($mainCategoriesName) }}-three-line-chart-select">

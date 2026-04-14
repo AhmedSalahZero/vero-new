@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 
 <style>
@@ -107,6 +108,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ $customersOrSupplierAgingText }}</x-main-form-title>
 @endsection
 @section('content')
+<div class="money-flow-dark">
 @php
 $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 @endphp
@@ -804,6 +806,7 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 
         {{-- </div> --}}
     </div>
+</div>
 </div>
 @endsection
 @section('js')

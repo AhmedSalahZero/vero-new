@@ -21,7 +21,7 @@
     --gold-subtle: rgba(201,168,76,0.10);
     --text-primary: #e2e8f0;
     --select-text: #ffffff;
-    --text-secondary: #94a3b8;
+    --text-secondary: white;
     --text-muted: #64748b;
     --danger: #ef4444;
     --success: #10b981;
@@ -68,6 +68,7 @@
 .money-flow-dark .kt-portlet__head {
     background: var(--bg-card-hover) !important;
     background-color: var(--bg-card-hover) !important;
+	margin-bottom: 10px !important;
 }
 
 .money-flow-dark .kt-portlet.kt-portlet--tabs {
@@ -281,7 +282,7 @@
 .money-flow-dark .btn-primary,
 .money-flow-dark .btn-success:not(.bg-red) {
     background: var(--teal) !important;
-    color: #0C1829 !important;
+    color: white !important;
     border: none !important;
     border-radius: 6px !important;
     font-weight: 600 !important;
@@ -316,7 +317,7 @@
 .money-flow-dark .active-style,
 .money-flow-dark a.active-style {
     background: var(--gold) !important;
-    color: #0C1829 !important;
+    color: white !important;
     border-radius: 6px !important;
     font-weight: 600 !important;
     border: none !important;

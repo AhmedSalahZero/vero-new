@@ -75,6 +75,7 @@
 </style>
 @endpush
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
     table {
         white-space: nowrap;
@@ -101,6 +102,7 @@
 <x-navigators-dropdown :navigators="$navigators ?? []"></x-navigators-dropdown>
 @endsection
 @section('content')
+<div class="money-flow-dark">
 @php
 $user = auth()->user();
 $additionalTitle = $modelName == 'LoanSchedule' && isset($loan)  ? ' [ ' . $loan->getName(). ' ]' : ''; 
@@ -534,6 +536,7 @@ $date = now()->format('d-m-Y')
 </div>
 
 
+</div>
 @endsection
 
 @section('js')

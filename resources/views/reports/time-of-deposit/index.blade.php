@@ -5,27 +5,18 @@
 @php
 use \App\Models\TimeOfDeposit;
 @endphp
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    input[type="checkbox"] {
+    .money-flow-dark input[type="checkbox"] {
         cursor: pointer;
     }
 
-    th {
-        background-color: #0742A6;
-        color: white;
-    }
-
-    .bank-max-width {
+    .money-flow-dark .bank-max-width {
         max-width: 200px !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style) {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -34,7 +25,7 @@ use \App\Models\TimeOfDeposit;
 {{ __('Time Of Deposit ' ) }} [{{ $financialInstitution->getName() }}]
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -599,6 +590,7 @@ use \App\Models\TimeOfDeposit;
             <!--End:: Tab Content-->
         </div>
     </div>
+</div>
 </div>
 
 @endsection

@@ -23,7 +23,7 @@
             <div class="modal-header">
 				<div class="d-flex flex-column " >
 				
-                <h5 class="modal-title mb-3" style="color:#0741A5 !important" id="exampleModalLongTitle"> {{ $title }} <br> </h5> 
+                <h5 class="modal-title mb-3"  id="exampleModalLongTitle"> {{ $title }} <br> </h5> 
 								 <h5 class="modal-title text-left" style="color:red !important" id="exampleModalLongTitle"> {{ __('For Each Incremental Sales Of '.number_format($salesChange)) }}</h5>
 				</div>
 

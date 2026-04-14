@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
+@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
 
@@ -28,7 +29,7 @@
     }
 
     .kt-widget24__title {
-        color: black !important;
+        color: white !important;
     }
 
 </style>
@@ -48,6 +49,7 @@
 </style>
 @endsection
 @section('content')
+<div class="money-flow-dark">
 <div class="kt-portlet">
 
     <form action="{{ route('view.lglc.dashboard',['company'=>$company->id]) }}" class="kt-portlet__head w-full sky-border" style="">
@@ -60,7 +62,7 @@
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
@@ -163,7 +165,7 @@
 		<div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['main_title'] }} </h3>
+                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['main_title'] }} </h3>
                 </div>
             </div>
             <div class="kt-portlet__body  kt-portlet__body--fit">
@@ -240,7 +242,7 @@
                 <div class="kt-portlet ">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['outstanding_types_title'] }} </h3>
+                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['outstanding_types_title'] }} </h3>
 
                         </div>
 
@@ -264,7 +266,7 @@
                 <div class="kt-portlet kt-portlet--tabs">
                      <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['per_bank_title'] }} </h3>
+                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['per_bank_title'] }} </h3>
 
                         </div>
 
@@ -304,7 +306,7 @@
                 <div class="kt-portlet kt-portlet--tabs">
                      <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['details_title'] }} </h3>
+                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['details_title'] }} </h3>
 
                         </div>
 
@@ -452,6 +454,7 @@
     $index++;
     @endphp
     @endforeach
+</div>
 </div>
 @endsection
 @section('js')
