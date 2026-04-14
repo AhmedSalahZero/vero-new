@@ -13,31 +13,22 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 
 <style>
-.custom-w-25{
+.money-flow-dark .custom-w-25{
 	width:23% !important;
 }
-    input[type="checkbox"] {
+    .money-flow-dark input[type="checkbox"] {
         cursor: pointer;
     }
 
-    th {
-        background-color: #0742A6;
-        color: white;
-    }
-
-    .bank-max-width {
+    .money-flow-dark .bank-max-width {
         max-width: 300px !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style) {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -46,7 +37,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 {{ __('Letter Of Credit Issuance ')  }}
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -393,6 +384,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 
         <!--End:: Tab Content-->
     </div>
+</div>
 </div>
 </div>
 

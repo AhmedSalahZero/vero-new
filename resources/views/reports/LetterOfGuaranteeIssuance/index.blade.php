@@ -15,41 +15,32 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 
 <style>
-    input[type="checkbox"] {
+    .money-flow-dark input[type="checkbox"] {
         cursor: pointer;
     }
-	.max-w-control{
+	.money-flow-dark .max-w-control{
 		max-width:100px !important;
 	}
-.bg-expired{
+.money-flow-dark .bg-expired{
 	background-color:red;
 	color:white !important;
 	 font-weight: bold !important;
 }
-.bg-cancelled{
+.money-flow-dark .bg-cancelled{
 	background-color:orange;
 	color:white !important;
 	 font-weight: bold !important;
 }
-    th {
-        background-color: #0742A6;
-        color: white;
-    }
-
-    .bank-max-width {
+    .money-flow-dark .bank-max-width {
         max-width: 250px !important;
 		text-wrap:normal !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style) {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -58,7 +49,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 {{ __('Letter Of Guarantee Issuance ')  }}
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -563,6 +554,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 
         <!--End:: Tab Content-->
     </div>
+</div>
 </div>
 </div>
 

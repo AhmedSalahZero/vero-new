@@ -6,28 +6,19 @@ use App\Models\BuyOrSellCurrency ;
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 
 <style>
-    input[type="checkbox"] {
+    .money-flow-dark input[type="checkbox"] {
         cursor: pointer;
     }
 
-    th {
-        background-color: #0742A6;
-        color: white;
-    }
-
-    .bank-max-width {
+    .money-flow-dark .bank-max-width {
         max-width: 200px !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style) {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -36,7 +27,7 @@ use App\Models\BuyOrSellCurrency ;
 {{ __('Sell Or Buy Currencies') }}
 @endsection
 @section('content')
-
+<div class="money-flow-dark">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -91,6 +82,7 @@ use App\Models\BuyOrSellCurrency ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
+                        <div class="table-responsive">
                         <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
@@ -176,6 +168,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
+                        </div>
 						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
@@ -210,6 +203,7 @@ use App\Models\BuyOrSellCurrency ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
+                        <div class="table-responsive">
                         <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
@@ -290,6 +284,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
+                        </div>
 						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}
                         <!--end: Datatable -->
                     </div>
@@ -319,6 +314,7 @@ use App\Models\BuyOrSellCurrency ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
+                        <div class="table-responsive">
                         <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
@@ -399,6 +395,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
+                        </div>
 						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}	 
                         <!--end: Datatable -->
                     </div>
@@ -440,6 +437,7 @@ use App\Models\BuyOrSellCurrency ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
+                        <div class="table-responsive">
                         <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
@@ -522,6 +520,7 @@ use App\Models\BuyOrSellCurrency ;
                                 @endforeach
                             </tbody>
                         </table>
+                        </div>
 						{{ $models[$currentType]->appends(array_merge(request()->all(),['active' => $currentType]))->links('pagination::bootstrap-4') }}	 
                         <!--end: Datatable -->
                     </div>
@@ -549,6 +548,7 @@ use App\Models\BuyOrSellCurrency ;
             <!--End:: Tab Content-->
         </div>
     </div>
+</div>
 </div>
 
 @endsection

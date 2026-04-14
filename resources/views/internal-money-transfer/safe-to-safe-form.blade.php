@@ -2,57 +2,52 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
+@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .kt-portlet .kt-portlet__head {
-        border-bottom-color: #CCE2FD !important;
+    .money-flow-dark .kt-portlet .kt-portlet__head {
+        border-bottom-color: #1490a833 !important;
     }
-.font-normal{
+.money-flow-dark .font-normal{
 	font-weight:normal !important;
 }
-    label {
+    .money-flow-dark label {
         white-space: nowrap !important
     }
 
-    [class*="col"] {
+    .money-flow-dark [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    label {
+    .money-flow-dark label {
         text-align: left !important;
     }
 
-    .width-8 {
+    .money-flow-dark .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .width-10 {
+    .money-flow-dark .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .width-12 {
+    .money-flow-dark .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .width-45 {
+    .money-flow-dark .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .kt-portlet {
+    .money-flow-dark .kt-portlet {
         overflow: visible !important;
-    }
-
-    input.form-control[disabled]:not(.ignore-global-style),
-    input.form-control:not(.is-date-css)[readonly] {
-        background-color: #CCE2FD !important;
-        font-weight: bold !important;
     }
 
 </style>
@@ -61,6 +56,7 @@
 {{ __('Internal Money Transfer Form') }}
 @endsection --}}
 @section('content')
+<div class="money-flow-dark">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -211,6 +207,7 @@
             <x-submitting :backTo="route('internal-money-transfers.index',['company'=>$company->id])" />
         </form>
 
+        </div>
         @endsection
         @section('js')
         <!--begin::Page Scripts(used by this page) -->
