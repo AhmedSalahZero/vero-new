@@ -23,8 +23,10 @@ use App\Models\SupplierInvoice;
 use App\Models\TimeOfDeposit;
 use App\Traits\GeneralFunctions;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class CashFlowReportController
@@ -41,6 +43,86 @@ class CashFlowReportController
 	public function getRedirectRoute(bool $isContract):string 
 	{
 		return $isContract ?'result.contract.cashflow.report' :'result.cashflow.report';
+	}
+
+	/**
+	 * Shared timeline axis for consolidated cash flow report.
+	 *
+	 * @return array<string, mixed>|RedirectResponse
+	 */
+	public function buildSharedTimelineContext(Company $company, Request $request): array|RedirectResponse
+	{
+		$defaultStartDate = $request->get('cash_start_date', now()->format('Y-m-d'));
+		$defaultEndDate = $request->get('cash_end_date', now()->addMonth()->format('Y-m-d'));
+		$formStartDate = Carbon::make($request->get('start_date', $defaultStartDate))->format('Y-m-d');
+		$formEndDate = Carbon::make($request->get('end_date', $defaultEndDate))->format('Y-m-d');
+		if (! now()->between($formStartDate, $formEndDate)) {
+			return redirect()->back()->with('fail', __('Kindly the date of Today must be included within the report duration'));
+		}
+
+		$reportInterval = $request->get('report_interval');
+		if (empty($reportInterval) || ! in_array($reportInterval, ['daily', 'weekly', 'monthly'], true)) {
+			$reportInterval = 'monthly';
+		}
+
+		$startDate = Carbon::make($request->get('start_date', $defaultStartDate))->format('Y-m-d');
+		$endDate = Carbon::make($request->get('end_date', $defaultEndDate))->format('Y-m-d');
+		$year = explode('-', $startDate)[0];
+
+		$datesWithWeeks = [];
+		if ($reportInterval === 'weekly') {
+			$datesWithWeeks = HDate::getWeekNumberBetweenDates($year, Carbon::make($endDate));
+		} elseif ($reportInterval === 'monthly') {
+			$datesWithWeeks = HDate::getMonthNumberBetweenDates($year, Carbon::make($endDate));
+		} elseif ($reportInterval === 'daily') {
+			$datesWithWeeks = HDate::getDayNumberBetweenDates($year, Carbon::make($endDate));
+		}
+
+		$weeks = $this->mergeYearWithWeek($datesWithWeeks, Carbon::make($startDate));
+		$datesWithWeekNumber = $this->getDateWithWeakNumber($datesWithWeeks, Carbon::make($startDate));
+		$foreignExchangeRates = ForeignExchangeRate::where('company_id', $company->id)->get();
+		$firstIndex = array_key_first($weeks);
+		$lastIndex = array_key_last($weeks);
+		$dates = [];
+
+		foreach ($weeks as $currentWeekYear => $week) {
+			$currentYear = explode('-', (string) $currentWeekYear)[1];
+			if ($currentWeekYear === $firstIndex) {
+				$periodStart = $startDate;
+				$periodEnd = HDate::getMinDateOfWeek($datesWithWeeks, $week, $currentYear)['end_date'];
+			} elseif ($currentWeekYear === $lastIndex) {
+				$periodStart = HDate::getMinDateOfWeek($datesWithWeeks, $week, $currentYear)['start_date'];
+				$periodEnd = $request->get('end_date', $defaultEndDate);
+			} else {
+				$rangedWeeks = HDate::getMinDateOfWeek($datesWithWeeks, $week, $currentYear);
+				$periodStart = $rangedWeeks['start_date'];
+				$periodEnd = $rangedWeeks['end_date'];
+			}
+			$dates[$currentWeekYear] = [
+				'start_date' => $periodStart,
+				'end_date' => $periodEnd,
+			];
+		}
+
+		return [
+			'mainFunctionalCurrency' => $company->getMainFunctionalCurrency(),
+			'reportInterval' => $reportInterval,
+			'formStartDate' => $formStartDate,
+			'formEndDate' => $formEndDate,
+			'defaultStartDate' => $defaultStartDate,
+			'defaultEndDate' => $defaultEndDate,
+			'startDate' => $startDate,
+			'endDate' => $endDate,
+			'weeks' => $weeks,
+			'dates' => $dates,
+			'datesWithWeekNumber' => $datesWithWeekNumber,
+			'datesWithWeeks' => $datesWithWeeks,
+			'foreignExchangeRates' => $foreignExchangeRates,
+			'firstIndex' => $firstIndex,
+			'lastIndex' => $lastIndex,
+			'months' => generateDatesBetweenTwoDates(Carbon::make($formStartDate), Carbon::make($formEndDate)),
+			'days' => generateDatesBetweenTwoDates(Carbon::make($formStartDate), Carbon::make($formEndDate), 'addDay'),
+		];
 	}
 	
 	public function result(Company $company , Request $request, bool $returnResultAsArray = false ,  ?CashFlowReport $cashflowReport= null   , $defaultCashFlowId = 0 ){
@@ -384,6 +466,45 @@ class CashFlowReportController
 			$result[$week] = $currentAccumulated ;
 		}
 		return $result ;
+	}
+
+	public function finalizeContractCashFlowTotals(
+		array &$result,
+		Company $company,
+		string $currency,
+		?string $contractCode,
+		array $datesWithWeekNumber,
+		array $weeks,
+		int $cashflowReportId = 0,
+		bool $isContract = true,
+		?int $contractId = null,
+		string $formStartDate = '',
+		string $formEndDate = '',
+		$pastDueSupplierInvoicesForContracts = [],
+		array $customerDueInvoices = [],
+		array $supplierDueInvoices = [],
+		array $pastDueLoanInstallments = [],
+	): void {
+		if ($isContract && $contractId) {
+			SupplierInvoice::getForecastedProjectPayment($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId);
+		}
+
+		$totalCashInFlowArray = $result['customers'][__('Total Cash Inflow')]['total'] ?? [];
+		$totalCashInFlowArray = $this->mergeTotal($totalCashInFlowArray, $customerDueInvoices, $datesWithWeekNumber);
+		$totalCashOutFlowArray = $this->sumAllTotalKeys($result['suppliers'] ?? [], $result['cash_expenses'] ?? [], $datesWithWeekNumber);
+
+		$totalCashOutFlowArray = $this->mergeTotal($totalCashOutFlowArray, $supplierDueInvoices, $datesWithWeekNumber, true);
+		$totalCashOutFlowArray = $this->mergeTotal($totalCashOutFlowArray, $pastDueLoanInstallments, $datesWithWeekNumber);
+		$result['customers'][__('Total Cash Inflow')]['total'] = $totalCashInFlowArray;
+
+		$outProjection = $result['cash_expenses'][__('Projected Other Cash Out Items')] ?? [];
+		unset($result['cash_expenses'][__('Projected Other Cash Out Items')]);
+		$result['cash_expenses'][__('Projected Other Cash Out Items')] = $outProjection;
+		$result['cash_expenses'][__('Total Cash Outflow')]['total'] = $totalCashOutFlowArray;
+
+		$netCash = HArr::subtractAtDates([$totalCashInFlowArray, $totalCashOutFlowArray], array_merge(array_keys($totalCashInFlowArray), array_keys($totalCashOutFlowArray)));
+		$result['cash_expenses'][__('Net Cash (+/-)')]['total'] = $netCash;
+		$result['cash_expenses'][__('Accumulated Net Cash (+/-)')]['total'] = $this->formatAccumulatedNetCash($netCash, $weeks);
 	}
 	public function mergeTotal(array $totals , $arrayOfItems,array $datesWithWeekNumber,$debug = false ):array 
 	{

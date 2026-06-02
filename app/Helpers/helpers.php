@@ -4467,6 +4467,12 @@ function getHeaderMenu($currentCompany = null)
                     'submenu'=>[]
                 ],
                 [
+                    'title'=>__('Consolidated Cash Flow'),
+                    'link'=>route('reports.consolidated-cash-flow.index', ['company'=>$companyId]),
+                    'show'=>$canViewCashFlow ,
+                    'submenu'=>[]
+                ],
+                [
                     'title'=>__('Withdrawals Settlement Report'),
                     'link'=>route('view.withdrawals.settlement.report', ['company'=>$companyId]),
                     'show'=>$canViewWithdrawalsSettlementReport ,

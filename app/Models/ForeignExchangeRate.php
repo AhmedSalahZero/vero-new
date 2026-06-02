@@ -31,9 +31,22 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ForeignExchangeRate extends Model
 {
+	/** @var array<string, float|int> */
+	private static array $exchangeRateRequestMemo = [];
+
 	protected $guarded = [
 		'id'
 	];
+
+	public static function beginRequestMemo(): void
+	{
+		self::$exchangeRateRequestMemo = [];
+	}
+
+	public static function endRequestMemo(): void
+	{
+		self::$exchangeRateRequestMemo = [];
+	}
 	public function company()
 	{
 		return $this->belongsTo(Company::class , 'company_id','id');
@@ -98,7 +111,31 @@ class ForeignExchangeRate extends Model
 	}
 	public static function getExchangeRateAt($receivingCurrency,$mainFunctionalCurrency,$receivingDate,$companyId,$foreignExchangeRates)
 	{
-		return  $receivingCurrency != $mainFunctionalCurrency ? self::getExchangeRateForCurrencyAndClosestDate($receivingCurrency,$mainFunctionalCurrency,$receivingDate,$companyId,$foreignExchangeRates) : 1;
+		if ($receivingCurrency === $mainFunctionalCurrency) {
+			return 1;
+		}
+
+		$memoKey = implode('|', [
+			(string) $companyId,
+			(string) $receivingCurrency,
+			(string) $mainFunctionalCurrency,
+			(string) $receivingDate,
+		]);
+
+		if (array_key_exists($memoKey, self::$exchangeRateRequestMemo)) {
+			return self::$exchangeRateRequestMemo[$memoKey];
+		}
+
+		$rate = self::getExchangeRateForCurrencyAndClosestDate(
+			$receivingCurrency,
+			$mainFunctionalCurrency,
+			$receivingDate,
+			$companyId,
+			$foreignExchangeRates,
+		);
+		self::$exchangeRateRequestMemo[$memoKey] = $rate;
+
+		return $rate;
 	}
 	
 	public static function importOdooExchangeRates(Company $company)

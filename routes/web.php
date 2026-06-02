@@ -862,6 +862,12 @@ Route::middleware([])->group(function () {
                     Route::get('get-po-or-so-for-contract', 'getPoOrSoFromContractController@handle')->name('get.po.or.so.from.contract');
                     Route::get('cashflow-report', 'CashFlowReportController@index')->name('view.cashflow.report');
                     Route::get('cashflow-report-result/{returnResultAsArray?}/{cashflowReport?}', 'CashFlowReportController@result')->name('result.cashflow.report');
+					Route::prefix('reports/consolidated-cash-flow')
+                ->name('reports.consolidated-cash-flow.')
+                ->group(function () {
+                    Route::get('/', [\App\Http\Controllers\Reports\ConsolidatedCashFlowReportController::class, 'index'])->name('index');
+                    Route::get('/result', [\App\Http\Controllers\Reports\ConsolidatedCashFlowReportController::class, 'result'])->name('result');
+                });
                     Route::delete('delete-cashflow-report/{cashflowReport}', 'CashFlowReportController@destroy')->name('delete.cashflow.report');
                     Route::get('contract-cashflow-report', 'ContractCashFlowReportController@index')->name('view.contract.cashflow.report');
 				Route::get('contract-cashflow-report-result/{returnResultAsArray?}/{cashflowReport?}', 'ContractCashFlowReportController@result')->name('result.contract.cashflow.report');
