@@ -98,16 +98,19 @@ class CompanyController extends Controller
     }
 
   
-    public function update(Request $request, Company $companySection)
+     public function update(Request $request, Company $companySection)
     {
         toastr()->success('Updated Successfully');
 		$oldSystems =$companySection->getSystemsNames(); 
 		$newSystems = $request->get('systems');
 		$systemsToPreserve  = array_intersect($oldSystems,$newSystems);
 		$newSystemsToBeAdded  = array_diff($newSystems,$oldSystems);
-		$companySection->update([
-			'odoo_id'=>null 
-		]);
+		$companySection->users->each(function($user){
+			$user->update([
+				'odoo_id'=>null 
+			]);
+		});
+		
 		foreach($request->get('odoo_username') as $userId => $odooUsername){
 			$user = User::find($userId);
 			$user->update([
@@ -127,6 +130,7 @@ class CompanyController extends Controller
         toastr()->success('Updated Successfully');
         return redirect()->back();
     }
+    
 
     public function destroy(Company $companySection)
     {

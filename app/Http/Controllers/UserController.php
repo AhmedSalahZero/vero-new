@@ -141,10 +141,10 @@ class UserController extends Controller
 	}
 
 	
-	public function edit(User $user,?Company $company = null)
+	public function edit(User $user)
 	{
 		$companies = Company::all();
-		return view('super_admin_view.users.form', compact('companies', 'user','company'));
+		return view('super_admin_view.users.form', compact('companies', 'user'));
 	}
 
 	

@@ -96,7 +96,7 @@ class User extends Authenticatable implements HasMedia
 	protected $connection = 'mysql';
     protected $fillable = [
         'name', 'email', 'password','max_users',
-		'created_by','odoo_username','odoo_db_password'
+		'created_by','odoo_username','odoo_db_password','odoo_id'
     ];
     protected $hidden = [
         'password', 'remember_token',
@@ -294,5 +294,10 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->odoo_db_password;
     }
+     public function getOdooId():?int
+    {
+        return $this->odoo_id ;
+    }
+    
 	
 }

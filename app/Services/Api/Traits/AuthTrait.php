@@ -32,7 +32,7 @@ trait AuthTrait
 		$this->password = $user->getOdooDBPassword();
 		$this->company_id = $company->id;
 		$this->company = $company;
-		$currentOdooId = $company->getOdooId() ;
+		$currentOdooId = $user->getOdooId() ;
 		$common = ripcord::client("$this->url/xmlrpc/2/common");
 		$uid = null ;
 		try{
@@ -49,7 +49,7 @@ trait AuthTrait
 			$uid = null ;
 		}
 		if(is_null($currentOdooId)){
-			$company->update([
+			$user->update([
 				'odoo_id'=>$uid 
 			]);
 		}
@@ -239,3 +239,4 @@ trait AuthTrait
     // }
 	
 }
+

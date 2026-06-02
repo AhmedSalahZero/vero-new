@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-		Schema::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('consumerfinance_product_sales_projects', function (Blueprint $table) {
-			$table->json('increase_rates')->after('decrease_rates')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger('odoo_id')->nullable()->after('id');
+			
+			
+        });
+		Schema::table('companies',function(Blueprint $table){
+			$table->dropColumn('odoo_id');
 		});
-		
     }
 
     /**
@@ -22,7 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('consumerfinance_product_sales_projects', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
 				// $companyId = 0;
 				return Company::first();
 			}
-			return Company::find($companyId);
+			return Company::find($companyId) ;
 		});
 		\PhpOffice\PhpSpreadsheet\Shared\Font::setAutoSizeMethod(Font::AUTOSIZE_METHOD_EXACT);
 		require_once storage_path('dompdf/vendor/autoload.php');

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-		Schema::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('consumerfinance_product_sales_projects', function (Blueprint $table) {
-			$table->json('increase_rates')->after('decrease_rates')->nullable();
-		});
-		
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('odoo_username')->nullable()->after('odoo_id');
+            $table->string('odoo_db_password')->nullable()->after('odoo_username');
+        });
     }
 
     /**
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('consumerfinance_product_sales_projects', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }
