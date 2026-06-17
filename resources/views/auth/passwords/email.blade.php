@@ -20,7 +20,7 @@
 
                 <div class="intro-search-field with-autocomplete">
                     <div class="input-with-icon">
-                        <input class="input100  @error('email') is-invalid @enderror" style="color:white" type="email" name="email" placeholder="{{ __('Email Address') }}" value="" required="" />
+                        <input class="input100 @error('email') is-invalid @enderror" style="color:white" type="email" name="email" placeholder="{{ __('Email Address') }}" value="" required="" />
                         <i class="icon-material-outline-location-on"></i>
                         @error('email')
                         <span class="invalid-feedback" role="alert">

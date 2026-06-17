@@ -9,13 +9,7 @@
 @endphp
   <a
 											
-											 data-toggle="modal" data-target="#apply-periodic-interest-modal-{{ $model->id }}" type="button" class="btn 
-											 
-											 {{-- @if($model->isDueTodayOrGreater())
-											 disabled 
-											@endif  --}}
-											 
-											  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Apply Periodic Interest') }}" href="#"><i class="fa fa-bolt"></i></a>
+											 data-toggle="modal" data-target="#apply-periodic-interest-modal-{{ $model->id }}" type="button" class="btn {{-- @if($model->isDueTodayOrGreater()) disabled @endif --}} btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Apply Periodic Interest') }}" href="#"><i class="fa fa-bolt"></i></a>
 											  
 											 
                                             <div class="modal fade" id="apply-periodic-interest-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -44,7 +38,7 @@
                                                                         <label>{{__('Deposit Date')}}</label>
                                                                         <div class="kt-input-icon">
                                                                             <div class="input-group date">
-                                                                                <input max="" required type="text" name="periodic_interest_date" value="{{ formatDateForDatePicker($model->getEndDate()) }}" class="form-control kt_datepicker_max_date_is_today" readonly placeholder="Select date" />
+                                                                                <input max="" required type="text" name="periodic_interest_date" value="" class="form-control kt_datepicker_max_date_is_today" readonly placeholder="Select date" />
                                                                                 <div class="input-group-append">
                                                                                     <span class="input-group-text">
                                                                                         <i class="la la-calendar-check-o"></i>

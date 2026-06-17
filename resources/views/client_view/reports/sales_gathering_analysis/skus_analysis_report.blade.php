@@ -98,7 +98,7 @@
 <div class="kt-portlet kt-portlet--tabs">
    
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             @php
@@ -133,7 +133,7 @@
                     @php
                                     @endphp
 
-                    <tr class="group-color ">
+                    <tr class="group-color">
 
                         <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
                             <i class="row_icon{{ $id }} flaticon2-up white-text"></i>
@@ -171,7 +171,7 @@
 
                     @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 
-                    <tr class="row{{ $id }}  text-center" style="display: none">
+                    <tr class="row{{ $id }} text-center" style="display: none">
                         {{-- <td></td> --}}
                         <td class="text-left"><b>{{ $channel_name  }}</b></td>
 
@@ -222,7 +222,7 @@
                 @slot('table_body')
                 @php $chart_data = []; @endphp
                 @foreach ($final_report_data as $sales_channel_name => $sales_channel_data)
-                <tr class="group-color  text-lg-left  ">
+                <tr class="group-color text-lg-left">
                     <td colspan="{{ count($total_sales_channels) + 1 }}"><b class="white-text">{{ __($sales_channel_name) }}</b></td>
                     @foreach ($total_sales_channels as $date => $total)
                     <td class="hidden"> </td>

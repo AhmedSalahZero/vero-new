@@ -52,7 +52,7 @@
                         {{-- <div class="col-md-3">
                             <label>{{__('Note')}} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group ">
+                                <div class="input-group">
                                      <input type="text" class="form-control" disabled value="{{__('The Report Will Show Max Top 50')}}"  >
                                 </div>
                             </div>
@@ -60,7 +60,7 @@
                         <div class="col-md-4">
                             <label>{{__('Data Type')}} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group ">
+                                <div class="input-group">
                                     <input type="text" class="form-control" disabled value="{{__('Value')}}"  >
                                 </div>
                             </div>

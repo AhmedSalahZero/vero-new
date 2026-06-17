@@ -42,7 +42,7 @@
                     <td>{{$item->vat_amount}}</td>
                     <td>{{$item->invoice_net_amount}}</td>
 
-                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                         <span class="d-flex justify-content-center" style="overflow: visible; position: relative; width: 110px;">
                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{route('customersInvoice.edit',[$company,$item])}}"><i class="fa fa-pen-alt"></i></a>
                             <form method="post"   action="{{route('customersInvoice.destroy',[$company,$item->id])}}" style="display: inline">

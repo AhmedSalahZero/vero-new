@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 @section('dash_nav')
-<ul class="kt-menu__nav ">
-    <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a href="{{route('forecast.quantity.report',$company)}}" class="kt-menu__link "><span class="kt-menu__link-text">{{__('Sales Target Dashboard')}}</span></a></li>
-    <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('breakdown.forecast.quantity.report',$company)}}" class="kt-menu__link active-button"><span class="kt-menu__link-text active-text">{{__("Target Breakdown Dashboard")}}</span></a></li>
+<ul class="kt-menu__nav">
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('forecast.quantity.report',$company)}}" class="kt-menu__link"><span class="kt-menu__link-text">{{__('Sales Target Dashboard')}}</span></a></li>
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('breakdown.forecast.quantity.report',$company)}}" class="kt-menu__link active-button"><span class="kt-menu__link-text active-text">{{__("Target Breakdown Dashboard")}}</span></a></li>
     @if ((App\Models\CollectionSetting::where('company_id', $company->id)->first()) !== null))
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a
-            href="{{ route('collection.forecast.quantity.report', $company) }}" class="kt-menu__link "><span
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a
+            href="{{ route('collection.forecast.quantity.report', $company) }}" class="kt-menu__link"><span
                 class="kt-menu__link-text">{{__('Target Collection Dashboard')}}</span></a>
         </li>
     @endif
@@ -37,7 +37,7 @@
                         </h3>
                     </div>
                 </div>
-                <div class="kt-portlet__body  kt-portlet__body--fit">
+                <div class="kt-portlet__body kt-portlet__body--fit">
                     <div class="row row-no-padding row-col-separator-xl">
                         @php
                             $count = count($types);
@@ -105,7 +105,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{$type}}" role="tab">
+                                    <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{$type}}" role="tab">
                                         <i class="flaticon2-checking"></i>Reports Table
                                     </a>
                                 </li>
@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <div class="kt-portlet__body">
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="kt_apps_contacts_view_tab_1_{{$type}}" role="tabpanel">
 

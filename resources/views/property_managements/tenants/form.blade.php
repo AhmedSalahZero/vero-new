@@ -46,7 +46,7 @@ use App\Models\PropertyManagement\Department;
                                 <input type="hidden" name="creator_id" value="{{ \Auth::id()  }}">
                                
                                 <div id="tenants" class="leasing-repeater-parent">
-                                    <div class="form-group2  m-form__group2 row">
+                                    <div class="form-group2 m-form__group2 row">
                                         <div data-repeater-list="tenants" class="col-lg-12">
                                             @include('property_managements.tenants._repeater' , [
 												'tableId'=>'tenants',

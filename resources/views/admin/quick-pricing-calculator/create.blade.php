@@ -78,7 +78,7 @@ function updateField(route, parent = null) {
 
                     <div class="form-group row">
                         <div class="col-md-3 mb-4">
-                            <x-form.select :options="$pricingPlans" :add-new="false" :label="__('Choose Pricing Plan (Optional)')" class="select2-select   " data-filter-type="{{ $type }}" :all="false" name="pricing_plan_id" please-select="true" id="{{$type.'_'.'pricing_plan_id' }}" :selected-value="isset($pricingPlanId)  ? $pricingPlanId :  (isset($model) ? $model->getPricingPlanId() : 0) "></x-form.select>
+                            <x-form.select :options="$pricingPlans" :add-new="false" :label="__('Choose Pricing Plan (Optional)')" class="select2-select" data-filter-type="{{ $type }}" :all="false" name="pricing_plan_id" please-select="true" id="{{$type.'_'.'pricing_plan_id' }}" :selected-value="isset($pricingPlanId)  ? $pricingPlanId :  (isset($model) ? $model->getPricingPlanId() : 0) "></x-form.select>
                         </div>
 
 
@@ -98,7 +98,7 @@ function updateField(route, parent = null) {
                         </div>
 						
 						 <div class="col-md-4 mb-4">
-                            <x-form.select :pleaseSelect="true" :additional-column-name="'is_customer'" :additional-column-value="1" :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'Partner'" :add-new-modal-modal-title="__('Customer')" :previous-select-name-in-dB="''" :previous-select-must-be-selected="false" :previous-select-selector="''" :previous-select-title="''" :options="$customers" :add-new="false" :label="__('Customer (Optional)')" class="select2-select   " data-filter-type="{{ $type }}" :all="false" name="customer_id" id="{{$type.'_'.'customer_id' }}" :selected-value="isset($model) ? $model->getCustomerId() : 0"></x-form.select>
+                            <x-form.select :pleaseSelect="true" :additional-column-name="'is_customer'" :additional-column-value="1" :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'Partner'" :add-new-modal-modal-title="__('Customer')" :previous-select-name-in-dB="''" :previous-select-must-be-selected="false" :previous-select-selector="''" :previous-select-title="''" :options="$customers" :add-new="false" :label="__('Customer (Optional)')" class="select2-select" data-filter-type="{{ $type }}" :all="false" name="customer_id" id="{{$type.'_'.'customer_id' }}" :selected-value="isset($model) ? $model->getCustomerId() : 0"></x-form.select>
                         </div>
 						 <div class="col-md-2 mb-4">
                             <x-form.select :is-select2="false" :options="$currencies" :add-new="false" :label="__('Currency')" class="" data-filter-type="{{ $type }}" :all="false" name="currency_id" id="{{$type.'_'.'currency_id' }}" :selected-value="isset($model) ? $model->getCurrencyId() : 0"></x-form.select>
@@ -108,19 +108,19 @@ function updateField(route, parent = null) {
 						
 						
                         <div class="col-md-3 mb-4">
-                            <x-form.select :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="__('Revenue Business Line')" :options="$revenueBusinessLines" :add-new="false" :label="__('Revenue Business Line')" class="select2-select revenue_business_line_class " data-filter-type="{{ $type }}" :all="false" name="revenue_business_line_id" id="{{$type.'_'.'revenue_business_line_id' }}" :selected-value="isset($model) ? $model->getRevenueBusinessLineId() : 0"></x-form.select>
+                            <x-form.select :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="__('Revenue Business Line')" :options="$revenueBusinessLines" :add-new="false" :label="__('Revenue Business Line')" class="select2-select revenue_business_line_class" data-filter-type="{{ $type }}" :all="false" name="revenue_business_line_id" id="{{$type.'_'.'revenue_business_line_id' }}" :selected-value="isset($model) ? $model->getRevenueBusinessLineId() : 0"></x-form.select>
                         </div>
 
                         <div class="col-md-2 mb-4">
-                            <x-form.select :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'ServiceCategory'" :add-new-modal-modal-title="__('Service Category')" :previous-select-name-in-dB="'revenue_business_line_id'" :previous-select-must-be-selected="true" :previous-select-selector="'select.revenue_business_line_class'" :previous-select-title="__('Revenue Business Line')" :options="$serviceCategories" :add-new="false" :label="__('Service Category')" class="select2-select service_category_class " data-filter-type="{{ $type }}" :all="false" name="service_category_id" id="{{$type.'_'.'service_category_id' }}" :selected-value="isset($model) ? $model->getServiceCategoryId() : 0"></x-form.select>
+                            <x-form.select :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'ServiceCategory'" :add-new-modal-modal-title="__('Service Category')" :previous-select-name-in-dB="'revenue_business_line_id'" :previous-select-must-be-selected="true" :previous-select-selector="'select.revenue_business_line_class'" :previous-select-title="__('Revenue Business Line')" :options="$serviceCategories" :add-new="false" :label="__('Service Category')" class="select2-select service_category_class" data-filter-type="{{ $type }}" :all="false" name="service_category_id" id="{{$type.'_'.'service_category_id' }}" :selected-value="isset($model) ? $model->getServiceCategoryId() : 0"></x-form.select>
                         </div>
 
                         <div class="col-md-2 mb-4">
-                            <x-form.select :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'ServiceItem'" :add-new-modal-modal-title="__('Service Item')" :previous-select-name-in-dB="'service_category_id'" :previous-select-must-be-selected="true" :previous-select-selector="'select.service_category_class'" :previous-select-title="__('Service Category')" :options="$serviceItems" :add-new="false" :label="__('Service Item')" class="select2-select service_item_class " data-filter-type="{{ $type }}" :all="false" name="service_item_id" id="{{$type.'_'.'service_item_id' }}" :selected-value="isset($model) ? $model->getServiceItemId() : 0"></x-form.select>
+                            <x-form.select :add-new-modal="true" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'ServiceItem'" :add-new-modal-modal-title="__('Service Item')" :previous-select-name-in-dB="'service_category_id'" :previous-select-must-be-selected="true" :previous-select-selector="'select.service_category_class'" :previous-select-title="__('Service Category')" :options="$serviceItems" :add-new="false" :label="__('Service Item')" class="select2-select service_item_class" data-filter-type="{{ $type }}" :all="false" name="service_item_id" id="{{$type.'_'.'service_item_id' }}" :selected-value="isset($model) ? $model->getServiceItemId() : 0"></x-form.select>
                         </div>
                         <div class="col-md-2 mb-4">
 
-                            <x-form.select :options="$serviceNatures" :add-new="false" :label="__('Service Nature')" class="select2-select   " data-filter-type="{{ $type }}" :all="false" name="service_nature_id" id="{{$type.'_'.'service_nature_id' }}" :selected-value="isset($model) ? $model->getServiceNatureId() : 0"></x-form.select>
+                            <x-form.select :options="$serviceNatures" :add-new="false" :label="__('Service Nature')" class="select2-select" data-filter-type="{{ $type }}" :all="false" name="service_nature_id" id="{{$type.'_'.'service_nature_id' }}" :selected-value="isset($model) ? $model->getServiceNatureId() : 0"></x-form.select>
                         </div>
 
 
@@ -139,8 +139,8 @@ function updateField(route, parent = null) {
                         {{-- <div class="col-md-3 mb-4">
                             <label class="form-label font-weight-bold">{{ __('Select Country') }} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group ">
-                                    <select id="country_id" data-live-search="true" name="country_id" required class="form-control  form-select form-select-2 form-select-solid fw-bolder">
+                                <div class="input-group">
+                                    <select id="country_id" data-live-search="true" name="country_id" required class="form-control form-select form-select-2 form-select-solid fw-bolder">
                                         <option value="" selected>{{ __('Select') }}</option>
                                         @foreach(getCountries() as $value=>$name)
                                         <option value="{{ $value }}" @if(isset($model) && $model->getCountryId() == $value ) selected @endif> {{ $name }}</option>
@@ -154,7 +154,7 @@ function updateField(route, parent = null) {
                             <label class="form-label font-weight-bold">{{ __('Select state') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="state_id" data-live-search="true" name="state_id" required class="form-control  form-select form-select-2 form-select-solid fw-bolder  ">
+                                    <select id="state_id" data-live-search="true" name="state_id" required class="form-control form-select form-select-2 form-select-solid fw-bolder">
                                         <option value="" selected>{{ __('Select') }}</option>
                                         @foreach([] as $value=>$name)
                                         <option value="{{ $value }}" @if(isset($model) && $model->getStateId() == $value ) selected @endif>{{ $name }}</option>
@@ -188,7 +188,7 @@ function updateField(route, parent = null) {
                     </div>
 					
                             <div id="m_repeater_2">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div data-repeater-list="manpower_expenses" class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             @if(isset($model) && $model->directManpowerExpenses->count() )
@@ -272,7 +272,7 @@ function updateField(route, parent = null) {
 					
                         
                             <div id="m_repeater_7">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div data-repeater-list="other_variable_direct_operation_expenses" class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             @if(isset($model) && $model->otherVariableManpowerExpenses->count())
@@ -342,11 +342,11 @@ function updateField(route, parent = null) {
                                                     {{ __('Do You To Add Freelancer') }}
                                                 </label>
 
-                                                <label class="kt-radio kt-radio--success ">
+                                                <label class="kt-radio kt-radio--success">
                                                     <input type="radio" value="1" name="use_freelancer" class="use-freelancer" @if(isset($model) && $model->isUseFreelancer()) checked @endisset> {{ __('Yes') }}
                                                     <span></span>
                                                 </label>
-                                                <label class="kt-radio kt-radio--danger ">
+                                                <label class="kt-radio kt-radio--danger">
                                                     <input type="radio" value="0" name="use_freelancer" class="use-freelancer" @if(!isset($model) || !$model->isUseFreelancer()) checked @endisset> {{ __('No') }}
                                                     <span></span>
                                                 </label>
@@ -357,7 +357,7 @@ function updateField(route, parent = null) {
                                 </div>
                             </div>
                             <div id="m_repeater_3" class="use-freelancer-repeater">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div data-repeater-list="freelancer_expenses" class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             @if(isset($model) && $model->freelancerExpenses->count() )
@@ -429,7 +429,7 @@ function updateField(route, parent = null) {
 						
                             {{-- <h2 for="" class="d-bloxk">{{ __('Other Direct Operations Expenses') }}</h2> --}}
                             <div id="m_repeater_6">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div data-repeater-list="other_direct_operation_expenses" class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             @if(isset($model) && $model->otherDirectOperationExpenses->count())
@@ -509,7 +509,7 @@ function updateField(route, parent = null) {
 					
                             {{-- <h2 for="" class="d-bloxk">{{ __('Sales & Marketing Expenses') }}</h2> --}}
                             <div id="m_repeater_4">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div data-repeater-list="sales_and_marketing_expenses" class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             @if(isset($model) && $model->salesAndMarketingExpenses->count())
@@ -575,7 +575,7 @@ function updateField(route, parent = null) {
 					
                             {{-- <h2 for="" class="d-bloxk">{{ __('General & Administrative Expenses') }}</h2> --}}
                             <div id="m_repeater_5">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div data-repeater-list="general_expenses" class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             @if(isset($model) && $model->generalExpenses->count())
@@ -799,7 +799,7 @@ function updateField(route, parent = null) {
 
 
             <div class="kt-portlet__body">
-                <div class="row ">
+                <div class="row">
                     <div class="col-12">
 						<h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('Sensitivity Section') }} </h3>
 					<div class="row">
@@ -815,7 +815,7 @@ function updateField(route, parent = null) {
                         <label class="form-label font-weight-bold">{{ __('Apply Price Sensitivity (+/- %) ') }} </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input id="price-sensitiviy" name="price_sensitivity" class="form-control only-percentage-allowed-between-minus-plus-hundred " name="price_sensitiviy" value="{{ isset($model) ? $model->getPriceSensitivity() : old('price_sensitiviy') }}" step="any">
+                                <input id="price-sensitiviy" name="price_sensitivity" class="form-control only-percentage-allowed-between-minus-plus-hundred" name="price_sensitiviy" value="{{ isset($model) ? $model->getPriceSensitivity() : old('price_sensitiviy') }}" step="any">
                             </div>
                         </div>
 

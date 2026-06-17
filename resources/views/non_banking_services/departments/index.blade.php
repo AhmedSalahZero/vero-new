@@ -35,7 +35,7 @@ use App\Helpers\HArr;
                 </li>
 				
 				 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{  Request('active') == Department::MICROFINANCE ?'active':'' }}" href="{{route('non.banking.edit.departments',['company'=>$company->id,'department'=>$microfinanceDepartment->id,'type'=>Department::MICROFINANCE ])}}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == Department::MICROFINANCE ?'active':'' }}" href="{{route('non.banking.edit.departments',['company'=>$company->id,'department'=>$microfinanceDepartment->id,'type'=>Department::MICROFINANCE ])}}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Microfinance Departments') }}
                     </a>
                 </li>
@@ -74,28 +74,28 @@ use App\Helpers\HArr;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 		
 			  @php
             $currentType = Department::GENERAL ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 						@php
                         $rowIndex = 0;
                         @endphp
                         <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                             <x-slot name="ths">
-                                <x-tables.repeater-table-th class="  header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
-                                <x-tables.repeater-table-th class="  header-border-down first-column-th-class" :title="__('Expense Type')"></x-tables.repeater-table-th>
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Start Date')"></x-tables.repeater-table-th> --}}
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('End Date')"></x-tables.repeater-table-th> --}}
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Financial Statement')"></x-tables.repeater-table-th> --}}
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Balance Sheet')"></x-tables.repeater-table-th> --}}
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Cash Flow')"></x-tables.repeater-table-th> --}}
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Dashboard')"></x-tables.repeater-table-th> --}}
-                                <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Actions')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down first-column-th-class" :title="__('Expense Type')"></x-tables.repeater-table-th>
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Start Date')"></x-tables.repeater-table-th> --}}
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('End Date')"></x-tables.repeater-table-th> --}}
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Financial Statement')"></x-tables.repeater-table-th> --}}
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Balance Sheet')"></x-tables.repeater-table-th> --}}
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Cash Flow')"></x-tables.repeater-table-th> --}}
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Dashboard')"></x-tables.repeater-table-th> --}}
+                                <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Actions')"></x-tables.repeater-table-th>
                             </x-slot>
                             <x-slot name="trs">
 
@@ -110,14 +110,14 @@ use App\Helpers\HArr;
                                     <td>
                                         <div class="">
 
-                                            <input value="{{ $model->getName() }}" disabled class="form-control text-left " type="text">
+                                            <input value="{{ $model->getName() }}" disabled class="form-control text-left" type="text">
                                         </div>
                                     </td>
 									
 									 <td>
                                         <div class="">
 
-                                            <input value="{{ $model->getExpenseTypeName()  }}" disabled class="form-control text-left " type="text">
+                                            <input value="{{ $model->getExpenseTypeName()  }}" disabled class="form-control text-left" type="text">
                                         </div>
                                     </td>
                                     {{-- <td>
@@ -127,7 +127,7 @@ use App\Helpers\HArr;
                                         </div>
                                     </td> --}}
 									
-									  <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+									  <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											{{-- @if(hasAuthFor('update lc settlement internal transfer')) --}}
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon edit-btn-class" title="{{ __('Edit') }}" href="{{ route('non.banking.edit.departments',['company'=>$company->id,'department'=>$model->id,'type'=>$currentType]) }}"><i class="fa fa-pen-alt exclude-icon default-icon-color" ></i></a>
@@ -198,16 +198,16 @@ use App\Helpers\HArr;
             $currentType = Department::MICROFINANCE ;
             @endphp
             <!--Begin:: Tab Content-->
-            {{-- <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            {{-- <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 						@php
                         $rowIndex = 0;
                         @endphp
                         <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                             <x-slot name="ths">
-                                <x-tables.repeater-table-th class="  header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
                   
-                                <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Actions')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Actions')"></x-tables.repeater-table-th>
                             </x-slot>
                             <x-slot name="trs">
 
@@ -221,13 +221,13 @@ use App\Helpers\HArr;
 
                                     <td>
                                         <div class="">
-                                            <input value="{{ $model->getName() }}" disabled class="form-control text-left " type="text">
+                                            <input value="{{ $model->getName() }}" disabled class="form-control text-left" type="text">
                                         </div>
                                     </td>
 									
 									
 									
-									  <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+									  <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon edit-btn-class" title="{{ __('Edit') }}" href="{{ route('non.banking.edit.departments',['company'=>$company->id,'department'=>$model->id,'type'=>$currentType]) }}"><i class="fa fa-pen-alt exclude-icon default-icon-color" ></i></a>
                                         </span>

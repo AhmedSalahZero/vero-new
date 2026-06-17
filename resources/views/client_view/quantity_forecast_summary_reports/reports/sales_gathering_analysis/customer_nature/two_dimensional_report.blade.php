@@ -113,7 +113,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
         <td class="text-center"> {{ number_format($value) }}</td>
         <td class="text-center">
-            <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
+            <span class="active-text-color"><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
         </td>
 
         @endforeach
@@ -134,7 +134,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
         <td class="text-center"> {{ number_format($value) }}</td>
         <td class="text-center">
-            <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
+            <span class="active-text-color"><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
         </td>
 
         @endforeach
@@ -337,7 +337,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
         </td>
 
         <td class="text-center">
-            <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
+            <span class="active-text-color"><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
         </td>
 
         @endforeach
@@ -425,7 +425,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
         </td>
 
         <td class="text-center">
-            <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
+            <span class="active-text-color"><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
         </td>
 
         @endforeach
@@ -548,7 +548,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
                         $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; @endphp
     <td class="text-center">{{ number_format($value) }}</td>
     <td class="text-center">
-        <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
+        <span class="active-text-color"><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
     </td>
     @endforeach
     @php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; @endphp
@@ -557,7 +557,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
 
     </td>
     <td class="text-center">
-        <span class="active-text-color "><b> {{ number_format($total_percentage, 1) . ' % ' }}</b></span>
+        <span class="active-text-color"><b> {{ number_format($total_percentage, 1) . ' % ' }}</b></span>
     </td>
     @php $items_after_total = ['Stop','Dead']; @endphp
     @foreach ($items_after_total as $item)
@@ -569,7 +569,7 @@ $getIterableTimes = getIterableItems(array_merge($customersNaturesActive , $cust
                         @endphp
     <td class="text-center"> {{ number_format($value) }}</td>
     <td class="text-center">
-        <span class="active-text-color "><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
+        <span class="active-text-color"><b> {{ number_format($percentage_per_value, 1).' % ' }}</b></span>
     </td>
     @endforeach
 </tr>

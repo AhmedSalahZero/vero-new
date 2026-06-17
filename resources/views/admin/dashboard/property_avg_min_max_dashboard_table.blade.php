@@ -75,7 +75,7 @@
             <td class="w-20-percentage">
                 <div class="kt-input-icon">
                     <div class="input-group">
-                        <input disabled type="text" class="form-control text-left ignore-global-style  {{ $styleClasses[$styleIndex] }}" value="{{ $propertyTypeName }}">
+                        <input disabled type="text" class="form-control text-left ignore-global-style {{ $styleClasses[$styleIndex] }}" value="{{ $propertyTypeName }}">
                     </div>
                 </div>
             </td>

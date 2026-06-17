@@ -1,8 +1,8 @@
 
-					 <tr class=" @if($customerName == __('Total Cash Inflow') || $customerName == __('Total Cash Outflow') ||  $customerName == __('Total Cash')) bg-lighter @else  @endif  parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   " data-model-id="{{ $rowIndex }}">
+					 <tr class="@if($customerName == __('Total Cash Inflow') || $customerName == __('Total Cash Outflow') || $customerName == __('Total Cash')) bg-lighter @else @endif parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close" data-model-id="{{ $rowIndex }}">
                                     <td class="red reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize main-tr is-close"> @if($hasSubRows) + @endif  </td>
-                                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ $customerName }}</td>
-                                    <td class="  sub-numeric-bg text-center editable-date"> 
+                                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ $customerName }}</td>
+                                    <td class="sub-numeric-bg text-center editable-date"> 
 										{{-- @if($customerName == __('Cancelled LGs Cash Cover'))
 										<button   class="btn btn-sm btn-danger text-white js-show-customer-due-invoices-modal">{{ __('View') }}</button>
 										@endif  --}}
@@ -83,11 +83,11 @@
 										
                                     @endphp
 									
-                                    <td  data-id="{{ $currentValue }}" class="  sub-numeric-bg text-center editable-date">{{ number_format($currentValue,0) }}</td>
+                                    <td  data-id="{{ $currentValue }}" class="sub-numeric-bg text-center editable-date">{{ number_format($currentValue,0) }}</td>
                                     @endforeach
 									
                                    
-                                    <td class="  sub-numeric-bg text-center editable-date">
+                                    <td class="sub-numeric-bg text-center editable-date">
 									{{ number_format(  $currentMainRowTotal ) }}
 								
 									 </td>

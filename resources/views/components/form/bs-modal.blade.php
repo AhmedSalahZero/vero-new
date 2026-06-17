@@ -12,13 +12,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body " @if($modelBodyId) id="{{ $modelBodyId }}" @endif>
+      <div class="modal-body" @if($modelBodyId) id="{{ $modelBodyId }}" @endif>
         {{ $slot }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
         @if($hasSaveBtn)
-        <button type="button" class="btn btn-primary {{ $submitBtnClass }} ">{{ $saveBtnTitle }}</button>
+        <button type="button" class="btn btn-primary {{ $submitBtnClass }}">{{ $saveBtnTitle }}</button>
         @endif 
       </div>
     </div>

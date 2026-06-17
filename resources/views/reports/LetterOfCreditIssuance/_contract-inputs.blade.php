@@ -15,7 +15,7 @@
                                         <select id="purchase-order-id" data-current-selected="{{ isset($model) ? $model->getPurchaseOrderId() : 0 }}" name="purchase_order_id" data-live-search="true" class="form-control kt-bootstrap-select select2-select kt_bootstrap_select">
                                           
                                         </select>
-										<input placeholder="{{ __('New PO') }}" id="new-purchase-order-id" class="form-control " type="text" name="new_purchase_order_number" value="{{ isset($model) ? $model->getNewPoNumber(): '' }}" style="display:none">
+										<input placeholder="{{ __('New PO') }}" id="new-purchase-order-id" class="form-control" type="text" name="new_purchase_order_number" value="{{ isset($model) ? $model->getNewPoNumber(): '' }}" style="display:none">
                                     </div>
 
                                     <div class="col-md-2 hidden hide-only-bond">

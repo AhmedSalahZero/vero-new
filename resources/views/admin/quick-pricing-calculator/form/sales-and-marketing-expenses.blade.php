@@ -49,7 +49,7 @@
                             <label class="form-label font-weight-bold">{{ __('Total Cost') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group">
-                                    <input type="text" readonly class="form-control  disabled-custom total-cost-summation" name="smex_total_cost" value="{{ isset($salesAndMarketingExpense) ? $salesAndMarketingExpense->getTotalCost() : old('smex_total_cost') }}"  step="any" >
+                                    <input type="text" readonly class="form-control disabled-custom total-cost-summation" name="smex_total_cost" value="{{ isset($salesAndMarketingExpense) ? $salesAndMarketingExpense->getTotalCost() : old('smex_total_cost') }}"  step="any" >
                                 </div>
                             </div>
                         </div>

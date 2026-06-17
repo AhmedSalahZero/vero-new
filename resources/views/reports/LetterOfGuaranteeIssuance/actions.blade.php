@@ -1,6 +1,6 @@
 @if($model->isRunning() || $model->isExpired())
 
- <a data-toggle="modal" data-target="#cancel-deposit-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Cancel Letter') }}" href="#"><i class="fa fa-ban"></i></a>
+ <a data-toggle="modal" data-target="#cancel-deposit-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Cancel Letter') }}" href="#"><i class="fa fa-ban"></i></a>
  <div class="modal fade" id="cancel-deposit-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
          <div class="modal-content">
@@ -33,7 +33,7 @@
                          <div class="col-md-2 mb-4">
                              <label>{{__('LG Current Amount')}} </label>
                              <div class="kt-input-icon">
-                                 <input disabled value="{{  $model->getLgCurrentAmountFormatted()  }}" type="text" class="form-control text-center ">
+                                 <input disabled value="{{  $model->getLgCurrentAmountFormatted()  }}" type="text" class="form-control text-center">
                              </div>
                          </div>
 
@@ -68,7 +68,7 @@
  @if($model->isRunning())
  @if($model->isAdvancedPayment())
  
- <a data-toggle="modal" data-target="#amount-to-be-decreased-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Amount To Be Decreased') }}" href="#"><i class=" fa fa-balance-scale"></i></a>
+ <a data-toggle="modal" data-target="#amount-to-be-decreased-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Amount To Be Decreased') }}" href="#"><i class="fa fa-balance-scale"></i></a>
  <div class="modal fade" id="amount-to-be-decreased-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
          <div class="modal-content">
@@ -259,7 +259,7 @@
 
  @elseif($model->isCancelled())
 
- <a data-toggle="modal" data-target="#back-to-running-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Back To Running') }}" href="#"><i class="fa fa fa-undo"></i></a>
+ <a data-toggle="modal" data-target="#back-to-running-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Back To Running') }}" href="#"><i class="fa fa fa-undo"></i></a>
 
  <div class="modal fade" id="back-to-running-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-xl modal-dialog-centered" role="document">

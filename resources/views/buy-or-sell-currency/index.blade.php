@@ -6,18 +6,16 @@ use App\Models\BuyOrSellCurrency ;
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -27,7 +25,7 @@ use App\Models\BuyOrSellCurrency ;
 {{ __('Sell Or Buy Currencies') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -60,7 +58,7 @@ use App\Models\BuyOrSellCurrency ;
             </ul>
 			@if(hasAuthFor('create buy or sell currency'))
             <div class="flex-tabs">
-                <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Sell Or Buy Currencies') }}
                 </a>
@@ -69,7 +67,7 @@ use App\Models\BuyOrSellCurrency ;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             @php
             $currentType = BuyOrSellCurrency::BANK_TO_BANK ;
             @endphp
@@ -83,7 +81,7 @@ use App\Models\BuyOrSellCurrency ;
 
                         <!--begin: Datatable -->
                         <div class="table-responsive">
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -195,7 +193,7 @@ use App\Models\BuyOrSellCurrency ;
             $currentType = BuyOrSellCurrency::BANK_TO_SAFE ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__(BuyOrSellCurrency::getAllTypes()[$currentType])" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-buy-or-sell-currency :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('buy-or-sell-currencies.create',['company'=>$company->id])}}" />
@@ -204,7 +202,7 @@ use App\Models\BuyOrSellCurrency ;
 
                         <!--begin: Datatable -->
                         <div class="table-responsive">
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -249,7 +247,7 @@ use App\Models\BuyOrSellCurrency ;
                                     <td class="text-uppercase">{{ $model->getToBranchName() }}</td>
 
 
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
@@ -306,7 +304,7 @@ use App\Models\BuyOrSellCurrency ;
             $currentType = BuyOrSellCurrency::SAFE_TO_BANK ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__(BuyOrSellCurrency::getAllTypes()[$currentType])" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-buy-or-sell-currency :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('buy-or-sell-currencies.create',['company'=>$company->id])}}" />
@@ -315,7 +313,7 @@ use App\Models\BuyOrSellCurrency ;
 
                         <!--begin: Datatable -->
                         <div class="table-responsive">
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -429,7 +427,7 @@ use App\Models\BuyOrSellCurrency ;
             $currentType = BuyOrSellCurrency::SAFE_TO_SAFE ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__(BuyOrSellCurrency::getAllTypes()[$currentType])" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-buy-or-sell-currency :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('buy-or-sell-currencies.create',['company'=>$company->id])}}" />
@@ -438,7 +436,7 @@ use App\Models\BuyOrSellCurrency ;
 
                         <!--begin: Datatable -->
                         <div class="table-responsive">
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>

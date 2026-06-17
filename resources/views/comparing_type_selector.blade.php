@@ -2,7 +2,7 @@
                             <label>{{ __('Report Type') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select name="report_type" id="report_type" class="form-control ">
+                                    <select name="report_type" id="report_type" class="form-control">
                                         <option selected value="trend">{{ __('Trend') }}</option>
                                         <option value="comparing">{{ __('Interval Comparing') }}</option>
 

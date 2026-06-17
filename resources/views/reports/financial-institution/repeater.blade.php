@@ -4,33 +4,29 @@
                 @endphp
 
 
-                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center 
-                                         @if($isRepeater)
-                                         repeater_item
-                                         @endif 
-				                         ">
-                    <input type="hidden" class="form-control " @if($isRepeater) name="id" @else name="accounts[0][id]" @endif value="{{ isset($account) ? $account->getId() : 0 }}">
+                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
+                    <input type="hidden" class="form-control" @if($isRepeater) name="id" @else name="accounts[0][id]" @endif value="{{ isset($account) ? $account->getId() : 0 }}">
 
 
 
                     <div class="col-2">
-                        <label class="form-label font-weight-bold ">{{ __('Account Number') }}
+                        <label class="form-label font-weight-bold">{{ __('Account Number') }}
                             @include('star')
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input required placeholder="{{ __('Account Number') }}" type="text" class="form-control  exclude-text" @if($isRepeater) name="account_number" @else name="accounts[0][account_number]" @endif value="{{ isset($account) ? $account->getAccountNumber() : old('account_number') }}">
+                                <input required placeholder="{{ __('Account Number') }}" type="text" class="form-control exclude-text" @if($isRepeater) name="account_number" @else name="accounts[0][account_number]" @endif value="{{ isset($account) ? $account->getAccountNumber() : old('account_number') }}">
                             </div>
                         </div>
                     </div>
                     @if($company->hasOdooIntegrationCredentials())
-                    <div class="col-1	">
-                        <label class="form-label font-weight-bold ">{{ __('Odoo Code') }}
+                    <div class="col-1">
+                        <label class="form-label font-weight-bold">{{ __('Odoo Code') }}
                             @include('star')
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input required placeholder="{{ __('Odoo Code') }}" type="text" class="form-control  exclude-text" @if($isRepeater) name="odoo_code" @else name="accounts[0][odoo_code]" @endif value="{{ isset($account) ? $account->getOdooCode() : old('odoo_code') }}">
+                                <input required placeholder="{{ __('Odoo Code') }}" type="text" class="form-control exclude-text" @if($isRepeater) name="odoo_code" @else name="accounts[0][odoo_code]" @endif value="{{ isset($account) ? $account->getOdooCode() : old('odoo_code') }}">
                             </div>
                         </div>
                     </div>
@@ -44,7 +40,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="iban" @else name="accounts[0][iban]" @endif type="text" class="form-control " value="{{ isset($account) ? $account->getIban() : old('iban','') }}">
+                                <input @if($isRepeater) name="iban" @else name="accounts[0][iban]" @endif type="text" class="form-control" value="{{ isset($account) ? $account->getIban() : old('iban','') }}">
                             </div>
                         </div>
                     </div>
@@ -93,7 +89,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="exchange_rate" @else name="accounts[0][exchange_rate]" @endif type="text" class="form-control " value="{{ number_format(isset($account) ? $account->getExchangeRate() : old('exchange_rate',1)) }}">
+                                <input @if($isRepeater) name="exchange_rate" @else name="accounts[0][exchange_rate]" @endif type="text" class="form-control" value="{{ number_format(isset($account) ? $account->getExchangeRate() : old('exchange_rate',1)) }}">
                             </div>
                         </div>
                     </div>
@@ -107,7 +103,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="interest_rate" @else name="accounts[0][interest_rate]" @endif type="text" class="form-control " value="{{ old('interest_rate',0) }}">
+                                <input @if($isRepeater) name="interest_rate" @else name="accounts[0][interest_rate]" @endif type="text" class="form-control" value="{{ old('interest_rate',0) }}">
                             </div>
                         </div>
                     </div>

@@ -2,15 +2,15 @@
 @section('dash_nav')
 @include('client_view.home_dashboard.main_navs',['active'=>'breadkdown_dashboard'])
 
-{{-- <ul class="kt-menu__nav ">
-    <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard',$company)}}" class="kt-menu__link "><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
-<li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.breakdown',$company)}}" class="kt-menu__link active-button"><span class="kt-menu__link-text active-text">{{__("Breakdown Dashboard")}}</span></a></li>
-<li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.customers',$company)}}" class="kt-menu__link "><span class="kt-menu__link-text">{{__("Customers Dashboard")}}</span></a></li>
-<li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.salesPerson', $company) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{__("Sales Person Dashboard")}}</span></a>
+{{-- <ul class="kt-menu__nav">
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard',$company)}}" class="kt-menu__link"><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
+<li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard.breakdown',$company)}}" class="kt-menu__link active-button"><span class="kt-menu__link-text active-text">{{__("Breakdown Dashboard")}}</span></a></li>
+<li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard.customers',$company)}}" class="kt-menu__link"><span class="kt-menu__link-text">{{__("Customers Dashboard")}}</span></a></li>
+<li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.salesPerson', $company) }}" class="kt-menu__link"><span class="kt-menu__link-text">{{__("Sales Person Dashboard")}}</span></a>
 </li>
-<li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.salesDiscount', $company) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{__("Sales Discount Dashboard")}}</span></a>
+<li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.salesDiscount', $company) }}" class="kt-menu__link"><span class="kt-menu__link-text">{{__("Sales Discount Dashboard")}}</span></a>
 </li>
-<li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.intervalComparing', $company) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{__("Interval Comparing Dashboard")}}</span></a>
+<li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.intervalComparing', $company) }}" class="kt-menu__link"><span class="kt-menu__link-text">{{__("Interval Comparing Dashboard")}}</span></a>
 </li>
 </ul> --}}
 @endsection
@@ -171,7 +171,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                 </h3>
             </div>
         </div>
-        <div class="kt-portlet__body  kt-portlet__body--fit">
+        <div class="kt-portlet__body kt-portlet__body--fit">
             <div class="row row-no-padding row-col-separator-xl">
                 @foreach ($types as $type => $color)
 
@@ -223,7 +223,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                         @endphp
                                         <input type="hidden" name="company_id" value="{{ $company->id }}">
                                         <input type="hidden" name="type" value="{{ $type }}">
-                                        <label class="text-left font-weight-bold  w-100 mb-3 text-black">{{ __('Please Select') }} {{ ucwords(str_replace('_',' ',$type)) }}</label>
+                                        <label class="text-left font-weight-bold w-100 mb-3 text-black">{{ __('Please Select') }} {{ ucwords(str_replace('_',' ',$type)) }}</label>
                                         <select id="business_sector_select_{{ convertStringToClass($type) }}" data-live-search="true" data-actions-box="true" name="selected_type" class="form-control select2-select kt-bootstrap-select kt_bootstrap_select">
                                             @foreach($businessSectors as $businesSector)
                                             <option value="{{ $businesSector }}"> {{ __($businesSector) }} </option>
@@ -259,8 +259,8 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                                     @if(hasTopAndBottom($id))
 
                                                     <div class="" style="float:right;">
-                                                        <button style="background-color:#086691 ; color:#fff" class="btn  btn-sm ml-5 mr-1 ranged-button-ajax" data-direction="top" data-type="{{ $type }}" data-column="{{ $id }}">{{ __('Top 50') }}</button>
-                                                        <button style="background-color:#086691 ; color:#fff" class="btn  btn-sm text-white ranged-button-ajax" data-direction="bottom" data-type="{{ $type }}" data-column="{{ $id }}">{{ __('Bottom 50') }}</button>
+                                                        <button style="background-color:#086691 ; color:#fff" class="btn btn-sm ml-5 mr-1 ranged-button-ajax" data-direction="top" data-type="{{ $type }}" data-column="{{ $id }}">{{ __('Top 50') }}</button>
+                                                        <button style="background-color:#086691 ; color:#fff" class="btn btn-sm text-white ranged-button-ajax" data-direction="bottom" data-type="{{ $type }}" data-column="{{ $id }}">{{ __('Bottom 50') }}</button>
                                                     </div>
                                                     @endif
                                                
@@ -277,7 +277,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                                             @endforeach
 
                                         </table>
-                                        <div class="row ">
+                                        <div class="row">
                                            
                                 </div>
 
@@ -340,7 +340,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{$type}}" role="tab">
+                        <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{$type}}" role="tab">
                             <i class="flaticon2-checking"></i>Reports Table
                         </a>
                     </li>
@@ -348,7 +348,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="tab-content  kt-margin-t-20">
+            <div class="tab-content kt-margin-t-20">
 
                 <div class="tab-pane active" id="kt_apps_contacts_view_tab_1_{{$type}}" role="tabpanel">
 
@@ -426,7 +426,7 @@ $exportableFieldsValues[] = 'avg_invoice_value';
                             <tr>
 
                                 <th>{{($key??0)+1}}</th>
-                                <td class=" max-w-300">{{$item['item']?? '-'}}</td>
+                                <td class="max-w-300">{{$item['item']?? '-'}}</td>
                                 <td class="text-center">{{number_format($item['Sales Value']??0)}}</td>
 								@php
 									$acc += $total == 0 ? 0 : (($item['Sales Value']/$total)*100)  ;

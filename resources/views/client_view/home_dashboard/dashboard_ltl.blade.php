@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 @section('dash_nav')
-<ul class="kt-menu__nav ">
-    <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard',$company)}}" class="kt-menu__link "><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
-    <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.breakdown',$company)}}" class="kt-menu__link "><span class="kt-menu__link-text">Breakdown Analysis Dashboard</span></a></li>
-    {{-- <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.ltl')}}" class="kt-menu__link active-button"><span class="kt-menu__link-text">Long Term Facilities Dashboard</span></a></li> --}}
-    <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.forecast',$company)}}" class="kt-menu__link "><span class="kt-menu__link-text">Forecast Dashboard</span></a></li>
-    <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.contractResult',$company) }}"
-        class="kt-menu__link "><span class="kt-menu__link-text">Contract Result Dashboard</span></a></li>
+<ul class="kt-menu__nav">
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard',$company)}}" class="kt-menu__link"><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard.breakdown',$company)}}" class="kt-menu__link"><span class="kt-menu__link-text">Breakdown Analysis Dashboard</span></a></li>
+    {{-- <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard.ltl')}}" class="kt-menu__link active-button"><span class="kt-menu__link-text">Long Term Facilities Dashboard</span></a></li> --}}
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard.forecast',$company)}}" class="kt-menu__link"><span class="kt-menu__link-text">Forecast Dashboard</span></a></li>
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.contractResult',$company) }}"
+        class="kt-menu__link"><span class="kt-menu__link-text">Contract Result Dashboard</span></a></li>
 </ul>
 @endsection
 @section('css')
@@ -18,7 +18,7 @@
 
 {{-- Title --}}
 <div class="row">
-    <div class="kt-portlet ">
+    <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -34,7 +34,7 @@
     <div class="col-md-4">
         {{-- Bid Bonds --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -57,7 +57,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Outstanding</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -73,7 +73,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Cash Cover</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>30,000,000</h4>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
         </div>
         {{-- Final LGs --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -110,7 +110,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Outstanding</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -126,7 +126,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Cash Cover</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>30,000,000</h4>
                                             </div>
                                         </div>
@@ -145,7 +145,7 @@
         </div>
         {{-- Advanced Payment LGs --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -168,7 +168,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Outstanding</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -184,7 +184,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Cash Cover</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>30,000,000</h4>
                                             </div>
                                         </div>
@@ -204,7 +204,7 @@
     </div>
      {{-- Total Letters Of Guarentee --}}
      <div class="col-md-4">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label col-8">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -227,7 +227,7 @@
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" href="#">Limit</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>50,000,000</h4>
                                         </div>
                                     </div>
@@ -243,7 +243,7 @@
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" href="#">Outstanding</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>30,000,000</h4>
                                         </div>
                                     </div>
@@ -261,7 +261,7 @@
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" href="#">Available</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>20,000,000</h4>
                                         </div>
                                     </div>
@@ -288,7 +288,7 @@
 
 {{-- Title --}}
 <div class="row">
-    <div class="kt-portlet ">
+    <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -304,7 +304,7 @@
     <div class="col-md-4">
         {{-- Site LCs --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -327,7 +327,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Outstanding</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -343,7 +343,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Cash Cover</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>30,000,000</h4>
                                             </div>
                                         </div>
@@ -357,7 +357,7 @@
         </div>
         {{-- Deffered LCs --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -380,7 +380,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Outstanding</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -396,7 +396,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Cash Cover</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>30,000,000</h4>
                                             </div>
                                         </div>
@@ -415,7 +415,7 @@
         </div>
         {{-- Cash Against Documents --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -438,7 +438,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Outstanding</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -454,7 +454,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Cash Cover</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>30,000,000</h4>
                                             </div>
                                         </div>
@@ -474,7 +474,7 @@
     </div>
      {{-- Total Letters Of Guarentee --}}
      <div class="col-md-4">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label col-8">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -497,7 +497,7 @@
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" href="#">Limit</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>50,000,000</h4>
                                         </div>
                                     </div>
@@ -513,7 +513,7 @@
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" href="#">Outstanding</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>30,000,000</h4>
                                         </div>
                                     </div>
@@ -531,7 +531,7 @@
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" href="#">Available</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>20,000,000</h4>
                                         </div>
                                     </div>

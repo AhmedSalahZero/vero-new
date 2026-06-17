@@ -50,7 +50,7 @@ trait HasDepositAccount
 		$isOpeningBalance = $this->isOpeningBalance(); 
 		$date = $this->getStartDate();
 		$this->deleteOdooRelations($isBreakOrApplyDeposit);
-		if($company->hasOdooIntegrationCredentials() && $company->withinIntegrationDate($date) && ! $isOpeningBalance){
+		if($company->hasOdooIntegrationCredentials() && $company->withinIntegrationDate($date) && (! $isOpeningBalance || $isBreakOrApplyDeposit) ){
 			$this->handleTdOrCdStoreDepositWithoutJournalForOdoo($isBreakOrApplyDeposit);
 		}
 	}
@@ -61,9 +61,9 @@ trait HasDepositAccount
 	{
 		
 		$company = $this->company ; 
-		$isOpeningBalance = $this->isOpeningBalance();
+		// $isOpeningBalance = $this->isOpeningBalance();
 		$this->deleteOdooRelations($isBreakOrApplyDeposit);
-		if($company->hasOdooIntegrationCredentials() && !$isOpeningBalance){
+		// if($company->hasOdooIntegrationCredentials() && !$isOpeningBalance){
 			$referenceColumnName = $isBreakOrApplyDeposit ? 'inbound_break_odoo_reference' : 'inbound_odoo_reference';
 			$journalColumnName = $isBreakOrApplyDeposit ? 'store_break_journal_entry_id' : 'inbound_journal_entry_id';
   			$timeOfCertificateOdooService = new TimeOrCertificateOfDepositOdooService($company);
@@ -92,7 +92,7 @@ trait HasDepositAccount
 			$this->{$referenceColumnName} = $result['reference'];
 			$this->save();
 				
-		}
+		// }
 	}
 
 	public function storeRenewal(string $expiryDate,float $newInterestRate)

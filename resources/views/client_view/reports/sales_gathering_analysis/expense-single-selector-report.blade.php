@@ -80,7 +80,7 @@
 			@endif 
 				@foreach (['trend_tab_id'=>__('Trend') ,  'percentage_of_total_tab_id'=>__('Percentage Of Total '),'interval_percentage'=>__('Interval Percentage') ] as $tabId => $tabTitle )
                 <li class="nav-item">
-                    <a class="nav-link   @if(!config('app.showTrendCharts') && $tabId =='trend_tab_id') active @endif " data-toggle="tab" href="#{{ $tabId }}" role="tab">
+                    <a class="nav-link @if(!config('app.showTrendCharts') && $tabId =='trend_tab_id') active @endif" data-toggle="tab" href="#{{ $tabId }}" role="tab">
                         <i class="flaticon2-checking"></i>{{ $tabTitle }}
                     </a>
                 </li>
@@ -94,7 +94,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
 			@if(config('app.showTrendCharts'))
@@ -162,7 +162,7 @@
 
 	
 					
-                    <tr class="group-color  text-lg-left  ">
+                    <tr class="group-color text-lg-left">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($sales_channel_name) }}</b>
                         </td>
 						@foreach ($dates as $date )
@@ -279,7 +279,7 @@
 			
 			
 			
-			<div class="tab-pane " id="percentage_of_total_tab_id" role="tabpanel">
+			<div class="tab-pane" id="percentage_of_total_tab_id" role="tabpanel">
                 <x-table :tableTitle="$percentageTableTitle" :tableClass="'kt_table_with_no_pagination_no_search'">
                     @slot('table_header')
                     <tr class="table-active">
@@ -299,7 +299,7 @@
 					{{-- sales report --}}
 				
                     @foreach ($final_report_data as $sales_channel_name => $zoone_data)
-                    <tr class="group-color  text-lg-left  ">
+                    <tr class="group-color text-lg-left">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($sales_channel_name) }}</b></td>
                         @foreach ($dates as $date )
                         <td class="hidden"> </td>
@@ -347,7 +347,7 @@
             </div>
 			
 			
-			<div class="tab-pane " id="interval_percentage" role="tabpanel">
+			<div class="tab-pane" id="interval_percentage" role="tabpanel">
                 @include('interval_percentage' , ['total_branches'=>$mainItemTotals , 'totalArrys'=>[]])
             </div>
 			

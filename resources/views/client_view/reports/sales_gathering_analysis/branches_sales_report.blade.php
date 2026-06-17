@@ -81,7 +81,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
 			 @if(config('app.showTrendCharts'))
@@ -140,7 +140,7 @@
                     @foreach ($final_report_data as $zone_name => $zoone_data)
 
                     @php $chart_data = []; @endphp
-                    <tr class="group-color  text-lg-left  ">
+                    <tr class="group-color text-lg-left">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">
                                 {{ __($zone_name) }}</b>
                         </td>
@@ -261,7 +261,7 @@
                     @slot('table_body')
                     @php $chart_data = []; @endphp
                     @foreach ($final_report_data as $zone_name => $zoone_data)
-                    <tr class="group-color  text-lg-left  ">
+                    <tr class="group-color text-lg-left">
                         <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __($zone_name) }}</b></td>
                         @foreach ($dates as $date)
                         <td class="hidden"> </td>

@@ -61,7 +61,7 @@ use App\Models\NonBankingService\Department;
                                             <div class="kt-input-icon">
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select data-live-search="true" data-actions-box="true" name="expense_type" class="form-control  border-blue select2-select ">
+                                                        <select data-live-search="true" data-actions-box="true" name="expense_type" class="form-control border-blue select2-select">
                                                             @foreach(getExpenseTypes() as $id => $title )
                                                             <option @if( isset($department) && $department->getExpenseTypeId() == $id ) selected @endif value="{{ $id }}">{{$title}}</option>
                                                             @endforeach
@@ -78,7 +78,7 @@ use App\Models\NonBankingService\Department;
                                     </div>
                                 </div>
                                 <div id="positions" class="leasing-repeater-parent">
-                                    <div class="form-group2  m-form__group2 row">
+                                    <div class="form-group2 m-form__group2 row">
                                         <div data-repeater-list="positions" class="col-lg-12">
 
                                             @include('non_banking_services.departments._repeater' , [

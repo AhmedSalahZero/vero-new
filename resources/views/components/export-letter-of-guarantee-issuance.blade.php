@@ -8,7 +8,7 @@
             &nbsp;
 
             @if($hasSearch)
-            <a data-type="multi" data-toggle="modal" data-target="#search-modal-{{$type  }}" id="js-search-money-received" href="#" title="{{ __('Search Letter Of Guarantee Issuance') }}" class="btn  active-style btn-icon-sm  ">
+            <a data-type="multi" data-toggle="modal" data-target="#search-modal-{{$type  }}" id="js-search-money-received" href="#" title="{{ __('Search Letter Of Guarantee Issuance') }}" class="btn active-style btn-icon-sm">
                 <i class="fas fa-search"></i>
                 {{ __('Search') }}
             </a>
@@ -24,7 +24,7 @@
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <form action="{{ route('view.letter.of.guarantee.issuance',['company'=>$company->id,'active'=>$type]) }}" class="row ">
+                            <form action="{{ route('view.letter.of.guarantee.issuance',['company'=>$company->id,'active'=>$type]) }}" class="row">
                                 <input name="active" type="hidden" value="{{ $type }}">
                                 <div class="form-group col-4">
                                     <label for="Select Field " class="label">{{ __('Field Name') }}</label>

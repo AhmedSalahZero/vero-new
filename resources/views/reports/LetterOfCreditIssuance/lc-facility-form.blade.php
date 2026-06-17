@@ -5,45 +5,44 @@ use App\Models\LetterOfCreditIssuance;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -53,7 +52,7 @@ use App\Models\LetterOfCreditIssuance;
 {{ __('Letter Of Credit Issuance Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -164,7 +163,7 @@ use App\Models\LetterOfCreditIssuance;
                                         </select>
                                     </div>
 
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-3">
                                         <x-form.input :id="'current-lc-type-outstanding-balance-id'" :default-value="0" :model="$model??null" :label="__('LC Type Outstanding Balance')" :type="'text'" :placeholder="__('LC Type Outstanding Balance')" :name="'lc_type_outstanding_balance'" :class="'only-greater-than-zero-allowed'" :required="true"></x-form.input>
                                     </div>
                                     <div class="col-md-3">
@@ -301,8 +300,8 @@ use App\Models\LetterOfCreditIssuance;
                                             @include('star')
                                         </label>
                                         <div>
-                                            <input required value="{{ (isset($model) ? number_format($model->getLcAmount(),0) : 0) }}" class="form-control  only-greater-than-or-equal-zero-allowed amount-js  recalculate-amount-in-main-currency recalculate-cash-cover-amount-js recalculate-lc-commission-amount-js lc-amount-js" type="text" placeholder="{{ __('Lc Amount') }}">
-                                            <input type="hidden" value="{{ (isset($model) ? $model->getLcAmount() : 0) }}" name="lc_amount" class="only-greater-than-zero-allowed ">
+                                            <input required value="{{ (isset($model) ? number_format($model->getLcAmount(),0) : 0) }}" class="form-control only-greater-than-or-equal-zero-allowed amount-js recalculate-amount-in-main-currency recalculate-cash-cover-amount-js recalculate-lc-commission-amount-js lc-amount-js" type="text" placeholder="{{ __('Lc Amount') }}">
+                                            <input type="hidden" value="{{ (isset($model) ? $model->getLcAmount() : 0) }}" name="lc_amount" class="only-greater-than-zero-allowed">
 
                                         </div>
                                     </div>
@@ -348,7 +347,7 @@ use App\Models\LetterOfCreditIssuance;
 
 
                                 <div class="col-md-3">
-                                    <x-form.input :default-value="0" :readonly="true" :model="$model??null" :label="__('Cash Cover Amount')" :type="'text'" :placeholder="__('Cash Cover Amount')" :name="'cash_cover_amount'" :class="'only-greater-than-or-equal-zero-allowed cash-cover-amount-js' " :required="true"></x-form.input>
+                                    <x-form.input :default-value="0" :readonly="true" :model="$model??null" :label="__('Cash Cover Amount')" :type="'text'" :placeholder="__('Cash Cover Amount')" :name="'cash_cover_amount'" :class="'only-greater-than-or-equal-zero-allowed cash-cover-amount-js'" :required="true"></x-form.input>
                                 </div>
 
 
@@ -398,7 +397,7 @@ use App\Models\LetterOfCreditIssuance;
                                     </div>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :id="'cd-or-td-amount-id'" :readonly="true" :default-value="0" :model="$model??null" :label="__('Amount')" :type="'text'" :placeholder="''" :name="'amount'" :class="''" :required="true"></x-form.input>
                                 </div>
 
@@ -409,9 +408,7 @@ use App\Models\LetterOfCreditIssuance;
                                     </label>
                                     <div class="kt-input-icon">
                                         <div class="input-group date">
-                                            <select data-append-to-query=".js-account-id-2" name="lc_fees_and_commission_account_type" class="form-control 
-												js-update-account-id-based-on-account-type
-												">
+                                            <select data-append-to-query=".js-account-id-2" name="lc_fees_and_commission_account_type" class="form-control js-update-account-id-based-on-account-type">
                                                 {{-- <option value="" selected>{{__('Select')}}</option> --}}
                                                 @foreach($accountTypes as $index => $accountType)
                                                 <option value="{{ $accountType->id }}" @if(isset($model) && $model->getFeesAndCommissionAccountTypeId() == $accountType->id) selected @endif>{{ $accountType->getName() }}</option>
@@ -441,7 +438,7 @@ use App\Models\LetterOfCreditIssuance;
                                     </label>
                                     <div class="kt-input-icon">
                                         <div class="input-group date">
-                                            <select name="financed_by_bank_or_self" id="financed-by-bank-or-self-select-id" class="form-control ">
+                                            <select name="financed_by_bank_or_self" id="financed-by-bank-or-self-select-id" class="form-control">
                                                 {{-- <option value="" selected>{{__('Select')}}</option> --}}
                                                 @foreach(['bank'=>__('By Bank') , 'self'=>__('Self')] as $key => $title)
                                                 <option value="{{ $key }}" @if(isset($model) && $model->getFinancedBy() == $key) selected @endif>{{ $title }}</option>
@@ -453,7 +450,7 @@ use App\Models\LetterOfCreditIssuance;
 
 
 
-                                <div class="col-md-3 " id="financing-duration-div-id">
+                                <div class="col-md-3" id="financing-duration-div-id">
                                     <x-form.input :id="'financing-duration-id'" :model="$model??null" :label="__('Financing Duration (Days)')" :type="'text'" :placeholder="__('Financing Duration (Days)')" :name="'financing_duration'" :class="'only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
                                 </div>
 

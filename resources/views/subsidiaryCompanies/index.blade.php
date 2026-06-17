@@ -3,7 +3,6 @@
 use App\Models\Partner ;
 @endphp
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 
@@ -36,7 +35,7 @@ use App\Models\Partner ;
 {{ __('Subsidiary Companies') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
@@ -55,7 +54,7 @@ use App\Models\Partner ;
 			{{-- @if(auth()->user()->can('create subsidiary companies'))
             <div class="flex-tabs">
                
-                <a href="{{ route('subsidiary.companies.create',['company'=>$company->id,Partner::SUBSIDIARY_COMPANIES]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('subsidiary.companies.create',['company'=>$company->id,Partner::SUBSIDIARY_COMPANIES]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Subsidiary Company') }}
                 </a>
@@ -65,7 +64,7 @@ use App\Models\Partner ;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
 
 
@@ -76,7 +75,7 @@ use App\Models\Partner ;
             $currentType = Partner::SUBSIDIARY_COMPANIES ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Subsidary Companies')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-subsidiary-companies :indexRouteName="$indexRouteName" :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('subsidiary.companies.create',['company'=>$company->id])}}" />
@@ -84,7 +83,7 @@ use App\Models\Partner ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -118,7 +117,7 @@ use App\Models\Partner ;
 									
 									// || hasAuthFor('delete subsidiary companies')
 									 )
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											@if(hasAuthFor('update subsidiary companies'))
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('subsidiary.companies.edit',['company'=>$company->id,'subsidiaryCompany'=>$model->id]) }}"><i class="fa fa-pen-alt"></i></a>

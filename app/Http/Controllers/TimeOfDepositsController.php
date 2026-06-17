@@ -251,6 +251,9 @@ class TimeOfDepositsController
 	{
 		$periodInterestAmount = number_unformat($request->get('periodic_interest_amount')) ;
 		$periodInterestDate = $request->get('periodic_interest_date') ;
+		if(!$periodInterestDate){
+			return redirect()->back()->with('fail',__('Period Interest Date Is Required'));
+		}
 		$timeOfDeposit->applyPeriodicInterestInStatement($financialInstitution,$periodInterestAmount,$periodInterestDate);
 		$type = $request->get('type',TimeOfDeposit::RUNNING);
 		$activeTab = $type ;
@@ -273,7 +276,11 @@ class TimeOfDepositsController
 	 */
 	public function applyDeposit(Company $company,Request $request,FinancialInstitution $financialInstitution,TimeOfDeposit $timeOfDeposit)
 	{
-		$actualDepositDate = Carbon::make($request->get('deposit_date'))->format('Y-m-d') ;
+		$actualDepositDate = Carbon::make($request->get('deposit_date')) ;
+		if(!$actualDepositDate){
+			return redirect()->back()->with('fail',__('Deposit Date Is Required'));
+		}
+		$actualDepositDate = $actualDepositDate->format('Y-m-d') ;
 		$actualInterestAmount  = number_unformat($request->get('actual_interest_amount')) ;
 		$type = TimeOfDeposit::MATURED ;
 		$timeOfDeposit->update([
@@ -287,7 +294,9 @@ class TimeOfDepositsController
 			$currentAccount = $timeOfDeposit->handleDebitStatement($financialInstitution->id , $accountType , $timeOfDeposit->getMaturityAmountAddedToAccountNumber() , null , $actualDepositDate,$actualInterestAmount,null,null,1,null,null,false,true);
 			$timeOfDeposit->storePeriodInterestOdooRelations($currentAccount,$actualDepositDate,$actualInterestAmount);
 		}
-		$timeOfDeposit->handleDebitStatement($financialInstitution->id , $accountType , $timeOfDeposit->getMaturityAmountAddedToAccountNumber() , null , $actualDepositDate,$timeOfDeposit->getAmount());
+		$commentEn = __('TD Amount',[],'en');
+		$commentAr = __('TD Amount',[],'ar');
+		$timeOfDeposit->handleDebitStatement($financialInstitution->id , $accountType , $timeOfDeposit->getMaturityAmountAddedToAccountNumber() , null , $actualDepositDate,$timeOfDeposit->getAmount(),null,null,1,$commentEn,$commentAr);
 		$timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true);
 		return redirect()->route('view.time.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id ,'active'=>$type])->with('success',__('Time Of Deposit Has Been Marked As Matured'));
 	}
@@ -336,7 +345,11 @@ class TimeOfDepositsController
 	 */
 	public function applyBreak(Company $company,Request $request,FinancialInstitution $financialInstitution,TimeOfDeposit $timeOfDeposit)
 	{
-		$breakDate = Carbon::make($request->get('break_date'))->format('Y-m-d') ;
+		$breakDate = Carbon::make($request->get('break_date')) ;
+		if(!$breakDate){
+			return redirect()->back()->with('fail',__('Break Date Is Required'));
+		}
+		$breakDate = $breakDate->format('Y-m-d') ;
 		$breakInterestAmount  = $request->get('break_interest_amount') ;
 		$breakChargeAmount  = $request->get('break_charge_amount',0) ;
 		$amount  = $request->get('amount') ;

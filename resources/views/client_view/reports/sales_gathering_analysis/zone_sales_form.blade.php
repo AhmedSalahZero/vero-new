@@ -50,7 +50,7 @@
                             </label>
                             <div class="kt-input-icon">
                                 <div id="append-main-select" class="input-group date">
-                                    <select data-max-options="{{ maxOptionsForOneSelector() }}" data-live-search="true" data-actions-box="true" name="zones[]"   class="form-control  select2-select form-select kt-bootstrap-select kt_bootstrap_select" required  multiple>
+                                    <select data-max-options="{{ maxOptionsForOneSelector() }}" data-live-search="true" data-actions-box="true" name="zones[]"   class="form-control select2-select form-select kt-bootstrap-select kt_bootstrap_select" required  multiple>
                                         {{-- <option value="{{json_encode($zones)}}">{{__('All Zones')}}</option> --}}
                                         @foreach ($zones as $zone)
                                             <option value="{{$zone}}"> {{__($zone)}}</option>

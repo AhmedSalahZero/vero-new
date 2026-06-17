@@ -8,8 +8,8 @@
  <input type="hidden" name="tableIds[]" value="{{ $tableId }}">
  <x-tables.repeater-table :removeRepeater="false" :repeater-with-select2="true" :canAddNewItem="$canAddNewItem" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
      <x-slot name="ths">
-         <x-tables.repeater-table-th class="header-border-down " :title="__('Is Active')"></x-tables.repeater-table-th>
-         <x-tables.repeater-table-th class=" header-border-down" :title="__('Name')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class="header-border-down" :title="__('Is Active')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class="header-border-down" :title="__('Name')"></x-tables.repeater-table-th>
      </x-slot>
      <x-slot name="trs">
          @php
@@ -55,7 +55,7 @@
 
              </td>
              <td>
-                 <input value="{{ (isset($subModel) ?$subModel->getName() : '') }}" @if($isRepeater) name="title" @else name="{{ $tableId }}[0][title]" @endif class="form-control  text-left " type="text">
+                 <input value="{{ (isset($subModel) ?$subModel->getName() : '') }}" @if($isRepeater) name="title" @else name="{{ $tableId }}[0][title]" @endif class="form-control text-left" type="text">
              </td>
 
          </tr>

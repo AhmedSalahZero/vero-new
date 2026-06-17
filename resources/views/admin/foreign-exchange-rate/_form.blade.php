@@ -38,7 +38,7 @@
                                                 @include('star')
                                             </label>
                                             <div class="input-group">
-                                                <select name="to_currency" id="to-currency" class="form-control js-change-currency ">
+                                                <select name="to_currency" id="to-currency" class="form-control js-change-currency">
                                                     {{-- <option selected>{{__('Select')}}</option> --}}
                                                     @foreach(getCurrencies() as $currencyName => $currencyValue )
                                                     <option value="{{ $currencyName }}" @if(isset($model) && $model->getToCurrency() == $currencyName ) selected @elseif($currencyName == 'EGP' ) selected @endif > {{ $currencyValue }}</option>

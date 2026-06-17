@@ -11,50 +11,48 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-calculator/jquery.calculator.css') }}">
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
 
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -64,7 +62,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
 {{ __('Internal Money Transfer Form') }}
 @endsection --}}
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -105,7 +103,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                         <div class="kt-portlet">
 
 
-                            <div class="kt-portlet ">
+                            <div class="kt-portlet">
                                 <div class="kt-portlet__head">
                                     <div class="kt-portlet__head-label flex-1">
                                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -128,7 +126,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                         </div>
 
 
-                                        <div data-type="{{ $safeToBankConst.','.$safeToSafeConst }}" class=" flex-1 d-flex justify-content-end pt-3 show-only-if">
+                                        <div data-type="{{ $safeToBankConst.','.$safeToSafeConst }}" class="flex-1 d-flex justify-content-end pt-3 show-only-if">
                                             <div class="col-md-3 mb-3">
                                                 <label>{{__('Balance')}} <span class="balance-date-js"></span> </label>
                                                 <div class="kt-input-icon">
@@ -193,41 +191,37 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                             </div>
 
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Currency To Sell Amount')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input name="currency_to_sell_amount" id="multiplierField" type="text" value="{{ isset($model) ? number_format($model->getAmountToSell()):0 }}" class="form-control recalculate-amount-in-main-currency amount-js greater-than-or-equal-zero-allowed " placeholder="{{__('Insert Amount')}}">
+                                                    <input name="currency_to_sell_amount" id="multiplierField" type="text" value="{{ isset($model) ? number_format($model->getAmountToSell()):0 }}" class="form-control recalculate-amount-in-main-currency amount-js greater-than-or-equal-zero-allowed" placeholder="{{__('Insert Amount')}}">
                                                     {{-- <input  type="hidden" value="{{ isset($model) ? $model->getAmountToSell():0 }}" name="currency_to_sell_amount" > --}}
                                                 </div>
                                             </div>
 
 
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Exchange Rate')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input id="calcField" type="text" value="{{ isset($model) ? $model->getExchangeRate():0 }}" name="exchange_rate" class="
-													form-control exchange-rate-js exchange-rate-class recalculate-amount-in-main-currency 
-													" placeholder="{{__('Exchange Rate')}}">
+                                                    <input id="calcField" type="text" value="{{ isset($model) ? $model->getExchangeRate():0 }}" name="exchange_rate" class="form-control exchange-rate-js exchange-rate-class recalculate-amount-in-main-currency" placeholder="{{__('Exchange Rate')}}">
                                                 </div>
 
 
                                             </div>
 
                                             {{-- {{ exchange rate *  Currency To Sell Amount }} --}}
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Currency To Buy Amount')}}
                                                     {{-- @include('star') --}}
                                                 </label>
                                                 <div class="kt-input-icon">
                                                     {{-- <input type="hidden" class="amount-in-main-currency-js-hidden" name="currency_to_buy_amount" value="{{ isset($model) ? $model->getAmountToBuy():0 }}"> --}}
-                                                    <input name="currency_to_buy_amount" id="resultField" readonly type="text" value="{{ isset($model) ? $model->getAmountToBuy():0 }}" class="
-													form-control greater-than-or-equal-zero-allowed amount-in-main-currency-js
-													" placeholder="{{__('Insert Amount')}}">
+                                                    <input name="currency_to_buy_amount" id="resultField" readonly type="text" value="{{ isset($model) ? $model->getAmountToBuy():0 }}" class="form-control greater-than-or-equal-zero-allowed amount-in-main-currency-js" placeholder="{{__('Insert Amount')}}">
                                                 </div>
                                             </div>
 
@@ -277,7 +271,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3  show-only-if" data-type="{{ $bankToBankConst.','.$bankToSafeConst }}">
+                                            <div class="col-md-3 show-only-if" data-type="{{ $bankToBankConst.','.$bankToSafeConst }}">
                                                 <label>{{__('From Account Number')}}
                                                     @include('star')
                                                 </label>
@@ -297,7 +291,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
 
-                                                        <select required js-to-when-change-trigger-change-account-type data-to-financial-institution-id name="to_bank_id" class="form-control ">
+                                                        <select required js-to-when-change-trigger-change-account-type data-to-financial-institution-id name="to_bank_id" class="form-control">
                                                             @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                                             <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getToBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
                                                             @endforeach
@@ -306,7 +300,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div data-type="{{ $bankToBankConst }}" class="col-md-3 show-only-if ">
+                                            <div data-type="{{ $bankToBankConst }}" class="col-md-3 show-only-if">
                                                 <label>{{__('To Account Type')}}
                                                     @include('star')
                                                 </label>
@@ -322,7 +316,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                 </div>
                                             </div>
 
-                                            <div data-type="{{ $bankToBankConst }}" class="col-md-3 show-only-if ">
+                                            <div data-type="{{ $bankToBankConst }}" class="col-md-3 show-only-if">
                                                 <label>{{__('To Account Number')}}
                                                     @include('star')
                                                 </label>
@@ -342,7 +336,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                 <label>{{ __('From Branch') }} <span class="multi_selection"></span> </label>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select id="from-branch-id" data-current-selected="{{ isset($model) ? $model->getFromBranchId() : 0 }}" data-live-search="true" data-actions-box="true" name="from_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select ">
+                                                        <select id="from-branch-id" data-current-selected="{{ isset($model) ? $model->getFromBranchId() : 0 }}" data-live-search="true" data-actions-box="true" name="from_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select">
                                                             @foreach($selectedBranches as $id => $name)
                                                             <option @if(isset($model) && $id==$model->getFromBranchId()) selected @endif value="{{ $id }}">{{ $name }}</option>
                                                             @endforeach
@@ -357,7 +351,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                 <label>{{ __('To Branch') }} <span class="multi_selection"></span> </label>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select data-current-selected="{{ isset($model) ? $model->getToBranchId() : 0 }}" id="to-branch-id" data-live-search="true" data-actions-box="true" name="to_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select ">
+                                                        <select data-current-selected="{{ isset($model) ? $model->getToBranchId() : 0 }}" id="to-branch-id" data-live-search="true" data-actions-box="true" name="to_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select">
                                                             @foreach($selectedBranches as $id => $name)
                                                             <option @if(isset($model) && $id==$model->getToBranchId()) selected @endif value="{{ $id }}">{{ $name }}</option>
                                                             @endforeach
@@ -378,7 +372,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
 
-                                                        <select required js-to-when-change-trigger-change-account-type data-to-financial-institution-id name="to_bank_id" class="form-control ">
+                                                        <select required js-to-when-change-trigger-change-account-type data-to-financial-institution-id name="to_bank_id" class="form-control">
                                                             @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                                             <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getToBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
                                                             @endforeach
@@ -387,7 +381,7 @@ $safeToSafeConst = BuyOrSellCurrency::SAFE_TO_SAFE;
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 show-only-if " data-type="{{ $safeToBankConst }}">
+                                            <div class="col-md-3 show-only-if" data-type="{{ $safeToBankConst }}">
                                                 <label>{{__('To Account Type')}}
                                                     @include('star')
                                                 </label>

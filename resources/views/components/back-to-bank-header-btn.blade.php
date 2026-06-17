@@ -24,7 +24,7 @@
             <div class="flex-tabs">
                 <a href="
 				{{ $createRoute }}
-				" class="btn  active-style btn-icon-sm align-self-center">
+				" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('New Record') }}
                 </a>

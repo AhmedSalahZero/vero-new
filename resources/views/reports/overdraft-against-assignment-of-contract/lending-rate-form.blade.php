@@ -27,11 +27,11 @@
     </div>
 </div>
 
-<div class="col-md-2 mb-4 ">
+<div class="col-md-2 mb-4">
     <label class="form-label font-weight-bold">{{ __('Amount') }} </label>
     <div class="kt-input-icon">
         <div class="input-group">
-            <input type="text" disabled class="form-control  contract-amount-class-{{ $mode }}" value="{{ isset($lendingInformationAgainstAssignmentOfContract) ? $lendingInformationAgainstAssignmentOfContract->getContractAmountFormatted() : 0 }}" step="any">
+            <input type="text" disabled class="form-control contract-amount-class-{{ $mode }}" value="{{ isset($lendingInformationAgainstAssignmentOfContract) ? $lendingInformationAgainstAssignmentOfContract->getContractAmountFormatted() : 0 }}" step="any">
         </div>
     </div>
 </div>
@@ -62,8 +62,8 @@
     </div>
 </div>
 
-<div class="col-md-1 mb-4 ">
-    <label class="form-label font-weight-bold ">{{ __('Lending %') }} </label>
+<div class="col-md-1 mb-4">
+    <label class="form-label font-weight-bold">{{ __('Lending %') }} </label>
     <div class="kt-input-icon">
         <div class="input-group">
             <input type="number" class="form-control only-percentage-allowed" name="lending_rate_{{ $mode }}" value="{{ isset($lendingInformationAgainstAssignmentOfContract) ? $lendingInformationAgainstAssignmentOfContract->getLendingRate() : '' }}" step="any">

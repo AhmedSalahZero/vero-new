@@ -1,6 +1,6 @@
 
 
-<div class="modal fade " id="{{ $modalId.$currency.$lgOrLcType }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{ $modalId.$currency.$lgOrLcType }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <form action="#" class="modal-content" method="post">
 		
@@ -20,10 +20,10 @@
 								
                                 <th class="text-center w-50-percentage text-capitalize th-main-color">{{ __('Financial Institution') }}</th>
                            
-                                <th class="text-center  text-capitalize th-main-color"> {!! __('Limit') !!} </th>
-                                <th class="text-center  text-capitalize th-main-color"> {!! __('Outstanding') !!} </th>
-                                <th class="text-center  text-capitalize th-main-color"> {!! __('Room') !!} </th>
-                                <th class="text-center  text-capitalize th-main-color"> {!! __('Cash Cover') !!} </th>
+                                <th class="text-center text-capitalize th-main-color"> {!! __('Limit') !!} </th>
+                                <th class="text-center text-capitalize th-main-color"> {!! __('Outstanding') !!} </th>
+                                <th class="text-center text-capitalize th-main-color"> {!! __('Room') !!} </th>
+                                <th class="text-center text-capitalize th-main-color"> {!! __('Cash Cover') !!} </th>
 								
 							
                             
@@ -90,9 +90,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary 
-				{{-- submit-form-btn --}}
-				"
+                <button type="button" class="btn btn-primary {{-- submit-form-btn --}}"
 				 data-dismiss="modal"
 				 
 				 >{{ __('Close') }}</button>

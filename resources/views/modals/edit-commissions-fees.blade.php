@@ -1,4 +1,4 @@
- <a data-toggle="modal" data-target="#edit-fees-modal-{{ $currentStatementId }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Edit Commission Fees') }}" href="#"><i class="fa fa-pen"></i></a>
+ <a data-toggle="modal" data-target="#edit-fees-modal-{{ $currentStatementId }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Edit Commission Fees') }}" href="#"><i class="fa fa-pen"></i></a>
  <div class="modal fade" id="edit-fees-modal-{{ $currentStatementId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
          <div class="modal-content">

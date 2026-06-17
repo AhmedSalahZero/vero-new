@@ -85,7 +85,7 @@
                             <td>{{ $key+1 }}</td>
                             <td>{{ $item->name }}</td>
 
-                            <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions"
+                            <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions"
                                 data-autohide-disabled="false"><span style="overflow: visible; position: relative; width: 110px;">
                                     <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" href="{{route('roles.permissions.edit',[$scope,$item])}}"><i class="fa fa-edit"></i></a>
                                     <a type="button" class="btn btn-secondary btn-outline-hover-danger btn-icon"><i class="fa fa-trash"></i></a>

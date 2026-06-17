@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
     .max-w-serial {
@@ -121,7 +120,7 @@
 
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="row">
     <div class="col-md-12">
@@ -274,7 +273,7 @@
                 @csrf
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
 
 						{{-- <div class="d-flex z-index-6" style="justify-content:right">
 						<a href="#" class="btn active-style btn-icon-sm align-self-center">
@@ -290,47 +289,47 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-serial header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
-                                        <th class="view-table-th   header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Bank Name') }}
                                         </th>
                                     
-                                        <th class="view-table-th max-w-invoice-number    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-number header-th align-middle text-center">
                                             {{ __('Account Type') }}
                                         </th>
 
 
-                                        <th class="view-table-th max-w-currency    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-currency header-th align-middle text-center">
                                             {{ __('Account Number') }}
                                         </th>
 
-                                        <th class="view-table-th max-w-amount    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-amount header-th align-middle text-center">
                                             {{ __('Withdrawal Date') }}
                                         </th>
-                                        <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Withdrawal Amount') }}
                                         </th>
 
- <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+ <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Settlement Amount') }}
                                         </th>
 										
 
-                                        <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Balance') }}
                                         </th>
 
                   
-                                        <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Due Date') }}
                                         </th>
 										
-                                        {{-- <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        {{-- <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Status') }}
                                         </th> --}}
 										
@@ -345,17 +344,17 @@
 
                                     </script>
                                     @foreach($overdraftWithdrawals as $index=>$modelAsStdClass)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
                                         <td class="sub-text-bg text-center max-w-amount">{{ $modelAsStdClass->name_en }}</td>
 										
                                         <td class="sub-text-bg text-center max-w-invoice-number">{{ $tableNameFormatted }}</td>
                                         <td class="sub-text-bg text-center max-w-invoice-date">{{  $modelAsStdClass->account_number }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
+                                        <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
                                         <td class="sub-text-bg text-center max-w-amount">{{ number_format($modelAsStdClass->credit) }}</td>
                                         <td class="sub-text-bg text-center max-w-amount">{{ number_format($modelAsStdClass->settlement_amount) }}</td>
                                         <td class="sub-text-bg text-center max-w-amount">{{ number_format($modelAsStdClass->net_balance) }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->due_date)->format('d-m-Y') }}</td>
+                                        <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($modelAsStdClass->due_date)->format('d-m-Y') }}</td>
                                         {{-- <td class="sub-text-bg text-center max-w-amount">{{ __('Status ') }}</td> --}}
 
                                     </tr>

@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 @php
 use App\Helpers\HArr;
 use Carbon\Carbon ;
@@ -130,7 +129,7 @@ use Carbon\Carbon ;
 <x-main-form-title :id="'main-form-title'" :class="''">{{ $title }}</x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 @php
 $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 @endphp
@@ -314,8 +313,8 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
             </div>
 
 
-            <div class="kt-portlet__body " style="padding-top:0 !important">
-                <div class="tab-content  ">
+            <div class="kt-portlet__body" style="padding-top:0 !important">
+                <div class="tab-content">
 				@php
 					$index = -1 ;
 				@endphp
@@ -331,21 +330,21 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 
 
                        
-                            <div class="table-custom-container position-relative  ">
+                            <div class="table-custom-container position-relative">
 
 
                                 <div class="responsive">
                                     <table class="table kt_table_with_no_pagination_no_collapse{{ $tableId }} table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class{{ $tableId }} dataTable no-footer">
                                         <thead>
-                                            <tr class="header-tr ">
-                                                <th rowspan="{{ $noRowHeaders }}" class="view-table-th expand-all is-open-parent header-th editable-date max-w-classes-expand align-middle text-center  trigger-child-row-1">
+                                            <tr class="header-tr">
+                                                <th rowspan="{{ $noRowHeaders }}" class="view-table-th expand-all is-open-parent header-th editable-date max-w-classes-expand align-middle text-center trigger-child-row-1">
                                                     {{ __('Expand All' ) }} 
                                                     <span>+</span>
                                                 </th>
                                                 <th rowspan="{{ $noRowHeaders }}" class="view-table-th header-th max-w-classes-name align-middle text-center">
                                                     {{ __('Item') }}
                                                 </th>
-                                                <th class="view-table-th @if($reportInterval == 'weekly') bg-lighter @endif max-w-weeks header-th  align-middle text-center">
+                                                <th class="view-table-th @if($reportInterval == 'weekly') bg-lighter @endif max-w-weeks header-th align-middle text-center">
                                                     @if($reportInterval == 'weekly')
                                                     {{ __('Week Num') }}
                                                     @elseif($reportInterval == 'monthly')
@@ -368,7 +367,7 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
                                                 @endforeach
                                                 @elseif($reportInterval == 'monthly')
                                                 @foreach($months as $month)
-                                                <th class="view-table-th  header-th max-w-weeks align-middle text-center">
+                                                <th class="view-table-th header-th max-w-weeks align-middle text-center">
                                                     @if($loop->first || $loop->last)
                                                     <span class="d-block">{{ Carbon::make($month)->format('d-m-Y') }}</span>
                                                     @else
@@ -381,7 +380,7 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
                                                 @elseif($reportInterval == 'daily')
 
                                                 @foreach($days as $day)
-                                                <th class="view-table-th  header-th max-w-weeks align-middle text-center">
+                                                <th class="view-table-th header-th max-w-weeks align-middle text-center">
                                                     <span class="d-block">{{ Carbon::make($day)->format('d-m-Y') }}</span>
                                                 </th>
                                                 @endforeach
@@ -393,27 +392,27 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 
                                             </tr>
                                             @if($reportInterval == 'weekly')
-                                            <tr class="header-tr ">
+                                            <tr class="header-tr">
 
 
-                                                <th class="view-table-th header-th max-w-weeks  align-middle text-center" class="header-th">
+                                                <th class="view-table-th header-th max-w-weeks align-middle text-center" class="header-th">
                                                     {{ __('Start Date') }}
                                                 </th>
                                                 @foreach($dates as $index=>$startAndEndDate)
-                                                <th class="view-table-th header-th max-w-weeks text-nowrap  align-middle text-center">{{ $startAndEndDate['start_date'] }}</th>
+                                                <th class="view-table-th header-th max-w-weeks text-nowrap align-middle text-center">{{ $startAndEndDate['start_date'] }}</th>
                                                 @endforeach
 
 
                                             </tr>
 
 
-                                            <tr class="header-tr ">
+                                            <tr class="header-tr">
 
-                                                <th class="view-table-th header-th max-w-weeks  align-middle text-center" class="header-th">
+                                                <th class="view-table-th header-th max-w-weeks align-middle text-center" class="header-th">
                                                     {{ __('End Date') }}
                                                 </th>
                                                 @foreach($dates as $index=>$startAndEndDate)
-                                                <th class="view-table-th header-th text-nowrap max-w-weeks  align-middle text-center">{{ $startAndEndDate['end_date'] }}</th>
+                                                <th class="view-table-th header-th text-nowrap max-w-weeks align-middle text-center">{{ $startAndEndDate['end_date'] }}</th>
                                                 @endforeach
 
 
@@ -454,10 +453,10 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 											$isTotalRow = true ;
                                             @endphp
                                             
-					 <tr class=" @if($customerName == __('Total Cash Inflow') || $customerName == __('Total Cash Outflow') ||  $customerName == __('Total Cash')) bg-lighter @else  @endif  parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   " data-model-id="{{ $rowIndex }}">
+					 <tr class="@if($customerName == __('Total Cash Inflow') || $customerName == __('Total Cash Outflow') || $customerName == __('Total Cash')) bg-lighter @else @endif parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close" data-model-id="{{ $rowIndex }}">
                                     <td class="red reset-table-width text-nowrap @if($hasSubRows) trigger-child-row-1 cursor-pointer @endif sub-text-bg text-capitalize main-tr is-close"> @if($hasSubRows) + @endif  </td>
-                                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ $customerName }}</td>
-                                    <td class="  sub-numeric-bg text-center editable-date"> 
+                                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ $customerName }}</td>
+                                    <td class="sub-numeric-bg text-center editable-date"> 
 									
 									
 										
@@ -558,7 +557,7 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 										
                                     @endphp
 									
-                                    <td  data-id="{{ $currentValue }}" class="  sub-numeric-bg text-center editable-date">{{ number_format($currentValue,0) }}
+                                    <td  data-id="{{ $currentValue }}" class="sub-numeric-bg text-center editable-date">{{ number_format($currentValue,0) }}
 								
 										
 									</td>
@@ -572,7 +571,7 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 									}
 									@endphp
                                    
-                                    <td class="  sub-numeric-bg text-center editable-date">
+                                    <td class="sub-numeric-bg text-center editable-date">
 									{{ number_format(  $currentMainRowTotal ) }}
 								
 									 </td>
@@ -719,7 +718,7 @@ $moreThan150=\App\ReadyFunctions\InvoiceAgingService::MORE_THAN_150;
 
 <script> 
 if ($('.kt-portlet__body').length) {
-                            $('.kt-portlet__body').append(`<i class="cursor-pointer text-dark arrow-nav  arrow-left fa fa-arrow-left"></i> <i class="cursor-pointer text-dark arrow-nav arrow-right fa  fa-arrow-right"></i>`)
+                            $('.kt-portlet__body').append(`<i class="cursor-pointer text-dark arrow-nav arrow-left fa fa-arrow-left"></i> <i class="cursor-pointer text-dark arrow-nav arrow-right fa fa-arrow-right"></i>`)
                             $(document).on('click', '.arrow-nav', function() {
                                 const scrollLeftOfTableBody = document.querySelector('.kt-portlet__body').scrollLeft
                                 const scrollByUnit = 50

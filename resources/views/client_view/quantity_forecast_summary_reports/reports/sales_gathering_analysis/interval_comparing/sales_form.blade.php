@@ -19,7 +19,7 @@
                 <input type="hidden" name="type" value="{{$type}}">
                 <input type="hidden" name="view_name" value="{{$view_name}}">
                 <div class="kt-portlet__body">
-                    <div class="form-group row ">
+                    <div class="form-group row">
                         <div class="col-md-3">
                             <label><b>{{__('First Inteval')}}</b></label>
                         </div>
@@ -42,13 +42,13 @@
                         <div class="col-md-3">
                             <label>{{__('Note')}} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group ">
+                                <div class="input-group">
                                      <input type="text" class="form-control" disabled value="{{__('The Report Will Show Max Top 50')}}"  >
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row ">
+                    <div class="form-group row">
                         <div class="col-md-3">
                             <label><b>{{__('Second Inteval')}}</b></label>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="col-md-3">
                             <label>{{__('Data Type')}} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group ">
+                                <div class="input-group">
                                     <input type="text" class="form-control" disabled value="{{__('Value')}}"  >
                                 </div>
                             </div>

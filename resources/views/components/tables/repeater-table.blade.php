@@ -51,12 +51,12 @@
 $canAddNewItem = true;
 @endphp
 
-<div class="{{ $tableClass }} {{ $parentClass }}  js-parent-to-table " data-table-id="{{ $repeaterId??'' }}" @if($hideByDefault) style="display:none" @endif>
+<div class="{{ $tableClass }} {{ $parentClass }} js-parent-to-table" data-table-id="{{ $repeaterId??'' }}" @if($hideByDefault) style="display:none" @endif>
 
 
     @if($showRows)
 
-    <table @if($initialJs) id="{{ $repeaterId }}" @endif class="table  {{ $repeaterId }} {{ $tableClasses }} table-white  repeater-class repeater {{ $tableName }}">
+    <table @if($initialJs) id="{{ $repeaterId }}" @endif class="table {{ $repeaterId }} {{ $tableClasses }} table-white repeater-class repeater {{ $tableName }}">
         <thead>
             <tr>
                 @if(!$removeActionBtn)
@@ -83,7 +83,7 @@ $canAddNewItem = true;
         <td>
             @if($showAddBtnAndPlus)
             @if($canAddNewItem && !$removeActionBtn)
-            <div data-repeater-create="" class="btn btn btn-sm text-white add-row btn-div  border-green bg-green  m-btn m-btn--icon m-btn--pill m-btn--wide {{__('right')}}">
+            <div data-repeater-create="" class="btn btn btn-sm text-white add-row btn-div border-green bg-green m-btn m-btn--icon m-btn--pill m-btn--wide {{__('right')}}">
                 <span>
                     +
                     <span>

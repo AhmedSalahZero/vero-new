@@ -34,16 +34,21 @@ trait AuthTrait
 		$this->company = $company;
 		$currentOdooId = $user->getOdooId() ;
 		$common = ripcord::client("$this->url/xmlrpc/2/common");
+
 		$uid = null ;
 		try{
 			if(is_null($currentOdooId)){
 					$uid = $common->authenticate($this->db, $this->username, $this->password, array());
+					if(!is_numeric($uid)){
+						$uid = null;
+					}
 				}else{
 					$uid = $currentOdooId ;
 				}
 		}
 		catch(\Exception $e){
 			$uid = null;
+
 		}
 		if(is_array($uid)){
 			$uid = null ;
@@ -239,4 +244,3 @@ trait AuthTrait
     // }
 	
 }
-

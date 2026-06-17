@@ -62,7 +62,7 @@
                                 <td>
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input name="collection_days_{{ $i }}" type="numeric" step="1" class="form-control " value="{{ isset($salesOrder) ? $salesOrder->getCollectionDays($i) : old('salesOrders.collection_days_'.$i,0) }}">
+                                            <input name="collection_days_{{ $i }}" type="numeric" step="1" class="form-control" value="{{ isset($salesOrder) ? $salesOrder->getCollectionDays($i) : old('salesOrders.collection_days_'.$i,0) }}">
                                         </div>
                                     </div>
                                 </td>

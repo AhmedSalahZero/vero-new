@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
 .max-w-comment{
@@ -133,7 +132,7 @@
 
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="row">
     <div class="col-md-12">
@@ -286,7 +285,7 @@
                 @csrf
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
                     
 
                     <div>
@@ -296,45 +295,45 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th  header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
-                               <th class="view-table-th     header-th  align-middle text-center">
+                               <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Bank Name') }}
                                         </th> 
                                      
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('LG Type') }}
                                         </th>
-                                            <th class="view-table-th   header-th  align-middle text-center">
+                                            <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Beneficiary Name') }}
                                         </th>
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Transaction Name') }}
                                         </th>
 
 
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('LG Code') }}
                                         </th>
 
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Source') }}
                                         </th>
 										     
                                        
-										<th class="view-table-th     header-th  align-middle text-center">
+										<th class="view-table-th header-th align-middle text-center">
                                             {{ __('Amount') }}
                                         </th>	
-										<th class="view-table-th     header-th  align-middle text-center">
+										<th class="view-table-th header-th align-middle text-center">
                                             {{ __('Renewal Date') }}
-                                        </th><th class="view-table-th     header-th  align-middle text-center">
+                                        </th><th class="view-table-th header-th align-middle text-center">
                                             {{ __('Cash Cover') }}
                                         </th>
-										<th class="view-table-th     header-th  align-middle text-center">
+										<th class="view-table-th header-th align-middle text-center">
                                             {!! __('Commission <br> Rate %') !!}
                                         </th>
 
@@ -358,20 +357,20 @@
 										
 									@endphp
                                     @foreach($results as $index=>$modelAsStdClass)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg  ">{{ $index+1 }}</td>
-                                        <td class="sub-text-bg  text-left ">{{ $modelAsStdClass->financial_institution_name }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg">{{ $index+1 }}</td>
+                                        <td class="sub-text-bg text-left">{{ $modelAsStdClass->financial_institution_name }}</td>
 
-                                        <td class="sub-text-bg  text-center ">{{ $lgsTypes[$modelAsStdClass->lg_type] }}</td>
-										                                        <td class="sub-text-bg  text-left ">{{ $modelAsStdClass->partner_name }}</td>
+                                        <td class="sub-text-bg text-center">{{ $lgsTypes[$modelAsStdClass->lg_type] }}</td>
+										                                        <td class="sub-text-bg text-left">{{ $modelAsStdClass->partner_name }}</td>
 										
-                                        <td class="sub-text-bg  text-left ">{{ $modelAsStdClass->transaction_name }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ $modelAsStdClass->lg_code }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ $lgsSources[$modelAsStdClass->source] }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ number_format($modelAsStdClass->lg_amount) }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ $modelAsStdClass->renewal_date }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ number_format($modelAsStdClass->cash_cover_amount) }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ $modelAsStdClass->lg_commission_rate }}</td>
+                                        <td class="sub-text-bg text-left">{{ $modelAsStdClass->transaction_name }}</td>
+                                        <td class="sub-text-bg text-center">{{ $modelAsStdClass->lg_code }}</td>
+                                        <td class="sub-text-bg text-center">{{ $lgsSources[$modelAsStdClass->source] }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->lg_amount) }}</td>
+                                        <td class="sub-text-bg text-center">{{ $modelAsStdClass->renewal_date }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->cash_cover_amount) }}</td>
+                                        <td class="sub-text-bg text-center">{{ $modelAsStdClass->lg_commission_rate }}</td>
 
                                     </tr>
 									@php
@@ -380,18 +379,18 @@
 									@endphp
                                     @endforeach
 									
-									 <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg  ">-</td>
-                                        <td class="sub-text-bg  text-center ">{{ __('Total') }}</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
-                                        <td class="sub-text-bg  text-center ">{{ number_format($lgAmountTotal) }}</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
-                                        <td class="sub-text-bg  text-center ">{{ number_format($cashCoverAmountTotal) }}</td>
-                                        <td class="sub-text-bg  text-center ">-</td>
+									 <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg">-</td>
+                                        <td class="sub-text-bg text-center">{{ __('Total') }}</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($lgAmountTotal) }}</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($cashCoverAmountTotal) }}</td>
+                                        <td class="sub-text-bg text-center">-</td>
 
                                     </tr>
 

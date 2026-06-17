@@ -287,7 +287,7 @@
 
                 </div>
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
 
 
                     <div>
@@ -299,22 +299,22 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th max-w-serial bg-lighter header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-serial bg-lighter header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
-                                        <th class="view-table-th   bg-lighter header-th  align-middle text-center">
+                                        <th class="view-table-th bg-lighter header-th align-middle text-center">
                                             {{ $customerOrSupplierNameText }}
                                         </th>
 										@foreach($tableHeaders as $tableHeader)
-										  <th class="view-table-th   bg-lighter header-th  align-middle text-center">
+										  <th class="view-table-th bg-lighter header-th align-middle text-center">
                                             {{ $tableHeader }}
                                         </th>
 										@endforeach 
 										
 											@if($isMonthlyReport)
-											<th class="view-table-th   bg-lighter header-th  align-middle text-center">
+											<th class="view-table-th bg-lighter header-th align-middle text-center">
 											{{ __('Total') }}
 	                                        </th>
 												@endif 
@@ -333,23 +333,23 @@
                                     @endphp
 									
 										@foreach($collectionEffectivenessIndexPerCustomer as $partnerName => $effectivenessIndexArrs)
-											<tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-												<td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
-												<td class="sub-text-bg  is-name-cell text-left">{{ $partnerName }}</td>
+											<tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+												<td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
+												<td class="sub-text-bg is-name-cell text-left">{{ $partnerName }}</td>
 												@foreach($tableHeaders as $tableHeader)
-												<td class="sub-text-bg text-center ">{{ number_format($effectivenessIndexArrs[$tableHeader],2) .  ' %' }}</td>
+												<td class="sub-text-bg text-center">{{ number_format($effectivenessIndexArrs[$tableHeader],2) .  ' %' }}</td>
 												@endforeach 
 												@if($isMonthlyReport)
-												<td class="sub-text-bg text-center ">{{ number_format($collectionEffectivenessIndexForAllCustomersPerCustomer[$partnerName],2) .  ' %' }}</td>
+												<td class="sub-text-bg text-center">{{ number_format($collectionEffectivenessIndexForAllCustomersPerCustomer[$partnerName],2) .  ' %' }}</td>
 												@endif 
 											</tr>
 											@php
 											$index++;
 										@endphp
 										@endforeach 
-										<tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer text-capitalize  ">
-												<th class="sub-text-bg max-w-serial  custom-th ">{{ '-' }}</td>
-												<th class="sub-text-bg  is-name-cell custom-th text-left">{{ __('All Company') }}</th>
+										<tr class="parent-tr reset-table-width text-nowrap cursor-pointer text-capitalize">
+												<th class="sub-text-bg max-w-serial custom-th">{{ '-' }}</td>
+												<th class="sub-text-bg is-name-cell custom-th text-left">{{ __('All Company') }}</th>
 													@foreach($tableHeaders as $tableHeader)
 												<th class="sub-text-bg text-center custom-th">{{ number_format($collectionEffectivenessIndexForAllCustomersPerDate[$tableHeader],2) .  ' %' }}</th>
 												@endforeach

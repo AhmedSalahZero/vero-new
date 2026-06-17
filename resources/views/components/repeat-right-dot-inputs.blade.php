@@ -18,13 +18,7 @@
 'disabled'=>false,
 'dataCurrentYear'=>null
 ])
-<div class="
-@if(!$removeThreeDotsClass)
-form-group 
-three-dots-parent
-@endif 
-
-">
+<div class="@if(!$removeThreeDotsClass) form-group three-dots-parent @endif">
 @php
 	$groupIndex = $attributes->get('data-group-index');
 	$isYearRepeater = $groupIndex != null ;
@@ -45,10 +39,7 @@ three-dots-parent
 				@if($name)
 				data-name="{{ removeSquareBrackets($name) }}"
 				@endif
-			 onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden 
-
-			 @if($isPercentage) expandable-percentage-input  @else expandable-amount-input @endif
-			  repeat-to-right-input-formatted  {{ $formattedInputClasses }} " type="text" value="{{ $isNumber ?  number_format($currentVal,$numberFormatDecimals) : $currentVal  }}" 
+			 onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden @if($isPercentage) expandable-percentage-input @else expandable-amount-input @endif repeat-to-right-input-formatted {{ $formattedInputClasses }}" type="text" value="{{ $isNumber ?  number_format($currentVal,$numberFormatDecimals) : $currentVal  }}" 
 			 @if(!is_null($columnIndex))
 			 data-column-index="{{ $columnIndex }}" 
 			 @endif
@@ -63,7 +54,7 @@ three-dots-parent
 			@if($multiple)
 			multiple
 			@endif 
-			{{ $inputHiddenAttributes  }}  {{ $attributes->merge([]) }} type="hidden" data-name="{{ removeSquareBrackets($name) }}"  class="repeat-to-right-input-hidden input-hidden-with-name  {{ $classes }}" value="{{ $currentVal  }}" 
+			{{ $inputHiddenAttributes  }}  {{ $attributes->merge([]) }} type="hidden" data-name="{{ removeSquareBrackets($name) }}"  class="repeat-to-right-input-hidden input-hidden-with-name {{ $classes }}" value="{{ $currentVal  }}" 
 			 @if(!is_null($columnIndex))
 			data-column-index="{{ $columnIndex }}"
 			@endif
@@ -92,10 +83,7 @@ three-dots-parent
 	@if(!$removeThreeDots)
     <i 
 	data-name="{{ removeSquareBrackets($name) }}"
-	class="fa
-	
-
-	 fa-ellipsis-h pull-left repeat-to-right row-repeater-icon " data-column-index="{{ $columnIndex}}" 
+	class="fa fa-ellipsis-h pull-left repeat-to-right row-repeater-icon" data-column-index="{{ $columnIndex}}" 
 	 @if($isYearRepeater)
 	 data-group-repeater 
 	 data-group-index="{{ $groupIndex }}"	 

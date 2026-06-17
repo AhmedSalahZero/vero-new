@@ -35,17 +35,13 @@
             </div>
             @if($showReport && $currencyName)
 					
-            <div class="report-flex
-			@if($currencyName== 'main_currency')
-			visibility-hidden
-			@endif
-			"
+            <div class="report-flex @if($currencyName== 'main_currency') visibility-hidden @endif"
 			>
-                <div class="kt-align-right ">
+                <div class="kt-align-right">
                     <a href="{{ route('show.total.net.balance.in',['company'=>$company->id , 'currency'=>$currencyName ,'modelType'=>$invoiceType   ]) }}" type="button" class="d-flex ml-3 btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('All Invoices Report') }} </a>
                 </div>
 
-                <div class="kt-align-right ">
+                <div class="kt-align-right">
                     <a href="{{ route('show.total.net.balance.in',['company'=>$company->id , 'currency'=>$currencyName ,'modelType'=>$invoiceType,'only'=>'past_due'   ]) }}" type="button" class="d-flex ml-3 btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('Past Dues Report') }} </a>
                 </div>
             </div>
@@ -54,16 +50,12 @@
 			@else 
 
 
- <div class="report-flex 
- 
- visibility-hidden
- 
- ">
-                <div class="kt-align-right ">
+ <div class="report-flex visibility-hidden">
+                <div class="kt-align-right">
                     <a href="#" type="button" class="d-flex ml-3 btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('Report') }} </a>
                 </div>
 
-                <div class="kt-align-right ">
+                <div class="kt-align-right">
                     <a href="#" type="button" class="d-flex ml-3 btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('Report') }} </a>
                 </div>
             </div>

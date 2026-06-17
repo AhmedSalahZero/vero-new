@@ -39,7 +39,7 @@
               $allocation_base = str_replace('_', ' ', ucwords($new_products_allocations->allocation_base)) ;@endphp
         @if (count($products_seasonality)>0)
             <div class="kt-portlet">
-                <div class="kt-portlet__body ">
+                <div class="kt-portlet__body">
 
                     <x-table :tableTitle="__($allocation_base.' Against New Product Items Table')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
                         @slot('table_header')
@@ -92,7 +92,7 @@
         @if(hasProductsItems($company))
 
         <div class="kt-portlet">
-            <div class="kt-portlet__body ">
+            <div class="kt-portlet__body">
                 <x-table :tableTitle="__($allocation_base.' Against Existing Product Items Table')" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
                     @slot('table_header')
                         <tr class="table-active text-center">
@@ -137,7 +137,7 @@
         @if (count($products_seasonality)>0)
             {{-- Total --}}
             <div class="kt-portlet">
-                <div class="kt-portlet__body ">
+                <div class="kt-portlet__body">
                     @php
                         $total = $total_products_items['Total']??[];
                         unset($total_products_items['Total']);

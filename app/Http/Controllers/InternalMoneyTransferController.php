@@ -71,8 +71,8 @@ class InternalMoneyTransferController
 		$bankToBankStartDate = $filterDates[InternalMoneyTransfer::BANK_TO_BANK]['startDate'] ?? null ;
 		$bankToBankEndDate = $filterDates[InternalMoneyTransfer::BANK_TO_BANK]['endDate'] ?? null ;
 		$bankToBankInternalMoneyTransfers = $company->bankToBankInternalMoneyTransfers()
-		->filterByTransferDate($bankToBankStartDate,$bankToBankEndDate)
-		->when($currentType == InternalMoneyTransfer::BANK_TO_BANK, function ($query) use ($request) {
+		->whereBetween('transfer_date', [$bankToBankStartDate, $bankToBankEndDate])
+		->when($currentType == InternalMoneyTransfer::BANK_TO_BANK, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');
@@ -100,8 +100,8 @@ class InternalMoneyTransferController
 		$safeToBankStartDate = $filterDates[InternalMoneyTransfer::SAFE_TO_BANK]['startDate'] ?? null ;
 		$safeToBankEndDate = $filterDates[InternalMoneyTransfer::SAFE_TO_BANK]['endDate'] ?? null ;
 		$safeToBankInternalMoneyTransfers = $company->safeToBankInternalMoneyTransfers()
-		->filterByTransferDate($safeToBankStartDate,$safeToBankEndDate)
-		->when($currentType == InternalMoneyTransfer::SAFE_TO_BANK, function ($query) use ($request) {
+		->whereBetween('transfer_date', [$safeToBankStartDate, $safeToBankEndDate])
+		->when($currentType == InternalMoneyTransfer::SAFE_TO_BANK, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');
@@ -128,8 +128,8 @@ class InternalMoneyTransferController
 		$bankToSafeStartDate = $filterDates[InternalMoneyTransfer::BANK_TO_SAFE]['startDate'] ?? null ;
 		$bankToSafeEndDate = $filterDates[InternalMoneyTransfer::BANK_TO_SAFE]['endDate'] ?? null ;
 		$bankToSafeInternalMoneyTransfers = $company->bankToSafeInternalMoneyTransfers()
-		->filterByTransferDate($bankToSafeStartDate,$bankToSafeEndDate)
-		->when($currentType == InternalMoneyTransfer::BANK_TO_SAFE, function ($query) use ($request) {
+		->whereBetween('transfer_date', [$bankToSafeStartDate, $bankToSafeEndDate])
+		->when($currentType == InternalMoneyTransfer::BANK_TO_SAFE, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');
@@ -157,8 +157,8 @@ class InternalMoneyTransferController
 		$safeToSafeStartDate = $filterDates[InternalMoneyTransfer::SAFE_TO_SAFE]['startDate'] ?? null ;
 		$safeToSafeEndDate = $filterDates[InternalMoneyTransfer::SAFE_TO_SAFE]['endDate'] ?? null ;
 		$safeToSafeInternalMoneyTransfers = $company->safeToSafeInternalMoneyTransfers()
-		->filterByTransferDate($safeToSafeStartDate,$safeToSafeEndDate)
-		->when($currentType == InternalMoneyTransfer::SAFE_TO_SAFE, function ($query) use ($request) {
+		->whereBetween('transfer_date', [$safeToSafeStartDate, $safeToSafeEndDate])
+		->when($currentType == InternalMoneyTransfer::SAFE_TO_SAFE, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');

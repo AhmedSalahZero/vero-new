@@ -41,13 +41,13 @@ use App\Models\OdooExpense ;
 
 
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             @php
             $currentType = OdooExpense::APPROVED ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Approved Odoo Expense')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-odoo-expenses :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="#" />
@@ -55,7 +55,7 @@ use App\Models\OdooExpense ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -100,13 +100,13 @@ use App\Models\OdooExpense ;
                                     <td>{{ $model->getMarginRateFormatted() }}</td> --}}
                                     {{-- <td class="text-uppercase">{{ $model->getDurationFormatted() }}</td>
                                     <td class="text-transform">{{ $model->getPaymentInstallmentIntervalFormatted() }}</td> --}}
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             {{-- @if(hasAuthFor('create medium term loan')) --}}
                                             @if($model->getPaymentStatus() == 'not_paid')
                                             <a data-toggle="modal" data-target="#pay-modal{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Paid') }}" href="#"><i class="fa fa-dollar pl-2"></i> <i class="fa fa-dollar-sign ml-1 pr-2"></i> </a>
                                             <div class="modal fade text-left" id="pay-modal{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog  modal-dialog-centered" role="document">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <form action="{{ route('odoo-expenses.mark.as.paid',['company'=>$company->id]) }}" method="post">
                                                             @csrf

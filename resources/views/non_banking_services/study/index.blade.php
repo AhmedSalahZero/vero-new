@@ -80,13 +80,13 @@ use App\Models\NonBankingService\Study;
                 </li>
 
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{  Request('active') == Study::ANNUALLY_STUDY ?'active':'' }}" data-toggle="tab" href="#{{Study::ANNUALLY_STUDY  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == Study::ANNUALLY_STUDY ?'active':'' }}" data-toggle="tab" href="#{{Study::ANNUALLY_STUDY  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Annually Study') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{  Request('active') == Study::CONSOLIDATION ?'active':'' }}" data-toggle="tab" href="#{{Study::CONSOLIDATION  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == Study::CONSOLIDATION ?'active':'' }}" data-toggle="tab" href="#{{Study::CONSOLIDATION  }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Consolidations Study') }}
                     </a>
                 </li>
@@ -97,7 +97,7 @@ use App\Models\NonBankingService\Study;
             </ul>
 
             <form action="{{ route('non.banking.store.consolidations',['company'=>$company->id]) }}" method="POST">
-                <div class="modal fade " id="modal-id-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal fade" id="modal-id-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                         @csrf
 
@@ -126,7 +126,7 @@ use App\Models\NonBankingService\Study;
                                         </div>
                                         <input type="hidden" name="study_type" value="{{  Study::BUSINESS_PLAN }}">
                                         <div class="col-md-6">
-                                            <x-form.select :label="__('Studies')" :isRequired="true" name="study_ids[]" :multiple="true" :selectedValue="isset($subModel) ? $subModel->getRevenueStreamTypes() : ''" :options="$models[Study::BUSINESS_PLAN ]->formattedForSelect(true,'getId','getName')" :add-new="false" class="select2-select repeater-select update-revenue-category-based-on-revenue-js " :all="false" data-current-selected="{{ json_encode(isset($subModel) ? $subModel->getRevenueStreamTypes():[]) }}"></x-form.select>
+                                            <x-form.select :label="__('Studies')" :isRequired="true" name="study_ids[]" :multiple="true" :selectedValue="isset($subModel) ? $subModel->getRevenueStreamTypes() : ''" :options="$models[Study::BUSINESS_PLAN ]->formattedForSelect(true,'getId','getName')" :add-new="false" class="select2-select repeater-select update-revenue-category-based-on-revenue-js" :all="false" data-current-selected="{{ json_encode(isset($subModel) ? $subModel->getRevenueStreamTypes():[]) }}"></x-form.select>
 
                                         </div>
                                     </div>
@@ -136,8 +136,8 @@ use App\Models\NonBankingService\Study;
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger " data-dismiss="modal">{{ __('Close') }} </button>
-                                <button type="submit" class="btn btn-primary ">{{ __('Save') }} </button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">{{ __('Close') }} </button>
+                                <button type="submit" class="btn btn-primary">{{ __('Save') }} </button>
                             </div>
 
                         </div>
@@ -153,7 +153,7 @@ use App\Models\NonBankingService\Study;
 
 
             <form action="{{ route('non.banking.store.consolidations',['company'=>$company->id]) }}" method="POST">
-                <div class="modal fade " id="modal-id-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal fade" id="modal-id-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                         @csrf
 
@@ -181,7 +181,7 @@ use App\Models\NonBankingService\Study;
                                         </div>
                                         <input type="hidden" name="study_type" value="{{  Study::BUSINESS_PLAN }}">
                                         <div class="col-md-6">
-                                            <x-form.select :label="__('Studies')" :isRequired="true" name="study_ids[]" :multiple="true" :selectedValue="isset($subModel) ? $subModel->getRevenueStreamTypes() : ''" :options="$models[Study::ANNUALLY_STUDY]->formattedForSelect(true,'getId','getName')" :add-new="false" class="select2-select repeater-select update-revenue-category-based-on-revenue-js " :all="false" data-current-selected="{{ json_encode(isset($subModel) ? $subModel->getRevenueStreamTypes():[]) }}"></x-form.select>
+                                            <x-form.select :label="__('Studies')" :isRequired="true" name="study_ids[]" :multiple="true" :selectedValue="isset($subModel) ? $subModel->getRevenueStreamTypes() : ''" :options="$models[Study::ANNUALLY_STUDY]->formattedForSelect(true,'getId','getName')" :add-new="false" class="select2-select repeater-select update-revenue-category-based-on-revenue-js" :all="false" data-current-selected="{{ json_encode(isset($subModel) ? $subModel->getRevenueStreamTypes():[]) }}"></x-form.select>
 
                                         </div>
                                     </div>
@@ -191,8 +191,8 @@ use App\Models\NonBankingService\Study;
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger " data-dismiss="modal">{{ __('Close') }} </button>
-                                <button type="submit" class="btn btn-primary ">{{ __('Save') }} </button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">{{ __('Close') }} </button>
+                                <button type="submit" class="btn btn-primary">{{ __('Save') }} </button>
                             </div>
 
                         </div>
@@ -206,18 +206,14 @@ use App\Models\NonBankingService\Study;
             <div class="multi-flex-tabs">
                 <div class="flex-tabs">
                    
-                    <a href="{{ route('non.banking.create.study',['company'=>$company->id,'is_business_plan'=>0]) }}" class="btn 
-					 @if(!$company->hasAtLeastOneOfEachMainModels())
-					 visibility-hidden 
-                    @endif
-					w-200px btn-2-bg bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
-                        <i class="fas fa-plus white-icon exclude-icon "></i>
+                    <a href="{{ route('non.banking.create.study',['company'=>$company->id,'is_business_plan'=>0]) }}" class="btn @if(!$company->hasAtLeastOneOfEachMainModels()) visibility-hidden @endif w-200px btn-2-bg bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
+                        <i class="fas fa-plus white-icon exclude-icon"></i>
                         {{ __('New Financial Plan') }}
                     </a>
 
 
                     <a href="#" data-toggle="modal" data-target="#modal-id-1" class="btn w-200px btn-3-bg bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
-                        {{-- <i class="fas fa-plus white-icon exclude-icon "></i> --}}
+                        {{-- <i class="fas fa-plus white-icon exclude-icon"></i> --}}
                         {{ __('Business Consolidations') }}
                     </a>
 
@@ -229,7 +225,7 @@ use App\Models\NonBankingService\Study;
 
 
                     {{-- <a href="{{ route('non.banking.create.study',['company'=>$company->id,'is_business_plan'=>1]) }}" class="btn w-200px btn-2-bg bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
-                    <i class="fas fa-plus white-icon exclude-icon "></i>
+                    <i class="fas fa-plus white-icon exclude-icon"></i>
                     {{ __('New Business Plan') }}
                     </a> --}}
                     <a href="{{ route('create.existing.branches',['company'=>$company->id]) }}" class="btn w-200px new-record-class new-study-item rounded btn-icon-sm align-self-center">
@@ -265,13 +261,13 @@ use App\Models\NonBankingService\Study;
                 <div class="flex-tabs">
 
                     <a href="{{ route('non.banking.create.study',['company'=>$company->id,'is_business_plan'=>0]) }}" class="btn w-200px btn-2-bg visibility-hidden bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
-                        <i class="fas fa-plus white-icon exclude-icon "></i>
+                        <i class="fas fa-plus white-icon exclude-icon"></i>
                         {{ __('New Annual Plan') }}
                     </a>
 
 
                     <a href="#" data-toggle="modal" data-target="#modal-id-2" class="btn w-200px btn-3-bg bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
-                        {{-- <i class="fas fa-plus white-icon exclude-icon "></i> --}}
+                        {{-- <i class="fas fa-plus white-icon exclude-icon"></i> --}}
                         {{ __('Annual Consolidations') }}
                     </a>
 
@@ -299,27 +295,27 @@ use App\Models\NonBankingService\Study;
         </div>
     </div>
     <div class="kt-portlet__body pt-0">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             @php
             $currentType = Study::BUSINESS_PLAN ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     @php
                     $rowIndex = 0;
                     @endphp
                     <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                         <x-slot name="ths">
-                            <x-tables.repeater-table-th class="  header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Start Date')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('End Date')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Financial Statement')"></x-tables.repeater-table-th>
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Balance Sheet')"></x-tables.repeater-table-th> --}}
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Cash Flow')"></x-tables.repeater-table-th> --}}
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Dashboard')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Actions')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Start Date')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('End Date')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Financial Statement')"></x-tables.repeater-table-th>
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Balance Sheet')"></x-tables.repeater-table-th> --}}
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Cash Flow')"></x-tables.repeater-table-th> --}}
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Dashboard')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Actions')"></x-tables.repeater-table-th>
                         </x-slot>
                         <x-slot name="trs">
 
@@ -334,7 +330,7 @@ use App\Models\NonBankingService\Study;
                                 <td>
                                     <div class="">
 
-                                        <input value="{{ $model->getName() }}" disabled class="form-control text-left " type="text">
+                                        <input value="{{ $model->getName() }}" disabled class="form-control text-left" type="text">
                                     </div>
                                 </td>
                                 <td>
@@ -348,7 +344,7 @@ use App\Models\NonBankingService\Study;
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center flex-column " style="gap:10px;">
+                                    <div class="d-flex align-items-center flex-column" style="gap:10px;">
                                         <div class="d-flex mr-auto" style="gap:10px;">
                                             <a href="{{ route('view.non.banking.forecast.income.statement',['company'=>$company->id,'study'=>$model->id]) }}" class="btn btn-md-width btn-1-bg btn-sm btn-brand btn-pill">{{ __('Income Statement') }}</a>
                                             <a href="{{ route('non.banking.balance.sheet.result',['company'=>$company->id,'study'=>$model->id]) }}" class="btn btn-md-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Balance Sheet') }}</a>
@@ -365,7 +361,7 @@ use App\Models\NonBankingService\Study;
                                         <a href="{{ route('view.non.banking.valuation',['company'=>$company->id,'study'=>$model->id]) }}" class="btn btn-sm-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Valuation') }}</a>
                                     </div>
                                 </td>
-                                <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                     <span style="overflow: visible; position: relative; width: 110px;">
                                         <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon edit-btn-class" title="{{ __('Edit') }}" href="{{ route('non.banking.edit.study',['company'=>$company->id,'study'=>$model->id]) }}"><i class="fa fa-pen-alt exclude-icon default-icon-color"></i></a>
                                         <a data-toggle="modal" data-target="#copy{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon copy-btn-class" title="{{ __('Copy') }}" href="#"><i class="fa fa-copy exclude-icon default-icon-color"></i></a>
@@ -388,7 +384,7 @@ use App\Models\NonBankingService\Study;
                                                         </div>
                                                         <div class="modal-footer d-flex">
                                                             <button type="button" class="btn btn-sm btn-secondary p-2" data-dismiss="modal">{{__('Close')}}</button>
-                                                            <button type="submit" class="btn btn-sm btn-info p-2 "><span class="tooltiptext submit-copy-btn"><i class="far fa-copy"> {{__('Copy')}}</i> </span>
+                                                            <button type="submit" class="btn btn-sm btn-info p-2"><span class="tooltiptext submit-copy-btn"><i class="far fa-copy"> {{__('Copy')}}</i> </span>
                                                             </button>
                                                         </div>
                                                     </form>
@@ -455,21 +451,21 @@ use App\Models\NonBankingService\Study;
             $currentType = Study::ANNUALLY_STUDY ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{   Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     @php
                     $rowIndex = 0;
                     @endphp
                     <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                         <x-slot name="ths">
-                            <x-tables.repeater-table-th class="  header-border-down first-column-th-class" :title="__('Study Name')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Start Date')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('End Date')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Income Statement')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Balance Sheet')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Cash Flow')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Dashboard')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Actions')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="header-border-down first-column-th-class" :title="__('Study Name')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Start Date')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('End Date')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Income Statement')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Balance Sheet')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Cash Flow')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Dashboard')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Actions')"></x-tables.repeater-table-th>
                         </x-slot>
                         <x-slot name="trs">
 
@@ -484,7 +480,7 @@ use App\Models\NonBankingService\Study;
                                 <td>
                                     <div class="">
 
-                                        <input value="{{ $model->getName() }}" disabled class="form-control text-left " type="text">
+                                        <input value="{{ $model->getName() }}" disabled class="form-control text-left" type="text">
                                     </div>
                                 </td>
                                 <td>
@@ -500,7 +496,7 @@ use App\Models\NonBankingService\Study;
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center flex-column " style="gap:10px;">
+                                    <div class="d-flex align-items-center flex-column" style="gap:10px;">
                                         <div class="d-flex mr-auto" style="gap:10px;">
                                             <a href="{{ route('view.non.banking.forecast.income.statement',['company'=>$company->id,'study'=>$model->id]) }}" class="btn btn-sm-width btn-1-bg btn-sm btn-brand btn-pill">{{ __('Forecast') }}</a>
                                             <a href="#" class="btn btn-sm-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Actual') }}</a>
@@ -531,7 +527,7 @@ use App\Models\NonBankingService\Study;
                                         <a href="#" class="btn btn-sm-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Actual') }}</a>
                                     </div>
                                 </td>
-                                <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                     <span style="overflow: visible; position: relative; width: 110px;">
                                         {{-- @if(hasAuthFor('update lc settlement internal transfer')) --}}
                                         {{-- <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon edit-btn-class" title="Edit" href="{{ route('non.banking.edit.study',['company'=>$company->id,'study'=>$model->id]) }}"><i class="fa fa-pen-alt exclude-icon default-icon-color"></i></a> --}}
@@ -558,7 +554,7 @@ use App\Models\NonBankingService\Study;
                                                         </div>
                                                         <div class="modal-footer d-flex">
                                                             <button type="button" class="btn btn-sm btn-secondary p-2" data-dismiss="modal">{{__('Close')}}</button>
-                                                            <button type="submit" class="btn btn-sm btn-info p-2 "><span class="tooltiptext submit-copy-btn"><i class="far fa-copy"> {{__('Copy')}}</i> </span>
+                                                            <button type="submit" class="btn btn-sm btn-info p-2"><span class="tooltiptext submit-copy-btn"><i class="far fa-copy"> {{__('Copy')}}</i> </span>
                                                             </button>
                                                         </div>
                                                     </form>
@@ -634,21 +630,21 @@ use App\Models\NonBankingService\Study;
             $currentType = Study::CONSOLIDATION ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     @php
                     $rowIndex = 0;
                     @endphp
                     <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                         <x-slot name="ths">
-                            <x-tables.repeater-table-th class="  header-border-down w-50-prc" :title="__('Name')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" header-border-down w-40-prc" :title="__('Studies')"></x-tables.repeater-table-th>
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('End Date')"></x-tables.repeater-table-th> --}}
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Financial Statement')"></x-tables.repeater-table-th> --}}
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Balance Sheet')"></x-tables.repeater-table-th> --}}
-                            <x-tables.repeater-table-th class=" header-border-down w-10-prc" :title="__('Statements')"></x-tables.repeater-table-th>
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Dashboard')"></x-tables.repeater-table-th> --}}
-                            <x-tables.repeater-table-th class=" header-border-down w-5-prc" :title="__('Actions')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="header-border-down w-50-prc" :title="__('Name')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="header-border-down w-40-prc" :title="__('Studies')"></x-tables.repeater-table-th>
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('End Date')"></x-tables.repeater-table-th> --}}
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Financial Statement')"></x-tables.repeater-table-th> --}}
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Balance Sheet')"></x-tables.repeater-table-th> --}}
+                            <x-tables.repeater-table-th class="header-border-down w-10-prc" :title="__('Statements')"></x-tables.repeater-table-th>
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Dashboard')"></x-tables.repeater-table-th> --}}
+                            <x-tables.repeater-table-th class="header-border-down w-5-prc" :title="__('Actions')"></x-tables.repeater-table-th>
                         </x-slot>
                         <x-slot name="trs">
 
@@ -661,7 +657,7 @@ use App\Models\NonBankingService\Study;
 
                                 <td>
                                     <div class="">
-                                        <input value="{{ $model->getName() }}" disabled class="form-control text-left " type="text">
+                                        <input value="{{ $model->getName() }}" disabled class="form-control text-left" type="text">
                                     </div>
                                 </td>
                                 <td>
@@ -678,7 +674,7 @@ use App\Models\NonBankingService\Study;
                                     </div>
                                 </td> --}}
                                 <td>
-                                    <div class="d-flex align-items-center flex-column " style="gap:10px;">
+                                    <div class="d-flex align-items-center flex-column" style="gap:10px;">
                                         <div class="d-flex mr-auto" style="gap:10px;">
                                             <a href="{{ route('view.non.banking.consolidation.income.statement',['company'=>$company->id,'consolidation'=>$model->id]) }}" class="btn btn-md-width btn-1-bg btn-sm btn-brand btn-pill">{{ __('Income Statement') }}</a>
                                             <a href="{{ route('non.banking.balance.sheet.result',['company'=>$company->id,'study'=>$model->id]) }}" class="btn btn-md-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Balance Sheet') }}</a>
@@ -720,7 +716,7 @@ use App\Models\NonBankingService\Study;
                                         </div>
                                         <div class="modal-footer d-flex">
                                             <button type="button" class="btn btn-sm btn-secondary p-2" data-dismiss="modal">{{__('Close')}}</button>
-                                            <button type="submit" class="btn btn-sm btn-info p-2 "><span class="tooltiptext submit-copy-btn"><i class="far fa-copy"> {{__('Copy')}}</i> </span>
+                                            <button type="submit" class="btn btn-sm btn-info p-2"><span class="tooltiptext submit-copy-btn"><i class="far fa-copy"> {{__('Copy')}}</i> </span>
                                             </button>
                                         </div>
                                     </form>

@@ -177,14 +177,14 @@ $tableId = 'kt_table_1';
 
 <input type="hidden" id="monthly_data_monthly_net_cash" data-total="{{ json_encode($formattedDataForMonthlyNetCashChart ?? []) }}">
 <input type="hidden" id="sub-item-type" value="{{ $reportType }}">
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
 
 
 
     <div class="responsive">
         <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
             <thead>
-                <tr class="header-tr " data-model-name="{{ $modelName }}">
+                <tr class="header-tr" data-model-name="{{ $modelName }}">
                     <th class="view-table-th header-th trigger-child-row-1">
                         {{ __('Expand') }}
                     </th>
@@ -216,11 +216,11 @@ $tableId = 'kt_table_1';
 
                 $isAccumulatedRow = $rowIndex ==3;
                 $isMonthlyRow = $rowIndex ==2;
-                $hasSubRows = $rowIndex < 2 ; @endphp <tr @if($isMonthlyRow) data-financial-statement-able-item-id="78" @endif class="@if($isAccumulatedRow) main-with-no-child even @endif   reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close  " data-model-id="{{ $rowIndex }}">
-                    <td class="red reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize  is-close"> @if($hasSubRows) + @endif</td>
-                    <td class="sub-text-bg  max-w-classes editable-text is-name-cell ">{{ $cashName }}</td>
+                $hasSubRows = $rowIndex < 2 ; @endphp <tr @if($isMonthlyRow) data-financial-statement-able-item-id="78" @endif class="@if($isAccumulatedRow) main-with-no-child even @endif reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close" data-model-id="{{ $rowIndex }}">
+                    <td class="red reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize is-close"> @if($hasSubRows) + @endif</td>
+                    <td class="sub-text-bg max-w-classes editable-text is-name-cell">{{ $cashName }}</td>
                     @foreach($cashFlowStatement->getIntervalFormatted() as $dateIndex=>$dateAsString)
-                    <td class="  sub-numeric-bg text-center editable-date" @if($isAccumulatedRow) style="color:white !important" @endif>{{ number_format($elements['total'][$dateAsString] ??0,0) }}</td>
+                    <td class="sub-numeric-bg text-center editable-date" @if($isAccumulatedRow) style="color:white !important" @endif>{{ number_format($elements['total'][$dateAsString] ??0,0) }}</td>
                     @endforeach
                     <td @if($isMonthlyRow) class="sub-numeric-bg text-center" @endif @if($isAccumulatedRow) style="color:white !important" @endif>{{ $isAccumulatedRow ? '-' : number_format(array_sum($elements['total'] ?? []),0) }}</td>
                     </tr>
@@ -235,9 +235,9 @@ $tableId = 'kt_table_1';
                     @endphp
                     @if($subName !='total')
                     <tr class="edit-info-row add-sub maintable-1-row-class{{ $rowIndex }} is-sub-row d-none">
-                        <td class=" reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize is-close "></td>
+                        <td class="reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize is-close"></td>
 
-                        <td class="sub-text-bg max-w-classes editable editable-text is-name-cell ">{{ $subName }}</td>
+                        <td class="sub-text-bg max-w-classes editable editable-text is-name-cell">{{ $subName }}</td>
                         @foreach($cashFlowStatement->getIntervalFormatted() as $dateAsIndex=>$dateAsString)
                         @php
 					
@@ -246,7 +246,7 @@ $tableId = 'kt_table_1';
                         @endphp
                         <td class="sub-numeric-bg editable-date">{{ number_format($totalAtDate,0) }}</td>
                         @endforeach
-                        <td @if($isAccumulatedRow) style="color:white !important" @endif class="  sub-numeric-bg text-center total-row">{{ number_format($currentTotalAtDate,0) }}</td>
+                        <td @if($isAccumulatedRow) style="color:white !important" @endif class="sub-numeric-bg text-center total-row">{{ number_format($currentTotalAtDate,0) }}</td>
                     </tr>
                     @endif
 
@@ -336,7 +336,7 @@ $tableId = 'kt_table_1';
             buttons: [
                  {
                     "attr": {}
-                    , "text": '<i class="fa fa-pen-alt  " style="color:#366cf3;"></i>' + '{{ __("Cash Opening Balances") }}'
+                    , "text": '<i class="fa fa-pen-alt" style="color:#366cf3;"></i>' + '{{ __("Cash Opening Balances") }}'
                     , 'className': 'btn btn-bold btn-active filter-table-btn ml-2  flex-1 flex-grow-0 btn-border-radius do-not-close-when-click-away'
                     , "action": function() {
                         window.location.href = "{{ route('admin.show-cash-and-banks',[$company->id,$cashFlowStatement->id,$reportType]) }}"

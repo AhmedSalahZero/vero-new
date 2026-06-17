@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab">
+                    <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab">
                         <i class="flaticon2-checking"></i>Reports Table
                     </a>
                 </li>
@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
@@ -91,7 +91,7 @@
                     @foreach ($final_report_data as $category_name => $zoone_data)
                     @php $chart_data = []; @endphp
 
-                    <tr class="group-color  table-active text-lg-left  ">
+                    <tr class="group-color table-active text-lg-left">
                         <td colspan="{{ count($total_categories) + 1 }}"><b class="white-text">{{ __($category_name) }}</b>
                         </td>
                         @foreach ($total_categories as $date => $total)
@@ -161,7 +161,7 @@
                     @slot('table_body')
                     @php $chart_data = []; @endphp
                     @foreach ($final_report_data as $category_name => $zoone_data)
-                    <tr class="group-color  table-active text-lg-left  ">
+                    <tr class="group-color table-active text-lg-left">
                         <td colspan="{{ count($total_categories) + 1 }}"><b class="white-text">{{ __($category_name) }}</b></td>
                         @foreach ($total_categories as $date => $total)
                         <td class="hidden"> </td>

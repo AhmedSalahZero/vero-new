@@ -24,6 +24,6 @@
 		 @if($required)
 		 required
     @endif
-		 type="text" name="{{ $name }}" class="@if($onlyMonth)  only-month-year-picker @endif datepicker-input date-input form-control recalc-end-date start-date {{ $classes }} " value="{{$value}} " />
+		 type="text" name="{{ $name }}" class="@if($onlyMonth) only-month-year-picker @endif datepicker-input date-input form-control recalc-end-date start-date {{ $classes }}" value="{{$value}} " />
     </div>
 </div>

@@ -7,36 +7,34 @@ $banks = [];
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark th:not(.bank-max-width),
-    .money-flow-dark td:not(.bank-max-width) {
+    th:not(.bank-max-width),
+    td:not(.bank-max-width) {
         text-wrap: nowrap !important;
     }
 
-    .money-flow-dark td {
+    td {
         vertical-align: middle !important;
     }
 
-    .money-flow-dark .color-green {
+    .color-green {
         color: white !important;
         background-color: green !important;
     }
 
-    .money-flow-dark .kt-portlet__body {
+    .kt-portlet__body {
         padding-top: 0 !important;
     }
 
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -46,7 +44,7 @@ $banks = [];
 {{ __('Money Payment Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -57,35 +55,35 @@ $banks = [];
                     </a>
                 </li>
                 {{-- <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyPayment::CHEQUE_UNDER_COLLECTION ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::CHEQUE_UNDER_COLLECTION }}" role="tab">
+                    <a class="nav-link {{ Request('active') == MoneyPayment::CHEQUE_UNDER_COLLECTION ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::CHEQUE_UNDER_COLLECTION }}" role="tab">
                 <i class="fa fa-money-check-alt"></i> {{ __('Cheques Under Collection') }}
                 </a>
                 </li> --}}
                 {{-- <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyPayment::CHEQUE_COLLECTED ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::CHEQUE_COLLECTED }}" role="tab">
+                    <a class="nav-link {{ Request('active') == MoneyPayment::CHEQUE_COLLECTED ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::CHEQUE_COLLECTED }}" role="tab">
                 <i class="fa fa-money-check-alt"></i> {{ __('Collected Cheques') }}
                 </a>
                 </li> --}}
                 {{-- <li class="nav-item">
-                    <a class="nav-link {{  Request('active') == MoneyPayment::CHEQUE_REJECTED ?'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::CHEQUE_REJECTED }}" role="tab">
+                    <a class="nav-link {{ Request('active') == MoneyPayment::CHEQUE_REJECTED ?'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::CHEQUE_REJECTED }}" role="tab">
                 <i class="fa fa-money-check-alt"></i> {{ __('Rejected Cheques') }}
                 </a>
                 </li> --}}
 
 
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyPayment::OUTGOING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::OUTGOING_TRANSFER }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyPayment::OUTGOING_TRANSFER ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::OUTGOING_TRANSFER }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Outgoing Transfer') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyPayment::CASH_PAYMENT ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::CASH_PAYMENT }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyPayment::CASH_PAYMENT ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::CASH_PAYMENT }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Cash Payment') }}
                     </a>
                 </li>
 
                 {{-- <li class="nav-item">
-                    <a class="nav-link {{ Request('active') == MoneyPayment::CASH_IN_BANK ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyPayment::CASH_IN_BANK }}" role="tab">
+                    <a class="nav-link {{ Request('active') == MoneyPayment::CASH_IN_BANK ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyPayment::CASH_IN_BANK }}" role="tab">
                 <i class="fa fa-money-check-alt"></i>{{ __('Bank Deposit') }}
                 </a>
                 </li> --}}
@@ -93,7 +91,7 @@ $banks = [];
             </ul>
             @if(auth()->user()->can('create supplier payment'))
             <div class="flex-tabs">
-                <a href="{{route('create.money.payment',['company'=>$company->id])}}" class="btn  btn-sm active-style btn-icon-sm align-self-center">
+                <a href="{{route('create.money.payment',['company'=>$company->id])}}" class="btn btn-sm active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Money Payment') }}
                 </a>
@@ -108,7 +106,7 @@ $banks = [];
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == MoneyPayment::PAYABLE_CHEQUE ?'active':'' }}" id="{{ MoneyPayment::PAYABLE_CHEQUE }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
@@ -118,7 +116,7 @@ $banks = [];
 
                     <div class="kt-portlet__body">
 
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th class="align-middle">{{ __('Select') }}</th>
@@ -129,7 +127,7 @@ $banks = [];
                                     <th class="align-middle">{!! __('Cheque<br>Number') !!}</th>
                                     <th class="align-middle">{!! __('Cheque<br>Amount') !!}</th>
                                     <th class="align-middle">{{ __('Currency') }}</th>
-                                    <th class="align-middle bank-max-width ">{{ __('Payment Bank') }}</th>
+                                    <th class="align-middle bank-max-width">{{ __('Payment Bank') }}</th>
                                     <th class="align-middle bank-max-width">{{ __('Account Type') }}</th>
                                     <th class="align-middle">{{ __('Account No') }}</th>
                                     <th class="align-middle">{!! __('Due<br>Date') !!}</th>
@@ -144,14 +142,14 @@ $banks = [];
                                     <td>
                                         <input style="max-height:25px;" id="cash-send-to-collection{{ $moneyPayment->id }}" type="checkbox" name="second_to_collection[]" value="{{ $moneyPayment->id }}" data-money-type="{{ MoneyPayment::PAYABLE_CHEQUE }}" class="form-control checkbox js-send-to-collection">
                                     </td>
-                                    <td class="bank-max-width @if($moneyPayment->payableCheque->getStatus() == 'paid') exclude-td font-weight-bold text-success color-green @endif ">{{ $moneyPayment->payableCheque->getStatusFormatted() }}</td>
+                                    <td class="bank-max-width @if($moneyPayment->payableCheque->getStatus() == 'paid') exclude-td font-weight-bold text-success color-green @endif">{{ $moneyPayment->payableCheque->getStatusFormatted() }}</td>
                                     <td class="bank-max-width">{{ $moneyPayment->getMoneyTypeFormatted() }}</td>
                                     <td class="bank-max-width">{{ $moneyPayment->getSupplierName() }}</td>
                                     <td class="text-nowrap">{{ $moneyPayment->getDeliveryDateFormatted() }}</td>
                                     <td>{{ $moneyPayment->payableCheque->getChequeNumber() }}</td>
                                     <td>{{ $moneyPayment->getPaidAmountFormatted() }}</td>
                                     <td class="text-transform" data-currency="{{ $moneyPayment->getCurrency() }}">{{ $moneyPayment->getCurrencyToPaymentCurrencyFormatted() }}</td>
-                                    <td class="bank-max-width ">{{ $moneyPayment->payableCheque->getDeliveryBankName() }}</td>
+                                    <td class="bank-max-width">{{ $moneyPayment->payableCheque->getDeliveryBankName() }}</td>
                                     <td class="bank-max-width">{{ $moneyPayment->payableCheque->getAccountTypeName() }}</td>
                                     <td class="text-nowrap">{{ $moneyPayment->payableCheque->getAccountNumber() }}</td>
                                     <td class="text-nowrap">{{ $moneyPayment->payableCheque->getDueDateFormatted() }}</td>
@@ -241,7 +239,7 @@ $banks = [];
             <!--End:: Tab Content-->
 
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ Request('active') == MoneyPayment::OUTGOING_TRANSFER ? 'active':''  }}" id="{{ MoneyPayment::OUTGOING_TRANSFER }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyPayment::OUTGOING_TRANSFER ? 'active':'' }}" id="{{ MoneyPayment::OUTGOING_TRANSFER }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyPayment::OUTGOING_TRANSFER" :title="__('Outgoing Transfer')" :startDate="$filterDates[MoneyPayment::OUTGOING_TRANSFER]['startDate']??''" :endDate="$filterDates[MoneyPayment::OUTGOING_TRANSFER]['endDate']??''">
@@ -340,7 +338,7 @@ $banks = [];
 
 
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ Request('active') == MoneyPayment::CASH_PAYMENT ? 'active':''  }}" id="{{ MoneyPayment::CASH_PAYMENT }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyPayment::CASH_PAYMENT ? 'active':'' }}" id="{{ MoneyPayment::CASH_PAYMENT }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyPayment::CASH_PAYMENT" :title="__('Cash Payment')" :startDate="$filterDates[MoneyPayment::CASH_PAYMENT]['startDate']??''" :endDate="$filterDates[MoneyPayment::CASH_PAYMENT]['endDate']??''">

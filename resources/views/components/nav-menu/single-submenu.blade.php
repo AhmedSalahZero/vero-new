@@ -7,7 +7,7 @@
                         {{ $k.'='.$v }}
                         @endforeach
 
-                        class="kt-menu__item " aria-haspopup="true"><a href="{{ $menuArr['link'] }}" class="kt-menu__link ">
+                        class="kt-menu__item" aria-haspopup="true"><a href="{{ $menuArr['link'] }}" class="kt-menu__link">
 						@if(isset($menuArr['icon']))
 						
 						<i class="{{ $menuArr['icon'] }}"></i>

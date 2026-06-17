@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -60,7 +59,7 @@
 {{ __('Internal Money Transfer Form') }}
 @endsection --}}
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -99,7 +98,7 @@
                         <div class="kt-portlet">
 
 
-                            <div class="kt-portlet ">
+                            <div class="kt-portlet">
                                 <div class="kt-portlet__head">
                                     <div class="kt-portlet__head-label">
                                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -114,12 +113,12 @@
 
 											
 											
-                                          <div class="col-md-3 ">
+                                          <div class="col-md-3">
                                                 <label>{{__('Name')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input type="text" value="{{ isset($model) ? $model->getName():'' }}" name="name" class="form-control  " placeholder="{{__('Other Partner Name')}}">
+                                                    <input type="text" value="{{ isset($model) ? $model->getName():'' }}" name="name" class="form-control" placeholder="{{__('Other Partner Name')}}">
                                                 </div>
                                             </div>
 

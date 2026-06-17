@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
 
@@ -49,7 +48,7 @@
 </style>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet">
 
     <form action="{{ route('view.lglc.dashboard',['company'=>$company->id]) }}" class="kt-portlet__head w-full sky-border" style="">
@@ -62,7 +61,7 @@
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
@@ -112,7 +111,7 @@
 				$activeCurrency = is_null($activeCurrency) ? $currency :$activeCurrency ; 
 			@endphp
             <li class="nav-item @if($activeCurrency == $currency ) active @endif">
-                <a class="nav-link @if($activeCurrency == $currency  ) active @endif" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
+                <a class="nav-link @if($activeCurrency == $currency ) active @endif" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
                     <i class="flaticon2-checking icon-lg"></i>
                     <span style="font-size:18px !important;">{{ $currency }}</span>
                 </a>
@@ -127,13 +126,13 @@
     </div>
 </div>
 
-<div class="tab-content  kt-margin-t-20">
+<div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
     @endphp
     @foreach($selectedCurrencies as $name=>$currency)
 	
-    <div class="tab-pane  @if($activeCurrency == $currency) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
+    <div class="tab-pane @if($activeCurrency == $currency) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
         @foreach([
 			'lg'=>[
 				'main_title'=>__('Letters Of Guarantee Position'),
@@ -165,10 +164,10 @@
 		<div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['main_title'] }} </h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['main_title'] }} </h3>
                 </div>
             </div>
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
 					
 					@foreach([
@@ -202,7 +201,7 @@
 										@php
 											$currentModalId = $currentColType . $lgOrLcType;
 										@endphp
-										<button class="btn btn-sm btn-brand btn-elevate btn-pill text-white @if($currentColType != 'limit') visibility-hidden  @endif "   data-toggle="modal" data-target="#{{ $currentModalId.$currency.$lgOrLcType }}">{{ __('Details') }}</button>
+										<button class="btn btn-sm btn-brand btn-elevate btn-pill text-white @if($currentColType != 'limit') visibility-hidden @endif"   data-toggle="modal" data-target="#{{ $currentModalId.$currency.$lgOrLcType }}">{{ __('Details') }}</button>
 										@if($currentColType == 'limit')
 										@include('admin.dashboard.lg-lc-details',['detailItems'=> $details[$name][$lgOrLcType]??[]  , 'modalId'=>$currentModalId ,'title'=>__('Details')])
 										@endif 
@@ -239,10 +238,10 @@
 
          
             <div class="col-md-6">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['outstanding_types_title'] }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['outstanding_types_title'] }} </h3>
 
                         </div>
 
@@ -266,7 +265,7 @@
                 <div class="kt-portlet kt-portlet--tabs">
                      <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['per_bank_title'] }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['per_bank_title'] }} </h3>
 
                         </div>
 
@@ -276,7 +275,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -306,7 +305,7 @@
                 <div class="kt-portlet kt-portlet--tabs">
                      <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['details_title'] }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $lcOrLgOptionsArr['details_title'] }} </h3>
 
                         </div>
 
@@ -316,7 +315,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -326,13 +325,13 @@
 
 
 
-                                    <div class="col-md-12  margin__left">
+                                    <div class="col-md-12 margin__left">
 
                                         <div class="row common-parent">
 										<input type="hidden" class="current_currency" value="{{ $currency }}">
                                           
                                             <div class="col-md-6">
-                                                <select {{ 'update-'. $lgOrLcType .'-table-and-charts' }} data-currency="{{ $currency }}"  id="financial_institution_id_{{ $currency }}" class="form-control ">
+                                                <select {{ 'update-'. $lgOrLcType .'-table-and-charts' }} data-currency="{{ $currency }}"  id="financial_institution_id_{{ $currency }}" class="form-control">
 														<option value="0">{{ __('All') }}</option>
 												
                                                     @foreach($financialInstitutions as $bank)
@@ -363,10 +362,10 @@
                                                 @slot('table_header')
                                                 <tr class="table-active text-center">
                                                     <th class="text-center bank-max-width">{{ __('Bank Name') }}</th>
-                                                    <th class="text-center ">{{ __('Type') }}</th>
-                                                    <th class="text-center ">{{ __('Source') }}</th>
-                                                    <th class="text-center ">{{ __('Outstanding') }}</th>
-                                                    <th class="text-center ">{{ __('Cash Cover') }}</th>
+                                                    <th class="text-center">{{ __('Type') }}</th>
+                                                    <th class="text-center">{{ __('Source') }}</th>
+                                                    <th class="text-center">{{ __('Outstanding') }}</th>
+                                                    <th class="text-center">{{ __('Cash Cover') }}</th>
                                                 </tr>
                                                 @endslot
                                                 @slot('table_body')

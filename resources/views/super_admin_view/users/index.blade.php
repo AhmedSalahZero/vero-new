@@ -28,7 +28,7 @@
             {{ $company->name[$lang] }} ,
             @endforeach
         </td>
-        <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+        <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
             <span style="overflow: visible; position: relative; width: 110px;">
 	
                 <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('user.edit', [$item,$company->id]) }}"><i class="fa fa-pen-alt"></i></a>

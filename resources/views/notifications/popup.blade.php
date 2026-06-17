@@ -33,12 +33,12 @@
             <div class="modal-body">
 			
                 <div class="customize-elements">
-                    <table class="table   table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
+                    <table class="table table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                         <thead>
                             <tr class="header-tr">
-                                <th class="view-table-th   bg-lighter header-th  align-middle text-center"> # </th>
+                                <th class="view-table-th bg-lighter header-th align-middle text-center"> # </th>
 								@foreach($notificationHeaders as $notificationHeader)
-                                <th class="view-table-th   bg-lighter header-th  align-middle text-center"> {!! __($notificationHeader) !!} </th>
+                                <th class="view-table-th bg-lighter header-th align-middle text-center"> {!! __($notificationHeader) !!} </th>
 								@endforeach
                             </tr>
                         </thead>

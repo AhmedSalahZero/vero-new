@@ -1,4 +1,4 @@
-<a data-toggle="modal" data-target="#cancel-deposit-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Apply payment') }}" href="#"><i class="fa fa-coins"></i></a>
+<a data-toggle="modal" data-target="#cancel-deposit-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Apply payment') }}" href="#"><i class="fa fa-coins"></i></a>
 <div class="modal fade" id="cancel-deposit-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -34,7 +34,7 @@
                         <div class="col-md-2 mb-4">
                             <label>{{__('Exchange Rate')}} </label>
                             <div class="kt-input-icon">
-                                <input disabled value="{{  number_format($model->getExchangeRate(),2 )  }}" type="text" class="form-control  text-center">
+                                <input disabled value="{{  number_format($model->getExchangeRate(),2 )  }}" type="text" class="form-control text-center">
                             </div>
                         </div>
 
@@ -203,7 +203,7 @@
                             <label>{{ __('Account Type') }} <span class=""></span> </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="account_type_id" name="payment_account_type_id" class="form-control  js-update-account-id-based-on-account-type">
+                                    <select id="account_type_id" name="payment_account_type_id" class="form-control js-update-account-id-based-on-account-type">
                                         @foreach($currentAccounts as $index => $accountType)
                                         <option value="{{ $accountType->id }}" @if($accountType->id == $model->getPaymentAccountTypeId())
                                             selected
@@ -316,17 +316,17 @@
                                         </td>
                                         <td>
 
-                                            <x-form.select :insideModalWithJs="false" :selectedValue="isset($settlementAllocation) && $settlementAllocation->partner_id ? $settlementAllocation->partner_id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class=" suppliers-or-customers-js " data-filter-type="{{ 'create' }}" :all="false" data-name="partner_id" name="partner_id"></x-form.select>
+                                            <x-form.select :insideModalWithJs="false" :selectedValue="isset($settlementAllocation) && $settlementAllocation->partner_id ? $settlementAllocation->partner_id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class="suppliers-or-customers-js" data-filter-type="{{ 'create' }}" :all="false" data-name="partner_id" name="partner_id"></x-form.select>
                                         </td>
 
                                         <td>
-                                            <x-form.select :insideModalWithJs="false" data-current-selected="{{ isset($settlementAllocation) ? $settlementAllocation->contract_id : '' }}" :selectedValue="isset($settlementAllocation) ? $settlementAllocation->contract_id : ''" :options="[]" :add-new="false" class=" contracts-js   " data-filter-type="{{ 'create' }}" :all="false" data-name="contract_id" name="contract_id"></x-form.select>
+                                            <x-form.select :insideModalWithJs="false" data-current-selected="{{ isset($settlementAllocation) ? $settlementAllocation->contract_id : '' }}" :selectedValue="isset($settlementAllocation) ? $settlementAllocation->contract_id : ''" :options="[]" :add-new="false" class="contracts-js" data-filter-type="{{ 'create' }}" :all="false" data-name="contract_id" name="contract_id"></x-form.select>
                                         </td>
 
                                         <td>
                                             <div class="kt-input-icon custom-w-20">
                                                 <div class="input-group">
-                                                    <input disabled type="text" class="form-control contract-code " value="">
+                                                    <input disabled type="text" class="form-control contract-code" value="">
                                                 </div>
                                             </div>
                                         </td>
@@ -342,7 +342,7 @@
                                         <td>
                                             <div class="kt-input-icon custom-w-15">
                                                 <div class="input-group">
-                                                    <input type="text" data-name="allocation_amount" name="allocation_amount" class="form-control " value="{{ isset($settlementAllocation) ? $settlementAllocation->getAmount(): 0 }}">
+                                                    <input type="text" data-name="allocation_amount" name="allocation_amount" class="form-control" value="{{ isset($settlementAllocation) ? $settlementAllocation->getAmount(): 0 }}">
                                                 </div>
                                             </div>
                                         </td>

@@ -189,7 +189,7 @@
 
 
     {{-- Percentages --}}
-    <tr class="secondary-row-color ">
+    <tr class="secondary-row-color">
         <th> {{ __($main_type_item_name) .' %' }} </th>
 
         @foreach ($all_items as $item)

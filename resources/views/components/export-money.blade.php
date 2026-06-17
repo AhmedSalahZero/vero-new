@@ -12,13 +12,13 @@ use App\Models\MoneyReceived ;
         <div class="kt-portlet__head-actions">
             &nbsp;
             @if($hasBatchCollection)
-            <a data-money-type="{{ $moneyReceivedType }}" data-type="multi" data-toggle="modal" data-target="#send-to-under-collection-modal{{ $moneyReceivedType }}" id="js-send-to-under-collection-trigger{{ $moneyReceivedType }}" href="{{route('create.money.receive',['company'=>$company->id])}}" title="{{ __('Please Select More Than One Cheque') }}" class="btn  active-style btn-icon-sm js-can-trigger-cheque-under-collection-modal disabled">
+            <a data-money-type="{{ $moneyReceivedType }}" data-type="multi" data-toggle="modal" data-target="#send-to-under-collection-modal{{ $moneyReceivedType }}" id="js-send-to-under-collection-trigger{{ $moneyReceivedType }}" href="{{route('create.money.receive',['company'=>$company->id])}}" title="{{ __('Please Select More Than One Cheque') }}" class="btn active-style btn-icon-sm js-can-trigger-cheque-under-collection-modal disabled">
                 <i class="fas fa-book"></i>
                 {{ __('Create Batch Send To Collection') }}
             </a>
             @endif
             @if($hasSearch)
-            <a data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $moneyReceivedType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Received') }}" class="btn  active-style btn-icon-sm  ">
+            <a data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $moneyReceivedType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Received') }}" class="btn active-style btn-icon-sm">
                 <i class="fas fa-search"></i>
                 {{ __('Advanced Filter') }}
             </a>
@@ -34,7 +34,7 @@ use App\Models\MoneyReceived ;
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <form action="{{ route('view.money.receive',['company'=>$company->id]) }}" class="row ">
+                            <form action="{{ route('view.money.receive',['company'=>$company->id]) }}" class="row">
                                 <input name="active" type="hidden" value="{{ $moneyReceivedType }}">
                                 <div class="form-group col-4">
                                     <label for="Select Field " class="label">{{ __('Field Name') }}</label>
@@ -112,7 +112,7 @@ use App\Models\MoneyReceived ;
                                     <div class="col-md-9 mb-3">
                                         <label>{{__('Drawal Bank')}} @include('star')</label>
                                         <div class="kt-input-icon">
-                                            <div class="input-group date ">
+                                            <div class="input-group date">
                                                 <select js-when-change-trigger-change-account-type data-financial-institution-id required name="drawl_bank_id" class="form-control js-drawl-bank">
                                                     @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                                     <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->cheque && $model->cheque->getDraweeBankId() == $financialInstitutionBank->id ? 'selected':'' }}>{{ $financialInstitutionBank->getName() }}</option>
@@ -126,7 +126,7 @@ use App\Models\MoneyReceived ;
                                 <div class="row mb-3">
 
 
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-3">
                                         <label>{{__('Account Type')}} @include('star')</label>
                                         <div class="kt-input-icon">
                                             <div class="input-group date">
@@ -179,11 +179,7 @@ use App\Models\MoneyReceived ;
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success 
-								
-								{{-- submit-form-btn --}}
-								
-								">{{ __('Confirm') }}</button>
+                                <button type="submit" class="btn btn-success {{-- submit-form-btn --}}">{{ __('Confirm') }}</button>
                             </div>
 
                         </form>

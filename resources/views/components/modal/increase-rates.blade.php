@@ -12,7 +12,7 @@
         deleteConfirm: @json(__('Are you sure you want to delete this position?'))
     };
 	</script>
-<div class="modal modal-increase-rates  fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal modal-increase-rates fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -49,13 +49,13 @@
 						@endphp
 						        <td >
 								<div class="max-w-selector-popup">
-                                    <input readonly  class="form-control " value="Yr-{{ $yearFormatted }}" placeholder="{{ __('Year') .  ' ' . $yearNumber  }}">
+                                    <input readonly  class="form-control" value="Yr-{{ $yearFormatted }}" placeholder="{{ __('Year') .  ' ' . $yearNumber  }}">
 								</div>
                                 </td>
 								
 								 <td >
 								<div class="max-w-selector-popup">
-                                    <input @if($isReadonly) readonly @endif multiple name="{{ isset($name) ? $name.'['.$yearNumber.']' : 'increase_rates' }}" class="form-control " value="{{ $currentIncreaseRate }}" placeholder="{{ __('Increase %') .  ' ' . $yearNumber  }}">
+                                    <input @if($isReadonly) readonly @endif multiple name="{{ isset($name) ? $name.'['.$yearNumber.']' : 'increase_rates' }}" class="form-control" value="{{ $currentIncreaseRate }}" placeholder="{{ __('Increase %') .  ' ' . $yearNumber  }}">
 								</div>
                                 </td>
                                 
@@ -63,7 +63,7 @@
                                 </tr>
                                 @endfor
 								{{-- <tr style="border-top:1px solid gray;padding-top:5px;text-align:center">
-									<td class="td-for-total-payment-rate " disabled readonly>
+									<td class="td-for-total-payment-rate" disabled readonly>
 										{{ $totalRate }} %
 									</td>
 									<td class="">-</td>

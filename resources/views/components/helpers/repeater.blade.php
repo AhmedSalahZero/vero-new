@@ -6,7 +6,7 @@
 {{-- instanceNo up to 6 [hard coded]  --}}
 <div id="m_repeater_{{ $instanceNo }}" {{ $attributes->merge(['class'=>'d-block w-full repeater-class']) }}>
     <div class="form-group w-100 m-form__group row d-inline-flex">
-        <div data-repeater-list="{{ $groupName }}" class="col-lg-12 d-flex flex-wrap  align-items-center mx-auto">
+        <div data-repeater-list="{{ $groupName }}" class="col-lg-12 d-flex flex-wrap align-items-center mx-auto">
             <div @if($repeaterWithSelect2) style="display: none; !important" @endif data-repeater-item class="form-group m-form__group row align-items-center repeater_item {{ $itemClasses ? $itemClasses : 'w-48' }}">
 
 

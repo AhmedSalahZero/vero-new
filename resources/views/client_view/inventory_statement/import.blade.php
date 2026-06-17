@@ -84,7 +84,7 @@
                     @slot('table_header')
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-lg-12 ">
+                                <div class="col-lg-12">
                                     <label class="kt-option bg-secondary">
                                         <span class="kt-option__control">
                                             <span class="kt-checkbox kt-checkbox--bold kt-checkbox--brand kt-checkbox--check-bold"
@@ -152,7 +152,7 @@
                                     @endif
                                 @endforeach
 
-                                <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions"
+                                <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions"
                                     data-autohide-disabled="false">
                                     <span class="d-flex justify-content-center"
                                         style="overflow: visible; position: relative; width: 110px;">

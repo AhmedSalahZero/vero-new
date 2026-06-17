@@ -14,14 +14,14 @@
 @php
 								$salesChange = count($monthlySalesForSalesGathering) ?  Average::mean($monthlySalesForSalesGathering) : 0;
 							@endphp
-<div class="modal fade " id="{{ $modalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{ $modalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <form action="#" class="modal-content" method="post">
 		
 								
 		@csrf
             <div class="modal-header">
-				<div class="d-flex flex-column " >
+				<div class="d-flex flex-column" >
 				
                 <h5 class="modal-title mb-3"  id="exampleModalLongTitle"> {{ $title }} <br> </h5> 
 								 <h5 class="modal-title text-left" style="color:red !important" id="exampleModalLongTitle"> {{ __('For Each Incremental Sales Of '.number_format($salesChange)) }}</h5>
@@ -87,7 +87,7 @@
                                 <td class="w-15-percentage">
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input disabled type="text" class="form-control  ignore-global-style text-left" value="{{ $currentTextBasedOnCorrelationValue }}">
+                                            <input disabled type="text" class="form-control ignore-global-style text-left" value="{{ $currentTextBasedOnCorrelationValue }}">
                                         </div>
                                     </div>
                                 </td>
@@ -127,9 +127,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary 
-				{{-- submit-form-btn --}}
-				"
+                <button type="button" class="btn btn-primary {{-- submit-form-btn --}}"
 				 data-dismiss="modal"
 				 
 				 >{{ __('Close') }}</button>

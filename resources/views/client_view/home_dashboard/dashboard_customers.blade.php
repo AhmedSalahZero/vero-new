@@ -70,7 +70,7 @@
 
 {{-- Title --}}
 <div class="row">
-    <div class="kt-portlet ">
+    <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -161,7 +161,7 @@
                 <h2 class="text-center">{{ __('Top 50 Customers Nature Breakdown') }}</h2>
 
                 <div class="kt-portlet__body table-responsive">
-                    <table class="table exclude-table text-center text-capitalize " style="background: #086691;color: #fff;font-weight: bold;">
+                    <table class="table exclude-table text-center text-capitalize" style="background: #086691;color: #fff;font-weight: bold;">
                         <tr>
                             <th>nature</th>
                             <td>count</td>
@@ -191,7 +191,7 @@
 </div>
 
 <div class="row">
-    <div class="kt-portlet ">
+    <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                 <h3 class="kt-portlet__head-title head-title text-primary">

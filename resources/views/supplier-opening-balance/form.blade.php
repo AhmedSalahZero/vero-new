@@ -154,7 +154,7 @@ use App\Models\MoneyPayment ;
                         <div class="kt-portlet__body">
 
                             <div class="form-group row">
-                                <div class="col-md-4 ">
+                                <div class="col-md-4">
                                     <x-form.date :type="'text'" :classes="'datepicker-input'" :default-value="formatDateForDatePicker(isset($model)  ? $model->getDate() :null)" :model="$model??null" :label="__('Opening Balance Date')" :type="'text'" :placeholder="__('')" :name="'date'" :required="true"></x-form.date>
                                 </div>
 
@@ -243,7 +243,7 @@ use App\Models\MoneyPayment ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="invoice_number" step="4" type="text" class="form-control " value="{{ isset($supplierInvoice) ? $supplierInvoice->getInvoiceNumber() : old('invoice_number',1) }}">
+                                                        <input name="invoice_number" step="4" type="text" class="form-control" value="{{ isset($supplierInvoice) ? $supplierInvoice->getInvoiceNumber() : old('invoice_number',1) }}">
                                                     </div>
                                                 </div>
 
@@ -264,7 +264,7 @@ use App\Models\MoneyPayment ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="contract_code" step="4" type="text" class="form-control " value="{{ isset($supplierInvoice) ? $supplierInvoice->getContractCode() : '' }}">
+                                                        <input name="contract_code" step="4" type="text" class="form-control" value="{{ isset($supplierInvoice) ? $supplierInvoice->getContractCode() : '' }}">
                                                     </div>
                                                 </div>
 
@@ -274,7 +274,7 @@ use App\Models\MoneyPayment ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="contract_date" type="date" class="form-control " value="{{ isset($supplierInvoice) ? $supplierInvoice->getContractDate() : '' }}">
+                                                        <input name="contract_date" type="date" class="form-control" value="{{ isset($supplierInvoice) ? $supplierInvoice->getContractDate() : '' }}">
                                                     </div>
                                                 </div>
 
@@ -293,7 +293,7 @@ use App\Models\MoneyPayment ;
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
                                                      
-                                                        <input name="paid_amount" type="text" class="form-control " value="{{ number_format(isset($supplierInvoice) ? $supplierInvoice->getInvoiceAmount() : old('amount',0)) }}">
+                                                        <input name="paid_amount" type="text" class="form-control" value="{{ number_format(isset($supplierInvoice) ? $supplierInvoice->getInvoiceAmount() : old('amount',0)) }}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -318,7 +318,7 @@ use App\Models\MoneyPayment ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="exchange_rate" step="4" type="text" class="form-control " value="{{ isset($supplierInvoice) ? $supplierInvoice->getExchangeRate() : old('exchange_rate',1) }}">
+                                                        <input name="exchange_rate" step="4" type="text" class="form-control" value="{{ isset($supplierInvoice) ? $supplierInvoice->getExchangeRate() : old('exchange_rate',1) }}">
                                                     </div>
                                                 </div>
 
@@ -493,7 +493,7 @@ use App\Models\MoneyPayment ;
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
 
-                                                        <input name="paid_amount" type="text" class="form-control " value="{{ number_format(isset($moneyModel) ? $moneyModel->getPaidAmount() : old('amount',0)) }}">
+                                                        <input name="paid_amount" type="text" class="form-control" value="{{ number_format(isset($moneyModel) ? $moneyModel->getPaidAmount() : old('amount',0)) }}">
                                                     </div>
                                                 </div>
 												
@@ -519,7 +519,7 @@ use App\Models\MoneyPayment ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="exchange_rate" step="4" type="text" class="form-control  " value="{{ isset($moneyModel) ? $moneyModel->getExchangeRate() : old('exchange_rate',1) }}">
+                                                        <input name="exchange_rate" step="4" type="text" class="form-control" value="{{ isset($moneyModel) ? $moneyModel->getExchangeRate() : old('exchange_rate',1) }}">
                                                     </div>
                                                 </div>
 

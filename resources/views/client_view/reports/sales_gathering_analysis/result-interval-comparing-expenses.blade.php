@@ -76,7 +76,7 @@
                     <span class="kt-portlet__head-icon">
                         <i class="kt-font-secondary btn-outline-hover-danger fa fa-layer-group"></i>
                     </span>
-                    <h3 class="kt-portlet__head-title  mt-4">
+                    <h3 class="kt-portlet__head-title mt-4">
 
                         <b> {{__('From : ')}} </b>{{ $dates['start_date'.$name]}}
                         <b> - </b>

@@ -1,14 +1,14 @@
 
-<div id="kt_header" class="kt-header  kt-header--fixed fh-fixedHeader" data-ktheader-minimize="on">
+<div id="kt_header" class="kt-header kt-header--fixed fh-fixedHeader" data-ktheader-minimize="on">
 @php
 	$super_admin_sections = \App\Helpers\HAuth::getSuperAdminSection();
 	
 @endphp
 
-    <div class="kt-container ">
+    <div class="kt-container">
 
         <!-- begin:: Brand -->
-        <div class="kt-header__brand   kt-grid__item" id="kt_header_brand">
+        <div class="kt-header__brand kt-grid__item" id="kt_header_brand">
             <a class="kt-header__brand-logo" href="{{ route('home') }}">
                 <img alt="Logo" src="{{ url('assets/media/logos/logo_va.png') }}" class="kt-header__brand-logo-default" />
                 <img alt="Logo" src="{{ url('assets/media/logos/vero analysis blue logo.png') }}" width="25%" class="kt-header__brand-logo-sticky" />
@@ -166,24 +166,24 @@
     <!--begin: User bar -->
     @php $user = Auth::user();
     $first_letter = substr($user->name, 0, 1); @endphp
-    <div class="kt-header__topbar-item kt-header__topbar-item--user ">
+    <div class="kt-header__topbar-item kt-header__topbar-item--user">
         <div class="kt-header__topbar-wrapper" data-toggle="dropdown">
             @if (isset($company) && !request()->route()->named('home'))
             <div class="d-flex flex-column">
                 <div class="d-flex">
                     @endif
                     <span class="kt-header__topbar-welcome">Hi,</span>
-                    <span class="kt-header__topbar-username ">{{ $user->name }} </span>
+                    <span class="kt-header__topbar-username">{{ $user->name }} </span>
                     <span class="kt-header__topbar-icon"><b>{{ $first_letter }}</b></span> &nbsp;
                     @php
                     $days = $user->getExpirationDaysLeft();
                     @endphp
                     @if ($user->subscription == 'free_trial')
-                    <span class="kt-header__topbar-username "><b>{{ $days . __(' Days Left') }}</b></span>
+                    <span class="kt-header__topbar-username"><b>{{ $days . __(' Days Left') }}</b></span>
                     @endif
                     @if (isset($company) && !request()->route()->named('home'))
                 </div>
-                <h6><span class="kt-header__topbar text-center " style="color:white;white-space: nowrap;margin-bottom: -20px;">{{ $company->name[lang()] . ' ' . __('Company') }}</span>
+                <h6><span class="kt-header__topbar text-center" style="color:white;white-space: nowrap;margin-bottom: -20px;">{{ $company->name[lang()] . ' ' . __('Company') }}</span>
                 </h6>
             </div>
             @endif
@@ -213,6 +213,7 @@
             <!--begin: Navigation -->
             <div class="kt-notification">
                 <div class="kt-notification__custom kt-space-between">
+                    <a class="btn btn-label btn-label-brand btn-sm btn-bold" href="{{ route('profile.edit') }}">{{ __('My Profile') }}</a>
                     <a class="btn btn-label btn-label-brand btn-sm btn-bold" href="{{ route('logout') }}" onclick="event.preventDefault();
                                               document.getElementById('logout-form').submit();">{{ __('Sign Out') }}</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

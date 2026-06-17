@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
 
 
@@ -139,7 +138,7 @@
 @endif 
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -299,7 +298,7 @@
                 </h3>
             </div>
         </div>
-        <div class="kt-portlet__body  kt-portlet__body--fit">
+        <div class="kt-portlet__body kt-portlet__body--fit">
             <div class="row row-no-padding row-col-separator-xl">
 				<form class="w-full mt-3 ml-3">
 				<input type="hidden" name="all_partners" value="{{ $showAllPartner??0 }}">
@@ -311,9 +310,7 @@
                     <div class="kt-input-icon">
                         <div class="kt-input-icon">
                             <div class="input-group date">
-                                <select data-live-search="true" data-actions-box="true" id="partner_id" name="partner_id" class="form-control select2-select 
-								{{-- ajax-get-invoice-numbers --}}
-								">
+                                <select data-live-search="true" data-actions-box="true" id="partner_id" name="partner_id" class="form-control select2-select {{-- ajax-get-invoice-numbers --}}">
                                     {{-- <option value="" selected>{{__('Select')}}</option> --}}
                                     @foreach($partners as $currentPartnerId => $customerName)
                                     <option @if($partnerId == $currentPartnerId)  selected @endif @if(isset($model) && $model->getCustomerName() == $customerName ) selected @endif value="{{ $currentPartnerId }}">{{$customerName}}</option>
@@ -336,7 +333,7 @@
 						</div>
 						<div class="col-md-1">
 							<label for="button"></label>
-							<button type="submit" class="btn block form-control btn-primary btn-sm "> {{ __('Submit') }}</button>
+							<button type="submit" class="btn block form-control btn-primary btn-sm"> {{ __('Submit') }}</button>
 						
 						</div>	
 						
@@ -351,7 +348,7 @@
 				
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
 
 
                     <div>
@@ -363,37 +360,37 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-serial header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
-                                        <th class="view-table-th    header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Date') }}
                                         </th>
 										
-										  <th class="view-table-th    header-th  align-middle text-center">
+										  <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Document Type') }}
                                         </th>
 										
-										  <th class="view-table-th    header-th  align-middle text-center">
+										  <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Document No') }}
                                         </th>
 
                                        
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Debit') }}
                                         </th>
 
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Credit') }}
                                         </th>
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('End Balance') }}
                                         </th>
 										
-										 <th class="view-table-th   max-w-comment   header-th  align-middle text-center">
+										 <th class="view-table-th max-w-comment header-th align-middle text-center">
                                             {{ __('Comment') }}
                                         </th>
 
@@ -414,14 +411,14 @@
 									@endphp
 								
                                     @foreach($invoicesWithItsReceivedMoney as $index=>$item)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
                                         {{-- <td class="red reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize main-tr is-close"> @if($hasSubRows) + @endif</td> --}}
-                                        <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
-                                        <td class="sub-text-bg text-center  is-name-cell ">{{ $item['date'] }}</td>
-                                        <td class="sub-text-bg   is-name-cell ">{{ $item['document_type'] }}</td>
-										   <td class="sub-text-bg  text-center">{{ $item['document_no'] }}</td>
-                                        <td class="sub-text-bg text-center  is-name-cell ">{{ number_format($item['debit'],2) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ number_format($item['credit'],2) }}</td>
+                                        <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
+                                        <td class="sub-text-bg text-center is-name-cell">{{ $item['date'] }}</td>
+                                        <td class="sub-text-bg is-name-cell">{{ $item['document_type'] }}</td>
+										   <td class="sub-text-bg text-center">{{ $item['document_no'] }}</td>
+                                        <td class="sub-text-bg text-center is-name-cell">{{ number_format($item['debit'],2) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($item['credit'],2) }}</td>
 										@php
 											if($index == 0 ){
 												$balances[$index] = $item['end_balance']  ;
@@ -430,7 +427,7 @@
 											}
 										@endphp
                                         <td class="sub-text-bg text-center">{{ number_format($balances[$index],2  ) }}</td>
-                                        <td class="sub-text-bg  max-w-comment text-wrap">{{ $item['comment'] }}</td>
+                                        <td class="sub-text-bg max-w-comment text-wrap">{{ $item['comment'] }}</td>
 										
                                      
                  

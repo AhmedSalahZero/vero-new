@@ -119,7 +119,7 @@
 
                             <div class="kt-portlet__body">
                                 <div class="kt-list-timeline">
-                                    <div class="accordion  accordion-toggle-arrow" id="veroanalysisId">
+                                    <div class="accordion accordion-toggle-arrow" id="veroanalysisId">
                                         @if(auth()->user()->can('upload sales gathering data') || auth()->user()->can('upload expense analysis data') || auth()->user()->can('view sales breakdown analysis report') || auth()->user()->can(viewExpenseAnalysisData))
                                         <div class="card">
                                             <div class="card-header" id="headingOne44">
@@ -376,12 +376,12 @@
                 @can($params['viewPermissionName'])
                 <div class="kt-list-timeline__items">
 
-                    <div class="kt-list-timeline__item ">
+                    <div class="kt-list-timeline__item">
                         <span class="kt-list-timeline__badge kt-list-timeline__badge--brand"></span>
                         <span class="kt-list-timeline__text">
                             <h4> {{ getUploadDataText($params['typePrefixName']) }} </h4>
                         </span>
-                        <span class="kt-list-timeline__time "> <a href="{{route('view.uploading',['company'=>$company->id , 'model'=>$elementModelName])}}" class="btn btn-outline-info"> <b>{{ __('Go') }}</b></a></span>
+                        <span class="kt-list-timeline__time"> <a href="{{route('view.uploading',['company'=>$company->id , 'model'=>$elementModelName])}}" class="btn btn-outline-info"> <b>{{ __('Go') }}</b></a></span>
                     </div>
                 </div>
                 @endcan

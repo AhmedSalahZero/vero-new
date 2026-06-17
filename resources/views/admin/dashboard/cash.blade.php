@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
 
@@ -46,7 +45,7 @@
 </style>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet">
 
     <form action="{{ route('view.customer.invoice.dashboard.cash',['company'=>$company->id]) }}" class="kt-portlet__head w-full sky-border" style="">
@@ -59,7 +58,7 @@
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
@@ -119,21 +118,21 @@
     </div>
 </div>
 
-<div class="tab-content  kt-margin-t-20">
+<div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
     @endphp
 
     @foreach($selectedCurrencies as $name=>$currency)
 
-    <div class="tab-pane  @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
+    <div class="tab-pane @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
         <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Current Cash Position')}}</h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Current Cash Position')}}</h3>
                 </div>
             </div>
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
 
                     <div class="col-md-6 col-lg-3 col-xl-3">
@@ -172,7 +171,7 @@
                         <div class="kt-widget24">
                             <div class="kt-widget24__details">
                                 <div class="kt-widget24__info w-100">
-                                    <h4 class="kt-widget24__title font-size  text-uppercase d-flex justify-content-between align-items-center">
+                                    <h4 class="kt-widget24__title font-size text-uppercase d-flex justify-content-between align-items-center">
                                         {{ __('Time Deposit') . ' [ ' . $currency . ' ]' }}
 										@php
 											$currentModalId = 'time_of_deposits_details';
@@ -272,10 +271,10 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-						   <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Short Term Cash Facilities Position') }} </h3>
+						   <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Short Term Cash Facilities Position') }} </h3>
                             
                         </div>
                     </div>
@@ -288,11 +287,11 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                
-						   <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Total Cash Facilities') }} </h3>
+						   <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Total Cash Facilities') }} </h3>
                    
                 </div>
             </div>
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
                     <div class="col-md-6 col-lg-3 col-xl-3">
 
@@ -386,7 +385,7 @@
 		
         {{-- <div class="row">
             <div class="col-md-4">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
                             <h3 class="kt-portlet__head-title head-title text-primary">
@@ -405,7 +404,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Limit') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($totalCard[$currency]['limit'] ?? 0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -421,7 +420,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Outstanding') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4> {{ number_format($totalCard[$currency]['outstanding']??0,0) }} </h4>
                                                 </div>
                                             </div>
@@ -439,7 +438,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Available') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($totalCard[$currency]['room']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -457,7 +456,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Interest') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($totalCard[$currency]['interest_amount']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -476,10 +475,10 @@
             {{-- Fully Secured Overdraft  --}}
             @if($hasFullySecuredOverdraft[$currency]??false)
             <div class="col-md-4">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Fully Secured Overdraft') }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Fully Secured Overdraft') }} </h3>
 
                         </div>
 
@@ -494,7 +493,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Limit') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($fullySecuredOverdraftCardData[$currency]['limit'] ?? 0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -510,7 +509,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Outstanding') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4> {{ number_format($fullySecuredOverdraftCardData[$currency]['outstanding']??0,0) }} </h4>
                                                 </div>
                                             </div>
@@ -528,7 +527,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Available') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($fullySecuredOverdraftCardData[$currency]['room']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -544,7 +543,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Interest') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($fullySecuredOverdraftCardData[$currency]['interest_amount']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -575,12 +574,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#FullySecuredOverdraftkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
+                                    <a class="nav-link" data-toggle="tab" href="#FullySecuredOverdraftkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
                                         <i class="flaticon2-checking"></i>Reports Table
                                     </a>
                                 </li>
                                 <li class="nav-item ml-auto">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.bank.statement',['company'=>$company->id,'accountType'=>'FullySecuredOverdraft','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Bank Statement Report') }} </a>
                                         </div>
@@ -588,7 +587,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id,'accountType'=>'FullySecuredOverdraft','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Withdrawal Report') }} </a>
                                         </div>
@@ -603,7 +602,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -674,9 +673,9 @@
                                                 @slot('table_header')
                                                 <tr class="table-active text-center">
                                                     <th class="text-center max-w-300">{{ __('Bank Name') }}</th>
-                                                    <th class="text-center ">{{ __('Limit') }}</th>
-                                                    <th class="text-center ">{{ __('Outstanding') }}</th>
-                                                    <th class="text-center ">{{ __('Room') }}</th>
+                                                    <th class="text-center">{{ __('Limit') }}</th>
+                                                    <th class="text-center">{{ __('Outstanding') }}</th>
+                                                    <th class="text-center">{{ __('Room') }}</th>
                                                 </tr>
                                                 @endslot
                                                 @slot('table_body')
@@ -685,7 +684,7 @@
                                                 @foreach ($totalRoomForEachFullySecuredOverdraftId[$currency] ??[] as $key => $item)
                                                 <tr>
 
-                                                    <td class=" max-w-300">{{$item['item']?? '-'}}</td>
+                                                    <td class="max-w-300">{{$item['item']?? '-'}}</td>
                                                     <td class="text-center">{{number_format($item['limit']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['end_balance']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['available_room']??0)}}</td>
@@ -727,10 +726,10 @@
             {{-- start Clean Overdraft --}}
             @if($hasCleanOverdraft[$currency] ?? false )
             <div class="col-md-4">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Clean Overdraft') }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Clean Overdraft') }} </h3>
 
                         </div>
 
@@ -745,7 +744,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Limit') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($cleanOverdraftCardData[$currency]['limit'] ?? 0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -761,7 +760,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Outstanding') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4> {{ number_format($cleanOverdraftCardData[$currency]['outstanding']??0,0) }} </h4>
                                                 </div>
                                             </div>
@@ -779,7 +778,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Available') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($cleanOverdraftCardData[$currency]['room']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -795,7 +794,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Interest') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($cleanOverdraftCardData[$currency]['interest_amount']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -826,12 +825,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#CleanOverdraftkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
+                                    <a class="nav-link" data-toggle="tab" href="#CleanOverdraftkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
                                         <i class="flaticon2-checking"></i>Reports Table
                                     </a>
                                 </li>
                                 <li class="nav-item ml-auto">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.bank.statement',['company'=>$company->id,'accountType'=>'CleanOverdraft','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Bank Statement Report') }} </a>
                                         </div>
@@ -839,7 +838,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id,'accountType'=>'CleanOverdraft','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Withdrawal Report') }} </a>
                                         </div>
@@ -854,7 +853,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="CleanOverdraftkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -925,9 +924,9 @@
                                                 @slot('table_header')
                                                 <tr class="table-active text-center">
                                                     <th class="text-center max-w-300">{{ __('Bank Name') }}</th>
-                                                    <th class="text-center ">{{ __('Limit') }}</th>
-                                                    <th class="text-center ">{{ __('Outstanding') }}</th>
-                                                    <th class="text-center ">{{ __('Room') }}</th>
+                                                    <th class="text-center">{{ __('Limit') }}</th>
+                                                    <th class="text-center">{{ __('Outstanding') }}</th>
+                                                    <th class="text-center">{{ __('Room') }}</th>
                                                 </tr>
                                                 @endslot
                                                 @slot('table_body')
@@ -936,7 +935,7 @@
                                                 @foreach ($totalRoomForEachCleanOverdraftId[$currency] ??[] as $key => $item)
                                                 <tr>
 
-                                                    <td class=" max-w-300">{{$item['item']?? '-'}}</td>
+                                                    <td class="max-w-300">{{$item['item']?? '-'}}</td>
                                                     <td class="text-center">{{number_format($item['limit']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['end_balance']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['available_room']??0)}}</td>
@@ -977,10 +976,10 @@
             {{-- start Overdraft Against Commercial Paper --}}
             @if($hasOverdraftAgainstCommercialPaper[$currency] ?? false )
             <div class="col-md-4">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Overdraft Against Commercial Paper') }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Overdraft Against Commercial Paper') }} </h3>
                         </div>
 
                     </div>
@@ -994,7 +993,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Limit') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($overdraftAgainstCommercialPaperCardData[$currency]['limit'] ?? 0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -1010,7 +1009,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Outstanding') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4> {{ number_format($overdraftAgainstCommercialPaperCardData[$currency]['outstanding']??0,0) }} </h4>
                                                 </div>
                                             </div>
@@ -1028,7 +1027,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Available') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($overdraftAgainstCommercialPaperCardData[$currency]['room']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -1044,7 +1043,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Interest') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($overdraftAgainstCommercialPaperCardData[$currency]['interest_amount']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -1070,12 +1069,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#OverdraftAgainstCommercialPaperkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
+                                    <a class="nav-link" data-toggle="tab" href="#OverdraftAgainstCommercialPaperkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
                                         <i class="flaticon2-checking"></i>Reports Table
                                     </a>
                                 </li>
                                 <li class="nav-item ml-auto">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.bank.statement',['company'=>$company->id,'accountType'=>'OverdraftAgainstCommercialPaper','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Bank Statement Report') }} </a>
                                         </div>
@@ -1083,7 +1082,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id,'accountType'=>'OverdraftAgainstCommercialPaper','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Withdrawal Report') }} </a>
                                         </div>
@@ -1098,7 +1097,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="OverdraftAgainstCommercialPaperkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -1169,9 +1168,9 @@
                                                 @slot('table_header')
                                                 <tr class="table-active text-center">
                                                     <th class="text-center max-w-300">{{ __('Bank Name') }}</th>
-                                                    <th class="text-center ">{{ __('Limit') }}</th>
-                                                    <th class="text-center ">{{ __('Outstanding') }}</th>
-                                                    <th class="text-center ">{{ __('Room') }}</th>
+                                                    <th class="text-center">{{ __('Limit') }}</th>
+                                                    <th class="text-center">{{ __('Outstanding') }}</th>
+                                                    <th class="text-center">{{ __('Room') }}</th>
                                                 </tr>
                                                 @endslot
                                                 @slot('table_body')
@@ -1180,7 +1179,7 @@
                                                 @foreach ($totalRoomForEachOverdraftAgainstCommercialPaperId[$currency] ??[] as $key => $item)
                                                 <tr>
 
-                                                    <td class=" max-w-300">{{$item['item']?? '-'}}</td>
+                                                    <td class="max-w-300">{{$item['item']?? '-'}}</td>
                                                     <td class="text-center">{{number_format($item['limit']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['end_balance']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['available_room']??0)}}</td>
@@ -1221,10 +1220,10 @@
             {{-- start Overdraft Against Assignment Of Contract --}}
             @if($hasOverdraftAgainstAssignmentOfContract[$currency] ?? false )
             <div class="col-md-4">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label col-8">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Overdraft Against Assignment Of Contract') }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Overdraft Against Assignment Of Contract') }} </h3>
                         </div>
 
                     </div>
@@ -1238,7 +1237,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Limit') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($overdraftAgainstAssignmentOfContractCardData[$currency]['limit'] ?? 0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -1254,7 +1253,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Outstanding') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4> {{ number_format($overdraftAgainstAssignmentOfContractCardData[$currency]['outstanding']??0,0) }} </h4>
                                                 </div>
                                             </div>
@@ -1272,7 +1271,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Available') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($overdraftAgainstAssignmentOfContractCardData[$currency]['room']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -1288,7 +1287,7 @@
                                                 <h3 class="kt-iconbox__title">
                                                     <a class="kt-link" onclick="return false" href="#">{{ __('Interest') }}</a>
                                                 </h3>
-                                                <div class="kt-iconbox__content text-primary  ">
+                                                <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($overdraftAgainstAssignmentOfContractCardData[$currency]['interest_amount']??0,0) }}</h4>
                                                 </div>
                                             </div>
@@ -1314,12 +1313,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#OverdraftAgainstAssignmentOfContractkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
+                                    <a class="nav-link" data-toggle="tab" href="#OverdraftAgainstAssignmentOfContractkt_apps_contacts_view_tab_2_{{$currency}}" role="tab">
                                         <i class="flaticon2-checking"></i>Reports Table
                                     </a>
                                 </li>
                                 <li class="nav-item ml-auto">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.bank.statement',['company'=>$company->id,'accountType'=>'OverdraftAgainstAssignmentOfContract','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Bank Statement Report') }} </a>
                                         </div>
@@ -1327,7 +1326,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <div class="kt-portlet__head-label ">
+                                    <div class="kt-portlet__head-label">
                                         <div class="kt-align-right">
                                             <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id,'accountType'=>'OverdraftAgainstAssignmentOfContract','currency'=>$currency]) }}" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Withdrawal Report') }} </a>
                                         </div>
@@ -1342,7 +1341,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content  kt-margin-t-20">
+                        <div class="tab-content kt-margin-t-20">
 
                             <div class="tab-pane active" id="OverdraftAgainstAssignmentOfContractkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -1413,9 +1412,9 @@
                                                 @slot('table_header')
                                                 <tr class="table-active text-center">
                                                     <th class="text-center max-w-300">{{ __('Bank Name') }}</th>
-                                                    <th class="text-center ">{{ __('Limit') }}</th>
-                                                    <th class="text-center ">{{ __('Outstanding') }}</th>
-                                                    <th class="text-center ">{{ __('Room') }}</th>
+                                                    <th class="text-center">{{ __('Limit') }}</th>
+                                                    <th class="text-center">{{ __('Outstanding') }}</th>
+                                                    <th class="text-center">{{ __('Room') }}</th>
                                                 </tr>
                                                 @endslot
                                                 @slot('table_body')
@@ -1424,7 +1423,7 @@
                                                 @foreach ($totalRoomForEachOverdraftAgainstAssignmentOfContractId[$currency] ??[] as $key => $item)
                                                 <tr>
 
-                                                    <td class=" max-w-300">{{$item['item']?? '-'}}</td>
+                                                    <td class="max-w-300">{{$item['item']?? '-'}}</td>
                                                     <td class="text-center">{{number_format($item['limit']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['end_balance']??0)}}</td>
                                                     <td class="text-center">{{number_format($item['available_room']??0)}}</td>
@@ -1465,10 +1464,10 @@
         {{-- Title --}}
         <div class="row">
             <div class="col-md-12">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap">
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap">
                                 {{ __('Long Term Cash Facilities Position') }}
                             </h3>
                         </div>
@@ -1489,7 +1488,7 @@
                 </div>
             </div>
 			
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
                     <div class="col-md-6 col-lg-3 col-xl-3">
 
@@ -1605,7 +1604,7 @@
                     </h3>
                 </div>
             </div>
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
                     <div class="col-md-6 col-lg-3 col-xl-3">
 

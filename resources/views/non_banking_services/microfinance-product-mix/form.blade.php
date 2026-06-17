@@ -42,21 +42,21 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Name') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Tenor <br> (Months)') !!} </th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Early Payment <br> Installments Count') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Avg <br> Amount') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Name') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Tenor <br> (Months)') !!} </th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Early Payment <br> Installments Count') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Avg <br> Amount') !!}</th>
                                         @if(!$model->isMonthlyStudy())
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Annual <br> Increase %') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Annual <br> Increase %') !!}</th>
                                         @endif
-                                        {{-- <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Mix %') !!}</th> --}}
-                                        <th class="min-w-90 form-label font-weight-bold text-center align-middle   header-border-down">{!! __('Funded <br> By') !!}</th>
-                                        {{-- <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{{ __('Allocations') }}</th> --}}
+                                        {{-- <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Mix %') !!}</th> --}}
+                                        <th class="min-w-90 form-label font-weight-bold text-center align-middle header-border-down">{!! __('Funded <br> By') !!}</th>
+                                        {{-- <th class="form-label font-weight-bold text-center align-middle header-border-down">{{ __('Allocations') }}</th> --}}
                                         @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Flat Rates %') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Flat Rates %') !!}</th>
                                         @endforeach
 
                                     </tr>
@@ -117,7 +117,7 @@
                                         @endif
 
                                         <td>
-                                            	<x-form.select :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getFundedBy():0" :options="\App\Helpers\HNonBanking::getMicrofinanceFundingBySelector()" :add-new="false" class="select2-select min-w-120 repeater-select  " :all="false" name="microfinanceByBranchProductMixes[{{ $product->id }}][funded_by]"></x-form.select>
+                                            	<x-form.select :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getFundedBy():0" :options="\App\Helpers\HNonBanking::getMicrofinanceFundingBySelector()" :add-new="false" class="select2-select min-w-120 repeater-select" :all="false" name="microfinanceByBranchProductMixes[{{ $product->id }}][funded_by]"></x-form.select>
                                         </td>
 
 
@@ -145,7 +145,7 @@
 
 
 
-                                            <div class="modal fade " id="{{ $currentModalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal fade" id="{{ $currentModalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-md modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -162,8 +162,8 @@
                                                                         <tr>
 
 
-                                                                            <th class="text-center  text-capitalize th-main-color">{{ __('Flat Rate') }}</th>
-                                                                            <th class="text-center  text-capitalize th-main-color">{{ __('Decreasing Rate') }}</th>
+                                                                            <th class="text-center text-capitalize th-main-color">{{ __('Flat Rate') }}</th>
+                                                                            <th class="text-center text-capitalize th-main-color">{{ __('Decreasing Rate') }}</th>
 
 
 
@@ -176,7 +176,7 @@
 
                                                                         <tr>
                                                                             <td class="">
-                                                                                <div class="kt-input-icon ">
+                                                                                <div class="kt-input-icon">
                                                                                     <div class="input-group">
                                                                                         <input disabled type="text" step="0.1" class="form-control ignore-global-style flat-rate-id" value="{{ 0 }}">
                                                                                     </div>
@@ -184,7 +184,7 @@
                                                                             </td>
 
                                                                             <td class="">
-                                                                                <div class="kt-input-icon ">
+                                                                                <div class="kt-input-icon">
                                                                                     <div class="input-group">
                                                                                         <input disabled type="text" step="0.1" class="form-control ignore-global-style decreasing-rate-id" value="{{ 0 }}">
                                                                                     </div>
@@ -201,7 +201,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary " data-dismiss="modal">{{ __('Close') }} </button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ __('Close') }} </button>
                                                         </div>
 
                                                     </div>
@@ -233,7 +233,7 @@
                 </div>
             </div>
 			
-			  <div class="kt-portlet " style="margin-bottom:5px;">
+			  <div class="kt-portlet" style="margin-bottom:5px;">
                 <div class="kt-portlet__body">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('New Loan Officers Cases Projection') }} </h3>
                     <div class="row">
@@ -247,9 +247,9 @@
                     <input type="hidden" name="tableIds[]" value="{{ $tableId }}">
                     <x-tables.repeater-table :hideByDefault="false" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :repeater-with-select2="true" :parentClass="''" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=false">
                         <x-slot name="ths">
-                            {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" header-border-down" :title="__('Loan Officer <br> Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
+                            {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Loan Officer <br> Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
                             <x-tables.repeater-table-th :font-size-class="'font-14px'" class="max-w-200 header-border-down" :title="__('Position')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th>
-                            @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('Mth-').$i . ' <br> ' .__('Cases #')">
+                            @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('Mth-').$i . ' <br> ' .__('Cases #')">
                                 </x-tables.repeater-table-th>
                                 @endfor
                         </x-slot>
@@ -367,17 +367,17 @@
 
 
                 <div class="table-responsive">
-                    <table class="table table-white repeater-class repeater ">
+                    <table class="table table-white repeater-class repeater">
                         <thead>
                             <tr>
                                 <th class="first-column-th-class-medium form-label font-weight-bold text-center align-middle interval-class header-border-down">{{ __('Product Name') }}</th>
                                 <th class="first-column-th-class-medium form-label font-weight-bold text-center align-middle interval-class header-border-down">{{ __('Tenor (Months)') }}</th>
                                 <th class="first-column-th-class-medium form-label font-weight-bold text-center align-middle interval-class header-border-down">{{ __('Avg Amount') }}</th>
-                                @for($i = 0 ; $i< $microfinanceProductMixCount ; $i++ ) <th class="form-label font-weight-bold  text-center align-middle interval-class header-border-down">
+                                @for($i = 0 ; $i< $microfinanceProductMixCount ; $i++ ) <th class="form-label font-weight-bold text-center align-middle interval-class header-border-down">
                                     @php
                                     $currentVal = 'd' ;
                                     @endphp
-                                    <input name="{{ 'existing_names[' . $i .']' }}" value="{{ $currentVal }}" class="form-control text-left " type="text">
+                                    <input name="{{ 'existing_names[' . $i .']' }}" value="{{ $currentVal }}" class="form-control text-left" type="text">
                                     </th>
                                     @endfor
                             </tr>

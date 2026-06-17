@@ -173,7 +173,7 @@ $currentReportType = Request()->segment(5)
     <div class="kt-portlet__body">
         <form action="{{route('dashboard.various.incomeStatement',['company'=>$company,'subItemType'=>Request()->segments()[4]])}}" method="POST">
             @csrf
-            <div class="form-group row ">
+            <div class="form-group row">
                 <div class="col-md-4">
                     <label style="margin-right: 10px;"><b>{{__('Income Statement')}}</b></label>
                 </div>
@@ -206,7 +206,7 @@ $currentReportType = Request()->segment(5)
 
 
             </div>
-            <div class="form-group row ">
+            <div class="form-group row">
 
                 <div class="col-md-4">
                     <label>{{__('Reports')}}</label>
@@ -235,13 +235,13 @@ $currentReportType = Request()->segment(5)
             {{-- <div class="col-md-4">
                     <label>{{__('Note')}} </label>
             <div class="kt-input-icon">
-                <div class="input-group ">
+                <div class="input-group">
                     <input type="text" class="form-control" disabled value="{{__('The Report Will Show Max Top 50')}}">
                 </div>
             </div>
     </div> --}}
 </div>
-<div class="form-group row ">
+<div class="form-group row">
 
     <div class="col-md-4">
         <label>{{__('Interval')}}</label>
@@ -272,7 +272,7 @@ $currentReportType = Request()->segment(5)
     {{-- <div class="col-md-4">
                     <label>{{__('Data Type')}} </label>
     <div class="kt-input-icon">
-        <div class="input-group ">
+        <div class="input-group">
             <input type="text" class="form-control" disabled value="{{__('Value')}}">
         </div>
     </div>
@@ -281,7 +281,7 @@ $currentReportType = Request()->segment(5)
 
 
 
-{{-- <div class="form-group row ">
+{{-- <div class="form-group row">
                 <div class="col-md-4">
                     <label><b>{{__('Third Inteval')}}</b></label>
 </div>
@@ -307,7 +307,7 @@ $currentReportType = Request()->segment(5)
 <div class="col-md-4">
     <label>{{__('Data Type')}} </label>
     <div class="kt-input-icon">
-        <div class="input-group ">
+        <div class="input-group">
             <input type="text" class="form-control" disabled value="{{__('Value')}}">
         </div>
     </div>
@@ -329,7 +329,7 @@ $currentReportType = Request()->segment(5)
 
         <div class="kt-portlet__body">
             <div class="kt-list-timeline">
-                <div class="accordion  accordion-toggle-arrow" id="accordionExample{{ convertStringToClass($mainItemName) }}">
+                <div class="accordion accordion-toggle-arrow" id="accordionExample{{ convertStringToClass($mainItemName) }}">
                     <div class="card">
                         <div class="card-header bg-white">
                             <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseOne{{ convertStringToClass($mainItemName) }}" aria-expanded="true" aria-controls="collapseOne{{ convertStringToClass($mainItemName) }}">
@@ -457,7 +457,7 @@ $currentReportType = Request()->segment(5)
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link " data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{convertStringToClass($mainItemName.$currentReportItem)}}" role="tab">
+                                                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{convertStringToClass($mainItemName.$currentReportItem)}}" role="tab">
                                                                 <i class="flaticon2-checking"></i>{{ __('Reports Table') }}
                                                             </a>
                                                         </li>
@@ -465,7 +465,7 @@ $currentReportType = Request()->segment(5)
                                                 </div>
                                             </div>
                                             <div class="kt-portlet__body">
-                                                <div class="tab-content  kt-margin-t-20">
+                                                <div class="tab-content kt-margin-t-20">
 
                                                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_1_{{convertStringToClass($mainItemName.$currentReportItem)}}" role="tabpanel">
 
@@ -488,7 +488,7 @@ $currentReportType = Request()->segment(5)
                                                         <div class="col-md-12">
                                                             <x-table :tableClass="'kt_table_with_no_pagination_no_scroll_without_pdf'">
                                                                 @slot('table_header')
-                                                                <tr class="table-active text-center ">
+                                                                <tr class="table-active text-center">
                                                                     <th class="text-center">
                                                                         {{ __($mainItemName) }}
                                                                     </th>
@@ -543,7 +543,7 @@ $currentReportType = Request()->segment(5)
                                                                     @endif
                                                                 </tr>
 																@if($loop->last)
-																<tr class="table-active text-center ">
+																<tr class="table-active text-center">
                                                                     <td>
 	{{ __('Total') }}
                                                                     </td>
@@ -685,7 +685,7 @@ $currentReportType = Request()->segment(5)
                 <div class="kt-portlet__body dataTables_wrapper dt-bootstrap4 no-footer">
                     <table class="table table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                         <thead>
-                            <tr class="header-tr ">
+                            <tr class="header-tr">
                                 <th class="text-center view-table-th header-th sorting_disabled sub-text-bg text-nowrap editable editable-text is-name-cell trigger-expand is-opened" style="cursor:pointer">{{ __('Expand All') }}</th>
                                 <th class="text-center view-table-th header-th sorting_disabled sub-text-bg text-nowrap editable editable-text is-name-cell">Name</th>
                                 @foreach ($intervals as $intervalName )
@@ -704,7 +704,7 @@ $currentReportType = Request()->segment(5)
 								@endphp 
                             @foreach ($intervalComparing as $theType => $intervals)
                             <tr class="sub-numeric-bg text-nowrap" data-model-id="{{ convertStringToClass($theType) }}">
-                                <td class=" reset-table-width trigger-child-row-1 cursor-pointer sub-text-bg sub-closed">+</td>
+                                <td class="reset-table-width trigger-child-row-1 cursor-pointer sub-text-bg sub-closed">+</td>
                                 <td class="sub-text-bg text-nowrap is-name-cell text-left" style="text-align: left !important;">{{ $theType }}</td>
                                 @php
                                 $currentValue =[ ];
@@ -721,7 +721,7 @@ $currentReportType = Request()->segment(5)
                                 $totalOfRevenue = sum_all_keys($intervalComparing[$theType][$intervalName])
 								@endphp
 								
-                                <td class="sub-numeric-bg text-nowrap "> {{  number_format( $totalOfRevenue  ) }} </td>
+                                <td class="sub-numeric-bg text-nowrap"> {{  number_format( $totalOfRevenue  ) }} </td>
 								<td 
 									@if($subIndex == 1)
 								style="color:{{ getColorForIndexes($currentTotalsOfSalesRevenues[0],$currentTotalsOfSalesRevenues[1],$typeIndex ) }}"
@@ -745,8 +745,8 @@ $currentReportType = Request()->segment(5)
                                 @php
                                 $val = $currentValue[1] - $currentValue[0] ;
                                 $percentage = isset($currentValue[0]) && $currentValue[0] ? number_format($val/ $currentValue[0] * 100 , 2) : number_format(0,2) ;
-                                if($val > 0 && $currentValue[0] <0) { $percentage=$percentage * -1; } $color=getPercentageColorOfSubTypes($val,$theType) ; @endphp <td class="sub-numeric-bg text-nowrap " style="color:{{  $color }} !important">{{ number_format($val)  }}</td>
-                                    <td class="sub-numeric-bg text-nowrap  " style="color:{{ getPercentageColorOfSubTypes($percentage , $theType) }} !important">
+                                if($val > 0 && $currentValue[0] <0) { $percentage=$percentage * -1; } $color=getPercentageColorOfSubTypes($val,$theType) ; @endphp <td class="sub-numeric-bg text-nowrap" style="color:{{  $color }} !important">{{ number_format($val)  }}</td>
+                                    <td class="sub-numeric-bg text-nowrap" style="color:{{ getPercentageColorOfSubTypes($percentage , $theType) }} !important">
                                         {{ $percentage . ' %' }}
                                     </td>
 
@@ -775,12 +775,12 @@ $currentReportType = Request()->segment(5)
                                 $currentValues[] = $salesValue ;
                                 @endphp
 								
-                                <td class=" sub-numeric-bg sub-text-bg text-nowrap editable editable-text is-name-cell  "> {{ number_format($salesValue) }} </td>
+                                <td class="sub-numeric-bg sub-text-bg text-nowrap editable editable-text is-name-cell"> {{ number_format($salesValue) }} </td>
                                 @php
 								$currentPercentageValue = !isQuantitySubItem($subItemName) ? ($currentTotalsOfSalesRevenues[$intervalIndex] ? $salesValue / $currentTotalsOfSalesRevenues[$intervalIndex] * 100 : 0) : '-';
 								$currentPercentageValueArr[] = !isQuantitySubItem($subItemName) ? ($currentTotalsOfSalesRevenues[$intervalIndex] ? $salesValue / $currentTotalsOfSalesRevenues[$intervalIndex] * 100 : 0) : '-';
 								@endphp 
-								<td class=" sub-numeric-bg sub-text-bg text-nowrap editable editable-text is-name-cell  "
+								<td class="sub-numeric-bg sub-text-bg text-nowrap editable editable-text is-name-cell"
 								@if($intervalIndex == 1)
 								style="color:{{ getColorForIndexes($currentPercentageValueArr[0],$currentPercentageValueArr[1],$typeIndex ) }}"
 								@endif 
@@ -799,10 +799,10 @@ $currentReportType = Request()->segment(5)
 
                                 $val = $currentValues[1] - $currentValues[0] ;
                                 $percentage = isset($currentValues[0]) && $currentValues[0] ? number_format($val/ $currentValues[0] * 100 , 2) : number_format(0,2) ;
-                                if($val > 0 && $currentValues[0] <0) { $percentage=$percentage * -1; } $color=getPercentageColorOfSubTypes($val,$theType) ; @endphp <td class="sub-numeric-bg   text-nowrap editable editable-text is-name-cell " style="color:{{ getPercentageColorOfSubTypes($val , $theType) }} !important">
+                                if($val > 0 && $currentValues[0] <0) { $percentage=$percentage * -1; } $color=getPercentageColorOfSubTypes($val,$theType) ; @endphp <td class="sub-numeric-bg text-nowrap editable editable-text is-name-cell" style="color:{{ getPercentageColorOfSubTypes($val , $theType) }} !important">
                                     {{ number_format($val ) }}
                                     </td>
-                                    <td class="sub-numeric-bg   text-nowrap editable editable-text is-name-cell " style="color:{{ getPercentageColorOfSubTypes($percentage , $theType) }} !important">
+                                    <td class="sub-numeric-bg text-nowrap editable editable-text is-name-cell" style="color:{{ getPercentageColorOfSubTypes($percentage , $theType) }} !important">
                                         {{ $percentage .' %' }}
                                     </td>
                                     @endforeach

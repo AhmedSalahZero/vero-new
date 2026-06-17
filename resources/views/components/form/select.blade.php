@@ -32,7 +32,7 @@
 ])
 
 @if($label)
-<label class="form-label font-weight-bold @if($addNewModal) d-flex @endif "> {{$label}}
+<label class="form-label font-weight-bold @if($addNewModal) d-flex @endif"> {{$label}}
 
 
     @if($isRequired)
@@ -68,11 +68,7 @@ data-actions-box="true"
     <option value="">{{ __('All') }}</option>
     @endif
     @if($addNew)
-    <option class="add-new-item 
-                @if($addWithPopup)
-                add-with-popup
-                @endif 
-                " data-add-new-form="{{ $addNewWithFormPopupClass ?: '' }}" data-add-model-name="{{ $addModelName }}" data-add-modal-title="{{ $addModalTitle }}">{{ $addNewText ?: __('Add New') }}</option>
+    <option class="add-new-item @if($addWithPopup) add-with-popup @endif" data-add-new-form="{{ $addNewWithFormPopupClass ?: '' }}" data-add-model-name="{{ $addModelName }}" data-add-modal-title="{{ $addModalTitle }}">{{ $addNewText ?: __('Add New') }}</option>
     @endif
     @foreach($options as $value=>$option)
     <option @if(isset($option['value'])) value="{{ $option['value']  }}" @endif title="{{ $option['title']??''  }}" @foreach($option as $name=>$val)

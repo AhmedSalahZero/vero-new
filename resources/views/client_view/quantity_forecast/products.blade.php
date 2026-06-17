@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-lg-6 kt-align-right">
                             <input type="submit" class="btn active-style" name="submit" value="{{__('Save')}}" >
-                            <input type="submit" class="btn btn-danger " name="submit" value="{{__('Skip')}}" >
+                            <input type="submit" class="btn btn-danger" name="submit" value="{{__('Skip')}}" >
                         </div>
                     </div>
                 </div>

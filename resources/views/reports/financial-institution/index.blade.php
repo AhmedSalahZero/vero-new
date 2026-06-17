@@ -2,23 +2,21 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-.money-flow-dark .kt-portlet__body{
+.kt-portlet__body{
 	padding-top:0 !important;
 }
-.money-flow-dark .hover-color-black:hover i{
+.hover-color-black:hover i{
 	color:black !important;
 }
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -28,7 +26,7 @@
 {{ __('Financial Institutions') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -43,7 +41,7 @@
 
            <div class="flex-tabs">
 		   @if(hasAuthFor('create financial institutions'))
-		    <a href="{{route('create.financial.institutions',['company'=>$company->id])}}" class="btn  active-style btn-icon-sm align-self-center">
+		    <a href="{{route('create.financial.institutions',['company'=>$company->id])}}" class="btn active-style btn-icon-sm align-self-center">
                 <i class="fas fa-plus"></i>
                 {{ __('New Record') }}
             </a>
@@ -53,7 +51,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == 'bank' ?'active':'' }}" id="bank" role="tabpanel">
@@ -64,7 +62,7 @@
                     {{-- <div class="kt-portlet__head kt-portlet__head--lg p-0">
                         <div class="kt-portlet__head-label">
                             <span class="kt-portlet__head-icon">
-                                <i class="kt-font-dark btn-outline-hover-danger kt-menu__link-icon fa fa-university "></i>
+                                <i class="kt-font-dark btn-outline-hover-danger kt-menu__link-icon fa fa-university"></i>
                             </span>
                             <h3 class="kt-portlet__head-title">
                             </h3>
@@ -73,7 +71,7 @@
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -95,7 +93,7 @@
                                     <td class="text-nowrap">{{ $financialInstitutionBank->getBranchName() }}</td>
                                     <td>{{ $financialInstitutionBank->getCompanyAccountNumber() }}</td>
     
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                      
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
@@ -104,7 +102,7 @@
                                         </span>
                                     </td>
 									
-									<td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+									<td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                      
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
@@ -154,7 +152,7 @@
 
             @foreach($financialInstitutionCompanies as $id => $companyArr)
 
-            <div class="tab-pane {{ Request('active') == $id ? 'active':''  }}" id="{{ $id }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $id ? 'active':'' }}" id="{{ $id }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <div class="kt-portlet__head kt-portlet__head--lg p-0">
                         <div class="kt-portlet__head-label">
@@ -188,7 +186,7 @@
                                     <td>{{ $financialInstitutionCompany->getName() }}</td>
                                     <td>{{ $financialInstitutionCompany->getBranchName() }}</td>
 								
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											@include('reports.financial-institution.dropdown-actions')
 											@if(hasAuthFor('update financial institutions'))

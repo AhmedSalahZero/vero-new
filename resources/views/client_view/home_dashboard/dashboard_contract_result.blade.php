@@ -7,14 +7,14 @@
         type="text/css" />
 @endsection
 @section('dash_nav')
-    <ul class="kt-menu__nav ">
-        <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard',$company) }}"
+    <ul class="kt-menu__nav">
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard',$company) }}"
                 class="kt-menu__link"><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.breakdown',$company) }}"
-                class="kt-menu__link "><span class="kt-menu__link-text">Breakdown Analysis Dashboard</span></a></li>
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.forecast',$company) }}"
-                class="kt-menu__link "><span class="kt-menu__link-text">Forecast Dashboard</span></a></li>
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.breakdown',$company) }}"
+                class="kt-menu__link"><span class="kt-menu__link-text">Breakdown Analysis Dashboard</span></a></li>
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.forecast',$company) }}"
+                class="kt-menu__link"><span class="kt-menu__link-text">Forecast Dashboard</span></a></li>
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a
                 href="{{ route('dashboard.contractResult',$company) }}" class="kt-menu__link active-button"><span
                     class="kt-menu__link-text active-text">Contract Result Dashboard</span></a></li>
     </ul>
@@ -93,7 +93,7 @@
     <div class="row">
         {{-- Contract Financial Results --}}
         <div class="col-md-4">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label col-8">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -117,7 +117,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Sales</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -135,7 +135,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Product Cost</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -153,7 +153,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Installation Cost</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -171,7 +171,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Software Cost</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -189,7 +189,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Direct Labor Cost</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -207,7 +207,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Operations Cost</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -225,7 +225,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Other Expenses</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -243,7 +243,7 @@
                                             <h3 class="kt-iconbox__title">
                                                 <a class="kt-link" href="#">Profit</a>
                                             </h3>
-                                            <div class="kt-iconbox__content text-primary  ">
+                                            <div class="kt-iconbox__content text-primary">
                                                 <h4>50,000,000</h4>
                                             </div>
                                         </div>
@@ -260,7 +260,7 @@
             <div class="row">
                 {{-- Phases Sales Breakdown --}}
                 <div class="col-md-6">
-                    <div class="kt-portlet ">
+                    <div class="kt-portlet">
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label col-8">
                                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -286,7 +286,7 @@
                 </div>
                 {{-- Revenues Breakdown --}}
                 <div class="col-md-6">
-                    <div class="kt-portlet ">
+                    <div class="kt-portlet">
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label col-8">
                                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -314,7 +314,7 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <div class="kt-portlet ">
+                    <div class="kt-portlet">
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label col-8">
                                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -338,7 +338,7 @@
                                                     <h3 class="kt-iconbox__title">
                                                         <a class="kt-link" href="#">Net Profit Margin %</a>
                                                     </h3>
-                                                    <div class="kt-iconbox__content text-primary  ">
+                                                    <div class="kt-iconbox__content text-primary">
                                                         <h4>50%</h4>
                                                     </div>
                                                 </div>
@@ -356,7 +356,7 @@
                                                     <h3 class="kt-iconbox__title">
                                                         <a class="kt-link" href="#">Required Financing</a>
                                                     </h3>
-                                                    <div class="kt-iconbox__content text-primary  ">
+                                                    <div class="kt-iconbox__content text-primary">
                                                         <h4>10,000,000</h4>
                                                     </div>
                                                 </div>
@@ -379,14 +379,14 @@
 
     {{-- Multi Line Chart --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Monthly Cash Flow') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -406,14 +406,14 @@
 
     {{-- Single Line Chart --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Monthly Accumulated Cash Flow') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -433,14 +433,14 @@
 
     {{-- Gantt Chart --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Contract Gantt Chart') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>

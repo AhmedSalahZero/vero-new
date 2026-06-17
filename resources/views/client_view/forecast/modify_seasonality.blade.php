@@ -41,7 +41,7 @@
                     <div class="kt-portlet__head-wrapper">
                         <div class="kt-portlet__head-actions">
                             &nbsp;
-                            <a href="{{ route('modify.seasonality', $company) }}" class="btn  active-style btn-icon-sm ">
+                            <a href="{{ route('modify.seasonality', $company) }}" class="btn active-style btn-icon-sm">
                                 <i class="fas fa-file-import"></i>
                                 {{__("Modify Seasonality")}}
                             </a>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="kt-portlet__body ">
+            <div class="kt-portlet__body">
                 <br>
                 <div class="row">
                     <div class="col-md-12">

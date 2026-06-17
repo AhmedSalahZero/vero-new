@@ -168,6 +168,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereCodeName&Nuber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereName&partNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\LabelingItem whereNameCode&partNumber($value)
  * @mixin \Eloquent
  */
 class LabelingItem extends Model

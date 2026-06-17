@@ -315,6 +315,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereSubOf($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereUpdatedBy($value)
+ * @property string|null $odoo_username
+ * @property string|null $odoo_db_password
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereOdooDbPassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Company whereOdooUsername($value)
  * @mixin \Eloquent
  */
 class Company extends Model implements HasMedia
@@ -522,7 +526,7 @@ class Company extends Model implements HasMedia
     {
         return $this->lcSettlementInternalMoneyTransfers()->where('type', LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT);
     }
-    public function getBankToLcSettlementInternalMoneyTransfers(?string $startDate = null, ?string $endDate = null, $activeTab = null):HasMany
+    public function getBankToLcSettlementInternalMoneyTransfers(?string $startDate = null, ?string $endDate = null, $activeTab = null)
     {
         return $this->bankToLcSettlementInternalMoneyTransfers()
         ->whereBetween('transfer_date', [$startDate, $endDate])
@@ -1493,13 +1497,18 @@ class Company extends Model implements HasMedia
         return $this->odoo_db_name;
     }
    
+    public function hasOdooCredentials(): bool
+    {
+        return (bool) ($this->getOdooDBUrl() && $this->getOdooDBName());
+    }
+
     public function hasOdooIntegrationCredentials():bool
     {
 		$user =auth()->user();
 		/**
 		 * @var User $user
 		 */
-        return $this->getOdooDBUrl() && $this->getOdooDBName() && $user->getOdooDBUserName() && $user->getOdooDBPassword();
+        return $this->hasOdooCredentials() && $user->getOdooDBUserName() && $user->getOdooDBPassword();
     }
     
     public function lastUploadFileNames()

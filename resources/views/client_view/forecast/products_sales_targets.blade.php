@@ -46,7 +46,7 @@
             <h2>{{__('Sales Annual Target Year ' )  . date('Y',strtotime($sales_forecast->start_date)) .' : '. number_format($sales_forecast->sales_target)}}</h2>
             <x-table :tableTitle="__('New Product '.$name_of_product.' Table')" :tableClass="'kt_table_with_no_pagination'">
                 @slot('table_header')
-                <tr class="table-active  text-center">
+                <tr class="table-active text-center">
                     <th>{{ __('Product '.$name_of_product.' Name') }}</th>
                     <th>{{ __('Sales Target Value') }}</th>
                     @if ($sales_forecast->target_base !== 'new_start' || $sales_forecast->new_start !=='product_target')
@@ -198,7 +198,7 @@
                     @endif
                 </tr>
                 @endforeach
-                <tr class="table-active  text-center">
+                <tr class="table-active text-center">
                     <th>{{__('Total')}}</th>
                     <td>{{number_format($total)}}</td>
                     <td>{{number_format($total_existing_targets)}}</td>

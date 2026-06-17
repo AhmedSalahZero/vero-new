@@ -183,25 +183,25 @@ use App\Models\LetterOfCreditIssuance;
 
 
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
 
 
                                         <x-form.input :id="'cd-or-td-amount-id'" :readonly="true" :default-value="0" :model="$model??null" :label="__('Amount')" :type="'text'" :placeholder="''" :name="'amount'" :class="''" :required="true"></x-form.input>
 
                                     </div>
 									
-									<div class="col-md-2 ">
+									<div class="col-md-2">
                                         <x-form.input :id="'current-lc-outstanding-balance-id'" :default-value="0" :model="$model??null" :label="__('LC Outstanding Balance')" :type="'text'" :placeholder="__('LC Outstanding Balance')"  :class="'recalculate-cd-or-td-free-to-use'" :required="false"></x-form.input>
                                     </div>
 
 									
 									
 									
-									 <div class="col-md-2 ">
+									 <div class="col-md-2">
                                         <x-form.input :id="'against-cash-cover-amount-id'" :default-value="0" :model="$model??null" :label="__('Against Cash Cover')" :type="'text'" :placeholder="__('Against Cash Cover')"  :class="'recalculate-cd-or-td-free-to-use'" :required="false"></x-form.input>
                                     </div>
 									
-									<div class="col-md-3 ">
+									<div class="col-md-3">
                                         <x-form.input :id="'cd-or-td-free-to-use-amount-id'" :default-value="0" :model="$model??null" :label="__('CD Free To Use')" :type="'text'" :placeholder="__('')"  :class="''" :required="false"></x-form.input>
                                     </div>
 									
@@ -220,7 +220,7 @@ use App\Models\LetterOfCreditIssuance;
                                         </select>
                                     </div>
 									
-									<div class="col-md-2 ">
+									<div class="col-md-2">
                                         <x-form.input :id="'current-lc-type-outstanding-balance-id'" :default-value="0" :model="$model??null" :label="__('LC Type Outstanding Balance')" :type="'text'" :placeholder="__('LC Type Outstanding Balance')" :name="'lc_type_outstanding_balance'" :class="'only-greater-than-zero-allowed'" :required="true"></x-form.input>
                                     </div>
 									
@@ -360,8 +360,8 @@ use App\Models\LetterOfCreditIssuance;
 									@include('star')
 									</label>
 									       <div>
-										                  <input required value="{{ (isset($model) ? number_format($model->getLcAmount(),0) : 0) }}" class="form-control  only-greater-than-or-equal-zero-allowed amount-js  recalculate-amount-in-main-currency recalculate-cash-cover-amount-js recalculate-lc-commission-amount-js lc-amount-js" type="text" placeholder="{{ __('Lc Amount') }}">
-                                    <input type="hidden" value="{{ (isset($model) ? $model->getLcAmount() : 0) }}"  name="lc_amount" class="only-greater-than-zero-allowed ">
+										                  <input required value="{{ (isset($model) ? number_format($model->getLcAmount(),0) : 0) }}" class="form-control only-greater-than-or-equal-zero-allowed amount-js recalculate-amount-in-main-currency recalculate-cash-cover-amount-js recalculate-lc-commission-amount-js lc-amount-js" type="text" placeholder="{{ __('Lc Amount') }}">
+                                    <input type="hidden" value="{{ (isset($model) ? $model->getLcAmount() : 0) }}"  name="lc_amount" class="only-greater-than-zero-allowed">
 
 										   </div>
                                     </div>
@@ -427,7 +427,7 @@ use App\Models\LetterOfCreditIssuance;
                                 </div>
 
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :model="$model??null" :label="__('Financing Duration')" :type="'text'" :placeholder="__('Financing Duration')" :name="'financing_duration'" :class="'only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
                                 </div>
                                 

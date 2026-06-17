@@ -229,7 +229,7 @@
 </style>
 
 
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
 
 
 
@@ -237,24 +237,24 @@
         <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
             <thead>
 
-                <tr class="header-tr ">
+                <tr class="header-tr">
 
-                    <th class="view-table-th  bg-lighter max-w-weeks header-th  align-middle text-center">
+                    <th class="view-table-th bg-lighter max-w-weeks header-th align-middle text-center">
                         {{ __('#') }}
                     </th>
 
-                    <th class="view-table-th  bg-lighter max-w-weeks header-th  align-middle text-center">
+                    <th class="view-table-th bg-lighter max-w-weeks header-th align-middle text-center">
                         {{ __('Customer Name') }}
                     </th>
 
-                    <th class="view-table-th  bg-lighter max-w-weeks header-th  align-middle text-center">
+                    <th class="view-table-th bg-lighter max-w-weeks header-th align-middle text-center">
                         {{ __('Net Balance') }}
                     </th>
 
-                    <th class="view-table-th  bg-lighter max-w-weeks header-th  align-middle text-center">
+                    <th class="view-table-th bg-lighter max-w-weeks header-th align-middle text-center">
                         {{ __('Statement Report') }}
                     </th>
-                    <th class="view-table-th  bg-lighter max-w-weeks header-th  align-middle text-center">
+                    <th class="view-table-th bg-lighter max-w-weeks header-th align-middle text-center">
                         {{ __('Invoice') }}
                     </th>
 
@@ -272,17 +272,17 @@
                 @foreach(['Cash & Banks Begining Balance','Checks Collected','Incoming Transfers','Customers Invoices Under Collection','Customers Checks Under Collection','Sales Forecast Collections','Total Cash Inflow','Raw Materils Payable Checks','Suppliers Payable','Operational Expenses Payments','Wages & Salaries Payments','Taxes & Social Insurance Payments','Forecasted Suppliers Payments','Total Cash Outflow','Cash Flow From Operations'] as $customerName)
 
 
-                <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
+                <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
                     {{-- <td class="red reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize main-tr is-close"> @if($hasSubRows) + @endif</td> --}}
-                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ 1 }}</td>
-                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ $customerName }}</td>
-                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ 2500 }}</td>
-                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ 'statement report' }}</td>
-                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ 'invoice' }}</td>
-                    {{-- <td class="  sub-numeric-bg text-center editable-date"></td> --}}
+                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ 1 }}</td>
+                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ $customerName }}</td>
+                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ 2500 }}</td>
+                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ 'statement report' }}</td>
+                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ 'invoice' }}</td>
+                    {{-- <td class="sub-numeric-bg text-center editable-date"></td> --}}
 
 
-                    {{-- <td class="  sub-numeric-bg text-center editable-date">{{ number_format($result[$customerName]['total'][$year] ?? 0 ) }}</td> --}}
+                    {{-- <td class="sub-numeric-bg text-center editable-date">{{ number_format($result[$customerName]['total'][$year] ?? 0 ) }}</td> --}}
 
                 </tr>
 

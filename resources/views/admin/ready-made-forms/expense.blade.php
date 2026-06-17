@@ -126,9 +126,9 @@
                         @php
                         $index = 0 ;
                         @endphp
-						<div class="d-flex align-items-center justify-content-start " style="margin-right:auto">
+						<div class="d-flex align-items-center justify-content-start" style="margin-right:auto">
                         @foreach(getTypesForValues() as $typeElement)
-                        <button data-value="{{ $typeElement['value'] }}" class="btn mb-5 js-type-btn type-btn btn btn-outline-info {{ $index == 0 ? 'active' :''  }}">{{ $typeElement['title'] }}</button>
+                        <button data-value="{{ $typeElement['value'] }}" class="btn mb-5 js-type-btn type-btn btn btn-outline-info {{ $index == 0 ? 'active' :'' }}">{{ $typeElement['title'] }}</button>
                         @php
                         $index++;
                         @endphp
@@ -197,7 +197,7 @@
 
                                 </td>
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
                                 </td>
                                 <td>
@@ -212,7 +212,7 @@
 								
 								 <td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 								
@@ -233,7 +233,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
                                 </td>
 
 
@@ -308,7 +308,7 @@
 
                                 <td>
 								
-                                    <x-form.select  :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
+                                    <x-form.select  :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 
                                 </td>
@@ -323,7 +323,7 @@
 								
 <td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
                                 <td>
@@ -341,7 +341,7 @@
                                     <div class="d-flex align-items-center flex-wrap text-center can-be-repeated-parent">
                                         <input data-column-index="{{ $payloadIndex }}" class="form-control can-be-repeated-text only-greater-than-or-equal-zero-allowed text-center" value="{{ isset($subModel) ? number_format($subModel->getPayloadAtDate($payloadIndex)) : 0 }}" type="text">
                                         <input class="can-be-repeated-hidden" type="hidden" value="{{ (isset($subModel) ? $subModel->getPayloadAtDate($payloadIndex) : 0) }}" multiple @if($isRepeater) name="payload" @else name="{{ $tableId }}[0][payload][{{ $fullDate }}]" @endif>
-                                        <i class="fa fa-ellipsis-h repeat-to-r " title="{{ __('Repeat To Right') }}" data-column-index="{{ $payloadIndex }}" data-digit-number="0"></i>
+                                        <i class="fa fa-ellipsis-h repeat-to-r" title="{{ __('Repeat To Right') }}" data-column-index="{{ $payloadIndex }}" data-digit-number="0"></i>
                                     </div>
                                 </td>
 
@@ -436,22 +436,22 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
 
                                 </td>
 
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
 
                                 </td>
 
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
 
                                 </td>
 
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
 
                                 </td>
 
@@ -465,7 +465,7 @@
                                 </td>
 
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getConditionalTo() : ''" :options="getConditionalToSelect()" :add-new="false" class="select2-select js-condition-to-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) conditional_to @else {{ $tableId }}[0][conditional_to] @endif"></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getConditionalTo() : ''" :options="getConditionalToSelect()" :add-new="false" class="select2-select js-condition-to-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) conditional_to @else {{ $tableId }}[0][conditional_to] @endif"></x-form.select>
 
                                 </td>
 
@@ -482,7 +482,7 @@
 								
 
                                 <td>
-                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
+                                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 									
 
@@ -498,7 +498,7 @@
 								
 								<td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 								
@@ -520,7 +520,7 @@
                 </div>
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
                 </td> --}}
 
@@ -604,22 +604,22 @@
                                 </div>
                             </td>
                             <td>
-                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
+                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
 
                             </td>
 
                             <td>
-                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
+                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
 
                             </td>
 
                             <td>
-                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
+                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
 
                             </td>
 
                             <td>
-                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
+                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
 
                             </td>
 
@@ -632,7 +632,7 @@
 
                             </td> --}}
                             <td>
-                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
+                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 								
 
@@ -648,7 +648,7 @@
 							
 							<td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 								
@@ -669,7 +669,7 @@
                                 <div class="d-flex align-items-center flex-wrap text-center can-be-repeated-parent">
                                     <input data-column-index="{{ $payloadIndex }}" class="form-control can-be-repeated-text only-percentage-allowed text-center" value="{{ isset($subModel) ? number_format($subModel->getPayloadAtDate($payloadIndex),PERCENTAGE_DECIMALS) : 0 }}" type="text">
                                     <input class="can-be-repeated-hidden" type="hidden" value="{{ (isset($subModel) ? $subModel->getPayloadAtDate($payloadIndex) : 0) }}" multiple @if($isRepeater) name="payload" @else name="{{ $tableId }}[0][payload][{{ $fullDate }}]" @endif>
-                                    <i class="fa fa-ellipsis-h repeat-to-r " title="{{ __('Repeat To Right') }}" data-column-index="{{ $payloadIndex }}" data-digit-number="0"></i>
+                                    <i class="fa fa-ellipsis-h repeat-to-r" title="{{ __('Repeat To Right') }}" data-column-index="{{ $payloadIndex }}" data-digit-number="0"></i>
                                 </div>
                             </td>
 
@@ -689,7 +689,7 @@
             </div>
             </td>
             <td>
-                <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+                <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
             </td> --}}
 
@@ -775,22 +775,22 @@
                             </div>
                         </td>
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
                         </td>
 
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
 
                         </td>
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
 
                         </td>
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
 
                         </td>
 
@@ -805,7 +805,7 @@
                         </td>
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getConditionalTo() : ''" :options="getConditionalToSelect()" :add-new="false" class="select2-select js-condition-to-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) conditional_to @else {{ $tableId }}[0][conditional_to] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getConditionalTo() : ''" :options="getConditionalToSelect()" :add-new="false" class="select2-select js-condition-to-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) conditional_to @else {{ $tableId }}[0][conditional_to] @endif"></x-form.select>
 
                         </td>
 
@@ -826,7 +826,7 @@
 
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif"></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 							
 
@@ -843,7 +843,7 @@
 						
 								<td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 						
@@ -865,7 +865,7 @@
                             </div>
                         </td>
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
                         </td>
 
@@ -950,24 +950,24 @@
                             </div>
                         </td>
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : 'service'" :options="getRevenueStreamTypes()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) revenue_stream_type @else {{ $tableId }}[0][revenue_stream_type] @endif"></x-form.select>
 
                         </td>
 
 
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseOne() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_1 @else {{ $tableId }}[0][allocation_base_1] @endif"></x-form.select>
 
                         </td>
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseTwo() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_2 @else {{ $tableId }}[0][allocation_base_2] @endif"></x-form.select>
 
                         </td>
 
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getAllocationBaseThree() : ''" :options="getAllocationsBases()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) allocation_base_3 @else {{ $tableId }}[0][allocation_base_3] @endif"></x-form.select>
 
                         </td>
 
@@ -981,7 +981,7 @@
 
                         </td> --}}
                         <td>
-                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
+                            <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
                                     <x-modal.custom-collection  :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 
                         </td>
@@ -996,7 +996,7 @@
 						
 						<td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 								
@@ -1017,7 +1017,7 @@
                             <div class="d-flex align-items-center flex-wrap text-center can-be-repeated-parent">
                                 <input data-column-index="{{ $payloadIndex }}" class="form-control can-be-repeated-text only-greater-than-or-equal-zero-allowed text-center" value="{{ isset($subModel) ? number_format($subModel->getPayloadAtDate($payloadIndex)) : 0 }}" type="text">
                                 <input class="can-be-repeated-hidden" type="hidden" value="{{ (isset($subModel) ? $subModel->getPayloadAtDate($payloadIndex) : 0) }}" multiple @if($isRepeater) name="payload" @else name="{{ $tableId }}[0][payload][{{ $fullDate }}]" @endif>
-                                <i class="fa fa-ellipsis-h repeat-to-r " title="{{ __('Repeat To Right') }}" data-column-index="{{ $payloadIndex }}" data-digit-number="0"></i>
+                                <i class="fa fa-ellipsis-h repeat-to-r" title="{{ __('Repeat To Right') }}" data-column-index="{{ $payloadIndex }}" data-digit-number="0"></i>
                             </div>
                         </td>
 
@@ -1037,7 +1037,7 @@
     </div>
     </td>
     <td>
-        <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+        <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
     </td> --}}
 
@@ -1112,12 +1112,12 @@
                 </td>
                 <td>
                     {{-- this must be multiselect --}}
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getDepartment() : 'department'" :options="[]" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) department @else {{ $tableId }}[0][department] @endif"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getDepartment() : 'department'" :options="[]" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) department @else {{ $tableId }}[0][department] @endif"></x-form.select>
 
                 </td>
                 <td>
                     {{-- this must be multiselect --}}
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getEmployee() : 'employee'" :options="[]" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) employee @else {{ $tableId }}[0][employee] @endif"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getEmployee() : 'employee'" :options="[]" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) employee @else {{ $tableId }}[0][employee] @endif"></x-form.select>
 
                 </td>
                 <td>
@@ -1129,7 +1129,7 @@
 
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select  payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 					
 
@@ -1144,7 +1144,7 @@
                 </td>
 				<td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 
@@ -1166,7 +1166,7 @@
                     </div>
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
                 </td>
 
@@ -1246,13 +1246,13 @@
 
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
                                     <x-modal.custom-collection  :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 					
 
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getInterval() : 2" :options="getPaymentIntervals()" :add-new="false" class="select2-select repeater-select  " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) interval @else {{ $tableId }}[0][interval] @endif"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getInterval() : 2" :options="getPaymentIntervals()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) interval @else {{ $tableId }}[0][interval] @endif"></x-form.select>
 
                 </td>
                 <td>
@@ -1267,7 +1267,7 @@
 				
 <td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
 								
@@ -1289,7 +1289,7 @@
                     </div>
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
                 </td>
 
@@ -1370,7 +1370,7 @@
 
                 </td>
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms " data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select repeater-select payment_terms" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) payment_terms @else {{ $tableId }}[0][payment_terms] @endif" ></x-form.select>
                                     <x-modal.custom-collection :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 					
 
@@ -1386,7 +1386,7 @@
 				
 				<td>
                                     <div class="d-flex align-items-center">
-                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox  text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
+                                        <input @if($isRepeater) name="is_deductible" @else name="{{ $tableId }}[0][is_deductible]" @endif class="form-control max-w-checkbox text-center" value="1" @if(isset($subModel) ? $subModel->isDeductible() : false)  checked @endif type="checkbox">
                                     </div>
                                 </td>
                 <td>
@@ -1407,7 +1407,7 @@
 </div>
 </td>
 <td>
-    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select   repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
+    <x-form.select :selectedValue="isset($subModel) ? $subModel->getIncreaseInterval() : 'annually' " :options="getDurationIntervalTypesForSelectExceptMonthly()" :add-new="false" class="select2-select repeater-select" data-filter-type="{{ $type }}" :all="false" name="@if($isRepeater) increase_interval @else {{ $tableId }}[0][increase_interval] @endif" id="{{$type.'_'.'duration_type' }}"></x-form.select>
 
 </td> --}}
 
@@ -1696,7 +1696,7 @@
             const elementToAppendIn = $(this).parent().find('.js-append-into');
             const texts = [];
             let lis = '';
-            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap ">' + 'Add New' + '</a></u>'
+            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap">' + 'Add New' + '</a></u>'
             lis += '<li >' + text + '</li>'
             $(this).closest('table').find('.js-show-all-categories-popup').each(function(index, element) {
                 let text = $(element).val().trim();

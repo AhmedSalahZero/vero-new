@@ -118,7 +118,7 @@
                                         id="total_sales_target_percentage_{{ $product_name }}">
                                         {{ !isset($modified_targets['products_modified_targets'])? 0: number_format(array_sum(array_column($modified_targets['products_modified_targets'], 'percentage') ?? [])) }}
                                     </td>
-                                    <td data-index="{{ $index }}" class="text-center active-style total_sales_values_id total_sales_values_class " id="total_sales_target_value_{{ $product_name }}">
+                                    <td data-index="{{ $index }}" class="text-center active-style total_sales_values_id total_sales_values_class" id="total_sales_target_value_{{ $product_name }}">
                                         {{ !isset($modified_targets['products_modified_targets'])? 0: number_format(array_sum(array_column($modified_targets['products_modified_targets'], 'value') ?? [])) }}
                                     </td>
                                 @endforeach

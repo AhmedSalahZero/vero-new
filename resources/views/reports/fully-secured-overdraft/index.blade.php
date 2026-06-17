@@ -2,18 +2,16 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -23,12 +21,12 @@
 {{ __('Fully Secured Overdraft '. $financialInstitution->getName()) }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
 <x-back-to-bank-header-btn :create-permission-name="'create fully secured overdraft'" :create-route="route('create.fully.secured.overdraft',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id])"></x-back-to-bank-header-btn>
 	
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == 'fully-secured-over-draft' ?'active':'' }}" id="bank" role="tabpanel">
@@ -48,7 +46,7 @@
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -81,7 +79,7 @@
                                     <td>{{ $fullySecuredOverdraft->getInterestRateFormatted() . ' %' }}</td>
                                     {{-- <td>{{ $fullySecuredOverdraft->getMaxLendingLimitPerCustomer() }}</td> --}}
                                     {{-- <td>{{ $fullySecuredOverdraft->getMaxSettlementDays() }}</td> --}}
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 										
                                	     @include('reports.fully-secured-overdraft.apply-rate')
 									 

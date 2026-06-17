@@ -2,49 +2,48 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
 
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -55,7 +54,7 @@
 [{{ $financialInstitution->getName() }} ]
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -91,13 +90,13 @@
                             </div>
                             <div class="kt-portlet__body">
                                 <div class="form-group row">
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <label>{{__('Financial Institution Name')}} </label>
                                         <div class="kt-input-icon">
                                             <input disabled value="{{ $financialInstitution->getName()  }}" type="text" class="form-control" placeholder="{{__('Financial Institution Name')}}">
                                         </div>
                                     </div>
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :model="$model??null" :label="__('Account Number')" :type="'text'" :placeholder="__('Account Number')" :name="'account_number'" :required="true"></x-form.input>
                                     </div>
                                     <div @if($company->hasOdooIntegrationCredentials())
@@ -118,13 +117,13 @@
                                     </div>
 
                                     @if($company->hasOdooIntegrationCredentials())
-                                    <div class="col-1	">
-                                        <label class="form-label font-weight-bold ">{{ __('Odoo Code') }}
+                                    <div class="col-1">
+                                        <label class="form-label font-weight-bold">{{ __('Odoo Code') }}
 
                                         </label>
                                         <div class="kt-input-icon">
                                             <div class="input-group">
-                                                <input placeholder="{{ __('Odoo Code') }}" type="text" class="form-control  exclude-text" name="odoo_code" value="{{ isset($model) ? $model->getOdooCode() : old('odoo_code') }}">
+                                                <input placeholder="{{ __('Odoo Code') }}" type="text" class="form-control exclude-text" name="odoo_code" value="{{ isset($model) ? $model->getOdooCode() : old('odoo_code') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -153,14 +152,14 @@
                                         <x-form.date :id="'end-date-id'" :classes="'recalculate-interest-amount'" :label="__('End Date')" :required="true" :model="$model??null" :name="'end_date'" :placeholder="__('Select End Date')"></x-form.date>
                                     </div>
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :id="'amount-id'" :model="$model??null" :label="__('Amount')" :type="'text'" :placeholder="__('Amount')" :name="'amount'" :class="'only-greater-than-or-equal-zero-allowed recalculate-interest-amount'" :required="true"></x-form.input>
                                     </div>
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :id="'interest-rate-id'" :model="$model??null" :class="'only-percentage-allowed recalculate-interest-amount'" :label="__('Interest Rate (%)')" :type="'text'" :placeholder="__('Borrowing Rate (%)')" :name="'interest_rate'" :required="true"></x-form.input>
                                     </div>
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :readonly="true" :id="'interest-amount-id'" :model="$model??null" :label="__('Interest Amount [At Maturity]')" :type="'text'" :placeholder="__('Interest Amount')" :name="'interest_amount'" :class="'only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
                                     </div>
 
@@ -177,7 +176,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-md-12 mb-0 mt-4 text-left">
                                                 <div class="form-group d-inline-block">

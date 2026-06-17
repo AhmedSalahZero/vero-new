@@ -129,14 +129,14 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
 					<h4>{{ __('Last Successfully Uploaded File Name :') .' '. $company->getSuccessLastFileNameForModel($modelName) }}</h4>
 					@endif 
                     @if($canViewPleaseReviewMessage)
-                    <h4 id="please-review-and-click-save" class="text-center alert alert-info " style="text-transform:capitalize;justify-content:center">{{ __('Please review And Click Save') }}</h4>
+                    <h4 id="please-review-and-click-save" class="text-center alert alert-info" style="text-transform:capitalize;justify-content:center">{{ __('Please review And Click Save') }}</h4>
 					
                     @endif
                     @if ($active_job)
                     <div class="kt-section__content uploading_div">
                         <label class="text-success text-xl-center"> <b> {{ __('Uploading') }}</b> @include('star')</label>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                         </div>
                     </div>
                     @endif
@@ -166,10 +166,10 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
 
-                        <div class="kt-section__content text-center ">
+                        <div class="kt-section__content text-center">
                             <label id="saving_data" class="text-success text-xl-center"> <b> {{ __('Saving Data') }}</b> @include('star')</label>
-                            <div class="progress ">
-                                <div id="progress_id" class="progress-bar progress-bar-striped progress-bar-animated  bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <div class="progress">
+                                <div id="progress_id" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                                 </div>
 
 
@@ -228,7 +228,7 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
 					
 					
 
-                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                         <span class="d-flex justify-content-center" style="overflow: visible; position: relative; width: 110px;">
                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" {{-- href="{{ route('salesGatheringTest.edit', [$company, $item]) }}" --}}><i class="fa fa-pen-alt"></i></a>
                         </span>

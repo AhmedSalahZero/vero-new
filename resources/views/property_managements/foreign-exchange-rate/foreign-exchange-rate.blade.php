@@ -8,22 +8,20 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark .custom-w-25 {
+    .custom-w-25 {
         width: 23% !important;
     }
 
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 300px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -33,7 +31,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 {{ __('Foreign Exchange Rate')  }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -62,14 +60,14 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 	  	@php
 			$index = 0 ;
 		@endphp
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 			@foreach($existingCurrencies as $existingCurrency)
 			
             @php
             $currentTab = $existingCurrency ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ (!Request('active',$currentActiveTab) && $currentTab == $mainFunctionalCurrency || !in_array($mainFunctionalCurrency,$existingCurrencies) && $currentTab == array_key_first($existingCurrencies) && !$currentActiveTab   )  || Request('active',$currentActiveTab) == $existingCurrency ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
+            <div class="tab-pane {{ (!Request('active',$currentActiveTab) && $currentTab == $mainFunctionalCurrency || !in_array($mainFunctionalCurrency,$existingCurrencies) && $currentTab == array_key_first($existingCurrencies) && !$currentActiveTab ) || Request('active',$currentActiveTab) == $existingCurrency ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentTab" :title="$existingCurrency . ' ' .__('Table') " :startDate="$filterDates[$currentTab]['startDate']" :endDate="$filterDates[$currentTab]['endDate']">
                         {{-- <x-export-letter-of-credit-issuance :search-fields="$searchFields[$currentTab]" :type="$currentTab" href="#" /> --}}
@@ -85,35 +83,35 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 				@endif 
 
                         <!--begin: Datatable -->
-                          <table class="table kt_table_with_no_pagination_no_collapse table-for-currency  table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency dataTable no-footer">
+                          <table class="table kt_table_with_no_pagination_no_collapse table-for-currency table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency dataTable no-footer">
                                         <thead>
 
-                                            <tr class="header-tr ">
+                                            <tr class="header-tr">
 
-                                                <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-serial header-th align-middle text-center">
                                                     {{ __('#') }}
                                                 </th>
 
-                                                <th class="view-table-th   max-w-16  align-middle text-center">
+                                                <th class="view-table-th max-w-16 align-middle text-center">
                                                     {{ __('Date') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-16    header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-16 header-th align-middle text-center">
                                                     {{ __('From Currency') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-16    header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-16 header-th align-middle text-center">
                                                     {{ __('To Currency') }}
                                                 </th>
 
-                                                <th class="view-table-th  max-w-16  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-16 header-th align-middle text-center">
                                                     {{ __('Exchange Rate') }}
                                                 </th>
-                                                <th class="view-table-th  max-w-16  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-16 header-th align-middle text-center">
                                                     {{ __('Reciprocal Exchange Rate') }}
                                                 </th>
 @if(hasAuthFor('update foreign exchange rate') || hasAuthFor('delete foreign exchange rate'))
-                                                <th class="view-table-th  max-w-action  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-action header-th align-middle text-center">
                                                     {{ __('Actions') }}
                                                 </th>
 												@endif 
@@ -132,24 +130,24 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                             $previousDate = null ;
                                             @endphp
                                             @foreach($models[$existingCurrency] as $index => $foreignExchangeRate)
-                                            <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                                <td class="sub-text-bg max-w-serial text-center   ">{{ ++$index }}</td>
-                                                <td class="sub-text-bg max-w-16  text-center   ">{{ $currentDueDate = $foreignExchangeRate->getDateFormatted() }} </td>
-                                                <td class="sub-text-bg  max-w-16 text-center   ">{{ $foreignExchangeRate->getFromCurrency() }}</td>
+                                            <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                                <td class="sub-text-bg max-w-serial text-center">{{ ++$index }}</td>
+                                                <td class="sub-text-bg max-w-16 text-center">{{ $currentDueDate = $foreignExchangeRate->getDateFormatted() }} </td>
+                                                <td class="sub-text-bg max-w-16 text-center">{{ $foreignExchangeRate->getFromCurrency() }}</td>
                                                 @php
                                                 $previousDate = $foreignExchangeRate->getDate();
                                                 @endphp
-                                                <td class="sub-text-bg max-w-16  text-center  ">{{ $foreignExchangeRate->getToCurrency() }}</td>
-                                                <td class="sub-text-bg max-w-16  text-center  ">{{ number_format($foreignExchangeRate->getExchangeRate(),4) }}</td>
-                                                <td class="sub-text-bg max-w-16  text-center  ">{{ number_format(1/$foreignExchangeRate->getExchangeRate(),4) }}</td>
+                                                <td class="sub-text-bg max-w-16 text-center">{{ $foreignExchangeRate->getToCurrency() }}</td>
+                                                <td class="sub-text-bg max-w-16 text-center">{{ number_format($foreignExchangeRate->getExchangeRate(),4) }}</td>
+                                                <td class="sub-text-bg max-w-16 text-center">{{ number_format(1/$foreignExchangeRate->getExchangeRate(),4) }}</td>
 												@if(hasAuthFor('update foreign exchange rate') || hasAuthFor('delete foreign exchange rate'))
-                                                <td class="sub-text-bg   text-center max-w-action   ">
+                                                <td class="sub-text-bg text-center max-w-action">
                                                     @if($loop->first)
 													@if(hasAuthFor('update foreign exchange rate'))
                                                     <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{route('edit.foreign.exchange.rate',[$company,$foreignExchangeRate->id])}}"><i class="fa fa-pen-alt"></i></a>
 													@endif 
 													@if(hasAuthFor('delete foreign exchange rate'))
-                                                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $foreignExchangeRate['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $foreignExchangeRate['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
                                                     </a>
 													<div id="modal-delete-{{ $foreignExchangeRate['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                                         <div class="modal-dialog">

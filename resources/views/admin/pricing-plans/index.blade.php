@@ -238,20 +238,20 @@
         <div class="kt-portlet">
 
             <div class="kt-portlet__body">
-                <a href="{{ route('pricing-plans.create',['company'=>$company->id]) }}" class="btn btn-bold btn-secondary  flex-1 flex-grow-0 btn-border-radius mr-auto">
+                <a href="{{ route('pricing-plans.create',['company'=>$company->id]) }}" class="btn btn-bold btn-secondary flex-1 flex-grow-0 btn-border-radius mr-auto">
                     <span class="plus-class">+</span>{{ __('Create') }}
                 </a>
             </div>
 
             <x-table :tableClass="'kt_table_with_no_pagination_no_fixed  removeGlobalStyle ' ">
                 @slot('table_header')
-                <tr class=" text-center second-tr-bg">
+                <tr class="text-center second-tr-bg">
                     <th class="text-center absorbing-column max-w-80"></th>
                     <th></th>
                 </tr>
                 @endslot
                 @slot('table_body')
-                <tr class=" text-center first-tr-bg ">
+                <tr class="text-center first-tr-bg">
                     <td class="max-w-80 text-center text-white"><b class="text-capitalize text-white">{{ __('Name') }}</b></td>
 
 
@@ -267,11 +267,11 @@
                 <tr class="group-color main-row-tr">
                     <td class="black-text max-w-80" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
 
-                        <div class="d-flex align-items-center ">
+                        <div class="d-flex align-items-center">
                             @if(isset($mainItemData['sub_items'])&&count($mainItemData['sub_items']))
-                            <i class="row_icon{{ $id }} flaticon2-up  mr-2  "></i>
+                            <i class="row_icon{{ $id }} flaticon2-up mr-2"></i>
                             @endif
-                            <b class="text-capitalize  text-white">{{ $mainItemData['data']['name'] }}</b>
+                            <b class="text-capitalize text-white">{{ $mainItemData['data']['name'] }}</b>
                         </div>
                     </td>
 
@@ -279,7 +279,7 @@
                     <td class="text-left text-capitalize text-white"><b class="ml-3">
                             <span style="overflow: visible; position: relative; width: 110px;">
                                 <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('pricing-plans.edit', ['company'=>$company->id , 'pricing_plan'=>$mainItemData['data']['id']]) }}"><i class="fa fa-pen-alt"></i></a>
-                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-1-delete-{{ $mainItemData['data']['id'] }}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-1-delete-{{ $mainItemData['data']['id'] }}" title="Delete"><i class="fa fa-trash-alt"></i>
                                 </a>
                                 <div id="modal-1-delete-{{ $mainItemData['data']['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -316,14 +316,14 @@
 
                 </tr>
                 @foreach ($mainItemData['sub_items'] ?? [] as $subItemId => $subItemArr)
-                <tr class="row{{ $id }}  text-center sub-item-row" style="display: none">
+                <tr class="row{{ $id }} text-center sub-item-row" style="display: none">
                     <td class="text-center max-w-80 text-capitalize text-white"><b class="ml-3">
                             {{ $subItemArr['name'] }}
                         </b></td>
                     <td class="text-left text-capitalize"><b class="ml-3">
                             <span style="overflow: visible; position: relative; width: 110px;">
                                 <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('admin.edit.quick.pricing.calculator', ['company'=>$company->id , 'quickPricingCalculator'=>$subItemArr['id']]) }}"><i class="fa fa-pen-alt"></i></a>
-                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $subItemArr['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $subItemArr['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
                                 </a>
                                 <div id="modal-delete-{{ $subItemArr['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                     <div class="modal-dialog">

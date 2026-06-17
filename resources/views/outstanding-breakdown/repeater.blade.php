@@ -3,18 +3,14 @@
                 $type = 'create';
                 @endphp
 
-                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center 
-                                         @if($isRepeater)
-                                         repeater_item
-                                         @endif 
-				                         ">
-                    <input type="hidden" class="form-control " @if($isRepeater) name="id" @else name="outstandingBreakdowns[0][id]" @endif value="{{ isset($outstandingBreakdown) ? $outstandingBreakdown->getId() : 0 }}">
+                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
+                    <input type="hidden" class="form-control" @if($isRepeater) name="id" @else name="outstandingBreakdowns[0][id]" @endif value="{{ isset($outstandingBreakdown) ? $outstandingBreakdown->getId() : 0 }}">
                     <div class="col-3">
                         <label class="form-label font-weight-bold">{{ __('Amount') }}
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="amount" @else name="outstandingBreakdowns[0][amount]" @endif type="text" class="form-control " value="{{ number_format(isset($outstandingBreakdown) ? $outstandingBreakdown->getAmount() : old('amount',0)) }}">
+                                <input @if($isRepeater) name="amount" @else name="outstandingBreakdowns[0][amount]" @endif type="text" class="form-control" value="{{ number_format(isset($outstandingBreakdown) ? $outstandingBreakdown->getAmount() : old('amount',0)) }}">
                             </div>
                         </div>
                     </div>

@@ -26,7 +26,7 @@ use App\Models\NonBankingService\ExistingBranch;
             <div class="kt-portlet__body">
                 <div class="row">
                     <div class="col-md-10">
-                        <div class="d-flex align-items-center ">
+                        <div class="d-flex align-items-center">
                             <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ $title }} </h3>
                         </div>
                     </div>
@@ -48,7 +48,7 @@ use App\Models\NonBankingService\ExistingBranch;
                                 <input type="hidden" name="creator_id" value="{{ \Auth::id()  }}">
 
                                 <div id="existingBranches" class="leasing-repeater-parent">
-                                    <div class="form-group2  m-form__group2 row">
+                                    <div class="form-group2 m-form__group2 row">
                                         <div data-repeater-list="existingBranches" class="col-lg-8">
 
                                             @include('non_banking_services.existing-branches._repeater' , [

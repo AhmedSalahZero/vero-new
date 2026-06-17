@@ -5,18 +5,16 @@ use App\Models\InternalMoneyTransfer ;
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -26,7 +24,7 @@ use App\Models\InternalMoneyTransfer ;
 {{ __('Internal Money Transfer') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -62,23 +60,23 @@ use App\Models\InternalMoneyTransfer ;
             </ul>
             @if(auth()->user()->can('create internal money transfer'))
             <div class="flex-tabs">
-                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::BANK_TO_BANK]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::BANK_TO_BANK]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Bank To Bank') }}
                 </a>
 
 
-                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::SAFE_TO_BANK]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::SAFE_TO_BANK]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Safe To Bank') }}
                 </a>
 
-                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::BANK_TO_SAFE]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::BANK_TO_SAFE]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Bank To Safe') }}
                 </a>
 
-                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::SAFE_TO_SAFE]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('internal-money-transfers.create',['company'=>$company->id,InternalMoneyTransfer::SAFE_TO_SAFE]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Safe To Safe') }}
                 </a>
@@ -86,14 +84,14 @@ use App\Models\InternalMoneyTransfer ;
             </div>
             @endif
 
-            {{-- <a href="" class="btn  active-style btn-icon-sm  align-self-center ">
+            {{-- <a href="" class="btn active-style btn-icon-sm align-self-center">
 				<i class="fas fa-plus"></i>
 				<span>{{ __('New Record') }}</span>
             </a> --}}
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             @php
             $currentType = InternalMoneyTransfer::BANK_TO_BANK ;
             @endphp
@@ -107,7 +105,7 @@ use App\Models\InternalMoneyTransfer ;
 
                         <!--begin: Datatable -->
                         <div class="table-responsive">
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -204,7 +202,7 @@ use App\Models\InternalMoneyTransfer ;
             $currentType = InternalMoneyTransfer::SAFE_TO_BANK ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Safe To Bank')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-internal-money-transfer :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('internal-money-transfers.create',['company'=>$company->id,'type'=>$currentType])}}" />
@@ -212,7 +210,7 @@ use App\Models\InternalMoneyTransfer ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -297,7 +295,7 @@ use App\Models\InternalMoneyTransfer ;
             $currentType = InternalMoneyTransfer::BANK_TO_SAFE ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Bank To Safe')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-internal-money-transfer :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('internal-money-transfers.create',['company'=>$company->id,'type'=>$currentType])}}" />
@@ -305,7 +303,7 @@ use App\Models\InternalMoneyTransfer ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -335,7 +333,7 @@ use App\Models\InternalMoneyTransfer ;
                                     <td class="text-uppercase">{{ $model->getFromAccountTypeName() }}</td>
                                     <td class="text-transform">{{ $model->getFromAccountNumber() }}</td>
                                     <td>{{ $model->getToBranchName() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @include('reports._user_comment_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
@@ -384,7 +382,7 @@ use App\Models\InternalMoneyTransfer ;
             $currentType = InternalMoneyTransfer::SAFE_TO_SAFE ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Safe To Safe')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-internal-money-transfer :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('internal-money-transfers.create',['company'=>$company->id,'type'=>$currentType])}}" />
@@ -392,7 +390,7 @@ use App\Models\InternalMoneyTransfer ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -421,7 +419,7 @@ use App\Models\InternalMoneyTransfer ;
                         
                                     <td>{{ $model->getFromBranchName() }}</td>
                                     <td>{{ $model->getToBranchName() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @include('reports._user_comment_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])

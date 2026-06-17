@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
 
             <!--End:: Tab  EGP FX Rate Table -->
@@ -89,10 +89,10 @@
                         <x-table :tableTitle="'Year -' .$year" :tableClass="'kt_table_with_no_pagination_no_search'">
                             @slot('table_header')
                             <tr class="table-active text-center">
-                                <th class="text-center ">{{ __('Month') }}</th>
-                                <th class="text-center ">{{ __('Sales Value') }}</th>
-                                <th class="text-center ">{{ __('Month %') }}</th>
-                                <td class="text-center ">{{ __('YoY GR%') }}</td>
+                                <th class="text-center">{{ __('Month') }}</th>
+                                <th class="text-center">{{ __('Sales Value') }}</th>
+                                <th class="text-center">{{ __('Month %') }}</th>
+                                <td class="text-center">{{ __('YoY GR%') }}</td>
                             </tr>
                             @endslot
                             @slot('table_body')

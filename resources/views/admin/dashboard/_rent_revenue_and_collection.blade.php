@@ -79,7 +79,7 @@ input.form-control[readonly] {
             <td class="w-20-percentage">
                 <div class="kt-input-icon">
                     <div class="input-group">
-                        <input disabled type="text" class="form-control text-left ignore-global-style  {{ $styleClasses[$styleIndex] }}" value="{{$propertyTypeName}}">
+                        <input disabled type="text" class="form-control text-left ignore-global-style {{ $styleClasses[$styleIndex] }}" value="{{$propertyTypeName}}">
                     </div>
                 </div>
             </td>
@@ -146,7 +146,7 @@ input.form-control[readonly] {
             <td class="w-20-percentage">
                 <div class="kt-input-icon">
                     <div class="input-group">
-                        <input readonly type="text" class="form-control text-left " value="{{ __('Total') }}">
+                        <input readonly type="text" class="form-control text-left" value="{{ __('Total') }}">
                     </div>
                 </div>
             </td>
@@ -154,7 +154,7 @@ input.form-control[readonly] {
 				<td class="w-20-percentage">
 					<div class="kt-input-icon">
 						<div class="input-group">
-							<input readonly type="text" class="form-control text-center " value="{{ number_format($totalPerMonth[$i] ?? 0) }}">
+							<input readonly type="text" class="form-control text-center" value="{{ number_format($totalPerMonth[$i] ?? 0) }}">
 						</div>
 					</div>
 				</td>
@@ -162,21 +162,21 @@ input.form-control[readonly] {
 				{{-- <td class="w-20-percentage">
 					<div class="kt-input-icon">
 						<div class="input-group">
-							<input readonly type="text" class="form-control text-center " value="{{ number_format($totalPerMonth['next_month'] ?? 0) }}">
+							<input readonly type="text" class="form-control text-center" value="{{ number_format($totalPerMonth['next_month'] ?? 0) }}">
 						</div>
 					</div>
 				</td>
 				<td class="w-20-percentage">
 					<div class="kt-input-icon">
 						<div class="input-group">
-							<input readonly type="text" class="form-control text-center " value="{{ number_format($totalPerMonth['two_months_later'] ?? 0) }}">
+							<input readonly type="text" class="form-control text-center" value="{{ number_format($totalPerMonth['two_months_later'] ?? 0) }}">
 						</div>
 					</div>
 				</td> --}}
 				<td class="w-20-percentage">
 					<div class="kt-input-icon">
 						<div class="input-group">
-							<input readonly type="text" class="form-control text-center " value="{{ number_format(array_sum($totalPerMonth)) }}">
+							<input readonly type="text" class="form-control text-center" value="{{ number_format(array_sum($totalPerMonth)) }}">
 						</div>
 					</div>
 				</td>

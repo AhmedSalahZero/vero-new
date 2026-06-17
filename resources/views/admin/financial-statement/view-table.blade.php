@@ -56,14 +56,14 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 
 
 ></div>
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
 
-    <x-tables.basic-view class="position-relative  main-table-class" id="{{ $tableId }}">
+    <x-tables.basic-view class="position-relative main-table-class" id="{{ $tableId }}">
        
 
 
         <x-slot name="headerTr">
-            <tr class="header-tr " data-model-name="{{ $modelName }}">
+            <tr class="header-tr" data-model-name="{{ $modelName }}">
                 @if($hasChildRows)
                
                 @endif
@@ -139,7 +139,7 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
                                     // do not change [1] index of item.id
                                     serviceCategoryId = item.id;
                                     mainRowId = row.data().id;
-                                    data.push([mainRowId, serviceCategoryId, getExpandAndCollpaseIcon(), item.name, ` <a data-model-name="${modelName}" data-table-id="subtable-level-1-id" data-record-id="${serviceCategoryId}"   class="btn btn-sm btn-clean  delete-record-btn btn-icon btn-icon-md" title="{{ __('Delete') }}"><i class="la la-trash"></i></a>`])
+                                    data.push([mainRowId, serviceCategoryId, getExpandAndCollpaseIcon(), item.name, ` <a data-model-name="${modelName}" data-table-id="subtable-level-1-id" data-record-id="${serviceCategoryId}"   class="btn btn-sm btn-clean delete-record-btn btn-icon btn-icon-md" title="{{ __('Delete') }}"><i class="la la-trash"></i></a>`])
                                 })
                                 $('#subtable-1-id' + row.data().id).DataTable({
                                     dom: 't'
@@ -189,7 +189,7 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 
                         function formatsubrow1(d) {
                             // `d` is the original data object for the row
-                            let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped-  table-hover table-checkable position-relative dataTable no-footer dtr-inline" > <thead style="display:none"><tr><td></td> <td></td> <td></td> <td></td><td></td></tr> </thead> `;
+                            let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped- table-hover table-checkable position-relative dataTable no-footer dtr-inline" > <thead style="display:none"><tr><td></td> <td></td> <td></td> <td></td><td></td></tr> </thead> `;
 
                             subtable += '</table>';
 
@@ -315,7 +315,7 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 													let canEditModifiedIncomeStatement = +sectionPermission.attr('data-can-edit-modified-income-statement')
 												
                                                     var actual = canEditActualIncomeStatement ? `
-			<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/actual-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Actual Income Statement Report') }}">
+			<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/actual-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Actual Income Statement Report') }}">
 				
 				{{ __('Actual') }}
 				
@@ -323,17 +323,17 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 						`:'';
 
                                                     var adjusted = canEditAdjustedIncomeStatement ? `
-					<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/adjusted-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff !important;margin-right:10px;" title="{{ __('View Adjusted Income Statement Report') }}">{{ __('Adjusted') }}</a>
+					<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/adjusted-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff !important;margin-right:10px;" title="{{ __('View Adjusted Income Statement Report') }}">{{ __('Adjusted') }}</a>
 						`:'';
 
                                                     var modified = canEditModifiedIncomeStatement ? `
-							<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/modified-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Modified Income Statement Report') }}">{{ __('Modified') }}</a>
+							<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/modified-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Modified Income Statement Report') }}">{{ __('Modified') }}</a>
 						`:'';
 
                                                     if (row.type == 'actual') {
                                                         return actual;
                                                     }
-                                                    var forecast = canEditForecastIncomeStatement ?`<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/forecast-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff ;margin-right:10px;" title="{{ __('Edit Forecast Income Statement Report') }}">{{ __('Forecast') }}</a>`:''
+                                                    var forecast = canEditForecastIncomeStatement ?`<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.income_statement_id}/forecast-report"  data-id="${row.income_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff ;margin-right:10px;" title="{{ __('Edit Forecast Income Statement Report') }}">{{ __('Forecast') }}</a>`:''
 
                                                     if (row.can_view_income_statement_actual_report) {
                                                         return forecast + actual + ' <br> <br>' + adjusted + modified;
@@ -363,7 +363,7 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 		//										
 		//											
         //                                            var actual = canEditActualBalanceSheet ? `
-		//											<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/balance-sheet/${row.balance_sheet_id}/actual-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Actual Balance Sheet Report') }}">
+		//											<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/balance-sheet/${row.balance_sheet_id}/actual-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Actual Balance Sheet Report') }}">
 		//		
 		//												{{ __('Actual') }}
 		//												
@@ -371,17 +371,17 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 		//														`:'';
 //
         //                                            var adjusted = canEditAdjustedBalanceSheet ?`
-		//														<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/balance-sheet/${row.balance_sheet_id}/adjusted-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff !important;margin-right:10px;" title="{{ __('View Adjusted Balance Sheet Report') }}">{{ __('Adjusted') }}</a>
+		//														<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/balance-sheet/${row.balance_sheet_id}/adjusted-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff !important;margin-right:10px;" title="{{ __('View Adjusted Balance Sheet Report') }}">{{ __('Adjusted') }}</a>
 		//				`:'';
 //
         //                                            var modified = canEditModifiedBalanceSheet?`
-		//					<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.balance_sheet_id}/modified-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Modified Balance Sheet Report') }}">{{ __('Modified') }}</a>
+		//					<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/income-statement/${row.balance_sheet_id}/modified-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Modified Balance Sheet Report') }}">{{ __('Modified') }}</a>
 		//				`:'';
 //
         //                                            if (row.type == 'actual') {
         //                                                return actual;
         //                                            }
-        //                                            var forecast = canEditForecastBalanceSheet ? `<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/balance-sheet/${row.balance_sheet_id}/forecast-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff ;margin-right:10px;" title="{{ __('Edit Forecast Balance Sheet Report') }}">{{ __('Forecast') }}</a>`:''
+        //                                            var forecast = canEditForecastBalanceSheet ? `<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/balance-sheet/${row.balance_sheet_id}/forecast-report"  data-id="${row.balance_sheet_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff ;margin-right:10px;" title="{{ __('Edit Forecast Balance Sheet Report') }}">{{ __('Forecast') }}</a>`:''
 //
         //                                            if (row.can_view_balance_sheet_actual_report) {
         //                                                return forecast + actual + ' <br> <br>' + adjusted + modified;
@@ -406,7 +406,7 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 													
 													
                                                     var actual = canEditActualCashFlowStatement?`
-			<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/actual-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Actual Cash Flow Statement Report') }}">
+			<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/actual-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Actual Cash Flow Statement Report') }}">
 				
 				{{ __('Actual') }}
 				
@@ -414,17 +414,17 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 						`:'';
 
                                                     var adjusted = canEditAdjustedCashFlowStatement?`
-					<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/adjusted-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff !important;margin-right:10px;" title="{{ __('View Adjusted Cash Flow Statement Report') }}">{{ __('Adjusted') }}</a>
+					<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/adjusted-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff !important;margin-right:10px;" title="{{ __('View Adjusted Cash Flow Statement Report') }}">{{ __('Adjusted') }}</a>
 						`:'';
 
                                                     var modified = canEditModifiedCashFlowStatement ?`
-							<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/modified-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Modified Cash Flow Statement Report') }}">{{ __('Modified') }}</a>
+							<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/modified-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:#087A7B !important;color:#fff !important" title="{{ __('Edit Modified Cash Flow Statement Report') }}">{{ __('Modified') }}</a>
 						`:'';
 
                                                     if (row.type == 'actual') {
                                                         return actual;
                                                     }
-                                                    var forecast = canEditForecastCashFlowStatement?`<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/forecast-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer  btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff ;margin-right:10px;" title="{{ __('Edit Forecast Cash Flow Statement Report') }}">{{ __('Forecast') }}</a>`:''
+                                                    var forecast = canEditForecastCashFlowStatement?`<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/cash-flow-statement/${row.cash_flow_statement_id}/forecast-report"  data-id="${row.cash_flow_statement_id}" data-model-name="{{$modelName}}" class="btn cursor-pointer btn-sm" style="background-color:rgb(37,150,190) !important;color:#fff ;margin-right:10px;" title="{{ __('Edit Forecast Cash Flow Statement Report') }}">{{ __('Forecast') }}</a>`:''
 
                                                     if (row.can_view_cash_flow_statement_actual_report) {
                                                         return forecast + actual + ' <br> <br>' + adjusted + modified;
@@ -448,7 +448,7 @@ data-can-delete-financial-statement="{{ $user->can('view income statement planni
 														let canDeleteFinancialStatement = +sectionPermission.attr('data-can-delete-financial-statement')
 													
 													let editFinancialStatement = canEditFinancialStatement ? `<a href="/` + $('body').data('lang') + '/' + $('body').data('current-company-id') + `/financial-statement/${row.id}/edit"  data-id="${row.id}" data-model-name="{{$modelName}}" class="btn btn-sm cursor-pointer btn-clean btn-icon btn-icon-md" title="{{ __('Edit') }}">
-                          <i class="fa fa-pen-alt "></i>
+                          <i class="fa fa-pen-alt"></i>
                         </a>`:'';
 													let deleteFinancialStatement = canDeleteFinancialStatement ? `<a data-model-name="{{$modelName}}" data-table-id="${tableId.replace('#','')}" data-record-id="${row.id}"   class="btn btn-sm btn-clean delete-record-btn cursor-pointer btn-icon btn-icon-md" title="{{ __('Delete') }}">
                           <i class="la la-trash icon-lg"></i>

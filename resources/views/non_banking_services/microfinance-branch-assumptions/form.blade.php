@@ -29,7 +29,7 @@ use App\Models\NonBankingService\Expense;
             $cardId = $tableId;
             @endphp
 
-            <div class="kt-portlet  ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__body">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('New Branches Openings Projection') }} </h3>
                     <div class="row">
@@ -108,7 +108,7 @@ use App\Models\NonBankingService\Expense;
 
 
 
-            <div class="kt-portlet " style="margin-bottom:5px;">
+            <div class="kt-portlet" style="margin-bottom:5px;">
 
 
                 <div class="kt-portlet__body">
@@ -133,10 +133,10 @@ use App\Models\NonBankingService\Expense;
                     {{-- <x-tables.repeater-table :canAddNewItem="false" :font-size-class="'font-14px'" :append-save-or-back-btn="false" :repeater-with-select2="true" :parentClass="'js-toggle-visibility'" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="false">
                         <x-slot name="ths">
                             <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Loan Cases <br> Per Office')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('First 3 Months')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('Second 3 Months')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('Third Months')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('Fourth Months')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('First 3 Months')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('Second 3 Months')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('Third Months')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('Fourth Months')"></x-tables.repeater-table-th>
                         </x-slot>
                         <x-slot name="trs">
                             @php
@@ -456,7 +456,7 @@ use App\Models\NonBankingService\Expense;
             const elementToAppendIn = $(this).parent().find('.js-append-into');
             const texts = [];
             let lis = '';
-            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap ">' + 'Add New' + '</a></u>'
+            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap">' + 'Add New' + '</a></u>'
             lis += '<li >' + text + '</li>'
             $(this).closest('table').find('.js-show-all-categories-popup').each(function(index, element) {
                 let text = $(element).val().trim();

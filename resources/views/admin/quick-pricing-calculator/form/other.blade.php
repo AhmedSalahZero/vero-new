@@ -2,12 +2,7 @@
 $isRepeater = !(isset($removeRepeater) && $removeRepeater) ;
 @endphp
 
-<div @if($isRepeater) data-repeater-item @endif class="form-group m-form__group row align-items-center 
-										
-										@if($isRepeater)
-										repeater_item
-										@endif 
-										">
+<div @if($isRepeater) data-repeater-item @endif class="form-group m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
 
     <div class="col-md-8">
         @if(isset($onlyTotal))

@@ -31,7 +31,7 @@
                         <hr style="flex:1;background-color:lightgray">
                     </div>
 
-                    <div class="form-group  mt-3">
+                    <div class="form-group mt-3">
                         <div class="row">
                             <div class="col-md-4 mb-4">
                                 <label class="form-label font-weight-bold">{{ __('Study Name') }} @include('star') </label>
@@ -46,10 +46,10 @@
                             $mainCurrencies[] = $currencies[0]??[];
                             @endphp
                             <div class="col-md-2 mb-4">
-                                <x-form.select :is-select2="false" :is-required="true" :options="[['title'=>__($company->getMainFunctionalCurrency()) , 'value'=>$company->getMainFunctionalCurrency()]]" :add-new="false" :label="__('Main Functional Currency')" class=" main_functional_currency" :all="false" name="main_functional_currency" :selected-value="isset($model) ? $model->getMainFunctionalCurrency() : 0"></x-form.select>
+                                <x-form.select :is-select2="false" :is-required="true" :options="[['title'=>__($company->getMainFunctionalCurrency()) , 'value'=>$company->getMainFunctionalCurrency()]]" :add-new="false" :label="__('Main Functional Currency')" class="main_functional_currency" :all="false" name="main_functional_currency" :selected-value="isset($model) ? $model->getMainFunctionalCurrency() : 0"></x-form.select>
                             </div>
                             {{-- <div class="col-md-2 mb-4">
-                                <x-form.select :is-select2="false" :is-required="true" :options="[['title'=>__('Existing Company' ) , 'value'=>'existing'] , ['title'=>__('New Company') ,'value'=>'new']]" :add-new="false" :label="__('Company Nature')" class=" " :all="false" name="company_nature" :selected-value="isset($model) ? $model->getCompanyNature() : 0"></x-form.select>
+                                <x-form.select :is-select2="false" :is-required="true" :options="[['title'=>__('Existing Company' ) , 'value'=>'existing'] , ['title'=>__('New Company') ,'value'=>'new']]" :add-new="false" :label="__('Company Nature')" class="" :all="false" name="company_nature" :selected-value="isset($model) ? $model->getCompanyNature() : 0"></x-form.select>
                             </div> --}}
 
                             {{-- <div class="col-md-4 mb-4">
@@ -100,12 +100,12 @@
 
 
 
-                            <div class="col-md-2 ">
+                            <div class="col-md-2">
                                 <x-form.label :class="'label'" :id="'test-id'">{{ __('Study End Date') }} </x-form.label>
                                 <div class="kt-input-icon">
                                     <div class="input-group date">
-                                        <input id="study-end-date" type="hidden" name="study_end_date" class=" form-control" readonly value="{{ isset($model) ? $model->getStudyEndDate() : getCurrentDateForFormDate('date') }}" />
-                                        <input id="study-end-date-text" type="text" class=" form-control" readonly value="{{ isset($model) ? $model->getStudyEndDateWithoutDay() : getCurrentDateForFormDate('date') }}" />
+                                        <input id="study-end-date" type="hidden" name="study_end_date" class="form-control" readonly value="{{ isset($model) ? $model->getStudyEndDate() : getCurrentDateForFormDate('date') }}" />
+                                        <input id="study-end-date-text" type="text" class="form-control" readonly value="{{ isset($model) ? $model->getStudyEndDateWithoutDay() : getCurrentDateForFormDate('date') }}" />
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>

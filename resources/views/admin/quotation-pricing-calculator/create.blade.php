@@ -58,17 +58,17 @@
                     <x-helpers.repeater :repeater-with-select2="true" :item-classes="'w-full'" :instance-no="'1'" :group-name="'services'" class="w-full d-none repeater-with-select2">
                         <x-form.row class="col-md-12">
                             <x-form.wrapper class="col-lg-2 col-md-4">
-                                <x-form.select :options="$revenueBusinessLines" :add-new="false" :label="__('Revenue Business Line')" :is-select2="false" class="repeater-select revenue_business_line_class " data-filter-type="{{ $type }}" :all="false" name="revenue_business_line_id" :selected-value="isset($model) ? $model->getRevenueBusinessLineId() : 0"></x-form.select>
+                                <x-form.select :options="$revenueBusinessLines" :add-new="false" :label="__('Revenue Business Line')" :is-select2="false" class="repeater-select revenue_business_line_class" data-filter-type="{{ $type }}" :all="false" name="revenue_business_line_id" :selected-value="isset($model) ? $model->getRevenueBusinessLineId() : 0"></x-form.select>
                             </x-form.wrapper>
                             <x-form.wrapper class="col-lg-3 col-md-4 mb-4">
-                                <x-form.select :is-select2="false" :options="$serviceCategories" :add-new="false" :label="__('Service Category')" class="repeater-select service_category_class " data-filter-type="{{ $type }}" :all="false" name="service_category_id" :selected-value="isset($model) ? $model->getServiceCategoryId() : 0"></x-form.select>
+                                <x-form.select :is-select2="false" :options="$serviceCategories" :add-new="false" :label="__('Service Category')" class="repeater-select service_category_class" data-filter-type="{{ $type }}" :all="false" name="service_category_id" :selected-value="isset($model) ? $model->getServiceCategoryId() : 0"></x-form.select>
                             </x-form.wrapper>
 
                             <x-form.wrapper class="col-lg-3 col-md-4 mb-4">
                                 <x-form.select :options="$serviceItems" :add-new="false" :label="__('Service Item')" :is-select2="false" class="repeater-select service_item_class main-service-item" data-filter-type="{{ $type }}" :all="false" name="service_item_id" :selected-value="isset($model) ? $model->getServiceItemId() : 0"></x-form.select>
                             </x-form.wrapper>
 
-                            <x-form.wrapper class="col-lg-2 col-md-4 ">
+                            <x-form.wrapper class="col-lg-2 col-md-4">
                                 <x-form.select :options="$serviceNatures" :add-new="false" :label="__('Service Nature')" :is-select2="false" class="repeater-select" data-filter-type="{{ $type }}" :all="false" name="service_nature_id" id="{{$type.'_'.'service_nature_id' }}" :selected-value="isset($model) ? $model->getServiceNatureId() : 0"></x-form.select>
                             </x-form.wrapper>
                             <x-form.wrapper class="col-lg-2 col-md-4">
@@ -89,8 +89,8 @@
                     <div class="col-md-4 mb-4">
                         <label>{{ __('Select Country') }} </label>
                         <div class="kt-input-icon">
-                            <div class="input-group ">
-                                <select id="country_id" data-live-search="true" name="country_id" required class="form-control  form-select form-select-2 form-select-solid fw-bolder">
+                            <div class="input-group">
+                                <select id="country_id" data-live-search="true" name="country_id" required class="form-control form-select form-select-2 form-select-solid fw-bolder">
                                     <option value="" selected>{{ __('Select') }}</option>
                                     @foreach(getCountries() as $value=>$name)
                                     <option value="{{ $value }}" @if(isset($model) && $model->getCountryId() == $value ) selected @endif> {{ $name }}</option>
@@ -104,7 +104,7 @@
                         <label>{{ __('Select state') }} </label>
                         <div class="kt-input-icon">
                             <div class="input-group date">
-                                <select id="state_id" data-live-search="true" name="state_id" required class="form-control  form-select form-select-2 form-select-solid fw-bolder">
+                                <select id="state_id" data-live-search="true" name="state_id" required class="form-control form-select form-select-2 form-select-solid fw-bolder">
                                     <option value="" selected>{{ __('Select') }}</option>
                                     @foreach([] as $value=>$name)
                                     <option value="{{ $value }}" @if(isset($model) && $model->getStateId() == $value ) selected @endif>{{ $name }}</option>
@@ -135,7 +135,7 @@
                 <div class="col-md-12">
                     <h2 for="" class="d-bloxk">{{ __('Direct Manpower Expenses') }}</h2>
                     <div id="m_repeater_2">
-                        <div class="form-group  m-form__group row">
+                        <div class="form-group m-form__group row">
                             <div data-repeater-list="manpower_expenses" class="col-lg-12">
                                 <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                     @if(isset($model) && $model->directManpowerExpenses->count() )
@@ -221,11 +221,11 @@
                                             {{ __('Do You Use Freelancer') }}
                                         </label>
 
-                                        <label class="kt-radio kt-radio--success ">
+                                        <label class="kt-radio kt-radio--success">
                                             <input type="radio" value="1" name="use_freelancer" class="use-freelancer" @if(isset($model) && $model->isUseFreelancer()) checked @endisset> {{ __('Yes') }}
                                             <span></span>
                                         </label>
-                                        <label class="kt-radio kt-radio--danger ">
+                                        <label class="kt-radio kt-radio--danger">
                                             <input type="radio" value="0" name="use_freelancer" class="use-freelancer" @if(!isset($model) || !$model->isUseFreelancer()) checked @endisset> {{ __('No') }}
                                             <span></span>
                                         </label>
@@ -236,7 +236,7 @@
                         </div>
                     </div>
                     <div id="m_repeater_3" class="use-freelancer-repeater">
-                        <div class="form-group  m-form__group row">
+                        <div class="form-group m-form__group row">
                             <div data-repeater-list="freelancer_expenses" class="col-lg-12">
                                 <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                     @if(isset($model) && $model->freelancerExpenses->count() )
@@ -593,7 +593,7 @@
 
 
         <div class="kt-portlet__body">
-            <div class="row ">
+            <div class="row">
                 <div class="col-12">
                     <h2>{{ __('Sensitivity Section') }}</h2>
                     <hr>
@@ -604,7 +604,7 @@
                     <label>{{ __('Apply Price Sensitivity (+/- %) ') }} </label>
                     <div class="kt-input-icon">
                         <div class="input-group">
-                            <input id="price-sensitiviy" name="price_sensitivity" class="form-control only-percentage-allowed-between-minus-plus-hundred " name="price_sensitiviy" value="{{ isset($model) ? $model->getPriceSensitivity() : old('price_sensitiviy') }}" step="any">
+                            <input id="price-sensitiviy" name="price_sensitivity" class="form-control only-percentage-allowed-between-minus-plus-hundred" name="price_sensitiviy" value="{{ isset($model) ? $model->getPriceSensitivity() : old('price_sensitiviy') }}" step="any">
                         </div>
                     </div>
 

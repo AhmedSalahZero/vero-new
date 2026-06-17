@@ -99,6 +99,7 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereUserComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense whereUserId($value)
  * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\CashExpense filterByPaymentDate(?string $startDate = null, ?string $endDate = null)
  * @mixin \Eloquent
  */
 class CashExpense extends Model  implements IHaveCreditOverdraftStatement

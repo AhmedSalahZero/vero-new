@@ -1,4 +1,4 @@
-					<a data-toggle="modal" data-target="#apply-rate-for-{{ $cleanOverdraft->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Update Interest Rate	') }}" href="#"><i class=" fa fa-percentage"></i></a>
+					<a data-toggle="modal" data-target="#apply-rate-for-{{ $cleanOverdraft->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Update Interest Rate	') }}" href="#"><i class="fa fa-percentage"></i></a>
                                         <div class="modal fade" id="apply-rate-for-{{ $cleanOverdraft->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                                 <div class="modal-content">

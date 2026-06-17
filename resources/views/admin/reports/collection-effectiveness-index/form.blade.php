@@ -28,7 +28,7 @@
                             <label>{{ __('Select Report Type') }}  </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date" >
-                                    <select  data-live-search="true" data-actions-box="true" name="report_type" class="form-control  kt-bootstrap-select select2-select kt_bootstrap_select " >
+                                    <select  data-live-search="true" data-actions-box="true" name="report_type" class="form-control kt-bootstrap-select select2-select kt_bootstrap_select" >
                                         <option value="whole_interval"> {{ __('Whole Internal') }}</option>
                                         <option value="monthly"> {{ __('Monthly') }}</option>
                                     </select>

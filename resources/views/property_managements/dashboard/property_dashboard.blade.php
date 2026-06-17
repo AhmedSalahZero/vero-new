@@ -71,7 +71,7 @@ html body .header-border-down, html body .action-class{
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
@@ -116,14 +116,14 @@ html body .header-border-down, html body .action-class{
             @endphp
 
 
-            <li class="nav-item  active ">
-                <a class="nav-link  active" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
+            <li class="nav-item active">
+                <a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
                     <i class="flaticon2-checking icon-lg"></i>
                     <span style="font-size:18px !important;">{{ __('Overview') }}</span>
                 </a>
             </li>
-            <li class="nav-item  ">
-                <a class="nav-link " href="{{ route('property.management.view.property.cashflow.forecast.dashboard',['company'=>$company->id]) }}" role="tab">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('property.management.view.property.cashflow.forecast.dashboard',['company'=>$company->id]) }}" role="tab">
                     <i class="flaticon2-checking icon-lg"></i>
                     <span style="font-size:18px !important;">{{ __('Forecast') }}</span>
                 </a>
@@ -134,23 +134,23 @@ html body .header-border-down, html body .action-class{
     </div>
 </div>
 
-<div class="tab-content  kt-margin-t-20">
+<div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
     @endphp
 
 
 
-    <div class="tab-pane  @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
+    <div class="tab-pane @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
        
 
 
 <div class="row">
     <div class="col-md-6">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Property Overview') }} </h3>
+                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Property Overview') }} </h3>
                 </div>
 
             </div>
@@ -186,11 +186,11 @@ html body .header-border-down, html body .action-class{
 													$currentDetailModel = $propertyOverviewCard['details_model']??[];
 												@endphp
 												
-            <div class="col-md-6 ">
-                <div class="kt-portlet " style="height:250px">
+            <div class="col-md-6">
+                <div class="kt-portlet" style="height:250px">
                     <div class="kt-portlet__head sky-border">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Total Count') }} </h3>
+                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Total Count') }} </h3>
                         </div>
 
                     </div>
@@ -213,7 +213,7 @@ html body .header-border-down, html body .action-class{
 												
                                                 @if(count($currentDetailModel))
 
-                                                <div class="modal fade " id="model-id-{{ $currentDetailModel['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal fade" id="model-id-{{ $currentDetailModel['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                                         <form action="#" class="modal-content" method="post">
 
@@ -227,11 +227,11 @@ html body .header-border-down, html body .action-class{
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="customize-elements">
-                                                                    <table class="table    table-white  ">
+                                                                    <table class="table table-white">
                                                                         <thead>
                                                                             <tr>
 																			@foreach($currentDetailModel['headers'] as $id => $headerArr)
-                                                                                <th class="form-label font-weight-bold  text-center align-middle  header-border-down {{ $headerArr['classes'] }} ">{{ $headerArr['title'] }}</th>
+                                                                                <th class="form-label font-weight-bold text-center align-middle header-border-down {{ $headerArr['classes'] }}">{{ $headerArr['title'] }}</th>
 																				  @endforeach
                                                                             </tr>
                                                                         </thead>
@@ -241,17 +241,17 @@ html body .header-border-down, html body .action-class{
                                                                             {{-- @foreach ($study->{$relationName} as $index=>$currentLeasingRevenueStreamBreakdown) --}}
                                                                             <tr>
 																			@foreach($rowItems as $rowIndex => $rowItem)
-                                                                                <td class=" {{ $rowItem['td_classes'] }}">
-                                                                                    <div class="kt-input-icon ">
+                                                                                <td class="{{ $rowItem['td_classes'] }}">
+                                                                                    <div class="kt-input-icon">
                                                                                         <div class="input-group">
-                                                                                            <input disabled type="text" step="0.1" class="form-control ignore-global-style {{ $rowItem['input-classes'] }} " value="{{ $rowItem['value'] }}">
+                                                                                            <input disabled type="text" step="0.1" class="form-control ignore-global-style {{ $rowItem['input-classes'] }}" value="{{ $rowItem['value'] }}">
                                                                                         </div>
                                                                                     </div>
                                                                                 </td>
 																				@endforeach
 {{-- 																				
                                                                                 <td class="w-50-percentage">
-                                                                                    <div class="kt-input-icon ">
+                                                                                    <div class="kt-input-icon">
                                                                                         <div class="input-group">
                                                                                             <input disabled type="text" step="0.1" class="form-control ignore-global-style" value="name here">
                                                                                         </div>
@@ -260,8 +260,8 @@ html body .header-border-down, html body .action-class{
 
 
                                                                                 <td class="w-10-percentage">
-                                                                                    <div class="d-flex align-items-center ">
-                                                                                        <div class="kt-input-icon ml-2 ">
+                                                                                    <div class="d-flex align-items-center">
+                                                                                        <div class="kt-input-icon ml-2">
                                                                                             <div class="input-group">
                                                                                                 <input type="text" class="form-control text-center" value="value here">
                                                                                             </div>
@@ -285,9 +285,7 @@ html body .header-border-down, html body .action-class{
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-primary 
-				
-				                                      " data-dismiss="modal">{{ __('Close') }}</button>
+                                                                <button type="submit" class="btn btn-primary" data-dismiss="modal">{{ __('Close') }}</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -340,10 +338,10 @@ html body .header-border-down, html body .action-class{
 
 <div class="row">
     <div class="col-md-6">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Revenues') }} </h3>
+                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Revenues') }} </h3>
                 </div>
 
             </div>
@@ -365,13 +363,13 @@ html body .header-border-down, html body .action-class{
     <div class="col-md-6">
         <div class="row">
 
-            <div class="col-md-12 ">
+            <div class="col-md-12">
 
-                <div class="kt-portlet " style="height:525px">
+                <div class="kt-portlet" style="height:525px">
 
                     <div class="kt-portlet__head sky-border">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Revenues Breakdown') }} </h3>
+                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Revenues Breakdown') }} </h3>
                         </div>
 
                     </div>
@@ -402,10 +400,10 @@ html body .header-border-down, html body .action-class{
 
 <div class="row">
     <div class="col-md-6">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Collections') }} </h3>
+                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Collections') }} </h3>
                 </div>
 
             </div>
@@ -434,13 +432,13 @@ html body .header-border-down, html body .action-class{
                     'warning',
                     ];
                     @endphp --}}
-            <div class="col-md-12 ">
+            <div class="col-md-12">
 
-                <div class="kt-portlet " style="height:525px">
+                <div class="kt-portlet" style="height:525px">
 
                     <div class="kt-portlet__head sky-border">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Collections Breakdown') }} </h3>
+                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Rent Collections Breakdown') }} </h3>
                         </div>
 
                     </div>
@@ -472,10 +470,10 @@ html body .header-border-down, html body .action-class{
 
 <div class="row">
     <div class="col-md-6">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Due Installments') }} </h3>
+                    <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Due Installments') }} </h3>
                 </div>
 
             </div>
@@ -497,13 +495,13 @@ html body .header-border-down, html body .action-class{
     <div class="col-md-6">
         <div class="row">
 
-            <div class="col-md-12 ">
+            <div class="col-md-12">
 
-                <div class="kt-portlet " style="height:525px">
+                <div class="kt-portlet" style="height:525px">
 
                     <div class="kt-portlet__head sky-border">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold text-black  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Due Installments Breakdown') }} </h3>
+                            <h3 class="font-weight-bold text-black form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Due Installments Breakdown') }} </h3>
                         </div>
 
                     </div>

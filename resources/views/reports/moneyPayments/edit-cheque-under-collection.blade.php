@@ -5,9 +5,8 @@ use App\Models\MoneyReceived;
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -17,7 +16,7 @@ use App\Models\MoneyReceived;
 {{ __('Cheque Under Collection') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -84,7 +83,7 @@ use App\Models\MoneyReceived;
                         <div class="col-md-9 mb-3">
                             <label>{{__('Drawal Bank')}} @include('star')</label>
                             <div class="kt-input-icon">
-                                <div class="input-group date ">
+                                <div class="input-group date">
                                     <select js-when-change-trigger-change-account-type data-financial-institution-id name="receiving_bank_id[{{ MoneyReceived::CASH_IN_BANK  }}]" class="form-control js-drawl-bank">
                                         @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                         <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getCashInBankReceivingBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
@@ -163,7 +162,7 @@ use App\Models\MoneyReceived;
                                 <label>{{__('Select Drawee Bank')}} @include('star')</label>
                                 <div class="kt-input-icon">
                                     <div class="input-group date">
-                                        <select name="drawee_bank_id" class="form-control ">
+                                        <select name="drawee_bank_id" class="form-control">
                                             {{-- <option value="-1">{{__('New Bank')}}</option> --}}
                                             @foreach($selectedBanks as $bankId=>$bankName)
                                             <option value="{{ $bankId }}" {{ isset($model) && $model->cheque && $model->cheque->getDraweeBankId() == $bankId ? 'selected':'' }}>{{ $bankName }}</option>

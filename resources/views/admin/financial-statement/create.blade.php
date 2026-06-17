@@ -53,7 +53,7 @@
 
 
                         <div class="col-md-2 mb-4">
-                            <x-form.select :options="$durationTypes" :add-new="false" :label="__('Duration Type')" class="select2-select   " data-filter-type="{{ $type }}" :all="false" name="duration_type" id="{{$type.'_'.'duration_type' }}" :selected-value="isset($model) ? $model->getDurationType() : 'monthly'"></x-form.select>
+                            <x-form.select :options="$durationTypes" :add-new="false" :label="__('Duration Type')" class="select2-select" data-filter-type="{{ $type }}" :all="false" name="duration_type" id="{{$type.'_'.'duration_type' }}" :selected-value="isset($model) ? $model->getDurationType() : 'monthly'"></x-form.select>
                         </div>
 
 
@@ -72,7 +72,7 @@
 								  <x-form.label :class="'label form-label font-weight-bold'" :id="'test-id'">{{ __('Start From') }}</x-form.label>
                                 <div class="kt-input-icon">
                                     <div class="input-group date">
-                                        <input id="study-start-date" type="text" name="start_from" class="only-month-year-picker date-input form-control " readonly value="{{ isset($model) ? $model->start_from : getCurrentDateForFormDate('date') }}" />
+                                        <input id="study-start-date" type="text" name="start_from" class="only-month-year-picker date-input form-control" readonly value="{{ isset($model) ? $model->start_from : getCurrentDateForFormDate('date') }}" />
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>

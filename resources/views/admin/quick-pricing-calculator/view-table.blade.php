@@ -279,7 +279,7 @@ td.padding-left-0{
     }
 
 </style>
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
 
     <div class="kt-portlet kt-portlet--tabs">
         <div class="kt-portlet__head">
@@ -291,7 +291,7 @@ td.padding-left-0{
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Request('active') == 'quick-price-calculator' ? 'active':''  }}" data-toggle="tab" href="#quick-price-calculator" role="tab">
+                        <a class="nav-link {{ Request('active') == 'quick-price-calculator' ? 'active':'' }}" data-toggle="tab" href="#quick-price-calculator" role="tab">
                             <i class="fa fa-money-check-alt"></i> {{ __('Quick Pricing Calculators Table') }}
                         </a>
                     </li>
@@ -303,18 +303,18 @@ td.padding-left-0{
             </div>
         </div>
     </div>
-    <div class="tab-content  kt-margin-t-20">
+    <div class="tab-content kt-margin-t-20">
         <div class="tab-pane {{ !Request('active') || Request('active') == 'pricing-plans' ?'active':'' }}" id="pricing-plans" role="tabpanel">
 
             <x-table :tableClass="'kt_table_with_no_pagination_no_fixed_custom_create_btn  removeGlobalStyle ' ">
                 @slot('table_header')
-                <tr class=" text-center second-tr-bg">
+                <tr class="text-center second-tr-bg">
                     <th class="text-center absorbing-column max-w-80"></th>
                     <th></th>
                 </tr>
                 @endslot
                 @slot('table_body')
-                <tr class=" text-center first-tr-bg ">
+                <tr class="text-center first-tr-bg">
                     <td class="max-w-80 text-center"><b class="text-capitalize text-white">{{ __('Name') }}</b></td>
 
 
@@ -330,21 +330,21 @@ td.padding-left-0{
                 <tr class="group-color main-row-tr">
                     <td class="black-text max-w-80" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
 
-                        <div class="d-flex align-items-center ">
+                        <div class="d-flex align-items-center">
                             @if(isset($mainItemData['sub_items'])&&count($mainItemData['sub_items']))
-                            <i class="row_icon{{ $id }} flaticon2-up  mr-2  "></i>
+                            <i class="row_icon{{ $id }} flaticon2-up mr-2"></i>
                             @endif
-                            {{-- <b class="text-capitalize ">{{ $mainItemData['data']['name'] }}</b> --}}
-                            <b class="text-capitalize ">{{ $mainItemData['data']['name'] }}</b>
+                            {{-- <b class="text-capitalize">{{ $mainItemData['data']['name'] }}</b> --}}
+                            <b class="text-capitalize">{{ $mainItemData['data']['name'] }}</b>
                         </div>
                     </td>
 
 
                     <td class="text-left text-capitalize"><b class="ml-3">
                             <span style="overflow: visible; position: relative; width: 110px;">
-                                <a type="button" class="btn btn-secondary color-active " title="{{ __('Start Pricing') }}" href="{{ route('admin.create.quick.pricing.calculator', ['company'=>$company->id , 'pricingPlanId'=> $mainItemData['data']['id'] ]) }}">{{ __('Start Pricing') }}</a>
+                                <a type="button" class="btn btn-secondary color-active" title="{{ __('Start Pricing') }}" href="{{ route('admin.create.quick.pricing.calculator', ['company'=>$company->id , 'pricingPlanId'=> $mainItemData['data']['id'] ]) }}">{{ __('Start Pricing') }}</a>
                                 <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" data-toggle="modal" data-target="#modal-1-edit-{{ $mainItemData['data']['id'] }}" title="Edit" href="{{ route('pricing-plans.edit', ['company'=>$company->id , 'pricing_plan'=>$mainItemData['data']['id']]) }}"><i class="fa fa-pen-alt"></i></a>
-                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-1-delete-{{ $mainItemData['data']['id'] }}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-1-delete-{{ $mainItemData['data']['id'] }}" title="Delete"><i class="fa fa-trash-alt"></i>
                                 </a>
 
                                 <div id="modal-1-edit-{{ $mainItemData['data']['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -428,11 +428,11 @@ td.padding-left-0{
 
                 </tr>
                 @foreach ($mainItemData['sub_items'] ?? [] as $subItemId => $subItemArr)
-                <tr class="row{{ $id }}  text-center sub-item-row" style="display: none">
+                <tr class="row{{ $id }} text-center sub-item-row" style="display: none">
                     <td class="text-center max-w-80 text-capitalize"><b class="ml-3">
                             {{-- {{ __('Equal To Delete ') }} --}}
                             {{-- {{ $subItemArr['name'] }} --}}
-                            <table class="table table-striped- table-bordered  table-checkable  ">
+                            <table class="table table-striped- table-bordered table-checkable">
                                 <tr>
 									
                                     <td class="text-left">{{ __('Name') }}</td>
@@ -450,11 +450,11 @@ td.padding-left-0{
           <td class="text-left">{{ __('Count Or Days') }}</td>
                                     <td class="bg-white">{{ $subItemArr['count_or_days'] }}</td>
                                     <td class="text-left">{{ __('Price Without VAT') }}</td>
-                                    <td class="bg-white ">{{ $subItemArr['total_recommended_without_vat_formatted'] }}</td>
+                                    <td class="bg-white">{{ $subItemArr['total_recommended_without_vat_formatted'] }}</td>
                                     <td class="padding-left-0">{{ __('Net Profit After Taxes') }}</td>
-                                    <td class="bg-white ">{{ $subItemArr['total_net_profit_after_taxes_formatted'] }}</td>
+                                    <td class="bg-white">{{ $subItemArr['total_net_profit_after_taxes_formatted'] }}</td>
                                     <td class="padding-left-0">{{ __('Net Profit %') }}</td>
-                                    <td class="bg-white ">{{ $subItemArr['total_net_profit_after_taxes_percentage_formatted'] }}</td>
+                                    <td class="bg-white">{{ $subItemArr['total_net_profit_after_taxes_percentage_formatted'] }}</td>
                                 </tr>
 
                             </table>
@@ -464,7 +464,7 @@ td.padding-left-0{
                     <td class="text-left text-capitalize"><b class="ml-3">
                             <span style="overflow: visible; position: relative; width: 110px;">
                                 <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('admin.edit.quick.pricing.calculator', ['company'=>$company->id , 'quickPricingCalculator'=>$subItemArr['id']]) }}"><i class="fa fa-pen-alt"></i></a>
-                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $subItemArr['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $subItemArr['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
                                 </a>
                                 <div id="modal-delete-{{ $subItemArr['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -501,8 +501,8 @@ td.padding-left-0{
             </x-table>
 
         </div>
-        <div class="tab-pane {{  Request('active') == 'quick-price-calculator' ?'active':'' }}" id="quick-price-calculator" role="tabpanel">
-            <x-tables.basic-view class="position-relative  main-table-class" id="{{ $tableId }}">
+        <div class="tab-pane {{ Request('active') == 'quick-price-calculator' ?'active':'' }}" id="quick-price-calculator" role="tabpanel">
+            <x-tables.basic-view class="position-relative main-table-class" id="{{ $tableId }}">
                 <x-slot name="filter">
                     @include('admin.quick-pricing-calculator.filter' , [
                     'type'=>'filter'
@@ -517,7 +517,7 @@ td.padding-left-0{
 
 
                 <x-slot name="headerTr">
-                    <tr class="header-tr " data-model-name="{{ $modelName }}">
+                    <tr class="header-tr" data-model-name="{{ $modelName }}">
                         @if($hasChildRows)
                         {{-- <th class="view-table-th header-th trigger-child-row-1" >
                 {{ __('Expand') }}
@@ -610,7 +610,7 @@ td.padding-left-0{
                                             // do not change [1] index of item.id
                                             serviceCategoryId = item.id;
                                             mainRowId = row.data().id;
-                                            data.push([mainRowId, serviceCategoryId, getExpandAndCollpaseIcon(), item.name, ` <a data-model-name="${modelName}" data-table-id="subtable-level-1-id" data-record-id="${serviceCategoryId}"   class="btn btn-sm btn-clean  delete-record-btn btn-icon btn-icon-md" title="{{ __('Delete') }}"><i class="la la-trash"></i></a>`])
+                                            data.push([mainRowId, serviceCategoryId, getExpandAndCollpaseIcon(), item.name, ` <a data-model-name="${modelName}" data-table-id="subtable-level-1-id" data-record-id="${serviceCategoryId}"   class="btn btn-sm btn-clean delete-record-btn btn-icon btn-icon-md" title="{{ __('Delete') }}"><i class="la la-trash"></i></a>`])
                                         })
                                         $('#subtable-1-id' + row.data().id).DataTable({
                                             dom: 't'
@@ -660,7 +660,7 @@ td.padding-left-0{
 
                                 function formatsubrow1(d) {
                                     // `d` is the original data object for the row
-                                    let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped- kt_table_with_no_pagination table-bordered  table-checkable dataTable no-footer" > <thead style="display:none"><tr><td></td> <td></td> <td></td> <td></td><td></td></tr> </thead> `;
+                                    let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped- kt_table_with_no_pagination table-bordered table-checkable dataTable no-footer" > <thead style="display:none"><tr><td></td> <td></td> <td></td> <td></td><td></td></tr> </thead> `;
 
                                     subtable += '</table>';
 
@@ -701,7 +701,7 @@ td.padding-left-0{
                                                 , "columns": [
 													{
                                                         render: function(d, b, row) {
-                                                            return `<input style="width:20px;height:20px" class="form-control check-all-js checkbox delete-multi-class " type="checkbox" value="${row.id}" >`
+                                                            return `<input style="width:20px;height:20px" class="form-control check-all-js checkbox delete-multi-class" type="checkbox" value="${row.id}" >`
                                                         }
                                                         , data: 'order'
                                                         , className: ''
@@ -1021,7 +1021,7 @@ td.padding-left-0{
         , dom: 'Bfrtip',
 
         buttons: [{
-                "text": '<div class="text-black">' + "{{ __('Create') }}</div> <form><div><input type='text' class='form-control' id='pricing-plan-input-js' name='name'>  </div> <div><button type='submit'  class='btn btn-bold active-style  btn-pricing-plan-inisde  flex-1 flex-grow-0  btn-border-radius '>Save</button></div></form>   "
+                "text": '<div class="text-black">' + "{{ __('Create') }}</div> <form><div><input type='text' class='form-control' id='pricing-plan-input-js' name='name'>  </div> <div><button type='submit'  class='btn btn-bold active-style btn-pricing-plan-inisde flex-1 flex-grow-0 btn-border-radius'>Save</button></div></form>   "
                 , 'className': 'btn btn-pricing-plan border-green btn-bold   flex-1 flex-grow-0 btn-border-radius mr-auto'
                 , "action": function() {
                     //window.location.href = "{{ route('pricing-plans.create',['company'=>$company->id]) }}"

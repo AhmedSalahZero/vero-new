@@ -11,15 +11,15 @@
 .expandable-percentage-input { max-width: 75px !important; min-width: 75px !important; text-align: center !important; }
 .expandable-amount-input { max-width: 150px !important; min-width: 150px !important; text-align: center !important; }
 .ml-son { margin-left: 10px; font-weight: 400; }
-.bg-lighter, .bg-lighter * { background-color: #E2EFFE !important; color: black !important; }
-.is-sub-row.is-total-row td.sub-numeric-bg, .is-sub-row.is-total-row td.sub-text-bg { background-color: #087383 !important; color: white !important; }
-.parent-tr td { border: 1px solid #E2EFFE !important; }
-.main-with-no-child, .main-with-no-child td, .main-with-no-child th { background-color: #046187 !important; color: white !important; font-weight: bold; }
-.is-sub-row td.sub-numeric-bg, .is-sub-row td.sub-text-bg { border: 1.5px solid white !important; background-color: #f7f8fa !important; color: black !important; font-weight: 400 !important; }
+.bg-lighter, .bg-lighter * { background-color: #f7f8fa !important; color: #212529 !important; }
+.is-sub-row.is-total-row td.sub-numeric-bg, .is-sub-row.is-total-row td.sub-text-bg { background-color: #dbeafe !important; color: #0f172a !important; }
+.parent-tr td { border: 1px solid #dee2e6 !important; }
+.main-with-no-child, .main-with-no-child td, .main-with-no-child th { background-color: #f1f5f9 !important; color: #0f172a !important; font-weight: 600; }
+.is-sub-row td.sub-numeric-bg, .is-sub-row td.sub-text-bg { border: 1px solid #e5e7eb !important; background-color: #ffffff !important; color: #111827 !important; font-weight: 400 !important; }
 .sub-numeric-bg { text-align: center; }
-th.dtfc-fixed-left { background-color: #074FA4 !important; color: white !important; }
-.header-tr { background-color: #046187 !important; }
-.header-tr th { background-color: #046187 !important; color: white !important; font-weight: bold; }
+th.dtfc-fixed-left { background-color: #e2e8f0 !important; color: #0f172a !important; }
+.header-tr { background-color: #f8fafc !important; }
+.header-tr th { background-color: #f8fafc !important; color: #0f172a !important; font-weight: 600; }
 .ccf-section-title td { font-size: 1rem !important; padding: 10px 12px !important; }
 .ccf-actions .btn { margin-inline-end: 8px; margin-bottom: 8px; }
 .max-w-grand-total { width: 7.5rem !important; max-width: none !important; min-width: 7rem !important; white-space: nowrap !important; }

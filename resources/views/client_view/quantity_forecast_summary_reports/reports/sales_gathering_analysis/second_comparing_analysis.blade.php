@@ -76,7 +76,7 @@
         <div class="kt-portlet__head-toolbar">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
 
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab">
                         <i class="flaticon2-checking"></i>Reports Table
                     </a>
@@ -85,7 +85,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <div id="chartdiv"></div>
             <!--End:: Tab  EGP FX Rate Table -->
@@ -108,7 +108,7 @@
                     $id = 0 ;
                     @endphp
                     @foreach ($mainItems as $mainItemName)
-                    <tr class="group-color ">
+                    <tr class="group-color">
 
                         <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
                             <i class="row_icon{{ $id }} flaticon2-up white-text"></i>
@@ -134,7 +134,7 @@
 
                     {{-- @foreach ($secondItemsName as $secondItemName  ) --}}
 
-                    <tr class="row{{ $id }}  text-center" style="display: none">
+                    <tr class="row{{ $id }} text-center" style="display: none">
                         {{-- <td></td> --}}
                         <td class="text-left"><b>{{ $secondItemName  }}</b></td>
 

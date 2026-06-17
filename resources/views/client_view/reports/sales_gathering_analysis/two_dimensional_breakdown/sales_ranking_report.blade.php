@@ -88,11 +88,11 @@
             </button>
 
 
-            <div class="modal " id="kt_modal_{{str_replace(' ' , '-' , $branchName) . $rankNumber}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal" id="kt_modal_{{str_replace(' ' , '-' , $branchName) . $rankNumber}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 style="text-align: left !important" class="modal-title " id="exampleModalLongTitle">
+                            <h5 style="text-align: left !important" class="modal-title" id="exampleModalLongTitle">
                                 {{ $branchName . ' [ ' . $rankNumber . ' ]' }}
                             </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -102,7 +102,7 @@
                             {{-- <div class="kt-scroll" data-scroll="true" data-height="200"> --}}
                             <x-table :tableClass="'kt_table_with_no_pagination_no_scroll'">
                                 @slot('table_header')
-    <tr class="table-active ">
+    <tr class="table-active">
 
         <th style="text-align: left !important">{{ __('Product Name ') }}</th>
         <th>{{ __('Sales Values') }}</th>

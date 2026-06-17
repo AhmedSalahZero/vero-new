@@ -3,14 +3,13 @@
 <x-styles.commons></x-styles.commons>
 @endpush
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
-    .money-flow-dark .input-group.date > .datepicker:not(.datepicker-dropdown) {
+    .input-group.date > .datepicker:not(.datepicker-dropdown) {
         display: none !important;
     }
 </style>
@@ -19,7 +18,7 @@
 {{ __('Consolidated Cash Flow') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div>
 <p style="opacity:.85;margin-bottom:1rem;">{{ __('Note: the report period must include today (same rule as the main cash flow report).') }}</p>
 <p style="opacity:.85;margin-bottom:1rem;">{{ __('Tip: select only the contracts you need (up to 50 per run). Monthly interval is faster than daily for long periods.') }}</p>
 <form class="kt-form kt-form--label-right" method="get" action="{{ route('reports.consolidated-cash-flow.result', ['company' => $company->id]) }}">
@@ -76,7 +75,7 @@
 <script src="{{ url('assets/js/demo1/pages/crud/forms/widgets/bootstrap-select.js') }}" type="text/javascript"></script>
 <script>
     $(function () {
-        const $dateInputs = $('.money-flow-dark input.datepicker-input:not(.only-month-year-picker)');
+        const $dateInputs = $('input.datepicker-input:not(.only-month-year-picker)');
         $dateInputs.each(function () {
             const $input = $(this);
             if ($input.data('datepicker')) {

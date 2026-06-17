@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/cr-1.5.6/date-1.1.2/fc-4.1.0/fh-3.2.3/r-2.3.0/rg-1.2.0/sl-1.4.0/sr-1.1.1/datatables.min.css" />
 
 <style>
@@ -236,7 +235,7 @@
 @endsection
 
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 
 <div class="kt-portlet kt-portlet--tabs">
@@ -244,7 +243,7 @@
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link {{ !Request('active')  ?'active':'' }}" data-toggle="tab" href="#running" role="tab">
+                    <a class="nav-link {{ !Request('active') ?'active':'' }}" data-toggle="tab" href="#running" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Cash Expense Categories') }}
                     </a>
                 </li>
@@ -254,7 +253,7 @@
 
             <div class="flex-tabs">
 
-                <a href="{{ route('cash.expense.category.create',['company'=>$company->id]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('cash.expense.category.create',['company'=>$company->id]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Create') }}
                 </a>
@@ -265,7 +264,7 @@
 
 
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') ?'active':'' }}" id="{{ 'running' }}" role="tabpanel">
@@ -278,17 +277,17 @@
                             @slot('table_header')
 
 
-                            <tr class=" text-center second-tr-bg">
-                                <th class="text-center absorbing-column "></th>
+                            <tr class="text-center second-tr-bg">
+                                <th class="text-center absorbing-column"></th>
                                 <th></th>
                             </tr>
                             @endslot
                             @slot('table_body')
-                            <tr class=" text-center first-tr-bg ">
-                                <td class=" text-center view-table-th max-w-20"><b style="color:white !important" class="text-capitalize">{{ __('Name') }}</b></td>
+                            <tr class="text-center first-tr-bg">
+                                <td class="text-center view-table-th max-w-20"><b style="color:white !important" class="text-capitalize">{{ __('Name') }}</b></td>
 
 
-                                <td style="color:white !important" class="text-center view-table-th ">
+                                <td style="color:white !important" class="text-center view-table-th">
                                     {{ __('Actions') }}
                                 </td>
                             </tr>
@@ -305,13 +304,13 @@
 
 
 
-                                <td class="black-text " style="cursor: pointer;" onclick="toggleRow('{{ $mainItemId }}')">
+                                <td class="black-text" style="cursor: pointer;" onclick="toggleRow('{{ $mainItemId }}')">
 
-                                    <div class="d-flex align-items-center ">
+                                    <div class="d-flex align-items-center">
                                         @if(count($subItems))
-                                        <i class="row_icon{{ $mainItemId }} flaticon2-up  mr-2  "></i>
+                                        <i class="row_icon{{ $mainItemId }} flaticon2-up mr-2"></i>
                                         @endif
-                                        <b class="text-capitalize ">{{ $parent['name'] }}</b>
+                                        <b class="text-capitalize">{{ $parent['name'] }}</b>
                                     </div>
                                 </td>
 
@@ -329,7 +328,7 @@
                                     <b class="ml-3">
 
                                         <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('cash.expense.category.edit', ['company'=>$company->id , 'cashExpenseCategory'=>$mainItemId]) }}"><i class="fa fa-pen-alt"></i></a>
-                                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $mainItemId }}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $mainItemId }}" title="Delete"><i class="fa fa-trash-alt"></i>
                                         </a>
 
                                         <div id="modal-delete-{{ $mainItemId }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -374,8 +373,8 @@
 
 
 
-                            <tr class="row{{ $mainItemId }}  text-center sub-item-row" style="display: none">
-                                <td colspan="5" class="text-left  text-capitalize">
+                            <tr class="row{{ $mainItemId }} text-center sub-item-row" style="display: none">
+                                <td colspan="5" class="text-left text-capitalize">
                                     <table class="table ml-3 table-borderless">
 
                                         <tr>

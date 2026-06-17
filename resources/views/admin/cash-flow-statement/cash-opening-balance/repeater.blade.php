@@ -4,23 +4,19 @@
                 @endphp
 
 
-                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center 
-                                         @if($isRepeater)
-                                         repeater_item
-                                         @endif 
-				                         ">
-                                <input type="hidden" class="form-control " @if($isRepeater) name="id" @else name="opening[0][id]" @endif value="{{ isset($receivable_and_payment) ? $receivable_and_payment->getId() : 0 }}">
+                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
+                                <input type="hidden" class="form-control" @if($isRepeater) name="id" @else name="opening[0][id]" @endif value="{{ isset($receivable_and_payment) ? $receivable_and_payment->getId() : 0 }}">
 
 
 
                     <div class="col-2">
-                        <label class="form-label font-weight-bold ">{{ __('Name') }}
+                        <label class="form-label font-weight-bold">{{ __('Name') }}
                             {{-- @include('star')  --}}
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input type="text" class="form-control  exclude-text" @if($isRepeater) name="receivable_name" @else name="opening[0][receivable_name]" @endif value="{{ isset($receivable_and_payment) ? $receivable_and_payment->getName() : old('receivable_name') }}">
-                                <input type="hidden" class="form-control " @if($isRepeater) name="old_receivable_name" @else name="opening[0][old_receivable_name]" @endif value="{{ isset($receivable_and_payment) ? $receivable_and_payment->getName() : old('old_receivable_name') }}">
+                                <input type="text" class="form-control exclude-text" @if($isRepeater) name="receivable_name" @else name="opening[0][receivable_name]" @endif value="{{ isset($receivable_and_payment) ? $receivable_and_payment->getName() : old('receivable_name') }}">
+                                <input type="hidden" class="form-control" @if($isRepeater) name="old_receivable_name" @else name="opening[0][old_receivable_name]" @endif value="{{ isset($receivable_and_payment) ? $receivable_and_payment->getName() : old('old_receivable_name') }}">
                             </div>
                         </div>
                     </div>

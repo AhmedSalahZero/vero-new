@@ -8,7 +8,7 @@
 
 
                                     <td>
-                                        <input value="{{ __('Equity Funding Rate (%)') }}" disabled class="form-control  min-width-hover-300 text-left mt-2" type="text">
+                                        <input value="{{ __('Equity Funding Rate (%)') }}" disabled class="form-control min-width-hover-300 text-left mt-2" type="text">
 
                                     </td>
                                     @php
@@ -53,7 +53,7 @@
 
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <input type="text" class="form-control expandable-amount-input  sum-percentage-css" disabled value="-">
+                                            <input type="text" class="form-control expandable-amount-input sum-percentage-css" disabled value="-">
                                         </div>
                                     </td>
 
@@ -181,7 +181,7 @@
 
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <input type="text" class="form-control expandable-amount-input  sum-percentage-css" disabled value="-">
+                                            <input type="text" class="form-control expandable-amount-input sum-percentage-css" disabled value="-">
                                         </div>
                                     </td>
 

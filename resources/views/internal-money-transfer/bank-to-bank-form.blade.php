@@ -2,49 +2,48 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
 
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -54,7 +53,7 @@
 {{ __('Internal Money Transfer Form') }}
 @endsection --}}
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -95,14 +94,14 @@
                         <div class="kt-portlet">
 
 
-                            <div class="kt-portlet ">
+                            <div class="kt-portlet">
                                 <div class="kt-portlet__head">
                                     <div class="kt-portlet__head-label flex-1">
                                         <h3 class="kt-portlet__head-title head-title text-primary">
                                             {{__('Bank To Bank Transfer Information')}}
                                         </h3>
 
-                                        <div class=" flex-1 d-flex justify-content-end pt-3">
+                                        <div class="flex-1 d-flex justify-content-end pt-3">
                                             <div class="col-md-3 mb-3">
                                                 <label>{{__('Balance')}} <span class="balance-date-js"></span> </label>
                                                 <div class="kt-input-icon">
@@ -128,7 +127,7 @@
                     <label>{{__('Date')}}</label>
                     <div class="kt-input-icon">
                         <div class="input-group date">
-                            <input type="text"  name="transfer_date" value="{{ isset($model) ? formatDateForDatePicker($model->getTransferDate()) : '' }}" class="form-control balance-date is-date-css " readonly placeholder="Select date" id="kt_datepicker_max_date_is_today" />
+                            <input type="text"  name="transfer_date" value="{{ isset($model) ? formatDateForDatePicker($model->getTransferDate()) : '' }}" class="form-control balance-date is-date-css" readonly placeholder="Select date" id="kt_datepicker_max_date_is_today" />
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="la la-calendar-check-o"></i>
@@ -141,21 +140,21 @@
                                             {{-- <div class="col-md-3">
                                                 <x-form.date :classes="'balance-date'" :label="__('Date')" :required="true" :model="$model??null" :name="'transfer_date'" :placeholder="__('Select Date')"></x-form.date>
                                             </div> --}}
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Transfer Days')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input step="1" type="numeric" value="{{ isset($model) ? $model->getTransferDays():0 }}" name="transfer_days" class="form-control greater-than-or-equal-zero-allowed " placeholder="{{__('Insert Amount')}}">
+                                                    <input step="1" type="numeric" value="{{ isset($model) ? $model->getTransferDays():0 }}" name="transfer_days" class="form-control greater-than-or-equal-zero-allowed" placeholder="{{__('Insert Amount')}}">
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Transfer Amount')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input type="text" value="{{ isset($model) ? number_format($model->getAmount()):0 }}" class="form-control greater-than-or-equal-zero-allowed ">
+                                                    <input type="text" value="{{ isset($model) ? number_format($model->getAmount()):0 }}" class="form-control greater-than-or-equal-zero-allowed">
                                                     <input type="hidden" name="amount" value="{{ isset($model) ? $model->getAmount():0 }}">
                                                 </div>
                                             </div>
@@ -191,7 +190,7 @@
 
 
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('From Account Type')}}
                                                     @include('star')
                                                 </label>
@@ -207,13 +206,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('From Account Number')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select required data-current-selected="{{ isset($model) ? $model->getFromAccountNumber(): 0  }}" data-from-current-selected="{{ isset($model) ? $model->getFromAccountNumber(): 0 }}" name="from_account_number" class="form-control js-from-account-number ">
+                                                        <select required data-current-selected="{{ isset($model) ? $model->getFromAccountNumber(): 0  }}" data-from-current-selected="{{ isset($model) ? $model->getFromAccountNumber(): 0 }}" name="from_account_number" class="form-control js-from-account-number">
                                                             <option value="" selected>{{__('Select')}}</option>
                                                         </select>
                                                     </div>
@@ -226,7 +225,7 @@
                                                 </label>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select data-current-selected="{{ isset($model) ? $model->getToBankId() : 0 }}" required js-to-when-change-trigger-change-account-type data-to-financial-institution-id name="to_bank_id" class="form-control ">
+                                                        <select data-current-selected="{{ isset($model) ? $model->getToBankId() : 0 }}" required js-to-when-change-trigger-change-account-type data-to-financial-institution-id name="to_bank_id" class="form-control">
                                                             @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                                             <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getToBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
                                                             @endforeach
@@ -235,7 +234,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('To Account Type')}}
                                                     @include('star')
                                                 </label>
@@ -251,7 +250,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('To Account Number')}}
                                                     @include('star')
                                                 </label>

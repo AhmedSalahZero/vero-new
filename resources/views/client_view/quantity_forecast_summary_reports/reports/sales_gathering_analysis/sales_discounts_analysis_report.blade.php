@@ -66,14 +66,14 @@
 <div class="kt-portlet kt-portlet--tabs">
     
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             @php
                     array_push($zones_names, 'Total');
                     array_push($zones_names, 'Zone_Sales_Percentages');
                     @endphp
-            {{-- <div class="tab-pane " id="kt_apps_contacts_view_tab_1" role="tabpanel">
+            {{-- <div class="tab-pane" id="kt_apps_contacts_view_tab_1" role="tabpanel">
                     @foreach ($zones_names as $name_of_zone)
 
                         <div class="col-xl-12">
@@ -116,7 +116,7 @@
         @php
                                     @endphp
 
-        <tr class="group-color ">
+        <tr class="group-color">
             <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
                 <i class="row_icon{{ $id }} flaticon2-up white-text"></i>
                 <b>{{ __($zone_name) }}</b>
@@ -219,7 +219,7 @@
     @slot('table_body')
     @php $chart_data = []; @endphp
     @foreach ($final_report_data as $zone_name => $zone_data)
-    <tr class="group-color  text-lg-left  ">
+    <tr class="group-color text-lg-left">
         <td colspan="{{ count($total_zones) + 1 }}"><b class="white-text">{{ __($zone_name) }}</b></td>
         @foreach ($total_zones as $date => $total)
         <td class="hidden"> </td>

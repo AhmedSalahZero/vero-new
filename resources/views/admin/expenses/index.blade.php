@@ -242,7 +242,7 @@
 
             <div class="kt-portlet__body">
 			<span class="visibility-hidden">/</span>
-                    <a href="{{ route('pricing-expenses.create',['company'=>$company->id]) }}" class="btn border-green btn-bold   flex-1 flex-grow-0 btn-border-radius mr-auto">
+                    <a href="{{ route('pricing-expenses.create',['company'=>$company->id]) }}" class="btn border-green btn-bold flex-1 flex-grow-0 btn-border-radius mr-auto">
                         {{-- <span class="plus-class">+</span> --}}
 						{{ __('Create') }}
                     </a>
@@ -250,17 +250,17 @@
 				
                             <x-table :tableClass="'kt_table_with_no_pagination_no_fixed  removeGlobalStyle ' ">
                                 @slot('table_header')
-                                <tr class=" text-center second-tr-bg">
+                                <tr class="text-center second-tr-bg">
                                     <th class="text-center absorbing-column max-w-80"></th>
                                     <th></th>
                                 </tr>
                                 @endslot
                                 @slot('table_body')
-                                <tr class=" text-center first-tr-bg ">
+                                <tr class="text-center first-tr-bg">
                                     <td class="max-w-80 text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Name') }}</b></td>
 
 
-                                    <td class="text-center  view-table-th" style="color:white !important">
+                                    <td class="text-center view-table-th" style="color:white !important">
                                         {{ __('Actions') }}
                                     </td>
                                 </tr>
@@ -272,16 +272,16 @@
                                 <tr class="group-color main-row-tr">
                                     <td class="black-text max-w-80" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
 
-                                        <div class="d-flex align-items-center ">
+                                        <div class="d-flex align-items-center">
                                             @if(count($subItems))
-                                            <i class="row_icon{{ $id }} flaticon2-up  mr-2  "></i>
+                                            <i class="row_icon{{ $id }} flaticon2-up mr-2"></i>
                                             @endif
-                                            <b class="text-capitalize ">{{ $name }}</b>
+                                            <b class="text-capitalize">{{ $name }}</b>
                                         </div>
                                     </td>
 
 
-                                    <td class="text-center ">
+                                    <td class="text-center">
 
                                     </td>
 
@@ -293,14 +293,14 @@
                                 </tr>
 
                                 @foreach ($subItems as $subItemIndex => $subItemArr)
-                                <tr class="row{{ $id }}  text-center sub-item-row" style="display: none">
+                                <tr class="row{{ $id }} text-center sub-item-row" style="display: none">
                                     <td class="text-left max-w-80 text-capitalize"><b class="ml-3">
                                             {{ $subItemArr['name'] }}
                                         </b></td>
                                     <td class="text-left text-capitalize"><b class="ml-3">
                                             <span style="overflow: visible; position: relative; width: 110px;">
                                                 <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('pricing-expenses.edit', ['company'=>$company->id , 'pricing_expense'=>$subItemArr['id']]) }}"><i class="fa fa-pen-alt"></i></a>
-                                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $subItemArr['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                                <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $subItemArr['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
                                                 </a>
                                                 <div id="modal-delete-{{ $subItemArr['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                                     <div class="modal-dialog">

@@ -3,12 +3,8 @@
                 $type = 'create';
                 @endphp
 
-                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center 
-                                         @if($isRepeater)
-                                         repeater_item
-                                         @endif 
-				                         ">
-                    <input type="hidden" class="form-control " @if($isRepeater) name="id" @else name="accounts[0][id]" @endif value="{{ isset($accountInterest) ? $accountInterest->getId() : 0 }}">
+                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
+                    <input type="hidden" class="form-control" @if($isRepeater) name="id" @else name="accounts[0][id]" @endif value="{{ isset($accountInterest) ? $accountInterest->getId() : 0 }}">
 
 
 
@@ -33,7 +29,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="interest_rate" @else name="accounts[0][interest_rate]" @endif type="text" class="form-control " value="{{ number_format(isset($accountInterest) ? $accountInterest->getInterestRate() : old('interest_rate',0)) }}">
+                                <input @if($isRepeater) name="interest_rate" @else name="accounts[0][interest_rate]" @endif type="text" class="form-control" value="{{ number_format(isset($accountInterest) ? $accountInterest->getInterestRate() : old('interest_rate',0)) }}">
                             </div>
                         </div>
                     </div>

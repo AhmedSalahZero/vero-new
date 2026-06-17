@@ -6,7 +6,7 @@
      {{-- <label class="form-label font-weight-bold">{{ __('Name') }} </label>
      <div class="kt-input-icon">
          <div class="input-group">
-             <input type="text" class="form-control " name="name" value="{{ isset($otherDirectOperationExpense) ? $otherDirectOperationExpense->getName() : old('name') }}" >
+             <input type="text" class="form-control" name="name" value="{{ isset($otherDirectOperationExpense) ? $otherDirectOperationExpense->getName() : old('name') }}" >
          </div>
      </div> --}}
  </div>
@@ -45,7 +45,7 @@
      <label class="form-label font-weight-bold">{{ __('Total Cost') }} </label>
      <div class="kt-input-icon">
          <div class="input-group">
-             <input type="text" readonly class="form-control  disabled-custom total-cost-summation" name="direct_opex_total_cost" value="{{ isset($otherDirectOperationExpense) ? $otherDirectOperationExpense->getTotalCost() : old('direct_opex_total_cost') }}" step="any">
+             <input type="text" readonly class="form-control disabled-custom total-cost-summation" name="direct_opex_total_cost" value="{{ isset($otherDirectOperationExpense) ? $otherDirectOperationExpense->getTotalCost() : old('direct_opex_total_cost') }}" step="any">
          </div>
      </div>
  </div>

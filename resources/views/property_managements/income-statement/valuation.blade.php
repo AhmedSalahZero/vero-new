@@ -60,13 +60,13 @@ use App\Models\PropertyManagement\Study;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             @php
             $currentType = 'study' ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     @include('property_managements.income-statement._valuation',['formattedDcfMethod'=>$formattedDcfMethod])
                 </div>
@@ -75,7 +75,7 @@ use App\Models\PropertyManagement\Study;
 
             @if(isset($nextButton))
             <div class="text-right mt-4 cash-flow-btn">
-                <a href="{{ $nextButton['link'] }}" class="btn btn-primary ">{{ $nextButton['title'] }}</a>
+                <a href="{{ $nextButton['link'] }}" class="btn btn-primary">{{ $nextButton['title'] }}</a>
             </div>
             @endif
 
@@ -107,13 +107,13 @@ use App\Models\PropertyManagement\Study;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             @php
             $currentType = 'study' ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     @include('property_managements.income-statement._multipliers',['formattedDcfMethod'=>$formattedDcfMethod])
                 </div>
@@ -122,7 +122,7 @@ use App\Models\PropertyManagement\Study;
 
             @if(isset($nextButton))
             <div class="text-right mt-4 cash-flow-btn">
-                <a href="{{ $nextButton['link'] }}" class="btn btn-primary ">{{ $nextButton['title'] }}</a>
+                <a href="{{ $nextButton['link'] }}" class="btn btn-primary">{{ $nextButton['title'] }}</a>
             </div>
             @endif
 

@@ -24,7 +24,7 @@
                             <label>{{ __('VAT %') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group">
-                                    <input id="vat-percentage" type="number" class="form-control only-greater-than-or-equal-zero-allowed " name="vat_percentage" value="{{ isset($profitability) ? $profitability->getVat() : old('vat_percentage',0) }}"  step="any" >
+                                    <input id="vat-percentage" type="number" class="form-control only-greater-than-or-equal-zero-allowed" name="vat_percentage" value="{{ isset($profitability) ? $profitability->getVat() : old('vat_percentage',0) }}"  step="any" >
                                 </div>
                             </div>
                         </div>

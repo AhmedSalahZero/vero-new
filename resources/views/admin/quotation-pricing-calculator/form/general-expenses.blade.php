@@ -33,7 +33,7 @@
                             <label>{{ __('Total Cost') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group">
-                                    <input type="text" readonly class="form-control  disabled-custom total-cost-summation" name="gaex_total_cost" value="{{ isset($generalExpense) ? $generalExpense->getTotalCost() : old('gaex_total_cost') }}"  step="any" >
+                                    <input type="text" readonly class="form-control disabled-custom total-cost-summation" name="gaex_total_cost" value="{{ isset($generalExpense) ? $generalExpense->getTotalCost() : old('gaex_total_cost') }}"  step="any" >
                                 </div>
                             </div>
                         </div>

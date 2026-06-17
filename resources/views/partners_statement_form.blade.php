@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -14,7 +13,7 @@
 {{ __('Partner Statement') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -47,7 +46,7 @@
                             <label>{{ __('Currency') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="invoice-currency-id" data-live-search="true" data-actions-box="true" name="currency" required class="form-control  kt-bootstrap-select select2-select kt_bootstrap_select ajax-currency-name">
+                                    <select id="invoice-currency-id" data-live-search="true" data-actions-box="true" name="currency" required class="form-control kt-bootstrap-select select2-select kt_bootstrap_select ajax-currency-name">
                                         @foreach(getCurrency() as $currency=>$currencyName)
                                         <option value="{{ $currency }}">{{ touppercase($currencyName) }}</option>
                                         @endforeach
@@ -60,7 +59,7 @@
                             <label>{{ __('Partner Type') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select data-remove-select="1" data-live-search="true" data-actions-box="true" name="partner_type" id="partner_type" required class="form-control  kt-bootstrap-select select2-select kt_bootstrap_select">
+                                    <select data-remove-select="1" data-live-search="true" data-actions-box="true" name="partner_type" id="partner_type" required class="form-control kt-bootstrap-select select2-select kt_bootstrap_select">
                                         @foreach($partnerTypes as $id=>$title)
                                         <option value="{{ $id }}">{{ $title }}</option>
                                         @endforeach
@@ -74,7 +73,7 @@
                             <label>{{ __('Partners') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select multiple data-live-search="true" data-actions-box="true" name="partner_id[]" id="customer_name" required class="form-control  kt-bootstrap-select select2-select kt_bootstrap_select">
+                                    <select multiple data-live-search="true" data-actions-box="true" name="partner_id[]" id="customer_name" required class="form-control kt-bootstrap-select select2-select kt_bootstrap_select">
 
                                     </select>
                                 </div>

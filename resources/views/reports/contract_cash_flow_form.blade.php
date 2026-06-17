@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -19,7 +18,7 @@
 {{ __('Contract Cash Flow Report') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div>
 
 <div class="row">
     <div class="col-md-12">
@@ -42,7 +41,7 @@
 
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select name="report_interval" class="form-control " required>
+                                    <select name="report_interval" class="form-control" required>
 									     <option value="">{{ __('Select') }}</option>
                                         <option value="daily" {{ old('report_interval') === 'daily' ? 'selected' : '' }}>{{__('Daily')}}</option>
                                         <option value="weekly" {{ old('report_interval') === 'weekly' ? 'selected' : '' }}>{{__('Weekly')}}</option>
@@ -53,10 +52,10 @@
                         </div>
 
                         <div class="col-md-3">
-                            <x-form.select :label="__('Customer')" :pleaseSelect="false"  :selectedValue="isset($currentContract) && $currentContract->client ? $currentContract->client->id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class="select2-select suppliers-or-customers-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="partner_id"></x-form.select>
+                            <x-form.select :label="__('Customer')" :pleaseSelect="false"  :selectedValue="isset($currentContract) && $currentContract->client ? $currentContract->client->id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class="select2-select suppliers-or-customers-js repeater-select" data-filter-type="{{ 'create' }}" :all="false" name="partner_id"></x-form.select>
                         </div>
                         <div class="col-md-3">
-                            <x-form.select :label="__('Contract')" :pleaseSelect="false" data-current-selected="{{ isset($currentContract) ? $currentContract->id : '' }}" :selectedValue="isset($currentContract) ? $currentContract->id : ''" :options="[]" :add-new="false" class="select2-select  contracts-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="contract_id"></x-form.select>
+                            <x-form.select :label="__('Contract')" :pleaseSelect="false" data-current-selected="{{ isset($currentContract) ? $currentContract->id : '' }}" :selectedValue="isset($currentContract) ? $currentContract->id : ''" :options="[]" :add-new="false" class="select2-select contracts-js repeater-select" data-filter-type="{{ 'create' }}" :all="false" name="contract_id"></x-form.select>
                         </div>
 
 
@@ -102,11 +101,11 @@
 
 						
 						
-						<div class="col-md-3 ">
+						<div class="col-md-3">
                                     <x-form.date :type="'text'" :classes="'datepicker-input '" :default-value="formatDateForDatePicker(old('start_date') ?: (now()) )" :model="$model??null" :label="__('Report Start Date')" :type="'text'" :id="'id'" :placeholder="__('')" :name="'start_date'" :required="true"></x-form.date>
                                 </div>
 								
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.date :type="'text'" :classes="'datepicker-input '" :default-value="formatDateForDatePicker(old('end_date') ?: (now()->addMonths(6)) )" :model="$model??null" :label="__('End Start Date')" :type="'text'" :id="'id'" :placeholder="__('')" :name="'end_date'" :required="true"></x-form.date>
                                 </div>
 								
@@ -120,7 +119,7 @@
 						 <label>{{__('Reset [Past Dues & Other Projected Cash In & Out]')}} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date justify-content-center">
-                                            <input name="reset_report"  class="form-control max-w-checkbox  text-center" value="1"   type="checkbox">
+                                            <input name="reset_report"  class="form-control max-w-checkbox text-center" value="1"   type="checkbox">
 								</div>
 								</div>
 						</div>
@@ -128,14 +127,14 @@
 						<div class="col-md-3 mt-4">
 						 <label>{{__('Do You Want To Save Report')}} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group date ">
-                                            <input name="save_report"  class="form-control max-w-checkbox want-to-save-report  text-center" value="1"   type="checkbox">
+                                <div class="input-group date">
+                                            <input name="save_report"  class="form-control max-w-checkbox want-to-save-report text-center" value="1"   type="checkbox">
 								</div>
 								</div>
 						</div>
 						
 						
-						  <div class="col-md-4 mt-4 " id="report-name-div" style="display:none">
+						  <div class="col-md-4 mt-4" id="report-name-div" style="display:none">
                             <label>{{ __('Report Name') }} </label>
                         <div class="kt-input-icon">
                             <div class="input-group date" id="report_name">

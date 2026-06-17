@@ -20,13 +20,13 @@
 'smallBox'=>''
 ])
     @if(! $withoutLabel)
-    <label title="{{$title}}" class=" fw-bold fs-6 mb-2 {{$labelClass}} " for="{{$id}}">{{$label}}
+    <label title="{{$title}}" class="fw-bold fs-6 mb-2 {{$labelClass}}" for="{{$id}}">{{$label}}
         @if($required)
     <span style="color:red">*</span>
             @endif
     </label>
     @endif
-    <input id="{{isset($idSuffix) && $idSuffix ? $id . $idSuffix : $id }}" title="{{$title}}" {{$attributes}} type="{{$type}}" class="form-control  form-control-solid mb-3 mb-lg-0 {{$inputClass}}"
+    <input id="{{isset($idSuffix) && $idSuffix ? $id . $idSuffix : $id }}" title="{{$title}}" {{$attributes}} type="{{$type}}" class="form-control form-control-solid mb-3 mb-lg-0 {{$inputClass}}"
 
            @if($json)
            name="{{$name . '[' .  $jsonLang . ']'}}" id="{{$id."-" . $jsonLang}}"

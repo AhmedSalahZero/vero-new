@@ -50,7 +50,7 @@
                     <div class="kt-portlet__head-wrapper">
                         <div class="kt-portlet__head-actions">
                             &nbsp;
-                            <a href="{{ route('modify.seasonality.quantity', $company) }}" class="btn  active-style btn-icon-sm ">
+                            <a href="{{ route('modify.seasonality.quantity', $company) }}" class="btn active-style btn-icon-sm">
                                 <i class="fas fa-file-import"></i>
                                 {{__("Modify Seasonality")}}
                             </a>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="kt-portlet__body ">
+            <div class="kt-portlet__body">
                 <br>
                 <div class="row">
                     <div class="col-md-12">
@@ -123,7 +123,7 @@
 
                                     @endphp
                                     <td class="text-center percentage_class">
-                                        <input type="number" class="form-control  percentage_{{$product_id}}" step="any" name="modified_seasonality[{{$product_data['item']}}][{{$month}}]" value="{{ number_format(($percentage*100) , 4) }}">
+                                        <input type="number" class="form-control percentage_{{$product_id}}" step="any" name="modified_seasonality[{{$product_data['item']}}][{{$month}}]" value="{{ number_format(($percentage*100) , 4) }}">
                                     </td>
                                 @endforeach
                                 <td class="percentage_total_{{$product_id}}">

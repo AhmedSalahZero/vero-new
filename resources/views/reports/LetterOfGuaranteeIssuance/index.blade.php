@@ -15,31 +15,29 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
-	.money-flow-dark .max-w-control{
+	.max-w-control{
 		max-width:100px !important;
 	}
-.money-flow-dark .bg-expired{
+.bg-expired{
 	background-color:red;
 	color:white !important;
 	 font-weight: bold !important;
 }
-.money-flow-dark .bg-cancelled{
+.bg-cancelled{
 	background-color:orange;
 	color:white !important;
 	 font-weight: bold !important;
 }
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 250px !important;
 		text-wrap:normal !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -49,7 +47,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 {{ __('Letter Of Guarantee Issuance ')  }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -93,12 +91,12 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
 		@endif 
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             @php
             $currentTab = $bidbondType ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $bidbondType  || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $bidbondType || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentTab" :title="$allLgs[$currentTab] . ' ' .__('Table') " :startDate="$filterDates[$currentTab]['startDate']" :endDate="$filterDates[$currentTab]['endDate']">
                         <x-export-letter-of-guarantee-issuance :search-fields="$searchFields[$currentTab]" :type="$currentTab" href="{{route('create.letter.of.guarantee.issuance',['company'=>$company->id,'active'=>$currentTab,'source'=>LetterOfGuaranteeIssuance::LG_FACILITY])}}" />
@@ -107,7 +105,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th class="text-center align-middle">{{ __('#') }}</th>
@@ -138,16 +136,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td>{{ $model->getTransactionName() }}</td>
                                     <td>{{ $model->getBeneficiaryName() }}</td>
                                     <td class="text-transform">{{ $model->getSourceFormatted() }}</td>
-                                    <td class="text-transform
-									
-									@if($model->isExpired())
-									bg-expired
-									
-									@elseif($model->isCancelled())
-									bg-cancelled
-									@endif 
-									
-									">{{ $model->getStatusFormatted() }}</td>
+                                    <td class="text-transform @if($model->isExpired()) bg-expired @elseif($model->isCancelled()) bg-cancelled @endif">{{ $model->getStatusFormatted() }}</td>
                                     <td class="bank-max-width">{{ $model->getFinancialInstitutionBankName() }}</td>
                                     <td class="text-uppercase width-30">{{ $model->getLgCode() }}</td>
                                     <td class="text-transform">{{ $model->getTransactionReference() }}</td>
@@ -222,7 +211,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
             $currentTab = $finalLGSType ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $bidbondType  || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $bidbondType || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentTab" :title="$allLgs[$currentTab] . ' ' .__('Table') " :startDate="$filterDates[$currentTab]['startDate']" :endDate="$filterDates[$currentTab]['endDate']">
                         <x-export-letter-of-guarantee-issuance :search-fields="$searchFields[$currentTab]" :type="$currentTab" href="{{route('create.letter.of.guarantee.issuance',['company'=>$company->id,'active'=>$currentTab,'source'=>LetterOfGuaranteeIssuance::LG_FACILITY])}}" />
@@ -230,7 +219,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th class="text-center align-middle">{{ __('#') }}</th>
@@ -260,21 +249,14 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td>{{ $model->getTransactionName() }}</td>
 									 <td>{{ $model->getBeneficiaryName() }}</td>
                                     <td>{{ $model->getSourceFormatted() }}</td>
-                                    <td class="
-									@if($model->isExpired())
-									bg-expired
-									@elseif($model->isCancelled())
-									bg-cancelled
-									@endif 
-									
-									"> {{ $model->getStatusFormatted() }}</td>
+                                    <td class="@if($model->isExpired()) bg-expired @elseif($model->isCancelled()) bg-cancelled @endif"> {{ $model->getStatusFormatted() }}</td>
                                     <td class="bank-max-width">{{ $model->getFinancialInstitutionBankName() }}</td>
                                     <td class="text-uppercase width-30">{{ $model->getLgCode() }}</td>
                                     <td class="text-transform">{{ $model->getLgAmountFormatted() }}  <br> {{ $model->getLgCurrency() }} </td>
                                     <td class="text-transform text-nowrap">{{ $model->getPurchaseOrderDateFormatted() }}</td>
                                     <td class="text-transform text-nowrap">{{ $model->getIssuanceDateFormatted() }}</td>
                                     <td class="text-transform text-nowrap">{{ $model->getRenewalDateFormatted() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative" class="max-w-control">
 											@include('reports._user_comment_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
@@ -332,7 +314,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
             $currentTab = $advancedPaymentLgsType ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $advancedPaymentLgsType  || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $advancedPaymentLgsType || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentTab" :title="$allLgs[$currentTab] . ' ' .__('Table') " :startDate="$filterDates[$currentTab]['startDate']" :endDate="$filterDates[$currentTab]['endDate']">
                         <x-export-letter-of-guarantee-issuance :search-fields="$searchFields[$currentTab]" :type="$currentTab" href="{{route('create.letter.of.guarantee.issuance',['company'=>$company->id,'active'=>$currentTab,'source'=>LetterOfGuaranteeIssuance::LG_FACILITY])}}" />
@@ -340,7 +322,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th class="text-center align-middle">{{ __('#') }}</th>
@@ -370,14 +352,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td>{{ $model->getTransactionName() }}</td>
 									<td>{{ $model->getBeneficiaryName() }}</td>
 									<td>{{ $model->getSourceFormatted() }}</td>
-									<td class="
-									@if($model->isExpired())
-									bg-expired
-									@elseif($model->isCancelled())
-									bg-cancelled
-									@endif 
-									
-									">{{ $model->getStatusFormatted() }}</td>
+									<td class="@if($model->isExpired()) bg-expired @elseif($model->isCancelled()) bg-cancelled @endif">{{ $model->getStatusFormatted() }}</td>
                                     <td class="bank-max-width">{{ $model->getFinancialInstitutionBankName() }}</td>
                                     <td class="text-uppercase width-30">{{ $model->getLgCode() }}</td>
                                     <td class="text-transform">{{ $model->getLgAmountFormatted() }}  <br> {{ $model->getLgCurrency() }} </td>
@@ -385,7 +360,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td class="text-transform text-nowrap">{{ $model->getPurchaseOrderDateFormatted() }}</td>
                                     <td class="text-transform text-nowrap">{{ $model->getIssuanceDateFormatted() }}</td>
                                     <td class="text-transform text-nowrap">{{ $model->getRenewalDateFormatted() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; " class="max-w-control">
 											@include('reports._user_comment_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
@@ -446,7 +421,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
             $currentTab = $performanceLgType ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $performanceLgType  || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active',$currentActiveTab) && $currentTab == $performanceLgType || Request('active',$currentActiveTab) == $currentTab ?'active':'' }}" id="{{ $currentTab }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentTab" :title="$allLgs[$currentTab] . ' ' .__('Table') " :startDate="$filterDates[$currentTab]['startDate']" :endDate="$filterDates[$currentTab]['endDate']">
                         <x-export-letter-of-guarantee-issuance :search-fields="$searchFields[$currentTab]" :type="$currentTab" href="{{route('create.letter.of.guarantee.issuance',['company'=>$company->id,'active'=>$currentTab,'source'=>LetterOfGuaranteeIssuance::LG_FACILITY])}}" />
@@ -456,7 +431,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th class="text-center align-middle">{{ __('#') }}</th>
@@ -485,14 +460,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td>{{ $model->getTransactionName() }}</td>
 									<td>{{ $model->getBeneficiaryName() }}</td>
                                     <td>{{ $model->getSourceFormatted() }}</td>
-                                    <td class="
-									@if($model->isExpired())
-									bg-expired
-									@elseif($model->isCancelled())
-									bg-cancelled
-									@endif 
-									
-									">{{ $model->getStatusFormatted() }}</td>
+                                    <td class="@if($model->isExpired()) bg-expired @elseif($model->isCancelled()) bg-cancelled @endif">{{ $model->getStatusFormatted() }}</td>
                                     <td class="bank-max-width">{{ $model->getFinancialInstitutionBankName() }}</td>
                                     <td class="text-uppercase width-30">{{ $model->getLgCode() }}</td>
                                     <td class="text-transform">{{ $model->getLgAmountFormatted() }}  <br> {{ $model->getLgCurrency() }} </td>

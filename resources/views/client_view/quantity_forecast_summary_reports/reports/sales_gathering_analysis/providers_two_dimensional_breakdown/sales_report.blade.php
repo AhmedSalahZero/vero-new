@@ -78,7 +78,7 @@
                         $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; @endphp
                         <td class="text-center">
                                 {{ number_format($value) }}
-                                 {{-- <span class="active-text "><b> {{ '    [ Perc% / ' . $main_type_name . ' ' . number_format($percentage_per_value, 1) . ' % ] ' }}</b></span> --}}
+                                 {{-- <span class="active-text"><b> {{ '    [ Perc% / ' . $main_type_name . ' ' . number_format($percentage_per_value, 1) . ' % ] ' }}</b></span> --}}
 
 
                         </td>
@@ -96,7 +96,7 @@
 
 
                 {{-- Percentages --}}
-                <tr class="secondary-row-color ">
+                <tr class="secondary-row-color">
                     <th> {{ __($main_type_item_name) .' %' }} </th>
 
                     @foreach ($all_items as $item)
@@ -104,14 +104,14 @@
                         $percentage_per_value = $main_item_total == 0 ? 0 : ($value / $main_item_total) * 100; @endphp
                         <td class="text-center">
 
-                            <span class="active-text "><b> {{ number_format($percentage_per_value, 1) . ' %  ' }}</b></span>
+                            <span class="active-text"><b> {{ number_format($percentage_per_value, 1) . ' %  ' }}</b></span>
 
 
                         </td>
                     @endforeach
                     @php $total_percentage = $final_total == 0 ? 0 : ($main_item_total / $final_total) * 100; @endphp
                     <td class="text-center">
-                        <span class="active-text "><b> {{   number_format($total_percentage, 1) . ' %  ' }}</b></span>
+                        <span class="active-text"><b> {{   number_format($total_percentage, 1) . ' %  ' }}</b></span>
                     </td>
                     @if (isset($totals_sales_per_main_type))
                         <td class="text-center">-</td>

@@ -3,7 +3,7 @@
         <div class="kt-portlet__head-actions">
             &nbsp;
             @if ($href != '#')
-            <a href={{$href}} class="btn  active-style btn-icon-sm {{$class}}">
+            <a href={{$href}} class="btn active-style btn-icon-sm {{$class}}">
                 <i class="fas fa-{{$icon}}"></i>
                 {{ __($firstButtonName) }}
             </a>
@@ -16,7 +16,7 @@
             @endif --}}
 
             @if (isset($lastUploadFailedHref) && $lastUploadFailedHref != '#')
-            <a href={{$lastUploadFailedHref}} class="btn  btn-danger btn-icon-sm {{$class}}">
+            <a href={{$lastUploadFailedHref}} class="btn btn-danger btn-icon-sm {{$class}}">
                 <i class="fas fa-file-import"></i>
                 {{ __('Last Upload Failed Rows') }}
             </a>
@@ -26,7 +26,7 @@
             @if(count($exportables))
 
             @if(request()->has('field'))
-            <a href="{{ route('view.uploading',['company'=>$company->id , 'model'=>getLastSegmentInRequest()]) }}" class="btn  active-style btn-icon-sm {{$class}}">
+            <a href="{{ route('view.uploading',['company'=>$company->id , 'model'=>getLastSegmentInRequest()]) }}" class="btn active-style btn-icon-sm {{$class}}">
                 <i class="fas fa-file-export"></i>
                 {{ __('Reset Search') }}
             </a>
@@ -44,7 +44,7 @@
                         <div class="modal-body">
                             <input id="js-upload-type" type="hidden" value="{{ getSegmentBeforeLast() }}">
                             @csrf
-                            <div class="row ">
+                            <div class="row">
                                 <div class="form-group flex-1" style="margin-right:15px;">
                                     <label for="Select Field " class="label">{{ __('Filter Item') }}</label>
                                     <select id="js-search-modal-name" class="form-control" id="Select Field " type="date" name="delete_from_date" placeholder="{{ __('Delete From') }}">
@@ -84,7 +84,7 @@
             @endif
 
 			@if(!$company->hasOdooIntegrationCredentials())
-            <a href="{{ route('create.sales.form',['company'=>$company->id , 'model'=>in_array('LoanSchedule',Request()->segments())?'LoanSchedule':getLastSegmentInRequest()]) }}" class="btn  active-style btn-icon-sm {{$class}}">
+            <a href="{{ route('create.sales.form',['company'=>$company->id , 'model'=>in_array('LoanSchedule',Request()->segments())?'LoanSchedule':getLastSegmentInRequest()]) }}" class="btn active-style btn-icon-sm {{$class}}">
                 <i class="fas fa-plus"></i>
                 {{ __('Create New Record') }}
             </a>
@@ -100,7 +100,7 @@
             </span>
             @if(getLastSegmentInRequest() == 'CustomerInvoice')
 
-            <a data-toggle="modal" data-target="#close-period-modal" href="#" class="btn  active-style btn-icon-sm {{$class}}">
+            <a data-toggle="modal" data-target="#close-period-modal" href="#" class="btn active-style btn-icon-sm {{$class}}">
                 <i class="fas fa-file-export"></i>
                 {{ __('Close Period') }}
             </a>
@@ -131,13 +131,13 @@
                                         <td class="not-editable text-center">{{ $notPeriodClosedCustomerInvoiceArr['invoice_month'] .'-'.$notPeriodClosedCustomerInvoiceArr['invoice_year'] }}</td>
                                         {{-- <td class="not-editable text-center">{{ $notPeriodClosedCustomerInvoice->getStatus() }}</td> --}}
                                         <td class="not-editable text-center">
-                                            <form class="form ajax-store-close-period-form " data-index="{{ $index }}" action="{{ route('store.close.period',['company'=>$company->id ]) }}" method="post">
+                                            <form class="form ajax-store-close-period-form" data-index="{{ $index }}" action="{{ route('store.close.period',['company'=>$company->id ]) }}" method="post">
                                                 @csrf
                                                 @if(!$canNotClosePeriod)
                                                 <input type="hidden" id="close-month-input" name="month" value="{{ $notPeriodClosedCustomerInvoiceArr['invoice_month'] }}">
                                                 <input type="hidden" id="close-year-input" name="year" value="{{ $notPeriodClosedCustomerInvoiceArr['invoice_year'] }}">
                                                 @endif
-                                                <button @if(!$canNotClosePeriod) id="close-period-btn" type="submit" @endif class="btn btn-primary btn-sm @if($canNotClosePeriod) disabled @endif "> {{ __('Close') }} </button>
+                                                <button @if(!$canNotClosePeriod) id="close-period-btn" type="submit" @endif class="btn btn-primary btn-sm @if($canNotClosePeriod) disabled @endif"> {{ __('Close') }} </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -159,7 +159,7 @@
 
 
             <div class="modal fade" id="delete_from_to_modal" tabindex="-1" role="dialog" aria-labelledby="delete_from_to_modalTitle" aria-hidden="true">
-                <div class="modal-dialog " role="document">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="delete_from_to_modalTitle">{{ Request()->segment(4) == 'LabelingItem' ? __('Delete Data Between Serials') : __('Delete Data Between Two Dates') }}</h5>
@@ -169,7 +169,7 @@
                         </div>
                         <div class="modal-body">
                             <input id="js-upload-type" type="hidden" value="{{ getSegmentBeforeLast() }}">
-                            <div class="row ">
+                            <div class="row">
                                 @if(Request()->segment(4) == 'LabelingItem')
                                 @csrf
                                 <div class="form-group flex-1">
@@ -266,7 +266,7 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button href="#" type="submit" id="" class="btn btn-primary ">{{ __('Export') }}</button>
+                                    <button href="#" type="submit" id="" class="btn btn-primary">{{ __('Export') }}</button>
                                 </div>
                             </form>
                         </div>

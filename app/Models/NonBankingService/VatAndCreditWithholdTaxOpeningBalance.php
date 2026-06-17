@@ -25,16 +25,7 @@ class VatAndCreditWithholdTaxOpeningBalance extends Model
         return $this->belongsTo(Study::class, 'study_id', 'id');
     }
 	
-    public function getVatAmount():float 
-    {
-        return $this->vat_amount ;
-    } 
-	public function getCreditWithholdTaxes():float 
-    {
-        return $this->credit_withhold_taxes ;
-    }
-	public function getCorporateTaxesPayableAmount():float 
-    {
-        return $this->corporate_taxes_payable ;
-    }
+   
+	
+
 }

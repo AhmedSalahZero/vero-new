@@ -41,7 +41,7 @@
         <form class="kt-form kt-form--label-right" action="#" enctype="multipart/form-data">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label w-full "> 
+                    <div class="kt-portlet__head-label w-full"> 
                         <h3 class="kt-portlet__head-title head-title text-primary w-full">
                             {{ __('Failed Rows') }} <br>
 							<span style="display: block;
@@ -91,7 +91,7 @@
 														$failed = isset($items[$header]['value']) ;
 																
 															@endphp
-															<td class="{{ $failed ? 'failed-td':'success-td'    }}">
+															<td class="{{ $failed ? 'failed-td':'success-td' }}">
 															@if($failed)
 															{{ $items[$header]['message'] ??'-' }} [ {{ $items[$header]['value'] ??'-' }} ]
 															@else

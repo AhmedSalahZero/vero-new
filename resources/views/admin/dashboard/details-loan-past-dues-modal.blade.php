@@ -1,6 +1,6 @@
 
 
-<div class="modal fade " id="{{ $currency }}-past-due-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{ $currency }}-past-due-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <form action="#" class="modal-content" method="post">
 		
@@ -18,8 +18,8 @@
                         <thead>
                             <tr>
 								
-                                <th class="text-center  text-capitalize th-main-color">{{ __('Date') }}</th>
-                                <th class="text-center  text-capitalize th-main-color">{{ __('Schedule Payment') }}</th>
+                                <th class="text-center text-capitalize th-main-color">{{ __('Date') }}</th>
+                                <th class="text-center text-capitalize th-main-color">{{ __('Schedule Payment') }}</th>
                                 <th class="text-center text-capitalize th-main-color"> {!! __('Past Due') !!} </th>
 								
 							
@@ -98,9 +98,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary 
-				{{-- submit-form-btn --}}
-				"
+                <button type="button" class="btn btn-primary {{-- submit-form-btn --}}"
 				 data-dismiss="modal"
 				 
 				 >{{ __('Close') }}</button>

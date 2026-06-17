@@ -246,6 +246,9 @@ class CertificatesOfDepositsController
 	{
 		$periodInterestAmount = number_unformat($request->get('periodic_interest_amount')) ;
 		$periodInterestDate = $request->get('periodic_interest_date') ;
+		if(!$periodInterestDate){
+			return redirect()->back()->with('fail',__('Period Interest Date Is Required'));
+		}
 		$certificatesOfDeposit->applyPeriodicInterestInStatement($financialInstitution,$periodInterestAmount,$periodInterestDate);
 		$type = $request->get('type',CertificatesOfDeposit::RUNNING);
 		$activeTab = $type ;
@@ -268,7 +271,11 @@ class CertificatesOfDepositsController
 	 */
 	public function applyDeposit(Company $company,Request $request,FinancialInstitution $financialInstitution,CertificatesOfDeposit $certificatesOfDeposit)
 	{
-		$actualDepositDate = Carbon::make($request->get('deposit_date'))->format('Y-m-d') ;
+		$actualDepositDate = Carbon::make($request->get('deposit_date')) ;
+		if(!$actualDepositDate){
+			return redirect()->back()->with('fail',__('Deposit Date Is Required'));
+		}
+		$actualDepositDate = $actualDepositDate->format('Y-m-d') ;
 		$actualInterestAmount  = number_unformat($request->get('actual_interest_amount')) ;
 		$certificateType = CertificatesOfDeposit::MATURED ;
 		$certificatesOfDeposit->update([
@@ -317,7 +324,11 @@ class CertificatesOfDepositsController
 	 */
 	public function applyBreak(Company $company,Request $request,FinancialInstitution $financialInstitution,CertificatesOfDeposit $certificatesOfDeposit)
 	{
-		$breakDate = Carbon::make($request->get('break_date'))->format('Y-m-d') ;
+		$breakDate = Carbon::make($request->get('break_date')) ;
+		if(!$breakDate){
+			return redirect()->back()->with('fail',__('Break Date Is Required'));
+		}
+		$breakDate = $breakDate->format('Y-m-d') ;
 		$breakInterestAmount  = $request->get('break_interest_amount') ;
 		$breakChargeAmount  = $request->get('break_charge_amount',0) ;
 		$amount  = $request->get('amount') ;

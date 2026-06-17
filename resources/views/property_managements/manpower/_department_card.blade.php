@@ -17,7 +17,7 @@ $repeaterId = $tableId.'_repeater';
         {{-- start of fixed monthly repeating amount --}}
 		<div class="row">
 		<div class="col-md-10 mt-4 mb-3">
-                        <div class="d-flex align-items-center ">
+                        <div class="d-flex align-items-center">
                             <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ $department->getName() . ' - ' . $department->getExpenseTypeName() }} </h3>
                         </div>
                     </div>
@@ -27,12 +27,12 @@ $repeaterId = $tableId.'_repeater';
 
         <x-tables.repeater-table :hideByDefault="false" :addExpenseType="true" :initEmpty="false" :removeActionBtn="true" :first-element-deletable="false" :font-size-class="'font-14px'" :department="$department" :append-save-or-back-btn="false" :repeater-with-select2="false" :parentClass="''" :tableName="$department ? $tableId.$department->id : $tableId " :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
             <x-slot name="ths">
-                {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down first-column-th-class" :title="__('')"></x-tables.repeater-table-th> --}}
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down " :title="__('Position')"></x-tables.repeater-table-th>
+                {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down first-column-th-class" :title="__('')"></x-tables.repeater-table-th> --}}
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Position')"></x-tables.repeater-table-th>
 				@if($allowExistingCount)
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down " :title="__('Existing <br> Count')"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="tenor-selector-class header-border-down" :title="__('Existing <br> Count')"></x-tables.repeater-table-th>
 				@endif
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down " :title="__('Monthly Net <br> Salary')"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="tenor-selector-class header-border-down" :title="__('Monthly Net <br> Salary')"></x-tables.repeater-table-th>
                 @foreach($studyMonthsForViews as $dateAsIndex=>$dateAsString)
                 @php
 				
@@ -42,10 +42,10 @@ $repeaterId = $tableId.'_repeater';
                 $title = $removeMonths ? $dateAsString :  dateFormatting($dateAsString, 'M\' Y') ;
 				@endphp
 		
-                <x-tables.repeater-table-th data-column-index="{{ $dateAsIndex }}" :font-size-class="'font-14px'" class=" interval-class header-border-down " :title=" $title . ' <br> ' .__('Hiring #')"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th data-column-index="{{ $dateAsIndex }}" :font-size-class="'font-14px'" class="interval-class header-border-down" :title=" $title . ' <br> ' .__('Hiring #')"></x-tables.repeater-table-th>
                 @if($financialYearEndMonthNumber == $currentMonthNumber || $loop->last )
 				@if(!$removeMonths)
-                <x-tables.repeater-table-th :icon="true" data-column-index="{{ $dateAsIndex }}" :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th :icon="true" data-column-index="{{ $dateAsIndex }}" :font-size-class="'font-14px'" class="tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
 				
 				@endif 
                 @php

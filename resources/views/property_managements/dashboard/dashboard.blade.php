@@ -102,13 +102,13 @@ use MathPHP\Statistics\Correlation ;
 
 </div>
 
-<div class="tab-content  kt-margin-t-20">
+<div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
     @endphp
 
 
-    <div class="tab-pane  active " id="kt_apps_contacts_view_tab_main" role="tabpanel">
+    <div class="tab-pane active" id="kt_apps_contacts_view_tab_main" role="tabpanel">
 
 
 
@@ -132,14 +132,14 @@ use MathPHP\Statistics\Correlation ;
             <div class="kt-portlet__body pt-0">
 
 
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1" role="tabpanel">
 
 
                         <div class="row">
                             <div class="col-md-4">
-                                <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Income Statement Summary Fig In Million') }} </h3>
+                                <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Income Statement Summary Fig In Million') }} </h3>
                             </div>
                             <div class="col-md-8 mb-3">
                                 @php
@@ -195,7 +195,7 @@ use MathPHP\Statistics\Correlation ;
             <div class="kt-portlet__body pt-0">
 
 
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1" role="tabpanel">
 
@@ -203,13 +203,13 @@ use MathPHP\Statistics\Correlation ;
                         <div class="row">
 
 
-                            <div class="col-md-12 ">
+                            <div class="col-md-12">
 
                                 <div class="row mb-3 ml-4 b-bottom">
                                     <div class="col-6">
-                                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Choose Revenue Stream') }} </h3>
+                                        <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Choose Revenue Stream') }} </h3>
                                     </div>
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-6">
                                         <select js-refresh-three-line-chart class="form-control">
                                             @foreach($lineChart as $id => $arr)
                                             {{-- <option value="{{ $id }}"> {{ $titlesMapping[$id]['title'] }} </option> --}}
@@ -241,7 +241,7 @@ use MathPHP\Statistics\Correlation ;
             <div class="kt-portlet__body pt-0">
 
 
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1" role="tabpanel">
 
@@ -253,11 +253,11 @@ use MathPHP\Statistics\Correlation ;
 
 
 
-                            <div class="col-md-12 ">
+                            <div class="col-md-12">
 
                                 <div class="row mb-3 ml-4 b-bottom">
                                     <div class="col-6">
-                                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Revenue Stream Breakdown') }} </h3>
+                                        <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Revenue Stream Breakdown') }} </h3>
                                     </div>
 
 
@@ -285,14 +285,14 @@ use MathPHP\Statistics\Correlation ;
             <div class="kt-portlet__body pt-0">
 
 
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1" role="tabpanel">
 
 
                         <div class="row">
                             <div class="col-md-12">
-                                <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Cost And Expense Summary') }} </h3>
+                                <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap"> {{ __('Cost And Expense Summary') }} </h3>
                             </div>
 
                        @include('property_managements.dashboard._expenses',['formattedExpenses'=>$formattedExpenses])

@@ -15,13 +15,13 @@ use App\Models\CashExpense ;
         <div class="kt-portlet__head-actions">
             &nbsp;
             @if($hasBatchCollection)
-            <a  data-money-type="{{ $cashExpenseType }}" data-type="multi" data-toggle="modal" data-target="#send-to-under-collection-modal{{ $cashExpenseType }}" id="js-send-to-under-collection-trigger{{ $cashExpenseType }}" href="{{route('create.money.receive',['company'=>$company->id])}}" title="{{ __('Please Select More Than One Cheque') }}" class="btn  active-style btn-icon-sm js-can-trigger-cheque-under-collection-modal disabled">
+            <a  data-money-type="{{ $cashExpenseType }}" data-type="multi" data-toggle="modal" data-target="#send-to-under-collection-modal{{ $cashExpenseType }}" id="js-send-to-under-collection-trigger{{ $cashExpenseType }}" href="{{route('create.money.receive',['company'=>$company->id])}}" title="{{ __('Please Select More Than One Cheque') }}" class="btn active-style btn-icon-sm js-can-trigger-cheque-under-collection-modal disabled">
                 <i class="fas fa-book"></i>
                 {{ __('Create Batch Mark As Paid') }}
             </a>
             @endif
             @if($hasSearch)
-            <a data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $cashExpenseType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Payments') }}" class="btn  active-style btn-icon-sm  ">
+            <a data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $cashExpenseType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Payments') }}" class="btn active-style btn-icon-sm">
                 <i class="fas fa-search"></i>
                 {{ __('Advanced Filter') }}
             </a>
@@ -37,7 +37,7 @@ use App\Models\CashExpense ;
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <form action="{{ $routeRedirect }}" class="row ">
+                            <form action="{{ $routeRedirect }}" class="row">
                                 <input name="active" type="hidden" value="{{ $cashExpenseType }}">
                                 <div class="form-group col-4">
                                     <label for="Select Field " class="label">{{ __('Field Name') }}</label>
@@ -83,7 +83,7 @@ use App\Models\CashExpense ;
 
 
             <div class="modal fade" id="send-to-under-collection-modal{{ $cashExpenseType }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog  modal-dialog-centered" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <form  data-money-type="{{ $cashExpenseType }}" id="ajax-send-cheques-to-collection-id{{ $cashExpenseType }}" class="ajax-send-cheques-to-collection" action="{{ $routeAction }}" method="post">
                             <input type="hidden" id="single-or-multi{{ $cashExpenseType }}" value="single">

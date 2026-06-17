@@ -15,7 +15,7 @@
                                                <label class="form-label font-weight-bold">{{ __('Working Days') }} </label>
                                                     <div class="kt-input-icon">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class " name="freelancer_working_days" value="{{ isset($freelancerExpense) ? $freelancerExpense->getWorkingDays() : old('freelancer_working_days',0) }}"  step="any" >
+                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class" name="freelancer_working_days" value="{{ isset($freelancerExpense) ? $freelancerExpense->getWorkingDays() : old('freelancer_working_days',0) }}"  step="any" >
                                                         </div>
                                                     </div>
                                                 </div> 
@@ -24,7 +24,7 @@
                                                       <label class="form-label font-weight-bold">{{ __('Cost Per Day') }} </label>
                                                     <div class="kt-input-icon">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class " name="freelancer_cost_per_day" value="{{ isset($freelancerExpense) ? $freelancerExpense->getCostPerDay() : old('freelancer_cost_per_day',0) }}"  step="any" >
+                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class" name="freelancer_cost_per_day" value="{{ isset($freelancerExpense) ? $freelancerExpense->getCostPerDay() : old('freelancer_cost_per_day',0) }}"  step="any" >
                                                         </div>
                                                     </div>
                                                 </div> 

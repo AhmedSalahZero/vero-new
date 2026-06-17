@@ -14,17 +14,17 @@
     </style>
 @endsection
 @section('dash_nav')
-    <ul class="kt-menu__nav ">
+    <ul class="kt-menu__nav">
 
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('forecast.quantity.report', $company) }}"
-                class="kt-menu__link "><span class="kt-menu__link-text">{{ __('Sales Target Dashboard') }}</span></a>
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('forecast.quantity.report', $company) }}"
+                class="kt-menu__link"><span class="kt-menu__link-text">{{ __('Sales Target Dashboard') }}</span></a>
         </li>
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a
-                href="{{ route('breakdown.forecast.quantity.report', $company) }}" class="kt-menu__link "><span
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a
+                href="{{ route('breakdown.forecast.quantity.report', $company) }}" class="kt-menu__link"><span
                     class="kt-menu__link-text">{{ __('Target Breakdown Dashboard') }}</span></a>
         </li>
 
-        <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a
                 href="{{ route('collection.forecast.quantity.report', $company) }}" class="kt-menu__link active-button"><span
                     class="kt-menu__link-text active-text">{{ __('Target Collection Dashboard') }}</span></a>
 
@@ -39,7 +39,7 @@
     <div class="row">
         {{-- Total Facilities --}}
         <div class="col-md-12">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
 
                 <div class="kt-portlet__body">
                     <div class="row">
@@ -73,7 +73,7 @@
     <div class="row">
         {{-- Total Facilities --}}
         <div class="col-md-12">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
 
                 <div class="kt-portlet__body">
                     <div class="row">

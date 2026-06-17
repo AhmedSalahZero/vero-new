@@ -218,7 +218,7 @@ tbody td{
                                 value="{{ @old('duration') }}"
                              @endif 
 
-                            type="number" step="1" min="1" max="600" id="duration" name="duration"  class="form-control number  grace_period_calc max-tenor-limit installment_condition" placeholder="{{__('Duration In Months')}} .." required />
+                            type="number" step="1" min="1" max="600" id="duration" name="duration"  class="form-control number grace_period_calc max-tenor-limit installment_condition" placeholder="{{__('Duration In Months')}} .." required />
                             @if ($errors->has('duration'))
                             <div class="invalid-feedback">{{ $errors->first('duration') }}</div>
                             @endif
@@ -241,7 +241,7 @@ tbody td{
                                 value="{{ @old('grace_period') }}"
                              @endif 
 
-                            type="text" step="any" id="grace_periodid" name="grace_period" class="form-control number  grace-period-class grace_period_calc installment_condition" placeholder="{{__('Grace Period')}} .." />
+                            type="text" step="any" id="grace_periodid" name="grace_period" class="form-control number grace-period-class grace_period_calc installment_condition" placeholder="{{__('Grace Period')}} .." />
                             @if ($errors->has('grace_period'))
                             <div class="invalid-feedback">{{ $errors->first('grace_period') }}</div>
                             @endif
@@ -488,7 +488,7 @@ tbody td{
                 </div>
                 <div class="col-md-5">
                     <div class="form-group validated">
-                        <label class="col-form-label take " id="interest_label">
+                        <label class="col-form-label take" id="interest_label">
                             {{@old('loan_type') == 'variable'? __('Interest Margin') : __('Interest')}}
                             <span class="astric">*</span>
                         </label>
@@ -666,7 +666,7 @@ tbody td{
                         </div>
                            @if(isset($longTermFunding->financial_id))
                          <div class="{{__('left')}}">
-                            <a href="{{route('fundingPlans.index',['company_id'=>$company->id , 'financial_id'=>$longTermFunding->financial_id])}}" class="btn btn-success  btn-sm" > {{__('Return To Funding Plan')}} </a>
+                            <a href="{{route('fundingPlans.index',['company_id'=>$company->id , 'financial_id'=>$longTermFunding->financial_id])}}" class="btn btn-success btn-sm" > {{__('Return To Funding Plan')}} </a>
                         </div>
                         @endif 
                         

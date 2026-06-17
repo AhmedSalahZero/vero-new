@@ -137,7 +137,7 @@
                 </div>
 
                 @if($type =='fixed')
-                <div class="col-md-4  item-main-parent">
+                <div class="col-md-4 item-main-parent">
                     <div class="form-group validated">
                         <label class="col-form-label take">
                             {{__('Tenor (Duration In Months) ')}}
@@ -304,7 +304,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group validated">
-                        <label class="col-form-label take " id="interest_label">
+                        <label class="col-form-label take" id="interest_label">
                             {{@old('loan_type') == 'variable'? __('Interest Margin') : __('Interest')}}
                             <span class="astric">*</span>
                         </label>

@@ -65,7 +65,7 @@
 <div class="kt-portlet kt-portlet--tabs">
    
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             @php
@@ -99,7 +99,7 @@
                     @if ($day_name != 'Total' && $day_name != 'Growth Rate %')
 
                 
-                    <tr class="group-color ">
+                    <tr class="group-color">
                         {{-- <td class="text-center" style="cursor: pointer;"
                                             onclick="toggleRow('{{ $id }}')"><i class="row_icon{{ $id }} flaticon2-up white-text"></i>
                         </td> --}}
@@ -126,7 +126,7 @@
                     @endphp
                     @foreach ($day_channels_data as $channel_name => $channel_section)
 
-                    <tr class="row{{ $id }}  text-center" style="display: none">
+                    <tr class="row{{ $id }} text-center" style="display: none">
                         {{-- <td></td> --}}
                         <td class="text-left"><b>{{ $channel_name  }}</b></td>
 

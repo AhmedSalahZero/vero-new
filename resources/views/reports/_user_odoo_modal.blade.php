@@ -1,5 +1,5 @@
  @if($company->hasOdooIntegrationCredentials() && $model->hasOdooError() )
- <a data-toggle="modal" data-target="#odoo-model-{{ $model->id }}" type="button" class="btn  btn-icon bg-red text-white" title="{{ __('Odoo Error') }}" href="#"><i class="fa fa-bug "></i></a>
+ <a data-toggle="modal" data-target="#odoo-model-{{ $model->id }}" type="button" class="btn btn-icon bg-red text-white" title="{{ __('Odoo Error') }}" href="#"><i class="fa fa-bug"></i></a>
  <div class="modal fade" id="odoo-model-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
          <div class="modal-content">

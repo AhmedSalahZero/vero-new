@@ -77,9 +77,9 @@
                     @endif
                     <div class="form-group row">
 					@if(isset(get_defined_vars()['__data']['type']) && get_defined_vars()['__data']['type'] !='averagePrices' &&get_defined_vars()['__data']['type']!='averagePricesProductItems')
-					 <div class="col-md-4  first-interval">
+					 <div class="col-md-4 first-interval">
 						<label></label>
-                            <div class="flex-center "><label class="first-interval">{{ __('First Interval') }}</label></div>
+                            <div class="flex-center"><label class="first-interval">{{ __('First Interval') }}</label></div>
                         
                         </div>
 @endif

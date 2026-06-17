@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 @php
 	use Carbon\Carbon ;
 @endphp
@@ -114,7 +113,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ __('Cash Flow Report') }}</x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <div class="kt-portlet">
@@ -266,13 +265,13 @@
 
 
                
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
 			
 
                     <div class="responsive">
                         <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                             <thead>
-                                <tr class="header-tr ">
+                                <tr class="header-tr">
                                     <th rowspan="{{ $noRowHeaders }}" class="view-table-th expand-all is-open-parent header-th editable-date max-w-classes-expand align-middle text-center trigger-child-row-1">
                                         {{ __('Expand All' ) }}
                                         <span>+</span>
@@ -280,7 +279,7 @@
                                     <th rowspan="{{ $noRowHeaders }}" class="view-table-th header-th max-w-classes-name align-middle text-center">
                                         {{ __('Item') }}
                                     </th>
-                                    <th class="view-table-th @if($reportInterval == 'weekly') bg-lighter @endif max-w-weeks header-th  align-middle text-center">
+                                    <th class="view-table-th @if($reportInterval == 'weekly') bg-lighter @endif max-w-weeks header-th align-middle text-center">
                                         @if($reportInterval == 'weekly')
 										{{ __('Week Num') }}
 										@elseif($reportInterval == 'monthly')
@@ -304,7 +303,7 @@
 									@elseif($reportInterval == 'monthly')
 									
 									@foreach($months as $month)
-									 <th class="view-table-th  header-th max-w-weeks align-middle text-center">
+									 <th class="view-table-th header-th max-w-weeks align-middle text-center">
 									 	@if($loop->first || $loop->last)
 										<span class="d-block">{{ Carbon::make($month)->format('d-m-Y') }}</span>
 										@else 
@@ -317,7 +316,7 @@
 										@elseif($reportInterval == 'daily')
 									
 										@foreach($days as   $day)
-										<th class="view-table-th  header-th max-w-weeks align-middle text-center">
+										<th class="view-table-th header-th max-w-weeks align-middle text-center">
 											<span class="d-block">{{ Carbon::make($day)->format('d-m-Y') }}</span>
 										</th>
 										@endforeach 
@@ -329,27 +328,27 @@
 
                                 </tr>
 				@if($reportInterval == 'weekly')
-                                <tr class="header-tr ">
+                                <tr class="header-tr">
 
 
-                                    <th class="view-table-th header-th max-w-weeks  align-middle text-center" class="header-th">
+                                    <th class="view-table-th header-th max-w-weeks align-middle text-center" class="header-th">
                                         {{ __('Start Date') }}
                                     </th>
                                     @foreach($dates as $index=>$startAndEndDate)
-                                    <th class="view-table-th header-th max-w-weeks text-nowrap  align-middle text-center">{{ $startAndEndDate['start_date'] }}</th>
+                                    <th class="view-table-th header-th max-w-weeks text-nowrap align-middle text-center">{{ $startAndEndDate['start_date'] }}</th>
                                     @endforeach
 
 
                                 </tr>
 
 
-                                <tr class="header-tr ">
+                                <tr class="header-tr">
 
-                                    <th class="view-table-th header-th max-w-weeks  align-middle text-center" class="header-th">
+                                    <th class="view-table-th header-th max-w-weeks align-middle text-center" class="header-th">
                                         {{ __('End Date') }}
                                     </th>
                                       @foreach($dates as $index=>$startAndEndDate)
-                                    <th class="view-table-th header-th text-nowrap max-w-weeks  align-middle text-center">{{ $startAndEndDate['end_date'] }}</th>
+                                    <th class="view-table-th header-th text-nowrap max-w-weeks align-middle text-center">{{ $startAndEndDate['end_date'] }}</th>
                                     @endforeach
 
 
@@ -378,10 +377,10 @@
                                 $hasSubRows = count($customerAging['invoices']??[]) ;
                                 $currentTotal = $customerAging['total'] ?? 0 ;
                                 @endphp
-                                <tr class=" @if($customerName == 'Total Cash Inflow' || $customerName == 'Total Cash Outflow') bg-lighter @else  @endif  parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   " data-model-id="{{ $rowIndex }}">
+                                <tr class="@if($customerName == 'Total Cash Inflow' || $customerName == 'Total Cash Outflow') bg-lighter @else @endif parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close" data-model-id="{{ $rowIndex }}">
                                     <td class="red reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize main-tr is-close"> @if($hasSubRows) + @endif  </td>
-                                    <td class="sub-text-bg   editable-text  max-w-classes-name is-name-cell ">{{ $customerName }}</td>
-                                    <td class="  sub-numeric-bg text-center editable-date"> 
+                                    <td class="sub-text-bg editable-text max-w-classes-name is-name-cell">{{ $customerName }}</td>
+                                    <td class="sub-numeric-bg text-center editable-date"> 
 										@if($customerName == 'Customers Past Due Invoices')
 										<button   class="btn btn-sm btn-warning text-white js-show-customer-due-invoices-modal">{{ __('View') }}</button>
                                                 <x-modal.due-invoices :contractCode="$contractCode" :currencyName="$currencyName" :cashflowReport="isset($cashflowReport) ? $cashflowReport:null" :report-interval="$reportInterval" :currentInvoiceType="'CustomerInvoice'" :dates="$dates" :weeks="$weeks" :pastDueCustomerInvoices="$pastDueCustomerInvoices" :id="'test-modal-id'"></x-modal.due-invoices>
@@ -442,9 +441,9 @@
 									}
                                     $currentPercentage = $currentValue && $currentTotal ? $currentValue/ $currentTotal * 100 : 0 ;
                                     @endphp
-                                    <td class="  sub-numeric-bg text-center editable-date">{{ number_format($currentValue,0) }}</td>
+                                    <td class="sub-numeric-bg text-center editable-date">{{ number_format($currentValue,0) }}</td>
                                     @endforeach
-                                    <td class="  sub-numeric-bg text-center editable-date">
+                                    <td class="sub-numeric-bg text-center editable-date">
 									{{ number_format($result[$customerName]['total'][$year] ?? 0 ) }}
 									
 									</td>
@@ -523,7 +522,7 @@
                         $('.arrow-nav').css('top', top + 'px')
                     })
                     if ($('.kt-portlet__body').length) {
-                        $('.kt-portlet__body').append(`<i class="cursor-pointer text-dark arrow-nav  arrow-left fa fa-arrow-left"></i> <i class="cursor-pointer text-dark arrow-nav arrow-right fa  fa-arrow-right"></i>`)
+                        $('.kt-portlet__body').append(`<i class="cursor-pointer text-dark arrow-nav arrow-left fa fa-arrow-left"></i> <i class="cursor-pointer text-dark arrow-nav arrow-right fa fa-arrow-right"></i>`)
                         $(document).on('click', '.arrow-nav', function() {
                             const scrollLeftOfTableBody = document.querySelector('.kt-portlet__body').scrollLeft
                             const scrollByUnit = 50

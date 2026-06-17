@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
     .custom-w-25 {
         width: 23% !important;
@@ -136,7 +135,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ __('Invoices Table') . '[ '. $partnerName .' ] '.'[ '. $currency .' ]' }}</x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -303,7 +302,7 @@
 
                 </div>
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
 
 
                     <div>
@@ -315,14 +314,14 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th max-w-serial bg-lighter header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-serial bg-lighter header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
                                         @if($hasProjectNameColumn)
-                                        <th class="view-table-th   bg-lighter header-th  align-middle text-center">
+                                        <th class="view-table-th bg-lighter header-th align-middle text-center">
                                             {{ __('Project Name') }}
                                         </th>
                                         @endif
@@ -330,16 +329,16 @@
                                         @include('admin.reports.invoice-report-th',['totalCollectionOrPaidText'=>$totalCollectionOrPaidText])
                                       
 
-                                        <th class="view-table-th   bg-lighter  header-th  align-middle text-center">
+                                        <th class="view-table-th bg-lighter header-th align-middle text-center">
                                             {{ __('Adjust Due Date') }}
                                         </th>
 
-                                        <th class="view-table-th   bg-lighter  header-th  align-middle text-center">
+                                        <th class="view-table-th bg-lighter header-th align-middle text-center">
                                             {{ __('Deductions') }}
                                         </th>
 
 
-                                        <th class="view-table-th   bg-lighter  header-th  align-middle text-center">
+                                        <th class="view-table-th bg-lighter header-th align-middle text-center">
                                             {{ __('Actions') }}
                                         </th>
                                     </tr>
@@ -353,13 +352,13 @@
 
 
                                     @foreach($invoices as $index=>$invoice)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
                                         @if($hasProjectNameColumn)
-                                        <td class="sub-text-bg text-center  text-nowrap ">{{ $invoice->getProjectName() }}</td>
+                                        <td class="sub-text-bg text-center text-nowrap">{{ $invoice->getProjectName() }}</td>
                                         @endif
                                          @include('admin.reports.invoice-report-td',['company'=>$company,'currency'=>$currency,'invoice'=>$invoice])
-                                        <td class="sub-text-bg  text-center">
+                                        <td class="sub-text-bg text-center">
                                             @if(!$invoice->$isCollectedOrPaid())
                                             <a href="{{ route('adjust.due.dates',['company'=>$company->id,'modelId'=>$invoice->id ,'modelType'=>getModelNameWithoutNamespace($invoice) ]) }}" title="{{ __('Adjust Due Date') }}" class="btn btn-sm btn-success" @if($invoice->dueDateHistories->count())
                                                 style="background-color:orange !important;color:black !important;border-color:white !important;"
@@ -369,7 +368,7 @@
                                                 >{{ $invoice->dueDateHistories->count() ? __('Adjusted') : __('Adjust Due Date') }}</a>
                                             @endif
                                         </td>
-                                        <td class="sub-text-bg  text-center">
+                                        <td class="sub-text-bg text-center">
                                             @if(!$invoice->$isCollectedOrPaid())
                                             <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#add-new-customer-modal-{{ $invoice->id }}">
                                                 {{ __('Deduct') }}
@@ -443,9 +442,9 @@
 
                                         <td>
 
-                                            <div class="kt-input-icon ">
+                                            <div class="kt-input-icon">
                                                 <div class="input-group date custom-w-100">
-                                                    <input type="text" name="date" value="{{ isset($deductionWithPivot) ? formatDateForDatePicker($deductionWithPivot->pivot->date) : formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control is-date-css refresh-datepicker-js  kt_datepicker_max_date_is_today" readonly placeholder="Select date" />
+                                                    <input type="text" name="date" value="{{ isset($deductionWithPivot) ? formatDateForDatePicker($deductionWithPivot->pivot->date) : formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control is-date-css refresh-datepicker-js kt_datepicker_max_date_is_today" readonly placeholder="Select date" />
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">
                                                             <i class="la la-calendar-check-o"></i>
@@ -484,7 +483,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                            <button type="submit" class="btn btn-primary submit-form-btn ">{{ __('Save') }}</button>
+                            <button type="submit" class="btn btn-primary submit-form-btn">{{ __('Save') }}</button>
                         </div>
                         </form>
                     </div>
@@ -496,23 +495,23 @@
         {{-- @endif --}}
         </td>
 
-        <td class="sub-text-bg  text-center">
+        <td class="sub-text-bg text-center">
             @if(!$invoice->$isCollectedOrPaid())
             <a href="{{ route($moneyReceivedOrPaidUrlName,['company'=>$company->id,'model'=>$invoice->id ]) }}" title="{{ $moneyReceivedOrPaidText }}" class="btn btn-sm btn-primary">{{ $moneyReceivedOrPaidText }}</a>
             @endif
         </td>
 
 
-        {{-- <td class="sub-text-bg  text-center">
+        {{-- <td class="sub-text-bg text-center">
                                             @if(!$invoice->$isCollectedOrPaid())
                                             <a href="{{ route('create.settlement.by.unapplied.amounts',['company'=>$company->id,'customerInvoiceId'=>$invoice->id,'modelType'=>$modelType ]) }}" title="{{ __('Settlement') }}" class="btn btn-sm btn-primary">{{ __('Settlement') }}</a>
         @endif
         </td> --}}
 
-        {{-- <td class="  sub-numeric-bg text-center editable-date"></td> --}}
+        {{-- <td class="sub-numeric-bg text-center editable-date"></td> --}}
 
 
-        {{-- <td class="  sub-numeric-bg text-center editable-date">{{ number_format($result[$customerName]['total'][$year] ?? 0 ) }}</td> --}}
+        {{-- <td class="sub-numeric-bg text-center editable-date">{{ number_format($result[$customerName]['total'][$year] ?? 0 ) }}</td> --}}
 
         </tr>
 

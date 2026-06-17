@@ -1,4 +1,4 @@
-<div class="modal fade " id="{{ $currentModalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{ $currentModalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <form action="#" class="modal-content" method="post">
 
@@ -22,9 +22,7 @@
                              
 							
 								@foreach($yearWithItsIndexes as $currentYearIndex=> $monthInfos )
-								<th class="text-center 
-								{{-- w-15-percentage --}}
-								 text-capitalize th-main-color">
+								<th class="text-center {{-- w-15-percentage --}} text-capitalize th-main-color">
 								{{ $yearIndexWithYear[$currentYearIndex] }}
 								</th>
 								@endforeach
@@ -43,7 +41,7 @@
 							@endif 
                             <tr>
                                 <td class="w-20-percentage">
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" step="0.1" class="form-control ignore-global-style" value="{{ $expenseName }}">
                                         </div>
@@ -56,17 +54,15 @@
 								$currentSalesRevenue = $formattedResult['sales_revenue'][$currentYearIndex]??0;
 								$currentPercentageOfSales = $currentSalesRevenue ?  $currentExpenseValue /  $currentSalesRevenue * 100 : 0;
 							@endphp
-                                <td class="
-								{{-- w-10-percentage --}}
-								">
-                                    <div class="d-flex align-items-center ">
-									<div class="kt-input-icon ">
+                                <td class="{{-- w-10-percentage --}}">
+                                    <div class="d-flex align-items-center">
+									<div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" class="form-control text-center ignore-global-style" value="{{  number_format($currentExpenseValue/getDivisionNumber(),2) }}">
                                         </div>
                                     </div>
 									
-									 <div class="kt-input-icon ml-2 ">
+									 <div class="kt-input-icon ml-2">
                                         <div class="input-group">
                                             <input disabled type="text" class="form-control text-center ignore-global-style" value="{{  number_format($currentPercentageOfSales,2) . ' %' }}">
                                         </div>
@@ -90,9 +86,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary 
-				{{-- submit-form-btn --}}
-				" data-dismiss="modal">{{ __('Close') }}</button>
+                <button type="button" class="btn btn-primary {{-- submit-form-btn --}}" data-dismiss="modal">{{ __('Close') }}</button>
             </div>
         </form>
     </div>

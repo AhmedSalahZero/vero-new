@@ -56,21 +56,21 @@ use App\Helpers\HArr;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 		
 			  @php
             $currentType = FixedAssetName::FIXED_ASSET ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 						@php
                         $rowIndex = 0;
                         @endphp
                         <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                             <x-slot name="ths">
-                                <x-tables.repeater-table-th class="  header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
-                                <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Actions')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down first-column-th-class" :title="__('Name')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Actions')"></x-tables.repeater-table-th>
                             </x-slot>
                             <x-slot name="trs">
 
@@ -86,14 +86,14 @@ use App\Helpers\HArr;
                                         <div class="row">
 										
 											 <div class="col-md-6">
-											 <input value="{{ $model->getName() }}" disabled class="form-control text-left " type="text">
+											 <input value="{{ $model->getName() }}" disabled class="form-control text-left" type="text">
 											 </div>
 											
 											<div class="col-md-3">
 											@php
 												$text = $model->isEmployeeAsset() ? __('Is Employee Asset') : '-';
 											@endphp
-											 <input value="{{ $text }}" disabled class="form-control text-left " type="text">
+											 <input value="{{ $text }}" disabled class="form-control text-left" type="text">
 											</div>
 											
 											
@@ -101,13 +101,13 @@ use App\Helpers\HArr;
 											@php
 												$text = $model->isBranchAsset() ? __('Is Branch Asset') : '-';
 											@endphp
-                                            <input value="{{ $text }}" disabled class="form-control text-left " type="text">
+                                            <input value="{{ $text }}" disabled class="form-control text-left" type="text">
 											</div>
                                            
                                         </div>
                                     </td>
 									
-									  <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+									  <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											{{-- @if(hasAuthFor('update lc settlement internal transfer')) --}}
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon edit-btn-class" title="{{ __('Edit') }}" href="{{ route('non.banking.edit.fixed.asset.names',['company'=>$company->id,'fixedAssetName'=>$model->id]) }}"><i class="fa fa-pen-alt exclude-icon default-icon-color" ></i></a>

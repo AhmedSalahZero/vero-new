@@ -48,7 +48,7 @@
                                             <div class="kt-input-icon">
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select data-live-search="true" data-actions-box="true" name="expense_type" class="form-control select2-select ">
+                                                        <select data-live-search="true" data-actions-box="true" name="expense_type" class="form-control select2-select">
                                                             @foreach(getExpenseTypes() as $id => $title )
                                                             <option @if( isset($inEditMode) && $expenseType == $id ) selected @endif value="{{ $id }}">{{$title}}</option>
                                                             @endforeach
@@ -65,7 +65,7 @@
                                     </div>
                                 </div> --}}
                                 <div id="fixedAssetNames" class="leasing-repeater-parent">
-                                    <div class="form-group2  m-form__group2 row">
+                                    <div class="form-group2 m-form__group2 row">
                                         <div data-repeater-list="fixedAssetNames" class="col-lg-12">
                                             @include('property_managements.fixed-asset-structure._repeater' , [
 												'tableId'=>'fixedAssetNames',

@@ -10,7 +10,7 @@
 <div class="d-flex mt-4">
     <div class="col-md-12">
         <div class="kt-header-menu-wrapper">
-            <div class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-tab ">
+            <div class="kt-header-menu kt-header-menu-mobile kt-header-menu--layout-tab">
                 <ul class="kt-menu__nav">
                     @foreach($navigators as $name=>$nagivatorOptions)
 
@@ -18,7 +18,7 @@
 
 
                     @else
-                    <li class="kt-menu__item  kt-menu__item" aria-haspopup="true">
+                    <li class="kt-menu__item kt-menu__item" aria-haspopup="true">
                         <a href="{{ $nagivatorOptions['link'] }}" class="kt-menu__link active-button">
                             <span class="kt-menu__link-text active-text">{{ $nagivatorOptions['name'] }}</span>
                         </a>

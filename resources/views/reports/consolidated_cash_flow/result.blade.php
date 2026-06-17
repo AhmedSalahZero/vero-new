@@ -3,7 +3,6 @@
 <x-styles.commons></x-styles.commons>
 @endpush
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 @include('reports.consolidated_cash_flow.styles')
 @endsection
 @section('sub-header')
@@ -26,7 +25,7 @@
 @endphp
 
 @section('content')
-<div class="money-flow-dark ccf-print-wrap" dir="{{ $dir }}">
+<div class="ccf-print-wrap" dir="{{ $dir }}">
     <div class="row no-print ccf-actions">
         <div class="col-md-12">
             <a href="{{ route('reports.consolidated-cash-flow.index', ['company' => $company->id]) }}" class="btn btn-secondary">{{ __('Back') }}</a>

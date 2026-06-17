@@ -83,6 +83,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User withoutRole($roles, $guard = null)
+ * @property int|null $odoo_id
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\User whereOdooId($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements HasMedia

@@ -220,7 +220,7 @@ $user = auth()->user();
         <div class="kt-portlet__body table-responsive">
 
             <!--begin: Datatable -->
-            <table class="table table-striped- table-bordered table-hover table-checkable exclude-table ">
+            <table class="table table-striped- table-bordered table-hover table-checkable exclude-table">
 
                 <thead>
                     <tr class="table-active remove-max-class text-center">
@@ -368,8 +368,8 @@ $user = auth()->user();
     if ($('div.kt-portlet__body').length) {
 
         $('div.kt-portlet__body').append(`
-								<i class="cursor-pointer text-dark arrow-nav  arrow-left fa fa-arrow-left"></i>
-								<i class="cursor-pointer text-dark arrow-nav arrow-right fa  fa-arrow-right"></i>
+								<i class="cursor-pointer text-dark arrow-nav arrow-left fa fa-arrow-left"></i>
+								<i class="cursor-pointer text-dark arrow-nav arrow-right fa fa-arrow-right"></i>
 								`)
 
 

@@ -24,14 +24,14 @@ $titleFormatted = [
             @endphp
 
             <div class="table-responsive">
-                <table class="table table-white repeater-class repeater ">
+                <table class="table table-white repeater-class repeater">
                     <thead>
                         <tr>
-                            <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Name') !!}</th>
+                            <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Name') !!}</th>
                             @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
 
 
-                            <th data-column-index="{{ $yearOrMonthAsIndex }}" class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Loan <br> Amount') !!}</th>
+                            <th data-column-index="{{ $yearOrMonthAsIndex }}" class="form-label font-weight-bold text-center align-middle header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Loan <br> Amount') !!}</th>
 
                             @php
                             $dateAsString = $dateIndexWithDate[$yearOrMonthAsIndex];
@@ -44,14 +44,14 @@ $titleFormatted = [
 
 
                             @if($study->isMonthlyStudy() && ($study->getFinancialYearEndMonthNumber() == $currentMonthNumber || $loop->last))
-                            <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class="tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
                             @php
                             $currentYearRepeaterIndex ++;
                             @endphp
                             @endif
 
                             @endforeach
-                            <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{{ __('Total') }}</th>
+                            <th class="form-label font-weight-bold text-center align-middle header-border-down">{{ __('Total') }}</th>
 
                         </tr>
                     </thead>
@@ -233,12 +233,12 @@ $fundedByFormatted = [
             $currentYearRepeaterIndex = 0 ;
             @endphp
             <div class="table-responsive">
-                <table class="table table-white repeater-class repeater ">
+                <table class="table table-white repeater-class repeater">
                     <thead>
                         <tr>
-                            <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Name') !!}</th>
+                            <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Name') !!}</th>
                             @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                            <th data-column-index="{{ $yearOrMonthAsIndex }}" class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Loan <br> Amount') !!}</th>
+                            <th data-column-index="{{ $yearOrMonthAsIndex }}" class="form-label font-weight-bold text-center align-middle header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Loan <br> Amount') !!}</th>
 
                             @php
                             $dateAsString = $dateIndexWithDate[$yearOrMonthAsIndex];
@@ -246,14 +246,14 @@ $fundedByFormatted = [
                             $currentYear= explode('-',$dateAsString)[0];
                             @endphp
                             @if($study->isMonthlyStudy() && ($study->getFinancialYearEndMonthNumber() == $currentMonthNumber || $loop->last))
-                            <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class="tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
                             @php
                             $currentYearRepeaterIndex ++;
                             @endphp
                             @endif
 
                             @endforeach
-                            <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{{ __('Total') }}</th>
+                            <th class="form-label font-weight-bold text-center align-middle header-border-down">{{ __('Total') }}</th>
 
                         </tr>
                     </thead>
@@ -402,12 +402,12 @@ $fundedByFormatted = [
 
 @if(!isset($hideFundingStructure))
 
-<div class="kt-portlet  " id="loan-portfolio">
+<div class="kt-portlet" id="loan-portfolio">
     <div class="kt-portlet__body">
         <div class="row">
 
             <div class="col-md-10">
-                <div class="d-flex align-items-center ">
+                <div class="d-flex align-items-center">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                         {{ __('Microfinance New Portfolio Funding Structure') . ' [ ' . $fundedByFormatted . ' ]' }}
                     </h3>
@@ -428,9 +428,9 @@ $fundedByFormatted = [
 
             <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                 <x-slot name="ths">
-                    <x-tables.repeater-table-th class="  header-border-down " :title="__('Item')"></x-tables.repeater-table-th>
+                    <x-tables.repeater-table-th class="header-border-down" :title="__('Item')"></x-tables.repeater-table-th>
                     @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                    <x-tables.repeater-table-th data-column-index="{{ $yearOrMonthAsIndex }}" class="  header-border-down " :title="$yearOrMonthFormatted"></x-tables.repeater-table-th>
+                    <x-tables.repeater-table-th data-column-index="{{ $yearOrMonthAsIndex }}" class="header-border-down" :title="$yearOrMonthFormatted"></x-tables.repeater-table-th>
 
 
 
@@ -445,13 +445,13 @@ $fundedByFormatted = [
                     @endphp
 
                     @if($study->isMonthlyStudy() && ($study->getFinancialYearEndMonthNumber() == $currentMonthNumber || $loop->last))
-                    <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+                    <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class="tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
                     @php
                     $currentYearRepeaterIndex ++;
                     @endphp
                     @endif
                     @endforeach
-                    <x-tables.repeater-table-th class="  header-border-down " :title="__('Total')"></x-tables.repeater-table-th>
+                    <x-tables.repeater-table-th class="header-border-down" :title="__('Total')"></x-tables.repeater-table-th>
                 </x-slot>
                 <x-slot name="trs">
 
@@ -525,7 +525,7 @@ $fundedByFormatted = [
 
 
                         <td>
-                            <input value="{{ __('Equity Funding Rate (%)') }}" disabled class="form-control  text-left mt-2" type="text">
+                            <input value="{{ __('Equity Funding Rate (%)') }}" disabled class="form-control text-left mt-2" type="text">
 
                         </td>
                         @php
@@ -574,7 +574,7 @@ $fundedByFormatted = [
                         @endforeach
                         <td>
                             <div class="d-flex align-items-center justify-content-center">
-                                <input type="text" class="form-control expandable-amount-input  sum-percentage-css" disabled value="-">
+                                <input type="text" class="form-control expandable-amount-input sum-percentage-css" disabled value="-">
                             </div>
                         </td>
 
@@ -589,7 +589,7 @@ $fundedByFormatted = [
 
 
                         <td>
-                            <input value="{{ __('Equity Funding Value') }}" disabled class="form-control  text-left mt-2" type="text">
+                            <input value="{{ __('Equity Funding Value') }}" disabled class="form-control text-left mt-2" type="text">
 
                         </td>
                         @php
@@ -694,7 +694,7 @@ $fundedByFormatted = [
 
                         <td>
                             <div class="d-flex align-items-center justify-content-center">
-                                <input type="text" class="form-control expandable-amount-input  sum-percentage-css" disabled value="-">
+                                <input type="text" class="form-control expandable-amount-input sum-percentage-css" disabled value="-">
                             </div>
                         </td>
 

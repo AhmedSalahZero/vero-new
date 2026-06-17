@@ -54,7 +54,7 @@ i.exclude-icon{
 
 
                 <a href="{{ route('property.management.create.tenants',['company'=>$company->id]) }}" class="btn btn-2-bg bg-white-hover new-study-item rounded btn-icon-sm align-self-center">
-                    <i class="fas fa-plus white-icon "></i>
+                    <i class="fas fa-plus white-icon"></i>
                     {{ __('New Tenant') }}
                 </a>
 
@@ -65,7 +65,7 @@ i.exclude-icon{
 
         </div>
     </div>
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') ?'active':'' }}" id="{{ 'running' }}" role="tabpanel">
@@ -81,32 +81,32 @@ i.exclude-icon{
                            
                             @endslot
                             @slot('table_body')
-                            <tr class=" text-center first-tr-bg ">
-                                <th class=" form-label font-weight-bold  text-center align-middle   header-border-down first-column-th-class">
-                                    <div class="d-flex align-items-center justify-content-center ">
+                            <tr class="text-center first-tr-bg">
+                                <th class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class">
+                                    <div class="d-flex align-items-center justify-content-center">
                                         <span class="">{{ __('Name') }}</span>
                                     </div>
                                 </th>
-								<th class=" form-label font-weight-bold  text-center align-middle   header-border-down first-column-th-class">
-                                    <div class="d-flex align-items-center justify-content-center ">
+								<th class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class">
+                                    <div class="d-flex align-items-center justify-content-center">
                                         <span class=""> {{ __('Nature') }}</span>
                                     </div>
                                 </th>
-								<th class=" form-label font-weight-bold  text-center align-middle   header-border-down first-column-th-class">
-                                    <div class="d-flex align-items-center justify-content-center ">
+								<th class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class">
+                                    <div class="d-flex align-items-center justify-content-center">
                                         <span class=""> {{ __('Business Sector') }}</span>
                                     </div>
                                 </th>
-								<th class=" form-label font-weight-bold  text-center align-middle   header-border-down first-column-th-class">
-                                    <div class="d-flex align-items-center justify-content-center ">
+								<th class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class">
+                                    <div class="d-flex align-items-center justify-content-center">
                                         <span class=""> {{ __('Related Party') }}</span>
                                     </div>
                                 </th>
 
 
 
-                                <th class=" form-label font-weight-bold  text-center align-middle   header-border-down first-column-th-class">
-                                    <div class="d-flex align-items-center justify-content-center ">
+                                <th class="form-label font-weight-bold text-center align-middle header-border-down first-column-th-class">
+                                    <div class="d-flex align-items-center justify-content-center">
                                         <span class=""> {{ __('Actions') }}</span>
                                     </div>
                                 </th>
@@ -120,9 +120,9 @@ i.exclude-icon{
                             $tenant =$tenant ;
                             @endphp
                             <tr class="group-color main-row-tr">
-                                <td class="black-text " style="cursor: pointer;" onclick="toggleRow('{{ $tenant->id }}')">
-                                    <div class="d-flex align-items-center ">
-                                        <b class="text-capitalize ">{{ str_to_upper($tenant->getName()) }}</b>
+                                <td class="black-text" style="cursor: pointer;" onclick="toggleRow('{{ $tenant->id }}')">
+                                    <div class="d-flex align-items-center">
+                                        <b class="text-capitalize">{{ str_to_upper($tenant->getName()) }}</b>
                                     </div>
                                 </td>
 								<td class="text-left text-capitalize">
@@ -154,7 +154,7 @@ i.exclude-icon{
                                     <b class="ml-3">
 
                                         <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('property.management.edit.tenants', ['company'=>$company->id,'tenant'=>$tenant->id]) }}"><i class="fa exclude-icon fa-pen-alt"></i></a>
-                                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $tenant->id }}" title="Delete"><i class="fa exclude-icon fa-trash-alt"></i>
+                                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $tenant->id }}" title="Delete"><i class="fa exclude-icon fa-trash-alt"></i>
                                         </a>
 
                                         <div id="modal-delete-{{ $tenant->id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -199,8 +199,8 @@ i.exclude-icon{
 
 
 
-                            <tr class="row{{ $mainItemId }}  text-center sub-item-row" style="display: none">
-                                <td colspan="5" class="text-left  text-capitalize">
+                            <tr class="row{{ $mainItemId }} text-center sub-item-row" style="display: none">
+                                <td colspan="5" class="text-left text-capitalize">
                                     <table class="table ml-3 table-borderless">
 
                                         <tr>

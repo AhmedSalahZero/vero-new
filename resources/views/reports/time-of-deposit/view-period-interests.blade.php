@@ -314,7 +314,7 @@ use Carbon\Carbon;
 
                     <div class="kt-portlet__body with-scroll pt-0">
 
-                        <div class="table-custom-container position-relative  ">
+                        <div class="table-custom-container position-relative">
 
 
                             <div>
@@ -323,27 +323,27 @@ use Carbon\Carbon;
 
 
                                 <div class="responsive">
-                                    <table class="table kt_table_with_no_pagination_no_collapse table-for-currency  table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency dataTable no-footer">
+                                    <table class="table kt_table_with_no_pagination_no_collapse table-for-currency table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency dataTable no-footer">
                                         <thead>
 
-                                            <tr class="header-tr ">
+                                            <tr class="header-tr">
 
-                                                <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-serial header-th align-middle text-center">
                                                     {{ __('#') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-name  max-w-invoice-date header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-invoice-date header-th align-middle text-center">
                                                     {{ __('Date') }}
                                                 </th>
 
                                                 
 
-                                                <th class="view-table-th max-w-name  max-w-counts header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-counts header-th align-middle text-center">
                                                     {{ __('Amount') }}
                                                 </th>
 
 
-                                                <th class="view-table-th max-w-name max-w-action  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-action header-th align-middle text-center">
                                                     {{ __('Actions') }}
                                                 </th>
 
@@ -364,17 +364,17 @@ use Carbon\Carbon;
 											@php
 												$deleteRouteAction = $model instanceOf \App\Models\TimeOfDeposit ? route('delete.period.interest.to.time.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id,'timeOfDeposit'=>$model->id,'currentAccountBankStatement'=>$row->id]) : route('delete.period.interest.to.certificates.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id,'certificatesOfDeposit'=>$model->id,'currentAccountBankStatement'=>$row->id]);
 											@endphp
-                                            <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                                <td class="sub-text-bg max-w-serial text-center   ">{{ ++$index }}</td>
+                                            <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                                <td class="sub-text-bg max-w-serial text-center">{{ ++$index }}</td>
                                                 @php
                                                 $previousDate = $row->date;
                                                 @endphp
-                                                <td class="sub-text-bg  text-center max-w-counts ">{{ $row->date }} </td>
-                                                <td class="sub-text-bg  text-center max-w-counts ">{{ number_format($row->debit,2) . ' ' . $model->getCurrency() }}</td>
-                                                <td class="sub-text-bg  text-center max-w-action   ">
+                                                <td class="sub-text-bg text-center max-w-counts">{{ $row->date }} </td>
+                                                <td class="sub-text-bg text-center max-w-counts">{{ number_format($row->debit,2) . ' ' . $model->getCurrency() }}</td>
+                                                <td class="sub-text-bg text-center max-w-action">
 													@include('reports._integrated_modal',['model'=>$row])
 												
-                                                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $row['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $row['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>
                                                     </a>
                                                     <div id="modal-delete-{{ $row['id'] }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                                         <div class="modal-dialog">

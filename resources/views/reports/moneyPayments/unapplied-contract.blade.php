@@ -1,4 +1,4 @@
-<div class="row " id="contract-row-id">
+<div class="row" id="contract-row-id">
     <div class="col-12">
         <hr>
     </div>
@@ -27,7 +27,7 @@
 
                     <div class="js-down-payment-template hidden">
                         <div class="col-md-12 js-duplicate-node">
-                            <div class=" kt-margin-b-10 border-class">
+                            <div class="kt-margin-b-10 border-class">
                                 @include('reports.moneyPayments._down-payments-purchase-orders')
                             </div>
                         </div>

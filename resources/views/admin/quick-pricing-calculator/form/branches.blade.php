@@ -3,20 +3,8 @@
 				@endphp
 
 
-				<div @if($isRepeater) data-repeater-item @endif class="form-group m-form__group row align-items-center 
-										 @if($isRepeater)
-										 repeater_item
-										 @endif 
-										 
-										 ">
-				    <div class="
-					@if(isset($onlyTotal) && $onlyTotal)
-					col-md-6
-					@else 
-					col-md-3
-					@endif 
-					
-					">
+				<div @if($isRepeater) data-repeater-item @endif class="form-group m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
+				    <div class="@if(isset($onlyTotal) && $onlyTotal) col-md-6 @else col-md-3 @endif">
 				        @if(isset($onlyTotal) && $onlyTotal)
 				        <label class="form-label font-weight-bold">{{ __('Branch Name') }}</label>
 				        <select name="branches[0][name]" class="form-control">
@@ -55,7 +43,7 @@
 				        <label class="form-label font-weight-bold">{{ __('Seats Count') }} </label>
 				        <div class="kt-input-icon">
 				            <div class="input-group">
-				                <input type="number" class="form-control only-greater-than-or-equal-zero-allowed " 
+				                <input type="number" class="form-control only-greater-than-or-equal-zero-allowed" 
 										@if($isRepeater)
 								name="food_cover"
 								@else 

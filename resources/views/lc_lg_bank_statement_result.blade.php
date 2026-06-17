@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
     .max-w-serial {
@@ -133,7 +132,7 @@
 
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="row">
     <div class="col-md-12">
@@ -286,7 +285,7 @@
                 @csrf
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
                     {{-- @if(!$isCurrentAccount)
                     <div class="d-flex z-index-6" style="justify-content:right">
                         <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id ]) }}" class="btn active-style btn-icon-sm align-self-center">
@@ -303,48 +302,48 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-serial header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
-                                        <th class="view-table-th   header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Date') }}
                                         </th>
 										@if($isLcOverdraftBankStatement)
-                                        <th class="view-table-th max-w-invoice-number    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-number header-th align-middle text-center">
                                             {{ __('Limit') }}
                                         </th>
 									
 										@endif 
                                    
                                       
-                                        <th class="view-table-th max-w-invoice-number    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-number header-th align-middle text-center">
                                             {{ __('Beginning Balance') }}
                                         </th>
 
 
-                                        <th class="view-table-th max-w-currency    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-currency header-th align-middle text-center">
                                             {{ __('Debit') }}
                                         </th>
 
-                                        <th class="view-table-th max-w-amount    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-amount header-th align-middle text-center">
                                             {{ __('Credit') }}
                                         </th>
-                                        <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('End Balance') }}
                                         </th>
 
                                         	@if($isLcOverdraftBankStatement)
                                        
-										<th class="view-table-th max-w-invoice-number    header-th  align-middle text-center">
+										<th class="view-table-th max-w-invoice-number header-th align-middle text-center">
                                             {{ __('Room') }}
                                         </th>
 										@endif 
                                       
 
-                                        <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Comment') }}
                                         </th>
 
@@ -359,9 +358,9 @@
 
                                     </script>
                                     @foreach($results as $index=>$modelAsStdClass)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
+                                        <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
 										@if($isLcOverdraftBankStatement)
                                         <td class="sub-text-bg text-center max-w-amount">{{ number_format($modelAsStdClass->limit) }}</td>
 										@endif 

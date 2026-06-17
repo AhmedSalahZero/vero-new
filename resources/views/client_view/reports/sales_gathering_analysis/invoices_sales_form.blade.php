@@ -53,7 +53,7 @@
                         <div class="col-md-3">
                             <label>{{__('Select') .' '. __(\App\Helpers\HVero::spaceAfterCapitalLetters(camelize($type)) ) }} @include('max-option-span') </label>
                             <div class="kt-input-icon">
-                                <div class="input-group date " id="append-main-select">
+                                <div class="input-group date" id="append-main-select">
                                     <select data-live-search="true" data-actions-box="true" data-max-options="{{ maxOptionsForOneSelector() }}" name="branches[]" class="select2-select form-control kt-bootstrap-select kt_bootstrap_select" multiple required>
                                         {{-- <option value="{{json_encode($branches)}}">{{__('All Branches')}}</option> --}}
                                         @foreach ($selects as $select)

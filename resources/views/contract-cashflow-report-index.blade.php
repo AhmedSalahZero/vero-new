@@ -2,7 +2,7 @@
 
                     <div class="kt-portlet__body with-scroll pt-0">
 
-                        <div class="table-custom-container position-relative  ">
+                        <div class="table-custom-container position-relative">
 
 
                             <div>
@@ -10,38 +10,38 @@
 
 
 
-                                <div class="responsive ">
-                                    <table class="table kt_table_with_no_pagination_no_collapse table-for-currency  table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency dataTable no-footer">
+                                <div class="responsive">
+                                    <table class="table kt_table_with_no_pagination_no_collapse table-for-currency table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency dataTable no-footer">
                                         <thead>
 
-                                            <tr class="header-tr ">
+                                            <tr class="header-tr">
 
-                                                <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-serial header-th align-middle text-center">
                                                     {{ __('#') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-name  max-w-invoice-date header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-invoice-date header-th align-middle text-center">
                                                     {{ __('Report Name') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-name  max-w-counts header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-counts header-th align-middle text-center">
                                                     {{ __('Report Interval') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-name  max-w-counts header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-counts header-th align-middle text-center">
                                                     {{ __('Start Date') }}
 													
 													<br> DD-MM-YYYY
 													
                                                 </th>
 
-                                                <th class="view-table-th max-w-name  max-w-counts header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-counts header-th align-middle text-center">
                                                     {{ __('End Date') }}
 													<br> DD-MM-YYYY
                                                 </th>
 
 
-                                                <th class="view-table-th max-w-name max-w-action  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name max-w-action header-th align-middle text-center">
                                                     {{ __('Actions') }}
                                                 </th>
 
@@ -60,17 +60,17 @@
                                             @endphp
 											
                                             @foreach($contractCashflowReports as $index => $cashflowReport)
-                                            <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize  ">
-                                                <td class="sub-text-bg max-w-serial text-center   ">{{ ++$index }}</td>
-                                                <td class="sub-text-bg  text-center  max-w-counts ">{{ $cashflowReport->getName()}}</td>
-                                                <td class="sub-text-bg  text-center  max-w-counts ">{{ $cashflowReport->getIntervalName()}}</td>
+                                            <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize">
+                                                <td class="sub-text-bg max-w-serial text-center">{{ ++$index }}</td>
+                                                <td class="sub-text-bg text-center max-w-counts">{{ $cashflowReport->getName()}}</td>
+                                                <td class="sub-text-bg text-center max-w-counts">{{ $cashflowReport->getIntervalName()}}</td>
                                                
-                                                <td class="sub-text-bg  text-center max-w-counts ">{{ $cashflowReport->getStartDateFormatted() }}  </td>
-                                                <td class="sub-text-bg  text-center max-w-counts ">{{ $cashflowReport->getEndDateFormatted() }}</td>
-                                                <td class="sub-text-bg  text-center max-w-action   ">
+                                                <td class="sub-text-bg text-center max-w-counts">{{ $cashflowReport->getStartDateFormatted() }}  </td>
+                                                <td class="sub-text-bg text-center max-w-counts">{{ $cashflowReport->getEndDateFormatted() }}</td>
+                                                <td class="sub-text-bg text-center max-w-action">
                                                     <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{route('result.cashflow.report',[$company,'returnResultAsArray'=>'view','cashflowReport'=>$cashflowReport->id])}}"><i class="fa fa-pen-alt"></i></a>
 
-                                                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $cashflowReport->id}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $cashflowReport->id}}" title="Delete"><i class="fa fa-trash-alt"></i>
                                                     </a>
                                                 
 

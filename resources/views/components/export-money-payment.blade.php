@@ -14,13 +14,13 @@ use App\Models\MoneyPayment ;
         <div class="kt-portlet__head-actions">
             &nbsp;
             @if($hasBatchCollection)
-            <a  data-money-type="{{ $moneyPaymentType }}" data-type="multi" data-toggle="modal" data-target="#send-to-under-collection-modal{{ $moneyPaymentType }}" id="js-send-to-under-collection-trigger{{ $moneyPaymentType }}" href="{{route('create.money.receive',['company'=>$company->id])}}" title="{{ __('Please Select More Than One Cheque') }}" class="btn  active-style btn-icon-sm js-can-trigger-cheque-under-collection-modal disabled">
+            <a  data-money-type="{{ $moneyPaymentType }}" data-type="multi" data-toggle="modal" data-target="#send-to-under-collection-modal{{ $moneyPaymentType }}" id="js-send-to-under-collection-trigger{{ $moneyPaymentType }}" href="{{route('create.money.receive',['company'=>$company->id])}}" title="{{ __('Please Select More Than One Cheque') }}" class="btn active-style btn-icon-sm js-can-trigger-cheque-under-collection-modal disabled">
                 <i class="fas fa-book"></i>
                 {{ __('Create Batch Mark As Paid') }}
             </a>
             @endif
             @if($hasSearch)
-            <a data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $moneyPaymentType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Payments') }}" class="btn  active-style btn-icon-sm  ">
+            <a data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $moneyPaymentType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Payments') }}" class="btn active-style btn-icon-sm">
                 <i class="fas fa-search"></i>
                 {{ __('Advanced Filter') }}
             </a>
@@ -36,7 +36,7 @@ use App\Models\MoneyPayment ;
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <form action="{{ $routeRedirect }}" class="row ">
+                            <form action="{{ $routeRedirect }}" class="row">
                                 <input name="active" type="hidden" value="{{ $moneyPaymentType }}">
                                 <div class="form-group col-4">
                                     <label for="Select Field " class="label">{{ __('Field Name') }}</label>
@@ -82,7 +82,7 @@ use App\Models\MoneyPayment ;
 
 
             <div class="modal fade" id="send-to-under-collection-modal{{ $moneyPaymentType }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog  modal-dialog-centered" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <form  data-money-type="{{ $moneyPaymentType }}" id="ajax-send-cheques-to-collection-id{{ $moneyPaymentType }}" class="ajax-send-cheques-to-collection" action="{{ $routeAction }}" method="post">
                             <input type="hidden" id="single-or-multi{{ $moneyPaymentType }}" value="single">
@@ -102,7 +102,7 @@ use App\Models\MoneyPayment ;
                                         <label>{{__('Actual Payment Date')}}</label>
                                         <div class="kt-input-icon">
                                             <div class="input-group date">
-                                                <input required type="text" name="actual_payment_date" value="{{ formatDateForDatePicker(isset($dueDate) ? $dueDate : now()->format('Y-m-d') ) }}" class="form-control " readonly placeholder="Select date" id="kt_datepicker_2" />
+                                                <input required type="text" name="actual_payment_date" value="{{ formatDateForDatePicker(isset($dueDate) ? $dueDate : now()->format('Y-m-d') ) }}" class="form-control" readonly placeholder="Select date" id="kt_datepicker_2" />
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-calendar-check-o"></i>

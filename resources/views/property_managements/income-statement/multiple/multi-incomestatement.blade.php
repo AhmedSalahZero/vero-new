@@ -60,37 +60,37 @@ use App\Models\PropertyManagement\Study;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             @php
             $currentType = 'study' ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-tables.repeater-table :tableClasses="'table-condensed fixed-column-table table-row-spacing income-class-table'" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden scrollable-table'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                         <x-slot name="ths">
-                            <x-tables.repeater-table-th :subParentClass="'plus-max-width-class fixed-column'" class="  header-border-down plus-max-width-class" :title="__('+/-')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th :subParentClass="'name-max-width-class fixed-column'" class="  header-border-down name-max-width-class exclude-from-collapse" :title="__('Name')"></x-tables.repeater-table-th>
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('')"></x-tables.repeater-table-th> --}}
+                            <x-tables.repeater-table-th :subParentClass="'plus-max-width-class fixed-column'" class="header-border-down plus-max-width-class" :title="__('+/-')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :subParentClass="'name-max-width-class fixed-column'" class="header-border-down name-max-width-class exclude-from-collapse" :title="__('Name')"></x-tables.repeater-table-th>
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('')"></x-tables.repeater-table-th> --}}
                             @foreach($studyMonthsForViews as $dateAsIndex=>$dateAsString)
                             @php
                             $currentMonthNumber = explode('-',$dateAsString)[1];
                             $currentYear= explode('-',$dateAsString)[0];
                             $currentYearRepeaterIndex = 0 ;
                             @endphp
-                            <x-tables.repeater-table-th data-column-index="{{ $dateAsIndex }}" class=" header-border-down " :title="dateFormatting($dateAsString, 'M\' Y')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th data-column-index="{{ $dateAsIndex }}" class="header-border-down" :title="dateFormatting($dateAsString, 'M\' Y')"></x-tables.repeater-table-th>
 
                             @if($financialYearEndMonthNumber == $currentMonthNumber || $loop->last)
-                            <x-tables.repeater-table-th :icon="true" data-column-index="{{ $dateAsIndex }}" :font-size-class="'font-14px'" class=" header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse " :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th :icon="true" data-column-index="{{ $dateAsIndex }}" :font-size-class="'font-14px'" class="header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
                             @php
                             $currentYearRepeaterIndex ++;
                             @endphp
                             @endif
 
                             @endforeach
-                            {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Total')"></x-tables.repeater-table-th> --}}
+                            {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Total')"></x-tables.repeater-table-th> --}}
                         </x-slot>
                         <x-slot name="trs">
 
@@ -130,7 +130,7 @@ use App\Models\PropertyManagement\Study;
 
             @if(isset($nextButton))
             <div class="text-right mt-4 cash-flow-btn">
-                <a href="{{ $nextButton['link'] }}" class="btn btn-primary ">{{ $nextButton['title'] }}</a>
+                <a href="{{ $nextButton['link'] }}" class="btn btn-primary">{{ $nextButton['title'] }}</a>
             </div>
             @endif
 

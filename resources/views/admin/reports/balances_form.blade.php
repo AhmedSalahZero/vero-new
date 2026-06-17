@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
     .dt-buttons.btn-group.flex-wrap {
         margin-bottom: 5rem !important;
@@ -131,7 +130,7 @@
 
     }
 
-    .money-flow-dark * {
+    * {
         box-sizing: border-box !important;
     }
 
@@ -141,7 +140,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ $title }}</x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -284,8 +283,8 @@
 
                 <div class="kt-portlet mb-0">
                  
-            <div class="kt-portlet__body  kt-portlet__body--fit">
-                <div class="row row-no-padding row-col-separator-xl ">
+            <div class="kt-portlet__body kt-portlet__body--fit">
+                <div class="row row-no-padding row-col-separator-xl">
                     @php
                     $index = 0 ;
                     @endphp
@@ -340,7 +339,7 @@
                 <div class="kt-portlet">
                     <div class="kt-portlet__body with-scroll pt-0">
 
-                        <div class="table-custom-container position-relative  ">
+                        <div class="table-custom-container position-relative">
 
 
                             <div>
@@ -349,32 +348,32 @@
 
 
                                 <div class="responsive">
-                                    <table class="table kt_table_with_no_pagination_no_collapse table-for-currency-{{ $currencyName }}  table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency-{{ $currencyName }} dataTable no-footer">
+                                    <table class="table kt_table_with_no_pagination_no_collapse table-for-currency-{{ $currencyName }} table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class-for-currency-{{ $currencyName }} dataTable no-footer">
                                         <thead>
 
-                                            <tr class="header-tr ">
+                                            <tr class="header-tr">
 
-                                                <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-serial header-th align-middle text-center">
                                                     {{ __('#') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-name   header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-name header-th align-middle text-center">
                                                     {{ __('Name') }}
                                                 </th>
 
-                                                <th class="view-table-th  max-w-currency    header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-currency header-th align-middle text-center">
                                                     {{ __('Currency') }}
                                                 </th>
 												
-                                                <th class="view-table-th max-w-amount    header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-amount header-th align-middle text-center">
                                                     {{ __('Net Balance') }}
                                                 </th>
 
-                                                <th class="view-table-th max-w-report-btn    header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-report-btn header-th align-middle text-center">
                                                     {{ __('Statement Report') }}
                                                 </th>
 												@if($currencyName != "main_currency")
-                                                <th class="view-table-th max-w-report-btn    header-th  align-middle text-center">
+                                                <th class="view-table-th max-w-report-btn header-th align-middle text-center">
                                                     {{ __('Invoice Report') }}
                                                 </th>
 @endif
@@ -396,9 +395,9 @@
 											@php
 												$indexKey ++ ;
 											@endphp
-                                            <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                                <td class="sub-text-bg max-w-serial   ">{{ $indexKey }}</td>
-                                                <td class="sub-text-bg  max-w-name is-name-cell ">{{ $invoicesBalancesAsStdClass->{$clientNameColumnName} }}</td>
+                                            <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                                <td class="sub-text-bg max-w-serial">{{ $indexKey }}</td>
+                                                <td class="sub-text-bg max-w-name is-name-cell">{{ $invoicesBalancesAsStdClass->{$clientNameColumnName} }}</td>
 													@if($currencyName == 'main_currency')
                                                 <td class="sub-text-bg text-center max-w-currency">{{ $mainFunctionalCurrency }}</td>
 												@else

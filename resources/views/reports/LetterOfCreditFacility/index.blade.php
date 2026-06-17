@@ -2,18 +2,16 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -23,13 +21,13 @@
 {{ __('Letter Of Credit Facility ['. $financialInstitution->getName() . ' ]')  }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
 
    <x-back-to-bank-header-btn :create-permission-name="'create letter of credit facility'" :create-route="route('create.letter.of.credit.facility',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id])"></x-back-to-bank-header-btn>
    
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == 'letter-of-credit-facilities' ?'active':'' }}" id="bank" role="tabpanel">
@@ -49,7 +47,7 @@
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -90,7 +88,7 @@
 
                                         <button data-toggle="modal" data-target="#letter_of_credit_terms_and_conditions{{ $letterOfCreditFacility->id }}" type="button" class="btn btn-outline-brand btn-elevate btn-pill"><i class="fa fa-tag"></i> Click Here</button>
 
-                                        <div class="modal fade " id="letter_of_credit_terms_and_conditions{{ $letterOfCreditFacility->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal fade" id="letter_of_credit_terms_and_conditions{{ $letterOfCreditFacility->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                                 <form action="#" class="modal-content" method="post">
 
@@ -178,7 +176,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-primary " data-dismiss="modal">{{ __('Close') }}</button>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ __('Close') }}</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -187,7 +185,7 @@
 
                                     </td>
 
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
 

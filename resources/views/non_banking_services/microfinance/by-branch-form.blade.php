@@ -39,7 +39,7 @@ $months = $study->getMicrofinanceMonths() ;
                     <div class="row">
 
                         <div class="col-md-10">
-                            <div class="d-flex align-items-center ">
+                            <div class="d-flex align-items-center">
                                 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                                     {{ __('Branches Planning Status') }}
                                 </h3>
@@ -60,27 +60,27 @@ $months = $study->getMicrofinanceMonths() ;
 
                         <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                             <x-slot name="ths">
-                                <x-tables.repeater-table-th class="  header-border-down " :title="__('Branch Name')"></x-tables.repeater-table-th>
-                                <x-tables.repeater-table-th class="  header-border-down " :title="__('Action')"></x-tables.repeater-table-th>
-                                <x-tables.repeater-table-th class="  header-border-down " :title="__('Planning Status')"></x-tables.repeater-table-th>
-                                <x-tables.repeater-table-th class="  header-border-down " :title="__('Reports')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down" :title="__('Branch Name')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down" :title="__('Action')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down" :title="__('Planning Status')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th class="header-border-down" :title="__('Reports')"></x-tables.repeater-table-th>
 
                             </x-slot>
                             <x-slot name="trs">
                                 @foreach($branches as $branch)
                                 <tr data-repeat-formatting-decimals="0" data-repeater-style>
                                     <td>
-                                        <input value="{{ $branch->getName() }}" disabled class="form-control  text-left mt-2" type="text">
+                                        <input value="{{ $branch->getName() }}" disabled class="form-control text-left mt-2" type="text">
                                     </td>
 
                                     <td>
-                                        <div class="d-flex align-items-center flex-column ">
+                                        <div class="d-flex align-items-center flex-column">
                                             <a href="{{ route('create.all-branches.microfinance',['company'=>$company->id , 'study'=>$study->id ,'branch_id'=>$branch->id]) }}" class="btn btn-md-width btn-1-bg btn-sm btn-brand btn-pill">{{ __('Start Planning') }}</a>
                                         </div>
 
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center flex-column ">
+                                        <div class="d-flex align-items-center flex-column">
 
                                             @if($study->hasBranchFilled($branch->id))
                                             <i class="fa fa-thumbs-up thumb-up exclude-icon"></i>
@@ -91,7 +91,7 @@ $months = $study->getMicrofinanceMonths() ;
 
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center flex-column ">
+                                        <div class="d-flex align-items-center flex-column">
                                             <a href="{{ route('view.loan.report.microfinance',['branchId'=>$branch->id , 'company'=>$company->id ,'study'=>$study->id]) }}" class="btn btn-md-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Loan Report') }}</a>
                                         </div>
                                     </td>
@@ -101,17 +101,17 @@ $months = $study->getMicrofinanceMonths() ;
 								
 								  <tr data-repeat-formatting-decimals="0" data-repeater-style>
                                     <td>
-                                        <input value="{{ __('New Branch') }}" disabled class="form-control  text-left mt-2" type="text">
+                                        <input value="{{ __('New Branch') }}" disabled class="form-control text-left mt-2" type="text">
                                     </td>
 
                                     <td>
-                                        <div class="d-flex align-items-center flex-column ">
+                                        <div class="d-flex align-items-center flex-column">
                                             <a href="{{ route('create.new-branches.microfinance',['company'=>$company->id , 'study'=>$study->id ]) }}" class="btn btn-md-width btn-1-bg btn-sm btn-brand btn-pill">{{ __('Start Planning') }}</a>
                                         </div>
 
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center flex-column ">
+                                        <div class="d-flex align-items-center flex-column">
 
                                             @if($study->hasNewBranchFilled())
                                             <i class="fa fa-thumbs-up thumb-up exclude-icon"></i>
@@ -122,7 +122,7 @@ $months = $study->getMicrofinanceMonths() ;
 
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center flex-column ">
+                                        <div class="d-flex align-items-center flex-column">
                                             {{-- <a href="{{ route('loan') }}" class="btn btn-md-width btn-2-bg btn-sm btn-brand btn-pill">{{ __('Loan Report') }}</a> --}}
                                         </div>
                                     </td>
@@ -387,7 +387,7 @@ $months = $study->getMicrofinanceMonths() ;
             const elementToAppendIn = $(this).parent().find('.js-append-into');
             const texts = [];
             let lis = '';
-            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap ">' + 'Add New' + '</a></u>'
+            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap">' + 'Add New' + '</a></u>'
             lis += '<li >' + text + '</li>'
             $(this).closest('table').find('.js-show-all-categories-popup').each(function(index, element) {
                 let text = $(element).val().trim();

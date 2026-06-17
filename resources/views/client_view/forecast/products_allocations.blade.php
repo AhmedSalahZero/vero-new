@@ -40,7 +40,7 @@
     @if ($sales_forecast['add_new_products'] == 1)
     <div class="kt-portlet">
         {{-- Monthly Seasonality --}}
-        <div class="row ">
+        <div class="row">
             <div class="col-md-12">
                 <div class="kt-portlet kt-portlet--mobile">
 
@@ -102,7 +102,7 @@
                 <div class="kt-portlet__head-wrapper">
                     <div class="kt-portlet__head-actions">
                         &nbsp;
-                        <a href="{{ route('modify.seasonality', $company) }}" class="btn  active-style btn-icon-sm ">
+                        <a href="{{ route('modify.seasonality', $company) }}" class="btn active-style btn-icon-sm">
                             <i class="fas fa-file-import"></i>
                             {{__("Modify Seasonality")}}
                         </a>
@@ -111,7 +111,7 @@
             </div>
         </div>
 
-        <div class="kt-portlet__body ">
+        <div class="kt-portlet__body">
             <h2>{{ __('Existing Product '.$name.' Target Year ') .date('Y', strtotime($sales_forecast->start_date)) .' : ' .number_format($existing_products_sales_targets) }}
             </h2>
             <br>
@@ -216,8 +216,8 @@
                                 <td class="text-center">{{ number_format($all_existings_total) }}</td>
                             </tr>
 
-                            <tr class="table-active ">
-                                <th class="text-center ">{{ __('Total') }}</th>
+                            <tr class="table-active">
+                                <th class="text-center">{{ __('Total') }}</th>
                                 @foreach ($total_existing_new as $date => $value)
                                 <td class="text-center">{{ number_format($value) }}</td>
                                 @endforeach

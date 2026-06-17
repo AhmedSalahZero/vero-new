@@ -109,6 +109,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer whereUserComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\InternalMoneyTransfer filterByTransferDate($startDate, $endDate)
  * @mixin \Eloquent
  */
 class InternalMoneyTransfer extends Model 

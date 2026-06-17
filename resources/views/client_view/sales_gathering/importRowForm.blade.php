@@ -31,7 +31,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             @if (false !== $found = array_search('date',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['date'])}} @include('star')</label>
                                     <div class="kt-input-icon">
                                         <div class="input-group date">
@@ -42,7 +42,7 @@
                             @endif
 
                             @if (false !== $found = array_search('country',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['country'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="country" value="{{$salesGatheringTest->country}}" class="form-control" placeholder="{{__($exportableFields['country'])}}">
@@ -50,7 +50,7 @@
                                 </div>
                             @endif
                             @if (false !== $found = array_search('local_or_export',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['local_or_export'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="local_or_export" value="{{$salesGatheringTest->local_or_export}}" class="form-control" placeholder="{{__($exportableFields['local_or_export'])}}">
@@ -59,7 +59,7 @@
                             @endif
 
                             @if (false !== $found = array_search('branch',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['branch'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="branch" value="{{$salesGatheringTest->branch}}" class="form-control" placeholder="{{__($exportableFields['branch'])}}">
@@ -68,7 +68,7 @@
                             @endif
 
                             @if (false !== $found = array_search('document_type',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['document_type'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="document_type" value="{{$salesGatheringTest->document_type}}" class="form-control" placeholder="{{__($exportableFields['document_type'])}}">
@@ -77,7 +77,7 @@
                             @endif
 
                             @if (false !== $found = array_search('document_number',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['document_number'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="document_number" value="{{$salesGatheringTest->document_number}}" class="form-control" placeholder="{{__($exportableFields['document_number'])}}">
@@ -86,7 +86,7 @@
                             @endif
 
                             @if (false !== $found = array_search('sales_person',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['sales_person'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="sales_person" value="{{$salesGatheringTest->sales_person}}" class="form-control" placeholder="{{__($exportableFields['sales_person'])}}">
@@ -95,7 +95,7 @@
                             @endif
 
                             @if (false !== $found = array_search('business_unit',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['business_unit'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="business_unit" value="{{$salesGatheringTest->business_unit}}" class="form-control" placeholder="{{__($exportableFields['business_unit'])}}">
@@ -104,7 +104,7 @@
                             @endif
 
                             @if (false !== $found = array_search('customer_name',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['customer_name'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="customer_name" value="{{$salesGatheringTest->customer_name}}" class="form-control" placeholder="{{__($exportableFields['customer_name'])}}">
@@ -113,7 +113,7 @@
                             @endif
 
                             @if (false !== $found = array_search('business_sector',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['business_sector'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="business_sector" value="{{$salesGatheringTest->business_sector}}" class="form-control" placeholder="{{__($exportableFields['business_sector'])}}">
@@ -122,7 +122,7 @@
                             @endif
 
                             @if (false !== $found = array_search('zone',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['zone'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="zone" value="{{$salesGatheringTest->zone}}" class="form-control" placeholder="{{__($exportableFields['zone'])}}">
@@ -131,7 +131,7 @@
                             @endif
 
                             @if (false !== $found = array_search('sales_channel',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['sales_channel'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="sales_channel" value="{{$salesGatheringTest->sales_channel}}" class="form-control" placeholder="{{__($exportableFields['sales_channel'])}}">
@@ -140,7 +140,7 @@
                             @endif
 
                             @if (false !== $found = array_search('service_provider_type',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['service_provider_type'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="service_provider_type" value="{{$salesGatheringTest->service_provider_type}}" class="form-control" placeholder="{{__($exportableFields['service_provider_type'])}}">
@@ -149,7 +149,7 @@
                             @endif
 
                             @if (false !== $found = array_search('service_provider_name',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['service_provider_name'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="service_provider_name" value="{{$salesGatheringTest->service_provider_name}}" class="form-control" placeholder="{{__($exportableFields['service_provider_name'])}}">
@@ -158,7 +158,7 @@
                             @endif
 
                             @if (false !== $found = array_search('service_provider_birth_year',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['service_provider_birth_year'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="number" name="service_provider_birth_year" value="{{$salesGatheringTest->service_provider_birth_year}}" class="form-control" placeholder="{{__($exportableFields['service_provider_birth_year'])}}">
@@ -167,7 +167,7 @@
                             @endif
 
                             @if (false !== $found = array_search('principle',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['principle'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="principle" value="{{$salesGatheringTest->principle}}" class="form-control" placeholder="{{__($exportableFields['principle'])}}">
@@ -176,7 +176,7 @@
                             @endif
 
                             @if (false !== $found = array_search('category',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['category'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="category" value="{{$salesGatheringTest->category}}" class="form-control" placeholder="{{__($exportableFields['category'])}}">
@@ -185,7 +185,7 @@
                             @endif
 
                             @if (false !== $found = array_search('sub_category',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['sub_category'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="sub_category" value="{{$salesGatheringTest->sub_category}}" class="form-control" placeholder="{{__($exportableFields['sub_category'])}}">
@@ -194,7 +194,7 @@
                             @endif
 
                             @if (false !== $found = array_search('product_or_service',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['product_or_service'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="product_or_service" value="{{$salesGatheringTest->product_or_service}}" class="form-control" placeholder="{{__($exportableFields['product_or_service'])}}">
@@ -203,7 +203,7 @@
                             @endif
 
                             @if (false !== $found = array_search('product_item',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['product_item'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="product_item" value="{{$salesGatheringTest->product_item}}" class="form-control" placeholder="{{__($exportableFields['product_item'])}}">
@@ -212,7 +212,7 @@
                             @endif
 
                             @if (false !== $found = array_search('measurment_unit',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['measurment_unit'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="measurment_unit" value="{{$salesGatheringTest->measurment_unit}}" class="form-control" placeholder="{{__($exportableFields['measurment_unit'])}}">
@@ -221,7 +221,7 @@
                             @endif
 
                             @if (false !== $found = array_search('return_reason',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['return_reason'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="return_reason" value="{{$salesGatheringTest->return_reason}}" class="form-control" placeholder="{{__($exportableFields['return_reason'])}}">
@@ -230,7 +230,7 @@
                             @endif
 
                             @if (false !== $found = array_search('quantity',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['quantity'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="number" name="quantity" value="{{$salesGatheringTest->quantity}}" class="form-control" placeholder="{{__($exportableFields['quantity'])}}">
@@ -239,7 +239,7 @@
                             @endif
 
                             @if (false !== $found = array_search('quantity_status',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['quantity_status'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="text" name="quantity_status" value="{{$salesGatheringTest->quantity_status}}" class="form-control" placeholder="{{__($exportableFields['quantity_status'])}}">
@@ -248,7 +248,7 @@
                             @endif
 
                             @if (false !== $found = array_search('quantity_bonus',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['quantity_bonus'])}}</label>
                                     <div class="kt-input-icon">
                                         <input type="number" step="any" name="quantity_bonus" value="{{$salesGatheringTest->quantity_bonus}}" class="form-control" placeholder="{{__($exportableFields['quantity_bonus'])}}">
@@ -257,7 +257,7 @@
                             @endif
 
                             @if (false !== $found = array_search('price_per_unit',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['price_per_unit'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="price_per_unit" value="{{$salesGatheringTest->price_per_unit}}" class="form-control" placeholder="{{__($exportableFields['price_per_unit'])}}">
@@ -266,7 +266,7 @@
                             @endif
 
                             @if (false !== $found = array_search('sales_value',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['sales_value'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="sales_value" value="{{$salesGatheringTest->sales_value}}" class="form-control" placeholder="{{__($exportableFields['sales_value'])}}">
@@ -275,7 +275,7 @@
                             @endif
 
                             @if (false !== $found = array_search('quantity_discount',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['quantity_discount'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="quantity_discount" value="{{$salesGatheringTest->quantity_discount}}" class="form-control" placeholder="{{__($exportableFields['quantity_discount'])}}">
@@ -284,7 +284,7 @@
                             @endif
 
                             @if (false !== $found = array_search('cash_discount',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['cash_discount'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="cash_discount" value="{{$salesGatheringTest->cash_discount}}" class="form-control" placeholder="{{__($exportableFields['cash_discount'])}}">
@@ -293,7 +293,7 @@
                             @endif
 
                             @if (false !== $found = array_search('special_discount',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['special_discount'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="special_discount" value="{{$salesGatheringTest->special_discount}}" class="form-control" placeholder="{{__($exportableFields['special_discount'])}}">
@@ -302,7 +302,7 @@
                             @endif
 
                             @if (false !== $found = array_search('other_discounts',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['other_discounts'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="other_discounts" value="{{$salesGatheringTest->other_discounts}}" class="form-control" placeholder="{{__($exportableFields['other_discounts'])}}">
@@ -311,7 +311,7 @@
                             @endif
 
                             @if (false !== $found = array_search('net_sales_value',$db_names))
-                                <div class="form-group  col-md-6">
+                                <div class="form-group col-md-6">
                                     <label>{{__($exportableFields['net_sales_value'])}}</label>
                                     <div class="kt-input-icon">
                                         <input  type="number" step="any" name="net_sales_value" value="{{$salesGatheringTest->net_sales_value}}" class="form-control" placeholder="{{__($exportableFields['net_sales_value'])}}">

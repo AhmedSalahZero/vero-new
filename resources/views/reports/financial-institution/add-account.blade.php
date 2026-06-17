@@ -2,43 +2,42 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
     hr {}
 
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {}
+    .kt-portlet {}
 
 </style>
 @endsection
@@ -46,7 +45,7 @@
 {{ __('Financial Institutions Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -72,7 +71,7 @@
                     <!--begin::Form-->
                     <form class="kt-form kt-form--label-right">
 
-                        <div class="kt-portlet ">
+                        <div class="kt-portlet">
                             <div class="kt-portlet__head">
                                 <div class="kt-portlet__head-label">
                                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -90,7 +89,7 @@
                                         <div class="" style="width:100%">
 
                                             <div id="m_repeater_0" class="cash-and-banks-repeater">
-                                                <div class="form-group  m-form__group row  ">
+                                                <div class="form-group m-form__group row">
                                                     <div data-repeater-list="accounts" class="col-lg-12">
                                                         @include('reports.financial-institution.repeater' )
                                                     </div>

@@ -7,7 +7,7 @@
                 </li>
 			@endif 
                 <li class="nav-item">
-                    <a class="nav-link   @if(!config('app.showTrendCharts')) active @endif " data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab">
+                    <a class="nav-link @if(!config('app.showTrendCharts')) active @endif" data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab">
                         <i class="flaticon2-checking"></i>Reports Table
                     </a>
                 </li>

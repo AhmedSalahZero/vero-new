@@ -2,51 +2,50 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
-.money-flow-dark .font-normal{
+.font-normal{
 	font-weight:normal !important;
 }
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -56,7 +55,7 @@
 {{ __('Internal Money Transfer Form') }}
 @endsection --}}
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -97,7 +96,7 @@
                         <div class="kt-portlet">
 
 
-                            <div class="kt-portlet ">
+                            <div class="kt-portlet">
                                 <div class="kt-portlet__head">
                                     <div class="kt-portlet__head-label flex-1">
                                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -105,7 +104,7 @@
                                         </h3>
 										 
 										 
-										 <div class=" flex-1 d-flex justify-content-end pt-3">
+										 <div class="flex-1 d-flex justify-content-end pt-3">
                                             <div class="col-md-3 mb-3">
                                                 <label>{{__('Balance')}} <span class="balance-date-js"></span> </label>
                                                 <div class="kt-input-icon">
@@ -124,24 +123,24 @@
                                             <div class="col-md-3">
                                                 <x-form.date :classes="'balance-date'"  :label="__('Date')" :required="true" :model="$model??null" :name="'transfer_date'" :placeholder="__('Select Date')"></x-form.date>
                                             </div>
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Cheque Number/Cash Withdrawal')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input data-max-cheque-value="0" step="1" type="numeric" value="{{ isset($model) ? $model->getChequeNumber():0 }}" name="cheque_number" class="form-control  " placeholder="{{__('Insert Cheque Number')}}">
+                                                    <input data-max-cheque-value="0" step="1" type="numeric" value="{{ isset($model) ? $model->getChequeNumber():0 }}" name="cheque_number" class="form-control" placeholder="{{__('Insert Cheque Number')}}">
                                                 </div>
 												<div>
 													<label for="" class="font-normal">{{ __('If Cash Withdrawal, Please write cash withdrawal') }}</label>
 												</div>
                                             </div>
 
-                                            <div class="col-md-3 ">
+                                            <div class="col-md-3">
                                                 <label>{{__('Cheque Amount')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? number_format($model->getAmount()):0 }}" class="form-control greater-than-or-equal-zero-allowed " >
+                                                    <input  type="text" value="{{ isset($model) ? number_format($model->getAmount()):0 }}" class="form-control greater-than-or-equal-zero-allowed" >
 													<input type="hidden" name="amount" value="{{ isset($model) ? $model->getAmount():0 }}">
                                                 </div>
                                             </div>
@@ -163,7 +162,7 @@
                             <label>{{ __('From Branch') }} <span class="multi_selection"></span> </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="from-branch-id" data-current-selected="{{ isset($model) ? $model->getFromBranchId() : 0 }}" required data-live-search="true" data-actions-box="true" name="from_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select ">
+                                    <select id="from-branch-id" data-current-selected="{{ isset($model) ? $model->getFromBranchId() : 0 }}" required data-live-search="true" data-actions-box="true" name="from_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select">
                                         {{-- @foreach($selectedBranches as $id => $name) --}}
                                         {{-- <option value="{{ $id }}" >{{ $name }}</option> --}}
                                         {{-- @endforeach --}}
@@ -177,7 +176,7 @@
                             <label>{{ __('To Branch') }} <span class="multi_selection"></span> </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="to-branch-id" data-current-selected="{{ isset($model) ? $model->getToBranchId() : 0 }}" required data-live-search="true" data-actions-box="true" name="to_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select ">
+                                    <select id="to-branch-id" data-current-selected="{{ isset($model) ? $model->getToBranchId() : 0 }}" required data-live-search="true" data-actions-box="true" name="to_branch_id" required class="form-control customers-js kt-bootstrap-select select2-select kt_bootstrap_select">
                                         {{-- @foreach($selectedBranches as $id => $name) --}}
                                         {{-- <option value="{{ $id }}" >{{ $name }}</option> --}}
                                         {{-- @endforeach --}}

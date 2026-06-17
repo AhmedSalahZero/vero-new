@@ -2,49 +2,48 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
 
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -54,7 +53,7 @@
 {{ __('Fully Secured Overdraft Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -94,7 +93,7 @@
 
 
                                 <div class="form-group row">
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-6">
                                         <label>{{__('Financial Institution Name')}} </label>
                                         <div class="kt-input-icon">
                                             <input disabled value="{{ $financialInstitution->getName()  }}" type="text" class="form-control" placeholder="{{__('Financial Institution Name')}}">
@@ -108,7 +107,7 @@
                                     </div>
 
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :model="$model??null" :label="__('Account Number')" :type="'text'" :placeholder="__('Account Number')" :name="'account_number'" :required="true"></x-form.input>
                                     </div>
 
@@ -141,7 +140,7 @@
 										@include('star')
 										</label>
                                         <div class="input-group">
-                                            <select name="currency" class="form-control repeater-select current-currency " js-when-change-trigger-change-account-type>
+                                            <select name="currency" class="form-control repeater-select current-currency" js-when-change-trigger-change-account-type>
                                                 {{-- <option selected>{{__('Select')}}</option> --}}
                                                 @foreach(getCurrencies() as $currencyName => $currencyValue )
                                                 <option value="{{ $currencyName }}" @if(isset($model) && $model->getCurrency() == $currencyName ) selected @endif > {{ $currencyValue }}</option>
@@ -176,15 +175,15 @@
                                     </div>
 
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :id="'cd-or-td-amount-id'" :readonly="true" :default-value="0" :model="$model??null" :label="__('Amount')" :type="'text'" :placeholder="''" :name="'cd_or_td_amount'" :class="'recalculate-limit-js'" :required="true"></x-form.input>
                                     </div>
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :id="'cd-or-td-interest-rate-id'" :readonly="true" :default-value="0" :model="$model??null" :label="__('CD Or TD Interest Rate')" :type="'text'" :placeholder="''" :name="'cd_or_td_interest'" :class="''" :required="true"></x-form.input>
                                     </div>
 
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2">
                                         <x-form.input :id="'cd-or-td-lending-percentage-id'" :readonly="false" :default-value="0" :model="$model??null" :label="__('CD Or TD Lending Percentage')" :type="'text'" :placeholder="''" :name="'cd_or_td_lending_percentage'" :class="'only-percentage-allowed recalculate-limit-js'" :required="true"></x-form.input>
                                     </div>
 
@@ -194,7 +193,7 @@
                             </div>
                         </div>
 
-                        <div class="kt-portlet ">
+                        <div class="kt-portlet">
                             <div class="kt-portlet__head">
                                 <div class="kt-portlet__head-label">
                                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -204,12 +203,12 @@
                             </div>
                             <div class="kt-portlet__body">
                                 <div class="form-group row">
-                                    <div class="col-md-4 ">	
+                                    <div class="col-md-4">	
 										<input id="limit-id" type="hidden" name="limit" value="{{ isset($model) ? $model->limit : 0 }}">
                                         <x-form.input :id="'limit-formatted-id'" :readonly="true" :model="$model??null" :label="__('Limit')" :type="'text'" :placeholder="__('Limit')" :name="'limit_formatted'" :class="'only-greater-than-zero-allowed'" :required="true"></x-form.input>
                                     </div>
 
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input  :default-value="0" :model="$model??null" :label="__('Outstanding Balance')" :type="'text'" :placeholder="__('Outstanding Balance')" :name="'outstanding_balance'" :class="'only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
                                     </div>
 
@@ -221,30 +220,30 @@
 											@if(!isset($model))
 							{{-- في حاله التحديث هيتم تحديثهم من البوب اب --}}
 							
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input :default-value="0" :id="'borrowing-rate-id'" :readonly="true" :model="$model??null" :class="'only-percentage-allowed'" :label="__('Borrowing Rate (%)')" :type="'text'" :placeholder="__('Borrowing Rate (%)')" :name="'borrowing_rate'" :required="true"></x-form.input>
                                     </div>
 
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input :default-value="0" :model="$model??null" :class="'only-percentage-allowed'" :label="__('Bank Margin Rate (%)')" :placeholder="__('Bank Margin Rate (%)')" :name="'margin_rate'" :required="true" :type="'text'"></x-form.input>
                                     </div>
 
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input :default-value="0" :model="$model??null" :class="'only-percentage-allowed'" :label="__('Interest Rate (%)')" :placeholder="__('Interest Rate (%)')" :name="'interest_rate'" :required="true" :type="'text'"></x-form.input>
                                     </div>
 									
 									@endif 
 
-                                    {{-- <div class="col-md-4 ">
+                                    {{-- <div class="col-md-4">
                                 <x-form.input :model="$model??null" :class="'only-percentage-allowed'" :label="__('Min Intrest Rate (%)')" :placeholder="__('Min Intrest Rate (%)')" :name="'min_interest_rate'" :required="true" :type="'text'"></x-form.input>
                             </div> --}}
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input :default-value="0" :model="$model??null" :class="'only-percentage-allowed'" :label="__('Highest Debt Balance Rate (%)')" :placeholder="__('Highest Debt Balance Rate (%)')" :name="'highest_debt_balance_rate'" :required="true" :type="'text'"></x-form.input>
                                     </div>
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input :default-value="0" :model="$model??null" :class="'only-percentage-allowed'" :label="__('Admin Fees Rate (%)')" :placeholder="__('Admin Fees Rate (%)')" :name="'admin_fees_rate'" :required="false" :type="'text'"></x-form.input>
                                     </div>
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4">
                                         <x-form.input :default-value="0" :model="$model??null" :label="__('Setteled Max Within (Days)')" :type="'text'" :placeholder="__('Setteled Max Within (Days)')" :name="'to_be_setteled_max_within_days'" :class="'only-greater-than-or-equal-zero-allowed'" :required="true"></x-form.input>
                                     </div>
                                 </div>
@@ -271,7 +270,7 @@
                                         <div class="" style="width:100%">
 
                                             <div id="m_repeater_0" class="cash-and-banks-repeater">
-                                                <div class="form-group  m-form__group row  ">
+                                                <div class="form-group m-form__group row">
                                                     <div data-repeater-list="outstanding_breakdowns" class="col-lg-12">
                                                         @if(isset($model) && count($model->outstandingBreakdowns))
                                                         @foreach($model->outstandingBreakdowns as $outstandingBreakdown)

@@ -27,7 +27,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div @if(!isset($model)) id="m_repeater_2" @endif class="w-100">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div @if(!isset($model)) data-repeater-list="positions" @endif class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             <div class="col-md-6">

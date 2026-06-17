@@ -33,7 +33,7 @@
 <div class="form-group-marginless">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-lg-12 " >
+                                    <div class="col-lg-12" >
                                         <label class="kt-option bg-secondary">
                                             <span class="kt-option__control">
                                                 <span
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
 							
-							 <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+							 <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
 							 	<thead>
 							 	<tr>
 									<th class="text-left">
@@ -74,7 +74,7 @@
 							 <tr>
 							 	<td class="text-left text-capitalize">
 								{{-- {{ $groupIndex+1 }} --}}
-								 <div class="kt-checkbox-inline d-flex  ">
+								 <div class="kt-checkbox-inline d-flex">
                                                     <label class="kt-checkbox kt-checkbox--bold kt-checkbox--success text-capitalize" cheched="">
                                                         <input data-group-index="{{ $groupIndex }}" type="checkbox" class="checkbox-for-row" value="1" 
                                                         checked
@@ -91,7 +91,7 @@
 									<div class="row pt-5 pl-4">
 									
 									@foreach($permissionArrays as $permissionArray)
-                                    <div class="kt-checkbox-inline d-flex justify-content-between mr-4 mb-5 ">
+                                    <div class="kt-checkbox-inline d-flex justify-content-between mr-4 mb-5">
                                                     <label class="kt-checkbox kt-checkbox--bold kt-checkbox--success text-capitalize" cheched="">
                                                         <input type="checkbox" class="view checkbox-for-permission" value="1" name="permissions[{{$permissionArray['name']}}]"
                                                         {{ $user->can($permissionArray['name']) ? 'checked' : ''}}
@@ -115,7 +115,7 @@
                                             <div class="col-9">
 											@foreach($permissionArrays as $permissionArray)
                                                 <div class="kt-checkbox-inline d-flex justify-content-between">
-                                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--success " cheched="">
+                                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--success" cheched="">
                                                         <input type="checkbox" class="view" value="1" name="permissions[{{$permissionArray['name']}}]"
                                                         {{ $user->can($permissionArray['name']) ? 'checked' : ''}}
                                                         > {{ $permissionArray['name'] }}

@@ -20,7 +20,6 @@
 
 @endsection
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
@@ -32,11 +31,11 @@
 </style>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 {{-- Title --}}
 <div class="row">
-    <div class="kt-portlet ">
+    <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -52,14 +51,14 @@
         </div>
         <div class="kt-portlet__body">
             <form action="">
-                <div class="row ">
+                <div class="row">
 				
 				<div class="col-md-2 mb-3">
                             <label>{{__('Report Interval')}} @include('star')</label>
 
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select name="report_interval" class="form-control " required>
+                                    <select name="report_interval" class="form-control" required>
 									     <option value="">{{ __('Select') }}</option>
                                         <option value="daily" @if($selectedReportInterval == 'daily' )  selected @endif>{{__('Daily')}}</option>
                                         <option value="weekly"  @if($selectedReportInterval == 'weekly' )  selected @endif>{{__('Weekly')}}</option>
@@ -72,10 +71,10 @@
 
 
                         <div class="col-md-3">
-                            <x-form.select :required="true" :label="__('Select')" :pleaseSelect="false" :selectedValue="$selectedPartnerId" :options="array_merge([['title'=>__('Company Cash Flow'),'value'=>'0']],formatOptionsForSelect($clientsWithContracts))" :add-new="false" class="select2-select suppliers-or-customers-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="partner_id"></x-form.select>
+                            <x-form.select :required="true" :label="__('Select')" :pleaseSelect="false" :selectedValue="$selectedPartnerId" :options="array_merge([['title'=>__('Company Cash Flow'),'value'=>'0']],formatOptionsForSelect($clientsWithContracts))" :add-new="false" class="select2-select suppliers-or-customers-js repeater-select" data-filter-type="{{ 'create' }}" :all="false" name="partner_id"></x-form.select>
                         </div>
                         <div class="col-md-3">
-                            <x-form.select :required="false" :label="__('Contract')" :pleaseSelect="false" data-current-selected="{{ $selectedContractId }}" :selectedValue="$selectedContractId" :options="[]" :add-new="false" class="select2-select  contracts-js repeater-select  " data-filter-type="{{ 'create' }}" :all="false" name="contract_id"></x-form.select>
+                            <x-form.select :required="false" :label="__('Contract')" :pleaseSelect="false" data-current-selected="{{ $selectedContractId }}" :selectedValue="$selectedContractId" :options="[]" :add-new="false" class="select2-select contracts-js repeater-select" data-filter-type="{{ 'create' }}" :all="false" name="contract_id"></x-form.select>
                         </div>
 
 
@@ -94,7 +93,7 @@
                             </div>
                         </div>
 						
-                    <div class="col-md-2 ">
+                    <div class="col-md-2">
                         <label>{{ __('Start Date') }} <span class="multi_selection"></span> </label>
                         <div class="kt-input-icon">
                             <div class="input-group date">
@@ -153,21 +152,21 @@
 </div>
 {{-- Multi Line Chart --}}
 
-<div class="tab-content  kt-margin-t-20">
+<div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
     @endphp
     @foreach($selectedCurrencies as $name=>$currency)
-    <div class="tab-pane  @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
+    <div class="tab-pane @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
                             {{ __('Monthly Cash Flow') }}
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
 						
 						<div class="parent-item d-inline-block">
@@ -204,14 +203,14 @@
 
         {{-- Single Line Chart --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
                             {{ __('Accumulated Cash Flow') }}
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
                             <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('Report') }} </button>
                         </div>
@@ -230,7 +229,7 @@
 
         {{-- Title --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -251,14 +250,14 @@
 			][$modelType] ;
 		@endphp
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
                             {{$modelTypeAsText. __(' Aging') }}
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
 							<form action="{{ route('result.aging.analysis',['company'=>$company->id ,'modelType'=>$modelType ]) }}" method="post">
 								@csrf
@@ -273,7 +272,7 @@
                     {{-- Chart --}}
                     <div class="row">
                         <div class="col-md-4">
-                            <table class="table table-sm table-striped table-head-bg-brand ">
+                            <table class="table table-sm table-striped table-head-bg-brand">
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th>{{ __('Invoices Aging') }}</th>
@@ -318,7 +317,7 @@
 		@endphp
 		@if(count($currentItems))
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -329,7 +328,7 @@
                             @endif
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
                             <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('Report') }} </button>
                             <button type="button" class="btn btn-sm btn-pill color-rose"><i class="fa fa-chart-line"></i> {{ __('Rejected Cheques Report') }} </button>
@@ -340,7 +339,7 @@
                     {{-- Chart --}}
                     <div class="row">
                         <div class="col-md-4">
-                            <table class="table table-sm table-striped table-head-bg-brand ">
+                            <table class="table table-sm table-striped table-head-bg-brand">
                                 <thead class="thead-inverse">
                                     <tr>
                                         <th>{{ __('Cheques Aging') }}</th>
@@ -400,7 +399,7 @@
 
         {{-- Title --}}
         <div class="row">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -415,7 +414,7 @@
             <div class="row">
                 {{-- Withdrawal dues --}}
                 <div class="col-md-6">
-                    <div class="kt-portlet ">
+                    <div class="kt-portlet">
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label">
                                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -433,7 +432,7 @@
                                     <input js-refresh-withdrawal-due-data-and-chart type="date" data-currency="{{ $currency }}" class="form-control withdrawal-end-date" name="withdrawal_end_date" value="{{ $withdrawalEndDate }}">
 									</div>
 								</div>
-                            <div class="kt-portlet__head-label ">
+                            <div class="kt-portlet__head-label">
                                 <div class="kt-align-right">
 
                                     @csrf
@@ -468,7 +467,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <table class="table table-sm table-striped table-head-bg-brand ">
+                                            <table class="table table-sm table-striped table-head-bg-brand">
                                                 <thead class="thead-inverse">
                                                     <tr>
                                                         <th>{{ __('Date') }}</th>
@@ -493,7 +492,7 @@
                 </div>
                 {{-- Long Term Facilities Comming Dues --}}
                 <div class="col-md-6">
-                    <div class="kt-portlet ">
+                    <div class="kt-portlet">
                         <div class="kt-portlet__head">
                             <div class="kt-portlet__head-label">
                                 <h3 class="kt-portlet__head-title head-title text-primary">
@@ -511,7 +510,7 @@
 									</div>
 								</div>
 								
-                            <div class="kt-portlet__head-label ">
+                            <div class="kt-portlet__head-label">
                                 <div class="kt-align-right">
                                     <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i class="fa fa-chart-line"></i> {{ __('Report') }} </button>
                                 </div>
@@ -538,7 +537,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <table class="table table-sm table-striped table-head-bg-brand ">
+                                            <table class="table table-sm table-striped table-head-bg-brand">
                                                 <thead class="thead-inverse">
                                                     <tr>
                                                         <th>{{ __('Date') }}</th>

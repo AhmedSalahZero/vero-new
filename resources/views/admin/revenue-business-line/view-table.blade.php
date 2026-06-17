@@ -246,7 +246,7 @@ td {
     }
 
 </style>
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
 
 
     <div style="padding-top:20px">
@@ -257,27 +257,27 @@ td {
     <x-table  :tableClass="'kt_table_with_no_pagination_no_fixed main-table-class removetableContainer  removeGlobalStyle ' ">
         @slot('table_header')
 			
-			 <tr class=" text-center first-tr-bg ">
-            <td class=" text-center"><b class="text-capitalize">{{ __('Expand') }}</b></td>
+			 <tr class="text-center first-tr-bg">
+            <td class="text-center"><b class="text-capitalize">{{ __('Expand') }}</b></td>
             <td data-is-collection-relation="0" data-collection-item-id="1" data-db-column-name="name" data-relation-name="BussinessLineName" data-is-relation="0" data-is-json="0" class="text-center header-th max-w-80">
                 {{ __('Name') }}
             </td>
-            <td class=" text-center"><b class="text-capitalize">{{ __('Actions') }}</b></td>
+            <td class="text-center"><b class="text-capitalize">{{ __('Actions') }}</b></td>
         </tr>
 		
-        {{-- <tr class=" text-center second-tr-bg">
-            <th class="text-center absorbing-column "></th>
+        {{-- <tr class="text-center second-tr-bg">
+            <th class="text-center absorbing-column"></th>
             <th class="max-w-80"></th>
             <th></th>
         </tr> --}}
         @endslot
         @slot('table_body')
-        {{-- <tr class=" text-center first-tr-bg ">
-            <td class=" text-center"><b class="text-capitalize">{{ __('Expand') }}</b></td>
+        {{-- <tr class="text-center first-tr-bg">
+            <td class="text-center"><b class="text-capitalize">{{ __('Expand') }}</b></td>
             <td data-is-collection-relation="0" data-collection-item-id="1" data-db-column-name="name" data-relation-name="BussinessLineName" data-is-relation="1" data-is-json="0" class="text-center header-th max-w-80">
                 {{ __('Name') }}
             </td>
-            <td class=" text-center"><b class="text-capitalize">{{ __('Actions') }}</b></td>
+            <td class="text-center"><b class="text-capitalize">{{ __('Actions') }}</b></td>
         </tr> --}}
         @php
         $id = 0 ;
@@ -285,10 +285,10 @@ td {
         @foreach($items as $mainId => $mainItemArr )
 
         <tr class="group-color main-row-tr" data-model-id="{{ $mainId }}" data-model-name="RevenueBusinessLine">
-            <td class="black-text " style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
-                <div class="d-flex align-items-center ">
+            <td class="black-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
+                <div class="d-flex align-items-center">
                     @if(count($mainItemArr['sub_items'] ?? []))
-                    <i class="row_icon{{ $id }} flaticon2-up  mr-2  "></i>
+                    <i class="row_icon{{ $id }} flaticon2-up mr-2"></i>
 
                     @endif
                     <b class="text-capitalize"> </b>
@@ -296,13 +296,13 @@ td {
             </td>
 
 
-            <td class=" max-w-80 editable font-weight-bold" contenteditable="true" title="{{ __('Click To Edit The Name') }}">
+            <td class="max-w-80 editable font-weight-bold" contenteditable="true" title="{{ __('Click To Edit The Name') }}">
               <h5> {{ $mainItemArr['data']['name'] }}</h5>
             </td>
             <td>
                 <span style="overflow: visible; position: relative; width: 110px;">
                     {{-- <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('revenue-business.edit', ['company'=>$company->id , 'revenue_business'=>$thirdSubId]) }}"><i class="fa fa-pen-alt"></i></a> --}}
-                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-revenue-bussines-line-{{ $mainId}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                    <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-revenue-bussines-line-{{ $mainId}}" title="Delete"><i class="fa fa-trash-alt"></i>
                     </a>
                     <div id="modal-delete-revenue-bussines-line-{{ $mainId }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
@@ -339,14 +339,14 @@ td {
         @endphp
         @foreach ($mainItemArr['sub_items'] ?? [] as $subItemId => $subItemArr)
         {{-- @if($subItemIndex != 'sub_items') --}}
-        <tr data-model-id="{{ $subItemId }}" data-model-name="ServiceCategory" class="row{{ $id }}  text-center sub-item-row" style="display: none">
-            <td data-order="{{ $order }}" class="black-text " style="cursor: pointer;" onclick="toggleRow2('{{ $id }}','{{ $order }}')">
-                <div class="d-flex align-items-center ">
-                    <i data-order="{{ $order }}" class="row_icon2{{ $id }} flaticon2-up  mr-2  ml-3"></i>
-                    <b class="text-capitalize ">{{ __('Category') }}</b>
+        <tr data-model-id="{{ $subItemId }}" data-model-name="ServiceCategory" class="row{{ $id }} text-center sub-item-row" style="display: none">
+            <td data-order="{{ $order }}" class="black-text" style="cursor: pointer;" onclick="toggleRow2('{{ $id }}','{{ $order }}')">
+                <div class="d-flex align-items-center">
+                    <i data-order="{{ $order }}" class="row_icon2{{ $id }} flaticon2-up mr-2 ml-3"></i>
+                    <b class="text-capitalize">{{ __('Category') }}</b>
                 </div>
             </td>
-            <td class="text-left text-capitalize editable " title="{{ __('Click To Edit The Name') }}" contenteditable="true" data-db-column-name="name" data-is-relation="0" data-model-id="{{ $subItemId }}" data-model-name="ServiceCategory">
+            <td class="text-left text-capitalize editable" title="{{ __('Click To Edit The Name') }}" contenteditable="true" data-db-column-name="name" data-is-relation="0" data-model-id="{{ $subItemId }}" data-model-name="ServiceCategory">
                 {{ $subItemArr['data']['name'] }}
             </td>
             <td>
@@ -355,7 +355,7 @@ td {
                         {{-- <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('revenue-business.edit', ['company'=>$company->id , 'revenue_business'=>$thirdSubId]) }}"><i class="fa fa-pen-alt"></i></a> --}}
                         <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Edit Position') }}" href="{{ route('admin.edit.revenue', ['company'=>$company->id , 'revenueBusinessLine'=>$mainId , 'serviceCategory'=>$subItemId]) }}"><i class="fa fa-pen-alt"></i></a>
 
-                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-service-category-{{ $subItemId}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-service-category-{{ $subItemId}}" title="Delete"><i class="fa fa-trash-alt"></i>
                         </a>
                         <div id="modal-delete-service-category-{{ $subItemId }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
@@ -391,18 +391,18 @@ td {
         @foreach ($subItemArr['sub_items'] ?? [] as $thirdSubId => $subArr)
 
 
-        <tr data-order="{{ $order }}" class="row2{{ $id }}   bg-last-row" style="display: none">
+        <tr data-order="{{ $order }}" class="row2{{ $id }} bg-last-row" style="display: none">
             <td>
 				<div class="pl-5">{{ __('Item Name') }}</div>
 			</td>
             <td title="{{ __('Click To Edit The Name') }}" class="text-left text-capitalize bg-active-style editable" contenteditable="true" data-db-column-name="name" data-is-relation="0" data-model-id="{{ $thirdSubId }}" data-model-name="ServiceItem">
                 <div class="pl-4">{{ $subArr['data']['name'] }}</div>
             </td>
-            <td class="text-left ">
+            <td class="text-left">
                 <b class="ml-3">
                     <span style="overflow: visible; position: relative; width: 110px;">
                         <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit Position" href="{{ route('admin.edit.revenue', ['company'=>$company->id , 'revenueBusinessLine'=>$mainId , 'serviceCategory'=>$subItemId,'serviceItem'=>$thirdSubId]) }}"><i class="fa fa-pen-alt"></i></a>
-                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $thirdSubId}}" title="Delete"><i class="fa fa-trash-alt"></i>
+                        <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $thirdSubId}}" title="Delete"><i class="fa fa-trash-alt"></i>
                         </a>
                         <div id="modal-delete-{{ $thirdSubId }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                             <div class="modal-dialog">

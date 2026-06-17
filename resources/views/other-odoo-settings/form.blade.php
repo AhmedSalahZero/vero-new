@@ -93,39 +93,39 @@ use App\NotificationSetting ;
                         <div class="kt-portlet__body">
 
                             <div class="form-group row">
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Liquidity / Treasury Clearance Account')" :type="'text'" :placeholder="__('Liquidity / Treasury Clearance Account')" :name="'liquidity_transfer_account_code'" :required="false"></x-form.input>
                                 </div>
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Custody Account')" :type="'text'" :placeholder="__('Custody Account')" :name="'custody_account_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Advanced / Employee Loans Account')" :type="'text'" :placeholder="__('Advanced / Employee Loans Account')" :name="'employee_loans_account_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Notes/Cheques Receivables')" :type="'text'" :placeholder="__('Notes/Cheques Receivables')" :name="'cheques_receivable_code'" :required="false"></x-form.input>
                                 </div>
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Notes/Cheques Payables')" :type="'text'" :placeholder="__('Notes/Cheques Payables')" :name="'cheques_payable_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Shareholders Account')" :type="'text'" :placeholder="__('Shareholders Account')" :name="'shareholder_account_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Dividend Payable Account')" :type="'text'" :placeholder="__('Shareholders Account')" :name="'dividend_payable_account_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Insurance From Account')" :type="'text'" :placeholder="__('Insurance From Account')" :name="'insurance_from_account_code'" :required="false"></x-form.input>
                                 </div>
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Advances To Suppliers')" :type="'text'" :placeholder="__('Advances To Suppliers')" :name="'advances_to_suppliers_code'" :required="false"></x-form.input>
                                 </div>
-								  <div class="col-md-3 ">
+								  <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Advances From Customers')" :type="'text'" :placeholder="__('Advances From Customers')" :name="'advances_from_customers_code'" :required="false"></x-form.input>
                                 </div>
 								
@@ -151,27 +151,27 @@ use App\NotificationSetting ;
                             <div class="form-group row">
 
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Bid LG Cash Cover')" :type="'text'" :placeholder="__('Bid LG Cash Cover')" :name="'bid_lg_cash_cover_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Final LG Cash Cover')" :type="'text'" :placeholder="__('Final LG Cash Cover')" :name="'final_lg_cash_cover_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Advanced LG Cash Cover')" :type="'text'" :placeholder="__('Advanced LG Cash Cover')" :name="'advanced_lg_cash_cover_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Performance LG Cash Cover')" :type="'text'" :placeholder="__('Performance LG Cash Cover')" :name="'performance_lg_cash_cover_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Sight Lc Cash Cover')" :type="'text'" :placeholder="__('Sight Lc Cash Cover')" :name="'sight_lc_cash_cover_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Deferred Lc Cash Cover')" :type="'text'" :placeholder="__('Deferred Lc Cash Cover')" :name="'deferred_lc_cash_cover_code'" :required="false"></x-form.input>
                                 </div>
 
@@ -195,43 +195,43 @@ use App\NotificationSetting ;
                             <div class="form-group row">
 
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('VAT Taxes')" :type="'text'" :placeholder="__('VAT Taxes')" :name="'vat_taxes_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Credit Withhold Taxes')" :type="'text'" :placeholder="__('Credit Withhold Taxes')" :name="'credit_withhold_taxes_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Salary Taxes')" :type="'text'" :placeholder="__('Salary Taxes')" :name="'salary_taxes_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Social Insurance')" :type="'text'" :placeholder="__('Social Insurance')" :name="'social_insurance_code'" :required="false"></x-form.input>
                                 </div>
 								
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Income Taxes')" :type="'text'" :placeholder="__('Income Taxes')" :name="'income_taxes_code'" :required="false"></x-form.input>
                                 </div>
 								
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Takaful Contribution Tax')" :type="'text'" :placeholder="__('Takaful Contribution Tax')" :name="'takaful_code'" :required="false"></x-form.input>
                                 </div>
 								
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Tax for the Support of Victims Fund')" :type="'text'" :placeholder="__('Tax for the Support of Victims Fund')" :name="'tax_for_victims_code'" :required="false"></x-form.input>
                                 </div>
 								
 								
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Real Estate Taxes')" :type="'text'" :placeholder="__('Real Estate Taxes')" :name="'real_estate_taxes_code'" :required="false"></x-form.input>
                                 </div>
 								
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Stamp Duty Taxes')" :type="'text'" :placeholder="__('Stamp Duty Taxes')" :name="'stamp_duty_taxes_code'" :required="false"></x-form.input>
                                 </div>
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Other Taxes')" :type="'text'" :placeholder="__('Other Taxes')" :name="'other_taxes_code'" :required="false"></x-form.input>
                                 </div>
 								
@@ -259,19 +259,19 @@ use App\NotificationSetting ;
                             <div class="form-group row">
 
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Letter Of Guarantee Commission Fees')" :type="'text'" :placeholder="__('Letter Of Guarantee Commission Fees')" :name="'letter_of_guarantee_commission_fees_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Letter Of Guarantee Issuance Fees')" :type="'text'" :placeholder="__('Letter Of Guarantee Issuance Fees')" :name="'letter_of_guarantee_issuance_fees_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Letter Of Credit Commission Fees')" :type="'text'" :placeholder="__('Letter Of Credit Commission Fees')" :name="'letter_of_credit_commission_fees_code'" :required="false"></x-form.input>
                                 </div>
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Letter Of Credit Other Fees')" :type="'text'" :placeholder="__('Letter Of Credit Other Fees')" :name="'letter_of_credit_other_fees_code'" :required="false"></x-form.input>
                                 </div>
 
@@ -297,23 +297,23 @@ use App\NotificationSetting ;
                             <div class="form-group row">
 
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Fully Secured Overdraft Interest Expense')" :type="'text'" :placeholder="__('Fully Secured Overdraft Interest Expense')" :name="'fully_secured_overdraft_interest_expense_code'" :required="false"></x-form.input>
                                 </div>
 								
-								 <div class="col-md-3 ">
+								 <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Clean Overdraft Interest Expense')" :type="'text'" :placeholder="__('Clean Overdraft Interest Expense')" :name="'clean_overdraft_interest_expense_code'" :required="false"></x-form.input>
                                 </div>
 								
-								 <div class="col-md-3 ">
+								 <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Overdraft Against Commercial Paper Interest Expense')" :type="'text'" :placeholder="__('Overdraft Against Commercial Paper Interest Expense')" :name="'overdraft_against_commercial_paper_interest_expense_code'" :required="false"></x-form.input>
                                 </div>
 								
-								 <div class="col-md-3 ">
+								 <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Overdraft Against Contract Assignment Interest Expense')" :type="'text'" :placeholder="__('Overdraft Against Contract Assignment Interest Expense')" :name="'overdraft_against_contract_assignment_interest_expense_code'" :required="false"></x-form.input>
                                 </div>
 								
-								 <div class="col-md-3 ">
+								 <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Medium Term Loan Interest Expense')" :type="'text'" :placeholder="__('Medium Term Loan Interest Expense')" :name="'medium_term_loan_interest_expense_code'" :required="false"></x-form.input>
                                 </div>
 								
@@ -353,16 +353,16 @@ use App\NotificationSetting ;
 
 
                             {{--
-								<div class="col-md-3 ">
+								<div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Interest Revenue')" :type="'text'" :placeholder="__('Interest Revenue')" :name="'interest_revenue_code'" :required="false"></x-form.input>
                                 </div>
 								
-								<div class="col-md-6 ">
+								<div class="col-md-6">
                              
                                 <label>{{__('Receiving Bank')}} @include('star')</label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select js-when-change-trigger-change-account-type data-financial-institution-id name="financial_institution_id" class="form-control ">
+                                    <select js-when-change-trigger-change-account-type data-financial-institution-id name="financial_institution_id" class="form-control">
                                         @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                         <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getCashInBankReceivingBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
                                         @endforeach

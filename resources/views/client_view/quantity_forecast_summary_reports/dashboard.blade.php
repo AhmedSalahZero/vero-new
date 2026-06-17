@@ -12,13 +12,13 @@
 </style>
 @endsection
 @section('dash_nav')
-<ul class="kt-menu__nav ">
-    <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a href="{{ route('forecast.quantity.report', $company) }}" class="kt-menu__link active-button"><span class="kt-menu__link-text active-text">{{ __('Sales Target Dashboard') }}</span></a>
+<ul class="kt-menu__nav">
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('forecast.quantity.report', $company) }}" class="kt-menu__link active-button"><span class="kt-menu__link-text active-text">{{ __('Sales Target Dashboard') }}</span></a>
     </li>
-    <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('breakdown.forecast.quantity.report', $company) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{__('Target Breakdown Dashboard')}}</span></a>
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('breakdown.forecast.quantity.report', $company) }}" class="kt-menu__link"><span class="kt-menu__link-text">{{__('Target Breakdown Dashboard')}}</span></a>
     </li>
     @if ((App\Models\CollectionSetting::where('company_id', $company->id)->first()) !== null))
-    <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('collection.forecast.quantity.report', $company) }}" class="kt-menu__link "><span class="kt-menu__link-text">{{__('Target Collection Dashboard')}}</span></a>
+    <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('collection.forecast.quantity.report', $company) }}" class="kt-menu__link"><span class="kt-menu__link-text">{{__('Target Collection Dashboard')}}</span></a>
     </li>
     @endif
 
@@ -35,7 +35,7 @@
             </h3>
         </div>
     </div>
-    <div class="kt-portlet__body  kt-portlet__body--fit">
+    <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="row row-no-padding row-col-separator-xl">
             {{-- Quarters --}}
             @foreach ($quarters as $quarter_name => $quarter)
@@ -84,7 +84,7 @@
             </h3>
         </div>
     </div>
-    <div class="kt-portlet__body  kt-portlet__body--fit">
+    <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="row row-no-padding row-col-separator-xl">
             {{-- Quarters --}}
 
@@ -163,7 +163,7 @@
 <div class="row">
     {{-- Total Facilities --}}
     <div class="col-md-12">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
 
             <div class="kt-portlet__body">
                 <div class="row">
@@ -202,7 +202,7 @@
 <div class="row">
     {{-- Total Facilities --}}
     <div class="col-md-12">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
 
             <div class="kt-portlet__body">
                 <div class="row">
@@ -222,7 +222,7 @@
                                 </tr>
                                 @endslot
                                 @slot('table_body')
-                                <tr class="group-color  table-active text-lg-left  ">
+                                <tr class="group-color table-active text-lg-left">
                                     <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __('Monthly Sales') }}</b></td>
                                     @foreach ($dates as $date)
                                     <td class="hidden"> </td>
@@ -248,7 +248,7 @@
                                     @endforeach
                                     <td>{{ number_format(array_sum($month_sales_percentage)) .' %'  }}</td>
                                 </tr>
-                                <tr class="group-color  text-lg-left  ">
+                                <tr class="group-color text-lg-left">
                                     <td colspan="{{ count($dates) + 2 }}"><b class="white-text">{{ __('Accumulated Sales') }}</b></td>
                                     @foreach ($dates as $date)
                                     <td class="hidden"> </td>

@@ -183,7 +183,7 @@
                             value="{{ @old('duration') }}"
                             @endif
 
-                            type="number" step="1" min="1" max="600" id="duration" name="duration" class="form-control number  grace_period_calc max-tenor-limit installment_condition" placeholder="{{__('Duration In Months')}} .." required />
+                            type="number" step="1" min="1" max="600" id="duration" name="duration" class="form-control number grace_period_calc max-tenor-limit installment_condition" placeholder="{{__('Duration In Months')}} .." required />
                             @if ($errors->has('duration'))
                             <div class="invalid-feedback">{{ $errors->first('duration') }}</div>
                             @endif
@@ -406,7 +406,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="{{__('right')}} text-right">
-                            <button type="submit" class="btn active-style ">Calculate</button>
+                            <button type="submit" class="btn active-style">Calculate</button>
                             {{-- <input id="submit---id" type="submit" onclick="return false;" name="submit" value="{{__('Calculate')}}" onclick="return false;" class="btn active-style submit"> --}}
                         </div>
 

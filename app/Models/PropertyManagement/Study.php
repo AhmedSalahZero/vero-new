@@ -148,6 +148,9 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereStudyEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereStudyStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\PropertyManagement\Study whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PropertyManagement\Manpower> $manpowers
+ * @property-read int|null $manpowers_count
+ * @property-read bool|null $manpowers_exists
  * @mixin \Eloquent
  */
 class Study extends Model
@@ -3326,16 +3329,8 @@ class Study extends Model
     {
         return $this->hasMany(VatAndCreditWithholdTaxOpeningBalance::class, 'study_id', 'id');
     }
-    public function getVatOpeningBalanceAmount():float
-    {
-        $vatOpening = $this->vatAndCreditWithholdTaxesOpeningBalances->first();
-        return $vatOpening ? $vatOpening->getVatAmount() : 0 ;
-    }
-    public function getCreditWithholdOpeningBalanceAmount():float
-    {
-        $vatOpening = $this->vatAndCreditWithholdTaxesOpeningBalances->first();
-        return $vatOpening ? $vatOpening->getCreditWithholdTaxes() : 0 ;
-    }
+   
+   
     public function longTermLoanOpeningBalances():HasMany
     {
         return $this->hasMany(LongTermLoanOpeningBalance::class, 'study_id', 'id');

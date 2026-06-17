@@ -99,7 +99,7 @@
                             </td>
                             <td>{{ $item->sub_of == 0 ? 'Main' : $item->parent->name[$lang] }}</td>
 
-                            <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions"
+                            <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions"
                                 data-autohide-disabled="false"><span style="overflow: visible; position: relative; width: 110px;">
                                     {{-- <div class="dropdown"> <a data-toggle="dropdown"
                                             class="btn btn-sm btn-clean btn-icon btn-icon-sm"> <i

@@ -7,37 +7,36 @@ use App\Models\Partner;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 12.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -47,7 +46,7 @@ use App\Models\Partner;
 {{ __('Down Payments Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -77,7 +76,7 @@ use App\Models\Partner;
     <div class="kt-portlet__body">
         <div class="form-group row">
 
-            <div class="col-md-2 ">
+            <div class="col-md-2">
                 <label>{{__('Receiving Date')}}</label>
                 <div class="kt-input-icon">
                     <div class="input-group date">
@@ -90,11 +89,11 @@ use App\Models\Partner;
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 ">
+            <div class="col-md-2">
                 <label>{{__('Down Payment Type')}} @include('star')</label>
                 <div class="kt-input-icon">
                     <div class="input-group date">
-                        <select required name="down_payment_type" id="down_payment_type" class="form-control ">
+                        <select required name="down_payment_type" id="down_payment_type" class="form-control">
                             <option @if(isset($model) && $model->isDownPaymentOverContract() ) selected @endif value="{{ MoneyReceived::DOWN_PAYMENT_OVER_CONTRACT }}">{{__('Contract Down Payment')}}</option>
                             <option @if(isset($model) && $model->isGeneralDownPayment() ) selected @endif value="{{ MoneyReceived::DOWN_PAYMENT_GENERAL }}">{{__('General Down Payment')}}</option>
                             {{-- <option @if(isset($model) && $model->isSettlementOfOpeningBalance() ) selected @endif value="{{ MoneyReceived::SETTLEMENT_OF_OPENING_BALANCE }}">{{__('Settlement Of Opening Balance')}}</option> --}}
@@ -105,22 +104,11 @@ use App\Models\Partner;
             </div>
 
 
-            <div class="col-md-2 " id="invoice-currency-div">
+            <div class="col-md-2" id="invoice-currency-div">
                 <label>{{__('Contract Currency')}} @include('star')</label>
                 <div class="kt-input-icon">
                     <div class="input-group date">
-                        <select id="invoice-currency-id" name="currency" class="form-control 
-							currency-class
-							currency-for-contracts
-							invoice-currency-class
-					
-							
-							ajax-get-contracts-for-customer  ajax-get-sales-orders-for-contract
-							current-invoice-currency
-							 ajax-get-invoice-numbers
-							 update-exchange-rate
-							 
-							 ">
+                        <select id="invoice-currency-id" name="currency" class="form-control currency-class currency-for-contracts invoice-currency-class ajax-get-contracts-for-customer ajax-get-sales-orders-for-contract current-invoice-currency ajax-get-invoice-numbers update-exchange-rate">
 
                             @foreach(isset($currencies) ? $currencies : getBanksCurrencies () as $currencyId=>$currentName)
                             @php
@@ -133,7 +121,7 @@ use App\Models\Partner;
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 ">
+            <div class="col-md-4">
                 <label>{{__('Customer Name')}}
                     @include('star')
                 </label>
@@ -156,18 +144,11 @@ use App\Models\Partner;
 
 
 
-            <div class="col-md-2 ">
+            <div class="col-md-2">
                 <label>{{__('Receiving Currency')}} @include('star')</label>
                 <div class="kt-input-icon">
                     <div class="input-group date">
-                        <select id="receiving-currency-id" when-change-trigger-account-type-change name="receiving_currency" class="form-control 
-									current-currency
-									currency-class
-									receiving-currency-class
-
-									ajax-get-invoice-numbers 
-									update-exchange-rate	
-							">
+                        <select id="receiving-currency-id" when-change-trigger-account-type-change name="receiving_currency" class="form-control current-currency currency-class receiving-currency-class ajax-get-invoice-numbers update-exchange-rate">
                             {{-- <option value="" selected>{{__('Select')}}</option> --}}
                             @foreach(isset($currencies) ? $currencies : getBanksCurrencies () as $currencyId=>$currentName)
                             @php
@@ -191,9 +172,7 @@ use App\Models\Partner;
                 <div class="kt-input-icon">
                     <div class="kt-input-icon">
                         <div class="input-group date">
-                            <select data-current-selected="{{ isset($model) ? $model->getContractId() : 0 }}" id="contract-id" name="contract_id" class="form-control down-payment-contract-class 
-										ajax-get-invoice-numbers
-										 ajax-get-sales-orders-for-contract">
+                            <select data-current-selected="{{ isset($model) ? $model->getContractId() : 0 }}" id="contract-id" name="contract_id" class="form-control down-payment-contract-class ajax-get-invoice-numbers ajax-get-sales-orders-for-contract">
                                 <option value="" selected>{{__('Select')}}</option>
                                 @foreach($contracts as $index => $contract)
                                 <option @if(isset($model) && $model->getContractId() == $contract->id ) selected @endif value="{{ $contract->id }}">{{$contract->getName()}}</option>
@@ -321,7 +300,7 @@ use App\Models\Partner;
     <div class="kt-portlet__body">
         <div class="form-group">
             <div class="row">
-                <div class="col-md-5 width-45 ">
+                <div class="col-md-5 width-45">
                     <label>{{__('Select Receiving Branch')}} @include('star')</label>
                     <div class="kt-input-icon">
                         <div class="input-group date">
@@ -338,7 +317,7 @@ use App\Models\Partner;
                 <div class="col-md-3 closest-parent">
                     <label>{{__('Received Amount')}} <span class="currency-span"></span> @include('star')</label>
                     <div class="kt-input-icon">
-                        <input data-max-cheque-value="0" type="text" value="{{ isset($model) ? $model->getReceivedAmount() :0 }}" name="received_amount[{{ MoneyReceived::CASH_IN_SAFE }}]" class="form-control only-greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::CASH_IN_SAFE .'-received-amount' }}  main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::CASH_IN_SAFE }}" placeholder="{{__('Received Amount')}}">
+                        <input data-max-cheque-value="0" type="text" value="{{ isset($model) ? $model->getReceivedAmount() :0 }}" name="received_amount[{{ MoneyReceived::CASH_IN_SAFE }}]" class="form-control only-greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::CASH_IN_SAFE .'-received-amount' }} main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::CASH_IN_SAFE }}" placeholder="{{__('Received Amount')}}">
                         <x-tool-tip title="{{__('Kash Vero')}}" />
                     </div>
                 </div>
@@ -389,7 +368,7 @@ use App\Models\Partner;
                     <div class="kt-input-icon">
                         <div class="input-group date">
 
-                            <select js-when-change-trigger-change-account-type data-financial-institution-id name="receiving_bank_id[{{ MoneyReceived::CASH_IN_BANK  }}]" class="form-control ">
+                            <select js-when-change-trigger-change-account-type data-financial-institution-id name="receiving_bank_id[{{ MoneyReceived::CASH_IN_BANK  }}]" class="form-control">
                                 @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                 <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getCashInBankReceivingBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
                                 @endforeach
@@ -401,13 +380,13 @@ use App\Models\Partner;
                 <div class="col-md-2 closest-parent">
                     <label>{{__('Deposit Amount')}} <span class="currency-span"></span> @include('star')</label>
                     <div class="kt-input-icon">
-                        <input data-max-cheque-value="0" type="text" value="{{ isset($model) ? $model->getReceivedAmount():0 }}" name="received_amount[{{ MoneyReceived::CASH_IN_BANK }}]" class="form-control greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::CASH_IN_BANK .'-received-amount' }}  main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::CASH_IN_BANK }}" placeholder="{{__('Insert Amount')}}">
+                        <input data-max-cheque-value="0" type="text" value="{{ isset($model) ? $model->getReceivedAmount():0 }}" name="received_amount[{{ MoneyReceived::CASH_IN_BANK }}]" class="form-control greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::CASH_IN_BANK .'-received-amount' }} main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::CASH_IN_BANK }}" placeholder="{{__('Insert Amount')}}">
                     </div>
                 </div>
 
 
 
-                <div class="col-md-3 ">
+                <div class="col-md-3">
                     <label>{{__('Account Type')}} @include('star')</label>
                     <div class="kt-input-icon">
                         <div class="input-group date">
@@ -497,7 +476,7 @@ use App\Models\Partner;
 							**					هو البنك اللي العميل جابلي منه الشيك وبالتالي مش شرط يكون من بنوك لانة ممكن يكون من بنك خاص بالعميل
 
                                  --}}
-                            <select name="drawee_bank_id" class="form-control ">
+                            <select name="drawee_bank_id" class="form-control">
                                 @foreach($selectedBanks as $bankId=>$bankName)
                                 <option value="{{ $bankId }}" {{ isset($model) && $model->cheque && $model->cheque->getDraweeBankId() == $bankId ? 'selected':'' }}>{{ $bankName }}</option>
                                 @endforeach
@@ -510,7 +489,7 @@ use App\Models\Partner;
                 <div class="col-md-2 width-12 closest-parent">
                     <label>{{__('Cheque Amount')}} <span class="currency-span"></span> @include('star')</label>
                     <div class="kt-input-icon">
-                        <input data-max-cheque-value="0" value="{{ isset($model) ? $model->getReceivedAmount() : 0 }}" placeholder="{{ __('Please insert the cheque amount') }}" type="text" name="received_amount[{{ MoneyReceived::CHEQUE }}]" class="form-control only-greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::CHEQUE .'-received-amount' }}  main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::CHEQUE }}">
+                        <input data-max-cheque-value="0" value="{{ isset($model) ? $model->getReceivedAmount() : 0 }}" placeholder="{{ __('Please insert the cheque amount') }}" type="text" name="received_amount[{{ MoneyReceived::CHEQUE }}]" class="form-control only-greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::CHEQUE .'-received-amount' }} main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::CHEQUE }}">
                     </div>
                 </div>
 
@@ -540,7 +519,7 @@ use App\Models\Partner;
                 </div>
 
 
-                <div class="col-md-2 ">
+                <div class="col-md-2">
                     <label>{{__('Branch')}} @include('star')</label>
                     <div class="kt-input-icon">
                         <div class="input-group date">
@@ -597,7 +576,7 @@ use App\Models\Partner;
                     <div class="kt-input-icon">
                         <div class="input-group date">
 
-                            <select js-when-change-trigger-change-account-type data-financial-institution-id name="receiving_bank_id[{{ MoneyReceived::INCOMING_TRANSFER }}]" class="form-control ">
+                            <select js-when-change-trigger-change-account-type data-financial-institution-id name="receiving_bank_id[{{ MoneyReceived::INCOMING_TRANSFER }}]" class="form-control">
                                 @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                 <option value="{{ $financialInstitutionBank->id }}" {{ isset($model) && $model->getIncomingTransferReceivingBankId() == $financialInstitutionBank->id ? 'selected' : '' }}>{{ $financialInstitutionBank->getName() }}</option>
                                 @endforeach
@@ -609,7 +588,7 @@ use App\Models\Partner;
                 <div class="col-md-2 closest-parent">
                     <label>{{__('Incoming Transfer Amount')}} <span class="currency-span"></span> @include('star')</label>
                     <div class="kt-input-icon">
-                        <input data-max-cheque-value="0" type="text" value="{{ isset($model) ? $model->getReceivedAmount():0 }}" name="received_amount[{{ MoneyReceived::INCOMING_TRANSFER }}]" class="form-control greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::INCOMING_TRANSFER .'-received-amount' }}  main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::INCOMING_TRANSFER }}" placeholder="{{__('Insert Amount')}}">
+                        <input data-max-cheque-value="0" type="text" value="{{ isset($model) ? $model->getReceivedAmount():0 }}" name="received_amount[{{ MoneyReceived::INCOMING_TRANSFER }}]" class="form-control greater-than-or-equal-zero-allowed {{ 'js-'. MoneyReceived::INCOMING_TRANSFER .'-received-amount' }} main-amount-class recalculate-amount-class" data-type="{{ MoneyReceived::INCOMING_TRANSFER }}" placeholder="{{__('Insert Amount')}}">
                     </div>
                 </div>
 
@@ -686,7 +665,7 @@ use App\Models\Partner;
 
         <div class="js-down-payment-template hidden">
             <div class="col-md-12 js-duplicate-node">
-                <div class=" kt-margin-b-10 border-class">
+                <div class="kt-margin-b-10 border-class">
                     @include('reports.moneyReceived._down-payments-sales-orders')
                 </div>
             </div>

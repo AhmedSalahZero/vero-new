@@ -110,6 +110,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency whereUserComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\BuyOrSellCurrency filterByTransactionDate($startDate, $endDate)
  * @mixin \Eloquent
  */
 class BuyOrSellCurrency extends Model

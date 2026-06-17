@@ -1,7 +1,7 @@
 <a data-toggle="modal" data-target="#edit-opening-cheques{{ $moneyPayment->id }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Edit Cheque') }}" href="#"><i class="fa fa-pen-alt exclude-icon default-icon-color"></i></a>
 
 <div class="modal closest-parent-class editable-opening-balance-cheque fade" id="edit-opening-cheques{{ $moneyPayment->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog  modal-xl modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <form   action="{{ route('update.opening.payable.cheque',['company'=>$company->id,'moneyPayment'=>$moneyPayment->id,'payableCheque'=>$moneyPayment->payableCheque->id]) }}" method="post">
                 @csrf
@@ -42,7 +42,7 @@
 
                             <div class="kt-input-icon width-15">
                                 <div class="input-group">
-                                    <input name="exchange_rate" type="numeric" class="form-control " value="{{ isset($moneyPayment) ? $moneyPayment->getExchangeRate() : old('exchange_rate',1) }}">
+                                    <input name="exchange_rate" type="numeric" class="form-control" value="{{ isset($moneyPayment) ? $moneyPayment->getExchangeRate() : old('exchange_rate',1) }}">
                                 </div>
                             </div>
 
@@ -65,7 +65,7 @@
 
                             <div class="kt-input-icon width-15">
                                 <div class="input-group">
-                                    <input name="paid_amount" type="text" class="form-control " value="{{ number_format(isset($moneyPayment) ? $moneyPayment->getPaidAmount() : old('paid_amount',0)) }}">
+                                    <input name="paid_amount" type="text" class="form-control" value="{{ number_format(isset($moneyPayment) ? $moneyPayment->getPaidAmount() : old('paid_amount',0)) }}">
                                 </div>
                             </div>
 
@@ -76,7 +76,7 @@
 
                             <div class="kt-input-icon width-15">
                                 <div class="input-group">
-                                    <input name="cheque_number" type="text" class="form-control " value="{{ isset($moneyPayment) ? $moneyPayment->getPayableChequeNumber() : old('cheque_number',0)}}">
+                                    <input name="cheque_number" type="text" class="form-control" value="{{ isset($moneyPayment) ? $moneyPayment->getPayableChequeNumber() : old('cheque_number',0)}}">
                                 </div>
                             </div>
 
@@ -88,7 +88,7 @@
                         <div class="col-md-6 mb-3 mt-3">
                             <label>{{__('Drawal Bank')}} @include('star')</label>
                             <div class="kt-input-icon">
-                                <div class="input-group date ">
+                                <div class="input-group date">
                                     <select js-when-change-trigger-change-account-type data-financial-institution-id required name="drawl_bank_id" class="form-control js-drawl-bank">
                                         @foreach($financialInstitutionBanks as $index=>$financialInstitutionBank)
                                         <option value="{{ $financialInstitutionBank->id }}" {{ isset($moneyPayment) && $moneyPayment->cheque && $moneyPayment->cheque->getDraweeBankId() == $financialInstitutionBank->id ? 'selected':'' }}>{{ $financialInstitutionBank->getName() }}</option>
@@ -133,11 +133,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success 
-								
-								{{-- submit-form-btn --}}
-								
-								">{{ __('Confirm') }}</button>
+                    <button type="submit" class="btn btn-success {{-- submit-form-btn --}}">{{ __('Confirm') }}</button>
                 </div>
 
             </form>

@@ -87,7 +87,7 @@ $tableId = 'kt_table_1';
 </style>
 @csrf
 <input type="hidden" id="editable-by-btn" value="1">
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
     <input type="hidden" value="{{ $financialStatement->id }}" id="model-id">
     <input type="hidden" id="financial-statement-duration-type" value="{{ $financialStatement->duration_type ?? '' }}">
 
@@ -128,7 +128,7 @@ $tableId = 'kt_table_1';
 
 
         <x-slot name="headerTr">
-            <tr class="header-tr " data-model-name="{{ $modelName }}">
+            <tr class="header-tr" data-model-name="{{ $modelName }}">
                 <input type="hidden" name="sub_item_type" value="{{ getReportNameFromRouteName(Request()->route()->getName()) }}">
 
 
@@ -170,7 +170,7 @@ $tableId = 'kt_table_1';
                         function formatsubrow1(d, dates) {
 
                             // `d` is the original data object for the row
-                            let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped-  table-hover table-checkable position-relative dataTable no-footer dtr-inline" > <thead style="display:none"><tr><td></td><td></td><td></td><td></td><td></td>
+                            let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped- table-hover table-checkable position-relative dataTable no-footer dtr-inline" > <thead style="display:none"><tr><td></td><td></td><td></td><td></td><td></td>
     <td></td> <td></td><td></td>  `;
                             for (date in dates) {
                                 subtable += ' <td> </td>';
@@ -256,11 +256,11 @@ $tableId = 'kt_table_1';
                                         if (!row.isSubItem && row.has_sub_items) {
                                             elements = `<a data-is-subitem="0" data-financial-statement-item-id="${row.id}" data-financial-statement-id="${modelId}" class="d-block add-btn mb-2" href="#" data-toggle="modal" data-target="#add-sub-modal${row.id}">{{ __('Add') }}</a> `;
                                             if (row.sub_items.length) {
-                                                // elements += `<a data-is-subitem="0" data-financial-statement-item-id="${row.id}" data-financial-statement-id="${modelId}" class="d-block  text-danger" href="#" data-toggle="modal" data-target="#delete-all-sub-modal${row.id}" >{{ __('Delete') }}</a> `
+                                                // elements += `<a data-is-subitem="0" data-financial-statement-item-id="${row.id}" data-financial-statement-id="${modelId}" class="d-block text-danger" href="#" data-toggle="modal" data-target="#delete-all-sub-modal${row.id}" >{{ __('Delete') }}</a> `
                                             }
                                             return elements;
                                         } else if (row.isSubItem) {
-                                            return `<a data-is-subitem="1" class="d-block edit-btn mb-2 text-white " href="#" data-toggle="modal" data-is-depreciation-or-amortization="${row.pivot.is_depreciation_or_amortization}" data-financial-statement-id="${row.pivot.financial_statement_able_id}" data-target="#edit-sub-modal${row.pivot.financial_statement_able_item_id + row.pivot.sub_item_name.replaceAll('/','-').replaceAll('&','-').replaceAll('%','-').replaceAll(' ','-').replaceAll('(','-').replaceAll(')','-') }"> <i class="fa fa-pen-alt"></i>  </a> <a class="d-block  delete-btn text-white mb-2 text-danger" href="#" data-toggle="modal" data-target="#delete-sub-modal${row.pivot.financial_statement_able_item_id + row.pivot.sub_item_name.replaceAll('/','-').replaceAll('&','-').replaceAll('%','-').replaceAll(' ','-').replaceAll('(','-').replaceAll(')','-') }">
+                                            return `<a data-is-subitem="1" class="d-block edit-btn mb-2 text-white" href="#" data-toggle="modal" data-is-depreciation-or-amortization="${row.pivot.is_depreciation_or_amortization}" data-financial-statement-id="${row.pivot.financial_statement_able_id}" data-target="#edit-sub-modal${row.pivot.financial_statement_able_item_id + row.pivot.sub_item_name.replaceAll('/','-').replaceAll('&','-').replaceAll('%','-').replaceAll(' ','-').replaceAll('(','-').replaceAll(')','-') }"> <i class="fa fa-pen-alt"></i>  </a> <a class="d-block delete-btn text-white mb-2 text-danger" href="#" data-toggle="modal" data-target="#delete-sub-modal${row.pivot.financial_statement_able_item_id + row.pivot.sub_item_name.replaceAll('/','-').replaceAll('&','-').replaceAll('%','-').replaceAll(' ','-').replaceAll('(','-').replaceAll(')','-') }">
                                 <i class="fas fa-trash-alt"></i>
                                 
                                 </a>`
@@ -446,7 +446,7 @@ $tableId = 'kt_table_1';
             <input  type="hidden" name="financial_statement_able_id"  value="{{ $financialStatement->id }}">
             <input  type="hidden" name="sub_item_name"  value="${data.pivot.sub_item_name}">
             <label>{{ __('name') }}</label>
-            <input name="new_sub_item_name"  class="form-control   mb-2" type="text" value="${data.pivot.sub_item_name}">
+            <input name="new_sub_item_name"  class="form-control mb-2" type="text" value="${data.pivot.sub_item_name}">
             ${Depreciation}
            <div class="mt-2">
             <label>{{ __('Sub Of') }}</label>
@@ -649,7 +649,7 @@ $tableId = 'kt_table_1';
       <div class="modal-body">
         <form id="add-sub-item-form${data.id}" class="submit-sub-item" action="{{ route('admin.store.financial.statement.report',['company'=>getCurrentCompanyId()]) }}">
 			<input type="hidden" name="sub_item_type" value="{{ getReportNameFromRouteName(Request()->route()->getName()) }}">
-            <label class="label ">{{ __('How Many Items ?') }}</label>
+            <label class="label">{{ __('How Many Items ?') }}</label>
             <input type="hidden" name="financial_statement_able_item_id"  value="${data.id}">
             <input  type="hidden" name="financial_statement_able_id"  value="{{ $financialStatement->id }}">
 

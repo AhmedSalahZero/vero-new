@@ -33,7 +33,7 @@
                         <div class="col-md-6">
                             <label>{{__('Data Type')}} </label>
                             <div class="kt-input-icon">
-                                <div class="input-group ">
+                                <div class="input-group">
                                     <input type="text" class="form-control" disabled value="{{__('Value And Count')}}"  >
                                 </div>
                             </div>

@@ -89,7 +89,7 @@ class LcSettlementInternalMoneyTransferController
 		$internalMoneyTransfer = new LcSettlementInternalMoneyTransfer ;
 		$companyId = $company->id ;
 		/**
-		 * @var LetterOfCreditIssuance $letterOfCreditIssuance
+		 * @var LetterOfCreditIssuance|null $letterOfCreditIssuance
 		 */
 		$letterOfCreditIssuance = LetterOfCreditIssuance::find($request->get('to_letter_of_credit_issuance_id'));
 		if(!$letterOfCreditIssuance){

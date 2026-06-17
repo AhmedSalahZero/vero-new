@@ -62,7 +62,7 @@ $months = $study->getMonths() ;
 				<li class="nav-item ml-auto" style="margin-top:10px">
 	
                     <a style="max-height:40px" href="{{ route($exportRouteName,['company'=>$company->id,'study'=>$study->id]) }}" class="btn btn-primary" >
-						           <i class="fas fa-file-export expand-icon   exclude-icon"></i>
+						           <i class="fas fa-file-export expand-icon exclude-icon"></i>
 							Export Excel
 					
                     </a>
@@ -82,11 +82,11 @@ $months = $study->getMonths() ;
     @foreach($tableDataFormatteds as $title=> $tableDataFormatted)
 		@if($title != $odasTitleStatement ||  ($title == $odasTitleStatement )  )
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             <div class="row">
 
                 <div class="col-md-10">
-                    <div class="d-flex align-items-center ">
+                    <div class="d-flex align-items-center">
                         <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                             {{ $title }}
                         </h3>
@@ -132,7 +132,7 @@ $months = $study->getMonths() ;
             <div class="row">
 
                 <div class="col-md-10">
-                    <div class="d-flex align-items-center ">
+                    <div class="d-flex align-items-center">
                         <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                             {{ __('Manual Funding Structure') }}
                         </h3>
@@ -151,13 +151,13 @@ $months = $study->getMonths() ;
 				
                 <x-tables.repeater-table :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                     <x-slot name="ths">
-                        <x-tables.repeater-table-th :subParentClass="'plus-max-width-class fixed-column'" class="  header-border-down plus-max-width-class" :title="__('+/-')"></x-tables.repeater-table-th>
-                        <x-tables.repeater-table-th class=" category-selector-class header-border-down " :title="__('Item')"></x-tables.repeater-table-th>
+                        <x-tables.repeater-table-th :subParentClass="'plus-max-width-class fixed-column'" class="header-border-down plus-max-width-class" :title="__('+/-')"></x-tables.repeater-table-th>
+                        <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Item')"></x-tables.repeater-table-th>
 
-                        @for($i = 0 ; $i<= $months ; $i++) @php $monthName=formatDateForView($studyDates[$i]); @endphp <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="$monthName">
+                        @for($i = 0 ; $i<= $months ; $i++) @php $monthName=formatDateForView($studyDates[$i]); @endphp <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="$monthName">
                             </x-tables.repeater-table-th>
                             @endfor
-                            <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('Total')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('Total')"></x-tables.repeater-table-th>
                     </x-slot>
                     <x-slot name="trs">
 
@@ -171,7 +171,7 @@ $months = $study->getMonths() ;
 
 
                             <td class="fixed-column">
-							    <div class="col-md-12  text-left">
+							    <div class="col-md-12 text-left">
                                         <div class="mt-2 d-inline-block">
                                             <div class="kt-radio-inline">
                                                 <label class="mr-3">
@@ -190,13 +190,8 @@ $months = $study->getMonths() ;
                                     </div>
 									
 						
-                                <a href="#" class="btn 
-								
-									visibility-hidden
-								
-									 
-									 btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
-                                    <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
+                                <a href="#" class="btn visibility-hidden btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
+                                    <i class="fas fa-angle-double-down expand-icon exclude-icon"></i>
                                 </a>
                             </td>
 
@@ -241,16 +236,14 @@ $months = $study->getMonths() ;
 						
 						  <td class="fixed-column">
 
-                                <a href="#" class="btn 
-									visibility-hidden
-									 btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
-                                    <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
+                                <a href="#" class="btn visibility-hidden btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
+                                    <i class="fas fa-angle-double-down expand-icon exclude-icon"></i>
                                 </a>
                             </td>
 							
 							
                             <td>
-                                <input disabled value="{{'[ '.$revenueOptionArr['title'].' ] '. __('New Loans Funding Rate (%)') }}" class="form-control  text-left" type="text">
+                                <input disabled value="{{'[ '.$revenueOptionArr['title'].' ] '. __('New Loans Funding Rate (%)') }}" class="form-control text-left" type="text">
                             </td>
 							@php
 								
@@ -287,8 +280,8 @@ $months = $study->getMonths() ;
 		
 	    @if(isset($nextButton))
         <div class="text-right mt-4 cash-flow-btn mr-2">
-		   <button type="submit" name="recalculate-cashflow" href="{{ $nextButton['link'] }}" class="btn text-white bg-danger ">{{ __('Recalculate Cashflow') }}</button>
-            <a href="{{ $nextButton['link'] }}" class="btn btn-primary ">{{ $nextButton['title'] }}</a>
+		   <button type="submit" name="recalculate-cashflow" href="{{ $nextButton['link'] }}" class="btn text-white bg-danger">{{ __('Recalculate Cashflow') }}</button>
+            <a href="{{ $nextButton['link'] }}" class="btn btn-primary">{{ $nextButton['title'] }}</a>
         </div>
         @endif
 		</form>

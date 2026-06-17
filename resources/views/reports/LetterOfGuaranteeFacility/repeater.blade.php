@@ -4,12 +4,8 @@
                 @endphp
 
 
-                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center 
-                                         @if($isRepeater)
-                                         repeater_item
-                                         @endif 
-				                         ">
-                    <input type="hidden" class="form-control " @if($isRepeater) name="id" @else name="termAndConditions[0][id]" @endif value="{{ isset($termAndCondition) ? $termAndCondition->id : 0 }}">
+                <div style="flex-wrap:nowrap;" @if($isRepeater) data-repeater-item @endif class="form-group date-element-parent m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
+                    <input type="hidden" class="form-control" @if($isRepeater) name="id" @else name="termAndConditions[0][id]" @endif value="{{ isset($termAndCondition) ? $termAndCondition->id : 0 }}">
 
 
 
@@ -29,7 +25,7 @@
 
 
                     <div class="col-2">
-                        <label class="form-label font-weight-bold ">{{ __('Outstanding Balance') }}
+                        <label class="form-label font-weight-bold">{{ __('Outstanding Balance') }}
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
@@ -50,9 +46,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="cash_cover_rate" @else name="termAndConditions[0][cash_cover_rate]" @endif type="text" class="form-control only-percentage-allowed
-								{{-- trigger-change-repeater --}}
-								" value="{{ (isset($termAndCondition) ? $termAndCondition->cash_cover_rate : old('cash_cover_rate',0)) }}">
+                                <input @if($isRepeater) name="cash_cover_rate" @else name="termAndConditions[0][cash_cover_rate]" @endif type="text" class="form-control only-percentage-allowed {{-- trigger-change-repeater --}}" value="{{ (isset($termAndCondition) ? $termAndCondition->cash_cover_rate : old('cash_cover_rate',0)) }}">
                             </div>
                         </div>
                     </div>
@@ -62,9 +56,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input @if($isRepeater) name="commission_rate" @else name="termAndConditions[0][commission_rate]" @endif type="text" class="form-control only-percentage-allowed
-								{{-- trigger-change-repeater --}}
-								" value="{{ (isset($termAndCondition) ? $termAndCondition->commission_rate : old('commission_rate',0)) }}">
+                                <input @if($isRepeater) name="commission_rate" @else name="termAndConditions[0][commission_rate]" @endif type="text" class="form-control only-percentage-allowed {{-- trigger-change-repeater --}}" value="{{ (isset($termAndCondition) ? $termAndCondition->commission_rate : old('commission_rate',0)) }}">
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
 .max-w-comment{
@@ -132,7 +131,7 @@
 
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="row">
     <div class="col-md-12">
@@ -285,7 +284,7 @@
                 @csrf
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
                     @if(!$isCurrentAccount)
                     <div class="d-flex z-index-6" style="justify-content:right">
                         <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id ]) }}" class="btn active-style btn-icon-sm align-self-center">
@@ -302,60 +301,60 @@
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th  header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
-                                        <th class="view-table-th   header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Date') }}
                                         </th>
                                         @if(! $isCurrentAccount)
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Limit') }}
                                         </th>
                                         @endif
                                         @if($isAgainstCommercialPaper || $isAgainstAssignmentOfContract)
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Actual Limit') }}
                                         </th>
                                         @endif
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Beginning Balance') }}
                                         </th>
 
 
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Debit') }}
                                         </th>
 
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Credit') }}
                                         </th>
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('End Balance') }}
                                         </th>
 
                                         @if(! $isCurrentAccount)
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Room') }}
                                         </th>
-                                        <th class="view-table-th     header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {!! __('Calculated <br> Interest') !!}
                                         </th>
 
 
                                         @endif
 
-                                        <th class="view-table-th   header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Reviewed') }}
                                         </th>
 										
-										 <th class="view-table-th   header-th  align-middle text-center">
+										 <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Actions') }}
                                         </th>
-                                        <th class="view-table-th   header-th  align-middle text-center max-w-comment">
+                                        <th class="view-table-th header-th align-middle text-center max-w-comment">
                                             {{ __('Comment') }}
                                         </th>
 
@@ -370,22 +369,22 @@
 
                                     </script>
                                     @foreach($results as $index=>$modelAsStdClass)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg  ">{{ $index+1 }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg">{{ $index+1 }}</td>
+                                        <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
                                         @if(! $isCurrentAccount)
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->limit) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->limit) }}</td>
                                         @if($isAgainstCommercialPaper || $isAgainstAssignmentOfContract)
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->statement_limit) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->statement_limit) }}</td>
                                         @endif
                                         @endif
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->beginning_balance,2) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->debit,2) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->credit,2) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->end_balance,2) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->beginning_balance,2) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->debit,2) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->credit,2) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->end_balance,2) }}</td>
                                         @if(! $isCurrentAccount)
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->room) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ number_format($modelAsStdClass->interest_amount) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->room) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->interest_amount) }}</td>
                                         @endif
 										@php
 								
@@ -396,8 +395,8 @@
 											$userComment = \App\Helpers\HNonBanking::getUserCommentFromModel($modelAsStdClass);
 										@endphp
 								
-                                        <td class="sub-text-bg text-left ">{{   $reviewedText   }}</td>
-                                        <td class="sub-text-bg text-left ">
+                                        <td class="sub-text-bg text-left">{{   $reviewedText   }}</td>
+                                        <td class="sub-text-bg text-left">
 							
 											@if(isset($modelAsStdClass->is_commission_fees) && $modelAsStdClass->is_commission_fees)
 												

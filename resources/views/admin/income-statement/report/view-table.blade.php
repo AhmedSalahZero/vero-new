@@ -255,7 +255,7 @@ $tableId = 'kt_table_1';
             <form enctype="multipart/form-data" action="{{ route('admin.import.excel.template',['company'=>$company->id,'incomeStatement'=>$incomeStatement->id]) }}" method="post">
                 @csrf
                 <div class="modal-body">
-                    <div class="upload__excel " style="height:100px;display:flex;align-items:center;">
+                    <div class="upload__excel" style="height:100px;display:flex;align-items:center;">
 
                         <input name="excel_file" type="file" value="{{ __('Choose File') }}">
                     </div>
@@ -269,7 +269,7 @@ $tableId = 'kt_table_1';
     </div>
 </div>
 
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
     <input type="hidden" value="{{ $incomeStatement->id }}" id="model-id">
     <input type="hidden" id="income-statement-duration-type" value="{{ $incomeStatement->duration_type ?? '' }}">
 
@@ -346,7 +346,7 @@ $tableId = 'kt_table_1';
             <input type="hidden" name="sub_item_type" value="{{ getReportNameFromRouteName(Request()->route()->getName()) }}">
             <input type="text" style="height:0;overflow:hidden;width:0;background-color:transparent;border:none;color:transparent;" id="pdf_only" name="opens">
             <input type="text" style="height:0;overflow:hidden;width:0;background-color:transparent;border:none;color:transparent;" id="export_type" name="dynamic_rows_shown">
-            <tr class="header-tr " data-model-name="{{ $modelName }}">
+            <tr class="header-tr" data-model-name="{{ $modelName }}">
                 <th class="view-table-th header-th trigger-child-row-1 expand-all is-open-parent text-nowrap">
                     {{ __('Expand') }}
                     <span>+</span>
@@ -407,8 +407,8 @@ $tableId = 'kt_table_1';
                         if ($('.kt-portlet__body').length) {
 
                             $('.kt-portlet__body').append(`
-								<i class="cursor-pointer text-dark arrow-nav  arrow-left fa fa-arrow-left"></i>
-								<i class="cursor-pointer text-dark arrow-nav arrow-right fa  fa-arrow-right"></i>
+								<i class="cursor-pointer text-dark arrow-nav arrow-left fa fa-arrow-left"></i>
+								<i class="cursor-pointer text-dark arrow-nav arrow-right fa fa-arrow-right"></i>
 								`)
 
 						
@@ -961,17 +961,17 @@ $tableId = 'kt_table_1';
 											// console.log('render 3')
                                             let modelId = $('#model-id').val();
                                             if (!row.isSubItem && row.has_sub_items) {
-                                                elements = `<a data-is-subitem="0"    class=" ${row.id == domElements.corporateTaxesId ? 'd-none' :'d-block' } add-btn mb-2" href="#" data-toggle="modal" data-target="#add-sub-modal${row.id}">{{ __('Add') }}</a> `;
+                                                elements = `<a data-is-subitem="0"    class="${row.id == domElements.corporateTaxesId ? 'd-none' :'d-block' } add-btn mb-2" href="#" data-toggle="modal" data-target="#add-sub-modal${row.id}">{{ __('Add') }}</a> `;
                                                 return elements;
                                             } else if (row.isSubItem || vars.subItemType == 'modified' && row.pivot) {
 												if(row.pivot.financial_statement_able_item_id == domElements.corporateTaxesId){
 													return '';
 												}
-                                                var deleteItem = vars.subItemType == 'modified' && row.pivot ? '' : `<a   class="${row.pivot.financial_statement_able_item_id == domElements.corporateTaxesId ? 'd-none' :'d-block' }  delete-btn text-white mb-2 text-danger" href="#" data-toggle="modal" data-target="#delete-sub-modal${row.pivot.financial_statement_able_item_id + convertStringToClass(row.pivot.sub_item_name) }">
-													<i class="fas fa-trash-alt ${vars.subItemType =='actual' && row.pivot.exist_in_forecast  || vars.subItemType =='modified' ? 'hidden':''}"></i></a>`;
+                                                var deleteItem = vars.subItemType == 'modified' && row.pivot ? '' : `<a   class="${row.pivot.financial_statement_able_item_id == domElements.corporateTaxesId ? 'd-none' :'d-block' } delete-btn text-white mb-2 text-danger" href="#" data-toggle="modal" data-target="#delete-sub-modal${row.pivot.financial_statement_able_item_id + convertStringToClass(row.pivot.sub_item_name) }">
+													<i class="fas fa-trash-alt ${vars.subItemType =='actual' && row.pivot.exist_in_forecast || vars.subItemType =='modified' ? 'hidden':''}"></i></a>`;
                                                 return `
 											<div class="d-flex align-items-center justify-content-between">
-												<a  data-is-subitem="1"   class="${row.pivot.financial_statement_able_item_id == domElements.corporateTaxesId ? 'd-none' :'d-block' } edit-btn mb-2 text-white " href="#" data-toggle="modal"   data-target="#edit-sub-modal${row.pivot.financial_statement_able_item_id + convertStringToClass(row.pivot.sub_item_name) }"> 
+												<a  data-is-subitem="1"   class="${row.pivot.financial_statement_able_item_id == domElements.corporateTaxesId ? 'd-none' :'d-block' } edit-btn mb-2 text-white" href="#" data-toggle="modal"   data-target="#edit-sub-modal${row.pivot.financial_statement_able_item_id + convertStringToClass(row.pivot.sub_item_name) }"> 
 												<i data-id="${row.pivot.financial_statement_able_item_id}" class="fa fa-pen-alt edit-modal-icon"></i>  
 												</a> 
 												${deleteItem}
@@ -1295,13 +1295,13 @@ $tableId = 'kt_table_1';
                                                         }
 
                                                         var repeating = `<div class="form-group custom-divs-class">
-																<div class="d-flex flex-column align-items-center justify-content-center flex-wrap ">
+																<div class="d-flex flex-column align-items-center justify-content-center flex-wrap">
 																	<label >{{ __('Non-Repeating Amount') }}</label>
 															
 															<input data-sub-item-name="${data.pivot.sub_item_name}" data-sub-item-id="${data.pivot.id}" data-in-edit-mode="1" ${nonRepeatingFixedisChecked} class="can_be_percentage_or_fixed_class non-repeating-fixed can-trigger-non-repeating-modal" type="checkbox" value="non_repeating_fixed" name="sub_items[0][percentage_or_fixed]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">	
 															</div>
 															</div>
-															<div class="form-group custom-divs-class ${reportType == 'actual' || reportType =='modified'  ?'hidden' : ''}">
+															<div class="form-group custom-divs-class ${reportType == 'actual' || reportType =='modified' ?'hidden' : ''}">
 																<div class="d-flex flex-column align-items-center justify-content-center flex-wrap">
 																	<label >{{ __('Repeating Fixed Amount') }}</label>
 																	<input ${repeatingFixedisChecked}  class="can_be_percentage_or_fixed_class repeating-fixed" type="checkbox" value="repeating_fixed" name="sub_items[0][percentage_or_fixed]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">
@@ -1333,7 +1333,7 @@ $tableId = 'kt_table_1';
 															</div>
 															</div>
 																<div class="form-group custom-divs-class ${reportType == 'actual' || reportType =='modified' ?'hidden' : ''}">
-															<div class="d-flex flex-column align-items-center justify-content-center flex-wrap ">
+															<div class="d-flex flex-column align-items-center justify-content-center flex-wrap">
 																<label >{{ __('Cost Per Unit') }}</label>
 															<input ${costOfUnitIsChecked} class="can_be_percentage_or_fixed_class cost-of-unit" type="checkbox" value="cost_of_unit" name="sub_items[0][percentage_or_fixed]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">
 															</div>
@@ -1383,7 +1383,7 @@ $tableId = 'kt_table_1';
 															<div class="cost-of-unit-sub w-100 ${costOfUnitDisplay}">
 																<div class="d-flex align-items-center justify-content-between" style="flex:1">
 																<div class="d-flex flex-column align-items-center justify-content-center flex-wrap" style="width:60% !important">
-																	<div class="d-flex flex-column align-items-center justify-content-center flex-wrap " style="width:100% !important">
+																	<div class="d-flex flex-column align-items-center justify-content-center flex-wrap" style="width:100% !important">
 																		<label class="form-label flex-self-start">{{ __('Cost Per Unit Of') }}</label>
 																	<select multiple
 																class="form-select select select2-select2 sub_select"   name="sub_items[0][is_cost_of_unit_of][]">
@@ -1535,7 +1535,7 @@ $tableId = 'kt_table_1';
                             
 											<div class="modal fade delete-item-modal" data-item-id="${data.pivot.financial_statement_able_item_id}" data-sub-name="${data.pivot.sub_item_name}" id="delete-sub-modal${data.pivot.financial_statement_able_item_id + convertStringToClass(data.pivot.sub_item_name)}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" >
 													<div class="modal-dialog" role="document">
-														<div class="modal-content ">
+														<div class="modal-content">
 														<div class="modal-header">
 															<h5 class="modal-title" id="exampleModalLongTitle">{{ __('Delete Sub Item ') }} ${data.pivot.sub_item_name} </h5>
 															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -1744,14 +1744,14 @@ $tableId = 'kt_table_1';
 															${repeating}
 															
 														<div class="form-group custom-divs-class ${reportType == 'actual' || reportType =='modified' ? 'hidden' : ''}">
-															<div class="d-flex flex-column align-items-center justify-content-center flex-wrap ">
+															<div class="d-flex flex-column align-items-center justify-content-center flex-wrap">
 																<label >{{ __('% Of Sales') }}</label>
 															<input class="can_be_percentage_or_fixed_class percentage-of-sales" type="checkbox" value="percentage" name="sub_items[0][percentage_or_fixed]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">
 															</div>
 															</div>
 															
 															<div class="form-group custom-divs-class ${reportType == 'actual' || reportType =='modified' ? 'hidden' : ''}">
-															<div class="d-flex flex-column align-items-center justify-content-center flex-wrap ">
+															<div class="d-flex flex-column align-items-center justify-content-center flex-wrap">
 																<label >{{ __('Cost Per Unit') }}</label>
 															<input class="can_be_percentage_or_fixed_class cost-of-unit" type="checkbox" value="cost_of_unit" name="sub_items[0][percentage_or_fixed]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">
 															</div>
@@ -1837,7 +1837,7 @@ $tableId = 'kt_table_1';
 													<input  name="sub_items[0][name]" type="text" value="" class="form-control names-items-names trim-when-key-up" required>
 												</div>
 												
-												<div class="form-check mt-2 text-center ">
+												<div class="form-check mt-2 text-center">
 												<label class="form-check-label"  style="margin-top:3px;display:block" >
 													{{ __('Is Depreciation Or Amortization ?') }}
 												</label>
@@ -1858,7 +1858,7 @@ $tableId = 'kt_table_1';
 															<div class="form-group how-many-item d-flex flex-wrap text-nowrap justify-content-between align-items-center border-bottom-popup" data-id="${data.id}" data-index="0">
 																<div style="display:flex;align-items:center;width:100%;justify-content:space-between; ">
 																<div class="${increaseNameWidth ? 'width-66' : ''}"><label class="form-label">{{ __('Name') }}</label>
-																<input name="sub_items[0][name]" type="text" value="" class="form-control trim-when-key-up  names-items-names" required></div>
+																<input name="sub_items[0][name]" type="text" value="" class="form-control trim-when-key-up names-items-names" required></div>
 															
 																` + `` + `</div>` +
                                                                 `
@@ -1887,7 +1887,7 @@ $tableId = 'kt_table_1';
 																					<form  data-financial-statement-able-item-id="${data.id}" id="add-sub-item-form${data.id}" class="submit-sub-item" action="{{ route('admin.store.income.statement.report',['company'=>getCurrentCompanyId()]) }}" method="post">
 
 																						
-																						<label class="label ">{{ __('How Many Items ?') }}</label>
+																						<label class="label">{{ __('How Many Items ?') }}</label>
 																																	<input type="hidden" name="in_add_or_edit_modal" value="1">
 
 																						<input type="hidden" name="sub_item_type" value="{{ getReportNameFromRouteName(Request()->route()->getName()) }}">
@@ -2307,12 +2307,12 @@ $tableId = 'kt_table_1';
                     const isExpense = editMode && pivot.is_financial_expense
                     return `
 					<div class="financial-income-or-expense-id only-one-checkbox-parent d-flex mb-2 ${editMode ?'mt-3':''}">
-					<div class="d-flex flex-column align-items-center justify-content-center flex-wrap mr-5 ">
+					<div class="d-flex flex-column align-items-center justify-content-center flex-wrap mr-5">
 					<label >{{ __('Income') }}</label>
 					<input ${!isExpense ? 'checked' : ''} class="only-one-checkbox"   type="checkbox" value="1" name="sub_items[0][is_financial_income]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">	
 					</div>
 					
-					<div class="d-flex flex-column align-items-center justify-content-center flex-wrap ">
+					<div class="d-flex flex-column align-items-center justify-content-center flex-wrap">
 							<label >{{ __('Expense') }}</label>
 					<input ${isExpense ? 'checked':''} class="is-financial-expense-class only-one-checkbox" type="checkbox" value="1" name="sub_items[0][is_financial_expense]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">	
 					</div>
@@ -2339,7 +2339,7 @@ $tableId = 'kt_table_1';
                     let canBeDeductable = vatRateMaps[incomeStatementItemId].can_be_dedictiable;
 
                     var deductableCheckbox = canBeDeductable ? `<label for="dedictiable-for-${incomeStatementId}-element2-${incomeStatementItemId}" class="label" style="margin-right:5px;margin-bottom:0">{{ __('Is Deductible') }}</label>
-																	<input ${isDeductable ? 'checked'  : false } id="dedictiable-for-${incomeStatementId}-element2-${incomeStatementItemId}" class="form-control vat-rate-value " type="checkbox" value="1" name="sub_items[0][is_deductible]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">` : '';
+																	<input ${isDeductable ? 'checked'  : false } id="dedictiable-for-${incomeStatementId}-element2-${incomeStatementItemId}" class="form-control vat-rate-value" type="checkbox" value="1" name="sub_items[0][is_deductible]"  style="width:16px;height:16px;margin-left:-0.05rem;left:50%;">` : '';
                     var spacer = editModel ? `<div style="height:20px"></div>` : ''
                     var vatFields = hasVatRate ? ` ${spacer} <div class="checkboxes-vat ${isDepreciationOrAmortization ? 'd-none' : ''}">
 																<div class="checkboxes-vat-content d-flex align-items-center"> 
@@ -2420,12 +2420,12 @@ $tableId = 'kt_table_1';
 
 
                     tdForBodyQuantity += `<td class="" data-type="quantity"> <input value="${number_format(totalForQuantity)}" readonly type="text" class="form-control pr-0 total-for-quantity" style="min-width: 80px" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" onblur="this.style.width = ((this.value.length + 1) * 10) + 'px';" onkeyup="this.style.width = ((this.value.length + 1) * 10) + 'px';">
-						<i style="visibility:hidden" class="fa fa-ellipsis-h " ></i>
+						<i style="visibility:hidden" class="fa fa-ellipsis-h" ></i>
 					 </td>`
 
                     tdForBodyQuantity = '<tr data-equation="value / price" data-number-format="0" class="quantity" data-type="quantity">' + tdForBodyQuantity + '</tr>'
                     tdForBodyValue += `<td class="" data-type="value"> <input value="${number_format(totalForValue)}" readonly type="text" class="form-control pr-0 total-for-value" style="min-width: 80px" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" onblur="this.style.width = ((this.value.length + 1) * 10) + 'px';" onkeyup="this.style.width = ((this.value.length + 1) * 10) + 'px';"> 
-					<i style="visibility:hidden" class="fa fa-ellipsis-h " ></i>
+					<i style="visibility:hidden" class="fa fa-ellipsis-h" ></i>
 					
 					</td>`
                     tdForBodyValue = '<tr data-equation="quantity * price" data-number-format="0" class="value" data-type="value">' + tdForBodyValue + '</tr>'
@@ -2455,11 +2455,11 @@ $tableId = 'kt_table_1';
                     }
 			
                     return `
-					<div class="quantity-section ">
+					<div class="quantity-section">
 						<div class="checkboxes-for-quantity only-two-checkbox-parent mt-4">
 							<div class="quantity-checkbox-div">
 							<label >{{ __('Value') }}</label>
-								<input data-sub-item-name="${editModal ? pivot.sub_item_name : 'new'}" data-sub-item-id="${subItemId}" data-in-edit-mode="${editModal }" class="only-two-checkbox 	" type="checkbox" value="value"  style="width:16px;height:16px;" name="sub_items[0][is_quantity]" ${editModal && pivot.is_value_quantity_price&& pivot.is_value_quantity_price.includes('value') ? 'checked' : '' } ${!editModal ? '' : ''}>
+								<input data-sub-item-name="${editModal ? pivot.sub_item_name : 'new'}" data-sub-item-id="${subItemId}" data-in-edit-mode="${editModal }" class="only-two-checkbox" type="checkbox" value="value"  style="width:16px;height:16px;" name="sub_items[0][is_quantity]" ${editModal && pivot.is_value_quantity_price&& pivot.is_value_quantity_price.includes('value') ? 'checked' : '' } ${!editModal ? '' : ''}>
 							</div>
 							<div class="quantity-checkbox-div">
 								<label >{{ __('Quantity') }}</label>
@@ -2473,7 +2473,7 @@ $tableId = 'kt_table_1';
 						
 						
 						<div id="modal-for-quantity-0" data-sub-id="${editModal ? pivot.id : 0}" class="modal fade modal-for-quantity" data-index="0"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" >
-  <div class="modal-dialog modal-dialog-centered custom-modal-w-h "  role="document">
+  <div class="modal-dialog modal-dialog-centered custom-modal-w-h"  role="document">
     <div class="modal-content" style="overflow-x:scroll">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Values And Quantities</h5>
@@ -2482,7 +2482,7 @@ $tableId = 'kt_table_1';
         </button>
       </div>
       <div class="modal-body">
-        <table class="table table-striped-  table-hover table-checkable position-relative dataTable no-footer dtr-inline">
+        <table class="table table-striped- table-hover table-checkable position-relative dataTable no-footer dtr-inline">
 			<thead>
 				<tr class="header-tr">
 					${thsForHeader}
@@ -2540,7 +2540,7 @@ $tableId = 'kt_table_1';
                         thsForHeader += '<th class="' + thdClass + '" data-date="' + date + '">' + datesFormatted[date] + '</th>'
 						var disabledInput =isDisabledInput(date) ;
                         tdForBodyValue += `<td data-id="${id}" class="" data-type="value"  data-date="${date}">
-							<input ${disabledInput ? 'readonly ' :'' } data-id="${id}" style="min-width: 80px" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" onblur="this.style.width = ((this.value.length + 1) * 10) + 'px';" onkeyup="this.style.width = ((this.value.length + 1) * 10) + 'px';" data-date="${date}" data-type-non-repeating="value" class="val-input hidden-for-popup-non-repeating blured-item-non-repeating form-control " type="text"  value="${number_format(valueAtDate,0)}" > 
+							<input ${disabledInput ? 'readonly ' :'' } data-id="${id}" style="min-width: 80px" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" onblur="this.style.width = ((this.value.length + 1) * 10) + 'px';" onkeyup="this.style.width = ((this.value.length + 1) * 10) + 'px';" data-date="${date}" data-type-non-repeating="value" class="val-input hidden-for-popup-non-repeating blured-item-non-repeating form-control" type="text"  value="${number_format(valueAtDate,0)}" > 
 							<input ${disabledInput ? 'readonly ' :'' } data-id="${id}" style="min-width: 80px" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" onblur="this.style.width = ((this.value.length + 1) * 10) + 'px';" onkeyup="this.style.width = ((this.value.length + 1) * 10) + 'px';" data-date="${date}" data-type-non-repeating="value" class="val-input hidden-for-popup-non-repeating pr-0" type="hidden" name="sub_items[0][non_repeating_popup][${date}]" value="${valueAtDate}" > 
 							<i class="fa fa-ellipsis-h repeat-row" data-column-index="${date}" data-index="value" data-parent-query="tr"  title="{{__('Repeat Right')}}"></i>
 							
@@ -2555,7 +2555,7 @@ $tableId = 'kt_table_1';
 
 
                     tdForBodyValue += `<td class="" data-type="value"> <input value="${number_format(totalForNonRepeating)}" readonly type="text" class="form-control pr-0 total-for-non-repeating-value" style="min-width: 80px" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" onblur="this.style.width = ((this.value.length + 1) * 10) + 'px';" onkeyup="this.style.width = ((this.value.length + 1) * 10) + 'px';"> 
-					<i style="visibility:hidden" class="fa fa-ellipsis-h " ></i>
+					<i style="visibility:hidden" class="fa fa-ellipsis-h" ></i>
 					
 					</td>`
                     tdForBodyValue = '<tr data-number-format="0" class="value" data-type="value">' + tdForBodyValue + '</tr>'
@@ -2574,11 +2574,11 @@ $tableId = 'kt_table_1';
 
                  
 
-                    let result = `<div class="non-repeating-section ">
+                    let result = `<div class="non-repeating-section">
 						
 						
 						<div id="modal-for-non-repeating-0" data-sub-id="${editModal ? pivot.id : 0}" data-edit-model="${editModal}" class="modal fade modal-for-non-repeating" data-index="0"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" >
-  <div class="modal-dialog modal-dialog-centered custom-modal-w-h "  role="document">
+  <div class="modal-dialog modal-dialog-centered custom-modal-w-h"  role="document">
     <div class="modal-content" style="overflow-x:scroll">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Non Repeating</h5>
@@ -2587,7 +2587,7 @@ $tableId = 'kt_table_1';
         </button>
       </div>
       <div class="modal-body">
-        <table class="table table-striped-  table-hover table-checkable position-relative dataTable no-footer dtr-inline">
+        <table class="table table-striped- table-hover table-checkable position-relative dataTable no-footer dtr-inline">
 			<thead>
 				<tr class="header-tr">
 					${thsForHeader}
@@ -2655,27 +2655,27 @@ $tableId = 'kt_table_1';
                     }
 
                     return `
-					<div class="collection-policy ${pivot && pivot.is_depreciation_or_amortization ? 'd-none' : 'd-flex'}  flex-wrap w-100 mt-3 ${id == domElements.salesRevenueId && editMode  ? 'pl-25' :''}">
+					<div class="collection-policy ${pivot && pivot.is_depreciation_or_amortization ? 'd-none' : 'd-flex'} flex-wrap w-100 mt-3 ${id == domElements.salesRevenueId && editMode ? 'pl-25' :''}">
 						<div class="collection-policy-header basis-100 mb-4">
 							<div class="check-boxes">
-								<div class="checkbox-item d-flex ">
-									<label class="form-label label  mr-3">{{ __('Has ${collectionOrPayment} Policy') }}</label>
+								<div class="checkbox-item d-flex">
+									<label class="form-label label mr-3">{{ __('Has ${collectionOrPayment} Policy') }}</label>
 									<input checked type="checkbox" style="width:16px;height:16px;" name="" class="checkbox has-collection-policy-class form-control" checked  value="1">
 									<input type="hidden" class="has_collection_policy_input" name="sub_items[0][collection_policy][has_collection_policy]" value="1">
 								</div>
 							</div>
 						</div>
-						<div class="collection-policy-content basis-100  only-one-checked-parent">
-							<div class="collection-policy-wrapper ">
+						<div class="collection-policy-content basis-100 only-one-checked-parent">
+							<div class="collection-policy-wrapper">
 								<div class="collection-policy-checkboxes d-flex parent-for-checkbox">
 									<div class="checkbox-item d-flex mr-3">
-									<label class="form-label label  mr-3">{{ __('System Default') }}</label>
+									<label class="form-label label mr-3">{{ __('System Default') }}</label>
 									<input data-index="0" ${isSystemDefault || !isCustom ? 'checked' : ''} type="checkbox" style="width:16px;height:16px;" class="checkbox only-one-checked form-control checkedbox checkbox-for-policy system_default" name="sub_items[0][collection_policy][type][name]" value="system_default">
 								</div>
 								
-								<div class="checkbox-item d-flex ">
-									<label class="form-label label  mr-3">{{ __('Customize') }}</label>
-									<input data-index="0" ${isCustom ? 'checked' : ''} type="checkbox" style="width:16px;height:16px;" class="checkbox only-one-checked form-control checkedbox  checkbox-for-policy customize" name="sub_items[0][collection_policy][type][name]"  value="customize">
+								<div class="checkbox-item d-flex">
+									<label class="form-label label mr-3">{{ __('Customize') }}</label>
+									<input data-index="0" ${isCustom ? 'checked' : ''} type="checkbox" style="width:16px;height:16px;" class="checkbox only-one-checked form-control checkedbox checkbox-for-policy customize" name="sub_items[0][collection_policy][type][name]"  value="customize">
 								</div>
 								
 								</div>
@@ -2693,9 +2693,9 @@ $tableId = 'kt_table_1';
 											</select>
 										</div>
 								</div>
-								<div class="basis-100 for-only-one-checked ${isCustom ? '' : 'd-none'} " data-item="customize">
+								<div class="basis-100 for-only-one-checked ${isCustom ? '' : 'd-none'}" data-item="customize">
 									<div class="customize-content" style="display:flex;gap:50px;">
-										<div class="collection-rate d-flex flex-column ">
+										<div class="collection-rate d-flex flex-column">
 											<h5 class="mb-3 label form-label">{{ __('${collectionOrPayment} Rate %') }} </h5>
 											${collectionRates}
 											<label class="label form-label">{{ __('Total') }}</label>

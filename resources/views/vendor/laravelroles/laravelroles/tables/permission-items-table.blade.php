@@ -25,18 +25,18 @@
                 <th scope="col" class="hidden-xs hidden-sm">
                     {!! trans('laravelroles::laravelroles.permissions-table.roles') !!}
                 </th>
-                <th scope="col" class="hidden-xs hidden-sm ">
+                <th scope="col" class="hidden-xs hidden-sm">
                     {!! trans('laravelroles::laravelroles.permissions-table.createdAt') !!}
                 </th>
-                <th scope="col" class="hidden-xs hidden-sm ">
+                <th scope="col" class="hidden-xs hidden-sm">
                     {!! trans('laravelroles::laravelroles.permissions-table.updatedAt') !!}
                 </th>
                 @if($tabletype == 'deleted')
-                    <th scope="col" class="hidden-xs hidden-sm ">
+                    <th scope="col" class="hidden-xs hidden-sm">
                         {!! trans('laravelroles::laravelroles.permissions-table.deletedAt') !!}
                     </th>
                 @endif
-                <th class="no-search no-sort " colspan="3">
+                <th class="no-search no-sort" colspan="3">
                     {!! trans('laravelroles::laravelroles.permissions-table.actions') !!}
                 </th>
             </tr>

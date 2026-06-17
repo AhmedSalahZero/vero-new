@@ -32,14 +32,14 @@
             </div>
             <div class="modal-body">
                 <div class="customize-elements">
-                    <table class="table  kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
+                    <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                         <thead>
                             <tr class="header-tr">
-                                <th class=" view-table-th  text-white header-th  align-middle text-center"> {{ __('Name') }} </th>
-                                <th class=" view-table-th  text-white  align-middle text-center"> {!! __('Remaining Installments') !!} </th>
-                                <th class=" view-table-th   text-white header-th  align-middle text-center">{{ __('Due Date') }}</th>
-                                <th class=" view-table-th   text-white header-th  align-middle text-center"> {!! __('Collection <br> Percentage') !!} </th>
-                                <th class="view-table-th   text-white header-th  align-middle text-center"> {!! __('Collection <br> Date') !!} </th>
+                                <th class="view-table-th text-white header-th align-middle text-center"> {{ __('Name') }} </th>
+                                <th class="view-table-th text-white align-middle text-center"> {!! __('Remaining Installments') !!} </th>
+                                <th class="view-table-th text-white header-th align-middle text-center">{{ __('Due Date') }}</th>
+                                <th class="view-table-th text-white header-th align-middle text-center"> {!! __('Collection <br> Percentage') !!} </th>
+                                <th class="view-table-th text-white header-th align-middle text-center"> {!! __('Collection <br> Date') !!} </th>
                             </tr>
                         </thead>
                         <tbody>

@@ -102,7 +102,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- begin:: Page -->
 
     <!-- begin:: Header Mobile -->
-    <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
+    <div id="kt_header_mobile" class="kt-header-mobile kt-header-mobile--fixed">
         <div class="kt-header-mobile__logo">
             <a href="#">
                 <img height="65px" alt="Logo" src="{{url('assets/media/logos/logo_va.png')}}" />
@@ -123,18 +123,18 @@ License: You must have a valid license purchased only from themeforest(the above
 
                 <!-- end:: Header -->
                 <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
-                    <div class="kt-content kt-content--fit-top  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                    <div class="kt-content kt-content--fit-top kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 
                         <!-- begin:: Subheader -->
-                        <div class="kt-subheader   kt-grid__item" id="kt_subheader">
-                            <div class="kt-container ">
+                        <div class="kt-subheader kt-grid__item" id="kt_subheader">
+                            <div class="kt-container">
                                 <div class="kt-subheader__main">
                                     <h3 class="kt-subheader__title" style="font-variant: small-caps;">
                                         @yield('sub-header')
                                     </h3>
                                     <button class="kt-header-menu-wrapper-close" id="kt_header_menu_mobile_close_btn"><i class="la la-close"></i></button>
                                     <div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
-                                        <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-tab ">
+                                        <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile kt-header-menu--layout-tab">
 
                                         </div>
                                     </div>
@@ -145,7 +145,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <!-- end:: Subheader -->
 
                         <!-- begin:: Content -->
-                        <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+                        <div class="kt-container kt-grid__item kt-grid__item--fluid">
 
                             <!--Begin::Dashboard 4-->
                             @if ($errors->any())

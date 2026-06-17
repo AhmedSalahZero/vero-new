@@ -12,9 +12,9 @@
         border-radius:10px !important;
     }
 </style>
-<div class="table-custom-container position-relative  ">
+<div class="table-custom-container position-relative">
 
-<x-tables.basic-view    class="position-relative  main-table-class" id="{{ $tableId }}">
+<x-tables.basic-view    class="position-relative main-table-class" id="{{ $tableId }}">
     <x-slot name="filter">
         @include('admin.revenue-business-line.filter' , [
             'type'=>'filter'
@@ -29,7 +29,7 @@
 
 
     <x-slot name="headerTr" >
-        <tr class="header-tr "  data-model-name="{{ $modelName }}">
+        <tr class="header-tr"  data-model-name="{{ $modelName }}">
         @if($hasChildRows)
             {{-- <th class="view-table-th header-th trigger-child-row-1" >
                 {{ __('Expand') }}
@@ -122,7 +122,7 @@
                 // do not change [1] index of item.id
                 serviceCategoryId = item.id ;
                 mainRowId = row.data().id ;
-                data.push([mainRowId , serviceCategoryId ,getExpandAndCollpaseIcon() , item.name , ` <a data-model-name="${modelName}" data-table-id="subtable-level-1-id" data-record-id="${serviceCategoryId}"   class="btn btn-sm btn-clean  delete-record-btn btn-icon btn-icon-md" title="{{ __('Delete') }}"><i class="la la-trash"></i></a>`])
+                data.push([mainRowId , serviceCategoryId ,getExpandAndCollpaseIcon() , item.name , ` <a data-model-name="${modelName}" data-table-id="subtable-level-1-id" data-record-id="${serviceCategoryId}"   class="btn btn-sm btn-clean delete-record-btn btn-icon btn-icon-md" title="{{ __('Delete') }}"><i class="la la-trash"></i></a>`])
             })
             $('#subtable-1-id'+row.data().id).DataTable({
                 dom:'t'
@@ -166,7 +166,7 @@
   
     function formatsubrow1(d) {
     // `d` is the original data object for the row
-    let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped-  table-checkable position-relative dataTable no-footer dtr-inline" > <thead style="display:none"><tr><td></td> <td></td> <td></td> <td></td><td></td></tr> </thead> `;
+    let subtable = `<table id="subtable-1-id${d.id}" class="subtable-1-class table table-striped- table-checkable position-relative dataTable no-footer dtr-inline" > <thead style="display:none"><tr><td></td> <td></td> <td></td> <td></td><td></td></tr> </thead> `;
      
      subtable+= '</table>';
 

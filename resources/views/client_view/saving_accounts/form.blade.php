@@ -75,7 +75,7 @@
                             <div class="col-md-6">
                                 <label>{{__('Account Balance')}}</label>
                                 <div class="kt-input-icon">
-                                    <input readonly type="number" min="0" name="account_calance" class="form-control "  placeholder="{{__('Account Balance')}}">
+                                    <input readonly type="number" min="0" name="account_calance" class="form-control"  placeholder="{{__('Account Balance')}}">
                                     <x-tool-tip title="{{__('Kash Vero')}}"/>
                                 </div>
                             </div>

@@ -20,5 +20,5 @@
 	'title'
 ])
 <div class="col-12">
-		                        <h3 class="kt-portlet__head-title head-title header-title-css text-primary d-flex align-items-center ">{{ $title }}</h3>
+		                        <h3 class="kt-portlet__head-title head-title header-title-css text-primary d-flex align-items-center">{{ $title }}</h3>
 							</div>

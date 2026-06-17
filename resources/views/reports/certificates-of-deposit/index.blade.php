@@ -5,17 +5,16 @@
 @php
 use \App\Models\CertificatesOfDeposit;
 @endphp
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -25,7 +24,7 @@ use \App\Models\CertificatesOfDeposit;
 {{ __('Certificates Of Deposit ' ) }} [{{ $financialInstitution->getName() }}]
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -54,7 +53,7 @@ use \App\Models\CertificatesOfDeposit;
             </ul>
             @if(hasAuthFor('create certificate of deposit'))
             <div class="flex-tabs">
-                <a href="{{ route('create.certificates.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('create.certificates.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('New Record') }}
                 </a>
@@ -63,13 +62,13 @@ use \App\Models\CertificatesOfDeposit;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             @php
             $currentType = CertificatesOfDeposit::RUNNING ;
             @endphp
-            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType  ? 'active'  :  '' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ? 'active' : '' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Running Certificates Of Deposit')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
@@ -80,7 +79,7 @@ use \App\Models\CertificatesOfDeposit;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -109,7 +108,7 @@ use \App\Models\CertificatesOfDeposit;
                                     <td>{{ $model->getInterestRateFormatted() }}</td>
                                     <td>{{ $model->getInterestAmountFormatted() }}</td>
                                     <td>{{ $model->getBlockedAgainstFormatted() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
@@ -120,13 +119,7 @@ use \App\Models\CertificatesOfDeposit;
 
                                             @include('reports.time-of-deposit.renewal-date._apply_periodic_interest')
 
-                                            <a data-toggle="modal" data-target="#apply-deposit-modal-{{ $model->id }}" type="button" class="btn
-											
-											@if($model->isDueTodayOrGreater())
-											 disabled 
-											@endif 
-											 
-											 btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Apply Deposit') }}" href="#"><i class="fa fa-coins"></i></a>
+                                            <a data-toggle="modal" data-target="#apply-deposit-modal-{{ $model->id }}" type="button" class="btn @if($model->isDueTodayOrGreater()) disabled @endif btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Apply Deposit') }}" href="#"><i class="fa fa-coins"></i></a>
 
                                             <div class="modal fade" id="apply-deposit-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -153,7 +146,7 @@ use \App\Models\CertificatesOfDeposit;
                                                                         <label>{{__('Deposit Date')}}</label>
                                                                         <div class="kt-input-icon">
                                                                             <div class="input-group date">
-                                                                                <input required type="text" name="deposit_date" value="{{ formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control" readonly placeholder="Select date" id="kt_datepicker_2" />
+                                                                                <input required type="text" name="deposit_date" value="" class="form-control" readonly placeholder="Select date" id="kt_datepicker_2" />
                                                                                 <div class="input-group-append">
                                                                                     <span class="input-group-text">
                                                                                         <i class="la la-calendar-check-o"></i>
@@ -186,7 +179,7 @@ use \App\Models\CertificatesOfDeposit;
 
 
                                             @if(hasAuthFor('update certificate of deposit'))
-                                            <a data-toggle="modal" data-target="#apply-break-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-danger   btn-icon" title="{{ __('Break') }}" href="#"><i class="fa fa-ban"></i></a>
+                                            <a data-toggle="modal" data-target="#apply-break-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-danger btn-icon" title="{{ __('Break') }}" href="#"><i class="fa fa-ban"></i></a>
                                             <div class="modal fade" id="apply-break-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                                     <div class="modal-content">
@@ -207,7 +200,7 @@ use \App\Models\CertificatesOfDeposit;
                                                                         <label>{{__('Break Date')}}</label>
                                                                         <div class="kt-input-icon">
                                                                             <div class="input-group date">
-                                                                                <input required type="text" name="break_date" value="{{ formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control" readonly placeholder="Select date" id="kt_datepicker_2" />
+                                                                                <input required type="text" name="break_date" value="" class="form-control" readonly placeholder="Select date" id="kt_datepicker_2" />
                                                                                 <div class="input-group-append">
                                                                                     <span class="input-group-text">
                                                                                         <i class="la la-calendar-check-o"></i>
@@ -316,7 +309,7 @@ use \App\Models\CertificatesOfDeposit;
         @php
         $currentType = CertificatesOfDeposit::MATURED ;
         @endphp
-        <div class="tab-pane {{  Request('active') == $currentType  ? 'active'  :  '' }}" id="{{ $currentType }}" role="tabpanel">
+        <div class="tab-pane {{ Request('active') == $currentType ? 'active' : '' }}" id="{{ $currentType }}" role="tabpanel">
             <div class="kt-portlet kt-portlet--mobile">
 
                 <x-table-title.with-two-dates :type="$currentType" :title="__('Matured Certificates Of Deposit')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
@@ -327,7 +320,7 @@ use \App\Models\CertificatesOfDeposit;
                 <div class="kt-portlet__body">
 
                     <!--begin: Datatable -->
-                    <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                    <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                         <thead>
                             <tr class="table-standard-color">
                                 <th>{{ __('#') }}</th>
@@ -360,11 +353,11 @@ use \App\Models\CertificatesOfDeposit;
                                 <td class="text-nowrap">{{ $model->getDepositDateFormatted() }}</td>
                                 <td>{{ $model->getActualInterestAmountFormatted() }}</td>
                                 <td>{{ $model->getBlockedAgainstFormatted() }}</td>
-                                <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
                                     <span style="overflow: visible; position: relative; width: 110px;">
-                                        <a data-toggle="modal" data-target="#reverse-deposit-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Reverse Deposit') }}" href="#"><i class="fa fa-undo"></i></a>
+                                        <a data-toggle="modal" data-target="#reverse-deposit-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Reverse Deposit') }}" href="#"><i class="fa fa-undo"></i></a>
                                         <div class="modal fade" id="reverse-deposit-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                                 <div class="modal-content">
@@ -410,7 +403,7 @@ use \App\Models\CertificatesOfDeposit;
         @php
         $currentType = CertificatesOfDeposit::BROKEN ;
         @endphp
-        <div class="tab-pane {{  Request('active') == $currentType  ? 'active'  :  '' }}" id="{{ $currentType }}" role="tabpanel">
+        <div class="tab-pane {{ Request('active') == $currentType ? 'active' : '' }}" id="{{ $currentType }}" role="tabpanel">
             <div class="kt-portlet kt-portlet--mobile">
 
                 <x-table-title.with-two-dates :type="$currentType" :title="__('Broken Certificates Of Deposit')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
@@ -421,7 +414,7 @@ use \App\Models\CertificatesOfDeposit;
                 <div class="kt-portlet__body">
 
                     <!--begin: Datatable -->
-                    <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                    <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                         <thead>
                             <tr class="table-standard-color">
                                 <th>{{ __('#') }}</th>
@@ -454,11 +447,11 @@ use \App\Models\CertificatesOfDeposit;
                                 <td class="text-nowrap">{{ $model->getDepositDateFormatted() }}</td>
                                 <td>{{ $model->getActualInterestAmountFormatted() }}</td>
                                 <td>{{ $model->getBlockedAgainstFormatted() }}</td>
-                                <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
                                     <span style="overflow: visible; position: relative; width: 110px;">
-                                        <a data-toggle="modal" data-target="#reverse-broken-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Reverse Broken') }}" href="#"><i class="fa fa-undo"></i></a>
+                                        <a data-toggle="modal" data-target="#reverse-broken-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Reverse Broken') }}" href="#"><i class="fa fa-undo"></i></a>
                                         <div class="modal fade" id="reverse-broken-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                                 <div class="modal-content">

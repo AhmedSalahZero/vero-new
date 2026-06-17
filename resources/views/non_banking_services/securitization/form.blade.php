@@ -59,7 +59,7 @@ use App\Models\NonBankingService\Securitization;
                                 <x-tables.repeater-table :initEmpty="!count($model->securitizations )" :firstElementDeletable="true" :hideByDefault="false" :removeRepeater="false" :repeater-with-select2="true" :parentClass="' js-toggle-visibility'" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                                     <x-slot name="ths">
                                         <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Revenue <br> Stream')"></x-tables.repeater-table-th>
-                                        <x-tables.repeater-table-th class="col-md-2 header-border-down " :title="__('Disbursement <br> Date')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
+                                        <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Disbursement <br> Date')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
                                         <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Securitization <br> Date')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
                                         <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Annual <br> Discount Rate')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
                                         <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Collection Revenue <br> Rate')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
@@ -90,7 +90,7 @@ use App\Models\NonBankingService\Securitization;
 
                                             <input type="hidden" name="id" value="{{ isset($subModel) ? $subModel->id : 0 }}">
                                             <td>
-                                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : ''" :options="$revenueStreamTypes" :add-new="false" class="select2-select repeater-select  " :all="false" name="{{ $isRepeater ? 'revenue_stream_type' : $tableId . '[0][revenue_stream_type]' }}"></x-form.select>
+                                                <x-form.select :selectedValue="isset($subModel) ? $subModel->getRevenueStreamType() : ''" :options="$revenueStreamTypes" :add-new="false" class="select2-select repeater-select" :all="false" name="{{ $isRepeater ? 'revenue_stream_type' : $tableId . '[0][revenue_stream_type]' }}"></x-form.select>
                                             </td>
 
 
@@ -117,7 +117,7 @@ use App\Models\NonBankingService\Securitization;
 
                                             <td>
 
-                                                <div class="d-flex align-items-center ">
+                                                <div class="d-flex align-items-center">
                                                     <input class="form-control only-percentage-allowed text-center" value="{{ isset($subModel) ? number_format($subModel->getDiscountRate(),PERCENTAGE_DECIMALS) : "0.00" }}" type="text">
                                                     <span style="margin-left:3px	">%</span>
                                                     <input type="hidden" value="{{ (isset($subModel) ? $subModel->getDiscountRate() : 0) }}" @if($isRepeater) name="discount_rate" @else name="{{ $tableId }}[0][discount_rate]" @endif>
@@ -126,7 +126,7 @@ use App\Models\NonBankingService\Securitization;
 
                                             <td>
 
-                                                <div class="d-flex align-items-center ">
+                                                <div class="d-flex align-items-center">
                                                     <input class="form-control only-percentage-allowed text-center" value="{{ isset($subModel) ? number_format($subModel->getCollectionRevenueRate(),PERCENTAGE_DECIMALS) : "0.00" }}" type="text">
                                                     <span style="margin-left:3px	">%</span>
                                                     <input type="hidden" value="{{ (isset($subModel) ? $subModel->getCollectionRevenueRate() : 0) }}" @if($isRepeater) name="collection_revenue_rate" @else name="{{ $tableId }}[0][collection_revenue_rate]" @endif>
@@ -135,7 +135,7 @@ use App\Models\NonBankingService\Securitization;
 
                                             <td>
 
-                                                <div class="d-flex align-items-center ">
+                                                <div class="d-flex align-items-center">
                                                     <input class="form-control only-percentage-allowed text-center" value="{{ isset($subModel) ? number_format($subModel->getEarlySettlementsExpenseRate(),PERCENTAGE_DECIMALS) : "0.00" }}" type="text">
                                                     <span style="margin-left:3px	">%</span>
                                                     <input type="hidden" value="{{ (isset($subModel) ? $subModel->getEarlySettlementsExpenseRate() : 0) }}" @if($isRepeater) name="early_settlements_expense_rate" @else name="{{ $tableId }}[0][early_settlements_expense_rate]" @endif>
@@ -193,19 +193,19 @@ use App\Models\NonBankingService\Securitization;
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Revenue <br> Stream') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Disbursement <br> Date') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Disbursement <br> Amount') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Schedule <br> Amounts') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Securitization <br> Date') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Net Present <br> Value') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Profit Or <br> Loss') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Collection <br> Revenue') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Settlements <br> Expense') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Securitization <br> Expense') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Revenue <br> Stream') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Disbursement <br> Date') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Disbursement <br> Amount') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Schedule <br> Amounts') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Securitization <br> Date') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Net Present <br> Value') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Profit Or <br> Loss') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Collection <br> Revenue') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Settlements <br> Expense') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Securitization <br> Expense') !!}</th>
 
                                     </tr>
                                 </thead>
@@ -219,35 +219,35 @@ use App\Models\NonBankingService\Securitization;
                                     <tr data-repeat-formatting-decimals="0" data-repeater-style>
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ $securitizationCalculation['revenue_stream_type'] }}" disabled="" class="form-control text-left " type="text">
+                                                <input value="{{ $securitizationCalculation['revenue_stream_type'] }}" disabled="" class="form-control text-left" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ $securitizationCalculation['disbursement_date'] }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ $securitizationCalculation['disbursement_date'] }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format($securitizationCalculation['portfolio_disbursement_amount']??0) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format($securitizationCalculation['portfolio_disbursement_amount']??0) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format($securitizationCalculation['portfolio_schedule_payment_sum']??0) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format($securitizationCalculation['portfolio_schedule_payment_sum']??0) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ $securitizationCalculation['securitization_date'] }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ $securitizationCalculation['securitization_date'] }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
@@ -255,34 +255,34 @@ use App\Models\NonBankingService\Securitization;
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format($securitizationCalculation['net_present_value']) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format($securitizationCalculation['net_present_value']) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format($securitizationCalculation['securitization_profit_or_loss']) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format($securitizationCalculation['securitization_profit_or_loss']) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format(array_sum($securitizationCalculation['collection_revenue_amounts']??[])) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format(array_sum($securitizationCalculation['collection_revenue_amounts']??[])) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format($securitizationCalculation['early_settlements_expense_amount']??0) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format($securitizationCalculation['early_settlements_expense_amount']??0) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>
 
                                         <td class="td-classes">
                                             <div>
-                                                <input value="{{ number_format($securitizationCalculation['securitization_expense_amount']) }}" disabled="" class="form-control " type="text">
+                                                <input value="{{ number_format($securitizationCalculation['securitization_expense_amount']) }}" disabled="" class="form-control" type="text">
                                             </div>
 
                                         </td>

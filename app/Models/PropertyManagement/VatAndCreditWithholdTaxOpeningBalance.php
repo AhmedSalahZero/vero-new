@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property numeric $vat_amount
- * @property numeric $credit_withhold_taxes
  * @property int $study_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -39,16 +37,6 @@ class VatAndCreditWithholdTaxOpeningBalance extends Model
         return $this->belongsTo(Study::class, 'study_id', 'id');
     }
 	
-    public function getVatAmount():float 
-    {
-        return $this->vat_amount ;
-    } 
-	public function getCreditWithholdTaxes():float 
-    {
-        return $this->credit_withhold_taxes ;
-    }
-	public function getCorporateTaxesPayableAmount():float 
-    {
-        return $this->corporate_taxes_payable ;
-    }
+  
+
 }

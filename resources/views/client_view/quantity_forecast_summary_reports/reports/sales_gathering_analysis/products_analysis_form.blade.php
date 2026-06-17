@@ -93,9 +93,9 @@
 
                     <div class="form-group row">
 					@if(!in_array('ProductsProductsItemsAveragePricesView',Request()->segments()))
-					 <div class="col-md-{{ $cols }}  first-interval">
+					 <div class="col-md-{{ $cols }} first-interval">
 						<label></label>
-                            <div class="flex-center "><label class="first-interval">{{ __('First Interval') }}</label></div>
+                            <div class="flex-center"><label class="first-interval">{{ __('First Interval') }}</label></div>
                         
                         </div>
 						@endif

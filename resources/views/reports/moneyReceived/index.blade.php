@@ -5,29 +5,27 @@ use App\Models\MoneyReceived;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
-
 <style>
-    .money-flow-dark th:not(.bank-max-width),
-    .money-flow-dark td:not(.bank-max-width) {
+    th:not(.bank-max-width),
+    td:not(.bank-max-width) {
         text-wrap: nowrap !important;
     }
 
 </style>
 <style>
-    .money-flow-dark .kt-portlet__body {
+    .kt-portlet__body {
         padding-top: 0 !important;
     }
 
-    .money-flow-dark input[type="checkbox"] {
+    input[type="checkbox"] {
         cursor: pointer;
     }
 
-    .money-flow-dark .bank-max-width {
+    .bank-max-width {
         max-width: 200px !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -37,7 +35,7 @@ use App\Models\MoneyReceived;
 {{ __('Money Received Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -48,35 +46,35 @@ use App\Models\MoneyReceived;
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_UNDER_COLLECTION ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_UNDER_COLLECTION }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_UNDER_COLLECTION ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_UNDER_COLLECTION }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Cheques Under Collection') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_COLLECTED ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_COLLECTED }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_COLLECTED ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_COLLECTED }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Collected Cheques') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{  Request('active') == MoneyReceived::CHEQUE_REJECTED ?'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_REJECTED }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CHEQUE_REJECTED ?'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CHEQUE_REJECTED }}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Rejected Cheques') }}
                     </a>
                 </li>
 
 
                 <li class="nav-item">
-                    <a  onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::INCOMING_TRANSFER ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::INCOMING_TRANSFER }}" role="tab">
+                    <a  onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::INCOMING_TRANSFER ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::INCOMING_TRANSFER }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Incoming Transfer') }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_SAFE ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_SAFE }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_SAFE ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_SAFE }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Cash In Safe') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_BANK ? 'active':''  }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_BANK }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ Request('active') == MoneyReceived::CASH_IN_BANK ? 'active':'' }}" data-toggle="tab" href="#{{ MoneyReceived::CASH_IN_BANK }}" role="tab">
                         <i class="fa fa-money-check-alt"></i>{{ __('Bank Deposit') }}
                     </a>
                 </li>
@@ -85,7 +83,7 @@ use App\Models\MoneyReceived;
             @if(auth()->user()->can('create money received'))
             <div class="flex-tabs">
 
-                <a href="{{route('create.money.receive',['company'=>$company->id])}}" class="btn  btn-sm active-style btn-icon-sm align-self-center">
+                <a href="{{route('create.money.receive',['company'=>$company->id])}}" class="btn btn-sm active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Money Received') }}
                 </a>
@@ -99,7 +97,7 @@ use App\Models\MoneyReceived;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == MoneyReceived::CHEQUE ?'active':'' }}" id="{{ MoneyReceived::CHEQUE }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
@@ -109,7 +107,7 @@ use App\Models\MoneyReceived;
 
                     <div class="kt-portlet__body">
 
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th class="align-middle">{{ __('Select') }}</th>
@@ -146,7 +144,7 @@ use App\Models\MoneyReceived;
                                     @endphp
 
                                     <td class="font-weight-bold" style="color:{{ $dueStatus['color'] }}!important">{{ $dueStatus['status'] }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell  " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             {{-- display:inline-block ; --}}
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
@@ -200,7 +198,7 @@ use App\Models\MoneyReceived;
 
 
 
-            <div class="tab-pane {{  Request('active') == MoneyReceived::CHEQUE_REJECTED ?'active':'' }}" id="{{ MoneyReceived::CHEQUE_REJECTED }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyReceived::CHEQUE_REJECTED ?'active':'' }}" id="{{ MoneyReceived::CHEQUE_REJECTED }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyReceived::CHEQUE_REJECTED" :title="__('Rejected Cheques')" :startDate="$filterDates[MoneyReceived::CHEQUE_REJECTED]['startDate']??''" :endDate="$filterDates[MoneyReceived::CHEQUE_REJECTED]['endDate']??''">
@@ -210,7 +208,7 @@ use App\Models\MoneyReceived;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('Select') }}</th>
@@ -242,7 +240,7 @@ use App\Models\MoneyReceived;
                                     <td class="bank-max-width">{{ $moneyReceived->cheque->getDraweeBankName() }}</td>
                                     <td class="text-nowrap">{{ $moneyReceived->cheque->getDueDateFormatted() }}</td>
                                     <td> {{ $moneyReceived->cheque->getStatusFormatted() }} </td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived])
@@ -298,7 +296,7 @@ use App\Models\MoneyReceived;
 
 
 
-            <div class="tab-pane {{ Request('active') == MoneyReceived::CHEQUE_UNDER_COLLECTION ? 'active':''  }}" id="{{ MoneyReceived::CHEQUE_UNDER_COLLECTION }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyReceived::CHEQUE_UNDER_COLLECTION ? 'active':'' }}" id="{{ MoneyReceived::CHEQUE_UNDER_COLLECTION }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyReceived::CHEQUE_UNDER_COLLECTION" :title="__('Cheques Under Collection')" :startDate="$filterDates[MoneyReceived::CHEQUE_UNDER_COLLECTION]['startDate']??''" :endDate="$filterDates[MoneyReceived::CHEQUE_UNDER_COLLECTION]['endDate']??''">
@@ -349,7 +347,7 @@ use App\Models\MoneyReceived;
                                     <td class="font-weight-bold" style="color:{{ $dueStatus['color'] }}!important">{{ $dueStatus['status'] }}</td>
 
 
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived])
@@ -362,7 +360,7 @@ use App\Models\MoneyReceived;
                                             @endif
                                             @endif
                                             @if($moneyReceived->cheque->getDueStatus())
-                                            <a data-toggle="modal" data-target="#apply-collection-modal-{{ $moneyReceived->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Apply Collection') }}" href="#"><i class="fa fa-coins"></i></a>
+                                            <a data-toggle="modal" data-target="#apply-collection-modal-{{ $moneyReceived->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Apply Collection') }}" href="#"><i class="fa fa-coins"></i></a>
                                             <div class="modal fade" id="apply-collection-modal-{{ $moneyReceived->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                                     <div class="modal-content">
@@ -422,10 +420,7 @@ use App\Models\MoneyReceived;
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-success 
-																submit-form-btn
-																
-																">{{ __('Confirm') }}</button>
+                                                                <button type="submit" class="btn btn-success submit-form-btn">{{ __('Confirm') }}</button>
                                                             </div>
 
                                                         </form>
@@ -433,10 +428,10 @@ use App\Models\MoneyReceived;
                                                 </div>
                                             </div>
                                             @endif
-                                            <a type="button" class="btn  btn-secondary btn-outline-hover-warning   btn-icon" title="{{ __('Send In Safe') }}" href="{{ route('cheque.send.to.safe',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}"><i class="fa fa-undo"></i></a>
+                                            <a type="button" class="btn btn-secondary btn-outline-hover-warning btn-icon" title="{{ __('Send In Safe') }}" href="{{ route('cheque.send.to.safe',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}"><i class="fa fa-undo"></i></a>
                                             @if($moneyReceived->cheque->getDueStatus())
                                             @if(auth()->user()->can('delete money received'))
-                                            <a type="button" class="btn  btn-secondary btn-outline-hover-danger   btn-icon" title="{{ __('Rejected') }}" href="{{ route('cheque.send.to.rejected.safe',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}">
+                                            <a type="button" class="btn btn-secondary btn-outline-hover-danger btn-icon" title="{{ __('Rejected') }}" href="{{ route('cheque.send.to.rejected.safe',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}">
                                                 <i class="fa fa-ban"></i>
                                             </a>
                                             <div class="modal fade" id="delete-cheque-id-{{ $moneyReceived->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -480,7 +475,7 @@ use App\Models\MoneyReceived;
 
 
 
-            <div class="tab-pane {{ Request('active') == MoneyReceived::CHEQUE_COLLECTED ? 'active':''  }}" id="{{ MoneyReceived::CHEQUE_COLLECTED }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyReceived::CHEQUE_COLLECTED ? 'active':'' }}" id="{{ MoneyReceived::CHEQUE_COLLECTED }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="MoneyReceived::CHEQUE_COLLECTED" :title="__('Collected Cheques')" :startDate="$filterDates[MoneyReceived::CHEQUE_COLLECTED]['startDate']??''" :endDate="$filterDates[MoneyReceived::CHEQUE_COLLECTED]['endDate']??''">
                         <x-export-money :account-types="$accountTypes" :financialInstitutionBanks="$financialInstitutionBanks" :search-fields="$collectedChequesTableSearchFields" :money-received-type="MoneyReceived::CHEQUE_COLLECTED" :has-search="1" :has-batch-collection="0" :banks="$banks" :selectedBanks="$selectedBanks" href="{{route('create.money.receive',['company'=>$company->id])}}" />
@@ -526,7 +521,7 @@ use App\Models\MoneyReceived;
                                         @include('reports._integrated_modal',['model'=>$moneyReceived])
 
                                         @if($moneyReceived->cheque->isCollected())
-                                        <a type="button" class="btn  btn-secondary btn-outline-hover-danger   btn-icon" title="{{ __('Under Collection') }}" href="{{ route('cheque.send.to.under.collection',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}"><i class="fa fa-undo"></i></a>
+                                        <a type="button" class="btn btn-secondary btn-outline-hover-danger btn-icon" title="{{ __('Under Collection') }}" href="{{ route('cheque.send.to.under.collection',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}"><i class="fa fa-undo"></i></a>
                                         @endif
                                     </td>
                                 </tr>
@@ -546,7 +541,7 @@ use App\Models\MoneyReceived;
             <!--End:: Tab Content-->
 
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ Request('active') == MoneyReceived::INCOMING_TRANSFER ? 'active':''  }}" id="{{ MoneyReceived::INCOMING_TRANSFER }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyReceived::INCOMING_TRANSFER ? 'active':'' }}" id="{{ MoneyReceived::INCOMING_TRANSFER }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyReceived::INCOMING_TRANSFER" :title="__('Incoming Transfer')" :startDate="$filterDates[MoneyReceived::INCOMING_TRANSFER]['startDate']??''" :endDate="$filterDates[MoneyReceived::INCOMING_TRANSFER]['endDate']??''">
@@ -582,7 +577,7 @@ use App\Models\MoneyReceived;
                                     <td data-currency="{{ $money->getReceivingCurrency() }}"> {{ $money->getCurrencyToReceivingCurrencyFormatted() }}</td>
                                     <td class="bank-max-width">{{ $money->getIncomingTransferAccountTypeName() }}</td>
                                     <td>{{ $money->getIncomingTransferAccountNumber() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             @include('reports._user_odoo_modal',['model'=>$money])
                                             @include('reports._integrated_modal',['model'=>$money])
@@ -637,7 +632,7 @@ use App\Models\MoneyReceived;
 
 
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ Request('active') == MoneyReceived::CASH_IN_SAFE ? 'active':''  }}" id="{{ MoneyReceived::CASH_IN_SAFE }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyReceived::CASH_IN_SAFE ? 'active':'' }}" id="{{ MoneyReceived::CASH_IN_SAFE }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyReceived::CASH_IN_SAFE" :title="__('Cash In Safe')" :startDate="$filterDates[MoneyReceived::CASH_IN_SAFE]['startDate']??''" :endDate="$filterDates[MoneyReceived::CASH_IN_SAFE]['endDate']??''">
@@ -672,7 +667,7 @@ use App\Models\MoneyReceived;
                                     <td>{{ $moneyReceived->getReceivedAmountFormatted() }}</td>
                                     <td data-currency="{{ $moneyReceived->getReceivingCurrency() }}">{{ $moneyReceived->getCurrencyToReceivingCurrencyFormatted() }}</td>
                                     <td>{{ $moneyReceived->getCashInSafeReceiptNumber() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived])
@@ -735,7 +730,7 @@ use App\Models\MoneyReceived;
 
 
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ Request('active') == MoneyReceived::CASH_IN_BANK ? 'active':''  }}" id="{{ MoneyReceived::CASH_IN_BANK }}" role="tabpanel">
+            <div class="tab-pane {{ Request('active') == MoneyReceived::CASH_IN_BANK ? 'active':'' }}" id="{{ MoneyReceived::CASH_IN_BANK }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
 
                     <x-table-title.with-two-dates :type="MoneyReceived::CASH_IN_BANK" :title="__('Bank Deposit')" :startDate="$filterDates[MoneyReceived::CASH_IN_BANK]['startDate']??''" :endDate="$filterDates[MoneyReceived::CASH_IN_BANK]['endDate']??''">
@@ -774,7 +769,7 @@ use App\Models\MoneyReceived;
                                     <td data-currency="{{ $money->getReceivingCurrency() }}"> {{ $money->getCurrencyToReceivingCurrencyFormatted() }}</td>
                                     <td class="bank-max-width">{{ $money->getCashInBankAccountTypeName() }}</td>
                                     <td>{{ $money->getCashInBankAccountNumber() }}</td>
-                                    <td class="kt-datatable__cell--left kt-datatable__cell  " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             @include('reports._user_comment_modal',['model'=>$money])
                                             @include('reports._user_odoo_modal',['model'=>$money])

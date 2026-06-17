@@ -1,6 +1,6 @@
 <tr class="edit-info-row add-sub maintable-1-row-class{{ $rowIndex }} is-sub-row d-none">
-    <td class=" reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize is-close "></td>
-    <td class="sub-text-bg max-w-classes-name is-name-cell ">
+    <td class="reset-table-width text-nowrap trigger-child-row-1 cursor-pointer sub-text-bg text-capitalize is-close"></td>
+    <td class="sub-text-bg max-w-classes-name is-name-cell">
         <div class="ml-son">
             {{ $currentSubRowKeyName }}
         </div>
@@ -11,7 +11,7 @@
 
 
     </td>
-    {{-- <td class="sub-text-bg max-w-classes-name editable editable-text is-name-cell ">{{$currentSubRowKeyName }}</td> --}}
+    {{-- <td class="sub-text-bg max-w-classes-name editable editable-text is-name-cell">{{$currentSubRowKeyName }}</td> --}}
     @php
     $currentSubTotal = 0;
     @endphp
@@ -52,17 +52,17 @@
     $currentSubTotal+=$currentValue;
     }
     @endphp
-    <td class="  sub-numeric-bg text-center editable-date">{{ number_format($currentValue) }}
+    <td class="sub-numeric-bg text-center editable-date">{{ number_format($currentValue) }}
 
         @if($customerName == __('Cancelled LGs Cash Cover') && $currentValue)
         @php
         $currentId = convertStringToClass($currentSubRowKeyName.$weekAndYear);
         @endphp
-        <i data-toggle="modal" data-target="#lg-breakdown-modal-{{ $currentId }}" class="flaticon2-information fs-15 kt-font-primary exclude-icon ml-2 cursor-pointer "></i>
+        <i data-toggle="modal" data-target="#lg-breakdown-modal-{{ $currentId }}" class="flaticon2-information fs-15 kt-font-primary exclude-icon ml-2 cursor-pointer"></i>
 
 
 
-        <div class="modal fade " id="lg-breakdown-modal-{{ $currentId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="lg-breakdown-modal-{{ $currentId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -132,7 +132,7 @@
     // $currentSubTotal = is_array($currentSubTotal) ? 0 : $currentSubTotal;
     // $currentSubTotal = -8;
     @endphp
-    <td class="  sub-numeric-bg text-center editable-date">{{ number_format($currentSubTotal) }}</td>
+    <td class="sub-numeric-bg text-center editable-date">{{ number_format($currentSubTotal) }}</td>
 
 
 </tr>

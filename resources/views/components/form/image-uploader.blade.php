@@ -119,7 +119,7 @@
             <div class="avatar-edit">
                 <input data-id="{{ $id }}" name="{{ $name }}" type='file' id="{{ $id .'-upload-id' }}" />
                 <label for="{{ $id .'-upload-id' }}" class="label-control">
-                    <i class="fa fa-pen edit-icon-color "></i>
+                    <i class="fa fa-pen edit-icon-color"></i>
                 </label>
             </div>
 				@endif

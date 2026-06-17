@@ -30,7 +30,7 @@
                             <div class="row">
                                 <div class="col-md-12 mb-4">
 
-                                    <div class="d-flex align-items-center ">
+                                    <div class="d-flex align-items-center">
                                         <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                                             {{ __('Reserve Assumption') }}
                                         </h3>
@@ -48,7 +48,7 @@
                                     <label class="form-label font-weight-bold">{{ __('Legal Reserve Rate %')  }} @include('star')</label>
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed " name="legal_reserve_rate" value="{{ isset($model) ? $model->getLegalReserveRate() : 5 }}">
+                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed" name="legal_reserve_rate" value="{{ isset($model) ? $model->getLegalReserveRate() : 5 }}">
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                     <label class="form-label font-weight-bold">{{ __('Max Legal Reserve Rate %') . ' ' . __(' ( From Paid Up Capital)')  }} @include('star')</label>
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed " name="max_legal_reserve_rate" value="{{ isset($model) ? $model->getMaxLegalReserveRate() : 50 }}">
+                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed" name="max_legal_reserve_rate" value="{{ isset($model) ? $model->getMaxLegalReserveRate() : 50 }}">
                                         </div>
                                     </div>
                                 </div>
@@ -70,7 +70,7 @@
                                     <label class="form-label font-weight-bold">{{ __('Financial Regularity Authority Reserve (FRA %) ')  }} @include('star')</label>
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed " name="financial_regulatory_authority_rate" value="{{ isset($model) ? $model->getFinancialRegulatoryAuthorityRate() : 0 }}">
+                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed" name="financial_regulatory_authority_rate" value="{{ isset($model) ? $model->getFinancialRegulatoryAuthorityRate() : 0 }}">
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@
                                     <label class="form-label font-weight-bold">{{ __('Max Financial Regularity Authority Reserve (FRA %) ')  }} @include('star')</label>
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed " name="max_financial_regulatory_authority_rate" value="{{ isset($model) ? $model->getMaxFinancialRegulatoryAuthorityRate() : 0 }}">
+                                            <input type="number" class="form-control only-greater-than-or-equal-zero-allowed" name="max_financial_regulatory_authority_rate" value="{{ isset($model) ? $model->getMaxFinancialRegulatoryAuthorityRate() : 0 }}">
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                         </div>
 
                         <div class="col-md-10">
-                            <div class="d-flex align-items-center ">
+                            <div class="d-flex align-items-center">
                                 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                                     {{ __('Profit Distribution Assumption') }}
                                 </h3>
@@ -107,12 +107,12 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
                                         <th class="first-column-th-class-medium form-label font-weight-bold text-center align-middle interval-class header-border-down">{{ __('Item') }}</th>
                                         @foreach($yearIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                                        <th class="form-label font-weight-bold  text-center align-middle interval-class header-border-down"> {{$yearOrMonthFormatted}} </th>
+                                        <th class="form-label font-weight-bold text-center align-middle interval-class header-border-down"> {{$yearOrMonthFormatted}} </th>
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -323,13 +323,13 @@
                                             {{-- <x-repeat-right-dot-inputs :name="'shareholders_dividend_payout_ratios['.$year.']'" :currentVal="number_format($currentVal,1)" :classes="'only-greater-than-zero-allowed'" :is-percentage="true"  :columnIndex="$columnIndex"></x-repeat-right-dot-inputs> --}}
                                             <div class="form-group three-dots-parent">
 
-                                                <select class="form-control select-inside-repeating-table-css repeat-to-right-select text-center " name="shareholders_dividend_in_cash_or_shares[{{ $yearOrMonthAsIndex }}]" data-column-index="{{ $columnIndex}}">
+                                                <select class="form-control select-inside-repeating-table-css repeat-to-right-select text-center" name="shareholders_dividend_in_cash_or_shares[{{ $yearOrMonthAsIndex }}]" data-column-index="{{ $columnIndex}}">
                                                     @foreach(['in_cash'=>__('In Cash') , 'in_share'=>__('In Shares')] as $value => $title)
                                                     <option @if($value==$currentVal) selected @endif value="{{ $value }}"> {{ $title }} </option>
                                                     @endforeach
                                                 </select>
 
-                                                <i class="fa fa-ellipsis-h pull-left repeat-select-to-right row-repeater-icon " data-column-index="{{ $columnIndex}}" title="{{__('Repeat Right')}}"></i>
+                                                <i class="fa fa-ellipsis-h pull-left repeat-select-to-right row-repeater-icon" data-column-index="{{ $columnIndex}}" title="{{__('Repeat Right')}}"></i>
                                             </div>
 
                                         </td>
@@ -371,7 +371,7 @@
                     <div class="row">
 
                         <div class="col-md-10">
-                            <div class="d-flex align-items-center ">
+                            <div class="d-flex align-items-center">
                                 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                                     {{ __('Salaries Annual Increase Rate') }}
                                 </h3>
@@ -388,12 +388,12 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
-                                        <th class="first-column-th-class-medium form-label font-weight-bold  text-center align-middle interval-class header-border-down">{{ __('Item') }}</th>
+                                        <th class="first-column-th-class-medium form-label font-weight-bold text-center align-middle interval-class header-border-down">{{ __('Item') }}</th>
                                         @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                                        <th class="form-label font-weight-bold  text-center align-middle interval-class header-border-down"> {{$yearOrMonthFormatted}} </th>
+                                        <th class="form-label font-weight-bold text-center align-middle interval-class header-border-down"> {{$yearOrMonthFormatted}} </th>
                                         @endforeach
                                   
                                     </tr>
@@ -541,7 +541,7 @@
                     <div class="row">
 
                         <div class="col-md-10">
-                            <div class="d-flex align-items-center ">
+                            <div class="d-flex align-items-center">
                                 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style="">
                                     {{ __('CBE Corridor & Banks Lending Margins & Interest Rates') }}
                                 </h3>
@@ -557,7 +557,7 @@
                     <div class="row general-assumption">
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
                                         <th class="first-column-th-class-medium form-label font-weight-bold text-center align-middle interval-class header-border-down">{{ __('Item') }}</th>

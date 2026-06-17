@@ -81,7 +81,7 @@
                     </h3>
                 </div>
             </div>
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
 
                     {{-- Pervious Year Sales --}}
@@ -325,9 +325,9 @@
                             <div class="col-md-6"
                                 style="display: {{ @$sales_forecast_data['target_base'] == 'new_start' ? 'block' : 'none' }}"
                                 id="new_start_field">
-                                <div class="form-group  form-group-marginless validated">
+                                <div class="form-group form-group-marginless validated">
                                     <label>New Start</label>
-                                    <div class="col-md-12 " >
+                                    <div class="col-md-12" >
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label class="kt-option">
@@ -415,7 +415,7 @@
 
                         <br>
                         <div class="row">
-                            <div class="col-md-6 ">
+                            <div class="col-md-6">
                                 <label class="kt-option bg-secondary">
                                     <span class="kt-option__control">
                                         <span
@@ -462,7 +462,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group  form-group-marginless">
+                                <div class="form-group form-group-marginless">
                                     <label>{{ __('Seasonality') }} @include('star')</label>
                                     <div class="kt-input-icon">
                                         <div class="input-group date validated">

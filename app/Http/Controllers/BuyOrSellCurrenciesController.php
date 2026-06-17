@@ -69,8 +69,8 @@ class BuyOrSellCurrenciesController
 		$bankToBankStartDate = $filterDates[BuyOrSellCurrency::BANK_TO_BANK]['startDate'] ?? null ;
 		$bankToBankEndDate = $filterDates[BuyOrSellCurrency::BANK_TO_BANK]['endDate'] ?? null ;
 		$bankToBankBuyOrSellCurrencies = $company->bankToBankBuyOrSellCurrencies()
-		->filterByTransactionDate($bankToBankStartDate,$bankToBankEndDate)
-		->when($currentType == BuyOrSellCurrency::BANK_TO_BANK, function ($query) use ($request) {
+		->whereBetween('transaction_date', [$bankToBankStartDate, $bankToBankEndDate])
+		->when($currentType == BuyOrSellCurrency::BANK_TO_BANK, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');
@@ -106,8 +106,8 @@ class BuyOrSellCurrenciesController
 		$safeToBankStartDate = $filterDates[BuyOrSellCurrency::SAFE_TO_BANK]['startDate'] ?? null ;
 		$safeToBankEndDate = $filterDates[BuyOrSellCurrency::SAFE_TO_BANK]['endDate'] ?? null ;
 		$safeToBankBuyOrSellCurrencies = $company->safeToBankBuyOrSellCurrencies()
-		->filterByTransactionDate($safeToBankStartDate,$safeToBankEndDate)
-		->when($currentType == BuyOrSellCurrency::SAFE_TO_BANK, function ($query) use ($request) {
+		->whereBetween('transaction_date', [$safeToBankStartDate, $safeToBankEndDate])
+		->when($currentType == BuyOrSellCurrency::SAFE_TO_BANK, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');
@@ -142,8 +142,8 @@ class BuyOrSellCurrenciesController
 		$bankToSafeStartDate = $filterDates[BuyOrSellCurrency::BANK_TO_SAFE]['startDate'] ?? null ;
 		$bankToSafeEndDate = $filterDates[BuyOrSellCurrency::BANK_TO_SAFE]['endDate'] ?? null ;
 		$bankToSafeBuyOrSellCurrencies = $company->bankToSafeBuyOrSellCurrencies()
-		->filterByTransactionDate($bankToSafeStartDate,$bankToSafeEndDate)
-		->when($currentType == BuyOrSellCurrency::BANK_TO_SAFE, function ($query) use ($request) {
+		->whereBetween('transaction_date', [$bankToSafeStartDate, $bankToSafeEndDate])
+		->when($currentType == BuyOrSellCurrency::BANK_TO_SAFE, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');
@@ -178,8 +178,8 @@ class BuyOrSellCurrenciesController
 		$safeToSafeStartDate = $filterDates[BuyOrSellCurrency::SAFE_TO_SAFE]['startDate'] ?? null ;
 		$safeToSafeEndDate = $filterDates[BuyOrSellCurrency::SAFE_TO_SAFE]['endDate'] ?? null ;
 		$safeToSafeBuyOrSellCurrencies = $company->safeToSafeBuyOrSellCurrencies()
-		->filterByTransactionDate($safeToSafeStartDate,$safeToSafeEndDate)
-		->when($currentType == BuyOrSellCurrency::SAFE_TO_SAFE, function ($query) use ($request) {
+		->whereBetween('transaction_date', [$safeToSafeStartDate, $safeToSafeEndDate])
+		->when($currentType == BuyOrSellCurrency::SAFE_TO_SAFE, function ($query) {
 			$searchFieldName = Request('field');
 				$value = Request('value');
 				$from = Request('from');

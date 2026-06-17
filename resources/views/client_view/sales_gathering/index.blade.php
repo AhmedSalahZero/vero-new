@@ -75,7 +75,6 @@
 </style>
 @endpush
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
     table {
         white-space: nowrap;
@@ -102,7 +101,7 @@
 <x-navigators-dropdown :navigators="$navigators ?? []"></x-navigators-dropdown>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 @php
 $user = auth()->user();
 $additionalTitle = $modelName == 'LoanSchedule' && isset($loan)  ? ' [ ' . $loan->getName(). ' ]' : ''; 
@@ -222,7 +221,7 @@ $date = now()->format('d-m-Y')
     <div class="kt-portlet__body">
         <div class="row">
             <div class="col-md-10">
-                <div class="d-flex align-items-center ">
+                <div class="d-flex align-items-center">
                     <x-sectionTitle :title="__('Filtering')"></x-sectionTitle>
                 </div>
             </div>
@@ -253,12 +252,12 @@ $date = now()->format('d-m-Y')
 
                         @foreach($exportables as $exportableName => $exportableTitle)
 						 <div class="col-md-3 mb-4">
-                            <x-form.select :options="$labelingUniqueItemsPerColumn[$exportableName]??[]" :add-new="false" :label="$exportableTitle" class="select2-select   " data-filter-type="{{ 'create' }}" :all="false" name="pricing_plan_id" please-select="true" id="{{Request($exportableName).'_'.'pricing_plan_id' }}" :selected-value="Request($exportableName)"></x-form.select>
+                            <x-form.select :options="$labelingUniqueItemsPerColumn[$exportableName]??[]" :add-new="false" :label="$exportableTitle" class="select2-select" data-filter-type="{{ 'create' }}" :all="false" name="pricing_plan_id" please-select="true" id="{{Request($exportableName).'_'.'pricing_plan_id' }}" :selected-value="Request($exportableName)"></x-form.select>
                         </div>
 						
                         {{-- <div class="col-md-3">
                             <div class="form-group">
-                                <x-form.select :please-select="true" :label="$exportableTitle" class="text-center  repeater-select" :options="$labelingUniqueItemsPerColumn[$exportableName]??[]"  :add-new="false" :all="false" name="{{ $exportableName }}" :selected-value="Request($exportableName)"></x-form.select>
+                                <x-form.select :please-select="true" :label="$exportableTitle" class="text-center repeater-select" :options="$labelingUniqueItemsPerColumn[$exportableName]??[]"  :add-new="false" :all="false" name="{{ $exportableName }}" :selected-value="Request($exportableName)"></x-form.select>
                             </div>
                         </div> --}}
                         @endforeach
@@ -460,7 +459,7 @@ $date = now()->format('d-m-Y')
 					 @endif 
 					 
 
-            <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+            <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 			
                 <span class="d-flex justify-content-center" style="overflow: visible; position: relative; width: 110px;">
 					
@@ -603,8 +602,8 @@ $(document).on('click', '#open-instructions', function(e) {
     if ($('div.kt-portlet__body').length) {
 
         $('div.kt-portlet__body').append(`
-								<i class="cursor-pointer text-dark arrow-nav  arrow-left fa fa-arrow-left"></i>
-								<i class="cursor-pointer text-dark arrow-nav arrow-right fa  fa-arrow-right"></i>
+								<i class="cursor-pointer text-dark arrow-nav arrow-left fa fa-arrow-left"></i>
+								<i class="cursor-pointer text-dark arrow-nav arrow-right fa fa-arrow-right"></i>
 								`)
 
 

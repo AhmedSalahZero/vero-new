@@ -31,7 +31,7 @@
                     {!! trans('laravelroles::laravelroles.modals.btnCancel') !!}
                 </button>
                 <button class="btn btn-{{ $modalClass }} pull-right" id="confirm" type="button" >
-                    <i class="fa {{  $actionBtnIcon  }}" aria-hidden="true"></i>
+                    <i class="fa {{ $actionBtnIcon }}" aria-hidden="true"></i>
                     {{ $btnSubmitText }}
                 </button>
             </div>

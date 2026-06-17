@@ -4,7 +4,7 @@
         @include('laravelroles::laravelroles.forms.permission-form')
     </div>
     <div class="card-footer">
-        <div class="row ">
+        <div class="row">
             <div class="col-md-6">
                 <span data-toggle="tooltip" title="{!! trans('laravelroles::laravelroles.tooltips.save-permission') !!}">
                     <button type="submit" class="btn btn-success btn-lg btn-block" value="save" name="action">

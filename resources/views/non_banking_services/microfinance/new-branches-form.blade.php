@@ -39,7 +39,7 @@ $months = $study->getMicrofinanceMonths() ;
             $repeaterId = $tableId.'_repeater';
             @endphp
 
-            <div class="kt-portlet  ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__body">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('New Branches Openings Projection') }} </h3>
                     <div class="row">
@@ -141,19 +141,19 @@ $months = $study->getMicrofinanceMonths() ;
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Name') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Tenor <br> (Months)') !!} </th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Early Payment <br> Installments Count') !!}</th>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Avg <br> Amount') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Name') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Tenor <br> (Months)') !!} </th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Early Payment <br> Installments Count') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Avg <br> Amount') !!}</th>
                                         @if(!$model->durationIsLessThanOneOrEqualYear())
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Annual <br> Increase %') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Annual <br> Increase %') !!}</th>
                                         @endif
-                                        <th class="min-w-90 form-label font-weight-bold text-center align-middle   header-border-down">{!! __('Funded <br> By') !!}</th>
+                                        <th class="min-w-90 form-label font-weight-bold text-center align-middle header-border-down">{!! __('Funded <br> By') !!}</th>
                                         @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Product <br> Mix %') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Product <br> Mix %') !!}</th>
                                         @endforeach
 
                                     </tr>
@@ -215,7 +215,7 @@ $months = $study->getMicrofinanceMonths() ;
                                         @endif
 
                                         <td>
-                                            <x-form.select :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getFundedBy():0" :options="\App\Helpers\HNonBanking::getMicrofinanceFundingBySelector()" :add-new="false" class="select2-select min-w-120 repeater-select  " :all="false" name="microfinanceProductSalesProjects[{{ $product->id }}][funded_by]"></x-form.select>
+                                            <x-form.select :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getFundedBy():0" :options="\App\Helpers\HNonBanking::getMicrofinanceFundingBySelector()" :add-new="false" class="select2-select min-w-120 repeater-select" :all="false" name="microfinanceProductSalesProjects[{{ $product->id }}][funded_by]"></x-form.select>
                                         </td>
 
 
@@ -248,7 +248,7 @@ $months = $study->getMicrofinanceMonths() ;
 
                                         <td>
                                             <div class="">
-                                                <input value="{{ __('Total') }}" disabled class="form-control text-left mt-2 " type="text">
+                                                <input value="{{ __('Total') }}" disabled class="form-control text-left mt-2" type="text">
                                             </div>
                                         </td>
  @if(!$model->durationIsLessThanOneOrEqualYear())
@@ -293,7 +293,7 @@ $months = $study->getMicrofinanceMonths() ;
                                                 <div class="form-group three-dots-parent">
                                                     <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
                                                         <div class="input-hidden-parent">
-                                                            <input readonly class="form-control copy-value-to-his-input-hidden sum-total-row  expandable-percentage-input  repeat-to-right-input-formatted  " type="text" value="{{ number_format($currentTotals[$yearOrMonthAsIndex]??0,1)}}" data-column-index="{{ $columnIndex }}">
+                                                            <input readonly class="form-control copy-value-to-his-input-hidden sum-total-row expandable-percentage-input repeat-to-right-input-formatted" type="text" value="{{ number_format($currentTotals[$yearOrMonthAsIndex]??0,1)}}" data-column-index="{{ $columnIndex }}">
                                                         </div>
 
                                                         <span class="ml-2 currency-class">
@@ -352,15 +352,15 @@ $months = $study->getMicrofinanceMonths() ;
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Name') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Name') !!}</th>
                                         @for($i = 0 ; $i< 12 ; $i++ ) @php $monthName=\Carbon\Carbon::make('2010-01-01')->addMonth($i)->format('M');
                                             @endphp
-                                            <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! $monthName .' <br> ' . __('Seasonality %') !!}</th>
+                                            <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! $monthName .' <br> ' . __('Seasonality %') !!}</th>
                                             @endfor
-                                            <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{{ __('Total') }}</th>
+                                            <th class="form-label font-weight-bold text-center align-middle header-border-down">{{ __('Total') }}</th>
 
 
                                     </tr>
@@ -412,7 +412,7 @@ $months = $study->getMicrofinanceMonths() ;
                                                     <div class="form-group three-dots-parent">
                                                         <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
                                                             <div class="input-hidden-parent">
-                                                                <input readonly class="form-control copy-value-to-his-input-hidden sum-total-column  expandable-percentage-input  repeat-to-right-input-formatted  " type="text" value="{{ number_format($totalSeasonality,1)  }}" data-column-index="{{ $columnIndex }}">
+                                                                <input readonly class="form-control copy-value-to-his-input-hidden sum-total-column expandable-percentage-input repeat-to-right-input-formatted" type="text" value="{{ number_format($totalSeasonality,1)  }}" data-column-index="{{ $columnIndex }}">
                                                                 <span style="visibility:hidden">..</span>
 
                                                             </div>
@@ -463,12 +463,12 @@ $months = $study->getMicrofinanceMonths() ;
 
 
                         <div class="table-responsive">
-                            <table class="table table-white repeater-class repeater ">
+                            <table class="table table-white repeater-class repeater">
                                 <thead>
                                     <tr>
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! __('Product <br> Name') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! __('Product <br> Name') !!}</th>
                                         @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-                                        <th class=" form-label font-weight-bold text-center align-middle  header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Flat Rates %') !!}</th>
+                                        <th class="form-label font-weight-bold text-center align-middle header-border-down">{!! $yearOrMonthFormatted .' <br> ' . __('Flat Rates %') !!}</th>
                                         @endforeach
 
                                     </tr>
@@ -510,7 +510,7 @@ $months = $study->getMicrofinanceMonths() ;
 
 
 
-                                            <div class="modal fade " id="{{ $currentModalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal fade" id="{{ $currentModalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-md modal-dialog-centered" role="document">
                                                     <div class="modal-content">
 
@@ -528,8 +528,8 @@ $months = $study->getMicrofinanceMonths() ;
                                                                         <tr>
 
 
-                                                                            <th class="text-center  text-capitalize th-main-color">{{ __('Flat Rate') }}</th>
-                                                                            <th class="text-center  text-capitalize th-main-color">{{ __('Decreasing Rate') }}</th>
+                                                                            <th class="text-center text-capitalize th-main-color">{{ __('Flat Rate') }}</th>
+                                                                            <th class="text-center text-capitalize th-main-color">{{ __('Decreasing Rate') }}</th>
 
 
 
@@ -542,7 +542,7 @@ $months = $study->getMicrofinanceMonths() ;
 
                                                                         <tr>
                                                                             <td class="">
-                                                                                <div class="kt-input-icon ">
+                                                                                <div class="kt-input-icon">
                                                                                     <div class="input-group">
                                                                                         <input disabled type="text" step="0.1" class="form-control ignore-global-style flat-rate-id" value="{{ 0 }}">
                                                                                     </div>
@@ -550,7 +550,7 @@ $months = $study->getMicrofinanceMonths() ;
                                                                             </td>
 
                                                                             <td class="">
-                                                                                <div class="kt-input-icon ">
+                                                                                <div class="kt-input-icon">
                                                                                     <div class="input-group">
                                                                                         <input disabled type="text" step="0.1" class="form-control ignore-global-style decreasing-rate-id" value="{{ 0 }}">
                                                                                     </div>
@@ -567,7 +567,7 @@ $months = $study->getMicrofinanceMonths() ;
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary " data-dismiss="modal">{{ __('Close') }} </button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ __('Close') }} </button>
                                                         </div>
 
                                                     </div>
@@ -603,7 +603,7 @@ $months = $study->getMicrofinanceMonths() ;
             {{-- end of Products Mix Pricing (Flat Rates %)  --}}
 
 
-            <div class="kt-portlet " style="margin-bottom:5px;">
+            <div class="kt-portlet" style="margin-bottom:5px;">
                 <div class="kt-portlet__body">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('New Loan Officers Hiring (Per New Branch) (From Branch Operation Date)') }} </h3>
                     <div class="row">
@@ -616,10 +616,10 @@ $months = $study->getMicrofinanceMonths() ;
                     <input type="hidden" name="tableIds[]" value="{{ $tableId }}">
                     <x-tables.repeater-table :hideByDefault="false" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :repeater-with-select2="true" :parentClass="''" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=false">
                         <x-slot name="ths">
-                            {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" header-border-down" :title="__('Loan Officer <br> Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
+                            {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Loan Officer <br> Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
                             {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Existing Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
                             <x-tables.repeater-table-th :font-size-class="'font-14px'" class="max-w-200 header-border-down" :title="__('Position')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th>
-                            @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('Mth-').$i . ' <br> ' .__('Hiring #')">
+                            @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('Mth-').$i . ' <br> ' .__('Hiring #')">
                                 </x-tables.repeater-table-th>
                                 @endfor
                         </x-slot>
@@ -708,7 +708,7 @@ $months = $study->getMicrofinanceMonths() ;
             </div>
 
 
-            {{-- <div class="kt-portlet " style="margin-bottom:5px;">
+            {{-- <div class="kt-portlet" style="margin-bottom:5px;">
                 <div class="kt-portlet__body">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('Existing Loan Officers Cases Projection') }} </h3>
             <div class="row">
@@ -722,7 +722,7 @@ $months = $study->getMicrofinanceMonths() ;
             <x-tables.repeater-table :hideByDefault="false" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :repeater-with-select2="true" :parentClass="''" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=false">
                 <x-slot name="ths">
                     <x-tables.repeater-table-th :font-size-class="'font-14px'" class="max-w-200 header-border-down" :title="__('Position')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th>
-                    @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="formatDateForView($dateIndexWithDate[$i]) . ' <br> ' .__('Cases #')">
+                    @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="formatDateForView($dateIndexWithDate[$i]) . ' <br> ' .__('Cases #')">
                         </x-tables.repeater-table-th>
                         @endfor
                 </x-slot>
@@ -816,7 +816,7 @@ $months = $study->getMicrofinanceMonths() ;
 
 
 
-<div class="kt-portlet " style="margin-bottom:5px;">
+<div class="kt-portlet" style="margin-bottom:5px;">
     <div class="kt-portlet__body">
         <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ __('New Loan Officers Cases Projection') }} </h3>
         <div class="row">
@@ -830,9 +830,9 @@ $months = $study->getMicrofinanceMonths() ;
         <input type="hidden" name="tableIds[]" value="{{ $tableId }}">
         <x-tables.repeater-table :hideByDefault="false" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden overflow-scroll'" :hide-add-btn="true" :repeater-with-select2="true" :parentClass="''" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=false">
             <x-slot name="ths">
-                {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" header-border-down" :title="__('Loan Officer <br> Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
+                {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Loan Officer <br> Count')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th> --}}
                 <x-tables.repeater-table-th :font-size-class="'font-14px'" class="max-w-200 header-border-down" :title="__('Position')" :helperTitle="__('Please insert Cost Per Unit excluding VAT')"></x-tables.repeater-table-th>
-                @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class=" interval-class header-border-down " :title="__('Mth-').$i . ' <br> ' .__('Cases #')">
+                @for($i = 0 ; $i<= $months ; $i++) <x-tables.repeater-table-th :font-size-class="'font-14px'" class="interval-class header-border-down" :title="__('Mth-').$i . ' <br> ' .__('Cases #')">
                     </x-tables.repeater-table-th>
                     @endfor
             </x-slot>
@@ -949,11 +949,11 @@ $months = $study->getMicrofinanceMonths() ;
 
         <x-tables.repeater-table :hideByDefault="false" :addExpenseType="false" :initEmpty="false" :removeActionBtn="true" :first-element-deletable="false" :font-size-class="'font-14px'"  :append-save-or-back-btn="false" :repeater-with-select2="false" :parentClass="''"  :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
             <x-slot name="ths">
-                {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down first-column-th-class" :title="__('')"></x-tables.repeater-table-th> --}}
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down " :title="__('Amount')"></x-tables.repeater-table-th>
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down " :title="__('Duration(MTH)')"></x-tables.repeater-table-th>
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down " :title="__('Annual <br> Increase %')"></x-tables.repeater-table-th>
-                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="  header-border-down " :title="__('Annual <br> Discount Rate %')"></x-tables.repeater-table-th>
+                {{-- <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down first-column-th-class" :title="__('')"></x-tables.repeater-table-th> --}}
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Amount')"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Duration(MTH)')"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Annual <br> Increase %')"></x-tables.repeater-table-th>
+                <x-tables.repeater-table-th :font-size-class="'font-14px'" class="header-border-down" :title="__('Annual <br> Discount Rate %')"></x-tables.repeater-table-th>
                 
             </x-slot>
 			
@@ -972,7 +972,7 @@ $months = $study->getMicrofinanceMonths() ;
 
 
                         <div class="">
-                            <input value="{{  $study->getRightOfUserRentAmount() }}" name="right_of_use_rent[0][amount]" class="form-control  text-left mt-2" type="text">
+                            <input value="{{  $study->getRightOfUserRentAmount() }}" name="right_of_use_rent[0][amount]" class="form-control text-left mt-2" type="text">
 
                         </div>
                     </td>
@@ -981,7 +981,7 @@ $months = $study->getMicrofinanceMonths() ;
 
 
                         <div class="">
-                            <input data-specific-number="{{ $study->getDurationInYears()*12 }}" value="{{  $study->getRightOfUserRentDuration() }}" name="right_of_use_rent[0][duration]" class="form-control  text-left mt-2 only-greater-than-or-equal-specific-number-allowed" type="text">
+                            <input data-specific-number="{{ $study->getDurationInYears()*12 }}" value="{{  $study->getRightOfUserRentDuration() }}" name="right_of_use_rent[0][duration]" class="form-control text-left mt-2 only-greater-than-or-equal-specific-number-allowed" type="text">
 
                         </div>
                     </td>
@@ -1057,7 +1057,7 @@ $months = $study->getMicrofinanceMonths() ;
         <x-slot name="ths">
             <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Expense <br> Category')"></x-tables.repeater-table-th>
             <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Expense <br> Name')"></x-tables.repeater-table-th>
-            <x-tables.repeater-table-th class="col-md-2 header-border-down  " :title="__('Start <br> Date')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
+            <x-tables.repeater-table-th class="col-md-2 header-border-down" :title="__('Start <br> Date')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
             <x-tables.repeater-table-th class="col-md-1 header-border-down" :title="__('Monthly <br> Amount')" :helperTitle="__('Please insert amount excluding VAT')"></x-tables.repeater-table-th>
             <x-tables.repeater-table-th class="col-md-1 hidden header-border-down" :title="__('End <br> Date')" :helperTitle="__('Default date is Income Statement start date, if else please select a date')"></x-tables.repeater-table-th>
             <x-tables.repeater-table-th class="col-md-1 header-border-down" :title="__('Payment <br> Terms')" :helperTitle="__('You can either choose one of the system default terms (cash, quarterly, semi-annually, or annually), if else please choose Customize to insert your payment terms')"></x-tables.repeater-table-th>
@@ -1090,16 +1090,16 @@ $months = $study->getMicrofinanceMonths() ;
 
                 <input type="hidden" name="id" value="{{ isset($subModel) ? $subModel->id : 0 }}">
                 <td>
-                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getExpenseCategory() : 'cash'" :options="\App\Helpers\HNonBanking::getBranchExpenseCategoriesForSelect2()" :add-new="false" class="select2-select repeater-select expense_category " :all="false" name="{{ $isRepeater ? 'expense_category' : $tableId . '[0][expense_category]' }}"></x-form.select>
+                    <x-form.select :selectedValue="isset($subModel) ? $subModel->getExpenseCategory() : 'cash'" :options="\App\Helpers\HNonBanking::getBranchExpenseCategoriesForSelect2()" :add-new="false" class="select2-select repeater-select expense_category" :all="false" name="{{ $isRepeater ? 'expense_category' : $tableId . '[0][expense_category]' }}"></x-form.select>
                 </td>
 
                 <td>
-                    <x-form.select data-current-selected="{{ isset($subModel) ? $subModel->getExpenseNameId() : '' }}" :selectedValue="isset($subModel) ? $subModel->getExpenseNameId() : ''" :options="[]" :add-new="false" class="select2-select repeater-select expense_name_id " :all="false" name="{{ $isRepeater ? 'expense_name_id' : $tableId . '[0][expense_name_id]' }}"></x-form.select>
+                    <x-form.select data-current-selected="{{ isset($subModel) ? $subModel->getExpenseNameId() : '' }}" :selectedValue="isset($subModel) ? $subModel->getExpenseNameId() : ''" :options="[]" :add-new="false" class="select2-select repeater-select expense_name_id" :all="false" name="{{ $isRepeater ? 'expense_name_id' : $tableId . '[0][expense_name_id]' }}"></x-form.select>
                 </td>
 
                 <td>
 
-                    <x-form.select :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getStartDateType():0" :options="\App\Helpers\HNonBanking::getMicrofinanceNewBranchesFixedExpenseSelector()" :add-new="false" class="select2-select repeater-select  " :all="false" name="{{ $isRepeater ? 'start_date_type' : $tableId . '[0][start_date_type]' }}"></x-form.select>
+                    <x-form.select :required="true" :label="''" :pleaseSelect="false" :selectedValue="isset($subModel) ? $subModel->getStartDateType():0" :options="\App\Helpers\HNonBanking::getMicrofinanceNewBranchesFixedExpenseSelector()" :add-new="false" class="select2-select repeater-select" :all="false" name="{{ $isRepeater ? 'start_date_type' : $tableId . '[0][start_date_type]' }}"></x-form.select>
 
 
                     {{-- <div class="max-w-150">
@@ -1125,7 +1125,7 @@ $months = $study->getMicrofinanceMonths() ;
                 </td>
                 <td>
                     <div class="">
-                        <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select  " :all="false" name="{{ $isRepeater ? 'payment_terms' : $tableId . '[0][payment_terms]' }}"></x-form.select>
+                        <x-form.select :selectedValue="isset($subModel) ? $subModel->getPaymentTerm() : 'cash'" :options="getPaymentTerms()" :add-new="false" class="select2-select payment_terms repeater-select" :all="false" name="{{ $isRepeater ? 'payment_terms' : $tableId . '[0][payment_terms]' }}"></x-form.select>
                         <x-modal.custom-collection :size="'sm'" :title="__('Payment Terms')" :subModel="isset($subModel) ? $subModel : null " :subModel="isset($subModel) ? $subModel : null " :tableId="$tableId" :isRepeater="$isRepeater" :id="$repeaterId.'test-modal-id'"></x-modal.custom-collection>
 
                     </div>
@@ -1403,7 +1403,7 @@ $months = $study->getMicrofinanceMonths() ;
             const elementToAppendIn = $(this).parent().find('.js-append-into');
             const texts = [];
             let lis = '';
-            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap ">' + 'Add New' + '</a></u>'
+            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap">' + 'Add New' + '</a></u>'
             lis += '<li >' + text + '</li>'
             $(this).closest('table').find('.js-show-all-categories-popup').each(function(index, element) {
                 let text = $(element).val().trim();

@@ -3,7 +3,6 @@
 use App\Models\Partner ;
 @endphp
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 
@@ -36,7 +35,7 @@ use App\Models\Partner ;
 {{ __('Partners') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
@@ -54,7 +53,7 @@ use App\Models\Partner ;
             </ul>
 			@if(!$company->hasOdooIntegrationCredentials())
             <div class="flex-tabs">
-                <a href="{{ route('partners.create',['company'=>$company->id,Partner::PARTNERS]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('partners.create',['company'=>$company->id,Partner::PARTNERS]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Partner') }}
                 </a>
@@ -64,7 +63,7 @@ use App\Models\Partner ;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
 
 
@@ -75,7 +74,7 @@ use App\Models\Partner ;
             $currentType = Partner::PARTNERS ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <x-table-title.with-two-dates :type="$currentType" :title="__('Partners')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-customers :indexRouteName="$indexRouteName" :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('partners.create',['company'=>$company->id])}}" />
@@ -83,7 +82,7 @@ use App\Models\Partner ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -170,7 +169,7 @@ use App\Models\Partner ;
 									
 									// || hasAuthFor('delete customers')
 									 )
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											@if(hasAuthFor('update customers'))
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('partners.edit',['company'=>$company->id,'partner'=>$model->id]) }}"><i class="fa fa-pen-alt"></i></a>
@@ -241,7 +240,7 @@ use App\Models\Partner ;
             modal.find('.data-type-span').html('[ {{ __("Balance Date") }} ]')
             $(modal).find('.search-field').val('').trigger('change').prop('disabled', true);
         } else {
-            modal.find('.data-type-span').html('[ {{ __("Contract Start Date") }} ]')
+      //      modal.find('.data-type-span').html('[ {{ __("Contract Start Date") }} ]')
             $(modal).find('.search-field').prop('disabled', false);
         }
     })

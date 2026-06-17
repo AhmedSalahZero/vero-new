@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -14,7 +13,7 @@
 {{ __('LG By Bank Name Report') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -51,7 +50,7 @@
                             <label>{{ __('Currency') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select js-get-bank data-live-search="true" data-actions-box="true" id="currency_name" name="currency_name" required class="form-control ajax-current-currency  kt-bootstrap-select select2-select kt_bootstrap_select ">
+                                    <select js-get-bank data-live-search="true" data-actions-box="true" id="currency_name" name="currency_name" required class="form-control ajax-current-currency kt-bootstrap-select select2-select kt_bootstrap_select">
                                         @foreach($currencies as $currency=>$currencyName)
                                         <option @if($currency == $selectedCurrency)  selected @endif value="{{ $currency }}">{{ touppercase($currencyName) }}</option>
                                         @endforeach
@@ -80,7 +79,7 @@
                             <label>{{__('Status')}} @include('star')</label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select required  name="status" class="form-control ">
+                                    <select required  name="status" class="form-control">
                                         <option value="running" selected>{{__('Running')}}</option>
                                         <option value="all" selected>{{__('All')}}</option>
                                         {{-- <option value="" selected>{{__('Select')}}</option> --}}

@@ -127,7 +127,7 @@ $totalOfDepreactionAndAmortization = 0;
 {{-- Title --}}
 <div class="row">
 
-    <div class="kt-portlet ">
+    <div class="kt-portlet">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                 <h3 class="kt-portlet__head-title head-title text-primary text-capitalize" style="font-size:2rem !important">
@@ -135,7 +135,7 @@ $totalOfDepreactionAndAmortization = 0;
                 </h3>
             </div>
         </div>
-        <div class="kt-portlet__body  kt-portlet__body--fit">
+        <div class="kt-portlet__body kt-portlet__body--fit">
             <div class="row row-no-padding row-col-separator-xl">
                 @foreach ($types as $singleType=>$type )
 				@if ($singleType == 'Corporate Taxes')
@@ -235,7 +235,7 @@ $totalOfDepreactionAndAmortization = 0;
             <div class="row">
                 {{-- Total Facilities --}}
                 <div class="col-md-12">
-                    <div class="kt-portlet ">
+                    <div class="kt-portlet">
 
                         <div class="kt-portlet__body">
                             <div class="row">
@@ -269,7 +269,7 @@ $totalOfDepreactionAndAmortization = 0;
                 </h3>
             </div>
         </div>
-        <div class="kt-portlet__body  kt-portlet__body--fit">
+        <div class="kt-portlet__body kt-portlet__body--fit">
             <div class="row row-no-padding row-col-separator-xl">
                 @foreach ([5=>'Gross Profit <br> &nbsp;',13=>'Earning Before Interest Taxes <br> Depreciation Amortization - EBITDA',15=>'Earning Before Interest Taxes - EBIT <br> &nbsp;',19=>'Earning Before Taxes - EBT',21=>__('Corporate Taxes'),23=>'Net Profit'] as $idOfItem=>$mainWithoutSubItemsName )
                 @php
@@ -433,7 +433,7 @@ $totalOfDepreactionAndAmortization = 0;
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{convertStringToClass($type)}}" role="tab">
+                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2_{{convertStringToClass($type)}}" role="tab">
                                 <i class="flaticon2-checking"></i>Reports Table
                             </a>
                         </li>
@@ -441,7 +441,7 @@ $totalOfDepreactionAndAmortization = 0;
                 </div>
             </div>
             <div class="kt-portlet__body">
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_1_{{convertStringToClass($type)}}" role="tabpanel">
 

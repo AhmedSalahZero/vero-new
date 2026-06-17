@@ -3,11 +3,7 @@
 				@endphp
 
 
-				<div @if($isRepeater) data-repeater-item @endif class="form-group m-form__group row align-items-center 
-										   @if($isRepeater)
-										 repeater_item
-										 @endif 
-										   ">
+				<div @if($isRepeater) data-repeater-item @endif class="form-group m-form__group row align-items-center @if($isRepeater) repeater_item @endif">
 
 				    <div class="col-md-8">
 				        @if(isset($onlyTotal) && $onlyTotal)
@@ -32,7 +28,7 @@
 				        <label class="form-label font-weight-bold">{{ __('Guest Capacity') }} </label>
 				        <div class="kt-input-icon">
 				            <div class="input-group">
-				                <input @if($isRepeater) name="meeting_cover" @else name="meetings[0][meeting_cover]" @endif type="number" class="form-control only-greater-than-or-equal-zero-allowed " value="{{ isset($meeting) ? $meeting->getMeetingCover() : old('meeting_cover') }}" step="0.5">
+				                <input @if($isRepeater) name="meeting_cover" @else name="meetings[0][meeting_cover]" @endif type="number" class="form-control only-greater-than-or-equal-zero-allowed" value="{{ isset($meeting) ? $meeting->getMeetingCover() : old('meeting_cover') }}" step="0.5">
 				            </div>
 				        </div>
 				    </div>

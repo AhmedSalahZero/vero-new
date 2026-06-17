@@ -64,11 +64,11 @@
         <div class="kt-portlet__head-toolbar">
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                 {{-- <li class="nav-item">
-                        <a class="nav-link " data-toggle="tab" href="#kt_apps_contacts_view_tab_1" role="tab">
+                        <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_1" role="tab">
                             <i class="flaticon-line-graph"></i> &nbsp; Charts
                         </a>
                     </li> --}}
-                <li class="nav-item ">
+                <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab">
                         <i class="flaticon2-checking"></i>Reports Table
                     </a>
@@ -77,14 +77,14 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             @php
                     array_push($names, 'Total');
                     array_push($names, 'Sales_Channel_Sales_Percentages');
                     @endphp
-            {{-- <div class="tab-pane " id="kt_apps_contacts_view_tab_1" role="tabpanel">
+            {{-- <div class="tab-pane" id="kt_apps_contacts_view_tab_1" role="tabpanel">
                     @foreach ($names as $name_of_sales_channel)
 
                         <div class="col-xl-12">
@@ -126,7 +126,7 @@
         @if ($sales_channel_name != 'Total' && $sales_channel_name != 'Growth Rate %')
 
 
-        <tr class="group-color ">
+        <tr class="group-color">
             <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
                 <i class="row_icon{{ $id }} flaticon2-down white-text"></i>
                 <b>{{ __($sales_channel_name) }}</b>
@@ -145,7 +145,7 @@
             @endforeach
         </tr>
         @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
-        <tr class="row{{ $id }}   text-center">
+        <tr class="row{{ $id }} text-center">
             <td class="text-left"><b>{{ $channel_name . ' - Avg. Prices'  }}</b></td>
 
             @foreach ($dates as $date)

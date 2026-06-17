@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
     .max-w-serial {
@@ -113,7 +112,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ __('Cash In Safe Statement ['  ) . ' ' . __($currency) . ' ]' }}</x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="row">
     <div class="col-md-12">
@@ -266,45 +265,45 @@
                 @csrf
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
                     <div>
                         <div class="responsive">
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-serial header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
 
-                                        {{-- <th class="view-table-th   header-th  align-middle text-center">
+                                        {{-- <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Full Date') }}
                                         </th>   
 										 --}}
-										<th class="view-table-th   header-th  align-middle text-center">
+										<th class="view-table-th header-th align-middle text-center">
                                             {{ __('Date') }}
                                         </th>
 
-                                        <th class="view-table-th max-w-invoice-number    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-number header-th align-middle text-center">
                                             {{ __('Beginning Balance') }}
                                         </th>
 
 
-                                        <th class="view-table-th max-w-currency    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-currency header-th align-middle text-center">
                                             {{ __('Debit') }}
                                         </th>
 
-                                        <th class="view-table-th max-w-amount    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-amount header-th align-middle text-center">
                                             {{ __('Credit') }}
                                         </th>
-                                        <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('End Balance') }}
                                         </th>
-										<th class="view-table-th   header-th  align-middle text-center">
+										<th class="view-table-th header-th align-middle text-center">
                                             {{ __('Reviewed') }}
                                         </th>
-										  <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+										  <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('Comment') }}
                                         </th>
 
@@ -327,10 +326,10 @@
                                     </script>
 
                                     @foreach($results as $index=>$modelAsStdClass)
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
-                                        {{-- <td class="sub-text-bg  text-center ">{{ $modelAsStdClass->full_date }}</td> --}}
-                                        <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
+                                        {{-- <td class="sub-text-bg text-center">{{ $modelAsStdClass->full_date }}</td> --}}
+                                        <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($modelAsStdClass->date)->format('d-m-Y') }}</td>
                                         <td class="sub-text-bg text-center max-w-invoice-number">{{ number_format($modelAsStdClass->beginning_balance) }}</td>
                                         <td class="sub-text-bg text-center max-w-invoice-date">{{ number_format($modelAsStdClass->debit) }}</td>
                                         <td class="sub-text-bg text-center max-w-currency">{{ number_format($modelAsStdClass->credit) }}</td>
@@ -343,7 +342,7 @@
 											$userComment = \App\Helpers\HNonBanking::getUserCommentFromModel($modelAsStdClass);
 											
 									   @endphp
-									      <td class="sub-text-bg text-left ">{{   $reviewedText   }}</td>
+									      <td class="sub-text-bg text-left">{{   $reviewedText   }}</td>
 									    <td class="sub-text-bg text-left max-w-amount">{{ $comment?:  getBankStatementComment($modelAsStdClass) }} <br> 
 										
 										{{ $userComment }}

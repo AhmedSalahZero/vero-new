@@ -6,9 +6,9 @@ $currentYearRepeaterIndex = 0 ;
 @endphp
 <x-tables.repeater-table :table-class="$tableClass" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
     <x-slot name="ths">
-        <x-tables.repeater-table-th class="  header-border-down first-column-th-class min-250-w" :title="__('Item')"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th class="header-border-down first-column-th-class min-250-w" :title="__('Item')"></x-tables.repeater-table-th>
         @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-        <x-tables.repeater-table-th data-column-index="{{ $yearOrMonthAsIndex }}" class="  header-border-down" :title="$yearOrMonthFormatted"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th data-column-index="{{ $yearOrMonthAsIndex }}" class="header-border-down" :title="$yearOrMonthFormatted"></x-tables.repeater-table-th>
 		
 		@php
         $dateAsString = $dateIndexWithDate[$yearOrMonthAsIndex];
@@ -17,7 +17,7 @@ $currentYearRepeaterIndex = 0 ;
         @endphp
 
         @if($study->isMonthlyStudy() && ($study->getFinancialYearEndMonthNumber() == $currentMonthNumber || $loop->last))
-        <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class="tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
         @php
         $currentYearRepeaterIndex ++;
         @endphp
@@ -33,7 +33,7 @@ $currentYearRepeaterIndex = 0 ;
 
                                         <td>
                                             <div class="min-250-w">
-                                                <input value="{{ __('Operating Months') }}" disabled class="form-control text-left " type="text">
+                                                <input value="{{ __('Operating Months') }}" disabled class="form-control text-left" type="text">
         </div>
 
 
@@ -74,7 +74,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="">
-                    <input value="{{ __('Revenues Growth Rate %') }}" disabled class="form-control min-250-w text-left " type="text">
+                    <input value="{{ __('Revenues Growth Rate %') }}" disabled class="form-control min-250-w text-left" type="text">
                 </div>
 
 
@@ -153,7 +153,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="">
-                    <input value="{{ __('Gross Profit % / REV.') }}" disabled class="form-control min-250-w text-left " type="text">
+                    <input value="{{ __('Gross Profit % / REV.') }}" disabled class="form-control min-250-w text-left" type="text">
                 </div>
 
 
@@ -228,7 +228,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="">
-                    <input value="{{ __('EBITDA % / REV.') }}" disabled class="form-control min-250-w  text-left " type="text">
+                    <input value="{{ __('EBITDA % / REV.') }}" disabled class="form-control min-250-w text-left" type="text">
                 </div>
 
 
@@ -293,7 +293,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="">
-                    <input value="{{ __('EBIT % / REV.') }}" disabled class="form-control min-250-w  text-left " type="text">
+                    <input value="{{ __('EBIT % / REV.') }}" disabled class="form-control min-250-w text-left" type="text">
                 </div>
 
 
@@ -363,7 +363,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="">
-                    <input value="{{ __('EBT % / REV.') }}" disabled class="form-control min-250-w  text-left " type="text">
+                    <input value="{{ __('EBT % / REV.') }}" disabled class="form-control min-250-w text-left" type="text">
                 </div>
 
 
@@ -437,7 +437,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="">
-                    <input value="{{ __('Net Profit % / REV.') }}" disabled class="form-control min-250-w  text-left " type="text">
+                    <input value="{{ __('Net Profit % / REV.') }}" disabled class="form-control min-250-w text-left" type="text">
                 </div>
 
 

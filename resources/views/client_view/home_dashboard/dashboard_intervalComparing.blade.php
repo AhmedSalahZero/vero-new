@@ -28,7 +28,7 @@
     <div class="kt-portlet__body">
         <form action="{{route('dashboard.intervalComparing',$company)}}" method="POST">
             @csrf
-              <div class="form-group row ">
+              <div class="form-group row">
                   <div class="col-md-3">
                         <label style="margin-right: 10px;"><b>{{__('Comparing Types')}}</b></label>
                   </div>
@@ -48,7 +48,7 @@
                 
              
             </div>
-            <div class="form-group row ">
+            <div class="form-group row">
               
                 <div class="col-md-3">
                     <label><b>{{__('First Inteval')}}</b></label>
@@ -72,13 +72,13 @@
                 <div class="col-md-3">
                     <label>{{__('Note')}} </label>
                     <div class="kt-input-icon">
-                        <div class="input-group ">
+                        <div class="input-group">
                                 <input type="text" class="form-control" disabled value="{{__('The Report Will Show Max Top 50')}}"  >
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group row ">
+            <div class="form-group row">
                 <div class="col-md-3">
                     <label><b>{{__('Second Inteval')}}</b></label>
                 </div>
@@ -104,7 +104,7 @@
                 <div class="col-md-3">
                     <label>{{__('Data Type')}} </label>
                     <div class="kt-input-icon">
-                        <div class="input-group ">
+                        <div class="input-group">
                             <input type="text" class="form-control" disabled value="{{__('Value')}}"  >
                         </div>
                     </div>
@@ -130,8 +130,8 @@
 
     <div class="row w-100" style="order:{{ ++$i }}">
 
-          <div style="width:100%" class=" text-center mt-3 mb-3">
-                        <div class="kt-portlet ">
+          <div style="width:100%" class="text-center mt-3 mb-3">
+                        <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
                                 <h3 class="kt-portlet__head-title head-title text-primary font-1-5" style="text-transform: capitalize">
@@ -241,8 +241,8 @@
           @foreach ($intervalComparing as $theType => $intervals)
         <div class="row w-100" style="order:{{ ++$i }}">
 
-           <div style="width:100%" class=" text-center mt-3 mb-3">
-                        <div class="kt-portlet ">
+           <div style="width:100%" class="text-center mt-3 mb-3">
+                        <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
                                 <h3 class="kt-portlet__head-title head-title text-primary font-1-5" style="text-transform: capitalize">

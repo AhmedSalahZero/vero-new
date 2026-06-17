@@ -46,7 +46,7 @@
                 <div class="clearfix"></div>
                 <!-- Search Field -->
                 <div class="intro-search-field">
-                    <input class="input100 " style=" color:white" type="password" id="password-confirm" name="password_confirmation" placeholder="Confirm Password" value="" required="" />
+                    <input class="input100" style=" color:white" type="password" id="password-confirm" name="password_confirmation" placeholder="Confirm Password" value="" required="" />
                     @error('password')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

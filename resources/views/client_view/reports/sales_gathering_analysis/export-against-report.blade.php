@@ -43,7 +43,7 @@
                             <label>{{ __('Report Type') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select name="report_type" id="report_type" class="form-control ">
+                                    <select name="report_type" id="report_type" class="form-control">
                                         <option selected value="trend">{{ __('Trend') }}</option>
                                         <option value="comparing">{{ __('Interval Comparing') }}</option>
 
@@ -138,9 +138,9 @@
 
                     <div class="form-group row">
                         @if(isset(get_defined_vars()['__data']['type']) && get_defined_vars()['__data']['type'] !='averagePrices')
-                        <div class="col-md-4  first-interval">
+                        <div class="col-md-4 first-interval">
                             <label></label>
-                            <div class="flex-center "><label class="first-interval">{{ __('First Interval') }}</label></div>
+                            <div class="flex-center"><label class="first-interval">{{ __('First Interval') }}</label></div>
 
                         </div>
                         @endif
@@ -225,7 +225,7 @@
                             <label>{{ __('Select Currency') }} <span class="multi_selection"></span>  </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date" >
-                                    <select data-live-search="true" data-actions-box="true" name="currency" required class="form-control kt-bootstrap-select  kt_bootstrap_select" >
+                                    <select data-live-search="true" data-actions-box="true" name="currency" required class="form-control kt-bootstrap-select kt_bootstrap_select" >
                                         @foreach($currencies as $currency)
                                         {{-- need to be removed to be by ajax --}}
                                         <option value="{{ $currency }}"> {{ __($currency) }}</option>

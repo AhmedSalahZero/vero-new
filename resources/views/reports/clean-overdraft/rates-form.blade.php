@@ -11,8 +11,8 @@
     </div>
 </div>
 
-<div class="col-md-2 mb-4 ">
-    <label class="form-label font-weight-bold ">{{ __('Borrowing Rate') }} </label>
+<div class="col-md-2 mb-4">
+    <label class="form-label font-weight-bold">{{ __('Borrowing Rate') }} </label>
     <div class="kt-input-icon">
         <div class="input-group">
             <input type="number" class="form-control only-percentage-allowed borrowing-rate-class recalculate-interest-rate" name="borrowing_rate_{{ $mode }}" value="{{ isset($rate) ? $rate->getBorrowingRate() : 0 }}" step="any">
@@ -20,8 +20,8 @@
     </div>
 </div>
 
-<div class="col-md-2 mb-4 ">
-    <label class="form-label font-weight-bold ">{{ __('Margin Rate') }} </label>
+<div class="col-md-2 mb-4">
+    <label class="form-label font-weight-bold">{{ __('Margin Rate') }} </label>
     <div class="kt-input-icon">
         <div class="input-group">
             <input type="number" class="form-control only-percentage-allowed margin-rate-class recalculate-interest-rate" name="margin_rate_{{ $mode }}" value="{{ isset($rate) ? $rate->getMarginRate() : 0 }}" step="any">
@@ -29,16 +29,16 @@
     </div>
 </div>
 
-<div class="col-md-2 mb-4 ">
-    <label class="form-label font-weight-bold ">{{ __('Interest Rate') }} </label>
+<div class="col-md-2 mb-4">
+    <label class="form-label font-weight-bold">{{ __('Interest Rate') }} </label>
     <div class="kt-input-icon">
         <div class="input-group">
             <input disabled type="number" class="form-control interest-rate-class" value="{{ isset($rate) ? $rate->getInterestRate() : '' }}" step="any">
         </div>
     </div>
 </div>
-<div class="col-md-2 mb-4 ">
-    <label class="form-label font-weight-bold ">{{ __('Min Interest Rate') }} </label>
+<div class="col-md-2 mb-4">
+    <label class="form-label font-weight-bold">{{ __('Min Interest Rate') }} </label>
     <div class="kt-input-icon">
         <div class="input-group">
             <input name="min_interest_rate_{{ $mode }}" type="number" class="form-control" value="{{ isset($rate) ? $rate->getMinInterestRate() : 0 }}" step="any">

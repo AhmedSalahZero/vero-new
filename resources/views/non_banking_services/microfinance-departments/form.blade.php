@@ -57,7 +57,7 @@ use App\Models\NonBankingService\Department;
                                     </div>
                                 </div>
                                 <div id="positions" class="leasing-repeater-parent">
-                                    <div class="form-group2  m-form__group2 row">
+                                    <div class="form-group2 m-form__group2 row">
                                         <div data-repeater-list="positions" class="col-lg-12">
 
                                             @include('non_banking_services.microfinance-departments._repeater' , [

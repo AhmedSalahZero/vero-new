@@ -12,7 +12,7 @@
                 <div class="col-lg-6 kt-align-right">
                     <button type="submit" class="btn active-style save-form">{{__('Save')}}</button>
 
-                    <button type="submit" class="btn active-style save-form " data-redirect-to="{{ $returnRedirectRoute }}">{{__('Save & Close')}}</button>
+                    <button type="submit" class="btn active-style save-form" data-redirect-to="{{ $returnRedirectRoute }}">{{__('Save & Close')}}</button>
                 </div>
             </div>
         </div>

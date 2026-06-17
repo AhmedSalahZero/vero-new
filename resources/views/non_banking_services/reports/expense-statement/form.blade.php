@@ -47,7 +47,7 @@
                             <label>{{__('Expense Type')}} @include('star')</label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select required name="expense_type" class="form-control ">
+                                    <select required name="expense_type" class="form-control">
 									@foreach($expenseTypes as $id => $title)
                                         <option value="{{ $id }}" >{{$title}}</option>
 										@endforeach 
@@ -61,7 +61,7 @@
                             <label>{{__('Expense Category')}} @include('star')</label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="expense-category-id" name="expense_category_id" class="form-control ">
+                                    <select id="expense-category-id" name="expense_category_id" class="form-control">
                                         @foreach($expenseCategories as $id=>$title)
                                         <option value="{{ $id }}" >{{ camelizeWithSpace($title) }}</option>
                                         @endforeach
@@ -73,7 +73,7 @@
                             <label>{{__('Expense Name')}} @include('star')</label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select id="expense-name-id" name="expense_name_id" class="form-control ">
+                                    <select id="expense-name-id" name="expense_name_id" class="form-control">
                                         
                                     </select>
                                 </div>

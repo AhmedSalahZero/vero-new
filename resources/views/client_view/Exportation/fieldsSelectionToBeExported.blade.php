@@ -49,7 +49,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title head-title text-primary ">
+                        <h3 class="kt-portlet__head-title head-title text-primary">
                             {{ __('Fields Names') }}
                         </h3>
                     </div>
@@ -59,7 +59,7 @@
                     <div class="form-group row form-group-marginless">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-lg-12 ">
+                                <div class="col-lg-12">
                                     <label class="kt-option bg-secondary">
                                         <span class="kt-option__control">
                                             <span class="kt-checkbox kt-checkbox--bold kt-checkbox--brand kt-checkbox--check-bold" checked>
@@ -98,12 +98,9 @@
 										@if(!in_array($fieldName,$hiddenFields))
                                 <div class="col-lg-6">
                                     <label class="kt-option @if ($status_disanbeled_fields) not_allowed_curser @endif">
-                                        <span class="kt-option__control ">
+                                        <span class="kt-option__control">
 
-                                            <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand
-                                                        @if ($status_disanbeled_fields)
-                                                            kt-checkbox--disabled
-                                                        @endif">
+                                            <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand @if ($status_disanbeled_fields) kt-checkbox--disabled @endif">
                                                 <input type="checkbox" name="fields[]" value="{{$fieldName}}" @if ($fieldName !='net_sales_value' ) class="fields" @endif @if (((false !==$found=array_search($fieldName,$selected_fields)) || $fieldName=='net_sales_value'||$fieldName=='invoice_status'  ) || $modelName == 'LoanSchedule' ) checked @endif @if ($status_disanbeled_fields) disabled="disabled" style="cursor: not-allowed;" @endif id="{{$fieldName}}">
                                                 <span></span>
                                             </label>

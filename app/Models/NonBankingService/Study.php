@@ -3474,16 +3474,8 @@ class Study extends Model
     {
         return $this->hasMany(VatAndCreditWithholdTaxOpeningBalance::class, 'study_id', 'id');
     }
-    public function getVatOpeningBalanceAmount():float
-    {
-        $vatOpening = $this->vatAndCreditWithholdTaxesOpeningBalances->first();
-        return $vatOpening ? $vatOpening->getVatAmount() : 0 ;
-    }
-    public function getCreditWithholdOpeningBalanceAmount():float
-    {
-        $vatOpening = $this->vatAndCreditWithholdTaxesOpeningBalances->first();
-        return $vatOpening ? $vatOpening->getCreditWithholdTaxes() : 0 ;
-    }
+   
+   
     public function longTermLoanOpeningBalances():HasMany
     {
         return $this->hasMany(LongTermLoanOpeningBalance::class, 'study_id', 'id');

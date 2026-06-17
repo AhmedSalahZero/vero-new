@@ -1,15 +1,15 @@
 @extends('layouts.dashboard')
 @section('dash_nav')
-    <ul class="kt-menu__nav ">
-        <li class="kt-menu__item  kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard',$company) }}"
-                class="kt-menu__link "><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.breakdown',$company) }}"
-                class="kt-menu__link "><span class="kt-menu__link-text">Breakdown Analysis Dashboard</span></a></li>
-        {{-- <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.ltl')}}" class="kt-menu__link "><span class="kt-menu__link-text">Long Term Facilities Dashboard</span></a></li> --}}
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.forecast',$company) }}"
+    <ul class="kt-menu__nav">
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard',$company) }}"
+                class="kt-menu__link"><span class="kt-menu__link-text">{{__('Sales Dashboard')}}</span></a></li>
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.breakdown',$company) }}"
+                class="kt-menu__link"><span class="kt-menu__link-text">Breakdown Analysis Dashboard</span></a></li>
+        {{-- <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{route('dashboard.ltl')}}" class="kt-menu__link"><span class="kt-menu__link-text">Long Term Facilities Dashboard</span></a></li> --}}
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.forecast',$company) }}"
                 class="kt-menu__link active-button"><span class="kt-menu__link-text">Forecast Dashboard</span></a></li>
-        <li class="kt-menu__item  kt-menu__item " aria-haspopup="true"><a href="{{ route('dashboard.contractResult',$company) }}"
-                    class="kt-menu__link "><span class="kt-menu__link-text">Contract Result Dashboard</span></a></li>
+        <li class="kt-menu__item kt-menu__item" aria-haspopup="true"><a href="{{ route('dashboard.contractResult',$company) }}"
+                    class="kt-menu__link"><span class="kt-menu__link-text">Contract Result Dashboard</span></a></li>
     </ul>
 @endsection
 @section('css')
@@ -18,7 +18,7 @@
 
     {{-- Title --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -31,14 +31,14 @@
 
     {{-- Multi Line Chart --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Monthly Cash Flow') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -58,14 +58,14 @@
 
     {{-- Single Line Chart --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Monthly Accumulated Cash Flow') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -85,7 +85,7 @@
 
     {{-- Title --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -98,14 +98,14 @@
 
     {{-- Customers Invoices Aging --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Customers Invoices Aging') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -116,7 +116,7 @@
                 {{-- Chart --}}
                 <div class="row">
                     <div class="col-md-4">
-                        <table class="table table-sm table-striped table-head-bg-brand ">
+                        <table class="table table-sm table-striped table-head-bg-brand">
                             <thead class="thead-inverse">
                                 <tr>
                                     <th>{{ __('Invoices Aging') }}</th>
@@ -195,14 +195,14 @@
 
     {{-- Customers Cheques Aging --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Customers Cheques Aging') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -215,7 +215,7 @@
                 {{-- Chart --}}
                 <div class="row">
                     <div class="col-md-4">
-                        <table class="table table-sm table-striped table-head-bg-brand ">
+                        <table class="table table-sm table-striped table-head-bg-brand">
                             <thead class="thead-inverse">
                                 <tr>
                                     <th>{{ __('Cheques Aging') }}</th>
@@ -270,14 +270,14 @@
 
     {{-- Suppliers Invoices Aging --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Suppliers Invoices Aging') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -288,7 +288,7 @@
                 {{-- Chart --}}
                 <div class="row">
                     <div class="col-md-4">
-                        <table class="table table-sm table-striped table-head-bg-brand ">
+                        <table class="table table-sm table-striped table-head-bg-brand">
                             <thead class="thead-inverse">
                                 <tr>
                                     <th>{{ __('Invoices Aging') }}</th>
@@ -366,14 +366,14 @@
 
     {{-- Suppliers Cheques Aging --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
                         {{ __('Suppliers Cheques Aging') }}
                     </h3>
                 </div>
-                <div class="kt-portlet__head-label ">
+                <div class="kt-portlet__head-label">
                     <div class="kt-align-right">
                         <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                 class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -384,7 +384,7 @@
                 {{-- Chart --}}
                 <div class="row">
                     <div class="col-md-4">
-                        <table class="table table-sm table-striped table-head-bg-brand ">
+                        <table class="table table-sm table-striped table-head-bg-brand">
                             <thead class="thead-inverse">
                                 <tr>
                                     <th>{{ __('Cheques Aging') }}</th>
@@ -438,7 +438,7 @@
 
     {{-- Title --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -452,14 +452,14 @@
     <div class="row">
         {{-- Short Term Facilities Comming Dues --}}
         <div class="col-md-4">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
                             {{ __('Short Term Facilities Comming Dues') }}
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
                             <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                     class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -472,7 +472,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12">
-                                <table class="table table-sm table-striped table-head-bg-brand ">
+                                <table class="table table-sm table-striped table-head-bg-brand">
                                     <thead class="thead-inverse">
                                         <tr>
                                             <th>{{ __('Date') }}</th>
@@ -512,14 +512,14 @@
         </div>
         {{-- Long Term Facilities Comming Dues --}}
         <div class="col-md-4">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
                             {{ __('Long Term Facilities Comming Dues') }}
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
                             <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                     class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -533,7 +533,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12">
-                                <table class="table table-sm table-striped table-head-bg-brand ">
+                                <table class="table table-sm table-striped table-head-bg-brand">
                                     <thead class="thead-inverse">
                                         <tr>
                                             <th>{{ __('Date') }}</th>
@@ -573,14 +573,14 @@
         </div>
         {{-- Leasing Facilities Comming Dues --}}
         <div class="col-md-4">
-            <div class="kt-portlet ">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
                             {{ __('Leasing Facilities Comming Dues') }}
                         </h3>
                     </div>
-                    <div class="kt-portlet__head-label ">
+                    <div class="kt-portlet__head-label">
                         <div class="kt-align-right">
                             <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill"><i
                                     class="fa fa-chart-line"></i> {{ __('Report') }} </button>
@@ -595,7 +595,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12">
-                                <table class="table table-sm table-striped table-head-bg-brand ">
+                                <table class="table table-sm table-striped table-head-bg-brand">
                                     <thead class="thead-inverse">
                                         <tr>
                                             <th>{{ __('Date') }}</th>

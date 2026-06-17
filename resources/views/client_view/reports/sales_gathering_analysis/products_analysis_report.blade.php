@@ -97,14 +97,14 @@
 <div class="kt-portlet kt-portlet--tabs">
     
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             @php
                     array_push($products_names, 'Total');
                     array_push($products_names, 'Sales_Channel_Sales_Percentages');
                     @endphp
-            {{-- <div class="tab-pane " id="kt_apps_contacts_view_tab_1" role="tabpanel">
+            {{-- <div class="tab-pane" id="kt_apps_contacts_view_tab_1" role="tabpanel">
                     @foreach ($products_names as $name_of_sales_channel)
                         <div class="col-xl-12">
                             <div class="kt-portlet kt-portlet--height-fluid">
@@ -150,7 +150,7 @@
         @if ($sales_channel_name != 'Total' && $sales_channel_name != 'Growth Rate %')
 
 
-        <tr class="group-color ">
+        <tr class="group-color">
             <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
                 <i class="row_icon{{ $id }} flaticon2-up white-text"></i>
                 <b>{{ __($sales_channel_name) }}</b>
@@ -174,7 +174,7 @@
 
         @foreach ($sales_channel_channels_data as $channel_name => $channel_section)
 
-        <tr class="row{{ $id }}  text-center" style="display: none">
+        <tr class="row{{ $id }} text-center" style="display: none">
 
             <td class="text-left"><b>{{ $channel_name  }}</b></td>
 

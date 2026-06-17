@@ -54,7 +54,7 @@ $user = auth()->user();
 					@endforeach
 @csrf
 <div class="kt-portlet">
-    <div class="kt-portlet__body d-flex " style="flex-direction:row !important;flex-wrap:nowrap !important;">
+    <div class="kt-portlet__body d-flex" style="flex-direction:row !important;flex-wrap:nowrap !important;">
         <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 col-3" style="white-space:nowrap"> {{ __('Cash & Banks Beginning Balance') }} </h3>
         <div class="kt-input-icon">
             <div class="input-group">
@@ -73,17 +73,17 @@ $user = auth()->user();
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="form-group row " style="flex:1">
+                    <div class="form-group row" style="flex:1">
                         <div class="col-md-4 text-left">
 
-                            {{-- <label class="form-label font-weight-bold ">{{ __('Cash & Banks Begining Balance') }} </label> --}}
+                            {{-- <label class="form-label font-weight-bold">{{ __('Cash & Banks Begining Balance') }} </label> --}}
 
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-10">
-                <div class="d-flex align-items-center ">
+                <div class="d-flex align-items-center">
                     <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5" style=""> {{ $title }} </h3>
                 </div>
             </div>
@@ -102,7 +102,7 @@ $user = auth()->user();
                     <div class="" style="width:100%;overflow:scroll">
 
                         <div id="m_repeater_{{ $index+4 }}" class="cash-and-banks-repeater">
-                            <div class="form-group  m-form__group row  ">
+                            <div class="form-group m-form__group row">
                                 <div data-repeater-list="opening_{{ $namePrefix }}" class="col-lg-12">
                                     @if(isset($receivables_and_payments) && ($namePrefix == 'receivable' && $hasReceivables || $namePrefix == 'payment' && $hasPayments) )
                                     @foreach($receivables_and_payments as $receivable_and_payment)

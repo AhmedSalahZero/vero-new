@@ -7,9 +7,9 @@ $currentYearRepeaterIndex = 0 ;
 
 <x-tables.repeater-table :table-class="$tableClasses" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
      <x-slot name="ths">
-        <x-tables.repeater-table-th class="  header-border-down first-column-th-class max-250-w" :title="__('Item')"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th class="header-border-down first-column-th-class max-250-w" :title="__('Item')"></x-tables.repeater-table-th>
         @foreach($yearOrMonthsIndexes as $yearOrMonthAsIndex=>$yearOrMonthFormatted)
-		   <x-tables.repeater-table-th  data-column-index="{{ $yearOrMonthAsIndex }}" class="  header-border-down" :title="$yearOrMonthFormatted"></x-tables.repeater-table-th>
+		   <x-tables.repeater-table-th  data-column-index="{{ $yearOrMonthAsIndex }}" class="header-border-down" :title="$yearOrMonthFormatted"></x-tables.repeater-table-th>
 		@php
         $dateAsString = $dateIndexWithDate[$yearOrMonthAsIndex];
         $currentMonthNumber = explode('-',$dateAsString)[1];
@@ -17,7 +17,7 @@ $currentYearRepeaterIndex = 0 ;
         @endphp
 
         @if($study->isMonthlyStudy() && ($study->getFinancialYearEndMonthNumber() == $currentMonthNumber || $loop->last))
-        <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class=" tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th :icon="true" data-column-index="{{ $yearOrMonthAsIndex }}" :font-size-class="'font-14px'" class="tenor-selector-class header-border-down {{ 'year-repeater-index-'.$currentYearRepeaterIndex }} collapse-before-me exclude-from-collapse" :title="__('Total Yr.').' <br> '. $currentYear"></x-tables.repeater-table-th>
         @php
         $currentYearRepeaterIndex ++;
         @endphp
@@ -35,7 +35,7 @@ $currentYearRepeaterIndex = 0 ;
             @endphp
             <td>
                 <div class="min-w-255">
-                    <input value="{{ __('Cost Of Service % / REV') }}" disabled class="form-control    text-left " type="text">
+                    <input value="{{ __('Cost Of Service % / REV') }}" disabled class="form-control text-left" type="text">
                 </div>
 
 
@@ -101,7 +101,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="min-w-255">
-                    <input value="{{ __('Other OPEX % / REV.') }}" disabled class="form-control text-left " type="text">
+                    <input value="{{ __('Other OPEX % / REV.') }}" disabled class="form-control text-left" type="text">
                 </div>
 
 
@@ -175,7 +175,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="min-w-255">
-                    <input value="{{ __('Marketing Exp. % / REV.') }}" disabled class="form-control text-left " type="text">
+                    <input value="{{ __('Marketing Exp. % / REV.') }}" disabled class="form-control text-left" type="text">
                 </div>
 
 
@@ -250,7 +250,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="min-w-255">
-                    <input value="{{ __('Sales Exp. % / REV.') }}" disabled class="form-control text-left " type="text">
+                    <input value="{{ __('Sales Exp. % / REV.') }}" disabled class="form-control text-left" type="text">
                 </div>
 
 
@@ -326,7 +326,7 @@ $currentYearRepeaterIndex = 0 ;
 
             <td>
                 <div class="min-w-255">
-                    <input value="{{ __('G&A Exp. % / REV.') }}" disabled class="form-control text-left " type="text">
+                    <input value="{{ __('G&A Exp. % / REV.') }}" disabled class="form-control text-left" type="text">
                 </div>
 
 

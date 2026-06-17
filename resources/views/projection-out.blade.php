@@ -13,7 +13,7 @@ use Carbon\Carbon;
 @php
 	$isContract = $contractCode?1:0;
 @endphp  
-<div class="tab-pane " id="{{ $currentTabId }}" role="tabpanel">
+<div class="tab-pane" id="{{ $currentTabId }}" role="tabpanel">
 <form action="{{ route('save.projection',['company'=>$company->id]) }}" method="post">
 	@csrf
     {{-- <div class="kt-portlet">
@@ -42,7 +42,7 @@ use Carbon\Carbon;
                 <x-tables.repeater-table  :initEmpty="false" :firstElementDeletable="true" :repeater-with-select2="false" :parentClass="'show-class-js'" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=true">
                     <x-slot name="ths">
 
-                        <tr class="header-tr ">
+                        <tr class="header-tr">
                             <th 
 							{{-- rowspan="{{ $noRowHeaders }}" --}}
 							 class="view-table-th expand-all is-open-parent header-th editable-date max-w-classes-expand align-middle text-center trigger-child-row-1">
@@ -69,7 +69,7 @@ use Carbon\Carbon;
                             @endforeach
                             @elseif($reportInterval == 'monthly')
                             @foreach($months as $month)
-                            <th class="view-table-th  header-th max-w-weeks align-middle text-center">
+                            <th class="view-table-th header-th max-w-weeks align-middle text-center">
                                 @if($loop->first || $loop->last)
                                 <span class="d-block">{{ Carbon::make($month)->format('d-m-Y') }}</span>
                                 @else
@@ -82,7 +82,7 @@ use Carbon\Carbon;
                             @elseif($reportInterval == 'daily')
 
                             @foreach($days as $day)
-                            <th class="view-table-th  header-th max-w-weeks align-middle text-center">
+                            <th class="view-table-th header-th max-w-weeks align-middle text-center">
                                 <span class="d-block">{{ Carbon::make($day)->format('d-m-Y') }}</span>
                             </th>
                             @endforeach
@@ -120,7 +120,7 @@ use Carbon\Carbon;
                                 <input type="hidden" name="type" value="out">
                                 <div class="kt-input-icon">
                                     <div class="input-group">
-                                        <input name="name" type="text" class="form-control " value="{{ (isset($currentRow) ? $currentRow->name : old('name','')) }}">
+                                        <input name="name" type="text" class="form-control" value="{{ (isset($currentRow) ? $currentRow->name : old('name','')) }}">
                                     </div>
                                 </div>
                             </td>
@@ -143,7 +143,7 @@ use Carbon\Carbon;
 							
                                 <div class="kt-input-icon">
                                     <div class="input-group">
-                                        <input name="amounts" multiple type="text" class="form-control " value="{{ number_format() }}">
+                                        <input name="amounts" multiple type="text" class="form-control" value="{{ number_format() }}">
                                     </div>
                                 </div>
                             </td> --}}

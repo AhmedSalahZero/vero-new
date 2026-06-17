@@ -41,7 +41,7 @@
                             <label>{{ __('Report Type') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select name="report_type" id="report_type" class="form-control ">
+                                    <select name="report_type" id="report_type" class="form-control">
                                         <option selected value="trend">{{ __('Trend') }}</option>
                                         <option value="comparing">{{ __('Interval Comparing') }}</option>
 
@@ -125,9 +125,9 @@
                     <div class="form-group row">
 					@endif 
                         @if(isset(get_defined_vars()['__data']['type']) && get_defined_vars()['__data']['type'] !='averagePrices')
-                        <div class="col-md-4  first-interval">
+                        <div class="col-md-4 first-interval">
                             <label></label>
-                            <div class="flex-center "><label class="first-interval">{{ __('First Interval') }}</label></div>
+                            <div class="flex-center"><label class="first-interval">{{ __('First Interval') }}</label></div>
 
                         </div>
                         @endif
@@ -185,7 +185,7 @@
 
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select data-column-name="{{ $firstColumn }}" name="firstColumnData[]" required data-live-search="true" data-actions-box="true" class="first-column-filter form-control  kt-bootstrap-select select2-select kt_bootstrap_select" id="firstColumnData" multiple>
+                                    <select data-column-name="{{ $firstColumn }}" name="firstColumnData[]" required data-live-search="true" data-actions-box="true" class="first-column-filter form-control kt-bootstrap-select select2-select kt_bootstrap_select" id="firstColumnData" multiple>
                                         @foreach ($firstColumnData as $firstColumnItemName)
                                         <option value="{{ $firstColumnItemName }}"> {{ __($firstColumnItemName) }}</option>
                                         @endforeach

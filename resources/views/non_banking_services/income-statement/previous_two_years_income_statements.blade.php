@@ -60,24 +60,24 @@ use App\Models\NonBankingService\Study;
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             @php
             $currentType = 'study' ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{  !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     <form method="post" action="{{ route('store.previous.non.banking.forecast.income.statement',['company'=>$company->id,'study'=>$study->id]) }}">
                         @csrf
 
                         <x-tables.repeater-table :tableClasses="'table-condensed fixed-column-table table-row-spacing income-class-table'" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden scrollable-table'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
                             <x-slot name="ths">
-                                <x-tables.repeater-table-th :subParentClass="'plus-max-width-class fixed-column'" class="  header-border-down plus-max-width-class" :title="__('+/-')"></x-tables.repeater-table-th>
-                                <x-tables.repeater-table-th :subParentClass="'name-max-width-class fixed-column'" class="  header-border-down name-max-width-class exclude-from-collapse" :title="__('Name')"></x-tables.repeater-table-th>
-                                {{-- <x-tables.repeater-table-th class=" interval-class header-border-down " :title="__('')"></x-tables.repeater-table-th> --}}
+                                <x-tables.repeater-table-th :subParentClass="'plus-max-width-class fixed-column'" class="header-border-down plus-max-width-class" :title="__('+/-')"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th :subParentClass="'name-max-width-class fixed-column'" class="header-border-down name-max-width-class exclude-from-collapse" :title="__('Name')"></x-tables.repeater-table-th>
+                                {{-- <x-tables.repeater-table-th class="interval-class header-border-down" :title="__('')"></x-tables.repeater-table-th> --}}
                                 @foreach($studyMonthsForViews as $dateAsIndex=>$dateAsString)
-                                <x-tables.repeater-table-th data-column-index="{{ $dateAsIndex }}" class=" header-border-down " :title="$dateAsString"></x-tables.repeater-table-th>
+                                <x-tables.repeater-table-th data-column-index="{{ $dateAsIndex }}" class="header-border-down" :title="$dateAsString"></x-tables.repeater-table-th>
                                 @endforeach
                             </x-slot>
                             <x-slot name="trs">
@@ -96,7 +96,7 @@ use App\Models\NonBankingService\Study;
                                     <td class="fixed-column">
                                         @if($hasSubItems)
                                         <a href="#" class="btn btn-1-bg btn-sm btn-brand add-btn-class text-center add-btn-js">
-                                            <i class="fas fa-angle-double-down expand-icon   exclude-icon"></i>
+                                            <i class="fas fa-angle-double-down expand-icon exclude-icon"></i>
                                         </a>
                                         @endif
                                     </td>
@@ -108,9 +108,7 @@ use App\Models\NonBankingService\Study;
                                             @endphp
                                             @foreach($currentTableData['main_items'] as $mainItemId => $mainItemArr)
                                             <div class="input-hidden-parent">
-                                                <input readonly data-number-of-decimals="0" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control exclude-from-collapse text-left copy-value-to-his-input-hidden 
-
-						 						  			  repeat-to-right-input-formatted  exclude-from-collapse custom-input-string-width input-text-left  " type="text" value="{{ $mainItemArr['options']['title']??$mainItemId }}" data-column-index="-1">
+                                                <input readonly data-number-of-decimals="0" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control exclude-from-collapse text-left copy-value-to-his-input-hidden repeat-to-right-input-formatted exclude-from-collapse custom-input-string-width input-text-left" type="text" value="{{ $mainItemArr['options']['title']??$mainItemId }}" data-column-index="-1">
                                             </div>
                                             @php
                                             @endphp
@@ -145,10 +143,8 @@ use App\Models\NonBankingService\Study;
                                             @if($isPercentage)
                                             <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
                                                 <div class="input-hidden-parent">
-                                                    <input disabled data-number-of-decimals="2" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden 
-
-							  expandable-percentage-input  			  repeat-to-right-input-formatted   " type="text" value="{{ number_format($previous_years_income_statement[$firstMainItemId]['main_items'][$mainItemId][$dateAsIndex]??0,2) }}" data-column-index="{{ $dateAsIndex }}">
-                                                    <input data-number-of-decimals="2" data-group-index="{{ $currentIndex ==0   ? $currentYearRepeaterIndex : -1 }}" type="hidden" data-name="{{ $name }}" name="{{ $name }}" data-is-main data-is-percentage data-first-parent-id="{{ $firstMainItemId }}" data-id="{{ $mainItemId }}" class="repeat-to-right-input-hidden input-hidden-with-name  " value="{{ $mainItemArr['data'][$dateAsIndex]??0 }}" data-column-index="{{ $dateAsIndex }}">
+                                                    <input disabled data-number-of-decimals="2" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden expandable-percentage-input repeat-to-right-input-formatted" type="text" value="{{ number_format($previous_years_income_statement[$firstMainItemId]['main_items'][$mainItemId][$dateAsIndex]??0,2) }}" data-column-index="{{ $dateAsIndex }}">
+                                                    <input data-number-of-decimals="2" data-group-index="{{ $currentIndex ==0   ? $currentYearRepeaterIndex : -1 }}" type="hidden" data-name="{{ $name }}" name="{{ $name }}" data-is-main data-is-percentage data-first-parent-id="{{ $firstMainItemId }}" data-id="{{ $mainItemId }}" class="repeat-to-right-input-hidden input-hidden-with-name" value="{{ $mainItemArr['data'][$dateAsIndex]??0 }}" data-column-index="{{ $dateAsIndex }}">
                                                 </div>
                                                 <span class="ml-2 currency-class">%</span>
                                             </div>
@@ -156,10 +152,8 @@ use App\Models\NonBankingService\Study;
 										
                                             <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
                                                 <div class="input-hidden-parent">
-                                                    <input @if($mainItemId!='corporate-taxes' ) disabled @endif data-number-of-decimals="0" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden 
-
-							  expandable-amount-input 			  repeat-to-right-input-formatted  custom-input-numeric-width  " type="text" value="{{ number_format($previous_years_income_statement[$firstMainItemId]['main_items'][$mainItemId][$dateAsIndex]??0) }}" data-column-index="{{ $dateAsIndex }}">
-                                                    <input data-number-of-decimals="0" data-group-index="{{ $currentIndex ==0   ? $currentYearRepeaterIndex : -1 }}" type="hidden" data-name="{{ $name }}" name="{{ $name }}" data-id="{{ $mainItemId }}" data-is-main @if($mainItemId=='sales-revenue' ) data-is-sales-revenue @endif class="repeat-to-right-input-hidden input-hidden-with-name  repeater-with-collapse-input" value="{{ $previous_years_income_statement[$firstMainItemId]['main_items'][$mainItemId][$dateAsIndex]??0 }}" data-column-index="{{ $dateAsIndex }}">
+                                                    <input @if($mainItemId!='corporate-taxes' ) disabled @endif data-number-of-decimals="0" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden expandable-amount-input repeat-to-right-input-formatted custom-input-numeric-width" type="text" value="{{ number_format($previous_years_income_statement[$firstMainItemId]['main_items'][$mainItemId][$dateAsIndex]??0) }}" data-column-index="{{ $dateAsIndex }}">
+                                                    <input data-number-of-decimals="0" data-group-index="{{ $currentIndex ==0   ? $currentYearRepeaterIndex : -1 }}" type="hidden" data-name="{{ $name }}" name="{{ $name }}" data-id="{{ $mainItemId }}" data-is-main @if($mainItemId=='sales-revenue' ) data-is-sales-revenue @endif class="repeat-to-right-input-hidden input-hidden-with-name repeater-with-collapse-input" value="{{ $previous_years_income_statement[$firstMainItemId]['main_items'][$mainItemId][$dateAsIndex]??0 }}" data-column-index="{{ $dateAsIndex }}">
                                                 </div>
                                             </div>
                                             @endif
@@ -195,10 +189,8 @@ use App\Models\NonBankingService\Study;
                                             <div class="">
                                                 <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
                                                     <div class="input-hidden-parent">
-                                                        <input style="text-align:left !important;" readonly data-number-of-decimals="0" readonly="" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden 
-
-										  expandable-amount-input 			  repeat-to-right-input-formatted  custom-input-string-width  input-text-left  " type="text" value="{{ $subItemArr['options']['title']??$subItemId }}" data-column-index="-1">
-                                                        <input data-number-of-decimals="0" type="hidden" data-name="" class="repeat-to-right-input-hidden input-hidden-with-name  " value="{{ $subItemArr['options']['title']??$subItemId }}" data-column-index="-1">
+                                                        <input style="text-align:left !important;" readonly data-number-of-decimals="0" readonly="" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden expandable-amount-input repeat-to-right-input-formatted custom-input-string-width input-text-left" type="text" value="{{ $subItemArr['options']['title']??$subItemId }}" data-column-index="-1">
+                                                        <input data-number-of-decimals="0" type="hidden" data-name="" class="repeat-to-right-input-hidden input-hidden-with-name" value="{{ $subItemArr['options']['title']??$subItemId }}" data-column-index="-1">
                                                     </div>
                                                     <span class="ml-2 currency-class"> </span>
                                                 </div>
@@ -221,10 +213,8 @@ use App\Models\NonBankingService\Study;
                                             <div class="">
                                                 <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
                                                     <div class="input-hidden-parent">
-                                                        <input data-number-of-decimals="0" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden 
-
-			 							 expandable-amount-input 			  repeat-to-right-input-formatted  custom-input-numeric-width  " type="text" value="{{ number_format($previous_years_income_statement[$firstMainItemId]['sub_items'][$subItemId][$dateAsIndex]??0) }}" data-column-index="{{ $dateAsIndex }}">
-                                                        <input data-name="{{ $name }}" name="{{ $name }}" data-id="{{ $firstMainItemId }}" data-is-sub data-sub-id="{{ $subItemId }}" data-number-of-decimals="0" type="hidden" data-name="" class="repeat-to-right-input-hidden input-hidden-with-name  repeater-with-collapse-input" value="{{ $previous_years_income_statement[$firstMainItemId]['sub_items'][$subItemId][$dateAsIndex]??0 }}" data-column-index="{{ $dateAsIndex }}">
+                                                        <input data-number-of-decimals="0" onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden expandable-amount-input repeat-to-right-input-formatted custom-input-numeric-width" type="text" value="{{ number_format($previous_years_income_statement[$firstMainItemId]['sub_items'][$subItemId][$dateAsIndex]??0) }}" data-column-index="{{ $dateAsIndex }}">
+                                                        <input data-name="{{ $name }}" name="{{ $name }}" data-id="{{ $firstMainItemId }}" data-is-sub data-sub-id="{{ $subItemId }}" data-number-of-decimals="0" type="hidden" data-name="" class="repeat-to-right-input-hidden input-hidden-with-name repeater-with-collapse-input" value="{{ $previous_years_income_statement[$firstMainItemId]['sub_items'][$subItemId][$dateAsIndex]??0 }}" data-column-index="{{ $dateAsIndex }}">
                                                     </div>
                                                     <span class="ml-2 currency-class"> </span>
                                                 </div>
@@ -263,7 +253,7 @@ use App\Models\NonBankingService\Study;
 
             @if(isset($nextButton))
             <div class="text-right mt-4 cash-flow-btn">
-                <a href="{{ $nextButton['link'] }}" class="btn btn-primary ">{{ $nextButton['title'] }}</a>
+                <a href="{{ $nextButton['link'] }}" class="btn btn-primary">{{ $nextButton['title'] }}</a>
             </div>
             @endif
 

@@ -5,45 +5,44 @@ use App\Models\LetterOfGuaranteeIssuance;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -53,7 +52,7 @@ use App\Models\LetterOfGuaranteeIssuance;
 {{ __('Letter Of Gurantee Issuance Form') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -166,7 +165,7 @@ use App\Models\LetterOfGuaranteeIssuance;
                                         </select>
                                     </div>
 
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-3">
                                         <x-form.input :id="'current-lg-type-outstanding-balance-id'" :default-value="0" :model="$model??null" :label="__('LG Type Outstanding Balance')" :type="'text'" :placeholder="__('LG Type Outstanding Balance')" :name="'lg_type_outstanding_balance'" :class="'only-greater-than-zero-allowed'" :required="true"></x-form.input>
                                     </div>
                                     <div class="col-md-3">
@@ -333,7 +332,7 @@ use App\Models\LetterOfGuaranteeIssuance;
 
                                         <div>
                                             <input data-current-value="{{ isset($model) ? $model->getLgAmount() : 0 }}" required value="{{ (isset($model) ? number_format($model->getLgAmount(),0) : 0) }}"  class="form-control only-greater-than-or-equal-zero-allowed only-smaller-than-or-equal-specific-number-allowed recalculate-cash-cover-amount-js recalculate-lg-commission-amount-js lg-amount-js" type="text" placeholder="{{ __('Lg Amount') }}">
-                                            <input data-current-value="{{ isset($model) ? $model->getLgAmount() : 0 }}" type="hidden" value="{{ (isset($model) ? $model->getLgAmount() : 0) }}" name="lg_amount" class="only-greater-than-zero-allowed ">
+                                            <input data-current-value="{{ isset($model) ? $model->getLgAmount() : 0 }}" type="hidden" value="{{ (isset($model) ? $model->getLgAmount() : 0) }}" name="lg_amount" class="only-greater-than-zero-allowed">
                                         </div>
                                     </div>
 
@@ -353,7 +352,7 @@ use App\Models\LetterOfGuaranteeIssuance;
 
 
                                     <div class="col-md-3">
-                                        <x-form.input :default-value="0" :readonly="true" :model="$model??null" :label="__('Cash Cover Amount')" :type="'text'" :placeholder="__('Cash Cover Amount')" :name="'cash_cover_amount'" :class="'only-greater-than-or-equal-zero-allowed cash-cover-amount-js' " :required="true"></x-form.input>
+                                        <x-form.input :default-value="0" :readonly="true" :model="$model??null" :label="__('Cash Cover Amount')" :type="'text'" :placeholder="__('Cash Cover Amount')" :name="'cash_cover_amount'" :class="'only-greater-than-or-equal-zero-allowed cash-cover-amount-js'" :required="true"></x-form.input>
                                     </div>
 							
 
@@ -421,7 +420,7 @@ use App\Models\LetterOfGuaranteeIssuance;
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3 ">
+                                    <div class="col-md-3">
                                         <x-form.input :id="'cd-or-td-amount-id'" :readonly="true" :default-value="0" :model="$model??null" :label="__('Amount')" :type="'text'" :placeholder="''" :name="'amount'" :class="''" :required="true"></x-form.input>
                                     </div>
 									
@@ -432,9 +431,7 @@ use App\Models\LetterOfGuaranteeIssuance;
                                         </label>
                                         <div class="kt-input-icon">
                                             <div class="input-group date">
-                                                <select data-append-to-query=".js-account-id-2" name="lg_fees_and_commission_account_type" class="form-control 
-												js-update-account-id-based-on-account-type
-												">
+                                                <select data-append-to-query=".js-account-id-2" name="lg_fees_and_commission_account_type" class="form-control js-update-account-id-based-on-account-type">
                                                     {{-- <option value="" selected>{{__('Select')}}</option> --}}
                                                     @foreach($accountTypes as $index => $accountType)
                                                     <option value="{{ $accountType->id }}" @if(isset($model) && $model->getFeesAndCommissionAccountTypeId() == $accountType->id) selected @endif>{{ $accountType->getName() }}</option>

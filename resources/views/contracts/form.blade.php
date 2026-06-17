@@ -3,7 +3,6 @@ use App\Models\MoneyReceived ;
 @endphp
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -63,7 +62,7 @@ use App\Models\MoneyReceived ;
 {{ $formTitle }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -99,7 +98,7 @@ use App\Models\MoneyReceived ;
                             <input id="model_type" type="hidden" name="model_type" value="{{ $type }}">
                             <div class="form-group row">
 
-                                <div class="col-md-4 ">
+                                <div class="col-md-4">
                                     <label> {{ __('Name') }}
                                         @include('star')
                                     </label>
@@ -111,7 +110,7 @@ use App\Models\MoneyReceived ;
                                 </div>
 
 								
-                                <div class="col-md-2 ">
+                                <div class="col-md-2">
                                     <label> {{ __('Code') }}
                                         @include('star')
                                     </label>
@@ -121,7 +120,7 @@ use App\Models\MoneyReceived ;
 											@if(isset($model))
 											readonly
 											@endif 
-											 required name="code" id="contract-code" type="text" class="form-control " value="{{ old('code',isset($model) ? $model->getCode() : null)   }}">
+											 required name="code" id="contract-code" type="text" class="form-control" value="{{ old('code',isset($model) ? $model->getCode() : null)   }}">
                                         </div>
                                     </div>
                                 </div>
@@ -176,25 +175,25 @@ use App\Models\MoneyReceived ;
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 ">
+                                <div class="col-md-2">
                                     <x-form.date :type="'text'" :classes="'datepicker-input start-date regenerate-code-ajax '" :default-value="formatDateForDatePicker(old('start_date') ?: (isset($model)  ? $model->getStartDate() : now()) )" :model="$model??null" :label="__('Start Date')" :type="'text'" :id="'start-date-id'" :placeholder="__('')" :name="'start_date'" :required="true"></x-form.date>
                                 </div>
-                                {{-- <div class="col-md-2 ">
+                                {{-- <div class="col-md-2">
                                     <label> {{ __('Duration (Months)') }}
                                         @include('star')
                                     </label>
                                     <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input required name="duration" type="numeric" class="form-control duration recalc-end-date duration " value="{{ ceil(old('duration',isset($model) ? $model->getDuration() * (12/365) : null))  }}">
+                                            <input required name="duration" type="numeric" class="form-control duration recalc-end-date duration" value="{{ ceil(old('duration',isset($model) ? $model->getDuration() * (12/365) : null))  }}">
                                         </div>
                                     </div>
                                 </div> --}}
 								
-								 <div class="col-md-2 ">
+								 <div class="col-md-2">
                                     <x-form.date :type="'text'" :classes="'datepicker-input '" :default-value="formatDateForDatePicker(old('end_date') ?: (isset($model)  ? $model->getEndDate() : now()->addYear()) )" :model="$model??null" :label="__('End Date')" :type="'text'" :id="'end-date-id'" :placeholder="__('')" :name="'end_date'" :required="true"></x-form.date>
                                 </div>
 								
-                                {{-- <div class="col-md-2 ">
+                                {{-- <div class="col-md-2">
                                     <label> {{ __('End Date') }}
                                         @include('star')
                                     </label>
@@ -207,7 +206,7 @@ use App\Models\MoneyReceived ;
 
 
 
-                                <div class="col-md-3 ">
+                                <div class="col-md-3">
                                     <label> {{ __('Amount') }}
                                         @include('star')
                                     </label>
@@ -217,7 +216,7 @@ use App\Models\MoneyReceived ;
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-1 ">
+                                <div class="col-md-1">
                                     <label> {{ __('Currency') }}
                                         @include('star')
                                     </label>
@@ -232,7 +231,7 @@ use App\Models\MoneyReceived ;
                                 </div>
 
 
-                                <div class="col-md-1 ">
+                                <div class="col-md-1">
                                     <label> {{ __('Exhange Rate') }}
                                         @include('star')
                                     </label>
@@ -310,7 +309,7 @@ use App\Models\MoneyReceived ;
                                             <td>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="{{ $salesOrderOrPurchaseNoText }}" type="text" class="form-control " value="{{ isset($salesOrder) ? $salesOrder->getNumber() : old('salesOrders.'.$salesOrderOrPurchaseNoText,0) }}">
+                                                        <input name="{{ $salesOrderOrPurchaseNoText }}" type="text" class="form-control" value="{{ isset($salesOrder) ? $salesOrder->getNumber() : old('salesOrders.'.$salesOrderOrPurchaseNoText,0) }}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -345,7 +344,7 @@ use App\Models\MoneyReceived ;
 											<td>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="execution_percentage_{{ $i }}" type="numeric" step="0.1" class="form-control " value="{{ isset($salesOrder) ? $salesOrder->getExecutionPercentage($i) : old('salesOrders.execution_percentage_'.$i,0) }}">
+                                                        <input name="execution_percentage_{{ $i }}" type="numeric" step="0.1" class="form-control" value="{{ isset($salesOrder) ? $salesOrder->getExecutionPercentage($i) : old('salesOrders.execution_percentage_'.$i,0) }}">
                             </div>
                         </div>
                         </td>
@@ -353,7 +352,7 @@ use App\Models\MoneyReceived ;
                         <td>
                             <div class="kt-input-icon">
                                 <div class="input-group">
-                                    <input name="execution_days_{{ $i }}" type="numeric" step="1" class="form-control " value="{{ isset($salesOrder) ? $salesOrder->getExecutionDays($i) : old('salesOrders.execution_days_'.$i,0) }}">
+                                    <input name="execution_days_{{ $i }}" type="numeric" step="1" class="form-control" value="{{ isset($salesOrder) ? $salesOrder->getExecutionDays($i) : old('salesOrders.execution_days_'.$i,0) }}">
                                 </div>
                             </div>
                         </td>
@@ -361,7 +360,7 @@ use App\Models\MoneyReceived ;
                         <td>
                             <div class="kt-input-icon">
                                 <div class="input-group">
-                                    <input name="collection_days_{{ $i }}" type="numeric" step="1" class="form-control " value="{{ isset($salesOrder) ? $salesOrder->getCollectionDays($i) : old('salesOrders.collection_days_'.$i,0) }}">
+                                    <input name="collection_days_{{ $i }}" type="numeric" step="1" class="form-control" value="{{ isset($salesOrder) ? $salesOrder->getCollectionDays($i) : old('salesOrders.collection_days_'.$i,0) }}">
                                 </div>
                             </div>
                         </td>

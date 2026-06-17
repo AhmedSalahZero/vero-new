@@ -99,18 +99,18 @@
                                         </label>
                                         <div class="kt-input-icon">
                                             <div class="input-group">
-                                                <input name="iban" type="text" class="form-control " value="{{ isset($model) ? $model->getIban() : old('iban',0) }}">
+                                                <input name="iban" type="text" class="form-control" value="{{ isset($model) ? $model->getIban() : old('iban',0) }}">
                                             </div>
                                         </div>
                                     </div>
 									 @if($company->hasOdooIntegrationCredentials())
-                    <div class="col-1	">
-                        <label class="form-label font-weight-bold ">{{ __('Odoo Code') }}
+                    <div class="col-1">
+                        <label class="form-label font-weight-bold">{{ __('Odoo Code') }}
                             @include('star')
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input required placeholder="{{ __('Odoo Code') }}" type="text" class="form-control  exclude-text" name="odoo_code" value="{{ isset($model) ? $model->getOdooCode() : old('odoo_code') }}">
+                                <input required placeholder="{{ __('Odoo Code') }}" type="text" class="form-control exclude-text" name="odoo_code" value="{{ isset($model) ? $model->getOdooCode() : old('odoo_code') }}">
                             </div>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                                     <div class="" style="width:100%">
 
                                         <div id="m_repeater_0" class="cash-and-banks-repeater">
-                                            <div class="form-group  m-form__group row  ">
+                                            <div class="form-group m-form__group row">
                                                 <div data-repeater-list="account_interests" class="col-lg-12">
                                                     @if(isset($model) )
                                                     @foreach($model->accountInterests as $index=>$accountInterest)

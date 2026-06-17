@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection(PROPERTY_MANAGEMENT_CONNECTION_NAME)->table('income_statement_reports', function (Blueprint $table) {
-            $table->json('interest_corridor_changes')->nullable();
+			if (!Schema::connection(PROPERTY_MANAGEMENT_CONNECTION_NAME)->hasColumn('income_statement_reports', 'interest_corridor_changes')) {
+				$table->json('interest_corridor_changes')->nullable();
+			}
         });
     }
 

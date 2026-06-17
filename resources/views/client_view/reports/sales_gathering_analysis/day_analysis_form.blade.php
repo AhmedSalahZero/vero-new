@@ -57,7 +57,7 @@
                             <label>{{ __('Data Type') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select name="data_type" id="data_type" {{$data_type_selector}} class="form-control ">
+                                    <select name="data_type" id="data_type" {{$data_type_selector}} class="form-control">
 
                                         <option selected value="value">{{ __('Value') }}</option>
                                         <option value="quantity">{{ __('Quantity') }}</option>
@@ -84,9 +84,9 @@
                         @endphp
                     <div class="form-group row">
 					@if(isset(get_defined_vars()['__data']['type']) && get_defined_vars()['__data']['type'] !='averagePrices' && get_defined_vars()['__data']['type']!='averagePricesProductItems')
-                        <div class="col-md-4  first-interval">
+                        <div class="col-md-4 first-interval">
 						<label></label>
-                            <div class="flex-center "><label class="first-interval">{{ __('First Interval') }}</label></div>
+                            <div class="flex-center"><label class="first-interval">{{ __('First Interval') }}</label></div>
                         
                         </div>
 						@endif
@@ -112,7 +112,7 @@
                             <label>{{ __('Select Interval') }} </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select data-live-search="true" name="interval" required class="form-control  form-select form-select-2 form-select-solid fw-bolder">
+                                    <select data-live-search="true" name="interval" required class="form-control form-select form-select-2 form-select-solid fw-bolder">
                                         <option value="" selected>{{ __('Select') }}</option>
                                         {{-- <option value="daily">{{ __('Daily') }}</option> --}}
                                         <option value="monthly">{{ __('Monthly') }}</option>
@@ -136,7 +136,7 @@
 
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <select data-live-search="true" data-actions-box="true" data-max-options="0" name="day_names[]" required class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder " id="day_names" multiple>
+                                    <select data-live-search="true" data-actions-box="true" data-max-options="0" name="day_names[]" required class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder" id="day_names" multiple>
                                         @foreach ($oldDayNames as $day)
                                         <option value="{{ $day }}"> {{ __($day) }}</option>
                                         @endforeach
@@ -258,10 +258,10 @@
         row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder" required ' + data_type + ' ></select>';
         $('#sales_channels').append(row)
         $('#categories').html('');
-        row = '<select data-live-search="true" data-actions-box="true" name="categories[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder " ' + data_type + '   ></select>';
+        row = '<select data-live-search="true" data-actions-box="true" name="categories[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder" ' + data_type + '   ></select>';
         $('#categories').append(row);
         $('#products').html('');
-        row = '<select data-live-search="true" data-actions-box="true" name="products[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder "  ' + data_type + '    ></select>';
+        row = '<select data-live-search="true" data-actions-box="true" name="products[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder"  ' + data_type + '    ></select>';
         $('#products').append(row);
         reinitializeSelect2();
     });
@@ -374,7 +374,7 @@
                 // else{
                 //     var data_type = '';
                 // }
-                row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder " required ' + data_type + '  >\n';
+                row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder" required ' + data_type + '  >\n';
                 // if($('#data_type').val()  !== 'value'){
                 //     row += '<option value="">Select</option>\n' ;
                 // }
@@ -417,7 +417,7 @@
                 // else{
                 //     var data_type = '';
                 // }
-                row = '<select data-live-search="true" data-actions-box="true" name="categories[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder " ' + data_type + '   >\n';
+                row = '<select data-live-search="true" data-actions-box="true" name="categories[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder" ' + data_type + '   >\n';
                 // if($('#data_type').val()  !== 'value'){
                 //     row += '<option value="">Select</option>\n' ;
                 // }
@@ -463,7 +463,7 @@
 
                 if (type == 'product_or_service') {
 
-                    row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder "  ' + data_type + '  required >\n';
+                    row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder"  ' + data_type + '  required >\n';
                     // if($('#data_type').val()  !== 'value'){
                     //     row += '<option value="">Select</option>\n' ;
                     // }
@@ -477,7 +477,7 @@
                     $('#sales_channels').html('');
                     $('#sales_channels').append(row);
                 } else {
-                    row = '<select data-live-search="true" data-actions-box="true"  name="products[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder "  ' + data_type + '    >\n';
+                    row = '<select data-live-search="true" data-actions-box="true"  name="products[]" class="form-control select2-select form-select form-select-2 form-select-solid fw-bolder"  ' + data_type + '    >\n';
                     // if($('#data_type').val()  !== 'value'){
                     //     row += '<option value="">Select</option>\n' ;
                     // }
@@ -521,7 +521,7 @@
         }).done(function(data) {
             var data_type = 'multiple';
 
-            row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class=" select2-select form-select form-select-2 form-control kt-bootstrap-select kt_bootstrap_select"  ' + data_type + '  required  >\n';
+            row = '<select data-live-search="true" data-actions-box="true" name="sales_channels[]" class="select2-select form-select form-select-2 form-control kt-bootstrap-select kt_bootstrap_select"  ' + data_type + '  required  >\n';
             // if($('#data_type').val()  !== 'value'){
             // row += '<option value="">Select</option>\n' ;
             // }

@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <x-styles.commons></x-styles.commons>
 <style>
     .max-w-serial {
@@ -118,7 +117,7 @@
  </x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 
 <div class="row">
     <div class="col-md-12">
@@ -271,41 +270,41 @@
                 @csrf
 
 
-                <div class="table-custom-container position-relative  ">
+                <div class="table-custom-container position-relative">
                     <div>
                         <div class="responsive">
                             <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                                 <thead>
 
-                                    <tr class="header-tr ">
+                                    <tr class="header-tr">
 
-                                        <th class="view-table-th   header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {{ __('#') }}
                                         </th>
-										  <th class="view-table-th   header-th  align-middle text-center">
+										  <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Category ') }}
                                         </th>
-										  <th class="view-table-th   header-th  align-middle text-center">
+										  <th class="view-table-th header-th align-middle text-center">
                                             {{ __('Sub Category ') }}
                                         </th>
-                                        <th class="view-table-th   header-th  align-middle text-center">
+                                        <th class="view-table-th header-th align-middle text-center">
                                             {!! __('Payment Date <br> DD-MM-YYYY ') !!}
                                         </th>
 
 
-                                        <th class="view-table-th max-w-currency    header-th  align-middle text-center">
+                                        <th class="view-table-th max-w-currency header-th align-middle text-center">
                                             {{ __('Amount') }}
                                         </th>
 										
-										   <th class="view-table-th max-w-currency    header-th  align-middle text-center">
+										   <th class="view-table-th max-w-currency header-th align-middle text-center">
                                             {{ __('Accumulated Amount') }}
                                         </th>
                                   
-										<th class="view-table-th   header-th  align-middle text-center">
+										<th class="view-table-th header-th align-middle text-center">
                                             {{ __('Payment Type') }}
                                         </th>
 										
-										  <th class="view-table-th max-w-invoice-date max-w-report-btn    header-th  align-middle text-center">
+										  <th class="view-table-th max-w-invoice-date max-w-report-btn header-th align-middle text-center">
                                             {{ __('User Comment') }}
                                         </th>
 
@@ -333,14 +332,14 @@
 									@php
 										$accumulatedAmount += $modelAsStdClass->paid_amount
 									@endphp
-                                    <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                        <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
-                                        <td class="sub-text-bg text-center ">{{ str_to_upper($modelAsStdClass->main_category_name) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ str_to_upper($modelAsStdClass->sub_category_name) }}</td>
-                                        <td class="sub-text-bg  text-center ">{{ \Carbon\Carbon::make($modelAsStdClass->payment_date)->format('d-m-Y') }}</td>
+                                    <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
+                                        <td class="sub-text-bg text-center">{{ str_to_upper($modelAsStdClass->main_category_name) }}</td>
+                                        <td class="sub-text-bg text-center">{{ str_to_upper($modelAsStdClass->sub_category_name) }}</td>
+                                        <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($modelAsStdClass->payment_date)->format('d-m-Y') }}</td>
                                         <td class="sub-text-bg text-center max-w-invoice-number">{{ number_format($modelAsStdClass->paid_amount) }}</td>
                                         <td class="sub-text-bg text-center max-w-invoice-number">{{ number_format($accumulatedAmount) }}</td>
-                                        <td class="sub-text-bg text-center ">{{ str_to_upper($modelAsStdClass->type) }}</td>
+                                        <td class="sub-text-bg text-center">{{ str_to_upper($modelAsStdClass->type) }}</td>
 									    <td class="sub-text-bg {{ \App\Helpers\HStr::isArabic($modelAsStdClass->user_comment) ? 'text-right' : 'text-left' }} max-w-amount">{{   $modelAsStdClass->user_comment   }}</td>
                                     </tr>
 

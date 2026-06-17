@@ -4,7 +4,7 @@
  <div class="col-md-3 mb-4">
      <label> {!! __('Expense <br> Name') !!} </label>
      <div class="kt-input-icon">
-         <input name="expense_name[{{ $actionType }}]" value="{{ isset($submodel) ? $submodel->getName() : '' }}" type="text" class="form-control ">
+         <input name="expense_name[{{ $actionType }}]" value="{{ isset($submodel) ? $submodel->getName() : '' }}" type="text" class="form-control">
      </div>
  </div>
 
@@ -12,7 +12,7 @@
      <label>{!! __(' <br> Date') !!}</label>
      <div class="kt-input-icon">
          <div class="input-group date">
-             <input required type="text" name="date[{{ $actionType }}]" value="{{ isset($submodel) ? formatDateForDatePicker($submodel->getDate()) :formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control " readonly placeholder="Select date" id="kt_datepicker_2" />
+             <input required type="text" name="date[{{ $actionType }}]" value="{{ isset($submodel) ? formatDateForDatePicker($submodel->getDate()) :formatDateForDatePicker(now()->format('Y-m-d')) }}" class="form-control" readonly placeholder="Select date" id="kt_datepicker_2" />
              <div class="input-group-append">
                  <span class="input-group-text">
                      <i class="la la-calendar-check-o"></i>

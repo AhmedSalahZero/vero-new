@@ -7,7 +7,7 @@
                             <span class="kt-portlet__head-icon">
                                 <i class="kt-font-secondary btn-outline-hover-danger text-main-color fa {{ $icon }}"></i>
                             </span>
-                            <label class="kt-portlet__head-title  text-main-color" style="font-size:20px !important; ">
+                            <label class="kt-portlet__head-title text-main-color" style="font-size:20px !important; ">
                                 {{ $title }}
                             </label>
 

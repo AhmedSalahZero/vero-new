@@ -62,11 +62,11 @@
                         <label class="visibility-hidden"> {{__('Currency')}}
                             @include('star')
                         </label>
-                        <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
+                        <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-nowrap" style=""> {{ __('Dashboard Results') }}</h3>
 
                     </div>
                     <div class="col-md-2">
-                        <div class="d-flex  align-items-center mt-4">
+                        <div class="d-flex align-items-center mt-4">
                             <label class="label text-nowrap mr-2"> {{__('End Date')}}
                                 @include('star')
                             </label>
@@ -85,7 +85,7 @@
                     </div>
 					
 					  <div class="col-md-2">
-                        <div class="d-flex  align-items-center mt-4">
+                        <div class="d-flex align-items-center mt-4">
                             <label class="label text-nowrap mr-2"> {{__('End Date')}}
                                 @include('star')
                             </label>
@@ -129,16 +129,8 @@
             @endphp
             {{-- @foreach($selectedCurrencies as $currencyUpper=>$currency) --}}
 
-            <li class="nav-item 
-			 active 
-			{{-- @if($index ==0 ) active @endif --}}
-			
-			">
-                <a class="nav-link 
-				 active 
-				{{-- @if($index ==0 ) active @endif --}}
-				
-				" data-toggle="tab" href="#kt_apps_contacts_view_tab_main" {{-- href="#kt_apps_contacts_view_tab_main{{ $index }}" --}} role="tab">
+            <li class="nav-item active {{-- @if($index ==0 ) active @endif --}}">
+                <a class="nav-link active {{-- @if($index ==0 ) active @endif --}}" data-toggle="tab" href="#kt_apps_contacts_view_tab_main" {{-- href="#kt_apps_contacts_view_tab_main{{ $index }}" --}} role="tab">
                     <i class="flaticon2-checking icon-lg"></i>
                     <span style="font-size:18px !important;">
                         {{-- {{ $currency }} --}}
@@ -155,33 +147,29 @@
     </div>
 </div>
 
-<div class="tab-content  kt-margin-t-20">
+<div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
     @endphp
 
     {{-- @foreach($selectedCurrencies as $name=>$currency) --}}
 
-    <div class="tab-pane  
-	 active 
-	{{-- @if($index == 0) active @endif --}}
-	
-	" {{-- id="kt_apps_contacts_view_tab_main{{ $index }}" --}} id="kt_apps_contacts_view_tab_main" role="tabpanel">
+    <div class="tab-pane active {{-- @if($index == 0) active @endif --}}" {{-- id="kt_apps_contacts_view_tab_main{{ $index }}" --}} id="kt_apps_contacts_view_tab_main" role="tabpanel">
 	
 	
 	<div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
-		 <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Expenses Results')}}</h3>
+		 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Expenses Results')}}</h3>
            
         </div>
     </div>
-    <div class="kt-portlet__body  kt-portlet__body--fit">
+    <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="row row-no-padding row-col-separator-xl">
             {{-- Daily --}}
            
             {{-- Current --}}
-            <div class="col-md-3 ">
+            <div class="col-md-3">
 
                 <!--begin::New Orders-->
                 <div class="kt-widget24">
@@ -265,7 +253,7 @@
             </div>
           
             {{-- Previous 3 Months --}}
-            <div class="col-md-3 ">
+            <div class="col-md-3">
 
                 <!--begin::Total Profit-->
                 <div class="kt-widget24 text-center">
@@ -368,10 +356,10 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Year To Date Expense Breakdown')}}</h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Year To Date Expense Breakdown')}}</h3>
                 </div>
             </div>
-            <div class="kt-portlet__body  kt-portlet__body--fit">
+            <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
 
 					@php
@@ -530,7 +518,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 		  <div class="kt-portlet">
             <div class="kt-portlet__head sky-border">
                 <div class="kt-portlet__head-label">
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Auto calculated Sales Breakeven Value = ' . number_format(HMath::calculateBreakevenPoint($monthlySalesForSalesGathering,$expensesMonthlyTotals)) )}}</h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{__('Auto calculated Sales Breakeven Value = ' . number_format(HMath::calculateBreakevenPoint($monthlySalesForSalesGathering,$expensesMonthlyTotals)) )}}</h3>
                 </div>
             </div>
             </div>
@@ -540,10 +528,10 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 
         {{-- <div class="row">
             <div class="col-md-12">
-                <div class="kt-portlet ">
+                <div class="kt-portlet">
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
-                            <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Expense') }} </h3>
+                            <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('Expense') }} </h3>
 
                         </div>
                     </div>
@@ -556,11 +544,11 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
 
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('test name here') }} </h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ __('test name here') }} </h3>
 
                 </div>
             </div> --}}
-            {{-- <div class="kt-portlet__body  kt-portlet__body--fit">
+            {{-- <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="row row-no-padding row-col-separator-xl">
                     <div class="col-md-6 col-lg-3 col-xl-3">
 
@@ -673,12 +661,12 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                             </a>
                         </li>
                         {{-- <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#FullySecuredOverdraftkt_apps_contacts_view_tab_2" role="tab">
+                            <a class="nav-link" data-toggle="tab" href="#FullySecuredOverdraftkt_apps_contacts_view_tab_2" role="tab">
                                 <i class="flaticon2-checking"></i>{{ __('Reports Table') }}
                             </a>
                         </li> --}}
                         <li class="nav-item ml-auto">
-                            <div class="kt-portlet__head-label ">
+                            <div class="kt-portlet__head-label">
                                 <div class="kt-align-right">
 									<form   target="_blank"  method="post" action="{{ route('one.selector.expense.report.result',['company'=>$company->id]) }}">
 										@csrf
@@ -701,7 +689,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                         </li>
 
                         {{-- <li class="nav-item">
-                            <div class="kt-portlet__head-label ">
+                            <div class="kt-portlet__head-label">
                                 <div class="kt-align-right">
                                     <a href="#" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Expense Against Revenues Report') }} </a>
                                 </div>
@@ -716,14 +704,14 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                     {{-- <option value="{{ $currency }}"></option> --}}
                 </select>
 
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1" role="tabpanel">
 
                         {{-- Monthly Chart --}}
                         <div class="row">
                             <div class="col-md-4">
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Category Breakdown') }} </h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Category Breakdown') }} </h3>
 
                                 {{-- <h4>  </h4> --}}
                                 <div id="pie-chart-general-id" class="chartDiv"></div>
@@ -736,9 +724,9 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 
                                 <div class="row mb-3 ml-4">
                                     <div class="col-12">
-									 <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
+									 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
                                     </div>
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-6">
                                         <select  js-refresh-three-line-chart class="form-control" data-type="general" id="general-three-line-chart-select">
                                             <option value="Total"> {{ 'All' }} </option>
                                             @foreach($mainCategoriesNames as $mainCategoryName)
@@ -772,9 +760,9 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         @slot('table_header')
                                         <tr class="table-active text-center">
                                             <th class="text-center max-w-300">{{ __('Sub Category Name') }}</th>
-                                            <th class="text-center ">{{ __('Amount') }}</th>
-                                            <th class="text-center ">{{ __('% Of Total') }}</th>
-                                            <th class="text-center ">{{ __('% Of Revenues') }}</th>
+                                            <th class="text-center">{{ __('Amount') }}</th>
+                                            <th class="text-center">{{ __('% Of Total') }}</th>
+                                            <th class="text-center">{{ __('% Of Revenues') }}</th>
                                         </tr>
                                         @endslot
                                         @slot('table_body')
@@ -783,7 +771,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         @foreach ([] as $key => $item)
                                         <tr>
 
-                                            <td class=" max-w-300">{{ '-'}}</td>
+                                            <td class="max-w-300">{{ '-'}}</td>
                                             <td class="text-center">{{number_format(0)}}</td>
                                             <td class="text-center">{{number_format(0)}}</td>
                                             <td class="text-center">{{number_format(0)}}</td>
@@ -818,11 +806,11 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
 
     {{-- Fully Secured Overdraft  --}}
    @foreach($mainCategoriesNames as $mainCategoriesName)
-    <div class="col-md-4 " >
-        <div class="kt-portlet " style="height:97% ">
+    <div class="col-md-4" >
+        <div class="kt-portlet" style="height:97% ">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label col-8">
-                    <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $mainCategoriesName . ' ' . __('Category') }} </h3>
+                    <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" style=""> {{ $mainCategoriesName . ' ' . __('Category') }} </h3>
                 </div>
             </div>
             <div class="kt-portlet__body">
@@ -846,7 +834,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" onclick="return false" href="#">{{ __('Average Value') }}</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                             <h4>{{ number_format($avgMinMaxOutliers[$mainCategoriesName.' - '.$mainCategoriesName]['Average Value']??0) }}</h4>
                                         </div>
                                     </div>
@@ -862,7 +850,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" onclick="return false" href="#">{{ __('Min Value') }}</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                                     <h4>{{ number_format($avgMinMaxOutliers[$mainCategoriesName.' - '.$mainCategoriesName]['Min Value']['value']??0) }}</h4>
                                         </div>
                                     </div>
@@ -880,7 +868,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" onclick="return false" href="#">{{ __('Max Value') }}</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
                                                      <h4>{{ number_format($avgMinMaxOutliers[$mainCategoriesName.' - '.$mainCategoriesName]['Max Value']['value']??0) }}</h4>
                                         </div>
                                     </div>
@@ -896,7 +884,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         <h3 class="kt-iconbox__title">
                                             <a class="kt-link" onclick="return false" href="#">{{ __('Outliers Values') }}</a>
                                         </h3>
-                                        <div class="kt-iconbox__content text-primary  ">
+                                        <div class="kt-iconbox__content text-primary">
 							
 										@php
 											$currentOutliersArr = $avgMinMaxOutliers[$mainCategoriesName.' - '.$mainCategoriesName]['Outliers'] ?? [];
@@ -938,13 +926,13 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                             </a>
                         </li>
                         {{-- <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#FullySecuredOverdraftkt_apps_contacts_view_tab_2" role="tab">
+                            <a class="nav-link" data-toggle="tab" href="#FullySecuredOverdraftkt_apps_contacts_view_tab_2" role="tab">
                                 <i class="flaticon2-checking"></i>{{ __('Reports Table') }}
                             </a>
                         </li> --}}
 					
                         <li class="nav-item ml-auto">
-                            <div class="kt-portlet__head-label ">
+                            <div class="kt-portlet__head-label">
                                 <div class="kt-align-right">
 									<form target="_blank" method="post" action="{{ route('result.expense.against.report',['company'=>$company->id]) }}">
 										@csrf
@@ -974,7 +962,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                         </li>
 
                         {{-- <li class="nav-item">
-                            <div class="kt-portlet__head-label ">
+                            <div class="kt-portlet__head-label">
                                 <div class="kt-align-right">
                                     <a href="#" type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white"><i class="fa fa-chart-line"></i> {{ __('Expense Against Revenues Report') }} </a>
                                 </div>
@@ -989,14 +977,14 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                     {{-- <option value="{{ $currency }}"></option> --}}
                 </select>
 
-                <div class="tab-content  kt-margin-t-20">
+                <div class="tab-content kt-margin-t-20">
 
                     <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1" role="tabpanel">
 
                         {{-- Monthly Chart --}}
                         <div class="row">
                             <div class="col-md-4">
-				<h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Expense Item Breakdown') }} </h3>
+				<h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Expense Item Breakdown') }} </h3>
                           
 								<div id="{{ 'pie-chart-'.convertStringToClass($mainCategoriesName).'-id' }}" class="chartDiv"></div>
 								<input type="hidden" id="{{ 'pie-chart-'.convertStringToClass($mainCategoriesName).'-data-id' }}" data-chart-data="{{ json_encode($chartData['pie'][$mainCategoriesName]??[]) }}">
@@ -1010,9 +998,9 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                             <div class="col-md-8 margin__left">
                                 <div class="row mb-3 ml-4">
                                     <div class="col-12">
-									 <h3 class="font-weight-bold  form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
+									 <h3 class="font-weight-bold form-label kt-subheader__title small-caps mr-5 text-primary text-nowrap" > {{ __('Monthly Expense Trend') }} </h3>
                                     </div>
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-6">
                                         <select  js-refresh-three-line-chart class="form-control" data-type="{{ convertStringToClass($mainCategoriesName) }}" id="{{ convertStringToClass($mainCategoriesName) }}-three-line-chart-select">
                                             <option value="Total"> {{ 'All' }} </option>
                                             @foreach($subItemNames[$mainCategoriesName]??[] as $subItemName)
@@ -1046,9 +1034,9 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         @slot('table_header')
                                         <tr class="table-active text-center">
                                             <th class="text-center max-w-300">{{ __('Sub Category Name') }}</th>
-                                            <th class="text-center ">{{ __('Amount') }}</th>
-                                            <th class="text-center ">{{ __('% Of Total') }}</th>
-                                            <th class="text-center ">{{ __('% Of Revenues') }}</th>
+                                            <th class="text-center">{{ __('Amount') }}</th>
+                                            <th class="text-center">{{ __('% Of Total') }}</th>
+                                            <th class="text-center">{{ __('% Of Revenues') }}</th>
                                         </tr>
                                         @endslot
                                         @slot('table_body')
@@ -1057,7 +1045,7 @@ $fixedVariableExpenseCoefficientCorrelations[$name][$subItemName] = 0;
                                         @foreach ([] as $key => $item)
                                         <tr>
 
-                                            <td class=" max-w-300">{{ '-'}}</td>
+                                            <td class="max-w-300">{{ '-'}}</td>
                                             <td class="text-center">{{number_format(0)}}</td>
                                             <td class="text-center">{{number_format(0)}}</td>
                                             <td class="text-center">{{number_format(0)}}</td>

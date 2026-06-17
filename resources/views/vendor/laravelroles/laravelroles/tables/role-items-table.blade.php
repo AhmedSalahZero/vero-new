@@ -16,7 +16,7 @@
                 <th scope="col">
                     {!! trans('laravelroles::laravelroles.roles-table.name') !!}
                 </th>
-                <th scope="col" class="hidden-xs ">
+                <th scope="col" class="hidden-xs">
                     {!! trans('laravelroles::laravelroles.roles-table.desc') !!}
                 </th>
                 <th scope="col">
@@ -25,18 +25,18 @@
                 <th scope="col" class="hidden-xs hidden-sm">
                     {!! trans('laravelroles::laravelroles.roles-table.permissons') !!}
                 </th>
-                <th scope="col" class="hidden-xs hidden-sm ">
+                <th scope="col" class="hidden-xs hidden-sm">
                     {!! trans('laravelroles::laravelroles.roles-table.createdAt') !!}
                 </th>
-                <th scope="col" class="hidden-xs hidden-sm ">
+                <th scope="col" class="hidden-xs hidden-sm">
                     {!! trans('laravelroles::laravelroles.roles-table.updatedAt') !!}
                 </th>
                 @if($tabletype == 'deleted')
-                    <th scope="col" class="hidden-xs hidden-sm ">
+                    <th scope="col" class="hidden-xs hidden-sm">
                         {!! trans('laravelroles::laravelroles.roles-table.deletedAt') !!}
                     </th>
                 @endif
-                <th class="no-search no-sort " colspan="3">
+                <th class="no-search no-sort" colspan="3">
                     {!! trans('laravelroles::laravelroles.roles-table.actions') !!}
                 </th>
             </tr>

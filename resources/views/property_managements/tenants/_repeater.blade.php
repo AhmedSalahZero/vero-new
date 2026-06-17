@@ -8,10 +8,10 @@
  <input type="hidden" name="tableIds[]" value="{{ $tableId }}">
  <x-tables.repeater-table :removeActionBtn="false" :hideDeleteBtn="$inEditMode" :hideAddBtn="$inEditMode" :hideAddBtnAndPlus="$inEditMode" :hideActionBtn="$inEditMode" :removeRepeater="$inEditMode" :repeater-with-select2="false" :canAddNewItem="!$inEditMode" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
      <x-slot name="ths">
-         <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Tenant Name')"></x-tables.repeater-table-th>
-         <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Nature')"></x-tables.repeater-table-th>
-         <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Business Sector')"></x-tables.repeater-table-th>
-         <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Related Party')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Tenant Name')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Nature')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Business Sector')"></x-tables.repeater-table-th>
+         <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Related Party')"></x-tables.repeater-table-th>
      </x-slot>
      <x-slot name="trs">
          @php
@@ -37,7 +37,7 @@
              <input type="hidden" name="id" value="{{ isset($subModel) ? $subModel->id : 0 }}">
 
              <td>
-                 <input value="{{ (isset($subModel) ?$subModel->getName() : '') }}" @if($isRepeater) name="name" @else name="{{ $tableId }}[0][name]" @endif class="form-control text-left " type="text">
+                 <input value="{{ (isset($subModel) ?$subModel->getName() : '') }}" @if($isRepeater) name="name" @else name="{{ $tableId }}[0][name]" @endif class="form-control text-left" type="text">
              </td>
              <td>
                  <div class="row">

@@ -19,13 +19,7 @@
 'disabled'=>false,
 'dataCurrentYear'=>null
 ])
-<div class="
-@if(!$removeThreeDotsClass)
-form-group 
-three-dots-parent
-@endif 
-
-">
+<div class="@if(!$removeThreeDotsClass) form-group three-dots-parent @endif">
     <div class="input-group input-group-sm align-items-center justify-content-center flex-nowrap">
         <div class="input-hidden-parent">
             <input
@@ -40,10 +34,7 @@ three-dots-parent
 				@if($name)
 				data-name="{{ removeSquareBrackets($name) }}"
 				@endif
-			 onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden 
-
-			 @if($isPercentage) expandable-percentage-input  @else expandable-amount-input @endif
-			  repeat-to-right-input-formatted  {{ $formattedInputClasses }} " type="text" value="{{ $currentFormattedVal }}" 
+			 onchange="this.style.width = ((this.value.length + 1) * 10) + 'px';" class="form-control copy-value-to-his-input-hidden @if($isPercentage) expandable-percentage-input @else expandable-amount-input @endif repeat-to-right-input-formatted {{ $formattedInputClasses }}" type="text" value="{{ $currentFormattedVal }}" 
 			 @if(!is_null($columnIndex))
 			 data-column-index="{{ $columnIndex }}" 
 			 @endif
@@ -58,7 +49,7 @@ three-dots-parent
 			@if($multiple)
 			multiple
 			@endif 
-			{{ $inputHiddenAttributes  }}  {{ $attributes->merge([]) }} type="hidden" data-name="{{ removeSquareBrackets($name) }}"  class="repeat-to-right-input-hidden input-hidden-with-name  {{ $classes }}" value="{{ $currentVal  }}" 
+			{{ $inputHiddenAttributes  }}  {{ $attributes->merge([]) }} type="hidden" data-name="{{ removeSquareBrackets($name) }}"  class="repeat-to-right-input-hidden input-hidden-with-name {{ $classes }}" value="{{ $currentVal  }}" 
 			 @if(!is_null($columnIndex))
 			data-column-index="{{ $columnIndex }}"
 			@endif
@@ -87,10 +78,7 @@ three-dots-parent
 	@if(!$removeThreeDots)
     <i 
 	data-name="{{ removeSquareBrackets($name) }}"
-	class="fa
-	
-
-	 fa-ellipsis-h pull-left repeat-to-right row-repeater-icon " data-column-index="{{ $columnIndex}}" data-section="target" title="{{__('Repeat Right')}}"></i>
+	class="fa fa-ellipsis-h pull-left repeat-to-right row-repeater-icon" data-column-index="{{ $columnIndex}}" data-section="target" title="{{__('Repeat Right')}}"></i>
 	 @elseif(!$removeThreeDotsClass) 
 
 

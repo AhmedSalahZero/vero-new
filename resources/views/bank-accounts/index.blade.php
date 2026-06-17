@@ -38,7 +38,7 @@
 	:create-permission-name="''" :create-route="''"
 	></x-back-to-bank-header-btn>
     <div style="padding-top:0 !important " class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == 'bank-accounts' ?'active':'' }}" id="bank" role="tabpanel">
@@ -47,7 +47,7 @@
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -72,7 +72,7 @@
 								
                                     <td>{{ $bankAccount->getLastAmountFormatted($company->id , $bankAccount->getCurrency(),$bankAccount->getFinancialInstitutionId(),$bankAccount->getAccountNumber()) }}</td>
 							
-                                    <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
@@ -95,7 +95,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                                                                <button type="submit" class="btn {{ $bankAccount->isActive() ? 'btn-danger' : 'btn-info'  }}">{{ $bankAccount->isActive() ? __('Confirm Lock') : __('Confirm Unlock') }}</button>
+                                                                <button type="submit" class="btn {{ $bankAccount->isActive() ? 'btn-danger' : 'btn-info' }}">{{ $bankAccount->isActive() ? __('Confirm Lock') : __('Confirm Unlock') }}</button>
                                                             </div>
 
                                                         </form>

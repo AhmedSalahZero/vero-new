@@ -8,8 +8,8 @@
                     <input type="hidden" name="tableIds[]" value="{{ $tableId }}">
                     <x-tables.repeater-table :initialJs="$isRepeater" :showAddBtnAndPlus="$isRepeater" :hideAddBtn="!$isRepeater" :removeRepeater="!$isRepeater" :repeater-with-select2="true" :canAddNewItem="$canAddNewItem" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="$tableId" :repeaterId="$repeaterId" :relationName="'food'" :isRepeater="$isRepeater">
                         <x-slot name="ths">
-                            <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Fixed Asset Name')"></x-tables.repeater-table-th>
-                            <x-tables.repeater-table-th class=" category-selector-class header-border-down  " :title="__('Optional')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Fixed Asset Name')"></x-tables.repeater-table-th>
+                            <x-tables.repeater-table-th class="category-selector-class header-border-down" :title="__('Optional')"></x-tables.repeater-table-th>
                         </x-slot>
                         <x-slot name="trs">
                             @php
@@ -33,7 +33,7 @@
                                 <input type="hidden" name="id" value="{{ isset($subModel) ? $subModel->id : 0 }}">
 								
 								    <td>
- 									<input value="{{ (isset($subModel) ?$subModel->getName() : '') }}" @if($isRepeater) name="name" @else name="{{ $tableId }}[0][name]" @endif class="form-control text-left " type="text">
+ 									<input value="{{ (isset($subModel) ?$subModel->getName() : '') }}" @if($isRepeater) name="name" @else name="{{ $tableId }}[0][name]" @endif class="form-control text-left" type="text">
                                 </td>
                                <td>
 							   <div class="row">
@@ -51,7 +51,7 @@
                                                     <span></span>
                                                 </label>
 
-                                                {{-- <label class="kt-radio kt-radio--danger text-black font-size-16px  font-weight-bold">
+                                                {{-- <label class="kt-radio kt-radio--danger text-black font-size-16px font-weight-bold">
                                                     <input type="checkbox" value="1" name="is_branch_asset" @if(isset($subModel) && $subModel->isBranchAsset()) checked @endisset
                                                     > {{ __('Is Branch Asset') }}
                                                     <span></span>

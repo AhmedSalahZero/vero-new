@@ -4,13 +4,13 @@ $tableClasses =  'col-md-12 overflow-scroll';
 
 <x-tables.repeater-table :scrollable="true" :table-class="$tableClasses" :removeActionBtn="true" :removeRepeater="true" :initialJs="false" :repeater-with-select2="true" :canAddNewItem="false" :parentClass="'js-remove-hidden'" :hide-add-btn="true" :tableName="''" :repeaterId="''" :relationName="'food'" :isRepeater="$isRepeater=!(isset($removeRepeater) && $removeRepeater)">
     <x-slot name="ths">
-        <x-tables.repeater-table-th class="  header-border-down max-column-th-class" :title="__('Item')"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th class="header-border-down max-column-th-class" :title="__('Item')"></x-tables.repeater-table-th>
 		@foreach([
 			'Revenues Multiplier',
 			'EBITDA Multiplier',
 			'Shareholder Equity Multiplier',
 		] as $columnName)
-        <x-tables.repeater-table-th class=" interval-class header-border-down " :title="$columnName"></x-tables.repeater-table-th>
+        <x-tables.repeater-table-th class="interval-class header-border-down" :title="$columnName"></x-tables.repeater-table-th>
 		@endforeach 
 
     </x-slot>
@@ -23,7 +23,7 @@ $tableClasses =  'col-md-12 overflow-scroll';
             $currentModalTitle = __('+/- EBIT (Fig In Million)') ;
             @endphp
             <td>
-                <div class="d-flex align-items-center ">
+                <div class="d-flex align-items-center">
                     <input value="{{ __('Multiplier Value') }}" disabled class="form-control text-left min-w-300" type="text">
                 </div>
             </td>

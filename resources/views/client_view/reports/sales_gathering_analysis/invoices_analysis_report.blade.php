@@ -94,7 +94,7 @@
 <div class="kt-portlet kt-portlet--tabs">
     
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
@@ -124,8 +124,8 @@
                     @php
                     $totalCountInvoiceNumber = 0 ;
                     @endphp
-                    <tr class="group-color ">
-                        <td colspan="{{ $colsSpans }}" class=" bg-white text-black max-w-classes" style="cursor: pointer;" onclick="toggleRow('{{ $idd }}')">
+                    <tr class="group-color">
+                        <td colspan="{{ $colsSpans }}" class="bg-white text-black max-w-classes" style="cursor: pointer;" onclick="toggleRow('{{ $idd }}')">
                             <i class="row_icon{{ $idd }} flaticon2-up text-black"></i>
                             <b>
                                 {{ __($zone_name) }}
@@ -141,7 +141,7 @@
                     </tr>
 
 
-                    <tr class="row{{ $idd }}  active-style text-center" style="display: none">
+                    <tr class="row{{ $idd }} active-style text-center" style="display: none">
                         <td class="text-left"><b>{{ __('Invoice Count')  }}</b></td>
 
 
@@ -166,7 +166,7 @@
 
                     @if($type != 'product_item')
 
-                    <tr class="row{{ $idd }}  active-style text-center" style="display: none">
+                    <tr class="row{{ $idd }} active-style text-center" style="display: none">
                         <td class="text-left"><b>{{ __('Avg Product Items Count Per Invoice')  }}</b></td>
 
                         @foreach (getLongestArray($sumForEachInterval) as $year => $d )
@@ -194,7 +194,7 @@
 
 
 
-                    <tr class="row{{ $idd }}  active-style text-center" style="display: none">
+                    <tr class="row{{ $idd }} active-style text-center" style="display: none">
                         <td class="text-left"><b>{{ __('Avg Invoice Value')  }}</b></td>
 
 							@php

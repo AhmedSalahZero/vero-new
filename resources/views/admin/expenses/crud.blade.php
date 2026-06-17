@@ -22,7 +22,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div @if(!isset($model)) id="m_repeater_2" @endif class="w-100">
-                                <div class="form-group  m-form__group row">
+                                <div class="form-group m-form__group row">
                                     <div @if(!isset($model)) data-repeater-list="expenses" @endif class="col-lg-12">
                                         <div data-repeater-item class="form-group m-form__group row align-items-center repeater_item">
                                             <div class="col-md-6">
@@ -38,7 +38,7 @@
                                                 <label>{{__('Expense Type')}}<span class="astric">*</span></label>
                                                 <div class="m-form__group m-form__group--inline">
                                                     <div class="m-form__control">
-                                                        <select name="expense_type" class="form-control ">
+                                                        <select name="expense_type" class="form-control">
                                                             @foreach( $expenseTypes as $id => $name )
                                                             <option value="{{$id  }}" @if(isset($model )? $id==$model->expense_type :false ) selected @endif >{{$name}}</option>
                                                             @endforeach

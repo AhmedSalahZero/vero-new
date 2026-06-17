@@ -26,6 +26,7 @@ class PartnersController
 		->when($request->has('value'),function($collection) use ($value,$searchFieldName){
 			return $collection->filter(function($moneyReceived) use ($value,$searchFieldName){
 				$currentValue = $moneyReceived->{$searchFieldName} ;
+			
 				// if($searchFieldName == 'bank_id'){
 				// 	$currentValue = $moneyReceived->getBankName() ;  
 				// }
@@ -67,6 +68,12 @@ class PartnersController
 		
 		$partnerStartDate = $filterDates[Partner::PARTNERS]['startDate'] ?? null ;
 		$partnerEndDate = $filterDates[Partner::PARTNERS]['endDate'] ?? null ;
+		if($request->has('field')){
+			$partnerStartDate = $request->get('from');
+		}
+		if($request->has('field')){
+			$partnerEndDate = $request->get('to');
+		}
 		$partners = $company->partners->where('is_tax','!=',1) ;
 		$partners =  $partners->filterByCreatedAt($partnerStartDate,$partnerEndDate) ;
 		$partners =  $currentType == Partner::PARTNERS ? $this->applyFilter($request,$partners):$partners ;
@@ -78,7 +85,7 @@ class PartnersController
 		
 		 $searchFields = [
 			Partner::PARTNERS=>[
-				'created_at'=>__('Created At'),
+		//		'created_at'=>__('Created At'),
 				'name'=>__('Name')
 			],
 		];

@@ -86,8 +86,8 @@ tbody td {
             </ul>
         </div>
     </div>
-    <div class="kt-portlet__body ">
-        <div class="tab-content  kt-margin-t-20">
+    <div class="kt-portlet__body">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
 
@@ -105,7 +105,7 @@ tbody td {
 
             @endphp
 
-            <div class="tab-pane  {{ $intervalName =='monthly' ? 'active' :'' }}" id="kt_apps_contacts_view_tab_2{{ $intervalName }}" role="tabpanel">
+            <div class="tab-pane {{ $intervalName =='monthly' ? 'active' :'' }}" id="kt_apps_contacts_view_tab_2{{ $intervalName }}" role="tabpanel">
 
 
                 <x-table :tableClass="'kt_table_with_no_pagination_no_fixed removeGlobalStyle '.$intervalName">

@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('css')
 <x-styles.commons></x-styles.commons>
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
    
 
@@ -134,7 +133,7 @@
 
     }
 
-    .money-flow-dark * {
+    * {
         box-sizing: border-box !important;
     }
 
@@ -144,7 +143,7 @@
 <x-main-form-title :id="'main-form-title'" :class="''">{{ __('Balance In '  ) . ' ' . __($currency) }}</x-main-form-title>
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
 
@@ -296,7 +295,7 @@
                 @csrf
 
 
-        <div class="table-custom-container position-relative  ">
+        <div class="table-custom-container position-relative">
 
 
             <div>
@@ -308,38 +307,38 @@
                     <table class="table kt_table_with_no_pagination_no_collapse table-striped- table-bordered table-hover table-checkable position-relative table-with-two-subrows main-table-class dataTable no-footer">
                         <thead>
 
-                            <tr class="header-tr ">
+                            <tr class="header-tr">
 
-                                <th class="view-table-th max-w-serial  header-th  align-middle text-center">
+                                <th class="view-table-th max-w-serial header-th align-middle text-center">
                                     {{ __('#') }}
                                 </th>
 
-                                <th class="view-table-th    header-th  align-middle text-center">
+                                <th class="view-table-th header-th align-middle text-center">
                                     {{ $clientNameText }}
                                 </th>
 
-                                <th class="view-table-th   header-th  align-middle text-center">
+                                <th class="view-table-th header-th align-middle text-center">
                                     {{ __('Invoice Number') }}
                                 </th>
-                                <th class="view-table-th max-w-invoice-date     header-th  align-middle text-center">
+                                <th class="view-table-th max-w-invoice-date header-th align-middle text-center">
                                     {{ __('Invoice Date') }}
                                 </th>
 
-							  <th class="view-table-th     header-th  align-middle text-center">
+							  <th class="view-table-th header-th align-middle text-center">
                                     {{ __('Currency') }}
                                 </th>
 								
-									  <th class="view-table-th header-th  align-middle text-center">
+									  <th class="view-table-th header-th align-middle text-center">
                                     {{ __('Net Balance') }}
                                 </th>
 								
 								
-								 <th class="view-table-th     header-th  align-middle text-center">
+								 <th class="view-table-th header-th align-middle text-center">
                                     {{ __('Invoice Due Date') }}
                                 </th>
 								
 								
-								 <th class="view-table-th     header-th  align-middle text-center">
+								 <th class="view-table-th header-th align-middle text-center">
                                     {{ __('Status') }}
                                 </th>
 								
@@ -347,7 +346,7 @@
 								
 								
 								
-								  <th class="view-table-th     header-th  align-middle text-center">
+								  <th class="view-table-th header-th align-middle text-center">
                                     {{ __('Actions') }}
                                 </th>
 								
@@ -366,16 +365,16 @@
                             </script>
 							
                             @foreach($invoicesBalances as $index=>$invoiceStdClass)
-                            <tr class=" parent-tr reset-table-width text-nowrap  cursor-pointer sub-text-bg text-capitalize is-close   ">
-                                <td class="sub-text-bg max-w-serial   ">{{ $index+1 }}</td>
-                                <td class="sub-text-bg  is-name-cell ">{{ $invoiceStdClass->{$clientNameColumnName} }}</td>
+                            <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                <td class="sub-text-bg max-w-serial">{{ $index+1 }}</td>
+                                <td class="sub-text-bg is-name-cell">{{ $invoiceStdClass->{$clientNameColumnName} }}</td>
                                 <td class="sub-text-bg text-center">{{ $invoiceStdClass->invoice_number }}</td>
-                                <td class="sub-text-bg text-center ">{{ $invoiceStdClass->invoice_date }}</td>
-                                <td class="sub-text-bg text-center ">{{ $invoiceStdClass->currency }}</td>
-                                <td class="sub-text-bg text-center ">{{ number_format($invoiceStdClass->net_balance) }}</td>
-                                <td class="sub-text-bg text-center ">{{ \Carbon\Carbon::make($invoiceStdClass->invoice_due_date)->format('d-m-Y') }}</td>
-                                <td class="sub-text-bg text-center ">{{ snakeToCamel($invoiceStdClass->invoice_status) }}</td>
-                                <td class="sub-text-bg  text-center">
+                                <td class="sub-text-bg text-center">{{ $invoiceStdClass->invoice_date }}</td>
+                                <td class="sub-text-bg text-center">{{ $invoiceStdClass->currency }}</td>
+                                <td class="sub-text-bg text-center">{{ number_format($invoiceStdClass->net_balance) }}</td>
+                                <td class="sub-text-bg text-center">{{ \Carbon\Carbon::make($invoiceStdClass->invoice_due_date)->format('d-m-Y') }}</td>
+                                <td class="sub-text-bg text-center">{{ snakeToCamel($invoiceStdClass->invoice_status) }}</td>
+                                <td class="sub-text-bg text-center">
                                     <a href="{{ route($moneyReceivedOrPaidUrlName,['company'=>$company->id,'model'=>$invoiceStdClass->id ]) }}" class="btn btn-sm btn-primary">{{ $moneyReceivedOrPaidText }}</a>
                                 </td>
                 

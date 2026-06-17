@@ -95,7 +95,7 @@
                             <span class="astric">*</span>
                         </label>
                         <div class="form-group-sub">
-                            <input type="number" step="any" id="given_loan" name="given_loan" value="{{ @old('given_loan') }}" class="form-control number " placeholder="{{__('Loan Amount')}} .." required />
+                            <input type="number" step="any" id="given_loan" name="given_loan" value="{{ @old('given_loan') }}" class="form-control number" placeholder="{{__('Loan Amount')}} .." required />
                             @if ($errors->has('given_loan'))
                             <div class="invalid-feedback">{{ $errors->first('given_loan') }}</div>
                             @endif
@@ -112,7 +112,7 @@
                             {{__('Tenor (Duration In Months) ')}}
                         </label><span class="astric">*</span>
                         <div class="form-group-sub">
-                            <input type="number" step="1" min="1" id="duration" name="duration" value="{{ @old('duration') }}" class="form-control number  grace_period_calc max-tenor-limit installment_condition" placeholder="{{__('Duration In Months')}} .." required />
+                            <input type="number" step="1" min="1" id="duration" name="duration" value="{{ @old('duration') }}" class="form-control number grace_period_calc max-tenor-limit installment_condition" placeholder="{{__('Duration In Months')}} .." required />
                             @if ($errors->has('duration'))
                             <div class="invalid-feedback">{{ $errors->first('duration') }}</div>
                             @endif
@@ -273,7 +273,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group validated">
-                        <label class="col-form-label take " id="interest_label">
+                        <label class="col-form-label take" id="interest_label">
                             {{@old('loan_type') == 'variable'? __('Interest Margin') : __('Interest')}}
                             <span class="astric">*</span>
                         </label>
@@ -415,7 +415,7 @@
 								</div>
 						</div>
 						
-                    <div class="col-6 ">
+                    <div class="col-6">
                         <div class="{{__('right')}} text-right">
                             <input id="submit---id" type="submit" onclick="return false;" name="submit" value="{{__('Calculate')}}" class="btn active-style submit">
                         </div>

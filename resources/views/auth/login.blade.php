@@ -14,7 +14,7 @@
         @endif
         <div class="clearfix"></div>
         <div class="float-right" >
-            {{-- <a href="{{route('free.user.subscription')}}" class="btn "  style="margin: 19px;color: #fff;background-color: #1a5798;border-color: #007bff;">{{__("Free Trail")}}</a> --}}
+            {{-- <a href="{{route('free.user.subscription')}}" class="btn"  style="margin: 19px;color: #fff;background-color: #1a5798;border-color: #007bff;">{{__("Free Trail")}}</a> --}}
         </div>
         <div class="intro-banner-search-form margin-top-49" style="background-color:none">
             <form class="login100-form validate-form flex-sb flex-w" method="POST"
@@ -58,7 +58,7 @@
 	<div class="col-12 mt-4">
 	
 				@if(session()->has('expired-login'))
-				<div class="row " style="justify-content:center">
+				<div class="row" style="justify-content:center">
 					<div class="col-6">
 					<div class="alert alert-danger">
 					{{ session()->get('expired-login') }}

@@ -19,7 +19,7 @@
                                                <label>{{ __('Working Days') }} </label>
                                                     <div class="kt-input-icon">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class " name="freelancer_working_days" value="{{ isset($freelancerExpense) ? $freelancerExpense->getWorkingDays() : old('freelancer_working_days') }}"  step="any" >
+                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class" name="freelancer_working_days" value="{{ isset($freelancerExpense) ? $freelancerExpense->getWorkingDays() : old('freelancer_working_days') }}"  step="any" >
                                                         </div>
                                                     </div>
                                                 </div> 
@@ -28,7 +28,7 @@
                                                       <label>{{ __('Cost Per Day') }} </label>
                                                     <div class="kt-input-icon">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class " name="freelancer_cost_per_day" value="{{ isset($freelancerExpense) ? $freelancerExpense->getCostPerDay() : old('freelancer_cost_per_day') }}"  step="any" >
+                                                            <input type="number" class="form-control only-greater-than-zero-allowed freelancer-total-cost-calculations-class" name="freelancer_cost_per_day" value="{{ isset($freelancerExpense) ? $freelancerExpense->getCostPerDay() : old('freelancer_cost_per_day') }}"  step="any" >
                                                         </div>
                                                     </div>
                                                 </div> 

@@ -2,7 +2,7 @@
 
 
 @if(hasAuthFor('create letter of credit issuance'))
- <a data-toggle="modal" data-target="#apply-expense-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Expenses') }}" href="#"><i class=" fa fa-money-bill"></i></a>
+ <a data-toggle="modal" data-target="#apply-expense-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Expenses') }}" href="#"><i class="fa fa-money-bill"></i></a>
  @endif
  <div class="modal fade" id="apply-expense-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -160,7 +160,7 @@
  @include('reports.LetterOfCreditIssuance.cancel-issuance-modal'
 
  )
- <a data-toggle="modal" data-target="#back-to-running-modal-{{ $model->id }}" type="button" class="btn  btn-secondary btn-outline-hover-success   btn-icon" title="{{ __('Back To Running') }}" href="#"><i class="fa fa fa-undo"></i></a>
+ <a data-toggle="modal" data-target="#back-to-running-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Back To Running') }}" href="#"><i class="fa fa fa-undo"></i></a>
 
  <div class="modal fade" id="back-to-running-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">

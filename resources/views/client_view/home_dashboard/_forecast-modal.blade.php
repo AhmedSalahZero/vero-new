@@ -1,4 +1,4 @@
-<div class="modal fade " id="{{ 'forecast-'.convertStringToClass($type) }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{ 'forecast-'.convertStringToClass($type) }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <form action="#" class="modal-content" method="post">
 
@@ -59,7 +59,7 @@
 							@if($name != 'total')
                             <tr>
                                 <td class="w-40-percentage">
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" step="0.1" class="form-control ignore-global-style" value="{{ $name }}">
                                         </div>
@@ -73,7 +73,7 @@
 								
 							@endphp
                                 <td class="w-10-percentage">
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" class="form-control text-center ignore-global-style" value="{{ is_numeric($value) ?  number_format($value) : $value }}">
                                         </div>
@@ -91,7 +91,7 @@
 							
 							<tr>
                                  <td class="w-40-percentage">
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" step="0.1" class="form-control ignore-global-style" value="{{ __('Others') }}">
                                         </div>
@@ -110,7 +110,7 @@
 							 
 							@endphp 
                                 <td class="w-10-percentage">
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" class="form-control text-center ignore-global-style" value="{{ number_format($currentVal)  }}">
                                         </div>
@@ -136,9 +136,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary 
-				{{-- submit-form-btn --}}
-				" data-dismiss="modal">{{ __('Close') }}</button>
+                <button type="button" class="btn btn-primary {{-- submit-form-btn --}}" data-dismiss="modal">{{ __('Close') }}</button>
             </div>
         </form>
     </div>

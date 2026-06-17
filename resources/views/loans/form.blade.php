@@ -2,49 +2,48 @@
 @section('css')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
-@include('reports.moneyPayments._dark_theme_styles')
 <style>
-    .money-flow-dark .kt-portlet .kt-portlet__head {
+    .kt-portlet .kt-portlet__head {
         border-bottom-color: #1490a833 !important;
     }
 
-    .money-flow-dark label {
+    label {
         white-space: nowrap !important
     }
 
-    .money-flow-dark [class*="col"] {
+    [class*="col"] {
         margin-bottom: 1.5rem !important;
     }
 
-    .money-flow-dark label {
+    label {
         text-align: left !important;
     }
 
-    .money-flow-dark .width-8 {
+    .width-8 {
         max-width: initial !important;
         width: 8% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-10 {
+    .width-10 {
         max-width: initial !important;
         width: 10% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-12 {
+    .width-12 {
         max-width: initial !important;
         width: 13.5% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .width-45 {
+    .width-45 {
         max-width: initial !important;
         width: 45% !important;
         flex: initial !important;
     }
 
-    .money-flow-dark .kt-portlet {
+    .kt-portlet {
         overflow: visible !important;
     }
 
@@ -54,7 +53,7 @@
 {{ __('Internal Money Transfer Form') }}
 @endsection --}}
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -93,7 +92,7 @@
                         <div class="kt-portlet">
 
 
-                            <div class="kt-portlet ">
+                            <div class="kt-portlet">
                                 <div class="kt-portlet__head">
                                     <div class="kt-portlet__head-label">
                                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -106,12 +105,12 @@
                                     <div class="form-group">
                                         <div class="row">
 										
-										   <div class="col-md-4 ">
+										   <div class="col-md-4">
                                                 <label>{{__('Name')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? $model->getName():'' }}" name="name" class="form-control  " >
+                                                    <input  type="text" value="{{ isset($model) ? $model->getName():'' }}" name="name" class="form-control" >
                                                 </div>
                                             </div> 
 											
@@ -128,7 +127,7 @@
 											
 											    
 											
-											   <div class="col-md-2	">
+											   <div class="col-md-2">
                                                 <label>{{__('Currency')}}
                                                     @include('star')
                                                 </label>
@@ -147,45 +146,45 @@
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? $model->getLimit():  0 }}" name="limit" class="form-control only-greater-than-zero-allowed " >
+                                                    <input  type="text" value="{{ isset($model) ? $model->getLimit():  0 }}" name="limit" class="form-control only-greater-than-zero-allowed" >
                                                 </div>
                                             </div> 
 											
-											  <div class="col-md-2 ">
+											  <div class="col-md-2">
                                                 <label>{{__('Account Number')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? $model->getAccountNumber():0 }}" name="account_number" class="form-control  " >
+                                                    <input  type="text" value="{{ isset($model) ? $model->getAccountNumber():0 }}" name="account_number" class="form-control" >
                                                 </div>
                                             </div>   
 											
-											<div class="col-md-2 ">
+											<div class="col-md-2">
                                                 <label>{{__('Borrowing Rate %')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? $model->getBorrowingRate():0 }}" name="borrowing_rate" id="borrowing-rate-id" class="form-control  recalculate-interest-rate " >
+                                                    <input  type="text" value="{{ isset($model) ? $model->getBorrowingRate():0 }}" name="borrowing_rate" id="borrowing-rate-id" class="form-control recalculate-interest-rate" >
                                                 </div>
                                             </div> 
 											
-											<div class="col-md-2 ">
+											<div class="col-md-2">
                                                 <label>{{__('Margin Rate %')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? $model->getMarginRate():0 }}" name="margin_rate" id="margin-rate-id" class="form-control recalculate-interest-rate " >
+                                                    <input  type="text" value="{{ isset($model) ? $model->getMarginRate():0 }}" name="margin_rate" id="margin-rate-id" class="form-control recalculate-interest-rate" >
                                                 </div>
                                             </div> 
 												
 											
 											
-											<div class="col-md-2 ">
+											<div class="col-md-2">
                                                 <label>{{__('Interest Rate %')}}
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input readonly name="interest_rate"  type="text" value="{{ isset($model) ? $model->getInterestRate():0 }}" name="margin_rate" class="form-control  " >
+                                                    <input readonly name="interest_rate"  type="text" value="{{ isset($model) ? $model->getInterestRate():0 }}" name="margin_rate" class="form-control" >
                                                 </div>
                                             </div> 
                                         
@@ -195,7 +194,7 @@
                                                     @include('star')
                                                 </label>
                                                 <div class="kt-input-icon">
-                                                    <input  type="text" value="{{ isset($model) ? $model->getDuration():0 }}" name="duration" class="form-control " >
+                                                    <input  type="text" value="{{ isset($model) ? $model->getDuration():0 }}" name="duration" class="form-control" >
                                                 </div>
                                             </div>
 											
@@ -206,7 +205,7 @@
                                                 </label>
                                                 <div class="kt-input-icon">
                                                     <div class="input-group date">
-                                                        <select required data-from-current-selected="{{ isset($model) ? $model->getPaymentInstallmentInterval(): 0 }}" name="installment_payment_interval" class="form-control ">
+                                                        <select required data-from-current-selected="{{ isset($model) ? $model->getPaymentInstallmentInterval(): 0 }}" name="installment_payment_interval" class="form-control">
                                                             <option value="" selected>{{__('Select')}}</option>
 															@foreach(\App\Helpers\HVero::getDurationIntervalTypesForSelect() as $intervalArr)
 																<option value="{{ $intervalArr['value'] }}" @if(isset($model) && $intervalArr['value'] == $model->getPaymentInstallmentInterval() ) selected @endif > {{ $intervalArr['title'] }} </option>

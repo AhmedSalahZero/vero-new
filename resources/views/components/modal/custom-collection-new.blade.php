@@ -42,15 +42,13 @@
                                 </td>
                                  <td>
 								<div class="">
-                                    <x-form.select  :multiple="true" :maxOptions="1"  :selectedValue="isset($subModel) ? $subModel->getPaymentRateAtDueInDays($rateIndex) : '' " :options="dueInDays()" :add-new="false" class="js-due_in_days repeater-select 
-								
-									"  :all="false" name="due_days" ></x-form.select>
+                                    <x-form.select  :multiple="true" :maxOptions="1"  :selectedValue="isset($subModel) ? $subModel->getPaymentRateAtDueInDays($rateIndex) : '' " :options="dueInDays()" :add-new="false" class="js-due_in_days repeater-select"  :all="false" name="due_days" ></x-form.select>
 								</div>
                                 </td>
                                 </tr>
                                 @endfor
 								<tr style="border-top:1px solid gray;padding-top:5px;text-align:center">
-									<td class="td-for-total-payment-rate " disabled readonly>
+									<td class="td-for-total-payment-rate" disabled readonly>
 										{{ $totalRate }} %
 									</td>
 									<td class="">-</td>

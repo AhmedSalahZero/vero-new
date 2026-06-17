@@ -292,7 +292,7 @@
 								 	<td>
                                 <input type="hidden" name="id" value="1">
 								<div>
-                                    <x-form.select-with-modal-abb data-name-id="{{ $subItemsCount['main_field_name'] ?? '' }}" :label-class="'visibility-hidden'" :add-new-modal="true" class="text-center repeater-select" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="$subItemsCount['main_field_name'] ?? '' " :options="getTestFfeArray()" :add-new="false" :label="$subItemsCount['main_field_name'] ?? '' " class="select2-select main_item_js  " data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="'furniture'"></x-form.select-with-modal-abb>
+                                    <x-form.select-with-modal-abb data-name-id="{{ $subItemsCount['main_field_name'] ?? '' }}" :label-class="'visibility-hidden'" :add-new-modal="true" class="text-center repeater-select" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="$subItemsCount['main_field_name'] ?? '' " :options="getTestFfeArray()" :add-new="false" :label="$subItemsCount['main_field_name'] ?? '' " class="select2-select main_item_js" data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="'furniture'"></x-form.select-with-modal-abb>
 								
 								</div>
 
@@ -316,10 +316,10 @@
 									
 									<div style="width:150px;"></div>
  					<label class="form-label font-weight-bold visibility-hidden">1</label>
-                                        <input data-name-id="{{ $subItemName }}" type="text" value="" class="form-control " @if($isRepeater) name="{{ 'name' }}" @else name="{{ $tableId }}[0][{{ 'name' }}]" @endif>
+                                        <input data-name-id="{{ $subItemName }}" type="text" value="" class="form-control" @if($isRepeater) name="{{ 'name' }}" @else name="{{ $tableId }}[0][{{ 'name' }}]" @endif>
                                     									
 									@else
-                                    <x-form.select-with-modal-abb data-name-id="{{ $subItemName }}" :label-class="'visibility-hidden'" :add-new-modal="true" class="text-center  repeater-select" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="$subItemName " :options="getTestCategory()" :add-new="false" :label="$subItemName " class="select2-select main_item_js  " data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="'beds'"></x-form.select-with-modal-abb>
+                                    <x-form.select-with-modal-abb data-name-id="{{ $subItemName }}" :label-class="'visibility-hidden'" :add-new-modal="true" class="text-center repeater-select" :add-new-modal-modal-type="''" :add-new-modal-modal-name="'RevenueBusinessLine'" :add-new-modal-modal-title="$subItemName " :options="getTestCategory()" :add-new="false" :label="$subItemName " class="select2-select main_item_js" data-filter-type="{{ __('create') }}" :all="false" name="revenue_business_line_id" id="{{'revenue_business_line_id' }}" :selected-value="'beds'"></x-form.select-with-modal-abb>
 									@endif
                                     </td>
 
@@ -659,7 +659,7 @@
             const elementToAppendIn = $(this).parent().find('.js-append-into');
             const texts = [];
             let lis = '';
-            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap ">' + 'Add New' + '</a></u>'
+            text = '<u><a href="#" data-close-new class="text-decoration-none mb-2 d-inline-block text-nowrap">' + 'Add New' + '</a></u>'
             lis += '<li >' + text + '</li>'
             $(this).closest('table').find('.js-show-all-categories-popup').each(function(index, element) {
                 let text = $(element).val().trim();

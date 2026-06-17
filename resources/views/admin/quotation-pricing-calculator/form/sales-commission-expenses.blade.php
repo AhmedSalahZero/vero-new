@@ -4,7 +4,7 @@
                                                   <x-form.select  :options="$serviceItems" :add-new="false"  :label="__('Service Item')" :is-select2="false" class="repeater-select service_item_class service-item-class-append" data-filter-type="{{ $type }}" :all="true" name="service_category_id" id="{{$type.'_'.'service_category_id' }}"  :selected-value="isset($quotationPricingCalculator) ? $quotationPricingCalculator->getServiceCategoryId() : 0" ></x-form.select>
                                             </x-form.wrapper>
 
-                       <div class="col-lg-6 col-md-3 ">
+                       <div class="col-lg-6 col-md-3">
                            
                             <label>{{ __('As Percentage Of Price %') }} </label>
                             <div class="kt-input-icon">

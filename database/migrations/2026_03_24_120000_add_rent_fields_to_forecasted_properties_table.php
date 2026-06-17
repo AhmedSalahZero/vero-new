@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection(PROPERTY_MANAGEMENT_CONNECTION_NAME)->table('forecasted_properties', function (Blueprint $table) {
+			if (!Schema::connection(PROPERTY_MANAGEMENT_CONNECTION_NAME)->hasColumn('forecasted_properties', 'renovate_duration')) {
             $table->unsignedBigInteger('renovate_duration')->default(0);
             $table->decimal('renovate_cost', 14)->default(0);
-            $table->decimal('monthly_rent_amount', 14)->default(0);
-            $table->string('collection_interval')->nullable();
-            $table->unsignedBigInteger('rent_duration')->default(0);
-            $table->decimal('rent_annual_increase', 12)->default(0);
+				$table->decimal('monthly_rent_amount', 14)->default(0);
+				$table->string('collection_interval')->nullable();
+				$table->unsignedBigInteger('rent_duration')->default(0);
+				$table->decimal('rent_annual_increase', 12)->default(0);
+			}
         });
     }
 
@@ -38,4 +40,3 @@ return new class extends Migration
         });
     }
 };
-

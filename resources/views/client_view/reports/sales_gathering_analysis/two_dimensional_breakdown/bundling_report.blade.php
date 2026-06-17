@@ -214,7 +214,7 @@
     </tr>
 
     {{-- Percentages --}}
-    <tr class="secondary-row-color ">
+    <tr class="secondary-row-color">
         <th> {{ 'Bundle Product %' }} </th>
 
 	

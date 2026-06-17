@@ -3,7 +3,6 @@
 use App\Models\Contract;
 @endphp
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/cr-1.5.6/date-1.1.2/fc-4.1.0/fh-3.2.3/r-2.3.0/rg-1.2.0/sl-1.4.0/sr-1.1.1/datatables.min.css" />
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
@@ -435,7 +434,7 @@ use App\Models\Contract;
 @endsection
 
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="kt-portlet kt-portlet--tabs">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-toolbar justify-content-between flex-grow-1">
@@ -465,7 +464,7 @@ use App\Models\Contract;
             @if(hasAuthFor('view '. str_plural(strtolower($type)) .' contracts'))
             <div class="flex-tabs">
 
-                <a href="{{ route('contracts.create',['company'=>$company->id,'type'=>$type]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('contracts.create',['company'=>$company->id,'type'=>$type]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Create') }}
                 </a>
@@ -477,7 +476,7 @@ use App\Models\Contract;
 
 
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
             @foreach($contractStatues as $contractStatus)
             @php
             $currentType = $contractStatus ;
@@ -493,23 +492,23 @@ use App\Models\Contract;
                             @slot('table_header')
 
 
-                            <tr class=" text-center second-tr-bg">
-                                <th class="text-center absorbing-column "></th>
+                            <tr class="text-center second-tr-bg">
+                                <th class="text-center absorbing-column"></th>
                                 <th></th>
                                 <th></th>
                             </tr>
                             @endslot
                             @slot('table_body')
-                            <tr class=" text-center first-tr-bg ">
-                                <td class=" text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Partner Name') }}</b></td>
-                                <td class=" text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Contract Name') }}</b></td>
-                                <td class=" text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Contract Code') }}</b></td>
-                                <td class=" text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Start Date') }}</b></td>
-                                <td class=" text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('End Date') }}</b></td>
-                                <td class=" text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Amount') }}</b></td>
+                            <tr class="text-center first-tr-bg">
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Partner Name') }}</b></td>
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Contract Name') }}</b></td>
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Contract Code') }}</b></td>
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Start Date') }}</b></td>
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('End Date') }}</b></td>
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Amount') }}</b></td>
 
 
-                                <td style="color:white !important" class="text-center view-table-th ">
+                                <td style="color:white !important" class="text-center view-table-th">
                                     {{ __('Actions') }}
                                 </td>
                             </tr>
@@ -529,32 +528,32 @@ use App\Models\Contract;
 
 
 
-                                <td class="black-text " style="cursor: pointer;" onclick="toggleRow('{{ $mainItemId }}')">
+                                <td class="black-text" style="cursor: pointer;" onclick="toggleRow('{{ $mainItemId }}')">
 
-                                    <div class="d-flex align-items-center ">
+                                    <div class="d-flex align-items-center">
                                         @if(count($subItems))
-                                        <i class="row_icon{{ $mainItemId }} flaticon2-up  mr-2  "></i>
+                                        <i class="row_icon{{ $mainItemId }} flaticon2-up mr-2"></i>
                                         @endif
-                                        <b class="text-capitalize ">
+                                        <b class="text-capitalize">
                                             <b class="text-capitalize text-wrap">{{ $parent['client_name'] }}</b>
                                         </b>
 
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <b class="text-capitalize ">
+                                    <b class="text-capitalize">
 
                                         <b class="text-capitalize text-wrap">{{ $parent['name'] }}</b>
                                     </b>
 
                                 </td>
                                 <td class="text-center">
-                                    <b class="text-capitalize ">{{ $parent['contract_code'] }}</b>
+                                    <b class="text-capitalize">{{ $parent['contract_code'] }}</b>
 
                                 </td>
                                 <td class="text-center">
-                                    <b class="text-capitalize  ">
-                                        <b class="text-capitalize ">{{ $parent['start_date'] }}</b>
+                                    <b class="text-capitalize">
+                                        <b class="text-capitalize">{{ $parent['start_date'] }}</b>
                                     </b>
 
 
@@ -567,7 +566,7 @@ use App\Models\Contract;
 
                                 </td>
                                 <td class="text-center">
-                                    <b class="text-capitalize  ">
+                                    <b class="text-capitalize">
                                         <b class="text-capitalize">{{ $parent['amount'] .' '. $parent['currency'] }}</b>
                                     </b>
 
@@ -675,7 +674,7 @@ use App\Models\Contract;
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('contracts.edit', ['company'=>$company->id , 'contract'=>$mainItemId,'type'=>$type]) }}"><i class="fa fa-pen-alt"></i></a>
                                             @endif
                                             @if(hasAuthFor('delete '. str_plural(strtolower($type)) .' contracts'))
-                                            <a class="btn btn-secondary btn-outline-hover-danger btn-icon  " href="#" data-toggle="modal" data-target="#modal-delete-{{ $mainItemId }}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                            <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $mainItemId }}" title="Delete"><i class="fa fa-trash-alt"></i>
                                             </a>
 
                                             <div id="modal-delete-{{ $mainItemId }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -719,8 +718,8 @@ use App\Models\Contract;
 
 
 
-                            <tr class="row{{ $mainItemId }}  text-center sub-item-row" style="display: none">
-                                <td colspan="5" class="text-left  text-capitalize">
+                            <tr class="row{{ $mainItemId }} text-center sub-item-row" style="display: none">
+                                <td colspan="5" class="text-left text-capitalize">
                                     <table class="table ml-3 table-borderless">
 
 
@@ -749,7 +748,7 @@ use App\Models\Contract;
 
                                 <td>
                                 </td>
-                                <td class="text-center ">
+                                <td class="text-center">
 
                                     <form action="{{ route('store.po.allocations',['company'=>$company->id]) }}" method="post">
                                         @csrf
@@ -819,24 +818,24 @@ use App\Models\Contract;
                                 </td>
                                 <td>
 
-                                    <x-form.select :insideModalWithJs="false" :selectedValue="isset($poAllocation) && $poAllocation->partner_id ? $poAllocation->partner_id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class=" suppliers-or-customers-js " data-filter-type="{{ 'create' }}" :all="false" data-name="partner_id" name="partner_id"></x-form.select>
+                                    <x-form.select :insideModalWithJs="false" :selectedValue="isset($poAllocation) && $poAllocation->partner_id ? $poAllocation->partner_id : ''" :options="formatOptionsForSelect($clientsWithContracts)" :add-new="false" class="suppliers-or-customers-js" data-filter-type="{{ 'create' }}" :all="false" data-name="partner_id" name="partner_id"></x-form.select>
                                 </td>
 
                                 <td>
-                                    <x-form.select :insideModalWithJs="false" data-current-selected="{{ isset($poAllocation) ? $poAllocation->contract_id : '' }}" :selectedValue="isset($poAllocation) ? $poAllocation->contract_id : ''" :options="[]" :add-new="false" class=" contracts-js   " data-filter-type="{{ 'create' }}" :all="false" data-name="contract_id" name="contract_id"></x-form.select>
+                                    <x-form.select :insideModalWithJs="false" data-current-selected="{{ isset($poAllocation) ? $poAllocation->contract_id : '' }}" :selectedValue="isset($poAllocation) ? $poAllocation->contract_id : ''" :options="[]" :add-new="false" class="contracts-js" data-filter-type="{{ 'create' }}" :all="false" data-name="contract_id" name="contract_id"></x-form.select>
                                     {{-- <div class="max-w-25">
 																					</div> --}}
                                 </td>
 
                                 <td>
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
-                                            <input disabled type="text" class="form-control contract-code " value="">
+                                            <input disabled type="text" class="form-control contract-code" value="">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input disabled type="text" class="form-control contract-amount" value="0">
                                         </div>
@@ -844,14 +843,14 @@ use App\Models\Contract;
                                 </td>
 
                                 <td>
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input type="text" data-name="allocation_percentage" name="allocation_percentage" class="form-control allocation-percentage-class" value="{{ isset($poAllocation) ? number_format($poAllocation->getPercentage(),2): 0 }}">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="kt-input-icon ">
+                                    <div class="kt-input-icon">
                                         <div class="input-group">
                                             <input type="text" readonly data-name="allocation_amount" name="allocation_amount" class="form-control allocation-amount-class" value="{{ isset($poAllocation) ? number_format($poAllocation->getAmount(),2): 0 }}">
                                         </div>
@@ -878,7 +877,7 @@ use App\Models\Contract;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                    <button type="submit" class="btn btn-primary ">{{ __('Save') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                 </div>
             </div>
         </div>

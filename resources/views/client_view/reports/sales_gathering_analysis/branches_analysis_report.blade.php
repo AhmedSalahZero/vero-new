@@ -92,7 +92,7 @@
 <div class="kt-portlet kt-portlet--tabs">
  
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
             <!--Begin:: Tab  EGP FX Rate Table -->
             @php
@@ -130,7 +130,7 @@
                                     // $row_name = str_replace(['&','(',')','{','}'], '_', $row_name);
                                  @endphp
 
-        <tr class="group-color ">
+        <tr class="group-color">
             <td class="white-text" style="cursor: pointer;" onclick="toggleRow('{{ $id }}')">
                 <i class="row_icon{{ $id }} flaticon2-up white-text"></i>
                 <b>{{ __($zone_name) }}</b>
@@ -157,7 +157,7 @@
 
 
 
-        <tr class="row{{ $id }}  text-center" style="display: none">
+        <tr class="row{{ $id }} text-center" style="display: none">
             <td class="text-left"><b>{{ $channel_name  }}</b></td>
 
 

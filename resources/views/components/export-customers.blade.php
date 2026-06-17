@@ -10,7 +10,7 @@
             &nbsp;
 			
 				@if($hasSearch)
-            <a  data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $moneyReceivedType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Received') }}" class="btn  active-style btn-icon-sm  ">
+            <a  data-type="multi" data-toggle="modal" data-target="#search-money-modal-{{ $moneyReceivedType }}" id="js-search-money-received" href="#" title="{{ __('Search Money Received') }}" class="btn active-style btn-icon-sm">
                 <i class="fas fa-search"></i>
                 {{ __('Search') }}
             </a>
@@ -26,7 +26,7 @@
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <form action="{{ route($indexRouteName,['company'=>$company->id ]) }}"  class="row ">
+                            <form action="{{ route($indexRouteName,['company'=>$company->id ]) }}"  class="row">
                             <input name="active" type="hidden" value="{{ $moneyReceivedType }}">
                                 <div class="form-group col-4" >
                                     <label for="Select Field " class="label">{{ __('Field Name') }}</label>
@@ -41,16 +41,7 @@
 									<input name="value" type="text" value="{{ request('value') }}" placeholder="{{ __('Search Text') }}" class="form-control search-field" >
                                 </div>
 								
-								<div class="form-group col-2" >
-                                    <label for="search-from " class="label">{{ __('From') }} <span class="data-type-span">{{ __('[ Contract Start At ]') }}</span> </label>
-									<input name="from"  type="date" value="{{ request('from') }}" class="form-control">
-                                </div>
 								
-								<div class="form-group col-2" >
-                                    <label for="search-to " class="label">{{ __('To') }} <span class="data-type-span">{{ __('[ Contract Start Date ]') }}</span>  </label>
-									<input name="to"  type="date" value="{{ request('to') }}" class="form-control">
-	
-                                </div>
 								
 								
 

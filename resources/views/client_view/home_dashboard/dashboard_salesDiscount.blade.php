@@ -58,7 +58,7 @@
 
     {{-- Title --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -130,7 +130,7 @@
 
     {{-- Title --}}
     <div class="row">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
@@ -198,7 +198,7 @@
                                 </tr>
 
                                 {{-- Percentages --}}
-                                <tr class="secondary-row-color ">
+                                <tr class="secondary-row-color">
                                     <th> {{ __($main_type_item_name) .' %' }} </th>
 
                                     @foreach ($all_items as $item)

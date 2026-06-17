@@ -11,12 +11,12 @@
         $repeaterIds[] =$repeaterId ;
         @endphp
         <div id="{{ $repeaterId }}_repeater" class="rooms-repeater">
-            <div class="form-group  m-form__group row">
+            <div class="form-group m-form__group row">
                 <div data-repeater-list="{{ $repeaterId }}" class="col-lg-12">
                     @include('property_managements.openingBalances._fixed-asset',['repeaterId'=>$repeaterId,'rows'=>$fixedAssetOpeningBalances])
                 </div>
             </div>
-            <input data-repeater-create type="button" class="btn btn-success btn-sm " value="{{ __('Add Fixed Asset') }}">
+            <input data-repeater-create type="button" class="btn btn-success btn-sm" value="{{ __('Add Fixed Asset') }}">
         </div>
 
     </div>
@@ -43,7 +43,7 @@ $hiringPopModels[] =$repeaterId;
         @foreach(count($otherLongTermAssetsOpeningBalances) ? $otherLongTermAssetsOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
                 <div class="col-3">
                     <label>{{ __('Name') }}</label>
                     <input type="text" name="name" class="form-control" value="{{ $model ? $model->getName() : 0 }}">
@@ -56,7 +56,7 @@ $hiringPopModels[] =$repeaterId;
                 <div class="col-3 common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
                         <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                     </div>
                 </div>
@@ -98,7 +98,7 @@ $hiringPopModels[] =$repeaterId;
                             </table>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn  save-modal btn-primary" data-dismiss="modal">{{ __('Save') }}</button>
+                            <button type="button" class="btn save-modal btn-primary" data-dismiss="modal">{{ __('Save') }}</button>
                             {{-- <button type="button" class="btn btn-primary">{{ __('Save changes') }}</button> --}}
                         </div>
                     </div>
@@ -108,7 +108,7 @@ $hiringPopModels[] =$repeaterId;
         @endforeach
     </div>
     <div class="ml-4 mt-4 d-flex justify-content-between" style="width:94%">
-        <input data-repeater-create type="button" class="btn btn-success btn-sm " value="{{ __('Add Other Long Term Assets') }}">
+        <input data-repeater-create type="button" class="btn btn-success btn-sm" value="{{ __('Add Other Long Term Assets') }}">
     </div>
 
 </div>
@@ -133,7 +133,7 @@ $hiringPopModels[] = 'cashAndBankOpeningBalances';
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $cashAndBank ? $cashAndBank->id : 0 }}">
 
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
                 <div class="col-3">
                     <label>{{ __('Cash & Bank Amount') }}</label>
                     <input type="text" name="cash_and_bank_amount" class="form-control" value="{{ $cashAndBank ? $cashAndBank->getCashAndBankAmount() : 0 }}">
@@ -152,41 +152,41 @@ $hiringPopModels[] = 'cashAndBankOpeningBalances';
 
             </div>
 
-            <div class="row closest-parent pb-2  mt-3 col-12">
+            <div class="row closest-parent pb-2 mt-3 col-12">
                 <div class="col-2">
                     <label>{{ __('Customers Outstanding') }}</label>
-                    <input type="text" name="customer_receivable_amount" class="form-control  only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getCustomerReceivableAmount() : 0 }}">
+                    <input type="text" name="customer_receivable_amount" class="form-control only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getCustomerReceivableAmount() : 0 }}">
                 </div>
 
                 {{-- <div class="col-2">
                     <label>{{ __('Expected Credit Loss (ECL)') }}</label>
-                    <input type="text" name="expected_credit_loss" class="form-control  only-less-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getExpectedCreditLossAmount() : 0 }}">
+                    <input type="text" name="expected_credit_loss" class="form-control only-less-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getExpectedCreditLossAmount() : 0 }}">
                     <span class="text-red">{{ __('For ECL Please Enter Negative Number') }}</span>
                 </div>
 
                 <div class="col-1">
                     <label>{{ __('ECL Rate %') }}</label>
-                    <input type="text" name="ecl_existing_rate" class="form-control  only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getEclExistingRate() : 0 }}">
+                    <input type="text" name="ecl_existing_rate" class="form-control only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getEclExistingRate() : 0 }}">
                 </div> --}}
 
-                <div class=" common-parent">
+                <div class="common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
                     </div>
                 </div>
 
-                {{-- <div class=" mr-2 ml-2 common-parent">
+                {{-- <div class="mr-2 ml-2 common-parent">
                     <label class="visible-hidden">{{ __('Interests') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-interests-customer-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interests') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-interests-customer-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interests') }}</button>
                     </div>
                     <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                 </div> --}}
 				
 				 {{-- <div class="col-1">
                     <label class="text-nowrap">{{ __('Avg CBE Corridor %') }}</label>
-                    <input type="text" name="avg_cbe_corridor_rate" class="form-control  only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getAvgCbeCorridorRate() : 0 }}">
+                    <input type="text" name="avg_cbe_corridor_rate" class="form-control only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getAvgCbeCorridorRate() : 0 }}">
                 </div> --}}
 				
 
@@ -278,37 +278,37 @@ $hiringPopModels[] = 'cashAndBankOpeningBalances';
             </div>
 
 
-            {{-- <div class="row closest-parent pb-2 mt-4  col-12">
+            {{-- <div class="row closest-parent pb-2 mt-4 col-12">
                 <div class="col-2">
                     <label>{{ __('Non Performing Outstanding') }}</label>
-                    <input type="text" name="non_performing_outstanding" class="form-control  only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getNonPerformingOutstanding() : 0 }}">
+                    <input type="text" name="non_performing_outstanding" class="form-control only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getNonPerformingOutstanding() : 0 }}">
                 </div>
 
                 <div class="col-2">
                     <label>{{ __('Expected Credit Loss (ECL)') }}</label>
-                    <input type="text" name="non_performing_expected_credit_loss" class="form-control  only-less-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getNonPerformingExpectedCreditLossAmount() : 0 }}">
+                    <input type="text" name="non_performing_expected_credit_loss" class="form-control only-less-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getNonPerformingExpectedCreditLossAmount() : 0 }}">
                     <span class="text-red">{{ __('For ECL Please Enter Negative Number') }}</span>
                 </div>
 
                 <div class="col-1">
                     <label>{{ __('ECL Rate %') }}</label>
-                    <input type="text" name="non_performing_ecl_existing_rate" class="form-control  only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getNonPerformingEclExistingRate() : 0 }}">
+                    <input type="text" name="non_performing_ecl_existing_rate" class="form-control only-greater-than-or-equal-zero-allowed" value="{{ $cashAndBank ? $cashAndBank->getNonPerformingEclExistingRate() : 0 }}">
                 </div>
 
-                <div class=" common-parent">
+                <div class="common-parent">
                     <label class="visible-hidden">{{ __('Principle') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-non-performing-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Principle') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-non-performing-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Principle') }}</button>
                     </div>
                 </div>
 				
 				
 				
 
-                <div class=" mr-2 ml-2 common-parent">
+                <div class="mr-2 ml-2 common-parent">
                     <label class="visible-hidden">{{ __('Interests') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-non-performing-interests-customer-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interests') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-non-performing-interests-customer-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interests') }}</button>
                     </div>
                     <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                 </div>
@@ -427,7 +427,7 @@ $hiringPopModels[] =$repeaterId;
         @foreach(count($otherDebtorsOpeningBalances) ? $otherDebtorsOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
                 <div class="col-3">
                     <label>{{ __('Name') }}</label>
                     <input type="text" name="name" class="form-control" value="{{ $model ? $model->getName() : '' }}">
@@ -441,7 +441,7 @@ $hiringPopModels[] =$repeaterId;
                 <div class="col-3 common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
                         <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                     </div>
                 </div>
@@ -492,7 +492,7 @@ $hiringPopModels[] =$repeaterId;
         @endforeach
     </div>
     <div class="ml-4 mt-4 d-flex justify-content-between" style="width:94%">
-        <input data-repeater-create type="button" class="btn btn-success btn-sm " value="{{ __('Add Other Debtor') }}">
+        <input data-repeater-create type="button" class="btn btn-success btn-sm" value="{{ __('Add Other Debtor') }}">
     </div>
 
 </div>
@@ -511,7 +511,7 @@ $hiringPopModels[] = $repeaterId;
         @foreach(count($supplierPayableOpeningBalances) ? $supplierPayableOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
                 <div class="col-3">
                     <label>{{ __('ODAs Outstanding') }}</label>
                     <input type="text" name="odas_outstanding_opening_amount" class="form-control" value="{{ $model ? $model->getOdasOutstandingAmount() : 0 }}">
@@ -527,14 +527,14 @@ $hiringPopModels[] = $repeaterId;
                 <div class="col-1 common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
                     </div>
                 </div>
 
-                {{-- <div class="col-2  common-parent" style="margin-left:-30px">
+                {{-- <div class="col-2 common-parent" style="margin-left:-30px">
                     <label class="visible-hidden">{{ __('Interest') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-interest-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interest') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-interest-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interest') }}</button>
                     </div>
                 </div> --}}
 
@@ -652,7 +652,7 @@ $hiringPopModels[] =$repeaterId;
         @foreach(count($otherCreditorsOpeningBalances) ? $otherCreditorsOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
                 <div class="col-3">
                     <label>{{ __('Name') }}</label>
                     <input type="text" name="name" class="form-control" value="{{ $model ? $model->getName() : 0 }}">
@@ -666,7 +666,7 @@ $hiringPopModels[] =$repeaterId;
                 <div class="col-3 common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
                         <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                     </div>
                 </div>
@@ -717,49 +717,12 @@ $hiringPopModels[] =$repeaterId;
         @endforeach
     </div>
     <div class="ml-4 mt-4 d-flex justify-content-between" style="width:94%">
-        <input data-repeater-create type="button" class="btn btn-success btn-sm " value="{{ __('Add Other Creditor') }}">
+        <input data-repeater-create type="button" class="btn btn-success btn-sm" value="{{ __('Add Other Creditor') }}">
     </div>
 
 </div>
 
 
-{{--
-<div class="div-title">
-    {{ __('Taxes Payable') }}
-</div>
-@php
-$repeaterId = 'vatAndCreditWithholdTaxesOpeningBalances';
-$hiringPopModels[] = $repeaterId;
-@endphp
-<div class="formItem repeater{{ $repeaterId }}">
-
-    <div data-repeater-list="{{ $repeaterId }}">
-        @foreach(count($vatAndCreditWithholdTaxesOpeningBalances) ? $vatAndCreditWithholdTaxesOpeningBalances : [null] as $currentRowIndex=>$model)
-        <div data-repeater-item class="container">
-            <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
-                <div class="col-2">
-                    <label>{{ __('Credit Withhold Taxes') }}</label>
-                    <input type="text" name="credit_withhold_taxes" class="form-control " value="{{ $model ? $model->getCreditWithholdTaxes() : 0 }}">
-                </div>
-
-                <div class="col-2">
-                    <label>{{ __('Corporate Taxes Payable') }}</label>
-                    <input type="text" name="corporate_taxes_payable" class="form-control " value="{{ $model ? $model->getCorporateTaxesPayableAmount() : 0 }}">
-                </div>
-
-
-
-
-            </div>
-
-        </div>
-        <!-- Modal for Settlements -->
-
-
-        @endforeach
-    </div>
-</div> --}}
 
 
 
@@ -777,7 +740,7 @@ $hiringPopModels[] =$repeaterId;
         @foreach(count($longTermLoanOpeningBalances) ? $longTermLoanOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
 
                 <div class="col-3">
                     <label>{{ __('Name') }}</label>
@@ -797,13 +760,13 @@ $hiringPopModels[] =$repeaterId;
                 <div class="col-1 common-parent">
                     <label class="visible-hidden">{{ __('Installments') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-installments-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Installments') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-installments-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Installments') }}</button>
                     </div>
                 </div>
                 <div class="col-2 common-parent">
                     <label class="visible-hidden">{{ __('Interests') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-interests-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interests') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-interests-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Interests') }}</button>
                         <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                     </div>
                 </div>
@@ -904,7 +867,7 @@ $hiringPopModels[] =$repeaterId;
         @endforeach
     </div>
     <div class="ml-4 mt-4 d-flex justify-content-between" style="width:94%">
-        <input data-repeater-create type="button" class="btn btn-success btn-sm " value="{{ __('Add Long Term Loan') }}">
+        <input data-repeater-create type="button" class="btn btn-success btn-sm" value="{{ __('Add Long Term Loan') }}">
     </div>
 
 </div>
@@ -924,7 +887,7 @@ $hiringPopModels[] =$repeaterId;
         @foreach(count($otherLongTermLiabilitiesOpeningBalances) ? $otherLongTermLiabilitiesOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
 
                 <div class="col-3">
                     <label>{{ __('Name') }}</label>
@@ -939,7 +902,7 @@ $hiringPopModels[] =$repeaterId;
                 <div class="col-3 common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
                     <div>
-                        <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
+                        <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-{{ $repeaterId }}-{{ $currentRowIndex }}">{{ __('Settlements') }}</button>
                         <input data-repeater-delete type="button" class="btn btn-danger text-white btn-md ml-2" value="{{ __('Delete') }}">
                     </div>
                 </div>
@@ -981,7 +944,7 @@ $hiringPopModels[] =$repeaterId;
                             </table>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn  save-modal btn-primary" data-dismiss="modal">{{ __('Save') }}</button>
+                            <button type="button" class="btn save-modal btn-primary" data-dismiss="modal">{{ __('Save') }}</button>
                             {{-- <button type="button" class="btn btn-primary">{{ __('Save changes') }}</button> --}}
                         </div>
                     </div>
@@ -991,7 +954,7 @@ $hiringPopModels[] =$repeaterId;
         @endforeach
     </div>
     <div class="ml-4 mt-4 d-flex justify-content-between" style="width:94%">
-        <input data-repeater-create type="button" class="btn btn-success btn-sm " value="{{ __('Add Other Long Term') }}">
+        <input data-repeater-create type="button" class="btn btn-success btn-sm" value="{{ __('Add Other Long Term') }}">
     </div>
 
 </div>
@@ -1018,7 +981,7 @@ $hiringPopModels[] = $repeaterId;
         @foreach(count($equityOpeningBalances) ? $equityOpeningBalances : [null] as $currentRowIndex=>$model)
         <div data-repeater-item class="container parent-for-salary-amount">
             <input type="hidden" name="id" value="{{ $model ? $model->id : 0 }}">
-            <div class="row closest-parent pb-2  col-12">
+            <div class="row closest-parent pb-2 col-12">
                 <div class="col-2">
                     <label>{{ __('Paid Up Capital') }}</label>
                     <input type="text" name="paid_up_capital_amount" class="form-control sum-num1" value="{{ $model ? $model->getPaidUpCapitalAmount() : 0 }}">
@@ -1035,7 +998,7 @@ $hiringPopModels[] = $repeaterId;
 
                 <div class="col-2 common-parent">
                     <label class="visible-hidden">{{ __('Settlements') }}</label>
-                    <button class="btn btn-primary btn-md text-nowrap " type="button" data-toggle="modal" data-target="#modal-for-retained-amounts">{{ __('Retained Earnings Dividends Distribution') }}</button>
+                    <button class="btn btn-primary btn-md text-nowrap" type="button" data-toggle="modal" data-target="#modal-for-retained-amounts">{{ __('Retained Earnings Dividends Distribution') }}</button>
 
 
                     <div class="modal fade" id="modal-for-retained-amounts" tabindex="-1" role="dialog" aria-labelledby="modalLabel-{{ $repeaterId }}-{{ $currentRowIndex }}" aria-hidden="true">
@@ -1123,7 +1086,7 @@ $hiringPopModels[] = $repeaterId;
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn  save-modal btn-primary" data-dismiss="modal">{{ __('Save') }}</button>
+                                    <button type="button" class="btn save-modal btn-primary" data-dismiss="modal">{{ __('Save') }}</button>
                                 </div>
                             </div>
                         </div>

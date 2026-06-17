@@ -82,7 +82,7 @@
             </h3>
         </div>
     </div>
-    <div class="kt-portlet__body  kt-portlet__body--fit">
+    <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="row row-no-padding row-col-separator-xl">
             {{-- Daily --}}
 
@@ -259,7 +259,7 @@
 {{-- Title --}}
 <div class="row">
     <div class="col-md-12">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title head-title text-primary">
@@ -274,7 +274,7 @@
 <div class="row">
     {{-- Total Facilities --}}
     <div class="col-md-12">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
 
             <div class="kt-portlet__body">
                 <div class="row">
@@ -306,7 +306,7 @@
   @endphp --}}
 <div class="row">
     <div class="col-md-12">
-        <div class="kt-portlet ">
+        <div class="kt-portlet">
 
             <div class="kt-portlet__body">
                 <div class="row">
@@ -350,7 +350,7 @@
                                 @foreach ($monthlyChartArr as $title => $values)
                                 @if(isset($values) && is_null($values[0]))
 
-                                <tr class="group-color  table-active text-lg-left  ">
+                                <tr class="group-color table-active text-lg-left">
                                     <td colspan="{{ count($values) + 2 }}"><b class="white-text">{{ __($title) }}</b></td>
                                     @foreach ($values as $item)
                                     <td class="hidden"> </td>
@@ -359,7 +359,7 @@
                                 </tr>
                                 @else
 
-                                <tr class=" text-lg-left  ">
+                                <tr class="text-lg-left">
                                     <td><b class="">{{ __($title) }}</b></td>
                                     @foreach ($values as $val)
                                     <td> {!! $val !!} </td>
@@ -399,7 +399,7 @@
                             </tr>
                             @endslot
                             @slot('table_body')
-                            <tr class="group-color  text-lg-left  ">
+                            <tr class="group-color text-lg-left">
                                 <td colspan="{{ count($dates ?? []) + 2  }}"><b class="white-text">{{ __('Monthly Sales') }}</b></td>
                                 @foreach ($dates as $date)
                                 <td class="hidden"> </td>
@@ -427,7 +427,7 @@
                                 </td>
                             </tr>
                             @endforeach
-                            <tr class="group-color  text-lg-left  ">
+                            <tr class="group-color text-lg-left">
                                 <td colspan="{{ count($dates ?? []) + 2 ?? 0 }}"><b class="white-text">{{ __('Accumulated Sales') }}</b></td>
                                 @foreach ($dates as $date)
                                 <td class="hidden"> </td>

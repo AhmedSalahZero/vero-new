@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('direct_factoring_breakdowns', function (Blueprint $table) {
-            $table->dropColumn('bank_total_dues');
+			if (Schema::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->hasColumn('direct_factoring_breakdowns', 'bank_total_dues')) {
+				$table->dropColumn('bank_total_dues');
+			}
         });
     }
 

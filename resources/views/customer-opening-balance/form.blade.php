@@ -4,7 +4,6 @@ use App\Models\MoneyReceived ;
 @endphp
 @extends('layouts.dashboard')
 @section('css')
-@include('reports.moneyPayments._dark_theme_styles')
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />
 <style>
@@ -122,7 +121,7 @@ use App\Models\MoneyReceived ;
 {{ __('Customers Opening Balance') }}
 @endsection
 @section('content')
-<div class="money-flow-dark">
+<div class="">
 <div class="row">
     <div class="col-md-12">
         <!--begin::Portlet-->
@@ -157,7 +156,7 @@ use App\Models\MoneyReceived ;
                         <div class="kt-portlet__body">
 
                             <div class="form-group row">
-                                <div class="col-md-4 ">
+                                <div class="col-md-4">
                                     <x-form.date :type="'text'" :classes="'datepicker-input'" :default-value="formatDateForDatePicker(isset($model)  ? $model->getDate() : null)" :model="$model??null" :label="__('Opening Balance Date')" :type="'text'" :placeholder="__('')" :name="'date'" :required="true"></x-form.date>
                                 </div>
 
@@ -248,7 +247,7 @@ use App\Models\MoneyReceived ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="invoice_number" step="4" type="text" class="form-control " value="{{ isset($customerInvoice) ? $customerInvoice->getInvoiceNumber() : old('invoice_number',1) }}">
+                                                        <input name="invoice_number" step="4" type="text" class="form-control" value="{{ isset($customerInvoice) ? $customerInvoice->getInvoiceNumber() : old('invoice_number',1) }}">
                                                     </div>
                                                 </div>
 
@@ -269,7 +268,7 @@ use App\Models\MoneyReceived ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="contract_code" step="4" type="text" class="form-control " value="{{ isset($customerInvoice) ? $customerInvoice->getContractCode() : '' }}">
+                                                        <input name="contract_code" step="4" type="text" class="form-control" value="{{ isset($customerInvoice) ? $customerInvoice->getContractCode() : '' }}">
                                                     </div>
                                                 </div>
 
@@ -279,7 +278,7 @@ use App\Models\MoneyReceived ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="contract_date" type="date" class="form-control " value="{{ isset($customerInvoice) ? $customerInvoice->getContractDate() : '' }}">
+                                                        <input name="contract_date" type="date" class="form-control" value="{{ isset($customerInvoice) ? $customerInvoice->getContractDate() : '' }}">
                                                     </div>
                                                 </div>
 
@@ -300,7 +299,7 @@ use App\Models\MoneyReceived ;
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
 
-                                                        <input name="received_amount" type="text" class="form-control " value="{{ number_format(isset($customerInvoice) ? $customerInvoice->getInvoiceAmount() : old('amount',0)) }}">
+                                                        <input name="received_amount" type="text" class="form-control" value="{{ number_format(isset($customerInvoice) ? $customerInvoice->getInvoiceAmount() : old('amount',0)) }}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -311,7 +310,7 @@ use App\Models\MoneyReceived ;
 
 
 
-                                                <div class="input-group ">
+                                                <div class="input-group">
                                                     <select name="currency" class="form-control select-for-currency ajax-get-invoice-numbers" js-when-change-trigger-change-account-type>
                                                         {{-- <option selected>{{__('Select')}}</option> --}}
                                                         @foreach(getCurrencies() as $currencyName => $currencyValue )
@@ -325,7 +324,7 @@ use App\Models\MoneyReceived ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="exchange_rate" step="4" type="text" class="form-control " value="{{ isset($customerInvoice) ? $customerInvoice->getExchangeRate() : old('exchange_rate',1) }}">
+                                                        <input name="exchange_rate" step="4" type="text" class="form-control" value="{{ isset($customerInvoice) ? $customerInvoice->getExchangeRate() : old('exchange_rate',1) }}">
                                                     </div>
                                                 </div>
 
@@ -500,7 +499,7 @@ use App\Models\MoneyReceived ;
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
 
-                                                        <input name="received_amount" type="text" class="form-control " value="{{ number_format(isset($moneyModel) ? $moneyModel->getReceivedAmount() : old('amount',0)) }}">
+                                                        <input name="received_amount" type="text" class="form-control" value="{{ number_format(isset($moneyModel) ? $moneyModel->getReceivedAmount() : old('amount',0)) }}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -511,7 +510,7 @@ use App\Models\MoneyReceived ;
 
 
 
-                                                <div class="input-group ">
+                                                <div class="input-group">
                                                     <select name="currency" class="form-control select-for-currency currency-for-contracts ajax-get-contracts-for-customer" js-when-change-trigger-change-account-type>
                                                         {{-- <option  selected>{{__('Select')}}</option> --}}
                                                         @foreach(getCurrencies() as $currencyName => $currencyValue )
@@ -525,7 +524,7 @@ use App\Models\MoneyReceived ;
 
                                                 <div class="kt-input-icon">
                                                     <div class="input-group">
-                                                        <input name="exchange_rate" step="4" type="text" class="form-control  " value="{{ isset($moneyModel) ? $moneyModel->getExchangeRate() : old('exchange_rate',1) }}">
+                                                        <input name="exchange_rate" step="4" type="text" class="form-control" value="{{ isset($moneyModel) ? $moneyModel->getExchangeRate() : old('exchange_rate',1) }}">
                                                     </div>
                                                 </div>
 

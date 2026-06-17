@@ -42,9 +42,7 @@ use App\Models\Notification ;
             <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
 				@foreach($notificationTypes as $typeId => $typeTitle)
                 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ 
-						# !Request('active') ||
-						 $activeType == $typeId  ?'active':'' }}" data-toggle="tab" href="#{{$typeId  }}" role="tab">
+                    <a onclick="return false" class="nav-link {{ # !Request('active') || $activeType == $typeId ?'active':'' }}" data-toggle="tab" href="#{{$typeId  }}" role="tab">
 					
                         <i class="fa fa-money-check-alt"></i> {{ $typeTitle }}
                     </a>
@@ -62,30 +60,30 @@ use App\Models\Notification ;
                 </a>
 
 
-                <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id,BuyOrSellCurrency::SAFE_TO_BANK]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id,BuyOrSellCurrency::SAFE_TO_BANK]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Safe To Bank') }}
                 </a>
 
-                <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id,BuyOrSellCurrency::BANK_TO_SAFE]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id,BuyOrSellCurrency::BANK_TO_SAFE]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Bank To Safe') }}
                 </a>
                 --}}
-                {{-- <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id]) }}" class="btn  active-style btn-icon-sm align-self-center">
+                {{-- <a href="{{ route('buy-or-sell-currencies.create',['company'=>$company->id]) }}" class="btn active-style btn-icon-sm align-self-center">
                     <i class="fas fa-plus"></i>
                     {{ __('Buy Or Sell Currencies') }}
                 </a> --}}
             </div>
 
-            {{-- <a href="" class="btn  active-style btn-icon-sm  align-self-center ">
+            {{-- <a href="" class="btn active-style btn-icon-sm align-self-center">
 				<i class="fas fa-plus"></i>
 				<span>{{ __('New Record') }}</span>
             </a> --}}
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        <div class="tab-content kt-margin-t-20">
 
 
 
@@ -101,7 +99,7 @@ use App\Models\Notification ;
             $currentType = $typeId ;
             @endphp
             <!--Begin:: Tab Content-->
-            <div class="tab-pane {{ $activeType  == $currentType  ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
+            <div class="tab-pane {{ $activeType == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
                     {{-- <x-table-title.with-two-dates :type="$currentType" :title="__(BuyOrSellCurrency::getAllTypes()[$currentType])" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-buy-or-sell-currency :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('buy-or-sell-currencies.create',['company'=>$company->id])}}" />
@@ -109,7 +107,7 @@ use App\Models\Notification ;
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->
-                        <table class="table  table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
+                        <table class="table table-striped- table-bordered table-hover table-checkable text-center kt_table_1">
                             <thead>
                                 <tr class="table-standard-color">
                                     <th>{{ __('#') }}</th>
@@ -128,7 +126,7 @@ use App\Models\Notification ;
                                     <td class="text-nowrap">{{ $model->created_at->diffForHumans() }}</td>
 
 
-                                    {{-- <td class="kt-datatable__cell--left kt-datatable__cell " data-field="Actions" data-autohide-disabled="false">
+                                    {{-- <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
 
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
