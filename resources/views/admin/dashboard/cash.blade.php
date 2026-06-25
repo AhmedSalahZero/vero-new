@@ -24,10 +24,6 @@
         border-bottom: 1.5px solid #CCE2FD !important;
     }
 
-    .kt-widget24__title {
-        color: white !important;
-    }
-
 </style>
 
 @endsection

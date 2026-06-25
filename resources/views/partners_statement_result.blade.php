@@ -68,7 +68,7 @@
 
             <!--Begin:: Tab USD FX Rate Table -->
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                <x-table :tableTitle="$title . $warningMessage" :tableClass="'kt_table_with_no_pagination'">
+                <x-table :tableTitle="$title . $warningMessage" :tableClass="'kt_table_with_no_pagination_no_fixed_right'">
 				
                     @slot('table_header')
                     <tr class="table-active text-center">
