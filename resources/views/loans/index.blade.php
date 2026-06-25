@@ -38,9 +38,9 @@ use App\Models\MediumTermLoan ;
             <!--Begin:: Tab Content-->
             <div class="tab-pane {{ !Request('active') || Request('active') == $currentType ?'active':'' }}" id="{{ $currentType }}" role="tabpanel">
                 <div class="kt-portlet kt-portlet--mobile">
-                    <x-table-title.with-two-dates :type="$currentType" :title="__('Medium Term Loan')" :startDate="$filterDates[$currentType]['startDate']??''" :endDate="$filterDates[$currentType]['endDate']??''">
+                    <x-table-title.with-end-date :type="$currentType" :title="__('Medium Term Loan')" :endDate="$filterDates[$currentType]['endDate']??''">
                         <x-export-loans  :financialInstitution="$financialInstitution" :search-fields="$searchFields[$currentType]" :money-received-type="$currentType" :has-search="1" :has-batch-collection="0" href="{{route('loans.create',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id])}}" />
-                    </x-table-title.with-two-dates>
+                    </x-table-title.with-end-date>
                     <div class="kt-portlet__body">
 
                         <!--begin: Datatable -->

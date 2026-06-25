@@ -104,7 +104,8 @@
 <div class="">
 @php
 $user = auth()->user();
-$additionalTitle = $modelName == 'LoanSchedule' && isset($loan)  ? ' [ ' . $loan->getName(). ' ]' : ''; 
+$additionalTitle = $modelName == 'LoanSchedule' && isset($loan)  ? ' [ ' . $loan->getName(). ' ]' : '';
+$loanScheduleImportParams = $modelName == 'LoanSchedule' && !empty($loanId) ? ['medium_term_loan_id' => $loanId] : [];
 @endphp
 
 @if($modelName == 'LabelingItem' )
@@ -299,7 +300,7 @@ $date = now()->format('d-m-Y')
 @endif 
     @csrf
     @method('delete')
-    <x-table :instructions-icon="1" :notPeriodClosedCustomerInvoices="$notPeriodClosedCustomerInvoices??[]" :tableTitle="camelToTitle($modelName).' '.__(' Table') . $additionalTitle " :tableClass="'kt_table_with_no_pagination '" href="#" :importHref="$user->can($uploadPermissionName) ? route('salesGatheringImport',['company'=>$company->id , 'model'=>$modelName]) : '#'" :exportHref="$user->can($exportPermissionName) ? route('salesGathering.export',['company'=>$company->id , 'model'=>$modelName]):'#' " :exportTableHref="$user->can($uploadPermissionName)?route('table.fields.selection.view',[$company,$modelName,'sales_gathering']) : '#'" :truncateHref="$user->can($deletePermissionName)?route('truncate',[$company,$modelName]):'#' ">
+    <x-table :instructions-icon="1" :notPeriodClosedCustomerInvoices="$notPeriodClosedCustomerInvoices??[]" :tableTitle="camelToTitle($modelName).' '.__(' Table') . $additionalTitle " :tableClass="'kt_table_with_no_pagination '" href="#" :importHref="$user->can($uploadPermissionName) ? route('salesGatheringImport', array_merge(['company'=>$company->id , 'model'=>$modelName], $loanScheduleImportParams)) : '#'" :exportHref="$user->can($exportPermissionName) ? route('salesGathering.export',['company'=>$company->id , 'model'=>$modelName]):'#' " :exportTableHref="$user->can($uploadPermissionName)?route('table.fields.selection.view',[$company,$modelName,'sales_gathering']) : '#'" :truncateHref="$user->can($deletePermissionName)?route('truncate',[$company,$modelName]):'#' ">
         @slot('table_header')
        
         <tr class="table-active text-center">
@@ -448,7 +449,7 @@ $date = now()->format('d-m-Y')
 			
 				
 					 @if($modelName == 'LoanSchedule' )
-					 	<td class="text-capitalize text-wrap max-w-100">
+					 	<td style="white-space: wrap !important;" class=" text-capitalize text-wrap max-w-100">
 						{{ $item->getStatusFormatted() }}
 					</td>
 					 	<td class="text-center">

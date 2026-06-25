@@ -1257,9 +1257,10 @@
                     })
                 }
                 $('#append-loan-' + currencyName).empty().append(trs)
-				if(chartData.length){
-	                am4core.registry.baseSprites.find(c => c.htmlContainer.id === currentChartId).data = chartData
-				}
+                const chartSprite = am4core.registry.baseSprites.find(c => c.htmlContainer.id === currentChartId)
+                if (chartSprite) {
+                    chartSprite.data = chartData
+                }
             }
         })
     })

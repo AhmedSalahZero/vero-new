@@ -70,11 +70,11 @@ class LoanSchedule extends Model
 	
 	public function getMediumTermLoanName()
 	{
-		return $this->mediumTermLoan->getName();
+		return $this->mediumTermLoan?->getName() ?? __('N/A');
 	}
 	public function getMediumTermLoanId()
 	{
-		return $this->mediumTermLoan->id;
+		return $this->medium_term_loan_id ?? $this->mediumTermLoan?->id;
 	}
 	public function getDate()
 	{
@@ -87,7 +87,7 @@ class LoanSchedule extends Model
 	}
 	public function getCurrency()
 	{
-		return $this->mediumTermLoan->currency ;
+		return $this->mediumTermLoan?->currency ?? '-';
 	}
 	public function getBeginningBalance()
 	{
@@ -127,7 +127,11 @@ class LoanSchedule extends Model
 	}
 	public function getFinancialInstitutionId()
 	{
-		return $this->mediumTermLoan->financial_institution_id;
+		return $this->mediumTermLoan?->financial_institution_id;
+	}
+	public function hasMediumTermLoan(): bool
+	{
+		return $this->medium_term_loan_id && $this->mediumTermLoan !== null;
 	}
 	public function settlements():HasMany
 	{
@@ -166,6 +170,10 @@ class LoanSchedule extends Model
 	}
 	public function getInstallmentNumber()
 	{
+		if (!$this->mediumTermLoan) {
+			return 0;
+		}
+
 		return array_keys($this->mediumTermLoan->loanSchedules->sortBy('date')->filter(function(LoanSchedule $loanSchedule){
 			return $loanSchedule->schedule_payment > 0;
 		})->values()

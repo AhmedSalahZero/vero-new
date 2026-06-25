@@ -44,6 +44,9 @@ class SalesGatheringTestJob implements ShouldQueue
 
     public function handle()
     {
+		if ($this->modelName == 'LoanSchedule' && !$this->loanId) {
+			return;
+		}
 		$uploadParamsForType = getUploadParamsFromType($this->modelName);
 		$modelTableName = $uploadParamsForType['dbName'];
 		

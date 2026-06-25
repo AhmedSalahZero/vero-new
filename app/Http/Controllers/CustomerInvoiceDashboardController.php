@@ -572,8 +572,8 @@ class CustomerInvoiceDashboardController extends Controller
 		$withdrawalStartDate = now()->subMonths(WithdrawalsSettlementReportController::NUMBER_OF_INTERNAL_MONTHS)->format('Y-m-d');
 		$withdrawalEndDate = $request->get('withdrawal_end_date',now()->format('Y-m-d'));
 		
-		$loanStartDate = $request->get('withdrawal_start_date',now()->format('Y-m-d'));
-		$loanEndDate = now()->addMonths(WithdrawalsSettlementReportController::NUMBER_OF_INTERNAL_MONTHS)->format('Y-m-d');
+		$loanStartDate = $request->get('loan_start_date', now()->format('Y-m-d'));
+		$loanEndDate = $request->get('loan_end_date', Carbon::make($loanStartDate)->addMonths(WithdrawalsSettlementReportController::NUMBER_OF_INTERNAL_MONTHS)->format('Y-m-d'));
 		
 		$agingDate = $request->get('aging_date',now()->format('Y-m-d'))  ;
         $selectedCurrencies = $request->get('currencies', $allCurrencies) ;

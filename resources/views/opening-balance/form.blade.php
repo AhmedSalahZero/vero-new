@@ -227,9 +227,9 @@ use App\Models\MoneyReceived ;
                                             </td>
                                             <td>
                                                 <div class="input-group">
-                                                    <select name="received_branch_id" class="form-control">
+                                                    <select name="received_branch_id" class="form-control cash-in-safe-branch-select">
                                                         @foreach($selectedBranches as $branchId => $branchName )
-                                                        <option value="{{ $branchId }}" @if(isset($cashInSafeStatement) && $cashInSafeStatement->getBranchId() == $branchId ) selected @endif > {{ $branchName }}</option>
+                                                        <option value="{{ $branchId }}" data-currency="{{ $branchCurrencies[$branchId] ?? '' }}" @if(isset($cashInSafeStatement) && $cashInSafeStatement->getBranchId() == $branchId ) selected @endif > {{ $branchName }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -252,7 +252,7 @@ use App\Models\MoneyReceived ;
 
 
                                                 <div class="input-group">
-                                                    <select name="currency" class="form-control select-for-currency ajax-get-invoice-numbers" js-when-change-trigger-change-account-type>
+                                                    <select name="currency" class="form-control select-for-currency cash-in-safe-currency-select ajax-get-invoice-numbers readonly-style-select" js-when-change-trigger-change-account-type>
                                                         @foreach(getCurrencies() as $currencyName => $currencyValue )
                                                         <option value="{{ $currencyName }}" @if(isset($cashInSafeStatement) && $cashInSafeStatement->getCurrency() == $currencyName ) selected @elseif($currencyName == 'EGP' ) selected @endif > {{ $currencyValue }}</option>
                                                         @endforeach
@@ -1246,7 +1246,45 @@ use App\Models\MoneyReceived ;
 
             </script>
 
+            <style>
+                .readonly-style-select {
+                    pointer-events: none;
+                    background-color: #e9ecef;
+                }
+            </style>
+            <script>
+                const cashInSafeBranchCurrencies = @json($branchCurrencies);
 
+                function setCashInSafeCurrencyFromBranch(row) {
+                    const $row = $(row);
+                    const $branchSelect = $row.find('.cash-in-safe-branch-select');
+                    const $currencySelect = $row.find('.cash-in-safe-currency-select');
+                    const selectedOption = $branchSelect.find('option:selected');
+                    const currency = selectedOption.data('currency') || cashInSafeBranchCurrencies[$branchSelect.val()];
+
+                    if (currency) {
+                        $currencySelect.val(currency);
+                    }
+                }
+
+                function initCashInSafeOpeningBalanceCurrencies() {
+                    $('#m_repeater_6 [data-repeater-item]').each(function () {
+                        setCashInSafeCurrencyFromBranch(this);
+                    });
+                }
+
+                $(document).on('change', '#m_repeater_6 .cash-in-safe-branch-select', function () {
+                    setCashInSafeCurrencyFromBranch($(this).closest('[data-repeater-item]'));
+                });
+
+                $(document).on('click', '#m_repeater_6 [data-repeater-create]', function () {
+                    setTimeout(initCashInSafeOpeningBalanceCurrencies, 100);
+                });
+
+                $(function () {
+                    initCashInSafeOpeningBalanceCurrencies();
+                });
+            </script>
 
             <script src="/custom/money-receive.js"></script>
 

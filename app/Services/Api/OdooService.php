@@ -629,6 +629,11 @@ class OdooService
         // ];
         // $partners = $this->fetchData('res.partner',$fields,$filters);
         $partners = $this->execute('res.partner', 'read', [$partnerIds, $fields]);
+		
+		if(isset($partners['faultCode']) && $partners['faultCode'] == 4) {
+			throw new \Exception('You do not have enough rights to access the fields "employee_ids" on Contact (res.partner). Please contact your system administrator.');
+	   }
+	   
         unset($partners[0]); // هنشيل اول واحد لانه بيكون الادمن
             
             

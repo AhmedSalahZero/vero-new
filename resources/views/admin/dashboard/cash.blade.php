@@ -42,6 +42,37 @@
 
     /* .dataTables_wrapper{max-width: 100%;  padding-bottom: 50px !important;overflow-x: overlay;max-height: 4000px;} */
 
+    .tab-content {
+        background-color: #F2F2F2;
+        margin-top: 0;
+    }
+
+    .tab-pane {
+        background-color: #F2F2F2;
+    }
+
+    .chartdiv_two_lines,
+    .chartDiv,
+    [id*="chartdiv"] {
+        background-color: #F2F2F2;
+    }
+
+    /* Disable white wave blob on Limit/Outstanding cards */
+    .kt-iconbox--animate-slower::before,
+    .kt-iconbox--animate-slower::after,
+    .kt-iconbox--animate::before,
+    .kt-iconbox--animate::after {
+        content: none !important;
+        display: none !important;
+        animation: none !important;
+    }
+
+    .kt-iconbox--animate-slower,
+    .kt-iconbox--animate {
+        background-color: transparent !important;
+        overflow: visible !important;
+    }
+
 </style>
 @endsection
 @section('content')
@@ -118,7 +149,7 @@
     </div>
 </div>
 
-<div class="tab-content kt-margin-t-20">
+<div class="tab-content">
     @php
     $index = 0 ;
     @endphp
@@ -397,7 +428,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -413,7 +444,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -431,7 +462,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -449,7 +480,7 @@
 
 
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -486,7 +517,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -502,7 +533,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -520,7 +551,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -536,7 +567,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -602,7 +633,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content kt-margin-t-20">
+                        <div class="tab-content">
 
                             <div class="tab-pane active" id="FullySecuredOverdraftchartkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -737,7 +768,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -753,7 +784,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -771,7 +802,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -787,7 +818,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -853,7 +884,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content kt-margin-t-20">
+                        <div class="tab-content">
 
                             <div class="tab-pane active" id="CleanOverdraftkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -986,7 +1017,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1002,7 +1033,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1020,7 +1051,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1036,7 +1067,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1097,7 +1128,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content kt-margin-t-20">
+                        <div class="tab-content">
 
                             <div class="tab-pane active" id="OverdraftAgainstCommercialPaperkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -1230,7 +1261,7 @@
                     <div class="kt-portlet__body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1246,7 +1277,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1264,7 +1295,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1280,7 +1311,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="kt-portlet kt-iconbox kt-iconbox--brand kt-iconbox--animate-slower">
+                                <div class="kt-portlet kt-iconbox kt-iconbox--brand">
                                     <div class="kt-portlet__body">
                                         <div class="kt-iconbox__body">
                                             <div class="kt-iconbox__desc">
@@ -1341,7 +1372,7 @@
                             <option value="{{ $currency }}"></option>
                         </select>
 
-                        <div class="tab-content kt-margin-t-20">
+                        <div class="tab-content">
 
                             <div class="tab-pane active" id="OverdraftAgainstAssignmentOfContractkt_apps_contacts_view_tab_1_{{$currency}}" role="tabpanel">
 
@@ -1741,6 +1772,8 @@
 
         // Create chart instance
         var chart = am4core.create("{{ $overdraftType }}" + "chartdiv_available_room_" + "{{$currency}}", am4charts.PieChart);
+        chart.background.fill = am4core.color("#F2F2F2");
+        chart.background.fillOpacity = 1;
 
         // Add data
         chart.data = $('#' + "{{ $overdraftType }}" + 'total_available_room_' + "{{$currency}}").data('total');
@@ -1780,8 +1813,8 @@
 
         // Create chart instance
         var chart = am4core.create("{{ $overdraftType }}chartdiv_two_lines_{{$currency  }}", am4charts.XYChart);
-
-        //
+        chart.background.fill = am4core.color("#F2F2F2");
+        chart.background.fillOpacity = 1;
 
         // Increase contrast by taking evey second color
         chart.colors.step = 2;

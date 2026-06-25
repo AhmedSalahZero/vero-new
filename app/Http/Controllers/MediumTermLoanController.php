@@ -47,16 +47,13 @@ class MediumTermLoanController
 	public function index(Company $company,Request $request,FinancialInstitution $financialInstitution)
 	{
 		
-		$numberOfMonthsBetweenEndDateAndStartDate = 18 ;
 		$currentType = $request->get('active',MediumTermLoan::RUNNING);
 		
 		$filterDates = [];
 		foreach(MediumTermLoan::getAllTypes() as $type){
-			$startDate = $request->has('startDate') ? $request->input('startDate.'.$type) : now()->subMonths($numberOfMonthsBetweenEndDateAndStartDate)->format('Y-m-d');
 			$endDate = $request->has('endDate') ? $request->input('endDate.'.$type) : now()->format('Y-m-d');
 			
 			$filterDates[$type] = [
-				'startDate'=>$startDate,
 				'endDate'=>$endDate
 			];
 		}
@@ -67,10 +64,9 @@ class MediumTermLoanController
 		 * * start of bank to safe internal money transfer 
 		 */
 		
-		$runningStartDate = $filterDates[MediumTermLoan::RUNNING]['startDate'] ?? null ;
 		$runningEndDate = $filterDates[MediumTermLoan::RUNNING]['endDate'] ?? null ;
 		$mediumTermLoans = $company->mediumTermLoans->where('financial_institution_id',$financialInstitution->id) ;
-		$mediumTermLoans =  $mediumTermLoans->filterByStartDate($runningStartDate,$runningEndDate) ;
+		$mediumTermLoans =  $mediumTermLoans->filterByLoanEndDate($runningEndDate) ;
 		$mediumTermLoans =  $currentType == MediumTermLoan::RUNNING ? $this->applyFilter($request,$mediumTermLoans):$mediumTermLoans ;
 
 		/**
@@ -150,10 +146,22 @@ class MediumTermLoanController
 	}
 	public function viewLoanScheduleSettlement(Company $company , LoanSchedule $loanSchedule)
 	{
+		if (!$loanSchedule->hasMediumTermLoan()) {
+			return redirect()
+				->back()
+				->with('warning', __('This loan schedule installment is not linked to an active medium term loan.'));
+		}
+
 		 return view('admin.loan-schedule-settlements.index',$this->getCommonSettlementVars($company,$loanSchedule));
 	}
 	public function storeLoanScheduleSettlement(Company $company,Request $request , LoanSchedule $loanSchedule)
 	{
+		if (!$loanSchedule->hasMediumTermLoan()) {
+			return redirect()
+				->back()
+				->with('warning', __('This loan schedule installment is not linked to an active medium term loan.'));
+		}
+
 		$currentAccountNumber = $request->get('current_account_number');
 		$amount = $request->get('amount');
 		$date = $request->get('date');
@@ -184,7 +192,15 @@ class MediumTermLoanController
 	}
 	public function editLoanScheduleSettlement(Company $company,Request $request , LoanScheduleSettlement $loanScheduleSettlement)
 	{
-		return view('admin.loan-schedule-settlements.index',$this->getCommonSettlementVars($company,$loanScheduleSettlement->loanSchedule,$loanScheduleSettlement));
+		$loanSchedule = $loanScheduleSettlement->loanSchedule;
+
+		if (!$loanSchedule || !$loanSchedule->hasMediumTermLoan()) {
+			return redirect()
+				->back()
+				->with('warning', __('This loan schedule installment is not linked to an active medium term loan.'));
+		}
+
+		return view('admin.loan-schedule-settlements.index',$this->getCommonSettlementVars($company,$loanSchedule,$loanScheduleSettlement));
 	}
 	public function deleteLoanScheduleSettlement(Company $company,Request $request , LoanScheduleSettlement $loanScheduleSettlement)
 	{
@@ -205,22 +221,28 @@ class MediumTermLoanController
 	}
 	public function refreshReport(Company $company,Request $request) // ajax 
 	{
-		$financialInstitutionId = $request->get('financialInstitutionId');
-		$loanId = $request->get('mediumTermLoanId');
+		$financialInstitutionId = (int) $request->get('financialInstitutionId');
+		$loanId = (int) $request->get('mediumTermLoanId');
 		$currencyName = $request->get('currencyName');
 		$startDate = $request->get('loanStartDate');
 		$endDate = $request->get('loanEndDate');
-		$result = DB::table('medium_term_loans')->where('medium_term_loans.company_id',$company->id)
-		->where('currency',$currencyName)->join('loan_schedules','loan_schedules.medium_term_loan_id','=','medium_term_loans.id')
-		->when($loanId != 0 , function($builder) use ($loanId){
-			$builder->where('loan_id','=',$loanId);
+		$result = DB::table('medium_term_loans')
+		->where('medium_term_loans.company_id', $company->id)
+		->where('medium_term_loans.currency', $currencyName)
+		->join('loan_schedules', 'loan_schedules.medium_term_loan_id', '=', 'medium_term_loans.id')
+		->when($loanId !== 0, function ($builder) use ($loanId) {
+			$builder->where('medium_term_loans.id', '=', $loanId);
 		})
-		->when($financialInstitutionId != 0 , function($builder) use ($financialInstitutionId){
-			$builder->where('financial_institution_id','=',$financialInstitutionId);
+		->when($financialInstitutionId !== 0, function ($builder) use ($financialInstitutionId) {
+			$builder->where('medium_term_loans.financial_institution_id', '=', $financialInstitutionId);
 		})
-		->whereBetween('date',[$startDate,$endDate])
-		->orderBy('date')
-		->take(6)->get()->unique('name');
+		->whereBetween('loan_schedules.date', [$startDate, $endDate])
+		->orderBy('loan_schedules.date')
+		->select([
+			'loan_schedules.date',
+			'loan_schedules.schedule_payment',
+		])
+		->get();
 		
 		return response()->json([
 			'status'=>true ,
@@ -228,22 +250,22 @@ class MediumTermLoanController
 		]);
 	}
 	public function getMediumTermLoanForFinancialInstitution(Company $company , Request $request){
-		$financialInstitution = FinancialInstitution::find($request->get('financialInstitutionId'));
-		
-		if(!$financialInstitution){
-			return [
-				'loans'=>$company->mediumTermLoans->where('currency',$request->get('currency'))->values()
-			];
-		}
-	
-		$loans = $financialInstitution->loans ;
+		$currency = $request->get('currency');
+		$financialInstitutionId = (int) $request->get('financialInstitutionId');
 
-	
+		if ($financialInstitutionId === 0) {
+			$loans = $company->mediumTermLoans()->where('currency', $currency)->get();
+		} else {
+			$financialInstitution = FinancialInstitution::find($financialInstitutionId);
+			$loans = $financialInstitution
+				? $financialInstitution->loans()->where('currency', $currency)->get()
+				: collect();
+		}
+
 		return response()->json([
 			'status'=>true ,
-			'loans'=>$loans 
+			'loans'=>$loans
 		]);
-		
 	}
 
 }

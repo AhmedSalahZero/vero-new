@@ -10,12 +10,14 @@ elseif($modelName == 'SupplierInvoice'){
 	$redirectUrl = route('view.balances',['company'=>$company->id,'modelType'=>'SupplierInvoice']);
 }
 elseif($modelName == 'LoanSchedule'){
-	$redirectUrl = route('view.uploading',['company'=>$company->id,'model'=>'LoanSchedule','loanId'=>Request('medium_term_loan_id')]);
+	$redirectUrl = route('view.uploading',['company'=>$company->id,'model'=>'LoanSchedule','loanId'=>$loanId ?? request('medium_term_loan_id') ?? session('loan_schedule_import_loan_id_' . $company->id)]);
 }
 elseif($modelName =='ExpenseAnalysis'){
 	$redirectUrl = route('view.expense.analysis.dashboard',['company'=>$company->id]);
 }
-$additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Request('medium_term_loan_id')] : [];
+$additionalArray = $modelName == 'LoanSchedule' && ($loanId ?? request('medium_term_loan_id') ?? session('loan_schedule_import_loan_id_' . $company->id))
+    ? ['medium_term_loan_id' => $loanId ?? request('medium_term_loan_id') ?? session('loan_schedule_import_loan_id_' . $company->id)]
+    : [];
 
 
 @endphp 
@@ -65,8 +67,11 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
         </div>
 
         <!--begin::Form-->
-        <form class="kt-form kt-form--label-right" method="POST" action={{ route('salesGatheringImport', ['company'=>$company->id , 'model'=>$modelName]) }} enctype="multipart/form-data">
+        <form class="kt-form kt-form--label-right" method="POST" action={{ route('salesGatheringImport', array_merge(['company'=>$company->id , 'model'=>$modelName], $additionalArray)) }} enctype="multipart/form-data">
             @csrf
+            @if($modelName == 'LoanSchedule' && !empty($additionalArray['medium_term_loan_id']))
+                <input type="hidden" name="medium_term_loan_id" value="{{ $additionalArray['medium_term_loan_id'] }}">
+            @endif
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -129,7 +134,7 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
 					<h4>{{ __('Last Successfully Uploaded File Name :') .' '. $company->getSuccessLastFileNameForModel($modelName) }}</h4>
 					@endif 
                     @if($canViewPleaseReviewMessage)
-                    <h4 id="please-review-and-click-save" class="text-center alert alert-info" style="text-transform:capitalize;justify-content:center">{{ __('Please review And Click Save') }}</h4>
+                    <h4 id="please-review-and-click-save" class="text-center alert alert-info" style="text-transform:capitalize;justify-content:center">{{ __('Please review And Click Save Data Button') }}</h4>
 					
                     @endif
                     @if ($active_job)
@@ -230,7 +235,7 @@ $additionalArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>Reques
 
                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                         <span class="d-flex justify-content-center" style="overflow: visible; position: relative; width: 110px;">
-                            <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" {{-- href="{{ route('salesGatheringTest.edit', [$company, $item]) }}" --}}><i class="fa fa-pen-alt"></i></a>
+                            <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('salesGatheringTest.editCachedRow', array_merge(['company'=>$company->id, 'model'=>$modelName, 'rowId'=>$item['id']], $additionalArray)) }}"><i class="fa fa-pen-alt"></i></a>
                         </span>
                     </td>
                 </tr>

@@ -114,7 +114,7 @@
                         </label>
                         <div class="kt-input-icon">
                             <div class="input-group">
-                                <input type="text" class="form-control only-greater-than-or-equal-zero-allowed trigger-change-repeater" value="{{ number_format(isset($account) ? $account->getMinBalance() : old('min_balance',0)) }}">
+                                <input type="text" class="form-control only-greater-than-or-equal-zero-allowed trigger-change-repeater" value="{{ old('min_balance',0) }}">
                                 <input type="hidden" value="{{ ( old('min_balance',0)) }}" @if($isRepeater) name="min_balance" @else name="accounts[0][min_balance]" @endif>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
             git status
             git stash
             git pull origin master
-            /usr/local/bin/ea-php84 /opt/cpanel/composer/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+            /usr/local/bin/ea-php84 $(which composer) install --no-interaction --prefer-dist --optimize-autoloader
             /usr/local/bin/ea-php84 artisan optimize:clear
             chmod -R 775 storage
             chmod -R 775 bootstrap/cache

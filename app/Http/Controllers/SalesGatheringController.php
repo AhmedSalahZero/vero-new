@@ -46,6 +46,9 @@ class SalesGatheringController extends Controller
 		$hasLabelingItemCodeField = LabelingItem::hasCodeField();
 		$loan = MediumTermLoan::find($loanId);
         $modelName = $uploadType;
+		if ($modelName == 'LoanSchedule' && $loanId) {
+			session(['loan_schedule_import_loan_id_' . $company->id => $loanId]);
+		}
 		$labelingUniqueItemsPerColumn = [];
 		$hasCodeColumnForLabelingItem = false;  
 		$orderByDirection = $uploadType == 'LabelingItem' || $uploadType == 'LoanSchedule' ? 'asc' :'desc';
@@ -95,9 +98,9 @@ class SalesGatheringController extends Controller
         $notPeriodClosedCustomerInvoices = $modelName == 'CustomerInvoice' ? CustomerInvoice::getOnlyNotClosedPeriods() : null;
 		$firstIndexElementInLabeling = $salesGatherings->first() ? $salesGatherings->first()->id : 0;
 		$lastIndexElementInLabeling = $salesGatherings->last() ? $salesGatherings->last()->id : 0;
-        $navigators =$this->getUploadingPageExportNavigation($modelName,$uploadPermissionName,$exportPermissionName,$deletePermissionName,$firstIndexElementInLabeling,$lastIndexElementInLabeling);
+        $navigators =$this->getUploadingPageExportNavigation($modelName,$uploadPermissionName,$exportPermissionName,$deletePermissionName,$firstIndexElementInLabeling,$lastIndexElementInLabeling,$loanId);
 
-        return view('client_view.sales_gathering.index', compact('navigators','loan','hasLabelingItemCodeField','hasCodeColumnForLabelingItem','labelingUniqueItemsPerColumn', 'salesGatherings', 'company', 'viewing_names', 'db_names', 'uploadPermissionName', 'exportPermissionName', 'deletePermissionName', 'modelName', 'notPeriodClosedCustomerInvoices'));
+        return view('client_view.sales_gathering.index', compact('navigators','loan','loanId','hasLabelingItemCodeField','hasCodeColumnForLabelingItem','labelingUniqueItemsPerColumn', 'salesGatherings', 'company', 'viewing_names', 'db_names', 'uploadPermissionName', 'exportPermissionName', 'deletePermissionName', 'modelName', 'notPeriodClosedCustomerInvoices'));
     }
     
 
@@ -183,9 +186,9 @@ class SalesGatheringController extends Controller
         return (new ExportData($company->id, array_values($selected_fields), $salesGathering))->download($modelName.'.xlsx');
 
     }
-    public function getUploadingPageExportNavigation(string $modelName,string $uploadPermissionName,string $exportPermissionName,string $deletePermissionName,int $fromIndex=  0 , int $toIndex=0)
+    public function getUploadingPageExportNavigation(string $modelName,string $uploadPermissionName,string $exportPermissionName,string $deletePermissionName,int $fromIndex=  0 , int $toIndex=0, ?string $loanId = null)
     {
-		$additionalUploadDataArray = $modelName == 'LoanSchedule' ? ['medium_term_loan_id'=>getLastSegmentInRequest()] : [];
+		$additionalUploadDataArray = $modelName == 'LoanSchedule' && $loanId ? ['medium_term_loan_id'=>$loanId] : [];
 		$viewName = $modelName == 'LoanSchedule' ? 'upload' : 'sales_gathering'; // i do not know the purpose of this variable
 		$user = auth()->user();
 		$company = app(Company::class);

@@ -38,6 +38,7 @@ class OpeningBalancesController
         $customers = Partner::where('company_id', $company->id)->where('is_customer', 1)->orderBy('name', 'asc')->get()->formattedForSelect(true, 'getId', 'getName');
         $suppliers = Partner::where('company_id', $company->id)->where('is_supplier', 1)->orderBy('name', 'asc')->get()->formattedForSelect(true, 'getId', 'getName');
         $selectedBranches =  Branch::getBranchesForCurrentCompany($company->id) ;
+        $branchCurrencies = Branch::where('company_id', $company->id)->pluck('currency', 'id');
         $banks = Bank::pluck('view_name', 'id');
 		
 		return [
@@ -49,7 +50,8 @@ class OpeningBalancesController
             'financialInstitutionBanks' => $financialInstitutionBanks,
             'accountTypes' => $accountTypes,
             'suppliersFormatted'=>$suppliers,
-            'selectedBranches'=>$selectedBranches
+            'selectedBranches'=>$selectedBranches,
+            'branchCurrencies'=>$branchCurrencies,
         ];
 	}
 

@@ -280,6 +280,8 @@ Route::middleware([])->group(function () {
                 //########### Import Routs ############
                 // Route::any('inventoryStatementImport', 'InventoryStatementTestController@import')->name('inventoryStatementImport');
                 // Route::get('inventoryStatement/insertToMainTable', 'InventoryStatementTestController@insertToMainTable')->name('inventoryStatementTest.insertToMainTable');
+                Route::get('salesGatheringImport/{model}/cached-row/{rowId}/edit', 'SalesGatheringTestController@editCachedRow')->name('salesGatheringTest.editCachedRow');
+                Route::put('salesGatheringImport/{model}/cached-row/{rowId}', 'SalesGatheringTestController@updateCachedRow')->name('salesGatheringTest.updateCachedRow');
                 Route::any('salesGatheringImport/{model}', 'SalesGatheringTestController@import')->name('salesGatheringImport');
                 Route::get('SalesGathering/insertToMainTable/{modelName}', 'SalesGatheringTestController@insertToMainTable')->name('salesGatheringTest.insertToMainTable');
 

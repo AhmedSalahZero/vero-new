@@ -51,6 +51,12 @@ class SalesGatheringTestController extends Controller
 
 	public function import(Company $company,string $modelName = 'SalesGathering')
 	{
+		$loanId = request('medium_term_loan_id') ?? request('loanId');
+		if ($modelName == 'LoanSchedule' && $loanId) {
+			session(['loan_schedule_import_loan_id_' . $company->id => $loanId]);
+		} elseif ($modelName == 'LoanSchedule') {
+			$loanId = session('loan_schedule_import_loan_id_' . $company->id);
+		}
 		$uploadParamsType = getUploadParamsFromType($modelName);
 		$importHeaderText = $uploadParamsType['importHeaderText'];
 		$company_id = $company->id;
@@ -85,7 +91,7 @@ class SalesGatheringTestController extends Controller
 			$exportableFields  = (new ExportTable)->customizedTableField($company, $modelName, 'selected_fields');
 			$viewing_names = array_values($exportableFields);
 			$db_names = array_keys($exportableFields);
-			return view('client_view.sales_gathering.import', compact('company', 'salesGatherings', 'viewing_names', 'db_names','modelName','importHeaderText'));
+			return view('client_view.sales_gathering.import', compact('company', 'salesGatherings', 'viewing_names', 'db_names','modelName','importHeaderText','loanId'));
 		} else {
 			// Get The Selected exportable fields returns a pair of ['field_name' => 'viewing name']
 			$exportable_fields = (new ExportTable)->customizedTableField($company, $modelName, 'selected_fields');
@@ -130,12 +136,20 @@ class SalesGatheringTestController extends Controller
 
 			toastr('Import started!', 'success');
 
-			return redirect()->back();
+			$redirectParams = ['company' => $company_id, 'model' => $modelName];
+			if ($modelName == 'LoanSchedule' && $loanId) {
+				$redirectParams['medium_term_loan_id'] = $loanId;
+			}
+			return redirect()->route('salesGatheringImport', $redirectParams);
 		}
 	}
 	public function insertToMainTable(Company $company , string $modelName)
 	{
-		$loanId = Request('medium_term_loan_id');
+		$loanId = request('medium_term_loan_id') ?? request('loanId') ?? session('loan_schedule_import_loan_id_' . $company->id);
+		if ($modelName == 'LoanSchedule' && !$loanId) {
+			toastr()->error(__('Loan is required to save loan schedule data.'));
+			return redirect()->back();
+		}
 		$active_job = ActiveJob::where('company_id',  $company->id)->where('model',$modelName)->where('status', 'save_to_table')->where('model_name', 'SalesGatheringTest')->first();
 		if ($active_job === null) {
 			$active_job = ActiveJob::create([
@@ -175,6 +189,61 @@ class SalesGatheringTestController extends Controller
 		return redirect()->back();
 	}
 
+	public function editCachedRow(Company $company, string $modelName, string $rowId)
+	{
+		$row = $this->findCachedImportRow($company->id, $modelName, $rowId);
+		if (!$row) {
+			toastr()->error(__('Row not found'));
+			return redirect()->back();
+		}
+		$loanId = request('medium_term_loan_id') ?? request('loanId') ?? session('loan_schedule_import_loan_id_' . $company->id);
+		$exportableFields = (new ExportTable)->customizedTableField($company, $modelName, 'selected_fields');
+		return view('client_view.sales_gathering.importCachedRowForm', compact('company', 'exportableFields', 'modelName', 'row', 'rowId', 'loanId'));
+	}
+
+	public function updateCachedRow(Request $request, Company $company, string $modelName, string $rowId)
+	{
+		$exportableFields = (new ExportTable)->customizedTableField($company, $modelName, 'selected_fields');
+		$updateData = $request->only(array_keys($exportableFields));
+		if (!$this->updateCachedImportRow($company->id, $modelName, $rowId, $updateData)) {
+			toastr()->error(__('Row not found'));
+			return redirect()->back();
+		}
+		toastr()->success(__('Updated Successfully'));
+		$loanId = request('medium_term_loan_id') ?? request('loanId') ?? session('loan_schedule_import_loan_id_' . $company->id);
+		$redirectParams = ['company' => $company->id, 'model' => $modelName];
+		if ($modelName == 'LoanSchedule' && $loanId) {
+			$redirectParams['medium_term_loan_id'] = $loanId;
+		}
+		return redirect()->route('salesGatheringImport', $redirectParams);
+	}
+
+	protected function findCachedImportRow(int $companyId, string $modelName, string $rowId): ?array
+	{
+		foreach (CachingCompany::where('company_id', $companyId)->where('model', $modelName)->get() as $cache) {
+			foreach (Cache::get($cache->key_name) ?: [] as $row) {
+				if (($row['id'] ?? null) == $rowId) {
+					return $row;
+				}
+			}
+		}
+		return null;
+	}
+
+	protected function updateCachedImportRow(int $companyId, string $modelName, string $rowId, array $data): bool
+	{
+		foreach (CachingCompany::where('company_id', $companyId)->where('model', $modelName)->get() as $cache) {
+			$rows = Cache::get($cache->key_name) ?: [];
+			foreach ($rows as $index => $row) {
+				if (($row['id'] ?? null) == $rowId) {
+					$rows[$index] = array_merge($row, $data, ['id' => $rowId]);
+					Cache::forever($cache->key_name, $rows);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public function edit(Company $company, SalesGatheringTest $salesGatheringTest,string $modelName)
 	{

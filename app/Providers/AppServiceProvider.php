@@ -88,6 +88,15 @@ class AppServiceProvider extends ServiceProvider
 				return $items->where('start_date','>=',Carbon::make($startDate)->startOfDay())->where('start_date','<=',Carbon::make($endDate)->endOfDay());
 			}) ;
 		});
+
+		Collection::macro('filterByLoanEndDate',function(?string $endDate){
+			/**
+			 * @var Collection $this
+			 */
+			return $this->when($endDate ,function(Collection $items) use ($endDate){
+				return $items->where('end_date','>=',Carbon::make($endDate)->startOfDay());
+			}) ;
+		});
 		
 		Collection::macro('filterByDateColumn',function(string $dateColumnName,?string $startDate, ?string $endDate  ){
 			/**
