@@ -102,10 +102,13 @@ use App\Models\Partner ;
                                 </tr>
                             </thead>
                             <tbody>
+							@php
+								$order = 1 ;
+							@endphp
                                 @foreach($models[$currentType] as $index=>$model)
                                 <tr>
                                     <td>
-                                        {{ $index+1 }}
+                                        {{ $order++ }}
                                     </td>
 
                                     <td class="text-nowrap text-left">{{ $model->getName() }}</td>
