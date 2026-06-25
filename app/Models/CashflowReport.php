@@ -46,7 +46,7 @@ class CashflowReport extends Model
 	}
 	public function getName():string 
 	{
-		return $this->report_name ;
+		return $this->report_name?:'N/A' ;
 	}
 	public function getReportName():string 
 	{
