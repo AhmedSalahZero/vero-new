@@ -730,9 +730,13 @@ class CustomerInvoice extends Model implements IInvoice
 		$contractWithSalesOrders = [];
 		foreach($contracts as $contract){
 			foreach($contract->salesOrders as $salesOrder){
+				$salesOrders = HArr::getLatestNonZeroExecutionKeys($salesOrder->toArray());
+				if(empty($salesOrders['end_date'])){
+					continue;
+				}
 				$contractWithSalesOrders[$contract->id][$salesOrder->id] = [
 					'contract'=>$contract ,
-					'sales_orders'=>HArr::getLatestNonZeroExecutionKeys($salesOrder->toArray())
+					'sales_orders'=>$salesOrders
 				];
 			}
 		}
@@ -742,7 +746,7 @@ class CustomerInvoice extends Model implements IInvoice
 				$contract = $ContractWithSoArr['contract'];
 				$soArr = $ContractWithSoArr['sales_orders'];
 				$soEndDate = $soArr['end_date'];
-				$soCollectionDays = $soArr['collection_days'];
+				$soCollectionDays = $soArr['collection_days'] ?? 0;
 				$currentSoCollectionDays = Carbon::make($soEndDate)->addDays($soCollectionDays);
 				$isBetweenViewInterval = $currentSoCollectionDays->between($startDate,$endDate);
 				if(!$isBetweenViewInterval){

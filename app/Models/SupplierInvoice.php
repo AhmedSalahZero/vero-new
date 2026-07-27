@@ -501,9 +501,13 @@ class SupplierInvoice extends Model implements IInvoice
 		$contractWithPurchaseOrders = [];
 		foreach($contracts as $contract){
 			foreach($contract->purchasesOrders as $purchaseOrder){
+				$purchaseOrders = HArr::getLatestNonZeroExecutionKeys($purchaseOrder->toArray());
+				if(empty($purchaseOrders['end_date'])){
+					continue;
+				}
 				$contractWithPurchaseOrders[$contract->id][$purchaseOrder->id] = [
 					'contract'=>$contract ,
-					'purchase_orders'=>HArr::getLatestNonZeroExecutionKeys($purchaseOrder->toArray())
+					'purchase_orders'=>$purchaseOrders
 				];
 			}
 		}
@@ -513,7 +517,7 @@ class SupplierInvoice extends Model implements IInvoice
 				$contract = $ContractWithSoArr['contract'];
 				$soArr = $ContractWithSoArr['purchase_orders'];
 				$soEndDate = $soArr['end_date'];
-				$soCollectionDays = $soArr['collection_days'];
+				$soCollectionDays = $soArr['collection_days'] ?? 0;
 				$currentSoCollectionDays = Carbon::make($soEndDate)->addDays($soCollectionDays);
 				$isBetweenViewInterval = $currentSoCollectionDays->between($startDate,$endDate);
 				if(!$isBetweenViewInterval){
@@ -567,9 +571,13 @@ class SupplierInvoice extends Model implements IInvoice
 		$contractWithSalesOrders = [];
 		foreach($contracts as $contract){
 			foreach($contract->salesOrders as $salesOrder){
+				$salesOrders = HArr::getLatestNonZeroExecutionKeys($salesOrder->toArray());
+				if(empty($salesOrders['end_date'])){
+					continue;
+				}
 				$contractWithSalesOrders[$contract->id][$salesOrder->id] = [
 					'contract'=>$contract ,
-					'sales_orders'=>HArr::getLatestNonZeroExecutionKeys($salesOrder->toArray())
+					'sales_orders'=>$salesOrders
 				];
 			}
 		}
@@ -579,7 +587,7 @@ class SupplierInvoice extends Model implements IInvoice
 				$contract = $ContractWithSoArr['contract'];
 				$soArr = $ContractWithSoArr['sales_orders'];
 				$soEndDate = $soArr['end_date'];
-				$soCollectionDays = $soArr['collection_days'];
+				$soCollectionDays = $soArr['collection_days'] ?? 0;
 				$currentSoCollectionDays = Carbon::make($soEndDate)->addDays($soCollectionDays);
 				$isBetweenViewInterval = $currentSoCollectionDays->between($startDate,$endDate);
 				if(!$isBetweenViewInterval){
