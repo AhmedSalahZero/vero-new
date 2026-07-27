@@ -74,13 +74,14 @@ final class CashFlowPeriodBatchLoader
             ->join('customer_invoices', 'customer_invoices.id', '=', 'settlements.invoice_id')
             ->whereIn('customer_invoices.contract_code', $contractCodes)
             ->where(function ($q) {
-                $q->whereNull('down_payment_type')->orWhere('down_payment_type', '=', 'general');
+                $q->whereNull('money_received.down_payment_type')->orWhere('money_received.down_payment_type', '=', 'general');
             })
             ->where('money_received.type', '=', $moneyType);
         $dateColumn = self::qualifiedMoneyReceivedDateColumn($dateColumnName, $chequeStatus !== null);
+        $settlementAmountExpression = self::settlementAmountInReceivingCurrencySql();
         $query
             ->whereBetween($dateColumn, [$periodStart, $periodEnd])
-            ->selectRaw('customer_invoices.contract_code as contract_code, money_received.received_amount, money_received.receiving_currency, '.$dateColumn.' as movement_date');
+            ->selectRaw('customer_invoices.contract_code as contract_code, '.$settlementAmountExpression.' as received_amount, money_received.receiving_currency, '.$dateColumn.' as movement_date');
 
         foreach ($query->cursor() as $row) {
             $code = (string) $row->contract_code;
@@ -307,6 +308,16 @@ final class CashFlowPeriodBatchLoader
         }
 
         return 'money_received.'.$dateColumnName;
+    }
+
+    private static function settlementAmountInReceivingCurrencySql(): string
+    {
+        return 'CASE
+            WHEN money_received.currency IS NULL
+                OR money_received.currency = money_received.receiving_currency
+            THEN settlements.settlement_amount
+            ELSE settlements.settlement_amount * money_received.exchange_rate
+        END';
     }
 
     private static function qualifiedMoneyPaymentDateColumn(string $moneyType, string $dateFieldName, bool $usesPayableChequeJoin): string

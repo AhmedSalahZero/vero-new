@@ -17,7 +17,6 @@ trait IsBankStatement
 			
 			$time  = Carbon::make($currentFullDate)->format('H:i:s');
 			$newFullDateTime = date('Y-m-d H:i:s', strtotime("$date $time")) ;
-			// $minDateTime = min($currentFullDate ,$newFullDateTime );
 			$minDate = min($currentDate , $date);
 			$updatedData = [
 				'date'=>$date,
@@ -26,10 +25,9 @@ trait IsBankStatement
 				'debit'=>$debit 
 			] ;
 			$updatedData = array_merge($updatedData , $additionUpdateData);
-			$row = DB::table($this->getTable())->where('id',$this->id)->first();
 			$isEndOfMonthRow = false ;
-			if(isset($row->interest_type)){
-				$isEndOfMonthRow =  $row->interest_type=='end_of_month' || $row->interest_type =='end_of_month_final';
+			if(isset($this->interest_type)){
+				$isEndOfMonthRow =  $this->interest_type=='end_of_month' || $this->interest_type =='end_of_month_final';
 			}
 			if($isEndOfMonthRow){
 				if(Request()->has('is_end_of_month_final')){
@@ -39,19 +37,22 @@ trait IsBankStatement
 				}
 			}
 			
-			DB::table($this->getTable())->where('id',$this->id)->update($updatedData);
-			$query = 
-			$modelName::where('date','>=',$minDate);
-			foreach($this->getForeignKeyNamesThatUsedInFilter() as $columnName){
-				$query->where($columnName,$this->{$columnName});
-			}
-			$query
-			// ->where('id','!=',$this->id)
-			->orderByRaw($orderBy)
-			->first()
-			->update([
-				'updated_at'=>now()
-			]);
+			// Concurrent editors must not interleave balance cascades.
+			DB::transaction(function () use ($updatedData, $modelName, $minDate, $orderBy) {
+				$this->update($updatedData);
+
+				$query = $modelName::where('date', '>=', $minDate);
+				foreach ($this->getForeignKeyNamesThatUsedInFilter() as $columnName) {
+					$query->where($columnName, $this->{$columnName});
+				}
+
+				$row = $query->orderByRaw($orderBy)->lockForUpdate()->first();
+				if ($row) {
+					$row->update([
+						'updated_at' => now(),
+					]);
+				}
+			});
 			
 	}
 }

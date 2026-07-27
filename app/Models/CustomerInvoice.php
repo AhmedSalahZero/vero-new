@@ -522,6 +522,108 @@ class CustomerInvoice extends Model implements IInvoice
 		if($chequeStatus == Cheque::UNDER_COLLECTION){
 			$currentTypeText = __('Cheques Under Collection');
 		}
+		if($moneyType == MoneyReceived::INCOMING_TRANSFER){
+			if($contractCode){
+				$rows = DB::table('money_received')
+				->where('money_received.company_id',$companyId)
+				->join('settlements','money_received.id','=','settlements.money_received_id')
+				->join('customer_invoices','invoice_id','=','customer_invoices.id')
+				->join('partners','partners.id','=','money_received.partner_id')
+				->leftJoin('incoming_transfers','incoming_transfers.money_received_id','=','money_received.id')
+				->leftJoin('financial_institutions','financial_institutions.id','=','incoming_transfers.receiving_bank_id')
+				->where('money_received.type','=',$moneyType)
+				->whereBetween('money_received.receiving_date',[$startDate,$endDate])
+				->where('contract_code',$contractCode)
+				->where(function($q){
+					$q->whereNull('money_received.down_payment_type')->orWhere('money_received.down_payment_type','=','general');
+				})
+				->groupByRaw('money_received.id, partners.name, financial_institutions.name, money_received.receiving_currency, money_received.receiving_date')
+				->selectRaw("money_received.id as money_received_id, partners.name, financial_institutions.name as bank_name, money_received.receiving_currency, money_received.receiving_date as movement_date, sum(CASE WHEN money_received.currency IS NULL OR money_received.currency = money_received.receiving_currency THEN settlements.settlement_amount ELSE settlements.settlement_amount * money_received.exchange_rate END) as received_amount")
+				->get();
+			}else{
+				$rows = DB::table('money_received')
+				->where('money_received.company_id',$companyId)
+				->join('partners','partners.id','=','money_received.partner_id')
+				->leftJoin('incoming_transfers','incoming_transfers.money_received_id','=','money_received.id')
+				->leftJoin('financial_institutions','financial_institutions.id','=','incoming_transfers.receiving_bank_id')
+				->where('money_received.type','=',$moneyType)
+				->whereBetween('money_received.receiving_date',[$startDate,$endDate])
+				->selectRaw('money_received.id as money_received_id, money_received.received_amount, partners.name, financial_institutions.name as bank_name, money_received.receiving_currency, money_received.receiving_date as movement_date')
+				->get();
+			}
+			foreach($rows as $row){
+				$receivingDate = $row->movement_date;
+				$receivingCurrency = $row->receiving_currency;
+				$exchangeRate  = ForeignExchangeRate::getExchangeRateAt($receivingCurrency,$mainFunctionalCurrency,$receivingDate,$companyId,$foreignExchangeRates);
+				$amount  = $row->received_amount  * $exchangeRate;
+				$subRowKey = 'money_received_'.$row->money_received_id;
+				$customerName = $row->name ?: __('Unknown Customer');
+				$result['customers'][$currentTypeText][$subRowKey]['label'] = $customerName;
+				$result['customers'][$currentTypeText][$subRowKey]['incoming_transfer_info'] = [
+					'customer_name'=>$customerName,
+					'bank_name'=>$row->bank_name ?? __('N/A'),
+					'amount'=>$amount,
+					'movement_date'=>$receivingDate,
+				];
+				$result['customers'][$currentTypeText][$subRowKey]['weeks'][$currentWeekYear] = isset($result['customers'][$currentTypeText][$subRowKey]['weeks'][$currentWeekYear]) ? $result['customers'][$currentTypeText][$subRowKey]['weeks'][$currentWeekYear]+  $amount :$amount;
+				$result['customers'][$currentTypeText][$subRowKey]['total'] = isset($result['customers'][$currentTypeText][$subRowKey]['total']) ? $result['customers'][$currentTypeText][$subRowKey]['total']  + $amount : $amount;
+				$currentTotal = $amount;
+				$result['customers'][$currentTypeText]['total'][$currentWeekYear] = isset($result['customers'][$currentTypeText]['total'][$currentWeekYear]) ? $result['customers'][$currentTypeText]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
+				$result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] = isset($result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear]) ? $result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] + $amount :$amount;
+			}
+			return ;
+		}
+		if($moneyType == MoneyReceived::CHEQUE && $chequeStatus == Cheque::COLLECTED){
+			if($contractCode){
+				$rows = DB::table('money_received')
+				->where('money_received.company_id',$companyId)
+				->join('cheques','cheques.money_received_id','=','money_received.id')
+				->join('settlements','money_received.id','=','settlements.money_received_id')
+				->join('customer_invoices','invoice_id','=','customer_invoices.id')
+				->join('partners','partners.id','=','money_received.partner_id')
+				->where('cheques.status',$chequeStatus)
+				->where('money_received.type','=',$moneyType)
+				->whereBetween($dateColumnName,[$startDate,$endDate])
+				->where('contract_code',$contractCode)
+				->where(function($q){
+					$q->whereNull('money_received.down_payment_type')->orWhere('money_received.down_payment_type','=','general');
+				})
+				->groupByRaw('money_received.id, partners.name, cheques.cheque_number, money_received.receiving_currency, cheques.actual_collection_date')
+				->selectRaw("money_received.id as money_received_id, partners.name, cheques.cheque_number, money_received.receiving_currency, cheques.actual_collection_date as movement_date, sum(CASE WHEN money_received.currency IS NULL OR money_received.currency = money_received.receiving_currency THEN settlements.settlement_amount ELSE settlements.settlement_amount * money_received.exchange_rate END) as received_amount")
+				->get();
+			}else{
+				$rows = DB::table('money_received')
+				->where('money_received.company_id',$companyId)
+				->join('cheques','cheques.money_received_id','=','money_received.id')
+				->join('partners','partners.id','=','money_received.partner_id')
+				->where('cheques.status',$chequeStatus)
+				->where('money_received.type','=',$moneyType)
+				->whereBetween($dateColumnName,[$startDate,$endDate])
+				->selectRaw('money_received.id as money_received_id, money_received.received_amount, partners.name, cheques.cheque_number, money_received.receiving_currency, cheques.actual_collection_date as movement_date')
+				->get();
+			}
+			foreach($rows as $row){
+				$receivingDate = $row->movement_date;
+				$receivingCurrency = $row->receiving_currency;
+				$exchangeRate  = ForeignExchangeRate::getExchangeRateAt($receivingCurrency,$mainFunctionalCurrency,$receivingDate,$companyId,$foreignExchangeRates);
+				$amount  = $row->received_amount  * $exchangeRate;
+				$subRowKey = 'money_received_'.$row->money_received_id;
+				$customerName = $row->name ?: __('Unknown Customer');
+				$result['customers'][$currentTypeText][$subRowKey]['label'] = $customerName;
+				$result['customers'][$currentTypeText][$subRowKey]['checks_collected_info'] = [
+					'customer_name'=>$customerName,
+					'cheque_number'=>$row->cheque_number ?? '',
+					'amount'=>$amount,
+					'movement_date'=>$receivingDate,
+				];
+				$result['customers'][$currentTypeText][$subRowKey]['weeks'][$currentWeekYear] = isset($result['customers'][$currentTypeText][$subRowKey]['weeks'][$currentWeekYear]) ? $result['customers'][$currentTypeText][$subRowKey]['weeks'][$currentWeekYear]+  $amount :$amount;
+				$result['customers'][$currentTypeText][$subRowKey]['total'] = isset($result['customers'][$currentTypeText][$subRowKey]['total']) ? $result['customers'][$currentTypeText][$subRowKey]['total']  + $amount : $amount;
+				$currentTotal = $amount;
+				$result['customers'][$currentTypeText]['total'][$currentWeekYear] = isset($result['customers'][$currentTypeText]['total'][$currentWeekYear]) ? $result['customers'][$currentTypeText]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
+				$result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] = isset($result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear]) ? $result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] + $amount :$amount;
+			}
+			return ;
+		}
 		$rows =  DB::table('money_received')
 		->where('money_received.company_id',$companyId)
 		->when($chequeStatus , function( $builder) use ($chequeStatus){

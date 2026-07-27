@@ -100,12 +100,26 @@
 
                             <div class="col-6">
                                 <label>{{__('Select Companies - (Multi Selection)')}} </label>
-                                <select required name="companies[]" class="form-control kt-selectpicker" multiple>
-                                    @php $selectedcompanies = isset($user) ?  $user->companies->pluck('id')->toArray() : []; @endphp
+                                @php
+                                    $canEditCompanies = $canEditCompanies ?? true;
+                                    $selectedcompanies = isset($user) ? $user->companies->pluck('id')->toArray() : (
+                                        $canEditCompanies ? [] : $companies->pluck('id')->toArray()
+                                    );
+                                @endphp
+                                @if(!$canEditCompanies)
+                                    <p class="text-muted small">{{ __('Company assignment is locked to your company. Only a Super Admin can change it.') }}</p>
+                                @endif
+                                <select @if($canEditCompanies) required @endif name="companies[]" class="form-control kt-selectpicker" multiple @if(!$canEditCompanies) disabled @endif>
                                     @foreach ($companies as $item)
-                                        <option {{ old('companies') == $item->id || in_array($item->id, $selectedcompanies) ? 'selected' : ''}}  value="{{$item->id}}">{{$item->name[$lang]}}</option>
+                                        <option {{ in_array($item->id, $selectedcompanies) ? 'selected' : ''}}  value="{{$item->id}}">{{$item->name[$lang]}}</option>
                                     @endforeach
                                 </select>
+                                @if(!$canEditCompanies)
+                                    {{-- disabled fields are not posted; keep assignment via hidden inputs --}}
+                                    @foreach ($selectedcompanies as $companyId)
+                                        <input type="hidden" name="companies[]" value="{{ $companyId }}">
+                                    @endforeach
+                                @endif
 
                             </div>
                             <div class="col-6">

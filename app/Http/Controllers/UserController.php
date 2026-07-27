@@ -86,12 +86,11 @@ class UserController extends Controller
 
 	public function create(?Company $company = null)
 	{
+		$authUser = Auth()->user();
+		$companies = $this->companiesForForm($authUser, $company);
+		$canEditCompanies = $this->authUserCanEditCompanyAssignment($authUser);
 
-		$companies = Company::all();
-		if($company){
-			$companies = Company::where('id',$company->id)->get();
-		}
-		return view('super_admin_view.users.form', compact('companies','company'));
+		return view('super_admin_view.users.form', compact('companies', 'company', 'canEditCompanies'));
 	}
 
 	
@@ -107,6 +106,8 @@ class UserController extends Controller
 		if (!$user->canStoreMoreUser()) {
 			return redirect()->back()->with('fail', __('You Exceed Your Max Users [ ' . $user->max_users . ' ]'));
 		}
+		$companyIds = $this->resolveCompanyIdsForWrite($user, $request->input('companies'), null);
+		abort_unless(count($companyIds) > 0, 422, __('Select at least one company.'));
 		$request['password'] = Hash::make($request->password);
 		$request['subscription'] = 'subscripted';
 
@@ -116,7 +117,7 @@ class UserController extends Controller
 				['created_by'=>Auth()->user()->id]
 			),
 		);
-		$user->companies()->attach($request->companies);
+		$user->companies()->attach($companyIds);
 		$user->assignRole($request->role);
 		/**
 		 * @var User $user
@@ -143,22 +144,103 @@ class UserController extends Controller
 	
 	public function edit(User $user)
 	{
-		$companies = Company::all();
-		return view('super_admin_view.users.form', compact('companies', 'user'));
+		$authUser = Auth()->user();
+		$companies = $this->companiesForForm($authUser, null);
+		$canEditCompanies = $this->authUserCanEditCompanyAssignment($authUser);
+
+		return view('super_admin_view.users.form', compact('companies', 'user', 'canEditCompanies'));
 	}
 
 	
 	public function update(Request $request, User $user)
 	{
-		// $request['password'] = Hash::make($request->password);
+		$authUser = Auth()->user();
+		$companyIds = $this->resolveCompanyIdsForWrite($authUser, $request->input('companies'), $user);
+		abort_unless(count($companyIds) > 0, 422, __('Select at least one company.'));
+
 		$user->update($request->except('avatar', 'companies'));
-		$user->companies()->sync($request->companies);
+		$user->companies()->sync($companyIds);
 		@count($user->roles) == 0 ?: $user->removeRole($user->roles[0]->name);
 
 		$user->assignRole($request->role);
 		ImageSave::saveIfExist('avatar', $user);
 
 		return redirect()->back();
+	}
+
+	/**
+	 * Company IDs the acting user may assign. null = unrestricted (Super Admin).
+	 *
+	 * @return list<int>|null
+	 */
+	protected function authUserAssignableCompanyIds(User $authUser): ?array
+	{
+		if ($authUser->isSuperAdmin()) {
+			return null;
+		}
+
+		return $authUser->companies->pluck('id')->map(fn ($id) => (int) $id)->values()->all();
+	}
+
+	/**
+	 * Owner policy (2026-07-26): only Super Admin freely picks any company.
+	 * Non–Super Admin is limited to their own companies; with a single company
+	 * they cannot change the target user's company assignment at all.
+	 */
+	protected function authUserCanEditCompanyAssignment(User $authUser): bool
+	{
+		if ($authUser->isSuperAdmin()) {
+			return true;
+		}
+
+		return $authUser->companies->count() > 1;
+	}
+
+	protected function companiesForForm(User $authUser, ?Company $company)
+	{
+		$assignableIds = $this->authUserAssignableCompanyIds($authUser);
+
+		if ($company) {
+			abort_unless(
+				$assignableIds === null || in_array((int) $company->id, $assignableIds, true),
+				403
+			);
+
+			return Company::where('id', $company->id)->get();
+		}
+
+		if ($assignableIds === null) {
+			return Company::all();
+		}
+
+		return Company::whereIn('id', $assignableIds)->get();
+	}
+
+	/**
+	 * @param  array<int|string>|null  $submitted
+	 * @return list<int>
+	 */
+	protected function resolveCompanyIdsForWrite(User $authUser, ?array $submitted, ?User $existingUser): array
+	{
+		$assignable = $this->authUserAssignableCompanyIds($authUser);
+		$submittedIds = array_values(array_unique(array_map('intval', (array) $submitted)));
+
+		if ($assignable === null) {
+			return $submittedIds;
+		}
+
+		if (! $this->authUserCanEditCompanyAssignment($authUser)) {
+			if ($existingUser) {
+				return $existingUser->companies->pluck('id')->map(fn ($id) => (int) $id)->values()->all();
+			}
+
+			return $assignable;
+		}
+
+		$forbidden = array_diff($submittedIds, $assignable);
+		abort_unless($forbidden === [], 403, __('You can only assign companies you belong to.'));
+
+		return array_values(array_intersect($submittedIds, $assignable));
 	}
 
 	

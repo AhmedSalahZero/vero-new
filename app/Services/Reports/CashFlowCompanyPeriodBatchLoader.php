@@ -50,6 +50,7 @@ final class CashFlowCompanyPeriodBatchLoader
     private static function applyChequeSettlements(array &$result, Collection $foreignExchangeRates, string $mainFunctionalCurrency, int $companyId, string $periodStart, string $periodEnd, array $periodsByWeekKey, string $chequeStatus, string $resultKey, string $totalCashInFlowKey): void
     {
         $dateColumn = $chequeStatus === Cheque::COLLECTED ? 'cheques.actual_collection_date' : 'cheques.expected_collection_date';
+        $settlementAmountExpression = self::settlementAmountInReceivingCurrencySql();
         $query = DB::table('money_received')
             ->join('cheques', 'cheques.money_received_id', '=', 'money_received.id')
             ->join('settlements', 'money_received.id', '=', 'settlements.money_received_id')
@@ -61,7 +62,7 @@ final class CashFlowCompanyPeriodBatchLoader
                 $q->whereNull('money_received.down_payment_type')->orWhere('money_received.down_payment_type', '=', 'general');
             })
             ->whereBetween($dateColumn, [$periodStart, $periodEnd])
-            ->selectRaw('money_received.received_amount, money_received.receiving_currency, '.$dateColumn.' as movement_date, customer_invoices.invoice_number');
+            ->selectRaw($settlementAmountExpression.' as received_amount, money_received.receiving_currency, '.$dateColumn.' as movement_date, customer_invoices.invoice_number');
 
         foreach ($query->cursor() as $row) {
             self::accumulateMoneyReceivedRow($result, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, $resultKey, $totalCashInFlowKey, $row, true);
@@ -70,6 +71,7 @@ final class CashFlowCompanyPeriodBatchLoader
 
     private static function applyChequeInSafe(array &$result, Collection $foreignExchangeRates, string $mainFunctionalCurrency, int $companyId, string $periodStart, string $periodEnd, array $periodsByWeekKey, string $totalCashInFlowKey): void
     {
+        $settlementAmountExpression = self::settlementAmountInReceivingCurrencySql();
         $query = DB::table('money_received')
             ->join('cheques', 'cheques.money_received_id', '=', 'money_received.id')
             ->join('settlements', 'money_received.id', '=', 'settlements.money_received_id')
@@ -81,7 +83,7 @@ final class CashFlowCompanyPeriodBatchLoader
                 $q->whereNull('money_received.down_payment_type')->orWhere('money_received.down_payment_type', '=', 'general');
             })
             ->whereBetween('cheques.due_date', [$periodStart, $periodEnd])
-            ->selectRaw('money_received.received_amount, money_received.receiving_currency, cheques.due_date as movement_date, customer_invoices.invoice_number');
+            ->selectRaw($settlementAmountExpression.' as received_amount, money_received.receiving_currency, cheques.due_date as movement_date, customer_invoices.invoice_number');
 
         foreach ($query->cursor() as $row) {
             self::accumulateMoneyReceivedRow($result, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, __('Cheques In Safe'), $totalCashInFlowKey, $row, true);
@@ -325,5 +327,15 @@ final class CashFlowCompanyPeriodBatchLoader
             $result['cash_expenses'][$categoryName][$expenseName]['total'][$weekKey] = ($result['cash_expenses'][$categoryName][$expenseName]['total'][$weekKey] ?? 0) + $amount;
             $result['cash_expenses'][$categoryName]['total'][$weekKey] = ($result['cash_expenses'][$categoryName]['total'][$weekKey] ?? 0) + $amount;
         }
+    }
+
+    private static function settlementAmountInReceivingCurrencySql(): string
+    {
+        return 'CASE
+            WHEN money_received.currency IS NULL
+                OR money_received.currency = money_received.receiving_currency
+            THEN settlements.settlement_amount
+            ELSE settlements.settlement_amount * money_received.exchange_rate
+        END';
     }
 }
