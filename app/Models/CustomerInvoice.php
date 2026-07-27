@@ -531,14 +531,15 @@ class CustomerInvoice extends Model implements IInvoice
 				->join('partners','partners.id','=','money_received.partner_id')
 				->leftJoin('incoming_transfers','incoming_transfers.money_received_id','=','money_received.id')
 				->leftJoin('financial_institutions','financial_institutions.id','=','incoming_transfers.receiving_bank_id')
+				->leftJoin('banks','banks.id','=','financial_institutions.bank_id')
 				->where('money_received.type','=',$moneyType)
 				->whereBetween('money_received.receiving_date',[$startDate,$endDate])
 				->where('contract_code',$contractCode)
 				->where(function($q){
 					$q->whereNull('money_received.down_payment_type')->orWhere('money_received.down_payment_type','=','general');
 				})
-				->groupByRaw('money_received.id, partners.name, financial_institutions.name, money_received.receiving_currency, money_received.receiving_date')
-				->selectRaw("money_received.id as money_received_id, partners.name, financial_institutions.name as bank_name, money_received.receiving_currency, money_received.receiving_date as movement_date, sum(CASE WHEN money_received.currency IS NULL OR money_received.currency = money_received.receiving_currency THEN settlements.settlement_amount ELSE settlements.settlement_amount * money_received.exchange_rate END) as received_amount")
+				->groupByRaw('money_received.id, partners.name, financial_institutions.type, financial_institutions.name, banks.view_name, banks.name_en, banks.name_ar, money_received.receiving_currency, money_received.receiving_date')
+				->selectRaw('money_received.id as money_received_id, partners.name, '.financial_institution_display_name_sql().', money_received.receiving_currency, money_received.receiving_date as movement_date, sum(CASE WHEN money_received.currency IS NULL OR money_received.currency = money_received.receiving_currency THEN settlements.settlement_amount ELSE settlements.settlement_amount * money_received.exchange_rate END) as received_amount')
 				->get();
 			}else{
 				$rows = DB::table('money_received')
@@ -546,9 +547,10 @@ class CustomerInvoice extends Model implements IInvoice
 				->join('partners','partners.id','=','money_received.partner_id')
 				->leftJoin('incoming_transfers','incoming_transfers.money_received_id','=','money_received.id')
 				->leftJoin('financial_institutions','financial_institutions.id','=','incoming_transfers.receiving_bank_id')
+				->leftJoin('banks','banks.id','=','financial_institutions.bank_id')
 				->where('money_received.type','=',$moneyType)
 				->whereBetween('money_received.receiving_date',[$startDate,$endDate])
-				->selectRaw('money_received.id as money_received_id, money_received.received_amount, partners.name, financial_institutions.name as bank_name, money_received.receiving_currency, money_received.receiving_date as movement_date')
+				->selectRaw('money_received.id as money_received_id, money_received.received_amount, partners.name, '.financial_institution_display_name_sql().', money_received.receiving_currency, money_received.receiving_date as movement_date')
 				->get();
 			}
 			foreach($rows as $row){
