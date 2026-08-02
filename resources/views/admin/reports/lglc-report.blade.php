@@ -28,7 +28,7 @@
     }
 
     .kt-widget24__title {
-        color: white !important;
+        color: #595d6e !important;
     }
 
 </style>
