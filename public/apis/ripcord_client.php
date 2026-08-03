@@ -487,11 +487,28 @@ class Ripcord_Transport_Stream implements Ripcord_Transport
 			) 
 		);
 		$context = stream_context_create( $options );
-		$result  = @file_get_contents( $url, false, $context );
-		$this->responseHeaders = $http_response_header;
+		/**
+		 * * بنمسك الوورنينج بنفسنا بدل @ عشان نحتفظ بسببه
+		 * * (error_get_last مابيتملاش لما لارافيل يكون حاطط error handler)
+		 */
+		$transportError = null;
+		set_error_handler( function( $errno, $errstr ) use ( &$transportError ) {
+			$transportError = $errstr;
+			return true;
+		} );
+		$result = file_get_contents( $url, false, $context );
+		restore_error_handler();
+		/**
+		 * * $http_response_header مابيعرّفه PHP إلا لما يوصل رد HTTP فعلاً
+		 * * فلو الطلب فشل قبل كده (DNS / اتصال مرفوض / TLS / تايم أوت)
+		 * * السطر ده كان بيطلع "Undefined variable $http_response_header"
+		 * * والاستثناء ده كان بيتلقف مكان الرسالة الحقيقية اللي تحت
+		 */
+		$this->responseHeaders = isset( $http_response_header ) ? $http_response_header : array();
 		if ( !$result )
 		{
-			throw new Ripcord_TransportException( 'Could not access ' . $url, 
+			throw new Ripcord_TransportException( 'Could not access ' . $url
+				. ( $transportError ? ' — ' . $transportError : '' ),
 				ripcord::cannotAccessURL );
 		}
 		return $result;
