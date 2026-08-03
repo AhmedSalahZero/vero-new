@@ -22,6 +22,8 @@ th.dtfc-fixed-left { background-color: #e2e8f0 !important; color: #0f172a !impor
 .header-tr th { background-color: #f8fafc !important; color: #0f172a !important; font-weight: 600; }
 .ccf-section-title td { font-size: 1rem !important; padding: 10px 12px !important; }
 .ccf-actions .btn { margin-inline-end: 8px; margin-bottom: 8px; }
+.ccf-meta { color: #0f172a; margin-top: 0.5rem; }
+.ccf-tip { color: #0f172a; }
 .max-w-grand-total { width: 7.5rem !important; max-width: none !important; min-width: 7rem !important; white-space: nowrap !important; }
 .max-w-classes-name { width: 14rem !important; max-width: min(22vw, 20rem) !important; min-width: 10rem !important; }
 .max-w-classes-expand { width: 48px !important; max-width: 48px !important; min-width: 48px !important; }

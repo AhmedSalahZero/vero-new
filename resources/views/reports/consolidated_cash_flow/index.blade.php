@@ -12,6 +12,10 @@
     .input-group.date > .datepicker:not(.datepicker-dropdown) {
         display: none !important;
     }
+    .ccf-tip {
+        color: #0f172a;
+        margin-bottom: 1rem;
+    }
 </style>
 @endsection
 @section('sub-header')
@@ -19,11 +23,11 @@
 @endsection
 @section('content')
 <div>
-<p style="opacity:.85;margin-bottom:1rem;">{{ __('Note: the report period must include today (same rule as the main cash flow report).') }}</p>
-<p style="opacity:.85;margin-bottom:1rem;">{{ __('Tip: leave contracts empty to include all active contracts, or select the ones you need. Monthly interval is faster than daily for long periods.') }}</p>
 <form class="kt-form kt-form--label-right" method="get" action="{{ route('reports.consolidated-cash-flow.result', ['company' => $company->id]) }}">
     <div class="kt-portlet">
         <div class="kt-portlet__body">
+            <p class="text-red mb-2">{{ __('Note: the report period must include today (same rule as the main cash flow report).') }}</p>
+            <p class="ccf-tip mb-4">{{ __('Tip: leave contracts empty to include all active contracts, or select the ones you need. Monthly interval is faster than daily for long periods.') }}</p>
             <div class="form-group row">
                 <div class="col-md-3">
                     <label>{{ __('Report Interval') }} @include('star')</label>

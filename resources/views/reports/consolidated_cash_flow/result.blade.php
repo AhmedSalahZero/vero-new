@@ -26,15 +26,18 @@
 
 @section('content')
 <div class="ccf-print-wrap" dir="{{ $dir }}">
-    <div class="row no-print ccf-actions">
-        <div class="col-md-12">
-            <a href="{{ route('reports.consolidated-cash-flow.index', ['company' => $company->id]) }}" class="btn btn-secondary">{{ __('Back') }}</a>
-            <button type="button" id="ccf-export-xlsx" class="btn btn-primary">{{ __('Export Excel') }}</button>
-            <button type="button" onclick="window.print()" class="btn btn-outline-primary">{{ __('Print') }}</button>
+    <div class="kt-portlet no-print">
+        <div class="kt-portlet__body">
+            <div class="row ccf-actions">
+                <div class="col-md-12">
+                    <a href="{{ route('reports.consolidated-cash-flow.index', ['company' => $company->id]) }}" class="btn btn-secondary">{{ __('Back') }}</a>
+                    <button type="button" id="ccf-export-xlsx" class="btn btn-primary">{{ __('Export Excel') }}</button>
+                    <button type="button" onclick="window.print()" class="btn btn-outline-primary">{{ __('Print') }}</button>
+                </div>
+            </div>
+            <p class="ccf-meta mb-0"><strong>{{ __('Currency') }}:</strong> {{ $currencyName }} — <strong>{{ __('Interval') }}:</strong> {{ $reportInterval }}</p>
         </div>
     </div>
-
-    <p class="mb-3"><strong>{{ __('Currency') }}:</strong> {{ $currencyName }} — <strong>{{ __('Interval') }}:</strong> {{ $reportInterval }}</p>
 
     @include('reports.consolidated_cash_flow._table', [
         'weekKeys' => $weekKeys,
