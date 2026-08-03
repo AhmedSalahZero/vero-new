@@ -18,7 +18,7 @@ class ConsolidatedCashFlowReportController
             ->where('company_id', $company->id)
             ->whereIn('status', [Contract::RUNNING, Contract::RUNNING_AND_AGAINST])
             ->orderBy('name')
-            ->get(['id', 'name', 'code']);
+            ->get(['id', 'name', 'code', 'currency']);
 
         return view('reports.consolidated_cash_flow.index', [
             'company' => $company,

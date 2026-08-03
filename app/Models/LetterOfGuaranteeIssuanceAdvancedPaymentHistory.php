@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\Api\LetterOfGuaranteeService;
+use App\Services\Api\OdooSync;
 use App\Traits\HasCompany;
 use App\Traits\Models\HasCurrentAccountCreditStatement;
 use App\Traits\Models\HasDeleteButTriggerChangeOnLastElement;
@@ -114,14 +115,26 @@ class LetterOfGuaranteeIssuanceAdvancedPaymentHistory extends Model
     }
 	public function deleteOdooRelations()
 	{
+		$company = $this->company;
+		/**
+		 * * من غير الشرط دا الشركة اللي مالهاش تكامل مع أودو كانت بتعمل
+		 * * new LetterOfGuaranteeService بـ url فاضي فيضرب TypeError
+		 */
+		if (!$company || !$company->hasOdooIntegrationCredentials()) {
+			return;
+		}
 		foreach (['journal_entry_id'] as $journalColumnName) {
             $currentJournalEntryId = $this->{$journalColumnName};
             if ($currentJournalEntryId) {
-                $odooLetterOfGuaranteeIssuance = new LetterOfGuaranteeService($this->company);
-                $odooLetterOfGuaranteeIssuance->unlink($currentJournalEntryId);
+                /**
+                 * * بنمرر ال id كقيمة لأن الصف هيتحذف قبل ما الاستدعاء يتنفذ
+                 */
+                OdooSync::defer(function () use ($company, $currentJournalEntryId) {
+                    (new LetterOfGuaranteeService($company))->unlink($currentJournalEntryId);
+                }, null, 'Unlink Odoo journal entry #'.$currentJournalEntryId);
             }
         }
-		
+
 	}
     public function deleteAllRelations():void
     {

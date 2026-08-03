@@ -27,21 +27,27 @@ class ConsolidatedCashFlowService
 
     private function resolveContractIds(Company $company, Request $request): array
     {
+        $currency = (string) $request->input('currency', $company->getMainFunctionalCurrency());
         $contractIds = $request->input('contract_ids', []);
         if (! is_array($contractIds)) {
             $contractIds = [];
         }
         $contractIds = array_values(array_unique(array_filter(array_map('intval', $contractIds))));
+
+        $baseQuery = Contract::query()
+            ->where('company_id', $company->id)
+            ->whereIn('status', [Contract::RUNNING, Contract::RUNNING_AND_AGAINST])
+            ->where('currency', $currency);
+
         if ($contractIds === []) {
-            $contractIds = Contract::query()
-                ->where('company_id', $company->id)
-                ->whereIn('status', [Contract::RUNNING, Contract::RUNNING_AND_AGAINST])
-                ->orderBy('name')
-                ->pluck('id')
-                ->all();
+            return $baseQuery->orderBy('name')->pluck('id')->all();
         }
 
-        return $contractIds;
+        return $baseQuery
+            ->whereIn('id', $contractIds)
+            ->orderBy('name')
+            ->pluck('id')
+            ->all();
     }
 
     private function buildReport(Company $company, Request $request, array $contractIds): array

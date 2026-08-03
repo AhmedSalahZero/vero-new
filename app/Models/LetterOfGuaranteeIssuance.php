@@ -6,6 +6,7 @@ use App\Enums\LgTypes;
 use App\Http\Controllers\LetterOfGuaranteeIssuanceRenewalDateController;
 use App\Models\LgRenewalDateHistory;
 use App\Services\Api\LetterOfGuaranteeService;
+use App\Services\Api\OdooSync;
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCompany;
 use App\Traits\Models\HasCommissionStatements;
@@ -616,13 +617,17 @@ class LetterOfGuaranteeIssuance extends Model
         $company = $this->company;
         
         if ($company->hasOdooIntegrationCredentials()) {
-            $odooLetterOfGuaranteeIssuanceService = new LetterOfGuaranteeService($company);
             foreach (['journal_entry_id','commission_fees_journal_entry_id','issuance_fees_journal_entry_id','cancel_journal_entry_id'] as $journalColumnName) {
                 $currentJournalEntryId = $this->{$journalColumnName};
                 if ($currentJournalEntryId) {
-                    $odooLetterOfGuaranteeIssuanceService->unlink($currentJournalEntryId);
+                    /**
+                     * * بنمرر ال id كقيمة لأن الصف هيتحذف قبل ما الاستدعاء يتنفذ
+                     */
+                    OdooSync::defer(function () use ($company, $currentJournalEntryId) {
+                        (new LetterOfGuaranteeService($company))->unlink($currentJournalEntryId);
+                    }, null, 'Unlink Odoo journal entry #'.$currentJournalEntryId);
                 }
-                
+
             }
         }
        
@@ -778,10 +783,26 @@ class LetterOfGuaranteeIssuance extends Model
     {
         $issuanceDate = $this->getIssuanceDate();
         $company=  $this->company;
-        
-        if ($this->isOpeningBalance() || !$company->withinIntegrationDate($issuanceDate)) {
+
+        /**
+         * * الشركة اللي مالهاش تكامل مع أودو كانت بتوصل لهنا وتعمل
+         * * new LetterOfGuaranteeService بـ url فاضي فيضرب TypeError
+         */
+        if (!$company->hasOdooIntegrationCredentials() || $this->isOpeningBalance() || !$company->withinIntegrationDate($issuanceDate)) {
             return ;
         }
+        /**
+         * * الاتصال بأودو بيتأجل لبعد ما الترانزاكشن تكومِت
+         */
+        OdooSync::defer(function () {
+            $this->createIssuanceAndCommissionFeesInOdoo();
+        }, $this, 'Create Odoo LG issuance/commission fees');
+    }
+
+    protected function createIssuanceAndCommissionFeesInOdoo(): void
+    {
+        $issuanceDate = $this->getIssuanceDate();
+        $company = $this->company;
         $odooSetting = $company->odooSetting;
         $financialInstitutionAccountForCommissionAndFees = FinancialInstitutionAccount::find($this->getCommissionFeesAccountId());
         if (is_null($odooSetting)) {
@@ -830,6 +851,20 @@ class LetterOfGuaranteeIssuance extends Model
         //
         
         if ($company->hasOdooIntegrationCredentials() && !$isOpeningBalance && !$isCdOrTdCashCoverAccount && $company->withinIntegrationDate($issuanceDate)) {
+            /**
+             * * الاتصال بأودو بيتأجل لبعد ما الترانزاكشن تكومِت
+             */
+            OdooSync::defer(function () {
+                $this->createLgIssuanceCashCoverInOdoo();
+            }, $this, 'Create Odoo LG cash cover');
+        }
+    }
+
+    protected function createLgIssuanceCashCoverInOdoo(): void
+    {
+        $company = $this->company;
+        $issuanceDate = $this->getIssuanceDate();
+        {
             $financialInstitutionAccountForCashCover = FinancialInstitutionAccount::find($this->getCashCoverDeductedFromAccountId());
             if (is_null($financialInstitutionAccountForCashCover)) {
                 return;
@@ -940,15 +975,27 @@ class LetterOfGuaranteeIssuance extends Model
         $financialInstitution = FinancialInstitution::find($financialInstitutionId);
         $company = $this->company;
         $isCdOrTdCashCoverAccount = $this->isCdOrTd();
-        $odooLetterOfGuaranteeIssuance = null ;
         foreach ([$journalEntryIdColumnName] as $journalColumnName) {
             $currentJournalEntryId = $this->{$journalColumnName};
-            $odooLetterOfGuaranteeIssuance = new LetterOfGuaranteeService($company);
             if ($currentJournalEntryId) {
-                $odooLetterOfGuaranteeIssuance->unlink($currentJournalEntryId);
+                OdooSync::defer(function () use ($company, $currentJournalEntryId) {
+                    (new LetterOfGuaranteeService($company))->unlink($currentJournalEntryId);
+                }, null, 'Unlink Odoo journal entry #'.$currentJournalEntryId);
             }
         }
         if ($company->hasOdooIntegrationCredentials() && !$isCdOrTdCashCoverAccount && $company->withinIntegrationDate($cancellationDate)) {
+            /**
+             * * إنشاء قيد الإلغاء في أودو بيتأجل لبعد ما الترانزاكشن تكومِت
+             */
+            OdooSync::defer(function () use ($company, $model, $financialInstitution, $cancellationDate, $cashCoverAmount, $ref, $message, $journalEntryIdColumnName) {
+                $this->createLgCancelCashCoverInOdoo($company, $model, $financialInstitution, $cancellationDate, $cashCoverAmount, $ref, $message, $journalEntryIdColumnName);
+            }, $this, 'Cancel Odoo LG cash cover');
+        }
+    }
+
+    protected function createLgCancelCashCoverInOdoo($company, $model, $financialInstitution, $cancellationDate, $cashCoverAmount, $ref, $message, string $journalEntryIdColumnName): void
+    {
+        {
             $lgType= $this->getLgType();
             $financialInstitutionAccount = FinancialInstitutionAccount::find($this->getCashCoverDeductedFromAccountId());
             $currency = $financialInstitutionAccount->getCurrency();

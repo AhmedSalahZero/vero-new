@@ -22,6 +22,21 @@
 {{ __('Consolidated Cash Flow') }}
 @endsection
 @section('content')
+@php
+    $selectedCurrency = old('currency', $company->getMainFunctionalCurrency());
+    $contractsForJs = $activeContracts->map(function ($c) {
+        $label = $c->getName();
+        if ($c->getCode()) {
+            $label .= ' [' . $c->getCode() . ']';
+        }
+
+        return [
+            'id' => (string) $c->id,
+            'label' => $label,
+            'currency' => strtoupper(trim((string) $c->getCurrency())),
+        ];
+    })->values();
+@endphp
 <div>
 <form class="kt-form kt-form--label-right" method="get" action="{{ route('reports.consolidated-cash-flow.result', ['company' => $company->id]) }}">
     <div class="kt-portlet">
@@ -45,10 +60,7 @@
                 </div>
                 <div class="col-md-3">
                     <label>{{ __('Currency') }}</label>
-                    @php
-                        $selectedCurrency = old('currency', $company->getMainFunctionalCurrency());
-                    @endphp
-                    <select name="currency" class="form-control">
+                    <select name="currency" id="ccf_currency" class="form-control">
                         @foreach (getBanksCurrencies() as $currencyId => $currentName)
                             <option value="{{ $currencyId }}" @if ($selectedCurrency === $currencyId || $selectedCurrency === $currentName) selected @endif>
                                 {{ touppercase($currentName) }}
@@ -60,9 +72,9 @@
             <div class="form-group row">
                 <div class="col-md-12">
                     <label>{{ __('Contracts') }} ({{ __('leave empty for all active contracts') }})</label>
-                    <select name="contract_ids[]" class="form-control select2-select" multiple data-live-search="true" data-actions-box="true">
+                    <select name="contract_ids[]" id="ccf_contracts" class="form-control select2-select" multiple data-live-search="true" data-actions-box="true" data-max-options="200">
                         @foreach ($activeContracts as $c)
-                            <option value="{{ $c->id }}" @if (collect(old('contract_ids', []))->contains($c->id)) selected @endif>
+                            <option value="{{ $c->id }}" data-currency="{{ $c->getCurrency() }}" @if (collect(old('contract_ids', []))->contains($c->id)) selected @endif>
                                 {{ $c->getName() }} @if ($c->getCode()) [{{ $c->getCode() }}] @endif
                             </option>
                         @endforeach
@@ -102,3 +114,69 @@
     });
 </script>
 @endsection
+@push('js')
+<script>
+    $(function () {
+        // Layout calls reinitializeSelect2() after @stack('js'); defer so picker exists first.
+        setTimeout(function () {
+            const $currency = $('#ccf_currency');
+            const $contracts = $('#ccf_contracts');
+            const allContracts = @json($contractsForJs);
+            let preferredSelectedIds = @json(array_map('strval', old('contract_ids', [])));
+
+            function normalizeCurrency(value) {
+                return String(value || '').trim().toUpperCase();
+            }
+
+            function reinitContractsPicker() {
+                const maxOptions = $contracts.data('max-options') || 200;
+                if (typeof $contracts.selectpicker !== 'function') {
+                    return;
+                }
+                try {
+                    $contracts.selectpicker('destroy');
+                } catch (e) {}
+                $contracts.selectpicker({
+                    liveSearch: true,
+                    actionsBox: true,
+                    maxOptions: maxOptions,
+                    buttons: ['selectMax', 'disableAll'],
+                });
+                $contracts.data('max-options', maxOptions);
+            }
+
+            function refreshContractsSelect(clearSelection) {
+                const currency = normalizeCurrency($currency.val());
+                const keepSelected = clearSelection
+                    ? []
+                    : (($contracts.val() || []).length ? ($contracts.val() || []) : preferredSelectedIds).map(String);
+
+                const matching = allContracts.filter(function (contract) {
+                    return normalizeCurrency(contract.currency) === currency;
+                });
+
+                $contracts.empty();
+                matching.forEach(function (contract) {
+                    const selected = keepSelected.indexOf(String(contract.id)) !== -1 ? ' selected' : '';
+                    $contracts.append(
+                        $('<option></option>')
+                            .attr('value', contract.id)
+                            .attr('data-currency', contract.currency)
+                            .prop('selected', selected !== '')
+                            .text(contract.label)
+                    );
+                });
+
+                reinitContractsPicker();
+            }
+
+            $currency.off('change.ccfContracts').on('change.ccfContracts', function () {
+                preferredSelectedIds = [];
+                refreshContractsSelect(true);
+            });
+
+            refreshContractsSelect(false);
+        }, 0);
+    });
+</script>
+@endpush

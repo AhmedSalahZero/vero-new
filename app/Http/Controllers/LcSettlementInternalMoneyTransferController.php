@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\FinancialInstitution;
 use App\Models\LcSettlementInternalMoneyTransfer;
 use App\Models\LetterOfCreditIssuance;
+use App\Services\Api\OdooSync;
 use App\Traits\GeneralFunctions;
 use Illuminate\Http\Request;
 
@@ -85,7 +86,16 @@ class LcSettlementInternalMoneyTransferController
 	}
 	
 	public function store(Company $company   , Request $request){
-	
+		/**
+		 * * الحفظ كله جوه ترانزاكشن واحدة
+		 */
+		return OdooSync::transaction(function () use ($company, $request) {
+			return $this->storeWithinTransaction($company, $request);
+		});
+	}
+
+	protected function storeWithinTransaction(Company $company   , Request $request){
+
 		$internalMoneyTransfer = new LcSettlementInternalMoneyTransfer ;
 		$companyId = $company->id ;
 		/**
@@ -135,11 +145,18 @@ class LcSettlementInternalMoneyTransferController
     }
 	
 	public function update(Company $company, Request $request , LcSettlementInternalMoneyTransfer $lcSettlementInternalTransfer){
-		
-		$lcSettlementInternalTransfer->deleteRelations();
-		$lcSettlementInternalTransfer->delete();
+
 		$type = LcSettlementInternalMoneyTransfer::BANK_TO_LETTER_OF_CREDIT;
-		$this->store($company,$request);
+		/**
+		 * * التعديل معمول كـ حذف ثم إنشاء
+		 * * فلازم يكون كله في ترانزاكشن واحدة
+		 */
+		OdooSync::transaction(function () use ($company, $request, $lcSettlementInternalTransfer) {
+			$lcSettlementInternalTransfer->deleteRelations();
+			$lcSettlementInternalTransfer->delete();
+
+			$this->storeWithinTransaction($company,$request);
+		});
 		$activeTab = $type ;
 		return response()->json([
 			'status'=>true,
@@ -150,9 +167,10 @@ class LcSettlementInternalMoneyTransferController
 	
 	public function destroy(Company $company , LcSettlementInternalMoneyTransfer $lcSettlementInternalTransfer)
 	{
-		$lcSettlementInternalTransfer->deleteRelations();
-		
-		$lcSettlementInternalTransfer->delete();
+		OdooSync::transaction(function () use ($lcSettlementInternalTransfer) {
+			$lcSettlementInternalTransfer->deleteRelations();
+			$lcSettlementInternalTransfer->delete();
+		});
 		return redirect()->back()->with('success',__('Item Has Been Delete Successfully'));
 	}
 	
