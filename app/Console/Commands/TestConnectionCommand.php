@@ -49,6 +49,8 @@ class TestConnectionCommand extends Command
 
 		$company = Company::find(92);
 		$user = User::find(64);
+		$this->info(' User: ' . $user->name);
+		$this->info(' Company: ' . $company->name);
 		/**
 		 * @var User $user
 		 * @var Company $company
