@@ -20,7 +20,7 @@
 @section('content')
 <div>
 <p style="opacity:.85;margin-bottom:1rem;">{{ __('Note: the report period must include today (same rule as the main cash flow report).') }}</p>
-<p style="opacity:.85;margin-bottom:1rem;">{{ __('Tip: select only the contracts you need (up to 50 per run). Monthly interval is faster than daily for long periods.') }}</p>
+<p style="opacity:.85;margin-bottom:1rem;">{{ __('Tip: leave contracts empty to include all active contracts, or select the ones you need. Monthly interval is faster than daily for long periods.') }}</p>
 <form class="kt-form kt-form--label-right" method="get" action="{{ route('reports.consolidated-cash-flow.result', ['company' => $company->id]) }}">
     <div class="kt-portlet">
         <div class="kt-portlet__body">
@@ -41,10 +41,14 @@
                 </div>
                 <div class="col-md-3">
                     <label>{{ __('Currency') }}</label>
+                    @php
+                        $selectedCurrency = old('currency', $company->getMainFunctionalCurrency());
+                    @endphp
                     <select name="currency" class="form-control">
-                        <option value="{{ $company->getMainFunctionalCurrency() }}" selected>{{ $company->getMainFunctionalCurrency() }}</option>
                         @foreach (getBanksCurrencies() as $currencyId => $currentName)
-                            <option value="{{ $currentName }}" @if (old('currency') === $currentName) selected @endif>{{ $currentName }}</option>
+                            <option value="{{ $currencyId }}" @if ($selectedCurrency === $currencyId || $selectedCurrency === $currentName) selected @endif>
+                                {{ touppercase($currentName) }}
+                            </option>
                         @endforeach
                     </select>
                 </div>

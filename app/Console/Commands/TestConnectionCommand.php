@@ -49,7 +49,6 @@ class TestConnectionCommand extends Command
 
 		$company = Company::find(92);
 		$user = $company->users()->where('odoo_id','!=',null)
-		->where('')
 		->first();
 		/**
 		 * @var User $user

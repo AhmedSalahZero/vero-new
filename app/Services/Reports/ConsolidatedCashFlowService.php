@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\DB;
 
 class ConsolidatedCashFlowService
 {
-    private const MAX_CONTRACTS_PER_RUN = 50;
-
     public function build(Company $company, Request $request): array
     {
         $contractIds = $this->resolveContractIds($company, $request);
@@ -41,10 +39,6 @@ class ConsolidatedCashFlowService
                 ->orderBy('name')
                 ->pluck('id')
                 ->all();
-        }
-
-        if (count($contractIds) > self::MAX_CONTRACTS_PER_RUN) {
-            throw new \RuntimeException(__('Too many contracts selected (:count). Please choose up to :max contracts per run.', ['count' => count($contractIds), 'max' => self::MAX_CONTRACTS_PER_RUN]));
         }
 
         return $contractIds;

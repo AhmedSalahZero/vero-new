@@ -103,7 +103,7 @@ class CashFlowContractPeriodSupplementBatchLoader
         $totalCashInFlowKey = __('Total Cash Inflow');
 
         $feeRows = DB::table('current_account_bank_statements')
-            ->select(['letter_of_guarantee_issuances.lg_type', 'financial_institution_accounts.currency', 'current_account_bank_statements.date', DB::raw('sum(credit) as paid_amount')])
+            ->select(['letter_of_guarantee_issuances.lg_type', 'financial_institution_accounts.currency', 'current_account_bank_statements.date', DB::raw('sum(credit) as total_amount')])
             ->join('financial_institution_accounts', 'financial_institution_accounts.id', '=', 'current_account_bank_statements.financial_institution_account_id')
             ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'current_account_bank_statements.letter_of_guarantee_issuance_id')
             ->where('current_account_bank_statements.company_id', $companyId)
