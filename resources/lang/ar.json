@@ -1336,5 +1336,10 @@
 "Configure":"تكوين",
 "Installments":"الأقساط",
 "All amounts are shown in":"جميع المبالغ معروضة بما يعادل",
-"Contracts filter currency":"عملة فلتر العقود"
+"Contracts filter currency":"عملة فلتر العقود",
+"Debit":"مدين",
+"Credit":"دائن",
+"End Balance":"رصيد آخر المدة",
+"Transactions":"عدد الحركات",
+"Export Excel":"تصدير Excel"
 }

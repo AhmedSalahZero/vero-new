@@ -44,12 +44,6 @@
         border: 1px solid #E2EFFE !important;
     }
 
-    .dataTables_filter {
-        width: 30% !important;
-        text-align: left !important;
-
-    }
-
     .border-parent {
         border: 2px solid #E2EFFE;
     }
@@ -285,6 +279,53 @@
                 @csrf
 
 
+                {{-- التصدير من السيرفر بيغطي المدى الكامل مش الصفحة المعروضة --}}
+                <div class="d-flex align-items-center z-index-6" style="justify-content:space-between">
+                    <span class="kt-font-bold">
+                        {{ __('Transactions') }} : {{ number_format($results->total()) }}
+                    </span>
+                    <a href="{{ $exportUrl }}" class="btn active-style btn-icon-sm align-self-center">
+                        <i class="fas fa-file-excel"></i>
+                        {{ __('Export Excel') }}
+                    </a>
+                </div>
+
+                {{--
+                    الإجماليات دي بتغطي المدى الكامل (SUM في SQL) مش الصفحة المعروضة.
+                    نفس نمط بطاقات kt-widget24 المستخدم في باقي التقارير.
+                --}}
+                @php
+                    $kpiCards = [
+                        ['title' => __('Beginning Balance'), 'value' => $kpis['beginningBalance'] ?? 0, 'color' => 'brand'],
+                        ['title' => __('Debit'),             'value' => $kpis['totalDebit'] ?? 0,       'color' => 'success'],
+                        ['title' => __('Credit'),            'value' => $kpis['totalCredit'] ?? 0,      'color' => 'warning'],
+                        ['title' => __('End Balance'),       'value' => $kpis['endingBalance'] ?? 0,
+                            'color' => ($kpis['endingBalance'] ?? 0) < 0 ? 'danger' : 'success'],
+                    ];
+                @endphp
+                <div class="row row-no-padding row-col-separator-xl mb-3">
+                    @foreach($kpiCards as $card)
+                        <div class="col-md-6 col-lg-3 col-xl-3">
+                            <div class="kt-widget24 text-center pb-0">
+                                <div class="kt-widget24__details">
+                                    <div class="kt-widget24__info">
+                                        <h4 class="kt-widget24__title font-size text-nowrap">{{ $card['title'] }}</h4>
+                                    </div>
+                                </div>
+                                <div class="kt-widget24__details">
+                                    <span class="kt-widget24__stats kt-font-{{ $card['color'] }}">
+                                        {{ number_format($card['value']) }}
+                                    </span>
+                                </div>
+                                <div class="progress progress--sm">
+                                    <div class="progress-bar kt-bg-{{ $card['color'] }}" role="progressbar" style="width: 100%;"></div>
+                                </div>
+                                <div class="kt-widget24__action"></div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
                 <div class="table-custom-container position-relative">
                     {{-- @if(!$isCurrentAccount)
                     <div class="d-flex z-index-6" style="justify-content:right">
@@ -294,39 +335,6 @@
                         </a>
                     </div>
                     @endif --}}
-
-                    {{-- الإجماليات دي بتغطي المدى الكامل (SUM في SQL) مش الصفحة المعروضة --}}
-                    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" style="gap:.75rem">
-                        <div class="d-flex flex-wrap" style="gap:1.5rem">
-                            <div>
-                                <div class="kt-font-bold">{{ __('Beginning Balance') }}</div>
-                                <div>{{ number_format($kpis['beginningBalance'] ?? 0, 2) }}</div>
-                            </div>
-                            <div>
-                                <div class="kt-font-bold">{{ __('Debit') }}</div>
-                                <div>{{ number_format($kpis['totalDebit'] ?? 0, 2) }}</div>
-                            </div>
-                            <div>
-                                <div class="kt-font-bold">{{ __('Credit') }}</div>
-                                <div>{{ number_format($kpis['totalCredit'] ?? 0, 2) }}</div>
-                            </div>
-                            <div>
-                                <div class="kt-font-bold">{{ __('End Balance') }}</div>
-                                <div class="{{ ($kpis['endingBalance'] ?? 0) < 0 ? 'kt-font-danger' : 'kt-font-success' }}">
-                                    {{ number_format($kpis['endingBalance'] ?? 0, 2) }}
-                                </div>
-                            </div>
-                            <div>
-                                <div class="kt-font-bold">{{ __('Transactions') }}</div>
-                                <div>{{ number_format($kpis['transactionCount'] ?? 0) }}</div>
-                            </div>
-                        </div>
-                        {{-- تصدير من السيرفر — بيغطي المدى الكامل مش الصفحة المعروضة --}}
-                        <a href="{{ $exportUrl }}" class="btn active-style btn-icon-sm align-self-center">
-                            <i class="fas fa-file-excel"></i>
-                            {{ __('Export Excel') }}
-                        </a>
-                    </div>
 
                     <div>
 
@@ -454,10 +462,11 @@
 
 
 
-                                // اتشال الـ B (أزرار التصدير من المتصفح) بعد ما بقى فيه ترقيم من
-                                // السيرفر — كانت هتصدّر الصفحة المعروضة بس. التصدير الكامل بقى
-                                // من اللينك اللي فوق (exportExcel)
-                                dom: 'frtip'
+                                // B = أزرار التصدير من المتصفح — اتشالت لأن مع الترقيم كانت
+                                //     هتصدّر الصفحة المعروضة بس. التصدير الكامل بقى من اللينك فوق.
+                                // f = خانة البحث — اتشالت لأنها بتفلتر الصفحة المعروضة بس
+                                //     مش كل نتايج التقرير، فبتضلل.
+                                dom: 'rtip'
 
                                 , "processing": false
                                 , "scrollX": true
