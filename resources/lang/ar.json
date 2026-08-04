@@ -1341,5 +1341,6 @@
 "Credit":"دائن",
 "End Balance":"رصيد آخر المدة",
 "Transactions":"عدد الحركات",
-"Export Excel":"تصدير Excel"
+"Export Excel":"تصدير Excel",
+"This contract code is already used by another contract in this company":"كود العقد ده مستخدم بالفعل في عقد تاني بنفس الشركة"
 }
