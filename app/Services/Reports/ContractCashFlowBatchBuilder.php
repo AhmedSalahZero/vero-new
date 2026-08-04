@@ -83,8 +83,8 @@ final class ContractCashFlowBatchBuilder
 
             CashExpense::getProjectionOtherCashOut($result, $company, 0, true);
             CustomerInvoice::getProjectionOtherCashIn($result, $company, 0, true);
-            CustomerInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId);
-            SupplierInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId);
+            CustomerInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
+            SupplierInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
             CustomerInvoice::getCustomerInvoicesUnderCollectionAtDatesForContracts($result, $company->id, $contractCode, $datesWithWeekNumber, $formEndDate);
             SupplierInvoice::getSupplierInvoicesForPoUnderCollectionAtDates($result, $company->id, $datesWithWeekNumber, $formStartDate, $formEndDate, $poAllocations, $pastDueSupplierInvoicesForContracts);
         }
@@ -154,6 +154,8 @@ final class ContractCashFlowBatchBuilder
                 $customerDueInvoices,
                 $supplierDueInvoices,
                 $pastDueLoanInstallments,
+                $foreignExchangeRates,
+                $mainFunctionalCurrency,
             );
 
             $summaries[] = [

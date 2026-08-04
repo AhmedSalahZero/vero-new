@@ -251,8 +251,8 @@ class CashFlowReportController
 		  /**
 		   * ! start postponed
 		   */
-		  CustomerInvoice::getForecastedProjectCollection($result ,$startDate , $endDate,$currency,$company->id,$datesWithWeekNumber,$contractId) ;
-		   SupplierInvoice::getForecastedProjectCollection($result ,$startDate , $endDate,$currency,$company->id,$datesWithWeekNumber,$contractId) ;
+		  CustomerInvoice::getForecastedProjectCollection($result ,$startDate , $endDate,$currency,$company->id,$datesWithWeekNumber,$contractId,$foreignExchangeRates,$mainFunctionalCurrency) ;
+		   SupplierInvoice::getForecastedProjectCollection($result ,$startDate , $endDate,$currency,$company->id,$datesWithWeekNumber,$contractId,$foreignExchangeRates,$mainFunctionalCurrency) ;
 		
 		 /**
 		   * ! end postponed
@@ -358,7 +358,7 @@ class CashFlowReportController
 			->where('supplier_invoices.contract_code',$currentContractCode);
 			})
 		->groupBy('week_start_date')->selectRaw('week_start_date,sum(amount) as amount')->get()),true);
-		$isContract ? SupplierInvoice::getForecastedProjectPayment($result ,$startDate , $endDate,$currency,$company->id,$datesWithWeekNumber,$contractId) : [];
+		$isContract ? SupplierInvoice::getForecastedProjectPayment($result ,$startDate , $endDate,$currency,$company->id,$datesWithWeekNumber,$contractId,$foreignExchangeRates,$mainFunctionalCurrency) : [];
 		
 		// for loans 
 		$pastDueInstallments = $this->getPastDueLoanSchedules($currency,$company->id);
@@ -484,9 +484,11 @@ class CashFlowReportController
 		array $customerDueInvoices = [],
 		array $supplierDueInvoices = [],
 		array $pastDueLoanInstallments = [],
+		$foreignExchangeRates = null,
+		?string $mainFunctionalCurrency = null,
 	): void {
 		if ($isContract && $contractId) {
-			SupplierInvoice::getForecastedProjectPayment($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId);
+			SupplierInvoice::getForecastedProjectPayment($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
 		}
 
 		$totalCashInFlowArray = $result['customers'][__('Total Cash Inflow')]['total'] ?? [];

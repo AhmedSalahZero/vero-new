@@ -491,13 +491,19 @@ class Ripcord_Transport_Stream implements Ripcord_Transport
 		 * * بنمسك الوورنينج بنفسنا بدل @ عشان نحتفظ بسببه
 		 * * (error_get_last مابيتملاش لما لارافيل يكون حاطط error handler)
 		 */
-		$transportError = null;
-		set_error_handler( function( $errno, $errstr ) use ( &$transportError ) {
-			$transportError = $errstr;
+		$transportErrors = array();
+		set_error_handler( function( $errno, $errstr ) use ( &$transportErrors ) {
+			/**
+			 * * بنجمّع كل الوورنينجز مش الأخير بس
+			 * * لأن أوضح رسالة بتكون الأولى، زي
+			 * * 'Unable to find the wrapper "https"' لما openssl مش محمّل
+			 */
+			$transportErrors[] = $errstr;
 			return true;
 		} );
 		$result = file_get_contents( $url, false, $context );
 		restore_error_handler();
+		$transportError = $transportErrors ? implode( ' | ', $transportErrors ) : null;
 		/**
 		 * * $http_response_header مابيعرّفه PHP إلا لما يوصل رد HTTP فعلاً
 		 * * فلو الطلب فشل قبل كده (DNS / اتصال مرفوض / TLS / تايم أوت)
@@ -548,8 +554,13 @@ class Ripcord_Transport_CURL implements Ripcord_Transport
 		}
 		$version = explode('.', phpversion() );
 		if ( ( (0 + $version[0]) == 5) && ( 0 + $version[1]) < 3 ) { // previousException supported in php >= 5.3
-			$this->_skipPreviousException = true;
-		}			
+			/**
+			 * * كان مكتوب $this->_skipPreviousException بشرطة سفلية
+			 * * والبروبرتي المعرّفة اسمها من غير شرطة
+			 * * فقراءتها تحت كانت بتطلع Undefined property وتخبّي خطأ الـ CURL الحقيقي
+			 */
+			$this->skipPreviousException = true;
+		}
 	}
 
 	/**
@@ -567,7 +578,14 @@ class Ripcord_Transport_CURL implements Ripcord_Transport
 			CURLOPT_URL            => $url,
 			CURLOPT_POST           => true,
 			CURLOPT_POSTFIELDS     => $request,
-			CURLOPT_HEADER         => true
+			CURLOPT_HEADER         => true,
+			/**
+			 * * من غير الهيدر ده كيرل بيبعت application/x-www-form-urlencoded
+			 * * فأودو بيقرا الـ body فاضي ويرد
+			 * * ExpatError: no element found: line 1, column 0
+			 * * (النسخة اللي بتستخدم stream wrapper كانت بتبعته أصلاً)
+			 */
+			CURLOPT_HTTPHEADER     => array( 'Content-Type: text/xml' )
 		);
 		curl_setopt_array( $curl, $options );
 		$contents = curl_exec( $curl );
@@ -581,10 +599,15 @@ class Ripcord_Transport_CURL implements Ripcord_Transport
 			$errorMessage = curl_error( $curl );
 			curl_close( $curl );
 			$version = explode('.', phpversion() );
-			if (!$this->_skipPreviousException) { // previousException supported in php >= 5.3
+			if (!$this->skipPreviousException) { // previousException supported in php >= 5.3
+				/**
+				 * * بنحط سبب كيرل في الرسالة نفسها كمان
+				 * * قبل كده كان مدفون في previous exception ومحدش بيشوفه
+				 */
 				$exception = new Ripcord_TransportException( 'Could not access ' . $url
+					. ' — ' . $errorMessage
 					, ripcord::cannotAccessURL
-					, new Exception( $errorMessage, $errorNumber ) 
+					, new Exception( $errorMessage, $errorNumber )
 				);
 			} else {
 				$exception = new Ripcord_TransportException( 'Could not access ' . $url 

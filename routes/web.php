@@ -850,7 +850,10 @@ Route::middleware([])->group(function () {
                     Route::get('lg-by-bank-name-report', 'LgByBankNameReportController@result')->name('result.lg.by.bank.name.report');
                     
                     Route::get('lg-lc-bank-statement', 'LGLCSBanktatementController@index')->name('view.lg.lc.bank.statement');
-                    Route::post('lg-lc-bank-statement', 'LGLCSBanktatementController@result')->name('result.lg.lc.bank.statement');
+                    // GET بدل POST عشان لينكات الصفحات ترجع نفس الفلاتر مع كل صفحة
+                    // (الفورم ده كان المرجع الوحيد للمسار — اتأكدت)
+                    Route::get('lg-lc-bank-statement-result', 'LGLCSBanktatementController@result')->name('result.lg.lc.bank.statement');
+                    Route::get('lg-lc-bank-statement-export', 'LGLCSBanktatementController@exportExcel')->name('export.lg.lc.bank.statement');
                     Route::get('get-lg-lc-types', 'LGLCSBanktatementController@getLgOrLcType')->name('get.lc.or.lg.types');
 
                     Route::get('customer-balances/{modelType}', 'BalancesController@index')->name('view.balances');

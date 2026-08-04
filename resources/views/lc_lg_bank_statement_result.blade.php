@@ -295,6 +295,39 @@
                     </div>
                     @endif --}}
 
+                    {{-- الإجماليات دي بتغطي المدى الكامل (SUM في SQL) مش الصفحة المعروضة --}}
+                    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" style="gap:.75rem">
+                        <div class="d-flex flex-wrap" style="gap:1.5rem">
+                            <div>
+                                <div class="kt-font-bold">{{ __('Beginning Balance') }}</div>
+                                <div>{{ number_format($kpis['beginningBalance'] ?? 0, 2) }}</div>
+                            </div>
+                            <div>
+                                <div class="kt-font-bold">{{ __('Debit') }}</div>
+                                <div>{{ number_format($kpis['totalDebit'] ?? 0, 2) }}</div>
+                            </div>
+                            <div>
+                                <div class="kt-font-bold">{{ __('Credit') }}</div>
+                                <div>{{ number_format($kpis['totalCredit'] ?? 0, 2) }}</div>
+                            </div>
+                            <div>
+                                <div class="kt-font-bold">{{ __('End Balance') }}</div>
+                                <div class="{{ ($kpis['endingBalance'] ?? 0) < 0 ? 'kt-font-danger' : 'kt-font-success' }}">
+                                    {{ number_format($kpis['endingBalance'] ?? 0, 2) }}
+                                </div>
+                            </div>
+                            <div>
+                                <div class="kt-font-bold">{{ __('Transactions') }}</div>
+                                <div>{{ number_format($kpis['transactionCount'] ?? 0) }}</div>
+                            </div>
+                        </div>
+                        {{-- تصدير من السيرفر — بيغطي المدى الكامل مش الصفحة المعروضة --}}
+                        <a href="{{ $exportUrl }}" class="btn active-style btn-icon-sm align-self-center">
+                            <i class="fas fa-file-excel"></i>
+                            {{ __('Export Excel') }}
+                        </a>
+                    </div>
+
                     <div>
 
 
@@ -403,6 +436,8 @@
                             </table>
                         </div>
 
+                        {{ $results->appends(Request()->all())->links() }}
+
                     </div>
 
                     @push('js')
@@ -419,7 +454,10 @@
 
 
 
-                                dom: 'Bfrtip'
+                                // اتشال الـ B (أزرار التصدير من المتصفح) بعد ما بقى فيه ترقيم من
+                                // السيرفر — كانت هتصدّر الصفحة المعروضة بس. التصدير الكامل بقى
+                                // من اللينك اللي فوق (exportExcel)
+                                dom: 'frtip'
 
                                 , "processing": false
                                 , "scrollX": true

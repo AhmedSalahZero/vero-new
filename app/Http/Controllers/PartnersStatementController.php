@@ -34,23 +34,33 @@ class PartnersStatementController
 		$partnerIds = (array)$request->get('partner_id',[]);
 		// foreach($partnerIds )
 	//	$partner = Partner::find($partnerId);
+		/**
+		 * * القائمة دي whitelist — اسم الجدول لازم يتحدد منها بس
+		 * * قبل كده كان بياخد المفتاح على طول، فأي partner_type مش موجود
+		 * * كان بيدي warning ويوصل DB::table(null) ويرمي خطأ
+		 */
 		$statementTableName = [
 			'is_subsidiary_company'=>'subsidiary_company_statements',
 			'is_shareholder'=>'shareholder_statements',
 			'is_employee'=>'employee_statements',
 			'is_other_partner'=>'other_partner_statements',
 			'is_tax'=>'tax_statements'
-		][$partnerType] ;
+		][$partnerType] ?? null ;
+		if(!$statementTableName){
+			return redirect()->back()->with('fail',__('No Data Found'));
+		}
 		$statements = [];
 		foreach($partnerIds as $partnerId){
 			$partner = Partner::find($partnerId);
 			$currentResult = DB::table($statementTableName)
-			->where('.company_id',$company->id)
+			->where('company_id',$company->id)
 			->where('currency_name',$currency)
 			->where('partner_id',$partnerId)
 			->where('date','>=',$startDate)
 			->where('date','<=',$endDate)
-			->orderByRaw('full_date asc , created_at asc')
+			// الـ id فاصل تعادل — من غيره الصفوف اللي ليها نفس full_date و created_at
+			// ترتيبها غير محدد وبيتغير من عرض للتاني
+			->orderByRaw('full_date asc , created_at asc , id asc')
 			->get() ;
 			if(count($currentResult)){
 				$statements[$partner->id]=['name'=>$partner->getName() , 'statements'=>$currentResult];

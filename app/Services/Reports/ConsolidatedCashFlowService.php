@@ -100,6 +100,8 @@ class ConsolidatedCashFlowService
                 'companyUnallocatedCashOut' => $companyUnallocatedCashOut,
                 'grandTotal' => $grandTotal,
                 'currencyName' => $currencyName,
+                // عملة الفلتر تختار العقود فقط، أما كل الأرقام المعروضة فمحوّلة للعملة الوظيفية
+                'displayCurrency' => (string) $sharedTimeline['mainFunctionalCurrency'],
                 'title' => __('Consolidated Cash Flow Report').' [ '.$reportInterval.' ]',
             ];
         } finally {
@@ -130,8 +132,8 @@ class ConsolidatedCashFlowService
         LoanSchedule::getLoanInstallmentsAtDates($result, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $datesWithWeekNumber, $periodEnd);
         CashExpense::getProjectionOtherCashOut($result, $company, $cashflowReportId, $isContract);
         CustomerInvoice::getProjectionOtherCashIn($result, $company, $cashflowReportId, $isContract);
-        CustomerInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currency, $companyId, $datesWithWeekNumber, null);
-        SupplierInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currency, $companyId, $datesWithWeekNumber, null);
+        CustomerInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currency, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
+        SupplierInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currency, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
         CustomerInvoice::getCustomerInvoicesUnderCollectionAtDatesForContracts($result, $companyId, null, $datesWithWeekNumber, $periodEnd);
         SupplierInvoice::getSupplierInvoicesUnderCollectionAtDates($result, $companyId, $datesWithWeekNumber, $periodStart, $periodEnd);
 
@@ -161,6 +163,8 @@ class ConsolidatedCashFlowService
             $customerDueInvoices,
             $supplierDueInvoices,
             $pastDueLoanInstallments,
+            $foreignExchangeRates,
+            $mainFunctionalCurrency,
         );
 
         return [

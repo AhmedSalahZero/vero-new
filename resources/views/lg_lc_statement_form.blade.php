@@ -19,8 +19,8 @@
 
 
         <!--begin::Form-->
-        <form class="kt-form kt-form--label-right" method="POST" action="{{ route('result.lg.lc.bank.statement',['company'=>$company->id ]) }}" enctype="multipart/form-data">
-            @csrf
+        {{-- GET عشان صفحة النتيجة تحمل الفلاتر في الرابط، فلينكات الصفحات والتصدير تشتغل --}}
+        <form class="kt-form kt-form--label-right" method="GET" action="{{ route('result.lg.lc.bank.statement',['company'=>$company->id ]) }}">
             <div class="kt-portlet" style="overflow-x:hidden">
                 <div class="kt-portlet__body">
                     <div class="form-group row">

@@ -35,7 +35,8 @@ class CashExpenseStatementController
 		->where('payment_date','>=',$startDate)
 		->where('payment_date','<=',$endDate)
 		->whereIn('cash_expense_category_name_id',$cashExpenseCategoryIds)
-		->orderByRaw('payment_date asc')
+		// الـ id فاصل تعادل — من غيره مصروفات نفس اليوم ترتيبها غير محدد
+		->orderByRaw('payment_date asc, cash_expenses.id asc')
 		->join('cash_expense_category_names','cash_expense_category_names.id','=','cash_expenses.cash_expense_category_name_id')
 		->join('cash_expense_categories','cash_expense_categories.id','=','cash_expense_category_names.cash_expense_category_id')
 		->selectRaw('cash_expenses.*,cash_expense_category_names.name as sub_category_name , cash_expense_categories.name as main_category_name ' )

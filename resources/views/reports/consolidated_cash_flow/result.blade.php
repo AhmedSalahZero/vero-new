@@ -20,7 +20,8 @@
         'companyUnallocatedCashOut' => $companyUnallocatedCashOut ?? [],
         'grandTotal' => $grandTotal,
         'currencyName' => $currencyName,
-        'title' => $title,
+        'displayCurrency' => $displayCurrency,
+        'title' => $title.' — '.__('All amounts are shown in').' '.$displayCurrency,
     ];
 @endphp
 
@@ -35,7 +36,7 @@
                     <button type="button" onclick="window.print()" class="btn btn-outline-primary">{{ __('Print') }}</button>
                 </div>
             </div>
-            <p class="ccf-meta mb-0"><strong>{{ __('Currency') }}:</strong> {{ $currencyName }} — <strong>{{ __('Interval') }}:</strong> {{ $reportInterval }}</p>
+            <p class="ccf-meta mb-0"><strong>{{ __('All amounts are shown in') }}:</strong> {{ $displayCurrency }} — <strong>{{ __('Contracts filter currency') }}:</strong> {{ $currencyName }} — <strong>{{ __('Interval') }}:</strong> {{ $reportInterval }}</p>
         </div>
     </div>
 
