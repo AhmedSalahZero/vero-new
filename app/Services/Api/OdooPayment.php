@@ -389,7 +389,11 @@ class OdooPayment
         $message = '',
         ?float $amountInEntryCurrency = null
     ) {
-        $amountInEntryCurrency = abs($amountInEntryCurrency ?? $amount);
+        /**
+         * * لو القيمة بالعملة الأجنبية مبعتتش أو جت صفر بنرجع للمبلغ الأصلي
+         * * عشان ما نبعتش amount_currency = 0 مع debit/credit بقيمة
+         */
+        $amountInEntryCurrency = $amountInEntryCurrency ? abs($amountInEntryCurrency) : abs($amount);
 
         
         try {
@@ -617,7 +621,11 @@ class OdooPayment
         $message = '',
         ?float $amountInEntryCurrency = null
     ) {
-        $amountInEntryCurrency = abs($amountInEntryCurrency ?? $amount);
+        /**
+         * * لو القيمة بالعملة الأجنبية مبعتتش أو جت صفر بنرجع للمبلغ الأصلي
+         * * عشان ما نبعتش amount_currency = 0 مع debit/credit بقيمة
+         */
+        $amountInEntryCurrency = $amountInEntryCurrency ? abs($amountInEntryCurrency) : abs($amount);
         try {
             // Step 1: Verify the payment exists and get its details
             $paymentData = $this->execute(

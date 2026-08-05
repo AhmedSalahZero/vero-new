@@ -274,7 +274,10 @@ use App\Models\MoneyReceived ;
 
     </div>
 
-    <div class="col-md-2" data-current-selected="{{ isset($mode) ? $model->getTransactionType() : '' }}" id="transaction-type-parent">
+    {{-- * نفس باج فورم الصرف: كان بيقرأ $mode وهو متغيّر مش موجود أصلاً
+         * فنوع العملية المحفوظ ماكانش بيترجّع في وضع التعديل والسليكت
+         * كان بيرجع لأول اختيار ويبعت لأودو حساب غلط --}}
+    <div class="col-md-2" data-current-selected="{{ isset($model) ? $model->getTransactionType() : '' }}" id="transaction-type-parent">
         <label>{{__('Transaction')}} @include('star')</label>
         <div class="kt-input-icon">
             <div class="input-group date">
