@@ -97,3 +97,63 @@ table.dataTable thead tr > .dtfc-fixed-left, table.dataTable thead tr > .dtfc-fi
 .light-gray-bg{
     background-color: lightgray;
 }
+
+/* ────────────────────────────────────────────────────────────────
+   البوب أب دايمًا في نص الشاشة
+
+   كان في ١٣٤ مودال في المشروع من غير كلاس modal-dialog-centered،
+   فكانوا بيفتحوا ملزوقين في أول الشاشة (margin: 1.75rem) وده بيخلي
+   أول المودال في نفس شريط الـ nav menu الثابت. والـ scroll مابينفعش
+   لأن المودال position:fixed فمابيتحركش مع الصفحة.
+
+   القواعد دي بتطبّق نفس سلوك modal-dialog-centered بتاع بوتستراب
+   على كل المودالات مرة واحدة، بدل ما نعدّل ١٣٤ ملف. منقولة حرفيًا
+   من assets/css/demo4/style.bundle.css عشان المودالات اللي عندها
+   الكلاس أصلاً ما يحصلّهاش أي اختلاف في السلوك.
+   ──────────────────────────────────────────────────────────────── */
+.modal .modal-dialog {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.modal .modal-dialog::before {
+    display: block;
+    height: calc(100vh - 1rem);
+    content: "";
+}
+
+.modal .modal-dialog.modal-dialog-scrollable {
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.modal .modal-dialog.modal-dialog-scrollable .modal-content {
+    max-height: none;
+}
+
+.modal .modal-dialog.modal-dialog-scrollable::before {
+    content: none;
+}
+
+@media (min-width: 576px) {
+    .modal .modal-dialog {
+        min-height: calc(100% - 3.5rem);
+    }
+
+    .modal .modal-dialog::before {
+        height: calc(100vh - 3.5rem);
+    }
+}
+
+/* الهيدر الثابت بتاع Metronic عنده z-index: 97 والمودال 1050، فالترتيب
+   سليم طالما مفيش stacking context حواليه. بنرفعهم فوق أي عنصر ثابت
+   تاني في الصفحة للأمان — الباك دروب فضل تحت المودال زي ما هو. */
+.modal {
+    z-index: 1100;
+}
+
+.modal-backdrop {
+    z-index: 1090;
+}
