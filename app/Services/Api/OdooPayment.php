@@ -79,14 +79,6 @@ class OdooPayment
                     $paymentData['destination_account_id'] = (int) $odooIdWithRef['id'];
                     $paymentData['memo'] = $odooIdWithRef['ref'] ?: $paymentData['memo'];
                 }
-                /**
-                 * * الجهات الضريبية بيتخزن في odoo_id بتاعها رقم الحساب مش رقم الشريك
-                 * * (شوف OdooSettingController::store) فبعتها كـ partner_id كان بيبوّظ القيد
-                 * * نفس الحماية الموجودة في createCashExpense
-                 */
-                if ($moneyModel->partner && $moneyModel->partner->isTax()) {
-                    $paymentData['partner_id'] = null;
-                }
             }
 
             $paymentId = $this->models->execute_kw(
@@ -1394,17 +1386,14 @@ public function transferAdvanceToReceivableOrPayable(int $odooCurrencyId , float
                 'journal_id' => $journalId,
                 'date' => date('Y-m-d'),
                 'ref' => 'Transfer Customer Advance to Receivable',
-                /**
-                 * * الـ currency_id كان ناقص هنا (موجود في فرع الموردين بس)
-                 * * وبدونه أودو بيتجاهل amount_currency ويخلّيها = المبلغ بالجنيه
-                 * * فالقيد كان بيتسجّل من غير قيمة العملة الأجنبية
-                 */
                 'line_ids' => [
+					//   'debit' => abs($amountInMainFunctionalCurrency),
+                    //     'amount_currency' => abs($amountInCurrency),
+						
                     [0, 0, [
                         'account_id' => $advanceAccountId,
                         'partner_id' => $partnerId,
                         'name' => 'Transfer from Customer Advance',
-                        'currency_id' => $odooCurrencyId,
                         'debit' => abs($amountInMainFunctionalCurrency),
 						'amount_currency' => abs($amountInCurrency),
                         'credit' => 0,
@@ -1413,10 +1402,9 @@ public function transferAdvanceToReceivableOrPayable(int $odooCurrencyId , float
                         'account_id' => $receivableAccountId,
                         'partner_id' => $partnerId,
                         'name' => 'Transfer to Receivable',
-                        'currency_id' => $odooCurrencyId,
                         'debit' => 0,
-                        'credit' => abs($amountInMainFunctionalCurrency),
-						'amount_currency' => -abs($amountInCurrency),
+                        'credit' => $amountInMainFunctionalCurrency,
+						'amount_currency' => -$amountInCurrency,
                     ]]
                 ]
             ];

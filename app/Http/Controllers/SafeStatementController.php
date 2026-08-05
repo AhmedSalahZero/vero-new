@@ -32,7 +32,14 @@ class SafeStatementController
 		->where('branch_id',$branchId)
 		->where('date','>=',$startDate)
 		->where('date','<=',$endDate)
-		->orderByRaw('date desc , id desc')
+		/**
+		 * * الترتيب بـ full_date مش date: الرصيد الجاري
+		 * * (beginning_balance/end_balance) بيتسلسل في CashInSafeStatement
+		 * * بـ 'full_date asc , id asc'، فالترتيب بالتاريخ من غير وقت كان
+		 * * بيقلب الصفوف اللي في نفس اليوم ويخلي رصيد آخر صف مش متصل
+		 * * برصيد اللي بعده
+		 */
+		->orderByRaw('full_date desc , id desc')
 		->get();
 			if(!count($results)){
 				return redirect()

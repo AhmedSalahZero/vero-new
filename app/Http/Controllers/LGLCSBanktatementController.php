@@ -200,6 +200,12 @@ class LGLCSBanktatementController
         return [
             'query' => $freshQuery,
             'statementTable' => $statementTableName,
+            /**
+             * * نفس العمود اللي الاستعلام بيرتّب بيه فوق (full_date لكشوف
+             * * الـ LC/LG و date لكشف الـ LC Overdraft) — الكروت لازم تقرا
+             * * أول/آخر صف بنفس الترتيب وإلا هتجيب رصيد صف تاني خالص
+             */
+            'orderColumn' => $orderColumnName,
             'isLcOverdraftBankStatement' => $isLcOverdraftBankStatement,
             'financialInstitutionName' => $financialInstitutionName,
             'letterOfCreditFacilityName' => $letterOfCreditFacilityName,
@@ -222,7 +228,7 @@ class LGLCSBanktatementController
         }
 
         $results = $this->paginateStatement($data['query'], self::ROWS_PER_PAGE);
-        $kpis = $this->ledgerStatementKpis($data['query'], $data['statementTable'], $results->total());
+        $kpis = $this->ledgerStatementKpis($data['query'], $data['statementTable'], $results->total(), $data['orderColumn']);
 
         return view('lc_lg_bank_statement_result', [
             'results' => $results,

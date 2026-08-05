@@ -109,6 +109,16 @@ trait PaginatesStatementQueries
      * summed in SQL; the opening and closing balances are read off the
      * boundary rows, because they are stored per row rather than derived.
      *
+     * ⚠️ لازم $dateColumn يكون نفس العمود اللي التقرير بيرتّب بيه استعلامه.
+     * الرصيد الجاري (beginning_balance/end_balance) بيتسلسل بـ
+     * 'full_date asc , id asc' — شوف CurrentAccountBankStatement و
+     * CashInSafeStatement و RepairStatementBalancesCommand::ORDER. فالتقرير
+     * اللي بيعرض بـ full_date وبيقرا صفوف الحدود بعمود التاريخ date (من غير
+     * وقت) بيجيب صف مختلف كل ما آخر يوم في الفترة يكون فيه أكتر من حركة
+     * وأكبر id مايكونش هو آخر full_date — وده طبيعي لأن القيود اللي بتتسجّل
+     * بتاريخ قديم بتاخد id أكبر. ساعتها الكارت بيعرض رصيد صف في نص الكشف.
+     * الديفولت فضل 'date' للتقارير اللي بترتّب فعلاً بـ date.
+     *
      * @param  callable():\Illuminate\Database\Query\Builder  $freshQuery
      * @return array<string,float|int>
      */
