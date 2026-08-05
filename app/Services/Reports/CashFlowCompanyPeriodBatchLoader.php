@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 final class CashFlowCompanyPeriodBatchLoader
 {
-    private const LG_CASH_COVER_DATE_COLUMN = 'letter_of_guarantee_issuances.renewal_date';
-
     public static function apply(
         array &$result,
         Collection $foreignExchangeRates,
@@ -213,13 +211,16 @@ final class CashFlowCompanyPeriodBatchLoader
             $result['cash_expenses'][$feeType][$lgType]['total'][$weekKey] = ($result['cash_expenses'][$feeType][$lgType]['total'][$weekKey] ?? 0) + $amount;
             $result['cash_expenses'][$feeType]['total'][$weekKey] = ($result['cash_expenses'][$feeType]['total'][$weekKey] ?? 0) + $amount;
         }
-        $coverRows = DB::table('letter_of_guarantee_cash_cover_statements')
+        $coverQuery = DB::table('letter_of_guarantee_cash_cover_statements')
             ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
-            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
-            ->whereBetween(self::LG_CASH_COVER_DATE_COLUMN, [$periodStart, $periodEnd])
+            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id');
+        $coverQuery = LgCashCoverEffectiveDate::joinTo($coverQuery);
+        $effectiveDateSql = LgCashCoverEffectiveDate::sql();
+        $coverRows = $coverQuery
+            ->whereBetween(DB::raw($effectiveDateSql), [$periodStart, $periodEnd])
             ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
-            ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.self::LG_CASH_COVER_DATE_COLUMN)
-            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, sum(debit) as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, '.self::LG_CASH_COVER_DATE_COLUMN.' as movement_date')
+            ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql)
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, sum(debit) as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, '.$effectiveDateSql.' as movement_date')
             ->get();
         foreach ($coverRows as $row) {
             $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->movement_date, $periodsByWeekKey);

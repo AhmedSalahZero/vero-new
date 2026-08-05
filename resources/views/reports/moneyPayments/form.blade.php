@@ -251,7 +251,9 @@ $selectedBanks = [];
                         </div>
 
 
-                        <div class="col-md-2" data-current-selected="{{ isset($mode) ? $model->getTransactionType() : '' }}" id="transaction-type-parent">
+                        {{-- * كان بيقرأ $mode وهو متغيّر مش موجود أصلاً، يعني القيمة المحفوظة
+                             * ماكانتش بتترجّع في وضع التعديل والسليكت كان بيرجع لأول اختيار --}}
+                        <div class="col-md-2" data-current-selected="{{ isset($model) ? $model->getTransactionType() : '' }}" id="transaction-type-parent">
                             <label>{{__('Transaction')}} @include('star')</label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">

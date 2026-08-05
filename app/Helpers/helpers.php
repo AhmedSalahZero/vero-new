@@ -3608,7 +3608,17 @@ function getBanksCurrencies():array
 function getDiffBetweenTwoDatesInDays(?Carbon $firstDate, ?Carbon $secondDate)
 {
     if ($firstDate && $secondDate) {
-        return $firstDate->diffInDays($secondDate);
+        // Same Carbon 3 bug class as IsInvoice::getAging() — diffInDays()
+        // with no $absolute flag returns a signed, fractional value
+        // under Carbon 3 (this project's Laravel 12) instead of Carbon
+        // 2's always-positive whole-day count. This shared helper is
+        // used purely for "how many days between these two dates"
+        // displays (Cheque.php, PayableCheque.php,
+        // TimeOfDepositRenewalDateController, and 3 renewal/adjustment
+        // history tables) — every call site already passes dates in
+        // chronological order, so forcing absolute + int is a safe,
+        // root-cause fix for all of them at once, not just this page.
+        return (int) $firstDate->diffInDays($secondDate, true);
     }
     return 0 ;
 }

@@ -120,14 +120,17 @@ class CashFlowContractPeriodSupplementBatchLoader
             self::applyLgFeeRow($result, $row, $lgsTypes, $mainType, $subTypeFees, $totalCashInFlowKey, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, false);
         }
 
-        $coverRows = DB::table('letter_of_guarantee_cash_cover_statements')
-            ->select(['letter_of_guarantee_issuances.lg_type', 'letter_of_guarantee_cash_cover_statements.currency', 'letter_of_guarantee_issuances.renewal_date', DB::raw('sum(debit) as total_amount')])
+        $coverQuery = DB::table('letter_of_guarantee_cash_cover_statements')
             ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
-            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
-            ->whereBetween('letter_of_guarantee_issuances.renewal_date', [$periodStart, $periodEnd])
+            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId);
+        $coverQuery = LgCashCoverEffectiveDate::joinTo($coverQuery);
+        $effectiveDateSql = LgCashCoverEffectiveDate::sql();
+        $coverRows = $coverQuery
+            ->selectRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql.' as movement_date, sum(debit) as total_amount')
+            ->whereBetween(DB::raw($effectiveDateSql), [$periodStart, $periodEnd])
             ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
             ->whereIn('letter_of_guarantee_issuances.contract_id', $contractIds)
-            ->groupBy('letter_of_guarantee_issuances.lg_type', 'letter_of_guarantee_cash_cover_statements.currency', 'letter_of_guarantee_issuances.renewal_date')
+            ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql)
             ->get();
 
         foreach ($coverRows as $row) {
@@ -226,7 +229,7 @@ class CashFlowContractPeriodSupplementBatchLoader
         array $periodsByWeekKey,
         bool $isCashCover,
     ): void {
-        $dateField = $isCashCover ? 'renewal_date' : 'date';
+        $dateField = $isCashCover ? 'movement_date' : 'date';
         $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->{$dateField}, $periodsByWeekKey);
         if ($weekKey === null) {
             return;

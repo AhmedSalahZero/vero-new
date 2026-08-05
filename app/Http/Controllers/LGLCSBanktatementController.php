@@ -71,6 +71,18 @@ class LGLCSBanktatementController
         'LetterOfGuaranteeIssuance' => 'lg_type',
     ];
 
+    /**
+     * ⚠️ عمود الترتيب لازم يبقى نفس العمود اللي التريجر بيبني بيه سلسلة الأرصدة،
+     * وإلا الصفوف تتعرض بترتيب مخالف للـ beginning/end balance المخزّنة.
+     * letter_of_credit_statements و letter_of_guarantee_statements بيربطوا بالصف
+     * السابق بـ full_date، أما lc_overdraft_bank_statements فبـ date.
+     */
+    private const ORDER_COLUMN_BY_TABLE = [
+        'letter_of_credit_statements' => 'full_date',
+        'letter_of_guarantee_statements' => 'full_date',
+        'lc_overdraft_bank_statements' => 'date',
+    ];
+
     public function index(Company $company, Request $request)
     {
         $lcSources = LetterOfCreditIssuance::lcSources();
@@ -144,6 +156,7 @@ class LGLCSBanktatementController
 
         $isLcOverdraftBankStatement = $statementTableName == 'lc_overdraft_bank_statements';
         $lcTypeOrLgTypeColumnName = self::TYPE_COLUMN_BY_REPORT_TYPE[$reportType] ?? null;
+        $orderColumnName = self::ORDER_COLUMN_BY_TABLE[$statementTableName];
 
         $source = $request->get('source');
         $type = $request->get('type');
@@ -167,7 +180,7 @@ class LGLCSBanktatementController
             ->when($lcTypeOrLgTypeColumnName, function ($q) use ($lcTypeOrLgTypeColumnName, $type) {
                 $q->where($lcTypeOrLgTypeColumnName, $type);
             })
-            ->orderByRaw('date desc , '.$statementTableName.'.id desc');
+            ->orderByRaw($statementTableName.'.'.$orderColumnName.' desc , '.$statementTableName.'.id desc');
 
         if (! $freshQuery()->exists()) {
             return null;

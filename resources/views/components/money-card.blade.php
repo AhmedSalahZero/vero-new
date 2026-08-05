@@ -7,7 +7,8 @@
 
 <style>
 .black-card-title-css{
-	color: white !important;
+	color: #000 !important;
+	font-weight: 600 !important;
 }
     .report-flex {
         display: flex;

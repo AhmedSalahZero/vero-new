@@ -567,12 +567,13 @@ $(document).on('change','select#partner_type',function(){
 		}else if(partnerColumnName =='is_shareholder' ){
 			options = `
 				<option ${currentSelect == 'funding-to' ? 'selected' :''}  value="funding-to">Funding To</option>
-				<option ${currentSelect == 'dividend-payment' ? 'selected' :''}  value="funding-to">Dividend Payment</option>
+				<option ${currentSelect == 'dividend-payment' ? 'selected' :''}  value="dividend-payment">Dividend Payment</option>
 			`
 		}
 		else if( partnerColumnName=="is_subsidiary_company"){
 			options = `
 				<option ${currentSelect == 'funding-to' ? 'selected' :''}  value="funding-to">Funding To</option>
+				<option ${currentSelect == 'investment-in-subsidiary-company' ? 'selected' :''}  value="investment-in-subsidiary-company">Investment In Subsidiary Company</option>
 			`
 		}
 		else if(partnerColumnName =='is_other_partner'){
@@ -631,9 +632,15 @@ function showOrHideTransaction(partnerColumnName)
 			<option ${currentSelect == 'custody' ? 'selected' :''}  value="custody">Custody</option>
 			<option ${currentSelect == 'loan' ? 'selected' :''}  value="loan">Loan</option>
 			`
-		}else if(partnerColumnName =='is_shareholder' || partnerColumnName=="is_subsidiary_company"){
+		}else if(partnerColumnName =='is_shareholder'){
 			options = `
 				<option ${currentSelect == 'funding-to' ? 'selected' :''}  value="funding-to">Funding To</option>
+				<option ${currentSelect == 'dividend-payment' ? 'selected' :''}  value="dividend-payment">Dividend Payment</option>
+			`
+		}else if(partnerColumnName=="is_subsidiary_company"){
+			options = `
+				<option ${currentSelect == 'funding-to' ? 'selected' :''}  value="funding-to">Funding To</option>
+				<option ${currentSelect == 'investment-in-subsidiary-company' ? 'selected' :''}  value="investment-in-subsidiary-company">Investment In Subsidiary Company</option>
 			`
 		}else if(partnerColumnName =='is_other_partner'){
 			options = `

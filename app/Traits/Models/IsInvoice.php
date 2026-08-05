@@ -107,12 +107,20 @@ trait IsInvoice
 	{
 		return self::where('company_id',getCurrentCompanyId())->where('is_period_closed',0)->get()->unique(function($item){return $item['invoice_month'] .'-'.$item['invoice_year'];})->values()->toArray();
 	}
-	public function getAging(){
-		if($this->getStatus() == self::COLLETED_OR_PAID){
+	public function getAging()
+	{
+		if ($this->getStatus() == self::COLLETED_OR_PAID) {
 			return '-';
 		}
-		return now()->diffInDays(Carbon::make($this->getInvoiceDate()));
-		
+		$dueDate = $this->getInvoiceDueDate();
+		if (! $dueDate) {
+			return '-';
+		}
+		// Carbon 3 diffInDays() is signed and fractional; aging is a whole
+		// day count from the due date, and 0 while the invoice is not due yet.
+		$days = (int) Carbon::make($dueDate)->startOfDay()->diffInDays(now()->startOfDay());
+
+		return max($days, 0);
 	}
 	public function getCurrency()
 	{

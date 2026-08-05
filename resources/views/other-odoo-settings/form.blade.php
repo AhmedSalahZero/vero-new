@@ -128,6 +128,9 @@ use App\NotificationSetting ;
 								  <div class="col-md-3">
                                     <x-form.input :default-value="null" :model="$model??null" :label="__('Advances From Customers')" :type="'text'" :placeholder="__('Advances From Customers')" :name="'advances_from_customers_code'" :required="false"></x-form.input>
                                 </div>
+								  <div class="col-md-3">
+                                    <x-form.input :default-value="null" :model="$model??null" :label="__('Investment In Subsidiary Company')" :type="'text'" :placeholder="__('Investment In Subsidiary Company')" :name="'investment_in_subsidiary_company_code'" :required="false"></x-form.input>
+                                </div>
 								
 								
 
