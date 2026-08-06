@@ -15,34 +15,37 @@
     }
 
 
+    /* العرض اتظبط من تاني بعد ما اتضاف عمودين رقميين
+       (Invoices / Down Payments) جنب الـ Net Balance:
+       4 + 26 + 6 + (3 × 12) + (2 × 14) = 100% */
     .max-w-name {
-        width: 45% !important;
-        min-width: 45% !important;
-        max-width: 45% !important;
+        width: 26% !important;
+        min-width: 26% !important;
+        max-width: 26% !important;
     }
 
     .max-w-currency {
-        width: 5% !important;
-        min-width: 5% !important;
-        max-width: 5% !important;
+        width: 6% !important;
+        min-width: 6% !important;
+        max-width: 6% !important;
     }
 
     .max-w-serial {
-        width: 5% !important;
-        min-width: 5% !important;
-        max-width: 5% !important;
+        width: 4% !important;
+        min-width: 4% !important;
+        max-width: 4% !important;
     }
 
     .max-w-amount {
-        width: 15% !important;
-        min-width: 15% !important;
-        max-width: 15% !important;
+        width: 12% !important;
+        min-width: 12% !important;
+        max-width: 12% !important;
     }
 
     .max-w-report-btn {
-        width: 15% !important;
-        min-width: 15% !important;
-        max-width: 15% !important;
+        width: 14% !important;
+        min-width: 14% !important;
+        max-width: 14% !important;
     }
 
     .is-sub-row.is-total-row td.sub-numeric-bg,
@@ -366,6 +369,14 @@
                                                 </th>
 												
                                                 <th class="view-table-th max-w-amount header-th align-middle text-center">
+                                                    {{ __('Invoices') }}
+                                                </th>
+
+                                                <th class="view-table-th max-w-amount header-th align-middle text-center">
+                                                    {{ __('Down Payments') }}
+                                                </th>
+
+                                                <th class="view-table-th max-w-amount header-th align-middle text-center">
                                                     {{ __('Net Balance') }}
                                                 </th>
 
@@ -387,11 +398,26 @@
                                                 window['currentTable{{ $currencyName }}'] = null;
                                             </script>
 											@php
+												/**
+												 * الصفوف الخاصة بالعملة دي، مرتبة بالـ Net Balance من الأكبر للأصغر.
+												 * الـ SQL في الكنترولر بيعمل order by net_balance desc، لكن الترتيب ده
+												 * بيضيع بعد كده: subtractQuery() بتعدّل net_balance في مكانه (الدفعات
+												 * المقدمة)، و addMainCurrency() بتبني صفوف main_currency من الأول
+												 * بترتيب الـ partner id. عشان كده الترتيب بيتعمل هنا في العرض.
+												 * $currencyTotal هو إجمالي التاب اللي بيظهر في صف الـ Total تحت،
+												 * ونفس رقم الكارت اللي فوق بالظبط.
+												 */
+												$rowsForCurrency = collect($invoicesBalances)
+													->filter(fn($row) => $row->currency === $currencyName)
+													->sortByDesc('net_balance')
+													->values();
+												$invoicesTotal = $rowsForCurrency->sum(fn($row) => $row->invoices_amount ?? 0);
+												$downPaymentsTotal = $rowsForCurrency->sum(fn($row) => $row->down_payment_amount ?? 0);
+												$currencyTotal = $rowsForCurrency->sum('net_balance');
 												$indexKey = 0 ;
 											@endphp
-									
-                                            @foreach($invoicesBalances as $index=>$invoicesBalancesAsStdClass)
-                                            @if( $currencyName == $invoicesBalancesAsStdClass->currency)
+
+                                            @foreach($rowsForCurrency as $invoicesBalancesAsStdClass)
 											@php
 												$indexKey ++ ;
 											@endphp
@@ -405,6 +431,8 @@
 												
 												@endif
 												
+                                                <td class="sub-text-bg text-center max-w-amount">{{ number_format($invoicesBalancesAsStdClass->invoices_amount ?? 0) }}</td>
+                                                <td class="sub-text-bg text-center max-w-amount">{{ number_format($invoicesBalancesAsStdClass->down_payment_amount ?? 0) }}</td>
                                                 <td class="sub-text-bg text-center max-w-amount">{{ number_format($invoicesBalancesAsStdClass->net_balance) }}</td>
                                                 <td class="sub-text-bg max-w-report-btn text-center">
                                                     @if($currencyName && $invoicesBalancesAsStdClass->{$clientNameColumnName})
@@ -419,15 +447,29 @@
                                                 </td>
                                                     @endif
                                             </tr>
-                                            @endif
                                             @endforeach
-											
-											
-											{{-- for main currencues  --}}
-											
-										
-											
-											
+
+                                            {{-- صف الإجمالي — نفس رقم الكارت اللي فوق للعملة دي.
+                                                 متحطّ جوه الـ tbody مش tfoot عشان الجدول ده
+                                                 DataTable بـ scrollX، والـ colspan في الـ tfoot
+                                                 بيبوّظ محاذاة الأعمدة. الترتيب والـ paging متقفلين
+                                                 في إعدادات الـ DataTable تحت، فالصف ده بيفضل
+                                                 آخر صف دايمًا. --}}
+                                            @if($rowsForCurrency->count())
+                                            <tr class="parent-tr reset-table-width text-nowrap sub-text-bg is-sub-row is-total-row">
+                                                <td class="sub-text-bg max-w-serial"></td>
+                                                <td class="sub-text-bg max-w-name is-name-cell">{{ __('Total') }}</td>
+                                                <td class="sub-text-bg text-center max-w-currency">{{ $currencyName == 'main_currency' ? $mainFunctionalCurrency : $currencyName }}</td>
+                                                <td class="sub-text-bg text-center max-w-amount">{{ number_format($invoicesTotal) }}</td>
+                                                <td class="sub-text-bg text-center max-w-amount">{{ number_format($downPaymentsTotal) }}</td>
+                                                <td class="sub-text-bg text-center max-w-amount">{{ number_format($currencyTotal) }}</td>
+                                                <td class="sub-text-bg max-w-report-btn text-center"></td>
+                                                    @if($currencyName != "main_currency")
+                                                <td class="sub-text-bg max-w-report-btn text-center"></td>
+                                                    @endif
+                                            </tr>
+                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>

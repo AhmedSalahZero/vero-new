@@ -163,7 +163,11 @@
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title head-title text-primary">
-                            {{ __('Monthly Cash Flow') }}
+                            {{-- الشارت متقسّم حسب الـ Report Interval، فالعنوان لازم يقول
+                                 الفترة الفعلية. كان مكتوب "Monthly" ثابت وبيكدب لما
+                                 التقرير يشتغل weekly أو daily. $reportInterval هو اللي
+                                 التقرير اشتغل بيه فعليًا، مش اللي في الـ query string. --}}
+                            {{ __(ucfirst($reportInterval ?? 'monthly')) }} {{ __('Cash Flow') }}
                         </h3>
                     </div>
                     <div class="kt-portlet__head-label">
@@ -684,6 +688,10 @@
     am4core.ready(function() {
         am4core.useTheme(am4themes_animated);
         var chart = am4core.create("chartdiv__{{ $modelType.$currency }}", am4charts.XYChart);
+        // أرقام صحيحة في كل حتة الشارت بيطبع فيها رقم: عناوين المحاور
+        // وتولتيب المؤشر. من غير السطر ده amCharts بيرجع للـ raw float.
+        chart.numberFormatter.numberFormat = '#,###';
+
 
 
 
@@ -700,12 +708,13 @@
         yAxis.renderer.minGridDistance = 10;
 
         var xAxis = chart.xAxes.push(new am4charts.ValueAxis());
+        xAxis.cursorTooltipEnabled = false;
 
         // Create series
         var series = chart.series.push(new am4charts.ColumnSeries());
         series.dataFields.valueX = "sales";
         series.dataFields.categoryY = "state";
-        series.columns.template.tooltipText = "{categoryY}: [bold]{valueX}[/]";
+        series.columns.template.tooltipText = "{categoryY}: [bold]{valueX.formatNumber('#,###')}[/]";
         series.columns.template.strokeWidth = 0;
         series.columns.template.adapter.add("fill", function(fill, target) {
             if (target.dataItem) {
@@ -805,6 +814,10 @@
 
         // Create chart instance
         var chart = am4core.create("chartdivline2_{{ $modelType.$currency }}", am4charts.XYChart);
+        // أرقام صحيحة في كل حتة الشارت بيطبع فيها رقم: عناوين المحاور
+        // وتولتيب المؤشر. من غير السطر ده amCharts بيرجع للـ raw float.
+        chart.numberFormatter.numberFormat = '#,###';
+
 
         // Add data
 
@@ -816,12 +829,14 @@
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        // تولتيب المؤشر على المحور = موقع بكسل مُستنتج، مش نقطة بيانات
+        valueAxis.cursorTooltipEnabled = false;
 
         // Create series
         var series = chart.series.push(new am4charts.LineSeries());
         series.dataFields.valueY = "value";
         series.dataFields.dateX = "date";
-        series.tooltipText = "{value}"
+        series.tooltipText = "{value.formatNumber('#,###')}"
         series.strokeWidth = 2;
         series.minBulletDistance = 15;
 
@@ -881,6 +896,11 @@
 
         // Create chart instance
         var chart = am4core.create("chartdivline1{{ $currency }}", am4charts.XYChart);
+        // أرقام صحيحة في كل حتة الشارت بيطبع فيها رقم: عناوين المحاور
+        // وتولتيب المؤشر. من غير السطر ده amCharts بيرجع للـ raw float
+        // وده كان سبب الأرقام بالكسور الطويلة عند الـ hover.
+        chart.numberFormatter.numberFormat = '#,###';
+
 
         // Add data
         chart.data =  @json($cashFlowReport['accumulated_net_cash'] ?? []);;
@@ -891,12 +911,14 @@
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        // تولتيب المؤشر على المحور = موقع بكسل مُستنتج، مش نقطة بيانات
+        valueAxis.cursorTooltipEnabled = false;
 
         // Create series
         var series = chart.series.push(new am4charts.LineSeries());
         series.dataFields.valueY = "value";
         series.dataFields.dateX = "date";
-        series.tooltipText = "{value}"
+        series.tooltipText = "{value.formatNumber('#,###')}"
         series.strokeWidth = 2;
         series.minBulletDistance = 15;
 		
@@ -952,6 +974,10 @@
 
         // Create chart instance
         var chart = am4core.create("withdrawal-dues-chart-{{ $currency }}", am4charts.XYChart);
+        // أرقام صحيحة في كل حتة الشارت بيطبع فيها رقم: عناوين المحاور
+        // وتولتيب المؤشر. من غير السطر ده amCharts بيرجع للـ raw float.
+        chart.numberFormatter.numberFormat = '#,###';
+
 
         // Add data
         chart.data = [];
@@ -962,12 +988,14 @@
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        // تولتيب المؤشر على المحور = موقع بكسل مُستنتج، مش نقطة بيانات
+        valueAxis.cursorTooltipEnabled = false;
 
         // Create series
         var series = chart.series.push(new am4charts.LineSeries());
         series.dataFields.valueY = "value";
         series.dataFields.dateX = "date";
-        series.tooltipText = "{value}"
+        series.tooltipText = "{value.formatNumber('#,###')}"
         series.strokeWidth = 2;
         series.minBulletDistance = 15;
 
@@ -1022,6 +1050,10 @@
 
         // Create chart instance
         var chart = am4core.create("loan-chart-{{ $currency }}", am4charts.XYChart);
+        // أرقام صحيحة في كل حتة الشارت بيطبع فيها رقم: عناوين المحاور
+        // وتولتيب المؤشر. من غير السطر ده amCharts بيرجع للـ raw float.
+        chart.numberFormatter.numberFormat = '#,###';
+
 
         // Add data
         chart.data = [];
@@ -1032,12 +1064,14 @@
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        // تولتيب المؤشر على المحور = موقع بكسل مُستنتج، مش نقطة بيانات
+        valueAxis.cursorTooltipEnabled = false;
 
         // Create series
         var series = chart.series.push(new am4charts.LineSeries());
         series.dataFields.valueY = "value";
         series.dataFields.dateX = "date";
-        series.tooltipText = "{value}"
+        series.tooltipText = "{value.formatNumber('#,###')}"
         series.strokeWidth = 2;
         series.minBulletDistance = 15;
 
@@ -1095,6 +1129,11 @@
 
         // Create chart instance
         var chart = am4core.create("chartdivmulti{{ $currency }}", am4charts.XYChart);
+        // أرقام صحيحة في كل حتة الشارت بيطبع فيها رقم: عناوين المحاور
+        // وتولتيب المؤشر. من غير السطر ده amCharts بيرجع للـ raw float
+        // وده كان سبب الأرقام بالكسور الطويلة عند الـ hover.
+        chart.numberFormatter.numberFormat = '#,###';
+
 
         //
 
@@ -1112,6 +1151,8 @@
         // Create series
         function createAxisAndSeries(field, name, opposite, bullet) {
             var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            // تولتيب المؤشر على المحور = موقع بكسل مُستنتج، مش نقطة بيانات
+            valueAxis.cursorTooltipEnabled = false;
             if (chart.yAxes.indexOf(valueAxis) != 0) {
                 valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
             }
@@ -1122,7 +1163,7 @@
             series.strokeWidth = 2;
             series.yAxis = valueAxis;
             series.name = name;
-            series.tooltipText = "{name}: [bold]{valueY}[/]";
+            series.tooltipText = "{name}: [bold]{valueY.formatNumber('#,###')}[/]";
             series.tensionX = 0.8;
             series.showOnInit = true;
 
