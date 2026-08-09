@@ -313,6 +313,7 @@ class CashFlowReportController
 				TimeOfDeposit::getAmountAndInterestAtDates($result,$foreignExchangeRates,$mainFunctionalCurrency,$company->id,$startDate,$endDate,$currentWeekYear);
 			}
 			 LetterOfGuaranteeIssuance::getCommissionAndFeesAtDates($result,$foreignExchangeRates , $mainFunctionalCurrency,'date',$company->id,$startDate,$endDate,$currentWeekYear,$contractId);
+			 LetterOfGuaranteeIssuance::getIssuedCashCovers($result,$foreignExchangeRates , $mainFunctionalCurrency,$company->id,$startDate,$endDate,$currentWeekYear,$contractId);
 			 LetterOfGuaranteeIssuance::getCashCovers($letterOfGuaranteeModelData,$result,$foreignExchangeRates , $mainFunctionalCurrency,'renewal_date',$company->id,$startDate,$endDate,$currentWeekYear,$contractId);
 			 LetterOfCreditIssuance::getCommissionAndFeesAtDates($result,$foreignExchangeRates , $mainFunctionalCurrency,'date',$company->id,$startDate,$endDate,$currentWeekYear);
 			 LetterOfCreditIssuance::getRemainingLcAmountAtDates($result,$foreignExchangeRates , $mainFunctionalCurrency,$company->id,$startDate,$endDate,$currentWeekYear);
@@ -378,6 +379,7 @@ class CashFlowReportController
 		$outProjection = $result['cash_expenses'][__('Projected Other Cash Out Items')] ?? [];
 		unset($result['cash_expenses'][__('Projected Other Cash Out Items')]);
 		$result['cash_expenses'][__('Projected Other Cash Out Items')] =$outProjection;
+		$result['cash_expenses'] = $this->placeNewLgCashCoverAfterLgCommissionFees($result['cash_expenses'] ?? []);
 		$result['cash_expenses'][__('Total Cash Outflow')]['total'] = $totalCashOutFlowArray;
 		$netCash = HArr::subtractAtDates([$totalCashInFlowArray,$totalCashOutFlowArray] , array_merge(array_keys($totalCashInFlowArray),array_keys($totalCashOutFlowArray))) ;
 	
@@ -502,12 +504,46 @@ class CashFlowReportController
 		$outProjection = $result['cash_expenses'][__('Projected Other Cash Out Items')] ?? [];
 		unset($result['cash_expenses'][__('Projected Other Cash Out Items')]);
 		$result['cash_expenses'][__('Projected Other Cash Out Items')] = $outProjection;
+		$result['cash_expenses'] = $this->placeNewLgCashCoverAfterLgCommissionFees($result['cash_expenses'] ?? []);
 		$result['cash_expenses'][__('Total Cash Outflow')]['total'] = $totalCashOutFlowArray;
 
 		$netCash = HArr::subtractAtDates([$totalCashInFlowArray, $totalCashOutFlowArray], array_merge(array_keys($totalCashInFlowArray), array_keys($totalCashOutFlowArray)));
 		$result['cash_expenses'][__('Net Cash (+/-)')]['total'] = $netCash;
 		$result['cash_expenses'][__('Accumulated Net Cash (+/-)')]['total'] = $this->formatAccumulatedNetCash($netCash, $weeks);
 	}
+
+	/**
+	 * Keep New Issued LG Cash Cover immediately after LGs Commission & Fees in cash_expenses.
+	 */
+	protected function placeNewLgCashCoverAfterLgCommissionFees(array $cashExpenses): array
+	{
+		$commissionKey = __('LGs Commission & Fees');
+		$newLgCashCoverKey = __('New Issued LG Cash Cover');
+
+		if (!array_key_exists($newLgCashCoverKey, $cashExpenses)) {
+			return $cashExpenses;
+		}
+
+		$newLgCashCover = $cashExpenses[$newLgCashCoverKey];
+		unset($cashExpenses[$newLgCashCoverKey]);
+
+		if (!array_key_exists($commissionKey, $cashExpenses)) {
+			$cashExpenses[$newLgCashCoverKey] = $newLgCashCover;
+
+			return $cashExpenses;
+		}
+
+		$reordered = [];
+		foreach ($cashExpenses as $key => $value) {
+			$reordered[$key] = $value;
+			if ($key === $commissionKey) {
+				$reordered[$newLgCashCoverKey] = $newLgCashCover;
+			}
+		}
+
+		return $reordered;
+	}
+
 	public function mergeTotal(array $totals , $arrayOfItems,array $datesWithWeekNumber,$debug = false ):array 
 	{
 		foreach($arrayOfItems as $itemArr){

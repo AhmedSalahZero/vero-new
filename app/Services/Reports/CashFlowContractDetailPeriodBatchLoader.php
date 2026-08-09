@@ -476,6 +476,44 @@ final class CashFlowContractDetailPeriodBatchLoader
                 'name' => $row->partner_name,
             ];
         }
+
+        $subTypeIssued = __('New Issued LG Cash Cover');
+        $issuedCoverRows = DB::table('letter_of_guarantee_cash_cover_statements')
+            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
+            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
+            ->where('letter_of_guarantee_cash_cover_statements.type', 'debit-lg-amount')
+            ->where('letter_of_guarantee_issuances.contract_id', $contractId)
+            ->where('letter_of_guarantee_issuances.category_name', LetterOfGuaranteeIssuance::NEW_ISSUANCE)
+            ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.is_debit', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.debit', '>', 0)
+            ->whereBetween('letter_of_guarantee_cash_cover_statements.date', [$periodStart, $periodEnd])
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, letter_of_guarantee_cash_cover_statements.debit as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, letter_of_guarantee_cash_cover_statements.date as movement_date')
+            ->get();
+
+        foreach ($issuedCoverRows as $row) {
+            $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->movement_date, $periodsByWeekKey);
+            if ($weekKey === null) {
+                continue;
+            }
+
+            $lgType = $lgsTypes[$row->lg_type] ?? $row->lg_type;
+            $exchangeRate = ForeignExchangeRate::getExchangeRateAt(
+                (string) $row->currency,
+                $mainFunctionalCurrency,
+                (string) $row->movement_date,
+                $companyId,
+                $foreignExchangeRates,
+            );
+            $amount = (float) $row->total_amount * $exchangeRate;
+
+            if (! isset($result[$mainType][$subTypeIssued][$lgType]['weeks'][$weekKey])) {
+                $result[$mainType][$subTypeIssued][$lgType]['weeks'][$weekKey] = 0;
+            }
+            $result[$mainType][$subTypeIssued][$lgType]['weeks'][$weekKey] += $amount;
+            $result[$mainType][$subTypeIssued][$lgType]['total'] = ($result[$mainType][$subTypeIssued][$lgType]['total'] ?? 0) + $amount;
+            $result[$mainType][$subTypeIssued]['total'][$weekKey] = ($result[$mainType][$subTypeIssued]['total'][$weekKey] ?? 0) + $amount;
+        }
     }
 
     private static function applyLetterOfCreditMovements(

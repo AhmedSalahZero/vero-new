@@ -720,6 +720,43 @@ class LetterOfGuaranteeIssuance extends Model
         }
     
     }
+
+    /**
+     * Cash Out: cash cover locked away on new LG issuance (not opening balance).
+     */
+    public static function getIssuedCashCovers(array &$result, $foreignExchangeRates, $mainFunctionalCurrency, int $companyId, string $startDate, string $endDate, string $currentWeekYear, ?int $contractId = null): void
+    {
+        $lgsTypes = LgTypes::getAll();
+        $mainType = 'cash_expenses';
+        $subType = __('New Issued LG Cash Cover');
+
+        $rows = DB::table('letter_of_guarantee_cash_cover_statements')
+            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
+            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
+            ->whereBetween('letter_of_guarantee_cash_cover_statements.date', [$startDate, $endDate])
+            ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.type', 'debit-lg-amount')
+            ->where('letter_of_guarantee_cash_cover_statements.is_debit', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.debit', '>', 0)
+            ->where('letter_of_guarantee_issuances.category_name', self::NEW_ISSUANCE)
+            ->when($contractId, function ($q) use ($contractId) {
+                $q->where('letter_of_guarantee_issuances.contract_id', $contractId);
+            })
+            ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, letter_of_guarantee_cash_cover_statements.date')
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, sum(letter_of_guarantee_cash_cover_statements.debit) as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, letter_of_guarantee_cash_cover_statements.date as movement_date')
+            ->get();
+
+        foreach ($rows as $row) {
+            $currentCurrency = $row->currency;
+            $date = $row->movement_date;
+            $exchangeRate = ForeignExchangeRate::getExchangeRateAt($currentCurrency, $mainFunctionalCurrency, $date, $companyId, $foreignExchangeRates);
+            $lgType = $lgsTypes[$row->lg_type] ?? $row->lg_type;
+            $currentPaidAmount = $row->total_amount * $exchangeRate;
+            $result[$mainType][$subType][$lgType]['weeks'][$currentWeekYear] = isset($result[$mainType][$subType][$lgType]['weeks'][$currentWeekYear]) ? $result[$mainType][$subType][$lgType]['weeks'][$currentWeekYear] + $currentPaidAmount : $currentPaidAmount;
+            $result[$mainType][$subType][$lgType]['total'] = isset($result[$mainType][$subType][$lgType]['total']) ? $result[$mainType][$subType][$lgType]['total'] + $currentPaidAmount : $currentPaidAmount;
+            $result[$mainType][$subType]['total'][$currentWeekYear] = isset($result[$mainType][$subType]['total'][$currentWeekYear]) ? $result[$mainType][$subType]['total'][$currentWeekYear] + $currentPaidAmount : $currentPaidAmount;
+        }
+    }
     
     public static function getCashCovers(array &$letterOfGuaranteeModelData , array &$result, $foreignExchangeRates, $mainFunctionalCurrency, string $dateFieldName, int $companyId, string $startDate, string $endDate, string $currentWeekYear, ?int $contractId = null)
     {

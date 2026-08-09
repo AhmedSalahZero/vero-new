@@ -8,6 +8,7 @@ use App\Models\CashExpense;
 use App\Models\Cheque;
 use App\Models\ForeignExchangeRate;
 use App\Models\LetterOfCreditIssuance;
+use App\Models\LetterOfGuaranteeIssuance;
 use App\Models\MoneyPayment;
 use App\Models\MoneyReceived;
 use App\Models\PayableCheque;
@@ -211,6 +212,33 @@ final class CashFlowCompanyPeriodBatchLoader
             $result['cash_expenses'][$feeType][$lgType]['total'][$weekKey] = ($result['cash_expenses'][$feeType][$lgType]['total'][$weekKey] ?? 0) + $amount;
             $result['cash_expenses'][$feeType]['total'][$weekKey] = ($result['cash_expenses'][$feeType]['total'][$weekKey] ?? 0) + $amount;
         }
+
+        $issuedType = __('New Issued LG Cash Cover');
+        $issuedRows = DB::table('letter_of_guarantee_cash_cover_statements')
+            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
+            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
+            ->whereBetween('letter_of_guarantee_cash_cover_statements.date', [$periodStart, $periodEnd])
+            ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.type', 'debit-lg-amount')
+            ->where('letter_of_guarantee_cash_cover_statements.is_debit', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.debit', '>', 0)
+            ->where('letter_of_guarantee_issuances.category_name', LetterOfGuaranteeIssuance::NEW_ISSUANCE)
+            ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, letter_of_guarantee_cash_cover_statements.date')
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, sum(letter_of_guarantee_cash_cover_statements.debit) as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, letter_of_guarantee_cash_cover_statements.date as movement_date')
+            ->get();
+        foreach ($issuedRows as $row) {
+            $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->movement_date, $periodsByWeekKey);
+            if ($weekKey === null) {
+                continue;
+            }
+            $lgType = $lgsTypes[$row->lg_type] ?? $row->lg_type;
+            $exchangeRate = ForeignExchangeRate::getExchangeRateAt((string) $row->currency, $mainFunctionalCurrency, (string) $row->movement_date, $companyId, $foreignExchangeRates);
+            $amount = (float) $row->total_amount * $exchangeRate;
+            $result['cash_expenses'][$issuedType][$lgType]['weeks'][$weekKey] = ($result['cash_expenses'][$issuedType][$lgType]['weeks'][$weekKey] ?? 0) + $amount;
+            $result['cash_expenses'][$issuedType][$lgType]['total'][$weekKey] = ($result['cash_expenses'][$issuedType][$lgType]['total'][$weekKey] ?? 0) + $amount;
+            $result['cash_expenses'][$issuedType]['total'][$weekKey] = ($result['cash_expenses'][$issuedType]['total'][$weekKey] ?? 0) + $amount;
+        }
+
         $coverQuery = DB::table('letter_of_guarantee_cash_cover_statements')
             ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
             ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id');
