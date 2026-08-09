@@ -328,13 +328,15 @@ class SalesGatheringTestController extends Controller
 						CustomerInvoice::create($tableDataArr);
 					}
 					if($modelName == 'SupplierInvoice'){
-						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id']);
+						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','purchases_order_id']);
 						$purchasesOrderId = $request->get('purchases_order_id') ;
 						$contractId = $request->get('contract_id') ;
 						$tableDataArr['purchases_order_number'] =$purchasesOrderId ? PurchaseOrder::find($purchasesOrderId)->getNumber() : null ; 
-						$contractName = $contractId ? Contract::find($contractId)->getName() : null;
+						$contract = $contractId ? Contract::find($contractId) : null;
+						$contractName = $contract ? $contract->getName() : null;
 						$tableDataArr['contract_name'] = $contractName ; 
 							$tableDataArr['project_name'] = $contractName ; 
+							$tableDataArr['contract_code'] = $contract ? $contract->getCode() : null;
 								$supplierName = Partner::find($tableDataArr['supplier_id'])->getName();
 								$tableDataArr['supplier_name'] = $supplierName ; 
 							SupplierInvoice::create($tableDataArr);
@@ -396,13 +398,15 @@ class SalesGatheringTestController extends Controller
 						$model->update($tableDataArr);
 					}
 					if($modelName == 'SupplierInvoice'){
-						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id']);
+						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','purchases_order_id']);
 						$purchasesOrderId = $request->get('purchases_order_id') ;
 						$contractId = $request->get('contract_id') ;
 						$tableDataArr['purchases_order_number'] =$purchasesOrderId ? PurchaseOrder::find($purchasesOrderId)->getNumber() : null ; 
-						$contractName = $contractId ? Contract::find($contractId)->getName() : null;
+						$contract = $contractId ? Contract::find($contractId) : null;
+						$contractName = $contract ? $contract->getName() : null;
 						$tableDataArr['contract_name'] = $contractName ; 
 							$tableDataArr['project_name'] = $contractName ; 
+							$tableDataArr['contract_code'] = $contract ? $contract->getCode() : null;
 								$supplierName = Partner::find($tableDataArr['supplier_id'])->getName();
 								$tableDataArr['supplier_name'] = $supplierName ; 
 							$model->update($tableDataArr);

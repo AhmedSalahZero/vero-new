@@ -168,6 +168,21 @@ class CustomerInvoice extends Model implements IInvoice
 	const ODOO_COLLETED_OR_PAID_AMOUNT_IN_MAIN_CURRENCY = 'odoo_collected_amount_in_main_currency';
 	const EXCEL_COLLETED_OR_PAID_AMOUNT = 'excel_collected_amount';
 	const EXCEL_COLLETED_OR_PAID_AMOUNT_IN_MAIN_CURRENCY = 'excel_collected_amount_in_main_currency';
+
+	/**
+	 * The "Excel Collected Amount" upload template column was renamed
+	 * to "Previous Collection" (view-only change, tables_fields.view_name).
+	 * This keeps files/templates that still use the old header text
+	 * importing correctly — App\Imports\ImportData checks this before
+	 * giving up on a column.
+	 */
+	public static function getImportHeaderAliases(): array
+	{
+		return [
+			self::EXCEL_COLLETED_OR_PAID_AMOUNT => ['Excel Collected Amount', __('Excel Collected Amount')],
+		];
+	}
+
 	const COLLETED_OR_PAID_AMOUNT_IN_MAIN_CURRENCY = 'collected_amount_in_main_currency';
 	const PARTIALLY_COLLECTED_OR_PAID_AND_PAST_DUE = 'partially_collected_and_past_due';
 	const MONEY_MODEL_NAME = 'MoneyReceived';

@@ -441,7 +441,9 @@ final class CashFlowContractDetailPeriodBatchLoader
             ->whereBetween(DB::raw($effectiveDateSql), [$periodStart, $periodEnd])
             ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
             ->where('letter_of_guarantee_issuances.contract_id', $contractId)
-            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, letter_of_guarantee_cash_cover_statements.debit as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, '.$effectiveDateSql.' as movement_date, partners.name as partner_name, letter_of_guarantee_issuances.lg_code as lg_code')
+            ->where('letter_of_guarantee_cash_cover_statements.is_credit', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.credit', '>', 0)
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, letter_of_guarantee_cash_cover_statements.credit as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, '.$effectiveDateSql.' as movement_date, partners.name as partner_name, letter_of_guarantee_issuances.lg_code as lg_code')
             ->get();
 
         foreach ($coverRows as $row) {

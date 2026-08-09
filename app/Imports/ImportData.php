@@ -262,12 +262,18 @@ class ImportData implements
 			if (is_int($row_name)) {
 				$data[$field_name] = $row_name;
 			} else {
-				if (isset($row_with_no_spaces[$row_name])) {
+				$cellValue = $row_with_no_spaces[$row_name] ?? null;
+
+				if ($cellValue === null || $cellValue === '') {
+					$cellValue = $this->resolveImportFieldValueFromAliases($row_with_no_spaces, $field_name);
+				}
+
+				if ($cellValue !== null && $cellValue !== '') {
 			
 					if (str_contains($field_name, 'date') || str_contains($field_name,'estimated')) {
-						$data[$field_name] = $this->dateFormatting($row_with_no_spaces[$row_name]);
+						$data[$field_name] = $this->dateFormatting($cellValue);
 					} else {
-						$item = str_replace('\\', '', $row_with_no_spaces[$row_name]);
+						$item = str_replace('\\', '', $cellValue);
 						$data[$field_name] = trim(preg_replace('/\s+/', ' ', $item));
 						if($field_name == 'currency' && $item == 'EUR'){
 							$data[$field_name] = 'EURO';
@@ -281,6 +287,33 @@ class ImportData implements
 		$data['id'] = generateIdForExcelRow($this->companyId);
 
 		return $data;
+	}
+
+	/**
+	 * Look up a cell by model-defined legacy header aliases (case-insensitive).
+	 */
+	protected function resolveImportFieldValueFromAliases(array $row, string $fieldName): ?string
+	{
+		$modelClass = '\\App\\Models\\' . $this->uploadModelName;
+		if (! class_exists($modelClass) || ! method_exists($modelClass, 'getImportHeaderAliases')) {
+			return null;
+		}
+
+		$aliases = $modelClass::getImportHeaderAliases();
+		if (! isset($aliases[$fieldName]) || ! is_array($aliases[$fieldName])) {
+			return null;
+		}
+
+		foreach ($aliases[$fieldName] as $alias) {
+			$normalizedAlias = mb_strtolower(trim((string) $alias));
+			foreach ($row as $key => $value) {
+				if (mb_strtolower(trim((string) $key)) === $normalizedAlias) {
+					return is_string($value) ? $value : (string) $value;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public function registerEvents(): array

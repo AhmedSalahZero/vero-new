@@ -280,7 +280,6 @@ class AssignMoneyToInvoiceCommand extends Command
             $this->apply($side, $company, $money, $invoice, $repointed, $amount, $withhold);
         } catch (Throwable $e) {
             $this->error('Failed: '.$e->getMessage());
-
             return self::FAILURE;
         }
 

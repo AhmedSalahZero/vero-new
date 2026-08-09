@@ -154,7 +154,7 @@
             {{-- <input type="hidden" name="model_name" value="IncomeStatement"> --}}
             <input type="hidden" name="company_id" value="{{ getCurrentCompanyId()  }}">
             <input type="hidden" name="creator_id" value="{{ \Auth::id()  }}">
-            <input type="hidden" id="current-purchase-order-id" value="{{ isset($model) && $model->purchases_order_number ? @\App\Models\PurchaseOrder::where('company_id',$company->id)->where('po_number',$model->purchases_order_number)->first()->id : 0  }}">
+            <input type="hidden" id="current-purchases-order-id" value="{{ isset($model) && $model->purchases_order_number ? @\App\Models\PurchaseOrder::where('company_id',$company->id)->where('po_number',$model->purchases_order_number)->first()->id : 0  }}">
             <input type="hidden" id="current-sales-order-id" value="{{ isset($model) && $model->sales_order_number ? @\App\Models\SalesOrder::where('company_id',$company->id)->where('so_number',$model->sales_order_number)->first()->id : 0  }}">
             <input type="hidden" id="current-contract-id" value="{{ isset($model) && $model->contract_name ? @\App\Models\Contract::where('company_id',$company->id)->where('name',$model->contract_name)->first()->id : 0  }}">
 
@@ -771,7 +771,7 @@
         const contractDate = $(this).find('option:selected').attr('data-contract-date');
         var currentSalesOrderId = $('#current-sales-order-id').val();
         var currentPurchaseOrderId = $('#current-purchases-order-id').val();
-        $('[name*="contract_code"]').val(contractCode);
+        $('[name*="contract_code"]').val(contractCode).prop('readonly', true);
         $('[name*="contract_date"]').val(contractDate);
         $.ajax({
             url: "{{ route('get.po.or.so.from.contract',['company'=>$company->id]) }}"
@@ -805,6 +805,9 @@
         $('input[name*="purchases_order_date"]').val(date).trigger('change');
     })
     $(function() {
+        if ($('select[name="contract_id"]').length) {
+            $('[name*="contract_code"]').prop('readonly', true);
+        }
         $('select[name="customer_id"]').trigger('change')
         $('select[name="supplier_id"]').trigger('change')
     })

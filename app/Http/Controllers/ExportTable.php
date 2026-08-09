@@ -89,6 +89,9 @@ class ExportTable extends Controller
 			$fields[] = 'supplier_name';
 			$fields[] = 'supplier_amount';
 		}
+		if ($model === 'SupplierInvoice' || $request->get('model_name') === 'SupplierInvoice') {
+			$fields = $this->reorderSupplierInvoiceContractFields($fields);
+		}
 		$request['fields'] = $fields;
 
 		$modelExportableFields = CustomizedFieldsExportation::where('model_name', $model)
@@ -150,6 +153,14 @@ class ExportTable extends Controller
 				->pluck('view_name', 'field_name')
 				// ->whereNotIn('field_name',['collected_amount'])
 				->toArray();
+
+			$ordered = [];
+			foreach ((array) $selected_fields as $fieldName) {
+				if (array_key_exists($fieldName, $columnsWithViewingNames)) {
+					$ordered[$fieldName] = $columnsWithViewingNames[$fieldName];
+				}
+			}
+			$columnsWithViewingNames = $ordered;
 			} else {
 				$columnsWithViewingNames = TablesField::where('model_name', $model_name)
 				->pluck('view_name', 'field_name')
@@ -158,6 +169,35 @@ class ExportTable extends Controller
 			
 		return $columnsWithViewingNames;
 	}
+	/**
+	 * Place contract_name then contract_code immediately after supplier_name.
+	 */
+	public function reorderSupplierInvoiceContractFields(array $fields): array
+	{
+		$contractFields = [];
+		foreach (['contract_name', 'contract_code'] as $fieldName) {
+			$index = array_search($fieldName, $fields, true);
+			if ($index !== false) {
+				$contractFields[] = $fieldName;
+				unset($fields[$index]);
+			}
+		}
+
+		$fields = array_values($fields);
+		if ($contractFields === []) {
+			return $fields;
+		}
+
+		$anchor = array_search('supplier_name', $fields, true);
+		if ($anchor === false) {
+			return array_values(array_merge($contractFields, $fields));
+		}
+
+		array_splice($fields, $anchor + 1, 0, $contractFields);
+
+		return array_values($fields);
+	}
+
 	/**
 	 * Adding Display Name For Each Column
 	 */

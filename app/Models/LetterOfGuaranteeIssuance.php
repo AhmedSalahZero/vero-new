@@ -736,13 +736,15 @@ class LetterOfGuaranteeIssuance extends Model
 		$commonQuery = $commonQuery
                         ->whereBetween(DB::raw($effectiveDateSql), [$startDate,$endDate])
                         ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
+                        ->where('letter_of_guarantee_cash_cover_statements.is_credit', '>', 0)
+                        ->where('letter_of_guarantee_cash_cover_statements.credit', '>', 0)
                         ->when($contractId, function ($q) use ($contractId) {
                             $q->where('contract_id', $contractId);
                         }) ;
         $commonQueryBase = clone $commonQuery;
         $rows = $commonQuery
         ->groupByRaw('letter_of_guarantee_issuances.lg_type,letter_of_guarantee_cash_cover_statements.currency,'.$effectiveDateSql)
-        ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type ,sum(debit) as total_amount , letter_of_guarantee_cash_cover_statements.currency as currency,'.$effectiveDateSql.' as movement_date')->get();
+        ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type ,sum(credit) as total_amount , letter_of_guarantee_cash_cover_statements.currency as currency,'.$effectiveDateSql.' as movement_date')->get();
                     
                $totalCashInFlowKey = __('Total Cash Inflow');         
         $subType = __('Cancelled LGs Cash Cover');
@@ -750,7 +752,7 @@ class LetterOfGuaranteeIssuance extends Model
 		 * * $commonQueryBase اتعمله clone قبل ما يتحط عليه أي select
 		 * * فالـ addSelect كان بيخلي الاستعلام يجيب movement_date لوحده
 		 * * وباقي الأعمدة اللي اللوب تحت بيقراها (currency - name - lg_code
-		 * * - lg_type - debit) كانت بترجع Undefined property على stdClass
+		 * * - lg_type - credit) كانت بترجع Undefined property على stdClass
 		 * * الأعمدة متكرّرة في أكتر من جدول فلازم تتحدد بالجدول بتاعها
 		 */
        $allRowsWithoutGrouping = $commonQueryBase
@@ -759,7 +761,7 @@ class LetterOfGuaranteeIssuance extends Model
 				.'letter_of_guarantee_issuances.lg_code as lg_code,'
 				.'partners.name as name,'
 				.'letter_of_guarantee_cash_cover_statements.currency as currency,'
-				.'letter_of_guarantee_cash_cover_statements.debit as debit,'
+				.'letter_of_guarantee_cash_cover_statements.credit as credit,'
 				.$effectiveDateSql.' as movement_date'
 			)
 	   		->get();
@@ -789,7 +791,7 @@ class LetterOfGuaranteeIssuance extends Model
 			// $lgCode = LetterOfGuaranteeIssuance::find($rowWithoutGrouping->letter_of_guarantee_issuance_id)->getName();
 			$lgType = $lgsTypes[$rowWithoutGrouping->lg_type];
             $exchangeRate = ForeignExchangeRate::getExchangeRateAt($currentCurrency, $mainFunctionalCurrency, $date, $companyId, $foreignExchangeRates);
-			$currentPaidAmount = $rowWithoutGrouping->debit *$exchangeRate;
+			$currentPaidAmount = $rowWithoutGrouping->credit *$exchangeRate;
 			$letterOfGuaranteeModelData[$lgType]['weeks'][$currentWeekYear][] = [
 				'amount'=>$currentPaidAmount,
 				'lg_code'=>$lgCode,

@@ -219,8 +219,10 @@ final class CashFlowCompanyPeriodBatchLoader
         $coverRows = $coverQuery
             ->whereBetween(DB::raw($effectiveDateSql), [$periodStart, $periodEnd])
             ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.is_credit', '>', 0)
+            ->where('letter_of_guarantee_cash_cover_statements.credit', '>', 0)
             ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql)
-            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, sum(debit) as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, '.$effectiveDateSql.' as movement_date')
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, sum(credit) as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, '.$effectiveDateSql.' as movement_date')
             ->get();
         foreach ($coverRows as $row) {
             $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->movement_date, $periodsByWeekKey);

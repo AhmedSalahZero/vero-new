@@ -29,7 +29,16 @@ class HGlobal
             'options'=>[],
         ];
     }
-    if (Str::contains($title, 'Project Name')) {
+    if (Str::contains($title, 'Purchases Order Number')) {
+        return [
+            'type'=>'select',
+            'class'=>'',
+            'default_value'=>'',
+            'name'=>'purchases_order_id',
+            'options'=>[],
+        ];
+    }
+    if (Str::contains($title, 'Project Name') || Str::contains($title, 'Contract Name')) {
         return [
             'type'=>'select',
             'class'=>'',
