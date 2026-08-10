@@ -82,9 +82,24 @@ class BalancesController
 		
 		$invoicesBalances = array_merge($invoicesBalances , $invoicesBalancesForMainFunctionalCurrency);
 		$cardNetBalances = $this->sumNetBalancePerCurrency($invoicesBalances,$mainFunctionalCurrency,$clientNameColumnName);
-		$hasMoreThanCurrency = isset($cardNetBalances['currencies']) && count($cardNetBalances['currencies']) >1 ; 
-        return view('admin.reports.balances_form', compact('company','mainFunctionalCurrency','hasMoreThanCurrency','title','invoicesBalances','cardNetBalances','mainCurrency','modelType','clientNameColumnName','clientIdColumnName','customersOrSupplierStatementText'));
+		$hasMoreThanCurrency = isset($cardNetBalances['currencies']) && count($cardNetBalances['currencies']) >1 ;
+		/**
+		 * * فواتير كل شريك مجمّعة بالشريك والعملة، عشان زرار الـ Invoices اللي في كل صف
+		 * * يفتح مودال بفواتير الصف من غير ما نعمل كويري لكل صف لوحده
+		 */
+		$invoicesPerPartnerAndCurrency = $this->getInvoicesGroupedByPartnerAndCurrency($fullClassName,$company,$clientIdColumnName);
+        return view('admin.reports.balances_form', compact('company','mainFunctionalCurrency','hasMoreThanCurrency','title','invoicesBalances','cardNetBalances','mainCurrency','modelType','clientNameColumnName','clientIdColumnName','customersOrSupplierStatementText','invoicesPerPartnerAndCurrency'));
     }
+	/**
+	 * فواتير الشركة كلها مجمّعة [partner_id][currency] ، بنفس ترتيب تقرير الفواتير.
+	 */
+	protected function getInvoicesGroupedByPartnerAndCurrency(string $fullClassName,Company $company,string $clientIdColumnName)
+	{
+		return $fullClassName::where('company_id',$company->id)
+			->orderByRaw('invoice_date asc , invoice_due_date desc , net_balance desc')
+			->get()
+			->groupBy([$clientIdColumnName,'currency']);
+	}
 	protected function getDownPaymentInMainCurrency(array $partnerIds,string $mainFunctionalCurrency,string $clientIdColumnName,string $downPaymentSettlementModelName , string $moneyModelName,Company $company):array{
 		$result = [];
 		$fullDownPaymentModelName = 'App\Models\\'.$downPaymentSettlementModelName;

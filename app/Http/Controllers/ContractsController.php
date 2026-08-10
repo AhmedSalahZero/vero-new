@@ -227,8 +227,20 @@ class ContractsController
 	}	
 	public function storePoAllocations(Request $request , Company $company){
 		$purchaseOrder = PurchaseOrder::find($request->get('po_id'));
+		$allocations = $request->get('poAllocations',[]);
+		$totalPercentage = 0 ;
+		foreach($allocations as $purchaseOrderArr){
+			$totalPercentage += (float) number_unformat($purchaseOrderArr['allocation_percentage'] ?? 0);
+		}
+		/**
+		 * * مجموع نسب التوزيع لكل الصفوف ما ينفعش يعدي 100%
+		 */
+		if(round($totalPercentage,2) > 100){
+			toastr()->error(__('Total Allocate Percentage Can Not Be More Than 100%'));
+			return redirect()->back();
+		}
 		$purchaseOrder->allocations()->delete();
-		foreach( $request->get('poAllocations',[])  as $index => $purchaseOrderArr){
+		foreach( $allocations  as $index => $purchaseOrderArr){
 				$purchaseOrderArr['allocation_amount'] = number_unformat($purchaseOrderArr['allocation_amount'] ?? 0);
 				$purchaseOrder->allocations()->create($purchaseOrderArr);
 		}

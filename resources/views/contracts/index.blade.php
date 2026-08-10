@@ -750,7 +750,7 @@ use App\Models\Contract;
                                 </td>
                                 <td class="text-center">
 
-                                    <form action="{{ route('store.po.allocations',['company'=>$company->id]) }}" method="post">
+                                    <form action="{{ route('store.po.allocations',['company'=>$company->id]) }}" method="post" class="po-allocations-form-js">
                                         @csrf
                                         <input type="hidden" name="po_id" value="{{ $titleAndValue['id'] }}">
                                         @if($type == 'Supplier')
@@ -978,15 +978,50 @@ use App\Models\Contract;
 
 </script>
 <script>
+    const MAX_ALLOCATION_PERCENTAGE = 100;
+
+    /**
+     * مجموع نسب التوزيع لكل الصفوف داخل نفس المودال (مع إمكانية استثناء الصف الحالي)
+     */
+    function totalAllocationPercentage($container, excludedInput) {
+        let total = 0;
+        $container.find('.allocation-percentage-class').each(function() {
+            if (excludedInput && this === excludedInput) {
+                return;
+            }
+            const value = parseFloat(number_unformat($(this).val()));
+            total += isNaN(value) ? 0 : value;
+        });
+        return Math.round(total * 100) / 100;
+    }
+
     $(document).on('change', '.allocation-percentage-class', function() {
-        let percentage = $(this).val()
-        percentage = percentage ? percentage : 0;
+        const container = $(this).closest('.allocate-modal-class');
+        let percentage = parseFloat(number_unformat($(this).val()));
+        percentage = isNaN(percentage) ? 0 : percentage;
+
+        if (container.length) {
+            const remaining = Math.max(MAX_ALLOCATION_PERCENTAGE - totalAllocationPercentage(container, this), 0);
+            if (percentage > remaining) {
+                percentage = remaining;
+                $(this).val(percentage);
+                toastr.error('{{ __('Total Allocate Percentage Can Not Be More Than 100%') }}');
+            }
+        }
+
         percentage = percentage / 100;
         const parent = $(this).closest('.sub-item-row');
         let amount = number_unformat($(parent).find('.total-amount').attr('data-value'));
         amount = amount ? amount : 0;
         $(this).closest('tr').find('.allocation-amount-class').val(Math.round(percentage * amount, 2))
 
+    });
+
+    $(document).on('submit', '.po-allocations-form-js', function(e) {
+        if (totalAllocationPercentage($(this)) > MAX_ALLOCATION_PERCENTAGE) {
+            e.preventDefault();
+            toastr.error('{{ __('Total Allocate Percentage Can Not Be More Than 100%') }}');
+        }
     });
     $(document).on('change', 'select.contracts-js', function() {
         const parent = $(this).closest('tr')

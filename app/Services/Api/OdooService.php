@@ -250,7 +250,6 @@ class OdooService
         $projects = $this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'read', array($contractIds), [
             'fields'=>[
                 'id',
-                
                 'account_id',
                 'name',
                 'partner_id',
