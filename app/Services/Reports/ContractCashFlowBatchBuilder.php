@@ -68,7 +68,6 @@ final class ContractCashFlowBatchBuilder
         }
 
         $contractCodes = array_keys($resultsByContractCode);
-        $currency = (string) $request->input('currency', $company->getMainFunctionalCurrency());
 
         foreach ($contracts as $contract) {
             $code = (string) ($contract->getCode() ?? '');
@@ -77,14 +76,15 @@ final class ContractCashFlowBatchBuilder
             }
             $contractId = (int) $contract->id;
             $contractCode = $code;
+            $contractCurrency = (string) $contract->getCurrency();
             $result = &$resultsByContractCode[$code];
             $pastDueSupplierInvoicesForContracts = collect([]);
             $poAllocations = $poByContract->get($contractId, collect());
 
             CashExpense::getProjectionOtherCashOut($result, $company, 0, true);
             CustomerInvoice::getProjectionOtherCashIn($result, $company, 0, true);
-            CustomerInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
-            SupplierInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $currency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
+            CustomerInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $contractCurrency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
+            SupplierInvoice::getForecastedProjectCollection($result, $formStartDate, $formEndDate, $contractCurrency, $company->id, $datesWithWeekNumber, $contractId, $foreignExchangeRates, $mainFunctionalCurrency);
             CustomerInvoice::getCustomerInvoicesUnderCollectionAtDatesForContracts($result, $company->id, $contractCode, $datesWithWeekNumber, $formEndDate);
             SupplierInvoice::getSupplierInvoicesForPoUnderCollectionAtDates($result, $company->id, $datesWithWeekNumber, $formStartDate, $formEndDate, $poAllocations, $pastDueSupplierInvoicesForContracts);
         }
@@ -141,7 +141,7 @@ final class ContractCashFlowBatchBuilder
             $controller->finalizeContractCashFlowTotals(
                 $result,
                 $company,
-                $currency,
+                (string) $contract->getCurrency(),
                 $code,
                 $datesWithWeekNumber,
                 $weeks,

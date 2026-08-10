@@ -37,7 +37,7 @@
                             <label>{{ __('End Date') }} <span class="multi_selection"></span> </label>
                             <div class="kt-input-icon">
                                 <div class="input-group date">
-                                    <input required type="date" class="form-control" name="end_date" value="{{ now()->addYear() }}">
+                                    <input required type="date" class="form-control" name="end_date" value="{{ now()->format('Y-m-d') }}" max="{{ now()->format('Y-m-d') }}" oninput="if (this.value && this.max && this.value > this.max) this.value = this.max" onchange="if (this.value && this.max && this.value > this.max) this.value = this.max">
                                 </div>
                             </div>
                         </div>

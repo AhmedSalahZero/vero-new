@@ -101,7 +101,14 @@
                             </tr>
 
                             <tr class="main-with-no-child ccf-section-title">
-                                <td colspan="{{ 4 + count($weekKeys) }}">{{ __('Section C — Grand total (contracts only, bank rows excluded)') }}</td>
+                                <td colspan="{{ 4 + count($weekKeys) }}">{{ __('Section C — Grand total') }}</td>
+                            </tr>
+                            <tr class="parent-tr reset-table-width sub-text-bg">
+                                <td class="sub-text-bg main-tr"></td>
+                                <td class="sub-text-bg max-w-classes-name is-name-cell">{{ __('Cash & Banks Balance') }}</td>
+                                <td class="sub-numeric-bg text-center">—</td>
+                                @foreach($weekKeys as $wk)<td class="sub-numeric-bg text-center">{{ number_format((float) ($grandTotal['cash_and_banks'][$wk] ?? 0), 0) }}</td>@endforeach
+                                <td class="sub-numeric-bg text-center">{{ number_format($rowTotal(($grandTotal['cash_and_banks'] ?? []), $weekKeys), 0) }}</td>
                             </tr>
                             <tr class="parent-tr reset-table-width sub-text-bg">
                                 <td class="sub-text-bg main-tr"></td>

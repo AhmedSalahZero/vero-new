@@ -27,7 +27,7 @@ class ConsolidatedCashFlowService
 
     private function resolveContractIds(Company $company, Request $request): array
     {
-        $currency = (string) $request->input('currency', $company->getMainFunctionalCurrency());
+        $currencies = $this->resolveCurrencies($company, $request);
         $contractIds = $request->input('contract_ids', []);
         if (! is_array($contractIds)) {
             $contractIds = [];
@@ -36,8 +36,18 @@ class ConsolidatedCashFlowService
 
         $baseQuery = Contract::query()
             ->where('company_id', $company->id)
+            ->where('model_type', Contract::FOR_CUSTOMER)
             ->whereIn('status', [Contract::RUNNING, Contract::RUNNING_AND_AGAINST])
-            ->where('currency', $currency);
+            ->whereIn('currency', $currencies);
+
+        if (($year = $this->resolveYear($request)) !== null) {
+            // Keep contracts still running into that year; open-ended contracts
+            // (end_date is a nullable DATE column) never expire so they always qualify.
+            $baseQuery->where(function ($query) use ($year) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', $year . '-01-01');
+            });
+        }
 
         if ($contractIds === []) {
             return $baseQuery->orderBy('name')->pluck('id')->all();
@@ -48,6 +58,39 @@ class ConsolidatedCashFlowService
             ->orderBy('name')
             ->pluck('id')
             ->all();
+    }
+
+    private function resolveYear(Request $request): ?int
+    {
+        $year = $request->input('year');
+        if ($year === null || $year === '' || ! is_numeric($year)) {
+            return null;
+        }
+
+        return (int) $year;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function resolveCurrencies(Company $company, Request $request): array
+    {
+        $main = strtoupper(trim((string) $company->getMainFunctionalCurrency()));
+        $raw = $request->input('currencies', null);
+        if (! is_array($raw) || $raw === []) {
+            $legacy = $request->input('currency');
+            $raw = is_string($legacy) && trim($legacy) !== '' ? [$legacy] : [$main];
+        }
+
+        $out = [];
+        foreach ($raw as $code) {
+            $normalized = strtoupper(trim((string) $code));
+            if ($normalized !== '' && ! in_array($normalized, $out, true)) {
+                $out[] = $normalized;
+            }
+        }
+
+        return $out !== [] ? $out : [$main];
     }
 
     private function buildReport(Company $company, Request $request, array $contractIds): array
@@ -65,7 +108,7 @@ class ConsolidatedCashFlowService
             $companyPayload = $this->loadCompanyReport($controller, $company, $request, $sharedTimeline);
             $weeks = $companyPayload['weeks'];
             $dates = $companyPayload['dates'];
-            $currencyName = (string) $companyPayload['currencyName'];
+            $currencyName = implode(', ', $this->resolveCurrencies($company, $request));
             $reportInterval = (string) $companyPayload['reportInterval'];
             $companyResult = $companyPayload['result'];
             $banksSection = $this->extractBanksSection($companyResult);
@@ -76,15 +119,16 @@ class ConsolidatedCashFlowService
 
             $sumInflow = [];
             $sumOutflow = [];
-            $sumNet = [];
             foreach ($contractsSection as $row) {
                 $sumInflow = $this->sumByWeek($sumInflow, $row['cash_inflow']);
                 $sumOutflow = $this->sumByWeek($sumOutflow, $row['cash_outflow']);
-                $sumNet = $this->sumByWeek($sumNet, $row['net_cash']);
             }
 
             $companyUnallocatedCashOut = $this->computeUnallocatedCashOut($companyResult, $contractsSection, $weeks);
+            $cashAndBanks = $banksSection[self::CASH_AND_BANKS_BALANCE_KEY]['total'] ?? [];
+            $sumNet = $this->netCashWithBanks($sumInflow, $cashAndBanks, $sumOutflow, $weeks);
             $grandTotal = [
+                'cash_and_banks' => $cashAndBanks,
                 'cash_inflow' => $sumInflow,
                 'cash_outflow' => $sumOutflow,
                 'net_cash' => $sumNet,
@@ -112,7 +156,8 @@ class ConsolidatedCashFlowService
     private function loadCompanyReport(CashFlowReportController $controller, Company $company, Request $request, array $sharedTimeline): array
     {
         $subRequest = $this->buildBaseCashFlowRequest($company, $request);
-        $currency = (string) $subRequest->input('currency', $company->getMainFunctionalCurrency());
+        $currencies = $this->resolveCurrencies($company, $request);
+        $currency = $currencies[0];
         $companyId = (int) $company->id;
         $cashflowReportId = 0;
         $isContract = false;
@@ -132,8 +177,8 @@ class ConsolidatedCashFlowService
         LoanSchedule::getLoanInstallmentsAtDates($result, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $datesWithWeekNumber, $periodEnd);
         CashExpense::getProjectionOtherCashOut($result, $company, $cashflowReportId, $isContract);
         CustomerInvoice::getProjectionOtherCashIn($result, $company, $cashflowReportId, $isContract);
-        CustomerInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currency, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
-        SupplierInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currency, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
+        CustomerInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currencies, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
+        SupplierInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currencies, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
         CustomerInvoice::getCustomerInvoicesUnderCollectionAtDatesForContracts($result, $companyId, null, $datesWithWeekNumber, $periodEnd);
         SupplierInvoice::getSupplierInvoicesUnderCollectionAtDates($result, $companyId, $datesWithWeekNumber, $periodStart, $periodEnd);
 
@@ -257,13 +302,14 @@ class ConsolidatedCashFlowService
         $start = Carbon::make($request->input('start_date'))->format('Y-m-d');
         $end = Carbon::make($request->input('end_date'))->format('Y-m-d');
         $interval = $request->input('report_interval', 'monthly');
-        $currency = $request->input('currency', $company->getMainFunctionalCurrency());
+        $currencies = $this->resolveCurrencies($company, $request);
 
         return Request::create('/', 'GET', [
             'start_date' => $start,
             'end_date' => $end,
             'report_interval' => $interval,
-            'currency' => $currency,
+            'currency' => $currencies[0],
+            'currencies' => $currencies,
         ]);
     }
 
@@ -274,6 +320,27 @@ class ConsolidatedCashFlowService
         foreach ($keys as $k) {
             $out[$k] = (float) ($a[$k] ?? 0) + (float) ($b[$k] ?? 0);
         }
+        return $out;
+    }
+
+    /**
+     * Section C Net Cash: Total Cash Inflow + Cash & Banks Balance − Total Cash Outflow.
+     *
+     * @param  array<string, float|int>  $inflow
+     * @param  array<string, float|int>  $cashAndBanks
+     * @param  array<string, float|int>  $outflow
+     * @param  array<string, string|int>  $weeks
+     * @return array<string, float|int>
+     */
+    private function netCashWithBanks(array $inflow, array $cashAndBanks, array $outflow, array $weeks): array
+    {
+        $out = [];
+        foreach (array_keys($weeks) as $wk) {
+            $out[$wk] = (float) ($inflow[$wk] ?? 0)
+                + (float) ($cashAndBanks[$wk] ?? 0)
+                - (float) ($outflow[$wk] ?? 0);
+        }
+
         return $out;
     }
 

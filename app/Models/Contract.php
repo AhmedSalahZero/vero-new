@@ -104,6 +104,8 @@ class Contract extends Model
 	const RUNNING ='running';
 	const RUNNING_AND_AGAINST = 'running_and_against';
 	const FINISHED = 'finished';
+	const FOR_CUSTOMER = 'Customer';
+	const FOR_SUPPLIER = 'Supplier';
 	
 	public function overdraftAgainstAssignmentOfContractLimits()
     {
@@ -338,6 +340,22 @@ class Contract extends Model
 		$date = $this->getEndDate() ;
 		return $date ? Carbon::make($date)->format('d-m-Y'):null ;
 	}
+	/**
+	 * * null يعني العقد مفتوح المدة (بدون تاريخ نهاية) أو التاريخ غير صالح
+	 */
+	public function getEndYear():?int
+	{
+		$date = $this->getEndDate() ;
+		if(! $date){
+			return null ;
+		}
+		try{
+			$parsed = Carbon::make($date);
+		}catch(\Throwable $e){
+			return null ;
+		}
+		return $parsed ? (int) $parsed->format('Y') : null ;
+	}
 	public function setEndDateAttribute($value)
 	{
 		$date = explode('/',$value);
@@ -381,11 +399,11 @@ class Contract extends Model
 	}
 	public function forCustomer():bool
 	{
-		return $this->model_type === 'Customer';
+		return $this->model_type === self::FOR_CUSTOMER;
 	}
 	public function forSupplier():bool
 	{
-		return $this->model_type === 'Supplier';
+		return $this->model_type === self::FOR_SUPPLIER;
 	}
 	/**
 	 * * اما 

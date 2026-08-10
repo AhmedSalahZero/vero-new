@@ -23,7 +23,13 @@
 @endsection
 @section('content')
 @php
-    $selectedCurrency = old('currency', $company->getMainFunctionalCurrency());
+    $mainCurrency = strtoupper(trim((string) $company->getMainFunctionalCurrency()));
+    $selectedCurrencies = old('currencies', old('currency') ? [old('currency')] : [$mainCurrency]);
+    if (! is_array($selectedCurrencies)) {
+        $selectedCurrencies = [$selectedCurrencies];
+    }
+    $selectedCurrencies = array_map(static fn ($c) => strtoupper(trim((string) $c)), $selectedCurrencies);
+    $selectedYear = (string) old('year', '');
     $contractsForJs = $activeContracts->map(function ($c) {
         $label = $c->getName();
         if ($c->getCode()) {
@@ -34,6 +40,8 @@
             'id' => (string) $c->id,
             'label' => $label,
             'currency' => strtoupper(trim((string) $c->getCurrency())),
+            // null = open-ended contract, it never drops out of the year filter
+            'end_year' => $c->getEndYear(),
         ];
     })->values();
 @endphp
@@ -42,7 +50,7 @@
     <div class="kt-portlet">
         <div class="kt-portlet__body">
             <p class="text-red mb-2">{{ __('Note: the report period must include today (same rule as the main cash flow report).') }}</p>
-            <p class="ccf-tip mb-4">{{ __('Tip: leave contracts empty to include all active contracts, or select the ones you need. Monthly interval is faster than daily for long periods.') }}</p>
+            <p class="ccf-tip mb-4">{{ __('Tip: leave contracts empty to include all active contracts, or select the ones you need. Monthly interval is faster than daily for long periods.') }} {{ __('Currency filters which contracts are included; amounts stay in the company functional currency.') }}</p>
             <div class="form-group row">
                 <div class="col-md-3">
                     <label>{{ __('Report Interval') }} @include('star')</label>
@@ -60,9 +68,10 @@
                 </div>
                 <div class="col-md-3">
                     <label>{{ __('Currency') }}</label>
-                    <select name="currency" id="ccf_currency" class="form-control">
+                    <select name="currencies[]" id="ccf_currency" class="form-control select2-select" multiple data-live-search="true" data-actions-box="true">
                         @foreach (getBanksCurrencies() as $currencyId => $currentName)
-                            <option value="{{ $currencyId }}" @if ($selectedCurrency === $currencyId || $selectedCurrency === $currentName) selected @endif>
+                            @php $code = strtoupper(trim((string) $currencyId)); @endphp
+                            <option value="{{ $currencyId }}" @if (in_array($code, $selectedCurrencies, true) || in_array(strtoupper(trim((string) $currentName)), $selectedCurrencies, true)) selected @endif>
                                 {{ touppercase($currentName) }}
                             </option>
                         @endforeach
@@ -70,7 +79,17 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-md-12">
+                <div class="col-md-3">
+                    <label>{{ __('Year') }}</label>
+                    <select name="year" id="ccf_year" class="form-control">
+                        <option value="">{{ __('All years') }}</option>
+                        @foreach ($years as $year)
+                            <option value="{{ $year }}" @if ($selectedYear === (string) $year) selected @endif>{{ $year }}</option>
+                        @endforeach
+                    </select>
+                    <span class="form-text text-muted">{{ __('Keeps only contracts ending in that year or later.') }}</span>
+                </div>
+                <div class="col-md-9">
                     <label>{{ __('Contracts') }} ({{ __('leave empty for all active contracts') }})</label>
                     <select name="contract_ids[]" id="ccf_contracts" class="form-control select2-select" multiple data-live-search="true" data-actions-box="true" data-max-options="200">
                         @foreach ($activeContracts as $c)
@@ -117,9 +136,11 @@
 @push('js')
 <script>
     $(function () {
-        // Layout calls reinitializeSelect2() after @stack('js'); defer so picker exists first.
+        // Layout calls reinitializeSelect2() after @stack('js'); wait for it,
+        // then only refresh contracts — do not destroy #ccf_currency.
         setTimeout(function () {
             const $currency = $('#ccf_currency');
+            const $year = $('#ccf_year');
             const $contracts = $('#ccf_contracts');
             const allContracts = @json($contractsForJs);
             let preferredSelectedIds = @json(array_map('strval', old('contract_ids', [])));
@@ -128,14 +149,34 @@
                 return String(value || '').trim().toUpperCase();
             }
 
-            function reinitContractsPicker() {
-                const maxOptions = $contracts.data('max-options') || 200;
+            function selectedCurrencies() {
+                const raw = $currency.val();
+                if (!raw) {
+                    return [];
+                }
+                return (Array.isArray(raw) ? raw : [raw]).map(normalizeCurrency).filter(Boolean);
+            }
+
+            function selectedYear() {
+                const parsed = parseInt($year.val(), 10);
+                return isNaN(parsed) ? null : parsed;
+            }
+
+            function matchesYear(contract, year) {
+                if (year === null || contract.end_year === null || contract.end_year === undefined) {
+                    return true;
+                }
+                return contract.end_year >= year;
+            }
+
+            function refreshContractsPicker() {
                 if (typeof $contracts.selectpicker !== 'function') {
                     return;
                 }
                 try {
                     $contracts.selectpicker('destroy');
                 } catch (e) {}
+                const maxOptions = $contracts.data('max-options') || 200;
                 $contracts.selectpicker({
                     liveSearch: true,
                     actionsBox: true,
@@ -146,37 +187,50 @@
             }
 
             function refreshContractsSelect(clearSelection) {
-                const currency = normalizeCurrency($currency.val());
+                const currencies = selectedCurrencies();
+                const currencySet = {};
+                currencies.forEach(function (c) { currencySet[c] = true; });
+
                 const keepSelected = clearSelection
                     ? []
                     : (($contracts.val() || []).length ? ($contracts.val() || []) : preferredSelectedIds).map(String);
 
+                const year = selectedYear();
                 const matching = allContracts.filter(function (contract) {
-                    return normalizeCurrency(contract.currency) === currency;
+                    return !!currencySet[normalizeCurrency(contract.currency)] && matchesYear(contract, year);
                 });
 
                 $contracts.empty();
                 matching.forEach(function (contract) {
-                    const selected = keepSelected.indexOf(String(contract.id)) !== -1 ? ' selected' : '';
+                    const selected = keepSelected.indexOf(String(contract.id)) !== -1;
                     $contracts.append(
                         $('<option></option>')
                             .attr('value', contract.id)
                             .attr('data-currency', contract.currency)
-                            .prop('selected', selected !== '')
+                            .prop('selected', selected)
                             .text(contract.label)
                     );
                 });
 
-                reinitContractsPicker();
+                refreshContractsPicker();
             }
 
-            $currency.off('change.ccfContracts').on('change.ccfContracts', function () {
-                preferredSelectedIds = [];
-                refreshContractsSelect(true);
-            });
+            $(document)
+                .off('changed.bs.select.ccfCurrency change.ccfCurrency')
+                .on('changed.bs.select.ccfCurrency change.ccfCurrency', '#ccf_currency', function () {
+                    preferredSelectedIds = [];
+                    refreshContractsSelect(true);
+                });
+
+            $(document)
+                .off('change.ccfYear')
+                .on('change.ccfYear', '#ccf_year', function () {
+                    preferredSelectedIds = [];
+                    refreshContractsSelect(true);
+                });
 
             refreshContractsSelect(false);
-        }, 0);
+        }, 50);
     });
 </script>
 @endpush

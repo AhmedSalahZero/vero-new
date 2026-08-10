@@ -509,10 +509,15 @@ class SupplierInvoice extends Model implements IInvoice
 		 */
 		$key = 'Forecasted Suppliers Contract Payments';
 
+		$currencyList = is_array($currency) ? array_values(array_filter(array_map('strval', $currency))) : [(string) $currency];
 		
 		$contracts = Contract::where('company_id',$companyId)
 		->where('end_date','<=',$endDate)
-		->where('currency',$currency)
+		->when(count($currencyList) === 1, function($query) use ($currencyList){
+			$query->where('currency', $currencyList[0]);
+		}, function($query) use ($currencyList){
+			$query->whereIn('currency', $currencyList);
+		})
 		->when($contractId,function($query) use ($contractId){
 			$query->where('id',$contractId);
 		})
@@ -550,7 +555,7 @@ class SupplierInvoice extends Model implements IInvoice
 				$contractName = $contract->getName();
 				$poNumber = $soArr['po_number']; 
 				$customerName = $contract->getClientName();
-				$currentInvoiceAmount = DB::table('supplier_invoices')->where('company_id',$companyId)->where('currency',$currency)->where('purchases_order_number',$poNumber)->where('contract_code',$contractCode)->sum('invoice_amount');
+				$currentInvoiceAmount = DB::table('supplier_invoices')->where('company_id',$companyId)->where('currency',$contract->getCurrency())->where('purchases_order_number',$poNumber)->where('contract_code',$contractCode)->sum('invoice_amount');
 				
 				$salesOrderDownPayments = DB::table('down_payment_money_payment_settlements')->where('company_id',$companyId)->where('purchase_order_id',$soId)->where('contract_id',$contractId)->sum('down_payment_amount');
 				$purchaseOrderNetPayments = $salesOrderDownPayments - $currentInvoiceAmount;

@@ -36,7 +36,7 @@
                     <button type="button" onclick="window.print()" class="btn btn-outline-primary">{{ __('Print') }}</button>
                 </div>
             </div>
-            <p class="ccf-meta mb-0"><strong>{{ __('All amounts are shown in') }}:</strong> {{ $displayCurrency }} — <strong>{{ __('Contracts filter currency') }}:</strong> {{ $currencyName }} — <strong>{{ __('Interval') }}:</strong> {{ $reportInterval }}</p>
+            <p class="ccf-meta mb-0"><strong>{{ __('All amounts are shown in') }}:</strong> {{ $displayCurrency }} — <strong>{{ __('Contracts filter currencies') }}:</strong> {{ $currencyName }} — <strong>{{ __('Interval') }}:</strong> {{ $reportInterval }}</p>
         </div>
     </div>
 
@@ -91,9 +91,10 @@
         });
         pushRow(['{{ __('Company cash out (unallocated)') }}'].concat(data.weekKeys.map(function (wk) { return fmtNum((data.companyUnallocatedCashOut || {})[wk]); })));
         pushRow([]); r++;
-        pushRow(['{{ __('Section C — Grand total (contracts only)') }}'].concat(data.weekKeys.map(function () { return ''; })));
+        pushRow(['{{ __('Section C — Grand total') }}'].concat(data.weekKeys.map(function () { return ''; })));
         merges.push({ s: { r: r - 1, c: 0 }, e: { r: r - 1, c: Math.max(1, data.weekKeys.length + 1) } });
         pushRow(headerRow);
+        pushRow(['{{ __('Cash & Banks Balance') }}'].concat(data.weekKeys.map(function (wk) { return fmtNum((data.grandTotal.cash_and_banks || {})[wk]); })));
         pushRow(['{{ __('Total Cash Inflow') }}'].concat(data.weekKeys.map(function (wk) { return fmtNum((data.grandTotal.cash_inflow || {})[wk]); })));
         pushRow(['{{ __('Total Cash Outflow') }}'].concat(data.weekKeys.map(function (wk) { return fmtNum((data.grandTotal.cash_outflow || {})[wk]); })));
         pushRow(['{{ __('Net Cash (+/-)') }}'].concat(data.weekKeys.map(function (wk) { return fmtNum((data.grandTotal.net_cash || {})[wk]); })));

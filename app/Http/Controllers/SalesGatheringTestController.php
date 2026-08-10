@@ -33,11 +33,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SalesGatheringTestController extends Controller
 {
-	
+	/** @var array<string, list<string>> table name => column names, memoized per request */
+	protected static array $tableColumnsCache = [];
+
 	
 	public function paginate($items, $perPage = 50, $page = null, $options = [])
 	{
@@ -308,6 +311,19 @@ class SalesGatheringTestController extends Controller
 		}
 		return $result ;
 	}
+	/**
+	 * The dynamic form posts helper inputs that are not real columns
+	 * (`purchases_order_id` / `sales_order_id` selects, whose *number* is what
+	 * gets stored). Models here are `$guarded = []`, so anything left in the
+	 * payload reaches the SET clause and blows up with "Unknown column".
+	 */
+	protected function onlyTableColumns(\Illuminate\Database\Eloquent\Model $model, array $data):array{
+		$table = $model->getTable();
+		if(! isset(static::$tableColumnsCache[$table])){
+			static::$tableColumnsCache[$table] = Schema::connection($model->getConnectionName())->getColumnListing($table);
+		}
+		return array_intersect_key($data, array_flip(static::$tableColumnsCache[$table]));
+	}
 	public function storeModel(Company $company ,Request $request, string $modelName )
 	{
 		$companyId = $company->id;
@@ -323,9 +339,9 @@ class SalesGatheringTestController extends Controller
 						$tableDataArr['contract_name'] = $contractName ; 
 						$tableDataArr['project_name'] = $contractName ; 
 						$customerName = Partner::find($tableDataArr['customer_id'])->getName();
-						$tableDataArr['customer_name'] = $customerName ; 
-					
-						CustomerInvoice::create($tableDataArr);
+						$tableDataArr['customer_name'] = $customerName ;
+
+						CustomerInvoice::create($this->onlyTableColumns(new CustomerInvoice, $tableDataArr));
 					}
 					if($modelName == 'SupplierInvoice'){
 						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','purchases_order_id']);
@@ -338,19 +354,19 @@ class SalesGatheringTestController extends Controller
 							$tableDataArr['project_name'] = $contractName ; 
 							$tableDataArr['contract_code'] = $contract ? $contract->getCode() : null;
 								$supplierName = Partner::find($tableDataArr['supplier_id'])->getName();
-								$tableDataArr['supplier_name'] = $supplierName ; 
-							SupplierInvoice::create($tableDataArr);
+								$tableDataArr['supplier_name'] = $supplierName ;
+							SupplierInvoice::create($this->onlyTableColumns(new SupplierInvoice, $tableDataArr));
 					}
 					if($modelName == 'SalesGathering'){
 						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','sales_order_id']);
-						$model->create($tableDataArr);
+						$model->create($this->onlyTableColumns($model, $tableDataArr));
 					}
-					
+
 		foreach((array)$request->get('tableIds') as $tableId){
 			foreach((array)$request->get($tableId) as  $tableDataArr){
 					$tableDataArr['company_id']  = $companyId ;
 					$tableDataArr = $this->removeCommaFromNumbers($tableDataArr);
-					$modelItem=$model->create($tableDataArr);
+					$modelItem=$model->create($this->onlyTableColumns($model, $tableDataArr));
 			}
 		}
 		if($modelName == 'SalesGathering'){
@@ -394,8 +410,8 @@ class SalesGatheringTestController extends Controller
 						$tableDataArr['contract_name'] = $contractName ; 
 						$tableDataArr['project_name'] = $contractName ; 
 							$customerName = Partner::find($tableDataArr['customer_id'])->getName();
-						$tableDataArr['customer_name'] = $customerName ; 
-						$model->update($tableDataArr);
+						$tableDataArr['customer_name'] = $customerName ;
+						$model->update($this->onlyTableColumns($model, $tableDataArr));
 					}
 					if($modelName == 'SupplierInvoice'){
 						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','purchases_order_id']);
@@ -408,22 +424,22 @@ class SalesGatheringTestController extends Controller
 							$tableDataArr['project_name'] = $contractName ; 
 							$tableDataArr['contract_code'] = $contract ? $contract->getCode() : null;
 								$supplierName = Partner::find($tableDataArr['supplier_id'])->getName();
-								$tableDataArr['supplier_name'] = $supplierName ; 
-							$model->update($tableDataArr);
-							
+								$tableDataArr['supplier_name'] = $supplierName ;
+							$model->update($this->onlyTableColumns($model, $tableDataArr));
+
 					}
 					if($modelName == 'SalesGathering'){
 						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','sales_order_id']);
-						$model->update($tableDataArr);
+						$model->update($this->onlyTableColumns($model, $tableDataArr));
 					}
-					
-					
+
+
 		foreach((array)$request->get('tableIds') as $tableId){
-		
+
 			foreach((array)$request->get($tableId) as  $tableDataArr){
 					$tableDataArr['company_id']  = $companyId ;
-					
-					$model->update($tableDataArr);
+
+					$model->update($this->onlyTableColumns($model, (array) $tableDataArr));
 			}
 		}
 		if($partnerId = $request->get('customer_id')){
