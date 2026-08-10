@@ -209,7 +209,43 @@ class LetterOfGuaranteeIssuanceController
         $lgCommissionAmount = $request->get('lg_commission_amount', 0);
         $minLgCommissionAmount = $request->get('min_lg_commission_fees', 0);
         $issuanceDate = Carbon::make($request->get('issuance_date'))->format('Y-m-d');
-        
+
+        /**
+         * ⚠️ Set explicitly rather than relying on the form's hidden
+         * company_id / source / created_by inputs being present. Any
+         * caller that doesn't send all three left them unset both in
+         * memory and in the database — a missing 'source' specifically
+         * makes the Index page show the wrong Source column and makes
+         * Edit open the wrong funding-source form entirely (each row's
+         * edit URL is built from the SAVED source column). Must happen
+         * BEFORE storeBasicForm(), since that calls $this->save()
+         * internally — setting them afterwards would only fix the
+         * in-memory object, leaving the persisted row still wrong.
+         */
+        $model->company_id = $company->id;
+        $model->source = $source;
+        $model->created_by = auth()->user()->id;
+        /**
+         * ⚠️ Bug fix: Bid Bond LGs are never linked to a contract — the
+         * Contract/SO fields are hidden on the form for this type. But
+         * the frontend only clears them when someone actively switches
+         * the LG Type dropdown TO Bid Bond; a record that already loaded
+         * as Bid Bond (e.g. one that had a contract attached before being
+         * changed to Bid Bond) kept whatever stale contract_id sat in the
+         * hidden field, and re-saving it silently preserved that stale
+         * link — which is exactly why a cancelled Bid Bond was showing up
+         * in a specific contract's Cash Flow report despite Bid Bonds
+         * supposedly never being linked to one. Enforced here
+         * server-side, unconditionally, regardless of what was submitted
+         * or which form/flow it came through.
+         */
+        if ($request->get('lg_type') === LgTypes::BID_BOND) {
+            $request->merge([
+                'contract_id' => 'null',
+                'purchase_order_id' => 'null',
+                'purchase_order_date' => 'null',
+            ]);
+        }
         $model->storeBasicForm($request);
         $transactionName = $request->get('transaction_name');
         $lgType = $request->get('lg_type');
@@ -278,6 +314,15 @@ class LetterOfGuaranteeIssuanceController
 
     public function edit(Company $company, Request $request, LetterOfGuaranteeIssuance $letterOfGuaranteeIssuance, string $source)
     {
+        // Cancelled LGs can't be edited until they're set back to Running —
+        // update() deletes the issuance and re-runs the entire creation
+        // pipeline (bank statement postings, LG/cash-cover statement
+        // entries, Odoo journal entries), which is not valid for a
+        // cancelled record.
+        if ($letterOfGuaranteeIssuance->isCancelled()) {
+            return redirect()->back()
+                ->with('fail', __('This LG is cancelled and can no longer be edited. Set it back to Running first.'));
+        }
         $formName = $source.'-form';
         $commonVars = array_merge(
             $this->commonViewVars($company, $source),

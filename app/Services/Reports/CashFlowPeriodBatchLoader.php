@@ -11,8 +11,26 @@ use App\Models\PayableCheque;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Loads cash-flow movements for all contracts in one query per movement type (full report period),
+ * then buckets amounts into week/month/day columns in PHP.
+ *
+ * Column map (aligned with CashFlowReportController):
+ * - money_received settlements: receiving_date/currency + settlement_amount converted
+ *   to receiving currency before report FX conversion to avoid fan-out and FX drift
+ * - money_received: receiving_date, receiving_currency, received_amount; cheques: expected/actual_collection_date, due_date
+ * - money_payments: delivery_date, payment_currency; payable_cheques: actual_payment_date, due_date, status
+ * - settlement_allocations: allocation_amount, contract_id
+ * - cash_expenses: type, payment_date, currency; cash_expense_contract: amount
+ * - payable_cheques (cash expense): actual_payment_date, due_date, status (no payment_date column)
+ */
 final class CashFlowPeriodBatchLoader
 {
+    /**
+     * @param  array<string, array<string, mixed>>  $resultsByContractCode
+     * @param  array<string, array{start_date: string, end_date: string}>  $periodsByWeekKey
+     * @param  list<string>  $contractCodes
+     */
     public static function applyContractPeriodMovements(
         array &$resultsByContractCode,
         Collection $foreignExchangeRates,
@@ -48,6 +66,11 @@ final class CashFlowPeriodBatchLoader
         self::applyCashExpenseOutflows($resultsByContractCode, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodStart, $periodEnd, $contractIds, $periodsByWeekKey, CashExpense::PAYABLE_CHEQUE, 'due_date', PayableCheque::PENDING);
     }
 
+    /**
+     * @param  array<string, array<string, mixed>>  $resultsByContractCode
+     * @param  array<string, array{start_date: string, end_date: string}>  $periodsByWeekKey
+     * @param  list<string>  $contractCodes
+     */
     private static function applyMoneyReceivedSettlements(
         array &$resultsByContractCode,
         Collection $foreignExchangeRates,
@@ -81,6 +104,8 @@ final class CashFlowPeriodBatchLoader
         $settlementAmountExpression = self::settlementAmountInReceivingCurrencySql();
         $query
             ->whereBetween($dateColumn, [$periodStart, $periodEnd])
+            // Use each settlement's share, converted to receiving currency when
+            // needed, so a receipt split across N invoices is not counted N times.
             ->selectRaw('customer_invoices.contract_code as contract_code, '.$settlementAmountExpression.' as received_amount, money_received.receiving_currency, '.$dateColumn.' as movement_date');
 
         foreach ($query->cursor() as $row) {
@@ -106,6 +131,11 @@ final class CashFlowPeriodBatchLoader
         }
     }
 
+    /**
+     * @param  array<string, array<string, mixed>>  $resultsByContractCode
+     * @param  array<string, array{start_date: string, end_date: string}>  $periodsByWeekKey
+     * @param  list<int>  $contractIds
+     */
     private static function applyDownPayments(
         array &$resultsByContractCode,
         Collection $foreignExchangeRates,
@@ -168,6 +198,11 @@ final class CashFlowPeriodBatchLoader
         }
     }
 
+    /**
+     * @param  array<string, array<string, mixed>>  $resultsByContractCode
+     * @param  array<string, array{start_date: string, end_date: string}>  $periodsByWeekKey
+     * @param  list<int>  $contractIds
+     */
     private static function applyMoneyPaymentOutflows(
         array &$resultsByContractCode,
         Collection $foreignExchangeRates,
@@ -184,7 +219,9 @@ final class CashFlowPeriodBatchLoader
         $keyNameForCurrentType = [
             MoneyPayment::OUTGOING_TRANSFER => __('Outgoing Transfers'),
             MoneyPayment::CASH_PAYMENT => __('Cash Payments'),
-            MoneyPayment::PAYABLE_CHEQUE => $chequeStatus === PayableCheque::PAID ? __('Paid Payable Cheques') : __('Under Payment Payable Cheques'),
+            MoneyPayment::PAYABLE_CHEQUE => $chequeStatus === PayableCheque::PAID
+                ? __('Paid Payable Cheques')
+                : __('Under Payment Payable Cheques'),
         ][$moneyType];
 
         $query = DB::table('money_payments')
@@ -225,6 +262,11 @@ final class CashFlowPeriodBatchLoader
         }
     }
 
+    /**
+     * @param  array<string, array<string, mixed>>  $resultsByContractCode
+     * @param  array<string, array{start_date: string, end_date: string}>  $periodsByWeekKey
+     * @param  list<int>  $contractIds
+     */
     private static function applyCashExpenseOutflows(
         array &$resultsByContractCode,
         Collection $foreignExchangeRates,

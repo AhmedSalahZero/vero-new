@@ -55,6 +55,21 @@
                                     <td class="sub-numeric-bg text-center">{{ number_format($tot, 0) }}</td>
                                 </tr>
                             @endforeach
+                            {{--
+                                Company-level cash IN not covered by the selected contracts —
+                                the inflow counterpart of the "Company cash out (unallocated)"
+                                row further down. Both are now also folded into Section C's
+                                grand totals.
+                            --}}
+                            <tr class="parent-tr reset-table-width sub-text-bg">
+                                <td class="sub-text-bg main-tr"></td>
+                                <td class="sub-text-bg max-w-classes-name is-name-cell">{{ __('Cash Inflow (unallocated)') }}</td>
+                                <td class="sub-numeric-bg text-center">—</td>
+                                @foreach($weekKeys as $wk)
+                                    <td class="sub-numeric-bg text-center">{{ number_format((float) (($companyUnallocatedCashIn ?? [])[$wk] ?? 0), 0) }}</td>
+                                @endforeach
+                                <td class="sub-numeric-bg text-center">{{ number_format($rowTotal(($companyUnallocatedCashIn ?? []), $weekKeys), 0) }}</td>
+                            </tr>
 
                             @foreach($contractsSection as $block)
                                 <tr class="main-with-no-child ccf-section-title">

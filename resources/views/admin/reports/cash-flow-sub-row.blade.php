@@ -47,9 +47,23 @@
                 </div>
             </div>
             @endif
-            @if($customerName == __('Incoming Transfers') && isset($result[$mainReportKey][$parentKeyName][$currentSubRowKeyName]['incoming_transfer_info']))
+            {{--
+                Incoming Transfer breakdown. Was a single summary payload
+                ('incoming_transfer_info') built per row; now a real list of the
+                individual transfers making up this cell, supplied separately in
+                $incomingTransferModelData and keyed by the row's own sub key.
+                That's what makes down-payment transfers show a breakdown too —
+                they land in the combined "Down Payment" row and previously had
+                no info payload at all.
+            --}}
             @php
-            $incomingTransferInfo = $result[$mainReportKey][$parentKeyName][$currentSubRowKeyName]['incoming_transfer_info'];
+            // Flattened across every period column — this icon sits next to the
+            // row NAME, outside the per-period loop below, so it summarises the
+            // whole row the way the previous single-payload version did.
+            $incomingTransferEntries = collect(($incomingTransferModelData ?? [])[$currentSubRowKeyName]['weeks'] ?? [])->flatten(1)->all();
+            @endphp
+            @if($customerName == __('Incoming Transfers') && count($incomingTransferEntries))
+            @php
             $incomingTransferModalId = convertStringToClass($currentSubRowKeyName.'-incoming-transfer');
             @endphp
             <i data-toggle="modal" data-target="#incoming-transfer-modal-{{ $incomingTransferModalId }}" class="flaticon2-information fs-15 kt-font-primary exclude-icon ml-2 cursor-pointer"></i>
@@ -64,22 +78,25 @@
                         </div>
                         <div class="modal-body">
                             <table class="table table-bordered active-header">
+                                <thead>
+                                    <th class="th-main-color" style="border-left:2px solid #ebedf2">{{ __('Bank Name') }}</th>
+                                    <th class="th-main-color">{{ __('Transfer Date') }}</th>
+                                    <th class="th-main-color">{{ __('Amount') }}</th>
+                                </thead>
                                 <tbody>
+                                    @php $incomingTransferTotal = 0; @endphp
+                                    @foreach($incomingTransferEntries as $incomingTransferInfo)
                                     <tr>
-                                        <th class="th-main-color" style="border-left:2px solid #ebedf2">{{ __('Customer Name') }}</th>
-                                        <td>{{ $incomingTransferInfo['customer_name'] ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="th-main-color" style="border-left:2px solid #ebedf2">{{ __('Bank Name') }}</th>
                                         <td>{{ $incomingTransferInfo['bank_name'] ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="th-main-color" style="border-left:2px solid #ebedf2">{{ __('Transfer Date') }}</th>
                                         <td>{{ $incomingTransferInfo['movement_date'] ?? '-' }}</td>
+                                        <td>{{ number_format($incomingTransferInfo['amount'] ?? 0,2) }}</td>
                                     </tr>
+                                    @php $incomingTransferTotal += $incomingTransferInfo['amount'] ?? 0; @endphp
+                                    @endforeach
                                     <tr>
-                                        <th class="th-main-color" style="border-left:2px solid #ebedf2">{{ __('Amount') }}</th>
-                                        <td>{{ number_format($incomingTransferInfo['amount'] ?? 0,0) }}</td>
+                                        <td>{{ __('Total') }}</td>
+                                        <td>--</td>
+                                        <td>{{ number_format($incomingTransferTotal,2) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -175,7 +192,10 @@
                                 @php
                                 $currentModalTotal = 0 ;
                                 @endphp
-                                @foreach($letterOfGuaranteeModelData[$currentSubRowKeyName]['weeks'][$weekAndYear]??[] as $currentModalArr)
+                                {{-- Keyed by [row][lg type] since the batch loaders replaced the per-week
+                                    LetterOfGuaranteeIssuance::getCashCovers(), which only keyed by lg type and so
+                                    merged the Cancelled and Issued cash-cover rows into one breakdown. --}}
+                                @foreach($letterOfGuaranteeModelData[$parentKeyName][$currentSubRowKeyName]['weeks'][$weekAndYear]??[] as $currentModalArr)
 
                                 <tr>
 

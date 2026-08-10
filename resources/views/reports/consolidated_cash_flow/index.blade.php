@@ -100,6 +100,40 @@
                     </select>
                 </div>
             </div>
+            {{--
+                Past-due collection/payment plan — up to 4 tiers per side.
+                Sent as two flat, parallel arrays matched by index (percentages
+                and days), NOT as an array of objects: a GET query string
+                doesn't reliably keep an object's keys together inside an
+                array. See ConsolidatedCashFlowService::normalizeTiers().
+                Leaving every row blank means the plan is simply not applied.
+            --}}
+            <div class="form-group row">
+                @foreach ([['customer', __('Customers Past Due Collection Plan'), __('% collected within')], ['supplier', __('Suppliers Past Due Payment Plan'), __('% paid within')]] as [$side, $sideLabel, $withinLabel])
+                    <div class="col-md-6">
+                        <label>{{ $sideLabel }}</label>
+                        <span class="form-text text-muted">{{ __('Optional. Spreads each past due invoice balance over the tiers below, starting from today.') }}</span>
+                        @for ($i = 0; $i < 4; $i++)
+                            <div class="input-group mb-2">
+                                <input type="number" step="0.01" min="0" max="100" class="form-control"
+                                    name="{{ $side }}_past_due_percentages[]"
+                                    value="{{ old($side . '_past_due_percentages.' . $i) }}"
+                                    placeholder="{{ $withinLabel }}">
+                                <div class="input-group-append input-group-prepend">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                <input type="number" step="1" min="1" class="form-control"
+                                    name="{{ $side }}_past_due_days[]"
+                                    value="{{ old($side . '_past_due_days.' . $i) }}"
+                                    placeholder="{{ __('days') }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">{{ __('days') }}</span>
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
     <x-custom-button-name-to-submit :displayName="__('Run Report')" />

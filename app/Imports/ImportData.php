@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
@@ -35,7 +36,8 @@ class ImportData implements
 	WithCalculatedFormulas,
 	WithHeadingRow,
 	WithBatchInserts,
-	WithEvents
+	WithEvents,
+	WithMultipleSheets
 {
 	use RegistersEventListeners;
 
@@ -120,8 +122,20 @@ class ImportData implements
 			
 		}
 		foreach ($chunks as $key=>$rows) {
+			// Excel files routinely carry thousands of trailing blank rows;
+			// without these two guards each one was imported as an empty
+			// record (and could fail validation for "Empty Value Not Allowed").
+			if (isRawImportRowEmpty($rows)) {
+				continue;
+			}
+
 			$data = $this->dataCustomizationImport($rows,$rowId);
 			$rowId ++ ;
+
+			if (! isset($data['validations']) && isMappedImportRowEmpty($data)) {
+				continue;
+			}
+
 			if (isset($data['validations'])) {
 				$isInvalidData = true;
 				$validationRow = $data['validations'];
@@ -162,6 +176,18 @@ class ImportData implements
 	public function chunkSize(): int
 	{
 		return 50000;
+	}
+
+	/**
+	 * Only the first sheet is ever the data sheet — without this, a
+	 * workbook carrying extra sheets (lookup lists, notes) had those
+	 * parsed and imported as data too.
+	 */
+	public function sheets(): array
+	{
+		return [
+			0 => $this,
+		];
 	}
 
 	public function dateFormatting($date)
@@ -246,8 +272,8 @@ class ImportData implements
 		foreach ($row as $key => $value) {
 		
 			
-			$row_with_no_spaces[trim($key)] = trim($value);
-			$rowValidation = $this->validateRowValue(trim($key), trim($value));
+			$row_with_no_spaces[trim($key)] = normalizeImportCellValue($value);
+			$rowValidation = $this->validateRowValue(trim($key), normalizeImportCellValue($value));
 			if (isset($rowValidation[$key]) && count($rowValidation[$key])) {
 				$validations[$rowId][$key] =  $rowValidation[$key] ;
 			}
@@ -262,19 +288,25 @@ class ImportData implements
 			if (is_int($row_name)) {
 				$data[$field_name] = $row_name;
 			} else {
-				$cellValue = $row_with_no_spaces[$row_name] ?? null;
+				$cellValue = $this->resolveImportFieldValue($row_with_no_spaces, $field_name, $row_name);
 
-				if ($cellValue === null || $cellValue === '') {
-					$cellValue = $this->resolveImportFieldValueFromAliases($row_with_no_spaces, $field_name);
+				if (
+					($cellValue === null || $cellValue === '')
+					&& ! is_int($row_name)
+					&& ! in_array($field_name, $this->fieldsExcludedFromPositionalFallback(), true)
+				) {
+					$cellValue = $this->resolveImportFieldValueByPosition($row_with_no_spaces, $field_name);
 				}
 
 				if ($cellValue !== null && $cellValue !== '') {
-			
+
 					if (str_contains($field_name, 'date') || str_contains($field_name,'estimated')) {
 						$data[$field_name] = $this->dateFormatting($cellValue);
 					} else {
 						$item = str_replace('\\', '', $cellValue);
-						$data[$field_name] = trim(preg_replace('/\s+/', ' ', $item));
+						$data[$field_name] = in_array($field_name, getImportIdentifierFieldNames(), true)
+							? normalizeImportCellValue($item)
+							: trim(preg_replace('/\s+/', ' ', $item));
 						if($field_name == 'currency' && $item == 'EUR'){
 							$data[$field_name] = 'EURO';
 						}
@@ -290,30 +322,96 @@ class ImportData implements
 	}
 
 	/**
-	 * Look up a cell by model-defined legacy header aliases (case-insensitive).
+	 * Look up a cell by header, trying (in order) the configured header
+	 * name, the raw field name, its space-separated and title-cased
+	 * forms, and finally any legacy header alias the model declares via
+	 * getImportHeaderAliases() — all case-insensitively. Replaces the
+	 * narrower aliases-only lookup, so a file whose header differs only
+	 * in casing/underscores still maps correctly.
 	 */
-	protected function resolveImportFieldValueFromAliases(array $row, string $fieldName): ?string
+	protected function resolveImportFieldValue(array $row, string $fieldName, string $rowName): ?string
 	{
+		$candidates = array_unique(array_filter([
+			$rowName,
+			$fieldName,
+			str_replace('_', ' ', $fieldName),
+			ucwords(str_replace('_', ' ', $fieldName)),
+		]));
+
 		$modelClass = '\\App\\Models\\' . $this->uploadModelName;
-		if (! class_exists($modelClass) || ! method_exists($modelClass, 'getImportHeaderAliases')) {
-			return null;
+		if (class_exists($modelClass) && method_exists($modelClass, 'getImportHeaderAliases')) {
+			$aliases = $modelClass::getImportHeaderAliases();
+			if (isset($aliases[$fieldName])) {
+				$candidates = array_merge($candidates, $aliases[$fieldName]);
+			}
 		}
 
-		$aliases = $modelClass::getImportHeaderAliases();
-		if (! isset($aliases[$fieldName]) || ! is_array($aliases[$fieldName])) {
-			return null;
-		}
+		foreach ($candidates as $candidate) {
+			$normalizedCandidate = mb_strtolower(trim((string) $candidate));
 
-		foreach ($aliases[$fieldName] as $alias) {
-			$normalizedAlias = mb_strtolower(trim((string) $alias));
 			foreach ($row as $key => $value) {
-				if (mb_strtolower(trim((string) $key)) === $normalizedAlias) {
-					return is_string($value) ? $value : (string) $value;
+				if (mb_strtolower(trim((string) $key)) === $normalizedCandidate) {
+					return normalizeImportCellValue($value);
 				}
 			}
 		}
 
 		return null;
+	}
+
+	/**
+	 * The importable fields in their configured order — the basis for
+	 * the positional fallback below.
+	 */
+	protected function getImportableFieldOrder(): array
+	{
+		$orderedFields = [];
+
+		foreach ($this->modelFields as $fieldName => $rowName) {
+			if (! is_int($rowName)) {
+				$orderedFields[] = $fieldName;
+			}
+		}
+
+		return $orderedFields;
+	}
+
+	/**
+	 * Fields that must NEVER be guessed by column position when the
+	 * uploaded file has no matching header for them. These drive
+	 * automatic Contract/SO/PO linking (see SalesGatheringTestJob) —
+	 * if the file is genuinely missing a "Contract Name"/"Contract
+	 * Code" column, every column after it shifts by one position, and
+	 * the positional fallback would silently pull an unrelated
+	 * column's value (e.g. Contracted Payment Days) into contract_code.
+	 * Leaving these blank when there's no header match is the safe
+	 * behavior — confirmed with the project owner.
+	 */
+	protected function fieldsExcludedFromPositionalFallback(): array
+	{
+		return [
+			'contract_name', 'contract_code', 'contract_date', 'contract_amount',
+			'purchases_order_number', 'purchases_order_date',
+			'sales_order_number', 'sales_order_date',
+		];
+	}
+
+	protected function resolveImportFieldValueByPosition(array $row, string $fieldName): ?string
+	{
+		$orderedFields = $this->getImportableFieldOrder();
+		$fieldIndex = array_search($fieldName, $orderedFields, true);
+
+		if ($fieldIndex === false) {
+			return null;
+		}
+
+		$values = array_values($row);
+
+		if (! array_key_exists($fieldIndex, $values)) {
+			return null;
+		}
+
+		return normalizeImportCellValue($values[$fieldIndex]);
 	}
 
 	public function registerEvents(): array

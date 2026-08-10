@@ -5071,6 +5071,33 @@ function getCurrency()
  * bank-type institutions use banks.view_name (with name_en/name_ar fallback);
  * other types use financial_institutions.name.
  */
+/**
+ * SQL expression matching Partner::getName(), for the batch report loaders
+ * that select partner names in raw queries rather than hydrating models.
+ * Falls back to name_en/name_ar when the deployment's partners table has
+ * no single `name` column.
+ */
+function partner_display_name_sql(string $tableAlias = 'partners', string $as = 'partner_name'): string
+{
+    if (Schema::hasColumn('partners', 'name')) {
+        return "{$tableAlias}.name as {$as}";
+    }
+
+    $t = $tableAlias;
+    $parts = [];
+    if (Schema::hasColumn('partners', 'name_en')) {
+        $parts[] = "NULLIF({$t}.name_en, '')";
+    }
+    if (Schema::hasColumn('partners', 'name_ar')) {
+        $parts[] = "NULLIF({$t}.name_ar, '')";
+    }
+    if ($parts !== []) {
+        return 'COALESCE('.implode(', ', $parts).", '-') as {$as}";
+    }
+
+    return "'' as {$as}";
+}
+
 function financial_institution_display_name_sql(
     string $fiAlias = 'financial_institutions',
     string $bankAlias = 'banks',
@@ -5232,6 +5259,104 @@ function qrcodeSpacing($code)
 {
     return str_replace(['//','/'], ['// ','/ '], $code);
 }
+
+/**
+ * Normalize one raw Excel cell into the string the importer should store.
+ *
+ * PhpSpreadsheet hands back native PHP types, so a numeric identifier
+ * column (account number, cheque number) arrives as a float and
+ * (string) casting it produces scientific notation ("1.2345678901E+15")
+ * or a stray ".0" — neither of which matches the real value. Floats
+ * that are whole numbers are printed in full, and already-exponential
+ * strings are expanded back out.
+ */
+function normalizeImportCellValue(mixed $value): string
+{
+    if ($value === null) {
+        return '';
+    }
+
+    if (is_bool($value)) {
+        return $value ? '1' : '0';
+    }
+
+    if (is_int($value)) {
+        return (string) $value;
+    }
+
+    if (is_float($value)) {
+        if (is_finite($value) && floor($value) == $value) {
+            return sprintf('%.0f', $value);
+        }
+
+        return rtrim(rtrim(sprintf('%.10F', $value), '0'), '.');
+    }
+
+    $stringValue = trim((string) $value);
+
+    if ($stringValue === '') {
+        return '';
+    }
+
+    if (preg_match('/^[\d.]+e[+-]?\d+$/i', $stringValue)) {
+        return sprintf('%.0f', (float) $stringValue);
+    }
+
+    if (ctype_digit($stringValue)) {
+        return $stringValue;
+    }
+
+    return $stringValue;
+}
+
+/**
+ * Fields whose value is an identifier, not a number — they must keep
+ * their exact digits and must never go through the generic whitespace
+ * squashing / numeric coercion the other import fields do.
+ */
+function getImportIdentifierFieldNames(): array
+{
+    return ['account_number', 'cheque_number'];
+}
+
+/**
+ * True when a raw sheet row is entirely blank — Excel files routinely
+ * carry thousands of such trailing rows, which would otherwise each be
+ * imported as an empty record.
+ */
+function isRawImportRowEmpty(iterable $row): bool
+{
+    foreach ($row as $value) {
+        if ($value !== null && $value !== '' && normalizeImportCellValue($value) !== '') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Same check as isRawImportRowEmpty(), applied after mapping — the
+ * importer always stamps id/company_id/created_by, so a row carrying
+ * only those is still empty.
+ */
+function isMappedImportRowEmpty(array $row): bool
+{
+    $ignoredKeys = ['id', 'company_id', 'created_by'];
+
+    foreach ($row as $fieldName => $value) {
+        if (in_array($fieldName, $ignoredKeys, true)) {
+            continue;
+        }
+
+        if ($value !== null && $value !== '' && normalizeImportCellValue($value) !== '') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function getDefaultImage()
 {
     return asset('custom/images/default-img.png');

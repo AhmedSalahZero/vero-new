@@ -41,6 +41,19 @@ class ConsolidatedCashFlowReportController
             'currencies.*' => ['string', 'max:32'],
             'currency' => ['nullable', 'string', 'max:32'], // legacy single-currency bookmarks
             'year' => ['nullable', 'integer', 'min:1900', 'max:2999'],
+            // Past-due collection/payment plan — up to 4 tiers per side, sent
+            // as two flat, parallel arrays (matched by index) rather than one
+            // array of {percentage, days} objects, since the latter doesn't
+            // survive GET query-string serialization reliably
+            // (see ConsolidatedCashFlowService::normalizeTiers()).
+            'customer_past_due_percentages' => ['nullable', 'array', 'max:4'],
+            'customer_past_due_percentages.*' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'customer_past_due_days' => ['nullable', 'array', 'max:4'],
+            'customer_past_due_days.*' => ['nullable', 'integer', 'min:1'],
+            'supplier_past_due_percentages' => ['nullable', 'array', 'max:4'],
+            'supplier_past_due_percentages.*' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'supplier_past_due_days' => ['nullable', 'array', 'max:4'],
+            'supplier_past_due_days.*' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $request->merge($validated);
