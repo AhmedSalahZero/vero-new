@@ -92,12 +92,33 @@ class OdooPurchaseOrderLookupTest extends TestCase
             ],
         ]);
 
-        $purchaseOrders = $this->invokeOn($service, 'getPurchaseOrdersLinkedToSalesOrders', [[11], ['S00001']]);
+        $purchaseOrders = $this->invokeOn($service, 'getPurchaseOrdersForProject', [[11], ['S00001'], null]);
 
         $this->assertSame(['P00042', 'P00044'], array_column($purchaseOrders, 'name'));
         $readCall = $service->calls[2];
         $this->assertSame('purchase.order', $readCall[0]);
         $this->assertSame([901, 903], $readCall[2][0], 'الـ read لازم يتنده مرة واحدة بالـ ids من غير تكرار');
+    }
+
+    public function test_it_reads_purchase_orders_booked_on_the_project_analytic_account(): void
+    {
+        $service = $this->service([
+            'purchase.order.line.search_read' => [
+                ['id' => 7, 'order_id' => [905, 'P00022']],
+                ['id' => 8, 'order_id' => [905, 'P00022']],
+            ],
+        ]);
+
+        $this->assertSame([905], $this->invokeOn($service, 'purchaseOrderIdsFromProjectAnalyticAccount', [129]));
+        $this->assertSame([[['analytic_distribution', 'in', [129]]], ['order_id']], $service->calls[0][2]);
+    }
+
+    public function test_a_project_without_an_analytic_account_is_not_queried(): void
+    {
+        $service = $this->service([]);
+
+        $this->assertSame([], $this->invokeOn($service, 'purchaseOrderIdsFromProjectAnalyticAccount', [null]));
+        $this->assertSame([], $service->calls);
     }
 
     public function test_a_fault_from_odoo_does_not_poison_the_result(): void
@@ -106,14 +127,14 @@ class OdooPurchaseOrderLookupTest extends TestCase
 
         $this->assertSame([], $this->invokeOn($service, 'purchaseOrderIdsFromSaleOrderLines', [[11]]));
         $this->assertSame([], $this->invokeOn($service, 'purchaseOrderIdsFromOrigin', [['S00001']]));
-        $this->assertSame([], $this->invokeOn($service, 'getPurchaseOrdersLinkedToSalesOrders', [[11], ['S00001']]));
+        $this->assertSame([], $this->invokeOn($service, 'getPurchaseOrdersForProject', [[11], ['S00001'], null]));
     }
 
     public function test_no_sales_orders_means_no_odoo_calls_at_all(): void
     {
         $service = $this->service([]);
 
-        $this->assertSame([], $this->invokeOn($service, 'getPurchaseOrdersLinkedToSalesOrders', [[], []]));
+        $this->assertSame([], $this->invokeOn($service, 'getPurchaseOrdersForProject', [[], [], null]));
         $this->assertSame([], $service->calls);
     }
 

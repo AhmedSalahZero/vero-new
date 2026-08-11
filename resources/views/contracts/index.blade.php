@@ -595,6 +595,15 @@ use App\Models\Contract;
                                             @include('contracts.contract-invoice-details',['modalId'=>$currentModelId,'detailItems'=>$parent['invoices']])
                                             @endif
 
+                                            {{-- عقود الموردين المربوطة بعقد العميل ده --}}
+                                            @if($type == 'Customer' && count($parent['related_contracts']))
+                                            @php
+                                            $relatedContractsModalId = 'related-supplier-contracts-'.$mainItemId ;
+                                            @endphp
+                                            <button class="btn btn-sm btn-outline-brand btn-pill" data-toggle="modal" data-target="#{{ $relatedContractsModalId }}">{{ __('Supplier Contracts') }} ({{ count($parent['related_contracts']) }})</button>
+                                            @include('contracts.related-supplier-contracts',['modalId'=>$relatedContractsModalId,'detailItems'=>$parent['related_contracts']])
+                                            @endif
+
                                             @if($currentType == Contract::RUNNING )
                                             <a data-toggle="modal" data-target="#mark-as-finished-contract-{{ $mainItemId }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Finished') }}" href="#"><i class="fa fa-check-double"></i></a>
                                             <div class="modal fade" id="mark-as-finished-contract-{{ $mainItemId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

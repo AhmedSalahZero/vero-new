@@ -1343,5 +1343,10 @@
 "Transactions":"عدد الحركات",
 "Export Excel":"تصدير Excel",
 "This contract code is already used by another contract in this company":"كود العقد ده مستخدم بالفعل في عقد تاني بنفس الشركة",
-"Total Allocate Percentage Can Not Be More Than 100%":"إجمالي نسبة التوزيع لا يمكن أن يزيد عن 100%"
+"Total Allocate Percentage Can Not Be More Than 100%":"إجمالي نسبة التوزيع لا يمكن أن يزيد عن 100%",
+"Supplier Contracts":"عقود الموردين",
+"Related Supplier Contracts":"عقود الموردين المرتبطة",
+"Supplier Name":"اسم المورد",
+"Contract Name":"اسم التعاقد",
+"Contract Code":"كود التعاقد"
 }

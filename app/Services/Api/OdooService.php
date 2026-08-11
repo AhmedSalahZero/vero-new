@@ -239,143 +239,143 @@ class OdooService
         
     }
         
-    // public function getContracts(string $startDate, string $endDate, int $companyId)
-    // {
-    //     $contractFilters = array(array(
-    //         array('id', '>=', 0),
-    //         array('write_date', '>=', $startDate),
-    //         array('write_date', '<=', $endDate)
-    //     ));
-    //     $contractIds=$this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'search', $contractFilters);
-    //     $projects = $this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'read', array($contractIds), [
-    //         'fields'=>[
-    //             'id',
-    //             'account_id',
-    //             'name',
-    //             'partner_id',
-    //             'date_start', // start date
-    //             'date', //end date
-    //         ]
-    //     ]);
+    public function getContracts(string $startDate, string $endDate, int $companyId)
+    {
+        $contractFilters = array(array(
+            array('id', '>=', 0),
+            array('write_date', '>=', $startDate),
+            array('write_date', '<=', $endDate)
+        ));
+        $contractIds=$this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'search', $contractFilters);
+        $projects = $this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'read', array($contractIds), [
+            'fields'=>[
+                'id',
+                'account_id',
+                'name',
+                'partner_id',
+                'date_start', // start date
+                'date', //end date
+            ]
+        ]);
         
-    //     foreach ($projects as $projectArr) {
-    //         $projectAmount = 0 ;
-    //         $modelType = 'Customer';
-    //         $currentProjectStartDate = isset($projectArr['date_start']) && $projectArr['date_start'] ? $projectArr['date_start'] :  now()->format('Y-m-d') ;
-    //         $currentProjectEndDate = isset($projectArr['date']) && $projectArr['date'] ? $projectArr['date'] : now()->format('Y-m-d') ;
-    //         $currentOdooProjectId = $projectArr['id'];
-    //         $currentOdooCustomerId = $projectArr['partner_id'][0]??null ;
+        foreach ($projects as $projectArr) {
+            $projectAmount = 0 ;
+            $modelType = 'Customer';
+            $currentProjectStartDate = isset($projectArr['date_start']) && $projectArr['date_start'] ? $projectArr['date_start'] :  now()->format('Y-m-d') ;
+            $currentProjectEndDate = isset($projectArr['date']) && $projectArr['date'] ? $projectArr['date'] : now()->format('Y-m-d') ;
+            $currentOdooProjectId = $projectArr['id'];
+            $currentOdooCustomerId = $projectArr['partner_id'][0]??null ;
             
-    //         if (is_null($currentOdooCustomerId)) {
-    //             continue;
-    //         }
-    //         $currentOdooCustomerName = $projectArr['partner_id'][1] ;
-    //         /**
-    //          * * كان بيمرر $startDate — ودا متغير من برة اللوب (تاريخ بداية
-    //          * * المزامنة)، فالكود كان بيطلع بشهر/سنة المزامنة مش المشروع نفسه
-    //          * * (مثلًا c-01-2026 لمشروع بادئ في مايو). دلوقتي بيستخدم تاريخ
-    //          * * بداية المشروع الجاري زي مسار الإنشاء اليدوي بالظبط.
-    //          */
-    //         $code = Contract::generateRandomContract($companyId, $currentOdooCustomerName, $currentProjectStartDate, $modelType);
-    //         $partnerId = Partner::handlePartnerForOdoo($currentOdooCustomerId, $currentOdooCustomerName, 1, 0, false, false, $companyId);
-    //         /**
-    //          * * لازم نقيّد البحث بالشركة والنوع: عقود الموردين بقت كمان
-    //          * * بتتخزن بـ odoo_id (بس بتاع الـ PO) ، ومن غير التقييد ده
-    //          * * ممكن مشروع رقمه 5 يلاقي عقد مورّد من PO رقمه 5
-    //          */
-    //         $oldProject = Contract::where('odoo_id', $currentOdooProjectId)->where('company_id', $companyId)->where('model_type', $modelType)->first();
+            if (is_null($currentOdooCustomerId)) {
+                continue;
+            }
+            $currentOdooCustomerName = $projectArr['partner_id'][1] ;
+            /**
+             * * كان بيمرر $startDate — ودا متغير من برة اللوب (تاريخ بداية
+             * * المزامنة)، فالكود كان بيطلع بشهر/سنة المزامنة مش المشروع نفسه
+             * * (مثلًا c-01-2026 لمشروع بادئ في مايو). دلوقتي بيستخدم تاريخ
+             * * بداية المشروع الجاري زي مسار الإنشاء اليدوي بالظبط.
+             */
+            $code = Contract::generateRandomContract($companyId, $currentOdooCustomerName, $currentProjectStartDate, $modelType);
+            $partnerId = Partner::handlePartnerForOdoo($currentOdooCustomerId, $currentOdooCustomerName, 1, 0, false, false, $companyId);
+            /**
+             * * لازم نقيّد البحث بالشركة والنوع: عقود الموردين بقت كمان
+             * * بتتخزن بـ odoo_id (بس بتاع الـ PO) ، ومن غير التقييد ده
+             * * ممكن مشروع رقمه 5 يلاقي عقد مورّد من PO رقمه 5
+             */
+            $oldProject = Contract::where('odoo_id', $currentOdooProjectId)->where('company_id', $companyId)->where('model_type', $modelType)->first();
 
-    //         $projectFormatted = [
-    //             'odoo_id'=>$currentOdooProjectId,
-    //             'code'=>$code,
-    //             'project_account_id'=>$projectArr['account_id'][0]??null,
-    //             'name'=>$projectArr['name'],
-    //             'model_type'=>$modelType,
-    //             'partner_id'=>$partnerId,
-    //             'start_date'=>$currentProjectStartDate,
-    //             'end_date'=>$currentProjectEndDate,
-    //             'company_id'=>$companyId,
-    //             'duration'=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate)
-    //         ];
-    //         if ($oldProject) {
-    //             $projectFormatted['id'] = $oldProject->id;
-    //             $projectFormatted['code'] = $oldProject->code;
-    //         }
-    //         $salesOrderFilters = array(array(
-    //             ['project_id','=',$currentOdooProjectId]
-    //         ));
-    //         $salesOrderIds=$this->models->execute_kw(
-    //             $this->db,
-    //             $this->uid,
-    //             $this->password,
-    //             'sale.order',
-    //             'search',
-    //             $salesOrderFilters
-    //             // , array('limit' => 10)
-    //         );
-    //         $salesOrders = $this->models->execute_kw($this->db, $this->uid, $this->password, 'sale.order', 'read', array($salesOrderIds), [
-    //             'fields'=>[
-    //                 'id',
-    //                 'name', // الاسم المجرد ، ودا اللي بيتكتب في origin بتاع الـ PO
-    //                 'display_name', // so_number
-    //                 'currency_id',
-    //                 'amount_total',
-    //                 'project_id'
-    //             ]
-    //         ]);
-    //         $salesOrderFormatted = [];
-    //         $salesOrderOdooIds = [];
-    //         $salesOrderNames = [];
-    //         foreach ($salesOrders as $orderIndex => $salesOrderArr) {
-    //             $projectFormatted['currency']=$salesOrderArr['currency_id'][1];
-    //             $currentOrderIndex =$orderIndex+1;
-    //             $currentSalesOrderId = $salesOrderArr['id'];
-    //             $currentSalesOrderAmount = $salesOrderArr['amount_total'];
-    //             $projectAmount += $currentSalesOrderAmount;
-    //             $salesOrderOdooIds[] = $currentSalesOrderId;
-    //             if (! empty($salesOrderArr['name'])) {
-    //                 $salesOrderNames[] = $salesOrderArr['name'];
-    //             }
+            $projectFormatted = [
+                'odoo_id'=>$currentOdooProjectId,
+                'code'=>$code,
+                'project_account_id'=>$projectArr['account_id'][0]??null,
+                'name'=>$projectArr['name'],
+                'model_type'=>$modelType,
+                'partner_id'=>$partnerId,
+                'start_date'=>$currentProjectStartDate,
+                'end_date'=>$currentProjectEndDate,
+                'company_id'=>$companyId,
+                'duration'=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate)
+            ];
+            if ($oldProject) {
+                $projectFormatted['id'] = $oldProject->id;
+                $projectFormatted['code'] = $oldProject->code;
+            }
+            $salesOrderFilters = array(array(
+                ['project_id','=',$currentOdooProjectId]
+            ));
+            $salesOrderIds=$this->models->execute_kw(
+                $this->db,
+                $this->uid,
+                $this->password,
+                'sale.order',
+                'search',
+                $salesOrderFilters
+                // , array('limit' => 10)
+            );
+            $salesOrders = $this->models->execute_kw($this->db, $this->uid, $this->password, 'sale.order', 'read', array($salesOrderIds), [
+                'fields'=>[
+                    'id',
+                    'name', // الاسم المجرد ، ودا اللي بيتكتب في origin بتاع الـ PO
+                    'display_name', // so_number
+                    'currency_id',
+                    'amount_total',
+                    'project_id'
+                ]
+            ]);
+            $salesOrderFormatted = [];
+            $salesOrderOdooIds = [];
+            $salesOrderNames = [];
+            foreach ($salesOrders as $orderIndex => $salesOrderArr) {
+                $projectFormatted['currency']=$salesOrderArr['currency_id'][1];
+                $currentOrderIndex =$orderIndex+1;
+                $currentSalesOrderId = $salesOrderArr['id'];
+                $currentSalesOrderAmount = $salesOrderArr['amount_total'];
+                $projectAmount += $currentSalesOrderAmount;
+                $salesOrderOdooIds[] = $currentSalesOrderId;
+                if (! empty($salesOrderArr['name'])) {
+                    $salesOrderNames[] = $salesOrderArr['name'];
+                }
                     
-    //             $currentSalesOrderArr = [
-    //                 'odoo_id'=>$currentSalesOrderId,
-    //                 'so_number'=>$salesOrderArr['display_name'],
-    //                 // 'id'=>$currentSalesOrderId,
-    //                 'amount'=>$currentSalesOrderAmount,
-    //                 'execution_percentage_'.$currentOrderIndex=>100,
-    //                 'start_date_'.$currentOrderIndex=>$currentProjectStartDate,
-    //                 'end_date_'.$currentOrderIndex=>$currentProjectEndDate,
-    //         //			'execution_days_'.$currentOrderIndex=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate),
-    //                 'collection_days_'.$currentOrderIndex=>0,
-    //                 'company_id'=>$companyId
+                $currentSalesOrderArr = [
+                    'odoo_id'=>$currentSalesOrderId,
+                    'so_number'=>$salesOrderArr['display_name'],
+                    // 'id'=>$currentSalesOrderId,
+                    'amount'=>$currentSalesOrderAmount,
+                    'execution_percentage_'.$currentOrderIndex=>100,
+                    'start_date_'.$currentOrderIndex=>$currentProjectStartDate,
+                    'end_date_'.$currentOrderIndex=>$currentProjectEndDate,
+            //			'execution_days_'.$currentOrderIndex=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate),
+                    'collection_days_'.$currentOrderIndex=>0,
+                    'company_id'=>$companyId
                         
-    //             ] ;
-    //             $oldSalesOrder = SalesOrder::where('odoo_id', $currentSalesOrderId)->first();
-    //             if ($oldSalesOrder) {
-    //                 $currentSalesOrderArr['id'] = $oldSalesOrder->id;
-    //             }
-    //             $salesOrderFormatted[]=$currentSalesOrderArr;
-    //         }
-    //         $projectAmount = $projectAmount ? $projectAmount : 0 ;
-    //         $projectFormatted['amount'] = $projectAmount ;
-    //         if (count($salesOrderFormatted) && $projectAmount) {
-    //             $projectFormatted['salesOrders']=$salesOrderFormatted;
-    //             $contract = $oldProject ? $oldProject : new Contract ;
+                ] ;
+                $oldSalesOrder = SalesOrder::where('odoo_id', $currentSalesOrderId)->first();
+                if ($oldSalesOrder) {
+                    $currentSalesOrderArr['id'] = $oldSalesOrder->id;
+                }
+                $salesOrderFormatted[]=$currentSalesOrderArr;
+            }
+            $projectAmount = $projectAmount ? $projectAmount : 0 ;
+            $projectFormatted['amount'] = $projectAmount ;
+            if (count($salesOrderFormatted) && $projectAmount) {
+                $projectFormatted['salesOrders']=$salesOrderFormatted;
+                $contract = $oldProject ? $oldProject : new Contract ;
 
-    //             $request = (new Request())->merge($projectFormatted);
-    //             $contract->storeBasicForm($request);
-    //             /**
-    //              * * كل PO مربوط بالـ SOs بتاعة المشروع ده بيبقى عقد مورّد
-    //              * * تحت عقد العميل ، وفواتير الـ PO بتتربط بعقد المورّد
-    //              */
-    //             $this->syncSupplierContractsFromPurchaseOrders($contract, $salesOrderOdooIds, $salesOrderNames, $currentProjectEndDate, $companyId);
-    //         }
+                $request = (new Request())->merge($projectFormatted);
+                $contract->storeBasicForm($request);
+                /**
+                 * * كل PO مربوط بالـ SOs بتاعة المشروع ده بيبقى عقد مورّد
+                 * * تحت عقد العميل ، وفواتير الـ PO بتتربط بعقد المورّد
+                 */
+                $this->syncSupplierContractsFromPurchaseOrders($contract, $salesOrderOdooIds, $salesOrderNames, $projectArr['account_id'][0] ?? null, $currentProjectEndDate, $companyId);
+            }
 
-    //     }
+        }
 
         
         
-    // }
+    }
 
     /**
      * * بتجيب الـ POs المربوطة بالـ SOs بتاعة المشروع من أودو ، وبتعمل
@@ -386,30 +386,33 @@ class OdooService
      * @param  array<string>  $salesOrderNames
      * @return array<Contract>
      */
-    public function syncSupplierContractsFromPurchaseOrders(Contract $customerContract, array $salesOrderOdooIds, array $salesOrderNames, string $projectEndDate, int $companyId): array
+    public function syncSupplierContractsFromPurchaseOrders(Contract $customerContract, array $salesOrderOdooIds, array $salesOrderNames, ?int $projectAnalyticAccountId, string $projectEndDate, int $companyId): array
     {
-        $purchaseOrders = $this->getPurchaseOrdersLinkedToSalesOrders($salesOrderOdooIds, $salesOrderNames);
+        $purchaseOrders = $this->getPurchaseOrdersForProject($salesOrderOdooIds, $salesOrderNames, $projectAnalyticAccountId);
 
         return $this->storeSupplierContractsFromPurchaseOrders($customerContract, $purchaseOrders, $projectEndDate, $companyId);
     }
 
     /**
-     * * في أودو 18 فيه طريقتين قياسيتين للربط:
+     * * في أودو 18 فيه ٣ طرق قياسية للربط ، وبناخد الاتحاد بينهم:
      * *   1) purchase.order.line.sale_order_id — بيتملي لما أودو نفسه
      * *      يولّد الـ PO من الـ SO (موديول sale_purchase وهو auto_install)
      * *   2) purchase.order.origin — المستند المصدر ، بيتكتب من الـ
      * *      procurement أو بإيد المشتري
-     * * بنجرّب الاتنين وبناخد الاتحاد بينهم
+     * *   3) analytic_distribution على سطور الـ PO فيها الحساب التحليلي
+     * *      بتاع المشروع — دي أوسع طريقة وبتمسك أوامر الشراء اللي
+     * *      اتحجزت على المشروع من غير ما حد يكتب الـ SO عليها
      *
      * @param  array<int>  $salesOrderOdooIds
      * @param  array<string>  $salesOrderNames
      * @return array<array<string,mixed>>
      */
-    protected function getPurchaseOrdersLinkedToSalesOrders(array $salesOrderOdooIds, array $salesOrderNames): array
+    protected function getPurchaseOrdersForProject(array $salesOrderOdooIds, array $salesOrderNames, ?int $projectAnalyticAccountId): array
     {
         $purchaseOrderIds = array_merge(
             $this->purchaseOrderIdsFromSaleOrderLines($salesOrderOdooIds),
-            $this->purchaseOrderIdsFromOrigin($salesOrderNames)
+            $this->purchaseOrderIdsFromOrigin($salesOrderNames),
+            $this->purchaseOrderIdsFromProjectAnalyticAccount($projectAnalyticAccountId)
         );
         $purchaseOrderIds = array_values(array_unique($purchaseOrderIds));
 
@@ -508,6 +511,38 @@ class OdooService
     }
 
     /**
+     * * أوامر الشراء المحجوزة على الحساب التحليلي بتاع المشروع.
+     * * analytic_distribution في أودو 17+ حقل Json ، وبيقبل البحث بـ in
+     * * على أرقام الحسابات التحليلية
+     *
+     * @return array<int>
+     */
+    protected function purchaseOrderIdsFromProjectAnalyticAccount(?int $projectAnalyticAccountId): array
+    {
+        if (is_null($projectAnalyticAccountId)) {
+            return [];
+        }
+
+        $purchaseOrderLines = $this->readFromOdoo('purchase.order.line', 'search_read', [
+            [['analytic_distribution', 'in', [$projectAnalyticAccountId]]],
+            ['order_id'],
+        ]);
+
+        if (! is_array($purchaseOrderLines)) {
+            return [];
+        }
+
+        $purchaseOrderIds = [];
+        foreach ($purchaseOrderLines as $purchaseOrderLine) {
+            if (is_array($purchaseOrderLine['order_id'] ?? null)) {
+                $purchaseOrderIds[] = $purchaseOrderLine['order_id'][0];
+            }
+        }
+
+        return array_values(array_unique($purchaseOrderIds));
+    }
+
+    /**
      * * الجزء اللي بيكتب عندنا — مش بيكلم أودو خالص ، بياخد صفوف الـ POs
      * * زي ما هي راجعة من أودو
      *
@@ -543,6 +578,19 @@ class OdooService
             $oldSupplierContract = Contract::where('odoo_id', $odooPurchaseOrderId)->where('company_id', $companyId)->where('model_type', 'Supplier')->first();
             $oldPurchaseOrder = PurchaseOrder::where('odoo_id', $odooPurchaseOrderId)->where('company_id', $companyId)->first();
 
+            /**
+             * * لو نفس الـ PO اتحجز على أكتر من مشروع هيتنقل لآخر عقد
+             * * عميل بيطالب بيه — بنسجّلها عشان تبان بدل ما تعدي في صمت
+             */
+            if ($oldSupplierContract && $oldSupplierContract->parent_id && (int) $oldSupplierContract->parent_id !== (int) $customerContract->id) {
+                Log::warning('Odoo purchase order moved to another customer contract', [
+                    'company_id' => $companyId,
+                    'purchase_order_odoo_id' => $odooPurchaseOrderId,
+                    'from_contract_id' => $oldSupplierContract->parent_id,
+                    'to_contract_id' => $customerContract->id,
+                ]);
+            }
+
             $purchaseOrderFormatted = [
                 'odoo_id'=>$odooPurchaseOrderId,
                 'po_number'=>$purchaseOrderNumber,
@@ -565,7 +613,12 @@ class OdooService
             $supplierContractFormatted = [
                 'odoo_id'=>$odooPurchaseOrderId,
                 'code'=>$oldSupplierContract ? $oldSupplierContract->code : Contract::generateRandomContract($companyId, $vendor[1], $startDate, 'Supplier'),
-                'name'=>$purchaseOrderNumber,
+                /**
+                 * * اسم العقد = اسم المشروع ، مش رقم الـ PO. رقم الـ PO
+                 * * مكانه po_number وبيظهر في صف الأمر تحت العقد ، والمورّد
+                 * * ليه عمود Partner Name لوحده
+                 */
+                'name'=>$customerContract->name,
                 'model_type'=>'Supplier',
                 'partner_id'=>$partnerId,
                 'parent_id'=>$customerContract->id,
@@ -614,7 +667,14 @@ class OdooService
 
         SupplierInvoice::where('company_id', $companyId)
             ->where(SupplierInvoice::SO_OR_PO_NUMBER, $purchaseOrderNumber)
-            ->whereNull('contract_code')
+            /**
+             * * بنربط الفواتير اللي لسه من غير عقد ، وبنحدّث كمان اللي
+             * * مربوطة بالعقد ده أصلاً عشان اسم العقد يفضل متزامن —
+             * * من غير ما نخطف فاتورة مربوطة بعقد تاني
+             */
+            ->where(function ($query) use ($supplierContract) {
+                $query->whereNull('contract_code')->orWhere('contract_code', $supplierContract->code);
+            })
             ->update($contractData);
     }
 
@@ -645,127 +705,127 @@ class OdooService
         return $result;
     }
 
-	public function getContracts(string $startDate, string $endDate, int $companyId)
-    {
-        $contractFilters = array(array(
-            // array('id', '=', 14),
-            array('id', '>=', 0),
-            array('write_date', '>=', $startDate),
-            array('write_date', '<=', $endDate)
-        ));
-        $contractIds=$this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'search', $contractFilters);
-        $projects = $this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'read', array($contractIds), [
-            'fields'=>[
-                'id',
-                'account_id',
-                'name',
-                'partner_id',
-                'date_start', // start date
-                'date', //end date
-            ]
-        ]);
+	// public function getContracts(string $startDate, string $endDate, int $companyId)
+    // {
+    //     $contractFilters = array(array(
+    //         // array('id', '=', 14),
+    //         array('id', '>=', 0),
+    //         array('write_date', '>=', $startDate),
+    //         array('write_date', '<=', $endDate)
+    //     ));
+    //     $contractIds=$this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'search', $contractFilters);
+    //     $projects = $this->models->execute_kw($this->db, $this->uid, $this->password, 'project.project', 'read', array($contractIds), [
+    //         'fields'=>[
+    //             'id',
+    //             'account_id',
+    //             'name',
+    //             'partner_id',
+    //             'date_start', // start date
+    //             'date', //end date
+    //         ]
+    //     ]);
         
-        foreach ($projects as $projectArr) {
-            $projectAmount = 0 ;
-            $modelType = 'Customer';
-            $currentProjectStartDate = isset($projectArr['date_start']) && $projectArr['date_start'] ? $projectArr['date_start'] :  now()->format('Y-m-d') ;
-            $currentProjectEndDate = isset($projectArr['date']) && $projectArr['date'] ? $projectArr['date'] : now()->format('Y-m-d') ;
-            $currentOdooProjectId = $projectArr['id'];
-            $currentOdooCustomerId = $projectArr['partner_id'][0]??null ;
+    //     foreach ($projects as $projectArr) {
+    //         $projectAmount = 0 ;
+    //         $modelType = 'Customer';
+    //         $currentProjectStartDate = isset($projectArr['date_start']) && $projectArr['date_start'] ? $projectArr['date_start'] :  now()->format('Y-m-d') ;
+    //         $currentProjectEndDate = isset($projectArr['date']) && $projectArr['date'] ? $projectArr['date'] : now()->format('Y-m-d') ;
+    //         $currentOdooProjectId = $projectArr['id'];
+    //         $currentOdooCustomerId = $projectArr['partner_id'][0]??null ;
             
-            if (is_null($currentOdooCustomerId)) {
-                continue;
-            }
-            $currentOdooCustomerName = $projectArr['partner_id'][1] ;
-            /**
-             * * كان بيمرر $startDate — ودا متغير من برة اللوب (تاريخ بداية
-             * * المزامنة)، فالكود كان بيطلع بشهر/سنة المزامنة مش المشروع نفسه
-             * * (مثلًا c-01-2026 لمشروع بادئ في مايو). دلوقتي بيستخدم تاريخ
-             * * بداية المشروع الجاري زي مسار الإنشاء اليدوي بالظبط.
-             */
-            $code = Contract::generateRandomContract($companyId, $currentOdooCustomerName, $currentProjectStartDate, $modelType);
-            $partnerId = Partner::handlePartnerForOdoo($currentOdooCustomerId, $currentOdooCustomerName, 1, 0, false, false, $companyId);
-            $oldProject = Contract::where('odoo_id', $currentOdooProjectId)->first();
+    //         if (is_null($currentOdooCustomerId)) {
+    //             continue;
+    //         }
+    //         $currentOdooCustomerName = $projectArr['partner_id'][1] ;
+    //         /**
+    //          * * كان بيمرر $startDate — ودا متغير من برة اللوب (تاريخ بداية
+    //          * * المزامنة)، فالكود كان بيطلع بشهر/سنة المزامنة مش المشروع نفسه
+    //          * * (مثلًا c-01-2026 لمشروع بادئ في مايو). دلوقتي بيستخدم تاريخ
+    //          * * بداية المشروع الجاري زي مسار الإنشاء اليدوي بالظبط.
+    //          */
+    //         $code = Contract::generateRandomContract($companyId, $currentOdooCustomerName, $currentProjectStartDate, $modelType);
+    //         $partnerId = Partner::handlePartnerForOdoo($currentOdooCustomerId, $currentOdooCustomerName, 1, 0, false, false, $companyId);
+    //         $oldProject = Contract::where('odoo_id', $currentOdooProjectId)->first();
             
-            $projectFormatted = [
-                'odoo_id'=>$currentOdooProjectId,
-                'code'=>$code,
-                'project_account_id'=>$projectArr['account_id'][0]??null,
-                'name'=>$projectArr['name'],
-                'model_type'=>$modelType,
-                'partner_id'=>$partnerId,
-                'start_date'=>$currentProjectStartDate,
-                'end_date'=>$currentProjectEndDate,
-                'company_id'=>$companyId,
-                'duration'=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate)
-            ];
-            if ($oldProject) {
-                $projectFormatted['id'] = $oldProject->id;
-                $projectFormatted['code'] = $oldProject->code;
-            }
-            $salesOrderFilters = array(array(
-                ['project_id','=',$currentOdooProjectId]
-            ));
-            $salesOrderIds=$this->models->execute_kw(
-                $this->db,
-                $this->uid,
-                $this->password,
-                'sale.order',
-                'search',
-                $salesOrderFilters
-                // , array('limit' => 10)
-            );
-            $salesOrders = $this->models->execute_kw($this->db, $this->uid, $this->password, 'sale.order', 'read', array($salesOrderIds), [
-                'fields'=>[
-                    'id',
-                    'display_name', // so_number
-                    'currency_id',
-                    'amount_total',
-                    'project_id'
-                ]
-            ]);
-            $salesOrderFormatted = [];
-            foreach ($salesOrders as $orderIndex => $salesOrderArr) {
-                $projectFormatted['currency']=$salesOrderArr['currency_id'][1];
-                $currentOrderIndex =$orderIndex+1;
-                $currentSalesOrderId = $salesOrderArr['id'];
-                $currentSalesOrderAmount = $salesOrderArr['amount_total'];
-                $projectAmount += $currentSalesOrderAmount;
+    //         $projectFormatted = [
+    //             'odoo_id'=>$currentOdooProjectId,
+    //             'code'=>$code,
+    //             'project_account_id'=>$projectArr['account_id'][0]??null,
+    //             'name'=>$projectArr['name'],
+    //             'model_type'=>$modelType,
+    //             'partner_id'=>$partnerId,
+    //             'start_date'=>$currentProjectStartDate,
+    //             'end_date'=>$currentProjectEndDate,
+    //             'company_id'=>$companyId,
+    //             'duration'=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate)
+    //         ];
+    //         if ($oldProject) {
+    //             $projectFormatted['id'] = $oldProject->id;
+    //             $projectFormatted['code'] = $oldProject->code;
+    //         }
+    //         $salesOrderFilters = array(array(
+    //             ['project_id','=',$currentOdooProjectId]
+    //         ));
+    //         $salesOrderIds=$this->models->execute_kw(
+    //             $this->db,
+    //             $this->uid,
+    //             $this->password,
+    //             'sale.order',
+    //             'search',
+    //             $salesOrderFilters
+    //             // , array('limit' => 10)
+    //         );
+    //         $salesOrders = $this->models->execute_kw($this->db, $this->uid, $this->password, 'sale.order', 'read', array($salesOrderIds), [
+    //             'fields'=>[
+    //                 'id',
+    //                 'display_name', // so_number
+    //                 'currency_id',
+    //                 'amount_total',
+    //                 'project_id'
+    //             ]
+    //         ]);
+    //         $salesOrderFormatted = [];
+    //         foreach ($salesOrders as $orderIndex => $salesOrderArr) {
+    //             $projectFormatted['currency']=$salesOrderArr['currency_id'][1];
+    //             $currentOrderIndex =$orderIndex+1;
+    //             $currentSalesOrderId = $salesOrderArr['id'];
+    //             $currentSalesOrderAmount = $salesOrderArr['amount_total'];
+    //             $projectAmount += $currentSalesOrderAmount;
                     
-                $currentSalesOrderArr = [
-                    'odoo_id'=>$currentSalesOrderId,
-                    'so_number'=>$salesOrderArr['display_name'],
-                    // 'id'=>$currentSalesOrderId,
-                    'amount'=>$currentSalesOrderAmount,
-                    'execution_percentage_'.$currentOrderIndex=>100,
-                    'start_date_'.$currentOrderIndex=>$currentProjectStartDate,
-                    'end_date_'.$currentOrderIndex=>$currentProjectEndDate,
-            //			'execution_days_'.$currentOrderIndex=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate),
-                    'collection_days_'.$currentOrderIndex=>0,
-                    'company_id'=>$companyId
+    //             $currentSalesOrderArr = [
+    //                 'odoo_id'=>$currentSalesOrderId,
+    //                 'so_number'=>$salesOrderArr['display_name'],
+    //                 // 'id'=>$currentSalesOrderId,
+    //                 'amount'=>$currentSalesOrderAmount,
+    //                 'execution_percentage_'.$currentOrderIndex=>100,
+    //                 'start_date_'.$currentOrderIndex=>$currentProjectStartDate,
+    //                 'end_date_'.$currentOrderIndex=>$currentProjectEndDate,
+    //         //			'execution_days_'.$currentOrderIndex=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate),
+    //                 'collection_days_'.$currentOrderIndex=>0,
+    //                 'company_id'=>$companyId
                         
-                ] ;
-                $oldSalesOrder = SalesOrder::where('odoo_id', $currentSalesOrderId)->first();
-                if ($oldSalesOrder) {
-                    $currentSalesOrderArr['id'] = $oldSalesOrder->id;
-                }
-                $salesOrderFormatted[]=$currentSalesOrderArr;
-            }
-            $projectAmount = $projectAmount ? $projectAmount : 0 ;
-            $projectFormatted['amount'] = $projectAmount ;
-            if (count($salesOrderFormatted) && $projectAmount) {
-                $projectFormatted['salesOrders']=$salesOrderFormatted;
-                $contract = $oldProject ? $oldProject : new Contract ;
+    //             ] ;
+    //             $oldSalesOrder = SalesOrder::where('odoo_id', $currentSalesOrderId)->first();
+    //             if ($oldSalesOrder) {
+    //                 $currentSalesOrderArr['id'] = $oldSalesOrder->id;
+    //             }
+    //             $salesOrderFormatted[]=$currentSalesOrderArr;
+    //         }
+    //         $projectAmount = $projectAmount ? $projectAmount : 0 ;
+    //         $projectFormatted['amount'] = $projectAmount ;
+    //         if (count($salesOrderFormatted) && $projectAmount) {
+    //             $projectFormatted['salesOrders']=$salesOrderFormatted;
+    //             $contract = $oldProject ? $oldProject : new Contract ;
             
-                $request = (new Request())->merge($projectFormatted);
-                $contract->storeBasicForm($request);
-            }
+    //             $request = (new Request())->merge($projectFormatted);
+    //             $contract->storeBasicForm($request);
+    //         }
                 
-        }
+    //     }
 
         
         
-    }
+    // }
     protected function getInvoices(string $startDate, string $endDate)
     {
         $fields= [
