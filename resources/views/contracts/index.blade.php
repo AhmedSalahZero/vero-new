@@ -772,7 +772,7 @@ use App\Models\Contract;
                                     <form action="{{ route('store.po.allocations',['company'=>$company->id]) }}" method="post" class="po-allocations-form-js">
                                         @csrf
                                         <input type="hidden" name="po_id" value="{{ $titleAndValue['id'] }}">
-                                        @if($type == 'Supplier')
+                                        @if($type == 'Supplier' && !$company->hasOdooIntegrationCredentials())
                                         <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#allocate-po-{{ $titleAndValue['id'] }}">
                                             {{ __('Allocate') }}
 
