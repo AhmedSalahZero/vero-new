@@ -384,6 +384,15 @@ use App\Models\Contract;
         margin-top: 0 !important;
     }
 
+    /* إجمالي عقود الموردين المرتبطة — صف لكل عملة */
+    tr.related-contracts-total-row td,
+    table.dataTable tfoot tr.related-contracts-total-row td {
+        background-color: #9FC9FB !important;
+        color: #0742A6 !important;
+        border-top: 2px solid #074FA4 !important;
+        font-size: 15px;
+    }
+
 </style>
 
 

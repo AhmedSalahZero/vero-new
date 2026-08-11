@@ -47,20 +47,29 @@
                                 <td class="sub-text-bg text-center text-nowrap">{{ $relatedContract->getAmountFormatted() }}</td>
                             </tr>
                             @endforeach
-
+                        </tbody>
+                        {{--
+                            الإجماليات في tfoot مش في tbody ، عشان الـ DataTable
+                            البحث بتاعها كان بيفلترها مع الصفوف العادية فتختفي
+                        --}}
+                        <tfoot>
                             @foreach($totalsPerCurrency as $currencyName => $currencyTotal)
-                            <tr class="is-total-row">
-                                <td class="sub-text-bg text-center"><b>{{ __('Total') }}</b></td>
-                                <td class="sub-text-bg text-center"></td>
-                                <td class="sub-text-bg text-center"></td>
-                                <td class="sub-text-bg text-center"></td>
-                                <td class="sub-text-bg text-center"></td>
-                                <td class="sub-text-bg text-center"></td>
-                                <td class="sub-text-bg text-center"><b>{{ $currencyName }}</b></td>
-                                <td class="sub-text-bg text-center text-nowrap"><b>{{ number_format($currencyTotal) }}</b></td>
+                            {{--
+                                عدد الخلايا هنا لازم يفضل 8 زي عدد الأعمدة (من غير colspan)
+                                عشان الـ fixedColumns بتعمل clone لأول وآخر عمود
+                            --}}
+                            <tr class="related-contracts-total-row">
+                                <td class="text-center text-nowrap"><b>{{ __('Total') }}</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center"><b>{{ $currencyName ?: '-' }}</b></td>
+                                <td class="text-center text-nowrap"><b>{{ number_format($currencyTotal) }}</b></td>
                             </tr>
                             @endforeach
-                        </tbody>
+                        </tfoot>
                     </table>
                 </div>
             </div>
