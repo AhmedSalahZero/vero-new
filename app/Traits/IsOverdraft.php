@@ -167,12 +167,74 @@ trait IsOverdraft
 		return $this->rates()->create([
 			'date'=>$date,
 			'min_interest_rate'=>$minInterestRate,
-			'margin_rate'=>$marginRate, // or bank_margin_rate 
+			'margin_rate'=>$marginRate, // or bank_margin_rate
 			'borrowing_rate'=>$borrowingRate,
 			'interest_rate'=>$interestRate,
 			'company_id'=>$companyId
 		]);
-	}	
+	}
+
+	/**
+	 * * بتولد صف فايدة اخر الشهر (type = interest , interest_type = end_of_month)
+	 * * لكل شهر ما بين بداية ونهاية التعاقد. الصف بينزل بـ credit = 0
+	 * * والـ trigger بتاع البنك استيتمنت هو اللي بيملي القيمة بعد كدا
+	 *
+	 * * دا محدود بتاريخ بدايه ونهايه وبالتالي مش هيحصل حركات خارجهم
+	 *
+	 * * كانت متعرفة على CleanOverdraft لوحده ، فالفايدة الشهرية كانت بتشتغل
+	 * * في الكلين أوفردرافت بس. نقلناها هنا عشان كل الأنواع اللي بتستخدم
+	 * * الـ trait (fully secured / commercial paper / assignment of contract)
+	 * * تولد نفس الصفوف
+	 */
+	public function handleEndOfMonthInterestForContractStatements(?string $contractStartDate , ?string $contractEndDate , int $companyId)
+	{
+		if(!$contractStartDate || !$contractEndDate){
+			return ;
+		}
+		$foreignKeyColumnName = static::generateForeignKeyFormModelName(); // clean_overdraft_id for clean_overdrafts for example
+		$fullBankStatement = static::getBankStatementTableClassName();
+
+		$contractStartDateAsCarbon = Carbon::make($contractStartDate);
+		$contractEndDateAsCarbon = Carbon::make($contractEndDate);
+
+		/**
+		 * * لازم copy() هنا: Carbon قابل للتعديل و endOfMonth() بتغير الكائن نفسه ،
+		 * * فمن غيرها الشرط كان بيقارن التاريخ بنفسه (true دايما) وكمان
+		 * * تاريخ البداية كان بيتحول لاخر الشهر ، فشهر التعاقد الاول كان بيتشال
+		 */
+		$isLastDayOfMonth = $contractStartDateAsCarbon->copy()->endOfMonth()->isSameDay($contractStartDateAsCarbon);
+
+		$dates = generateDatesBetweenTwoDatesWithoutOverflow($contractStartDateAsCarbon->copy(),$contractEndDateAsCarbon) ;
+		$countDates = count($dates);
+		$interestText = 'interest';
+		$interestTypeText = 'end_of_month';
+		$fullBankStatement::where('company_id',$companyId)->where('type',$interestText)->where($foreignKeyColumnName,$this->id)->where('interest_type',$interestTypeText)->where('date','>',$contractEndDate)->delete();
+		foreach($dates as $index => $dateAsString){
+			/**
+			 * * لو التعاقد بادئ في اخر يوم في الشهر فمفيش ايام فايدة تتحسب في الشهر ده
+			 */
+			if($index == 0 && $isLastDayOfMonth){
+				continue;
+			}
+			$isLastLoop = $index == $countDates -1;
+			$currentEndOfMonthDate = $isLastLoop ? $contractEndDateAsCarbon->format('Y-m-d') : Carbon::make($dateAsString)->endOfMonth()->format('Y-m-d');
+			$isExist = $fullBankStatement::where('company_id',$companyId)->where($foreignKeyColumnName,$this->id)->where('type',$interestText)->where('interest_type',$interestTypeText)->where('date',$currentEndOfMonthDate)->first();
+			if(!$isExist){
+				$fullBankStatement::create([
+					'company_id'=>$companyId,
+					$foreignKeyColumnName=>$this->id ,
+					'priority'=>1 ,
+					'type'=>$interestText,
+					'date'=>$currentEndOfMonthDate,
+					'limit'=>$this->limit ,
+					'credit'=>0 ,
+					'interest_type'=>$interestTypeText,
+					'comment_en'=>__('End Of Month Interest'),
+					'comment_ar'=>__('End Of Month Interest'),
+				]);
+			}
+		}
+	}
 	
 
 	

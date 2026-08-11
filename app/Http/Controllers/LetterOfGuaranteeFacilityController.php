@@ -12,6 +12,7 @@ use App\Models\LetterOfGuaranteeIssuance;
 use App\Models\LetterOfGuaranteeStatement;
 use App\Models\Partner;
 use App\Models\TimeOfDeposit;
+use App\Http\Requests\StoreLetterOfGuaranteeFacilityRequest;
 use App\Traits\GeneralFunctions;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -85,7 +86,7 @@ class LetterOfGuaranteeFacilityController
 	{
 		return ['name','contract_start_date','contract_end_date','outstanding_date','currency','limit','outstanding_amount'];
 	}
-	public function store(Company $company  ,FinancialInstitution $financialInstitution, Request $request){
+	public function store(Company $company  ,FinancialInstitution $financialInstitution, StoreLetterOfGuaranteeFacilityRequest $request){
 		$data = $request->only( $this->getCommonDataArr());
 		foreach(['contract_start_date','contract_end_date','outstanding_date'] as $dateField){
 			$data[$dateField] = $request->get($dateField) ? Carbon::make($request->get($dateField))->format('Y-m-d'):null;
@@ -137,7 +138,7 @@ class LetterOfGuaranteeFacilityController
 
 	}
 
-	public function update(Company $company , Request $request , FinancialInstitution $financialInstitution,LetterOfGuaranteeFacility $letterOfGuaranteeFacility){
+	public function update(Company $company , StoreLetterOfGuaranteeFacilityRequest $request , FinancialInstitution $financialInstitution,LetterOfGuaranteeFacility $letterOfGuaranteeFacility){
 		$termAndConditions =  $request->get('termAndConditions',[]) ;
         $source = LetterOfGuaranteeIssuance::LG_FACILITY;
 		$data['updated_by'] = auth()->user()->id ;

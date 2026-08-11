@@ -286,52 +286,9 @@ class CleanOverdraft extends Model implements IHaveStatement
 	}
 	
 	/**
-	 * *  دا محدود بتاريخ بدايه ونهايه وبالتالي مش هيحصل حركات خارجهم
+	 * * handleEndOfMonthInterestForContractStatements اتنقلت لـ IsOverdraft trait
+	 * * عشان باقي انواع الاوفردرافت تولد صفوف الفايدة الشهرية بردو
 	 */
-	public function handleEndOfMonthInterestForContractStatements(string $contractStartDate , string $contractEndDate , int $companyId)
-	{
-		$foreignKeyColumnName = self::generateForeignKeyFormModelName(); // clean_overdraft_id for clean_overdrafts for example
-		$fullBankStatement = self::getBankStatementTableClassName();
-		
-		$contractStartDateAsCarbon = Carbon::make($contractStartDate);
-		
-		$isLastDayOfMonth = $contractStartDateAsCarbon->isSameDay($contractStartDateAsCarbon->endOfMonth());
-		
-		$contractEndDateAsCarbon= Carbon::make($contractEndDate);
-		
-		$dates = generateDatesBetweenTwoDatesWithoutOverflow($contractStartDateAsCarbon,$contractEndDateAsCarbon) ;
-		$countDates = count($dates);
-		$interestText = 'interest';
-		$interestTypeText = 'end_of_month';
-		$fullBankStatement::where('company_id',$companyId)->where('type',$interestText)->where($foreignKeyColumnName,$this->id)->where('interest_type',$interestTypeText)->where('date','>',$contractEndDate)->delete();
-		foreach($dates as $index => $dateAsString){
-			if($index == 0 && $isLastDayOfMonth){
-				continue;
-			}
-			$isLastLoop = $index == $countDates -1;
-			$currentEndOfMonthDate = $isLastLoop ? Carbon::make($contractEndDate)->format('Y-m-d') : Carbon::make($dateAsString)->endOfMonth()->format('Y-m-d');
-			$isExist = $fullBankStatement::where('company_id',$companyId)->where($foreignKeyColumnName,$this->id)->where('type',$interestText)->where('interest_type',$interestTypeText)->where('date',$currentEndOfMonthDate)->first();
-			if(!$isExist){
-				$data = [
-				'company_id'=>$companyId,
-				$foreignKeyColumnName=>$this->id ,
-				'priority'=>1 ,
-				'type'=>$interestText,
-				'date'=>$currentEndOfMonthDate,
-				'limit'=>$this->limit ,
-				'credit'=>0 ,
-				'interest_type'=>'end_of_month',
-				'comment_en'=>__('End Of Month Interest'),
-				'comment_ar'=>__('End Of Month Interest'),
-			] ; 
-			// if($this instanceof FinancialInstitutionAccount){
-			// 	unset($data['priority']);
-			// }
-			 $fullBankStatement::create($data);
-			}
-			
-		}
-	}
 	
 	
 	

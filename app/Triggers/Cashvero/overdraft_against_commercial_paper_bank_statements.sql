@@ -244,15 +244,20 @@
 					-- اعادة حساب فايدة نهاية كل شهر (في حالة التعديل مش الانشاء)
 
 					if new.id and (new.type = interest_type_text or new.type = highest_debit_balance_text ) then 
-								select  sum(interest_amount) , max(end_balance) into _current_interest_amount,_largest_end_balance from  overdraft_against_commercial_paper_bank_statements where `type` != interest_type_text and `type` != highest_debit_balance_text and overdraft_against_commercial_paper_id = new.overdraft_against_commercial_paper_id and EXTRACT(MONTH from date) = EXTRACT(MONTH from new.date ) and  EXTRACT(YEAR from date) = EXTRACT(YEAR from new.date) ;
+								-- min مش max: ارصدة الاوفردرافت سالبة ، فاعلى مديونية في الشهر هي اصغر end_balance
+								select  sum(interest_amount) , min(end_balance) into _current_interest_amount,_largest_end_balance from  overdraft_against_commercial_paper_bank_statements where `type` != interest_type_text and `type` != highest_debit_balance_text and overdraft_against_commercial_paper_id = new.overdraft_against_commercial_paper_id and EXTRACT(MONTH from date) = EXTRACT(MONTH from new.date ) and  EXTRACT(YEAR from date) = EXTRACT(YEAR from new.date) ;
 								set _current_interest_amount = ifnull(_current_interest_amount,0);
+								-- لو الشهر مفيهوش اي حركات عادية بترجع max بـ NULL ، وساعتها
+								-- credit بيبقى NULL و end_balance بيقع بـ "cannot be null" اول لمسة تانية
+								set _largest_end_balance = ifnull(_largest_end_balance,0);
 								select highest_debt_balance_rate into _highest_debt_balance_rate from overdraft_against_commercial_papers where id = new.overdraft_against_commercial_paper_id  ;
 								if new.type = interest_type_text then 
 								-- للفايدة الخاصة باخر الشهر
 									set new.credit = _current_interest_amount ;
 								elseif new.type = highest_debit_balance_text then 
 								-- حساب ال highest debit balance
-								set _current_interest_amount = _highest_debt_balance_rate / 100 * _largest_end_balance ; 
+								-- * -1 عشان العمولة تطلع موجبة وتتخصم صح (credit سالب كان بيزود الرصيد بدل ما يخصم)
+								set _current_interest_amount = _highest_debt_balance_rate / 100 * _largest_end_balance * -1 ;
 								
 									set new.credit = _current_interest_amount ;
 								end if;

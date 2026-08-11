@@ -13,7 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * * بناخد البنك و السجل اللي بنعدله من الـ route مش من input مخفي في الفورم ،
  * * عشان الشرط ما يتلغيش لو حد بعت الريكوست من غير الحقول دي
  */
-class StoreLetterOfCreditFacilityRequest extends FormRequest
+class StoreLetterOfGuaranteeFacilityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,17 +28,17 @@ class StoreLetterOfCreditFacilityRequest extends FormRequest
     public function rules()
     {
         $financialInstitution = $this->route('financialInstitution');
-        $letterOfCreditFacility = $this->route('letterOfCreditFacility');
+        $letterOfGuaranteeFacility = $this->route('letterOfGuaranteeFacility');
 
         return [
             'name' => [
                 'required',
                 new UniqueToCompanyAndAdditionalColumnsRule(
-                    'LetterOfCreditFacility',
+                    'LetterOfGuaranteeFacility',
                     'name',
-                    $letterOfCreditFacility ? $letterOfCreditFacility->id : 0,
+                    $letterOfGuaranteeFacility ? $letterOfGuaranteeFacility->id : 0,
                     [['financial_institution_id', '=', $financialInstitution ? $financialInstitution->id : 0]],
-                    __('This Letter OF Credit Facility Already Exist')
+                    __('This Letter Of Guarantee Facility Already Exist')
                 ),
             ],
         ];

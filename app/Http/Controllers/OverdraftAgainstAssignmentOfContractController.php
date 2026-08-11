@@ -110,6 +110,9 @@ class OverdraftAgainstAssignmentOfContractController
 		 * @var OverdraftAgainstAssignmentOfContract $odAgainstAssignmentOfContract 
 		 */
 		$odAgainstAssignmentOfContract = $financialInstitution->overdraftAgainstAssignmentOfContracts()->create($data);
+
+		$odAgainstAssignmentOfContract->handleEndOfMonthInterestForContractStatements($data['contract_start_date'],$data['contract_end_date'],$company->id);
+
 		$type = $request->get('type','overdraft-against-assignment-of-contract');
 		$activeTab = $type ; 
 		
@@ -144,6 +147,7 @@ class OverdraftAgainstAssignmentOfContractController
 			$data[$dateField] = $request->get($dateField) ? Carbon::make($request->get($dateField))->format('Y-m-d'):null;
 		}
 		$odAgainstAssignmentOfContract->update($data);
+		$odAgainstAssignmentOfContract->handleEndOfMonthInterestForContractStatements($data['contract_start_date'],$data['contract_end_date'],$company->id);
 		$odAgainstAssignmentOfContract->triggerChangeOnContracts();
 		
 		$odAgainstAssignmentOfContract->storeOutstandingBreakdown($request,$company);

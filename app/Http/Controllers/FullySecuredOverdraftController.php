@@ -101,6 +101,9 @@ class FullySecuredOverdraftController
 		 * @var FullySecuredOverdraft $fullySecuredOverdraft 
 		 */
 		$fullySecuredOverdraft = $financialInstitution->fullySecuredOverdrafts()->create($data);
+
+		$fullySecuredOverdraft->handleEndOfMonthInterestForContractStatements($data['contract_start_date'],$data['contract_end_date'],$company->id);
+
 		$type = $request->get('type','fully-secured-over-draft');
 		$activeTab = $type ; 
 		
@@ -150,6 +153,7 @@ class FullySecuredOverdraftController
 		}
 		
 		$fullySecuredOverdraft->update($data);
+		$fullySecuredOverdraft->handleEndOfMonthInterestForContractStatements($data['contract_start_date'],$data['contract_end_date'],$company->id);
 		$fullySecuredOverdraft->storeOutstandingBreakdown($request,$company);
 		$fullySecuredOverdraft->updateLimitRaw();
 		

@@ -106,6 +106,9 @@ class OverdraftAgainstCommercialPaperController
 		 * @var OverdraftAgainstCommercialPaper $overdraftAgainstCommercialPaper 
 		 */
 		$overdraftAgainstCommercialPaper = $financialInstitution->overdraftAgainstCommercialPapers()->create($data);
+
+		$overdraftAgainstCommercialPaper->handleEndOfMonthInterestForContractStatements($data['contract_start_date'],$data['contract_end_date'],$company->id);
+
 		$type = $request->get('type','overdraft-against-commercial-paper');
 		$activeTab = $type ; 
 		
@@ -144,6 +147,7 @@ class OverdraftAgainstCommercialPaperController
 		}
 		
 		$overdraftAgainstCommercialPaper->update($data);
+		$overdraftAgainstCommercialPaper->handleEndOfMonthInterestForContractStatements($data['contract_start_date'],$data['contract_end_date'],$company->id);
 		$overdraftAgainstCommercialPaper->storeOutstandingBreakdown($request,$company);
 		$overdraftAgainstCommercialPaper->lendingInformation()->delete();
 		foreach($infos as $lendingInformationArr){
