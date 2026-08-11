@@ -917,6 +917,10 @@ use App\Models\Contract;
     @endslot
     </x-table>
 
+    {{-- active بيخلي التاب المفتوحة تفضل مفتوحة بعد التنقل --}}
+    @if(isset($paginators[$currentType]))
+    {{ $paginators[$currentType]->appends(array_merge(request()->except($paginators[$currentType]->getPageName()),['active' => $currentType]))->links('pagination::bootstrap-4') }}
+    @endif
 
 </div>
 </div>

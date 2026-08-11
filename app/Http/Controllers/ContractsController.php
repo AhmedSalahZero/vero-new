@@ -27,15 +27,26 @@ class ContractsController
 			Contract::FINISHED 
 		];
 		
-		$runningContracts = Contract::where('contracts.company_id',$company->id)->where('status',Contract::RUNNING )->where('model_type',$type)->join('partners','partners.id','=','contracts.partner_id')->selectRaw('contracts.*,partners.name as partner_name')->orderByRaw('start_date desc , partner_name asc')->with(['relatedContracts.client','relatedContracts.purchasesOrders'])->get();
-		$runningAndAgainstContracts = Contract::where('contracts.company_id',$company->id)->where('status',Contract::RUNNING_AND_AGAINST )->join('partners','partners.id','=','contracts.partner_id')->selectRaw('contracts.*,partners.name as partner_name')->orderByRaw('start_date desc , partner_name asc')->with(['relatedContracts.client','relatedContracts.purchasesOrders'])->where('model_type',$type)->get();
-		$finishedContracts = Contract::where('contracts.company_id',$company->id)->where('status',Contract::FINISHED )->where('model_type',$type)->join('partners','partners.id','=','contracts.partner_id')->selectRaw('contracts.*,partners.name as partner_name')->orderByRaw('start_date desc , partner_name asc')->with(['relatedContracts.client','relatedContracts.purchasesOrders'])->get();
-	
-		$contracts = [
-			Contract::RUNNING=>$runningContracts ,
-			Contract::RUNNING_AND_AGAINST=>$runningAndAgainstContracts,
-			Contract::FINISHED=>$finishedContracts
-		];
+		/**
+		 * * كل تاب ليها بيچينيشن مستقلة بالـ page parameter بتاعها ، عشان
+		 * * التنقل في تاب ما يحركش التابات التانية.
+		 * * والـ eager loading هنا مهم: من غيره الصفحة كانت بتعمل كويري
+		 * * لكل عقد (فواتيره وأوامره وتوزيعاتها) — دي كانت سبب البطء
+		 */
+		$contracts = [];
+		$paginators = [];
+		foreach($contractStatues as $contractStatus){
+			$paginator = Contract::where('contracts.company_id',$company->id)
+				->where('status',$contractStatus)
+				->where('model_type',$type)
+				->join('partners','partners.id','=','contracts.partner_id')
+				->selectRaw('contracts.*,partners.name as partner_name')
+				->orderByRaw('start_date desc , partner_name asc')
+				->with($this->relationsToEagerLoad($type))
+				->paginate(GeneralFunctions::getPaginationLimit(),['*'],$this->pageNameForStatus($contractStatus));
+			$paginators[$contractStatus] = $paginator;
+			$contracts[$contractStatus] = $paginator->getCollection();
+		}
 		
 		$customerOrSupplierContractsText = $type == 'Supplier' ? __('Supplier Contracts') : __('Customer Contracts');
 		$items = [];
@@ -73,8 +84,44 @@ class ContractsController
 		$commonVars = $this->getCommonVars($company,$type);
 		$clientsWithContracts = $commonVars['clientsWithContracts'];
 		
-        return view('contracts.index',compact('clientsWithContracts','company','items','type','customerOrSupplierContractsText','contractStatues','hasProjectNameColumn'));
+        return view('contracts.index',compact('clientsWithContracts','company','items','type','customerOrSupplierContractsText','contractStatues','hasProjectNameColumn','paginators'));
     }
+	/**
+	 * * اسم الـ page parameter لكل تاب ، عشان كل تاب تتنقل لوحدها
+	 */
+	public function pageNameForStatus(string $contractStatus):string
+	{
+		return $contractStatus.'_page';
+	}
+	/**
+	 * * العلاقات اللي الصفحة بتقراها لكل عقد. من غيرها بيحصل N+1
+	 * * (كويري للفواتير وكويري للأوامر وكويري للتوزيعات لكل عقد لوحده)
+	 *
+	 * @return array<string>
+	 */
+	protected function relationsToEagerLoad(string $type):array
+	{
+		$isSupplier = $type == 'Supplier';
+
+		/**
+		 * * ملحوظة مهمة: فواتير العقد (supplierInvoices / customerInvoices)
+		 * * **مينفعش** تتحط هنا. العلاقة دي فيها where('company_id',$this->company_id)
+		 * * ولارافيل وقت الـ eager loading بيبني العلاقة من موديل فاضي ،
+		 * * فالشرط بيتحول لـ company_id = null والفواتير بترجع صفر.
+		 * * وشيل الشرط مش حل لأن الفهرس الفريد على العقود هو (company_id , code)
+		 * * يعني نفس الكود ممكن يتكرر في شركة تانية. البيچينيشن أصلاً بتحدد
+		 * * الكويريات دي بعدد صفوف الصفحة الواحدة
+		 */
+		return [
+			'client',
+			/**
+			 * * التوزيعات موجودة على أمر الشراء بس ، مش على أمر البيع
+			 */
+			$isSupplier ? 'purchasesOrders.allocations' : 'salesOrders',
+			'relatedContracts.client',
+			'relatedContracts.purchasesOrders',
+		];
+	}
 	public function create(Request $request,Company $company,string $type)
 	{
 		return view('contracts.form',$this->getCommonVars($company,$type));

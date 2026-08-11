@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BankStatementController
 {
@@ -256,14 +257,32 @@ class BankStatementController
         $date = Carbon::make($request->get('date'))->format('Y-m-d');
         $fullModelClass = 'App\Models\\'.$statementModelName;
         $bankStatementRecord = $fullModelClass::find($statementId) ;
-		$financialInstitutionAccountId = $bankStatementRecord->financial_institution_account_id;
-		$financialInstitutionAccount = FinancialInstitutionAccount::find($financialInstitutionAccountId);
-		$financialInstitution = $financialInstitutionAccount->financialInstitution;
-		$financialInstitutionId= $financialInstitution->id;
-		if($bankStatementRecord && $bankStatementRecord->interest_journal_entry_id){
+		if(!$bankStatementRecord){
+			return redirect()->back()->with('fail', __('No Data Found'));
+		}
+		/**
+		 * * كشف الحساب الجاري هو الوحيد اللي عنده financial_institution_account_id ،
+		 * * أما كشوف الأوفردرافت فمالهاش العمود ده ولا ليها حساب في
+		 * * financial_institution_accounts أصلاً — فمفيش حساب نبني عليه قيد أودو.
+		 * * قبل كده الكود كان بيفترض إن الحساب موجود دايماً وبيقع بـ 500 على أي
+		 * * صف أوفردرافت ، وبكده تعديل الصف نفسه كان مستحيل
+		 */
+		$financialInstitutionAccountId = $bankStatementRecord->financial_institution_account_id ?? null;
+		$financialInstitutionAccount = $financialInstitutionAccountId ? FinancialInstitutionAccount::find($financialInstitutionAccountId) : null;
+		$financialInstitutionId = $financialInstitutionAccount?->financialInstitution?->id;
+		if($bankStatementRecord->interest_journal_entry_id){
 			(new CashExpenseOdooService($company))->unlink($bankStatementRecord->interest_journal_entry_id);
 		}
-		(new TimeOfDeposit())->storePeriodInterestOdooRelations($bankStatementRecord,$date,$debit,$financialInstitutionId , $financialInstitutionAccountId,$company);
+		if($financialInstitutionAccount && $financialInstitutionId){
+			(new TimeOfDeposit())->storePeriodInterestOdooRelations($bankStatementRecord,$date,$debit,$financialInstitutionId , $financialInstitutionAccountId,$company);
+		}else{
+			Log::info('Bank statement row updated without an Odoo interest entry: no financial institution account on the row', [
+				'company_id' => $company->id,
+				'statement_model_name' => $statementModelName,
+				'statement_id' => $statementId,
+				'financial_institution_account_id' => $financialInstitutionAccountId,
+			]);
+		}
         $bankStatementRecord->handleFullDateAfterDateEdit($date, $debit, $credit);
         return redirect()->back()->with('success', __('Data Updated Successfully'));
     }

@@ -12,6 +12,7 @@ use App\Models\ForeignExchangeRate;
 use App\Models\TimeOfDeposit;
 use App\Services\Api\CashExpenseOdooService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 trait HasPeriodicInterest
 {
@@ -69,6 +70,18 @@ trait HasPeriodicInterest
         $financialInstitutionId = is_null($financialInstitutionId) ?  $this->financial_institution_id : $financialInstitutionId;
 		$financialInstitutionAccountId = is_null($financialInstitutionAccountId) ? $this->maturity_amount_added_to_account_id : $financialInstitutionAccountId;
         $financialInstitutionAccount = FinancialInstitutionAccount::find($financialInstitutionAccountId);
+        /**
+         * * من غير حساب مفيش journal ولا حساب أودو نبني عليهم القيد ،
+         * * فبنسيب الصف من غير قيد بدل ما نقع
+         */
+        if (is_null($financialInstitutionAccount)) {
+            Log::info('Skipped the Odoo interest entry: financial institution account not found', [
+                'company_id' => $company->id,
+                'financial_institution_account_id' => $financialInstitutionAccountId,
+            ]);
+
+            return ;
+        }
         $journalId = $financialInstitutionAccount->journal_id ;
         $currencyName = $financialInstitutionAccount->getCurrency();
         $amountInCurrency = $amount;
