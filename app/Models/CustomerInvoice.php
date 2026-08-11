@@ -193,6 +193,8 @@ class CustomerInvoice extends Model implements IInvoice
 	const DOWN_PAYMENT_SETTLEMENT_MODEL_NAME ='DownPaymentSettlement';
 	const DOWN_PAYMENT_SETTLEMENT_TABLE_NAME ='down_payment_settlements';
 	const SO_OR_PO_NUMBER ='sales_order_number';
+	const ORDER_TABLE_NAME ='sales_orders';
+	const ORDER_NUMBER_COLUMN_NAME ='so_number';
     protected $guarded = [];
 
 	public function getClientDisplayName()

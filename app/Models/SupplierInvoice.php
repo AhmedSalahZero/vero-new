@@ -195,6 +195,12 @@ class SupplierInvoice extends Model implements IInvoice
 	const DOWN_PAYMENT_SETTLEMENT_MODEL_NAME ='DownPaymentMoneyPaymentSettlement';
 	const DOWN_PAYMENT_SETTLEMENT_TABLE_NAME ='down_payment_money_payment_settlements';
 	const SO_OR_PO_NUMBER ='purchases_order_number';
+	/**
+	 * * الجدول اللي بنوصل منه لعقد الفاتورة: فاتورة المورّد بتوصل بالـ PO
+	 * * زي ما فاتورة العميل بتوصل بالـ SO
+	 */
+	const ORDER_TABLE_NAME ='purchase_orders';
+	const ORDER_NUMBER_COLUMN_NAME ='po_number';
     protected $guarded = [];
 	
 	public function getClientDisplayName()

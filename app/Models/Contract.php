@@ -546,6 +546,10 @@ class Contract extends Model
 	{
 		return $this->hasMany(CustomerInvoice::class,'contract_code','code')->where('company_id',$this->company_id);
 	}
+	public function supplierInvoices()
+	{
+		return $this->hasMany(SupplierInvoice::class,'contract_code','code')->where('company_id',$this->company_id);
+	}
 	public static function deleteLimitUpdateRowFromStatement($overdraftAgainstAssignmentOfContractLimit)
 	{
 		$paperId = $overdraftAgainstAssignmentOfContractLimit->overdraft_against_assignment_of_contract_id;

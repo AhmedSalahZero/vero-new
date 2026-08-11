@@ -1343,6 +1343,5 @@
 "Transactions":"عدد الحركات",
 "Export Excel":"تصدير Excel",
 "This contract code is already used by another contract in this company":"كود العقد ده مستخدم بالفعل في عقد تاني بنفس الشركة",
-"Total Allocate Percentage Can Not Be More Than 100%":"إجمالي نسبة التوزيع لا يمكن أن يزيد عن 100%",
-"Invoices Details":"تفاصيل الفواتير"
+"Total Allocate Percentage Can Not Be More Than 100%":"إجمالي نسبة التوزيع لا يمكن أن يزيد عن 100%"
 }

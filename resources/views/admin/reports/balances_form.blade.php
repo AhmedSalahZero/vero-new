@@ -383,10 +383,6 @@
                                                 <th class="view-table-th max-w-report-btn header-th align-middle text-center">
                                                     {{ __('Statement Report') }}
                                                 </th>
-
-                                                <th class="view-table-th max-w-report-btn header-th align-middle text-center">
-                                                    {{ __('Invoices Details') }}
-                                                </th>
 												@if($currencyName != "main_currency")
                                                 <th class="view-table-th max-w-report-btn header-th align-middle text-center">
                                                     {{ __('Invoice Report') }}
@@ -419,11 +415,6 @@
 												$downPaymentsTotal = $rowsForCurrency->sum(fn($row) => $row->down_payment_amount ?? 0);
 												$currencyTotal = $rowsForCurrency->sum('net_balance');
 												$indexKey = 0 ;
-												/**
-												 * المودالات بتتجمّع هنا وبتتطبع بعد الجدول (برّه الـ DataTable
-												 * اللي عليه scrollX) عشان الـ overflow ما يقصّهاش.
-												 */
-												$invoicesModals = [] ;
 											@endphp
 
                                             @foreach($rowsForCurrency as $invoicesBalancesAsStdClass)
@@ -447,24 +438,6 @@
                                                     @if($currencyName && $invoicesBalancesAsStdClass->{$clientNameColumnName})
                                                     <a href="{{ route('view.invoice.statement.report',['company'=>$company->id ,'partnerId'=>$invoicesBalancesAsStdClass->{$clientIdColumnName},'currency'=>$invoicesBalancesAsStdClass->currency,'modelType'=>$modelType]) }}" class="btn btn-sm btn-primary" style="border-radius: 20px !important">{{ $customersOrSupplierStatementText }}</a>
                                                     @endif
-                                                </td>
-                                                <td class="sub-text-bg max-w-report-btn text-center">
-											@php
-												$rowPartnerId = $invoicesBalancesAsStdClass->{$clientIdColumnName} ;
-												$rowInvoices = $invoicesPerPartnerAndCurrency[$rowPartnerId][$invoicesBalancesAsStdClass->currency] ?? collect() ;
-												$invoicesModalId = 'partner-invoices-'.$modelType.'-'.$rowPartnerId.'-'.preg_replace('/[^A-Za-z0-9_-]/','',(string) $currencyName) ;
-												if(count($rowInvoices)){
-													$invoicesModals[] = [
-														'modalId'=>$invoicesModalId ,
-														'partnerName'=>$invoicesBalancesAsStdClass->{$clientNameColumnName} ,
-														'rowCurrency'=>$invoicesBalancesAsStdClass->currency ,
-														'detailItems'=>$rowInvoices
-													];
-												}
-											@endphp
-                                                @if(count($rowInvoices))
-                                                <button type="button" class="btn btn-sm btn-brand btn-elevate btn-pill text-white" data-toggle="modal" data-target="#{{ $invoicesModalId }}">{{ __('Invoices') }}</button>
-                                                @endif
                                                 </td>
 													@if($currencyName != "main_currency")
                                                 <td class="sub-text-bg max-w-report-btn text-center">
@@ -491,7 +464,6 @@
                                                 <td class="sub-text-bg text-center max-w-amount">{{ number_format($downPaymentsTotal) }}</td>
                                                 <td class="sub-text-bg text-center max-w-amount">{{ number_format($currencyTotal) }}</td>
                                                 <td class="sub-text-bg max-w-report-btn text-center"></td>
-                                                <td class="sub-text-bg max-w-report-btn text-center"></td>
                                                     @if($currencyName != "main_currency")
                                                 <td class="sub-text-bg max-w-report-btn text-center"></td>
                                                     @endif
@@ -501,10 +473,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-
-                                @foreach($invoicesModals as $invoicesModal)
-                                @include('admin.reports.partner-invoices-modal',$invoicesModal)
-                                @endforeach
 
                             </div>
 

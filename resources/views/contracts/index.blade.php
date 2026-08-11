@@ -589,7 +589,8 @@ use App\Models\Contract;
                                             @php
                                             $currentModelId = 'contract-invoice-details-'.$mainItemId ;
                                             @endphp
-                                            @if($hasProjectNameColumn)
+                                            {{-- الزرار بيظهر لعقود العملاء والموردين طالما العقد ليه فواتير --}}
+                                            @if(count($parent['invoices']))
                                             <button class="btn btn-sm btn-brand btn-elevate btn-pill text-white" data-toggle="modal" data-target="#{{ $currentModelId }}">{{ __('Invoices') }}</button>
                                             @include('contracts.contract-invoice-details',['modalId'=>$currentModelId,'detailItems'=>$parent['invoices']])
                                             @endif

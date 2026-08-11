@@ -360,8 +360,14 @@ trait IsInvoice
 		$contract = null;
 		$soOrPoNumber = $soOrPoNumber ? $soOrPoNumber : null ;
 		if($soOrPoNumber){
-			$salesOrder = DB::table('sales_orders')->where('company_id',$companyId)->where('so_number',$soOrPoNumber)->first() ;
-			$contract = $salesOrder ? DB::table('contracts')->where('id',$salesOrder->contract_id)->first() : null ;
+			/**
+			 * * invoice_origin بتاع فاتورة العميل بيكون اسم الـ SO ، وبتاع
+			 * * فاتورة المورّد بيكون اسم الـ PO. قبل كده الاتنين كانوا
+			 * * بيتدوّروا في sales_orders ، فالفواتير المورّدين الجاية من
+			 * * أودو كانت بتفضل من غير عقد على طول
+			 */
+			$order = DB::table(static::ORDER_TABLE_NAME)->where('company_id',$companyId)->where(static::ORDER_NUMBER_COLUMN_NAME,$soOrPoNumber)->first() ;
+			$contract = $order ? DB::table('contracts')->where('id',$order->contract_id)->first() : null ;
 		}
 		
 		$invoiceData = [

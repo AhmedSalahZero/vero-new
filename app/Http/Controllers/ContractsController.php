@@ -42,7 +42,10 @@ class ContractsController
 		foreach($contractStatues as $contractStatus){
 			foreach($contracts[$contractStatus] as $index=>$contract){
 				$contractId = $contract->id ;
-				$customerInvoices = $contract->customerInvoices;
+				/**
+				 * * عقود العملاء بتوريها فواتير العملاء ، وعقود الموردين بتوريها فواتير الموردين
+				 */
+				$contractInvoices = $type == 'Supplier' ? $contract->supplierInvoices : $contract->customerInvoices;
 				$items[$contractStatus][$contractId]['parent'] = [
 					'name'=>$contract->getName() ,
 					'contract'=>$contract,
@@ -52,7 +55,7 @@ class ContractsController
 					'end_date'=>$contract->getEndDateFormatted(),
 					'currency'=> $contract->getCurrency() ,
 					'amount'=>$contract->getAmountFormatted(),
-					'invoices'=>$customerInvoices
+					'invoices'=>$contractInvoices
 				];
 				foreach($contract->getOrders() as $order){
 					$items[$contractStatus][$contractId]['sub_items'][$order->id][$order->getOrderColumnName()] =$order->getNumber() ;
