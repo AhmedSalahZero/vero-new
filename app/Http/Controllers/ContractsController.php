@@ -7,6 +7,7 @@ use App\Models\CustomerInvoice;
 use App\Models\Partner;
 use App\Models\PurchaseOrder;
 use App\Models\SalesOrder;
+use App\Models\SupplierInvoice;
 use App\Traits\GeneralFunctions;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,11 @@ class ContractsController
     use GeneralFunctions;
 	public function index(Company  $company ,$type)
     {
-		$hasProjectNameColumn = $type == 'Customer'?  CustomerInvoice::hasProjectNameColumn() : false;
+		/**
+		 * * الفلاج ده بيوصف بس هل فيه فواتير من النوع ده عليها اسم مشروع
+		 * * ولا لأ ، مكانش المفروض يتقفل على العميل بـ false للمورّد
+		 */
+		$hasProjectNameColumn = $type == 'Customer'?  CustomerInvoice::hasProjectNameColumn() : SupplierInvoice::hasProjectNameColumn();
 		
 		$contractStatues = [
 			Contract::RUNNING ,

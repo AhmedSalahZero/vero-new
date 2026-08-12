@@ -346,7 +346,7 @@ use App\Models\LetterOfCreditIssuance;
                                     </div>
 
                                     <div class="col-md-3">
-                                        <x-form.input :default-value="1" :model="$model??null" :label="__('LC Duration Months')" :type="'numeric'" :placeholder="__('LC Duration ( Days )')" :name="'lc_duration_days'" :class="'recalc-due-date lc-duration-days-js'" :required="true"></x-form.input>
+                                        <x-form.input :default-value="1" :model="$model??null" :label="__('LC Duration ( Days )')" :type="'numeric'" :placeholder="__('LC Duration ( Days )')" :name="'lc_duration_days'" :class="'recalc-due-date lc-duration-days-js'" :required="true"></x-form.input>
                                     </div>
 
 

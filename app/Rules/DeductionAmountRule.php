@@ -26,7 +26,11 @@ class DeductionAmountRule implements ImplicitRule
      */
     public function passes($attribute, $value)
     {
-		$amounts = array_sum(array_column(Request()->get('deductions'),'amount'));
+		/**
+		 * * لازم unformat قبل الجمع: القيم بتيجي متفرمتة (1,000.00)
+		 * * و PHP 8.4 بترمي فاتال على array_sum مع النصوص المتفرمتة
+		 */
+		$amounts = array_sum(\App\Helpers\HArr::unformatValues(array_column(Request()->get('deductions',[]),'amount')));
         return $this->net_balance  >= $amounts ; 
     }
 

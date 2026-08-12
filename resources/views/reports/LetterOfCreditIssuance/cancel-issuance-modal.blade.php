@@ -227,6 +227,17 @@
                         </div>
 						
 						
+                        @else
+
+                        {{--
+                            الفوايد بتظهر في حالة التمويل من البنك بس ، لأن دي
+                            الحالة الوحيدة اللي فيها البنك دفع بدالك وبقى ليه
+                            مديونية عليك بتاخد فوايد. لما تكون انت الدافع
+                            (Self) مفيش قرض أصلا فمفيش فوايد.
+
+                            الفوايد بتتخصم من نفس حساب المصاريف والعمولات بتاع
+                            الاعتماد ، لأن مفيش حساب دفع في حالة تمويل البنك
+                        --}}
 						 <div class="col-md-3">
                             <label>{{__('Interest Currency')}}
                                 @include('star')
@@ -240,17 +251,21 @@
                                 </select>
                             </div>
                         </div>
-						
-						
+
+
                         <div class="col-md-3 mb-4">
                             <label>{{__('Interest Amount')}} </label>
                             <div class="kt-input-icon">
                                 <input  name="interest_amount" value="{{ $model->getInterestAmountFormatted() }}" type="text" class="form-control text-center">
                             </div>
                         </div>
-						
 
-
+                        <div class="col-md-6 mb-4">
+                            <label>{{ __('Interest Deducted From') }}</label>
+                            <div class="kt-input-icon">
+                                <input readonly value="{{ $model->lcFeesAndCommissionAccount ? $model->lcFeesAndCommissionAccount->getAccountNumber() : __('N/A') }}" type="text" class="form-control text-center">
+                            </div>
+                        </div>
 
                         @endif
 

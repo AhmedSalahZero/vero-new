@@ -25,7 +25,10 @@ class LendingRateRule implements ImplicitRule
      */
     public function passes($attribute, $value)
     {
-        $lendingRates = array_column($value,'lending_rate');
+        /**
+		 * * unformat وقائي: لو النسبة اتبعتت متفرمتة PHP 8.4 هترمي فاتال
+		 */
+		$lendingRates = \App\Helpers\HArr::unformatValues(array_column($value,'lending_rate'));
 		return array_sum($lendingRates) <= 100 ;
 		
     }

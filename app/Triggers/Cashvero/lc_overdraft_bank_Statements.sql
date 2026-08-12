@@ -31,7 +31,10 @@
 					set _current_interest_rate = _current_interest_rate / 100 ;
 
 					
-					set @dailyInterestRate = _current_interest_rate/365 ;
+					-- * -1 عشان الفايدة تطلع موجبة: الرصيد سالب (مديونية) وضربه في
+					-- سعر موجب بيدي رقم سالب ، والـ credit السالب كان بيقلل المديونية
+					-- بدل ما يزودها. نفس الاتجاه اللي في update trigger بتاع clean overdraft
+					set @dailyInterestRate = _current_interest_rate/365*-1 ;
 					if _previous_date then 
 					set @dayCounts = DATEDIFF(new.date,_previous_date) ;
 					set @interestAmount = if(_last_end_balance < 0 , _last_end_balance * @dailyInterestRate * @dayCounts , 0)  ;
@@ -127,7 +130,10 @@
 					set _current_interest_rate = _current_interest_rate / 100 ;
 
 					
-					set @dailyInterestRate = _current_interest_rate/365 ;
+					-- * -1 عشان الفايدة تطلع موجبة: الرصيد سالب (مديونية) وضربه في
+					-- سعر موجب بيدي رقم سالب ، والـ credit السالب كان بيقلل المديونية
+					-- بدل ما يزودها. نفس الاتجاه اللي في update trigger بتاع clean overdraft
+					set @dailyInterestRate = _current_interest_rate/365*-1 ;
 					if _previous_date then 
 					set @dayCounts = DATEDIFF(new.date,_previous_date) ;
 					set @interestAmount = if(_last_end_balance < 0 , _last_end_balance * @dailyInterestRate * @dayCounts , 0)  ;
@@ -185,9 +191,13 @@
 								-- credit بيبقى NULL و end_balance بيقع بـ "cannot be null" اول لمسة تانية
 								set _largest_end_balance = ifnull(_largest_end_balance,0);
 								select highest_debt_balance_rate into _highest_debt_balance_rate from letter_of_credit_facilities where id = new.lc_facility_id  ;
-								if new.type = interest_type_text then 
+								if new.type = interest_type_text then
 								-- للفايدة الخاصة باخر الشهر
-									set new.credit = _current_interest_amount ;
+								-- + new.interest_amount مهمة: الـ select فوق بيستبعد صفوف
+								-- الفوايد نفسها ، فلو الشهر مفيهوش أي حركة عادية (مديونية
+								-- ثابتة) الفايدة المستحقة بتكون محمولة على صف الفايدة ده
+								-- لوحده ، وكانت بتضيع وتطلع صفر
+									set new.credit = _current_interest_amount + new.interest_amount ;
 								elseif new.type = highest_debit_balance_text then 
 								-- حساب ال highest debit balance
 								-- * -1 عشان العمولة تطلع موجبة وتتخصم صح (credit سالب كان بيزود الرصيد بدل ما يخصم)

@@ -115,6 +115,9 @@ class LetterOfCreditFacilityController
 		 * @var LetterOfCreditFacility $letterOfCreditFacility
 		 */
 		$letterOfCreditFacility = $financialInstitution->LetterOfCreditFacilities()->create($data);
+
+		$letterOfCreditFacility->handleEndOfMonthInterestForOverdraft($data['contract_start_date'],$data['contract_end_date'],$company->id);
+
 		$currencyName = $letterOfCreditFacility->getCurrency();
 		$source = LetterOfCreditIssuance::LC_FACILITY;
 
@@ -170,6 +173,7 @@ class LetterOfCreditFacilityController
 		}
 
      $letterOfCreditFacility->update($data);
+     $letterOfCreditFacility->handleEndOfMonthInterestForOverdraft($data['contract_start_date'],$data['contract_end_date'],$company->id);
      $currencyName = $letterOfCreditFacility->getCurrency();
      LetterOfCreditStatement::deleteButTriggerChangeOnLastElement($letterOfCreditFacility->letterOfCreditStatements->where('type',LetterOfCreditIssuance::LC_FACILITY_BEGINNING_BALANCE));
      LetterOfCreditCashCoverStatement::deleteButTriggerChangeOnLastElement($letterOfCreditFacility->letterOfCreditCashCoverStatements->where('type',LetterOfCreditIssuance::LC_FACILITY_BEGINNING_BALANCE));

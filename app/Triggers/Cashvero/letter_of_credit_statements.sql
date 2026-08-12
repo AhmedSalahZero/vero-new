@@ -33,17 +33,20 @@ begin
 		declare _last_end_balance decimal(14,2) default 0 ;
 		declare _previous_date date default null ;
 		declare _count_all_rows integer default 0 ; 
-		if new.source = "lc-facility" then 
+		if new.source = "lc-facility" then
 		select date,end_balance into _previous_date, _last_end_balance  from letter_of_credit_statements where company_id = new.company_id and letter_of_credit_statements.lc_facility_id = new.lc_facility_id   and financial_institution_id = new.financial_institution_id and source = new.source and lc_type = new.lc_type and currency = new.currency and  (full_date < new.full_date or (full_date = new.full_date and id < new.id))  order by full_date desc , id desc limit 1 ;
+		select count(*) into _count_all_rows from letter_of_credit_statements where company_id = new.company_id and letter_of_credit_statements.lc_facility_id = new.lc_facility_id   and financial_institution_id = new.financial_institution_id and source = new.source and lc_type = new.lc_type and currency = new.currency and  (full_date < new.full_date or (full_date = new.full_date and id < new.id)) ;
 		else
 				select date,end_balance into _previous_date, _last_end_balance  from letter_of_credit_statements where company_id = new.company_id   and financial_institution_id = new.financial_institution_id and source = new.source and lc_type = new.lc_type and currency = new.currency and  (full_date < new.full_date or (full_date = new.full_date and id < new.id))  order by full_date desc , id desc limit 1 ;
-			
-		end if ; 
-		
-		
-		set _count_all_rows =1 ;
-	
-	 set new.beginning_balance = _last_end_balance ;
+				select count(*) into _count_all_rows from letter_of_credit_statements where company_id = new.company_id   and financial_institution_id = new.financial_institution_id and source = new.source and lc_type = new.lc_type and currency = new.currency and  (full_date < new.full_date or (full_date = new.full_date and id < new.id)) ;
+
+		end if ;
+
+
+	-- نفس منطق الـ insert بالظبط: أول صف في السلسلة بيحافظ على رصيده الافتتاحي.
+	-- قبل كده كان _count_all_rows متثبت على 1 والرصيد بياخد _last_end_balance
+	-- على طول ، فأول صف (زي صف الرصيد الافتتاحي) كان بيتصفّر أول ما يتلمس
+	 set new.beginning_balance = if(_count_all_rows,_last_end_balance,ifnull(new.beginning_balance,0)) ;
 	set new.end_balance = new.beginning_balance + new.debit - new.credit ; 
 	set new.is_debit = if(new.debit > 0 , 1 , 0);
 	set new.is_credit = if(new.credit > 0 , 1 , 0);

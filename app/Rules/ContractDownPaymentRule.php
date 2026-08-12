@@ -35,7 +35,11 @@ class ContractDownPaymentRule implements ImplicitRule
 		}
 		$breakDownAmountsColumnName = $this->isSo ? 'sales_orders_amounts' : 'purchases_orders_amounts';
 		$totalAmountColumnName = $this->isSo ? 'received_amount' : 'paid_amount';
-		$totalBreakdown = array_sum(array_column(Request()->get($breakDownAmountsColumnName,[]),$totalAmountColumnName));
+		/**
+		 * * لازم unformat قبل الجمع: القيم بتيجي متفرمتة (1,000.00)
+		 * * و PHP 8.4 بترمي فاتال على array_sum مع النصوص المتفرمتة
+		 */
+		$totalBreakdown = array_sum(\App\Helpers\HArr::unformatValues(array_column(Request()->get($breakDownAmountsColumnName,[]),$totalAmountColumnName)));
 		$moneyType = Request()->get('type');
 		$amountInInvoiceCurrency  = Request()->input('amount_in_invoice_currency.'.$moneyType);
 		return $totalBreakdown == $amountInInvoiceCurrency;
