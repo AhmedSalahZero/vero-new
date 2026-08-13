@@ -147,6 +147,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; " class="max-w-control">
 										  @include('reports._user_comment_modal',['model'=>$model])
+										  @include('reports._user_odoo_modal',['model'=>$model])
 										  @include('reports._integrated_modal',['model'=>$model])
                                           @include('reports.LetterOfGuaranteeIssuance.actions')
                                           @include('reports.LetterOfGuaranteeIssuance.renewal-date._renew_modal')
@@ -259,6 +260,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative" class="max-w-control">
 											@include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
                                           @include('reports.LetterOfGuaranteeIssuance.actions')
 										  @include('reports.LetterOfGuaranteeIssuance.renewal-date._renew_modal')
@@ -363,6 +365,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; " class="max-w-control">
 											@include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
                                         	  @include('reports.LetterOfGuaranteeIssuance.actions')
 											  @include('reports.LetterOfGuaranteeIssuance.renewal-date._renew_modal')
@@ -471,6 +474,7 @@ $currentActiveTab = isset($currentActiveTab) ? $currentActiveTab : null ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative;" class="max-w-control">
 											@include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
                                           @include('reports.LetterOfGuaranteeIssuance.actions')
 										  @include('reports.LetterOfGuaranteeIssuance.renewal-date._renew_modal')

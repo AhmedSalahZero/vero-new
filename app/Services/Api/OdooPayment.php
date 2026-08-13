@@ -1554,10 +1554,20 @@ public function transferAdvanceToReceivableOrPayable(int $odooCurrencyId , float
             [[$newMoveId]]
         );
 
+        /**
+         * * المرجع اللي المستخدم بيقراه (مثلا "TA/2026/08/0002") اودو
+         * * بيثبته بعد الـ post بس — قبل كده الحركة بتكون draft واسمها
+         * * غالبا "/". فبنقراه بعد الـ post عشان settleAdvanceWithInvoices
+         * * تقدر تعرضه بدل الرقم الداخلي.
+         */
+        $postedMove = $this->execute('account.move', 'read', [[$newMoveId], ['name']]);
+        $moveReference = $postedMove[0]['name'] ?? null;
+
         return [
             'success' => true,
             'message' => 'Journal entry created successfully',
             'move_id' => $newMoveId,
+            'reference' => $moveReference,
             'transfer_amount' => $amountInCurrency,
             'is_customer' => $isCustomer
         ];
@@ -1989,6 +1999,18 @@ public function settleAdvanceWithInvoices(int $odooCurrencyId, float $exchangeRa
             );
             
             if (!$transferResult['success']) {
+                /**
+                 * * الفشل ده كان بيعيش بس كرسالة بتظهر مرة واحدة + في
+                 * * مصفوفة $results في الميموري — مكانش بيتسجل علي صف
+                 * * التسوية نفسه، فمفيش طريقة بعد كده تعرف اي فاتورة
+                 * * فشلت ولا ليه. $settlement هو الصف المحلي (اتسجل
+                 * * قبل اي نداء لاودو — شوف storeDownPaymentSettlement)
+                 * * فالتحديث هنا آمن.
+                 */
+                $settlement->update([
+                    'synced_with_odoo' => false,
+                    'odoo_error_message' => $transferResult['message'],
+                ]);
                 $results[] = [
                     'invoice_id' => $invoiceId,
                     'amount' => $amountInCurrency,
@@ -2000,6 +2022,7 @@ public function settleAdvanceWithInvoices(int $odooCurrencyId, float $exchangeRa
             }
 
             $transferMoveId = $transferResult['move_id'];
+            $transferReference = $transferResult['reference'] ?? null;
             $transferMoveIds[] = $transferMoveId;
 
             // Step 2: Reconcile transfer with invoice
@@ -2010,16 +2033,33 @@ public function settleAdvanceWithInvoices(int $odooCurrencyId, float $exchangeRa
             );
             
             if ($invoiceReconcileResult['success']) {
-				$settlement->update(['odoo_move_id'=>$transferMoveId]);
-				
+				$settlement->update([
+					'odoo_move_id'=>$transferMoveId,
+					'odoo_reference'=>$transferReference,
+					'synced_with_odoo'=>true,
+					'odoo_error_message'=>null,
+				]);
+
                 $totalSettled += $amountInCurrency;
                 $results[] = [
                     'invoice_id' => $invoiceId,
                     'amount' => $amountInCurrency,
                     'status' => 'success',
-                    'transfer_move_id' => $transferMoveId
+                    'transfer_move_id' => $transferMoveId,
+                    'transfer_reference' => $transferReference,
                 ];
             } else {
+                /**
+                 * * حركة اليومية نفسها اتعملت تمام (فمرجعها حقيقي ويستاهل
+                 * * نحتفظ بيه)، لكن المطابقة مع الفاتورة دي فشلت — يبقي
+                 * * برضه فشل، فـ synced_with_odoo بتفضل false مع السبب.
+                 */
+                $settlement->update([
+                    'odoo_move_id'=>$transferMoveId,
+                    'odoo_reference'=>$transferReference,
+                    'synced_with_odoo' => false,
+                    'odoo_error_message' => $invoiceReconcileResult['message'],
+                ]);
                 $results[] = [
                     'invoice_id' => $invoiceId,
                     'amount' => $amountInCurrency,
@@ -2040,9 +2080,37 @@ public function settleAdvanceWithInvoices(int $odooCurrencyId, float $exchangeRa
             );
         }
 		
+        /**
+         * * الباج: كانت بترجع 'success' => true علي طول مهما حصل في
+         * * $results فوق — يعني لو كل الفواتير فشلت مع اودو، الكونترولر
+         * * (DownPaymentContractsController) اللي بيتاكد من الفلاج ده بس
+         * * كان بيشوف true ويقول للمستخدم "تم الحفظ بنجاح" رغم ان مفيش
+         * * حاجة اتسوّت في اودو اصلا. دلوقتي بيعكس فعلا لو في اي فاتورة
+         * * فشلت، مع رسالة بتوضح كده — وتفاصيل كل فاتورة في $results
+         * * (اللي كانت صح اصلا) زي ما هي.
+         */
+        $failedCount = count(array_filter($results, fn ($r) => $r['status'] === 'failed'));
+        $allSucceeded = $failedCount === 0;
+
+        if (! $allSucceeded) {
+            $message = $failedCount === count($results)
+                ? 'Advance settlement failed for all matched invoices'
+                : sprintf('Advance settlement partially failed (%d of %d invoice(s) failed)', $failedCount, count($results));
+
+            Log::error('Odoo advance settlement had failures', [
+                'advance_move_id' => $advanceMoveId,
+                'is_customer' => $isCustomer,
+                'failed_count' => $failedCount,
+                'total_count' => count($results),
+                'settlements' => $results,
+            ]);
+        } else {
+            $message = 'Advance settlement completed';
+        }
+
 		return [
-            'success' => true,
-            'message' => 'Advance settlement completed',
+            'success' => $allSucceeded,
+            'message' => $message,
             'total_settled' => $totalSettled,
             'settlements' => $results,
      //       'unreconcile_result' => $unreconcileResult,

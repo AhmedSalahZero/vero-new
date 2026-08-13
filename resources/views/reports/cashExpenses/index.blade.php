@@ -146,6 +146,7 @@ $banks = [];
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											@include('reports._user_comment_modal',['model'=>$cashExpense])
+											@include('reports._user_odoo_modal',['model'=>$cashExpense])
 											@include('reports._integrated_modal',['model'=>$cashExpense])
 											@if(auth()->user()->can('update cash expenses'))
 											@include('reports._review_modal',['model'=>$cashExpense])
@@ -248,6 +249,7 @@ $banks = [];
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 										@include('reports._user_comment_modal',['model'=>$money])
+										@include('reports._user_odoo_modal',['model'=>$money])
 										@include('reports._integrated_modal',['model'=>$money])
 										@if(!$money->isOpenBalance())
 										@if(auth()->user()->can('update cash expenses'))
@@ -348,6 +350,7 @@ $banks = [];
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
 										@include('reports._user_comment_modal',['model'=>$cashExpense])
+										@include('reports._user_odoo_modal',['model'=>$cashExpense])
 										@include('reports._integrated_modal',['model'=>$cashExpense])
 										@if(!$cashExpense->isOpenBalance())
 										@if(auth()->user()->can('update cash expenses'))

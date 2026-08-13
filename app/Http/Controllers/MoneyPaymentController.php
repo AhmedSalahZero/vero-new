@@ -28,6 +28,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class MoneyPaymentController
 {
@@ -702,22 +703,51 @@ class MoneyPaymentController
             
                 return redirect()->back()->with('fail', $errMessage);
             }
-            // $chequeDueDate = $moneyPayment->payableCheque->due_date;
-            $moneyPayment->payableCheque->update($data);
-            $currentStatement = $moneyPayment->getCurrentStatement();
-        
-        
-            if ($hasOdooIntegration && $company->withinIntegrationDate($actualPaymentDate)) {
-				
-				if($moneyPayment->isOpenBalance()){
-					$moneyPayment->markOpeningPayableChequeAsPaidInOdoo(false);
-				}else{
-					$moneyPayment->markPayableChequeAsPaidInOdoo();
-				}
-            }
-        
-            if ($currentStatement) {
-                $currentStatement->handleFullDateAfterDateEdit(Carbon::make($data['actual_payment_date'])->format('Y-m-d'), $currentStatement->debit, $currentStatement->credit);
+            /**
+             * * الباج: لو المزامنة مع اودو فشلت، كان التعديل المحلي
+             * * (الشيك اتعلم عليه مدفوع + تصحيح تاريخ الحركة) بيفضل
+             * * متسجل زي ما هو، فالسيستم بيقول مدفوع وأودو مسجلش حاجة،
+             * * ومفيش أي حاجة علي الشاشة بتوضح ان الاتنين اختلفوا.
+             * * بلف التعديل المحلي + الارسال لاودو + تصحيح التاريخ في
+             * * ترانزاكشن واحدة، فأي فشل من اودو بيرجّع كل حاجة زي ما
+             * * كانت والمستخدم يقدر يعيد المحاولة بأمان.
+             *
+             * * الشركات اللي مش مربوطة باودو مش هيحصلها اي فرق: البلوك
+             * * بتاع اودو اصلا بيتخطي بالنسبة لها، فالترانزاكشن بتكومِت
+             * * التعديل المحلي عادي زي الاول.
+             *
+             * * تشيك الرصيد فوق سايبينه بره الترانزاكشن لانه مجرد تحقق
+             * * ومش بيكتب اي حاجة.
+             */
+            try {
+                DB::transaction(function () use ($moneyPayment, $data, $hasOdooIntegration, $company, $actualPaymentDate) {
+                    $moneyPayment->payableCheque->update($data);
+                    $currentStatement = $moneyPayment->getCurrentStatement();
+
+                    if ($hasOdooIntegration && $company->withinIntegrationDate($actualPaymentDate)) {
+                        if ($moneyPayment->isOpenBalance()) {
+                            $moneyPayment->markOpeningPayableChequeAsPaidInOdoo(false);
+                        } else {
+                            $moneyPayment->markPayableChequeAsPaidInOdoo();
+                        }
+                    }
+
+                    if ($currentStatement) {
+                        $currentStatement->handleFullDateAfterDateEdit(Carbon::make($data['actual_payment_date'])->format('Y-m-d'), $currentStatement->debit, $currentStatement->credit);
+                    }
+                });
+            } catch (\Throwable $e) {
+                $message = __('Error While Connecting With Odoo').' : '.$e->getMessage();
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status'=>false ,
+                        'msg'=>$message,
+                        'pageLink'=>route('view.money.payment', ['company'=>$company->id,'active'=>MoneyPayment::PAYABLE_CHEQUE])
+                    ]);
+                }
+
+                return redirect()->route('view.money.payment', ['company'=>$company->id,'active'=>MoneyPayment::PAYABLE_CHEQUE])
+                    ->with('fail', $message);
             }
 
         }
@@ -728,7 +758,8 @@ class MoneyPaymentController
                 'pageLink'=>route('view.money.payment', ['company'=>$company->id,'active'=>MoneyPayment::PAYABLE_CHEQUE])
             ]);
         }
-        return redirect()->route('view.money.payment', ['company'=>$company->id,'active'=>MoneyPayment::PAYABLE_CHEQUE]);
+        return redirect()->route('view.money.payment', ['company'=>$company->id,'active'=>MoneyPayment::PAYABLE_CHEQUE])
+            ->with('success', __('Cheques Marked As Paid Successfully'));
 
     }
 

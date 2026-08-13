@@ -113,6 +113,7 @@ use \App\Models\TimeOfDeposit;
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
 											@if(hasAuthFor('create time of deposit'))
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
 											@include('reports.time-of-deposit.renewal-date._renew_modal')
 											
@@ -373,6 +374,7 @@ use \App\Models\TimeOfDeposit;
 
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
+										@include('reports._user_odoo_modal',['model'=>$model])
 										@include('reports._integrated_modal',['model'=>$model])
 										@include('reports.time-of-deposit.renewal-date._renew_modal')
                                             <a data-toggle="modal" data-target="#reverse-deposit-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Reverse Deposit') }}" href="#"><i class="fa fa-undo"></i></a>
@@ -529,6 +531,7 @@ use \App\Models\TimeOfDeposit;
 
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
+										@include('reports._user_odoo_modal',['model'=>$model])
 										@include('reports._integrated_modal',['model'=>$model])
 										@include('reports.time-of-deposit.renewal-date._renew_modal')
                                             <a data-toggle="modal" data-target="#reverse-broken-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Reverse Broken') }}" href="#"><i class="fa fa-undo"></i></a>

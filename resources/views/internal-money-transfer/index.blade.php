@@ -151,6 +151,7 @@ use App\Models\InternalMoneyTransfer ;
 
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
 											
                                             @if(auth()->user()->can('update internal money transfer'))
@@ -241,6 +242,7 @@ use App\Models\InternalMoneyTransfer ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
                                             @if(auth()->user()->can('update internal money transfer'))
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('internal-money-transfers.edit',['company'=>$company->id,'internal_money_transfer'=>$model->id,'type'=>$currentType]) }}"><i class="fa fa-pen-alt"></i></a>
@@ -336,6 +338,7 @@ use App\Models\InternalMoneyTransfer ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
                                             @if(auth()->user()->can('update internal money transfer'))
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('internal-money-transfers.edit',['company'=>$company->id,'internal_money_transfer'=>$model->id,'type'=>$currentType]) }}"><i class="fa fa-pen-alt"></i></a>
@@ -422,6 +425,7 @@ use App\Models\InternalMoneyTransfer ;
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @include('reports._user_comment_modal',['model'=>$model])
+											@include('reports._user_odoo_modal',['model'=>$model])
 											@include('reports._integrated_modal',['model'=>$model])
                                             @if(auth()->user()->can('update internal money transfer'))
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('internal-money-transfers.edit',['company'=>$company->id,'internal_money_transfer'=>$model->id,'type'=>$currentType]) }}"><i class="fa fa-pen-alt"></i></a>

@@ -753,9 +753,30 @@ class CashExpense extends Model  implements IHaveCreditOverdraftStatement
 		}
 		return $references ;
 	}
+	/**
+	 * * الاعمدة دي موجودة اصلا علي الجدول وبيتكتب فيها من OdooSync
+	 * * لكن مكانش فيه حاجة بتقراها، فحالة الفشل مكانتش بتظهر في اي مكان
+	 * * علي الشاشة. اتضافت مع ايقونة الخطأ في صفحات المصروفات.
+	 */
+	public function hasOdooError():bool
+	{
+		return !$this->synced_with_odoo && $this->odoo_error_message;
+	}
+	public function getOdooError()
+	{
+		if ($this->hasOdooError()) {
+			return $this->odoo_error_message;
+		}
+		return '';
+	}
+	/**
+	 * * كان بيرجع true طول ما فيه أي مرجع أودو، حتى لو آخر محاولة مزامنة
+	 * * فشلت — يعني ممكن تظهر علامة النجاح وعلامة الخطأ مع بعض. دلوقتي
+	 * * بيستثني حالة الفشل، زي باقي الموديلات بالظبط.
+	 */
 	public function fullyIntegratedWithOdoo()
 	{
-		return count($this->getOdooReferenceNames());
+		return !$this->hasOdooError() && count($this->getOdooReferenceNames());
 	}
 	public function isChequeAndNotCustomerOrSupplier()
 	{

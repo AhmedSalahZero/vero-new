@@ -295,7 +295,14 @@ class OdooService
                 'start_date'=>$currentProjectStartDate,
                 'end_date'=>$currentProjectEndDate,
                 'company_id'=>$companyId,
-                'duration'=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate)
+                /**
+                 * * باج حقيقي: تاريخ النهاية (الاكبر) كان هو الاساس وتاريخ
+                 * * البداية (الاصغر) هو المعامل — وده بالظبط الترتيب اللي
+                 * * بيرجع عدد شهور بالسالب مع Carbon 3 (diffInMonths بقت
+                 * * بتاخد الاشارة في الاعتبار بشكل افتراضي)، علي كل عقد
+                 * * جاي من اودو. اتصلح بتمرير $absolute = true.
+                 */
+                'duration'=>Carbon::make($currentProjectEndDate)->diffInMonths($currentProjectStartDate, true)
             ];
             if ($oldProject) {
                 $projectFormatted['id'] = $oldProject->id;
@@ -627,7 +634,11 @@ class OdooService
                 'currency'=>$currency,
                 'amount'=>$amount,
                 'company_id'=>$companyId,
-                'duration'=>Carbon::make($endDate)->diffInMonths($startDate),
+                /**
+                 * * نفس فيكس Carbon 3 اللي في عقد العميل فوق — $absolute = true
+                 * * عشان الفرق ما يرجعش بالسالب.
+                 */
+                'duration'=>Carbon::make($endDate)->diffInMonths($startDate, true),
                 'purchasesOrders'=>[$purchaseOrderFormatted],
             ];
 
@@ -1011,7 +1022,11 @@ class OdooService
 
         return false ;
     }
-    public function syncBranchSafe(string $odooCode, int $companyId)
+    /**
+     * * $odooCode بقي nullable لان الاستدعاء ممكن ييجي من غير كود، وكان
+     * * بيرمي TypeError قبل ما يوصل لاي حاجة.
+     */
+    public function syncBranchSafe(?string $odooCode, int $companyId)
     {
         $fields = [
             'id',
@@ -1025,7 +1040,9 @@ class OdooService
         ];
         $odooSetting = $this->company->odooSetting;
         $odooBranch = $this->fetchData('account.account', $fields, $filters)[0]??null;
-        $chartOfAccountId= $odooBranch['id'];
+        // * $odooBranch ممكن ترجع null لو مفيش حساب مطابق في اودو — كانت
+        // * بتعمل ايرور بدل ما تكمل عادي.
+        $chartOfAccountId= $odooBranch ? $odooBranch['id'] : null;
         $journalId = $this->getJournalIdFromChartOfAccountId($chartOfAccountId);
         
         $odooInboundTransferPaymentMethodId = null ;

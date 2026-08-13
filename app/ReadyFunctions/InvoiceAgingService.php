@@ -56,7 +56,12 @@ class InvoiceAgingService
             $invoiceNumber = $invoice->invoice_number;
             $invoiceDueDate = $invoice->invoice_due_date;
             $netBalance = $invoice->getNetBalanceUntil($this->aging_date) ;
-            if (!$netBalance) {
+            /**
+             * * الفاتوره اللي مش متسجل ليها تاريخ استحقاق مينفعش تتحسب
+             * * في اعمار الديون — getDueNameWithDiffInDays() تحت بتحسب
+             * * الفرق بين null وتاريخ الاعمار وبتطلع تصنيف غلط.
+             */
+            if (!$netBalance || !$invoiceDueDate) {
                 continue;
             }
             $dueNameWithDiffDays = $this->getDueNameWithDiffInDays($invoiceDueDate, $this->aging_date);

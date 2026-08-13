@@ -70,9 +70,15 @@ class PaymentSettlement extends Model
 		});
 		
 	}
+	/**
+	 * * كانت بترجع MoneyReceived::class — غلطة نسخ من
+	 * * Settlement::moneyReceived()، والعلاقة دي علي money_payment_id
+	 * * فبتجيب سجل تاني خالص بنفس الرقم. العلاقة مش متنادية من اي مكان
+	 * * دلوقتي، فالتصليح بيقفل المشكلة قبل ما حد يستخدمها.
+	 */
 	public function moneyPayment()
 	{
-		return $this->belongsTo(MoneyReceived::class , 'money_payment_id','id');
+		return $this->belongsTo(MoneyPayment::class , 'money_payment_id','id');
 	}
 	
 	public function supplierInvoice()
@@ -91,5 +97,21 @@ class PaymentSettlement extends Model
 	public function getMoney(){
 		$id = $this->money_payment_id;
 			return MoneyPayment::find($id);
+	}
+	/**
+	 * * نفس البترن المستخدم في باقي الابليكيشن (IsMoney، Settlement ...)
+	 * * — اتضاف مع تسجيل فشل settleAdvanceWithInvoices() علي صف التسوية
+	 * * نفسه بدل ما يبقي مجرد رسالة بتظهر مرة واحدة وتضيع.
+	 */
+	public function hasOdooError():bool
+	{
+		return !$this->synced_with_odoo && $this->odoo_error_message;
+	}
+	public function getOdooError()
+	{
+		if ($this->hasOdooError()) {
+			return $this->odoo_error_message;
+		}
+		return '';
 	}
 }

@@ -372,6 +372,8 @@ use Carbon\Carbon;
                                                 <td class="sub-text-bg text-center max-w-counts">{{ $row->date }} </td>
                                                 <td class="sub-text-bg text-center max-w-counts">{{ number_format($row->debit,2) . ' ' . $model->getCurrency() }}</td>
                                                 <td class="sub-text-bg text-center max-w-action">
+													{{-- * $row هنا CurrentAccountBankStatement ومفيهاش hasOdooError()،
+														 * فمودال خطأ اودو مش بيتضاف هنا — بس مودال المراجع. --}}
 													@include('reports._integrated_modal',['model'=>$row])
 												
                                                     <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $row['id']}}" title="Delete"><i class="fa fa-trash-alt"></i>

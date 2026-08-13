@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile        # ← هنا بالظبط بيستخدم الـ Dockerfile بتاعك
+    container_name: mnjz-app
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DB_HOST=mysql
+      - DB_DATABASE=mnjz
+      - REDIS_HOST=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - mnjz-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: mnjz-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - mnjz-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mnjz-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=mnjz
+    volumes:
+      - mnjz-mysql-data:/var/lib/mysql
+    networks:
+      - mnjz-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: mnjz-redis
+    networks:
+      - mnjz-network
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile        # ← نفس الـ Dockerfile، بس CMD مختلف
+    command: php artisan queue:work --tries=3
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - mnjz-network
+
+volumes:
+  mnjz-mysql-data:
+
+networks:
+  mnjz-network:
+    driver: bridge

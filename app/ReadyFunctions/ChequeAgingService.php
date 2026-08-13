@@ -60,7 +60,12 @@ class ChequeAgingService
                 $q->whereIn('partner_id',$partnerIds);
             });
         }
-        $invoices = $invoices->get();
+        /**
+		 * * اللوب اللي تحت بيقرا الموديل المرتبط والـ partner بتاعه لكل
+		 * * شيك، وده كان بيعمل استعلامين زياده لكل صف (N+1). بنحمّلهم
+		 * * مره واحده مع الاستعلام الاساسي.
+		 */
+        $invoices = $invoices->with([$modelModelName, $modelModelName.'.partner'])->get();
 
 
         foreach ($invoices as $index => $invoice) {

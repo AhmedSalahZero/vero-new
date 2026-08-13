@@ -80,8 +80,24 @@ class Settlement extends Model
 	public function getMoney()
 	{
 	     	$id = $this->money_received_id ;
-			return MoneyReceived::find($id);		
+			return MoneyReceived::find($id);
 	}
-	
-	
+	/**
+	 * * نفس البترن المستخدم في باقي الابليكيشن (IsMoney،
+	 * * InternalMoneyTransfer، BuyOrSellCurrency ...) — اتضاف مع تسجيل
+	 * * فشل settleAdvanceWithInvoices() علي صف التسوية نفسه بدل ما يبقي
+	 * * مجرد رسالة بتظهر مرة واحدة وتضيع.
+	 */
+	public function hasOdooError():bool
+	{
+		return !$this->synced_with_odoo && $this->odoo_error_message;
+	}
+	public function getOdooError()
+	{
+		if ($this->hasOdooError()) {
+			return $this->odoo_error_message;
+		}
+		return '';
+	}
+
 }

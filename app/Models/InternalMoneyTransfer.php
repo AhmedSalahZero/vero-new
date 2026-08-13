@@ -561,6 +561,17 @@ class InternalMoneyTransfer extends Model
 	{
 		return !$this->synced_with_odoo && $this->odoo_error_message ;
 	}
+	/**
+	 * * الجيتر كان ناقص — hasOdooError() كانت موجودة بس مفيش حاجة
+	 * * بترجع الرسالة نفسها. اتضاف مع ايقونة الخطأ في الصفحة.
+	 */
+	public function getOdooError()
+	{
+		if ($this->hasOdooError()) {
+			return $this->odoo_error_message;
+		}
+		return '';
+	}
 	public function fullyIntegratedWithOdoo():bool
 	{
 		return !$this->hasOdooError() && count($this->getOdooReferenceNames()) ;

@@ -88,7 +88,46 @@ class DownPaymentContractsController extends Controller
 		$models = [
 			$contractsWithDownPayments =>$moneyModels ,
 		];
-	
+
+		/**
+		 * * الصفحة دي مكانش فيها لا علامة النجاح (👍) ولا علامة الخطأ (🐞)
+		 * * مع اودو خالص، عكس باقي الصفحات اللي بتتعامل مع اودو.
+		 *
+		 * * وكمان: حالة الدفعة المقدمة لوحدها مش كفاية — هي بتقول بس ان
+		 * * الدفعة نفسها اتزامنت وقت ما اتقبضت/اتدفعت، ومبتقولش حاجة عن
+		 * * التسويات اللي بتتعمل عليها بعد كده مع الفواتير (كل تسوية
+		 * * بتعمل حركة يومية لوحدها في اودو عن طريق
+		 * * OdooPayment::settleAdvanceWithInvoices()). فالعلامتين هنا
+		 * * بيعبروا عن الاتنين مع بعض — وممكن الصف يبان عليه العلامتين
+		 * * في نفس الوقت لو بعض التسويات نجحت وبعضها فشل.
+		 */
+		$invoiceModelName = $modelType == 'CustomerInvoice' ? CustomerInvoice::class : SupplierInvoice::class;
+		$odooStatuses = [];
+		foreach ($moneyModels as $moneyModel) {
+			$settlements = $moneyModel->settlements;
+
+			$settlementReferences = $settlements
+				->filter(fn ($settlement) => $settlement->odoo_reference)
+				->map(fn ($settlement) => $settlement->odoo_reference.' — '.__('Transfer Customer Advance to Receivable'))
+				->values()
+				->all();
+
+			$failedSettlements = $settlements
+				->filter(fn ($settlement) => $settlement->hasOdooError())
+				->map(function ($settlement) use ($invoiceModelName) {
+					$invoice = $invoiceModelName::find($settlement->invoice_id);
+					$invoiceLabel = $invoice ? $invoice->getInvoiceNumber() : ('#'.$settlement->invoice_id);
+					return __('Invoice').' '.$invoiceLabel.': '.$settlement->getOdooError();
+				})
+				->values()
+				->all();
+
+			$odooStatuses[$moneyModel->id] = [
+				'extraReferenceNames' => $settlementReferences,
+				'failedSettlementErrors' => $failedSettlements,
+				'hasOdooError' => $moneyModel->hasOdooError() || count($failedSettlements) > 0,
+			];
+		}
 
         return view('contracts-down-payment.index', [
 			'company'=>$company,
@@ -96,6 +135,7 @@ class DownPaymentContractsController extends Controller
 			'moneyModelName'=>$moneyModelName,
 			'searchFields'=>$searchFields,
 			'models'=>$models,
+			'odooStatuses'=>$odooStatuses,
 			'title'=>$partnerName . ' ' .__('Down Payment'),
 			'tableTitle'=>__('Down Payment Table') ,
 			// 'financialInstitution'=>$financialInstitution,

@@ -98,8 +98,23 @@ use App\Models\MoneyReceived ;
                                     <td>{{ $moneyModel->getContractAmountFormatted() }}</td>
                                     <td class="kt-datatable__cell--left kt-datatable__cell" data-field="Actions" data-autohide-disabled="false">
                                         <span style="overflow: visible; position: relative; width: 110px;">
+											@php
+												$currentOdooStatus = $odooStatuses[$moneyModel->id] ?? ['extraReferenceNames'=>[],'failedSettlementErrors'=>[],'hasOdooError'=>false];
+											@endphp
+											{{-- * علامة الخطأ بتشمل كمان التسويات اللي فشلت مع اودو، مش
+												 * بس الدفعة نفسها. من غير زرار "اعادة الارسال" لان راوت
+												 * resend.with.odoo مربوط MoneyReceived بالتحديد. --}}
+											@include('reports._user_odoo_modal',[
+												'model'=>$moneyModel,
+												'hasOdooErrorOverride'=>$currentOdooStatus['hasOdooError'],
+												'extraOdooErrors'=>$currentOdooStatus['failedSettlementErrors'],
+											])
+											@include('reports._integrated_modal',[
+												'model'=>$moneyModel,
+												'extraOdooReferenceNames'=>$currentOdooStatus['extraReferenceNames'],
+											])
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Start Settlement') }}" href="{{ route('view.down.payment.settlement',['company'=>$company->id,'downPaymentId'=>$moneyModel->id,'modelType'=>$modelType]) }}"><i class="fa fa-dollar-sign"></i></a>
-                                        
+
                                         </span>
                                     </td>
                                 </tr>

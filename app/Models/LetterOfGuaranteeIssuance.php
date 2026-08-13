@@ -1008,9 +1008,24 @@ class LetterOfGuaranteeIssuance extends Model
 		
         return $references ;
     }
+    /**
+     * * نفس الكلام اللي في CashExpense: الاعمدة موجودة وبيتكتب فيها،
+     * * بس مفيش حاجة كانت بتقراها فحالة الفشل مكانتش بتبان.
+     */
+    public function hasOdooError():bool
+    {
+        return !$this->synced_with_odoo && $this->odoo_error_message;
+    }
+    public function getOdooError()
+    {
+        if ($this->hasOdooError()) {
+            return $this->odoo_error_message;
+        }
+        return '';
+    }
     public function fullyIntegratedWithOdoo()
     {
-        return count($this->getOdooReferenceNames());
+        return !$this->hasOdooError() && count($this->getOdooReferenceNames());
     }
     public function formatAnalysisDistribution():array
     {

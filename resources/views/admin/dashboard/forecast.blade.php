@@ -1,4 +1,18 @@
 @extends('layouts.dashboard')
+@php
+    /**
+     * * العملات اللي الكونترولر حسبها فعلا في الطلب ده (العملة الشغالة بس
+     * * افتراضيا، بدل كل عملات الشركة زي الاول). بيتعرّف هنا مرة واحدة
+     * * عشان يكون متاح في سكشن الكونتنت وسكشن الجافاسكريبت مع بعض.
+     */
+    $computedCurrencies = $computedCurrencies ?? $selectedCurrencies ;
+    /**
+     * * شريط التابات بيترسم من كل عملات الشركة، مش من $selectedCurrencies
+     * * (اللي بتتقلّص لعملة واحدة اول ما حد يضغط علي لينك عملة) — عشان
+     * * تفضل كل العملات متاحة للتنقل بينها.
+     */
+    $currencyTabs = $allCurrencies ?? $selectedCurrencies ;
+@endphp
 @section('dash_nav')
 <style>
     .chartdiv {
@@ -128,16 +142,35 @@
                     @php
                     $index = 0 ;
                     // $selectedCurrencies = ['USD'=>'USD'];
+                    /**
+                     * * تحسين سرعة: الصفحة بقت بتحسب العملة الشغالة بس بدل
+                     * * كل عملات الشركة. فالتاب بتاع العملة المحسوبة بيفضل
+                     * * تاب عادي (بيتبدل من غير تحميل)، وباقي العملات بقت
+                     * * لينكات بتعيد تحميل الصفحة بالعملة المطلوبة.
+                     */
+                    $firstComputedRendered = false ;
                     @endphp
 
 
-                    @foreach($selectedCurrencies as $currencyUpper=>$currency)
+                    @foreach($currencyTabs as $currencyUpper=>$currency)
+                    @php
+                    $isComputedCurrency = in_array($currency,$computedCurrencies) ;
+                    $isActiveCurrencyTab = $isComputedCurrency && !$firstComputedRendered ;
+                    if($isActiveCurrencyTab){ $firstComputedRendered = true ; }
+                    @endphp
 
-                    <li class="nav-item @if($index ==0 ) active @endif">
-                        <a class="nav-link @if($index ==0 ) active @endif" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
+                    <li class="nav-item @if($isActiveCurrencyTab) active @endif">
+                        @if($isComputedCurrency)
+                        <a class="nav-link @if($isActiveCurrencyTab) active @endif" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
                             <i class="flaticon2-checking icon-lg"></i>
                             <span style="font-size:18px !important;">{{ $currency }}</span>
                         </a>
+                        @else
+                        <a class="nav-link" href="{{ request()->fullUrlWithQuery(['currencies'=>[$currency]]) }}" title="{{ __('Load') }} {{ $currency }}">
+                            <i class="flaticon2-checking icon-lg"></i>
+                            <span style="font-size:18px !important;">{{ $currency }}</span>
+                        </a>
+                        @endif
                     </li>
 
                     @php
@@ -155,9 +188,21 @@
 <div class="tab-content kt-margin-t-20">
     @php
     $index = 0 ;
+    $firstComputedPaneRendered = false ;
     @endphp
-    @foreach($selectedCurrencies as $name=>$currency)
-    <div class="tab-pane @if($index == 0) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
+    @foreach($currencyTabs as $name=>$currency)
+    {{-- * العملات اللي لسه ماتحسبتش مش بيتعملها بانل خالص — التاب بتاعها
+         * لينك بيعيد تحميل الصفحة بالعملة دي. $index بيفضل بيزيد عشان
+         * ارقام البانلز تفضل متطابقة مع ارقام التابات فوق. --}}
+    @if(!in_array($currency,$computedCurrencies))
+        @php $index++ ; @endphp
+        @continue
+    @endif
+    @php
+    $isActiveCurrencyPane = !$firstComputedPaneRendered ;
+    $firstComputedPaneRendered = true ;
+    @endphp
+    <div class="tab-pane @if($isActiveCurrencyPane) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
         <div class="row">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
@@ -681,7 +726,11 @@
     }];
 
 </script>
-@foreach($selectedCurrencies as $currencyUpper=>$currency)
+{{-- * لازم تتقيد بنفس العملات المحسوبة، لان الاسكريبت ده بيعمل شارت علي
+     * عنصر id موجود جوه البانل — لو البانل مترسمش، amCharts هيدور علي
+     * عنصر مش موجود. --}}
+@foreach($currencyTabs as $currencyUpper=>$currency)
+@continue(!in_array($currency,$computedCurrencies))
 @foreach($invoiceTypesModels as $modelType)
 <!-- Chart code -->
 <script>

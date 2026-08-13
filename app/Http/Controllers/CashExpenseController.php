@@ -22,6 +22,7 @@ use App\Traits\GeneralFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class CashExpenseController
 {
@@ -474,15 +475,40 @@ class CashExpenseController
 			/**
 			 * @var CashExpense $cashExpense
 			 */
-			// $chequeDueDate = $cashExpense->payableCheque->due_date;
-			$cashExpense->payableCheque->update($data);
-			
-			$cashExpense->markPayableChequeAsPaidInOdoo();
-			
-			
-			if($currentStatement = $cashExpense->getCurrentStatement()){
-				$currentStatement->handleFullDateAfterDateEdit($data['actual_payment_date'],$currentStatement->debit,$currentStatement->credit);
+			/**
+			 * * نفس الباج اللي في MoneyPaymentController::markChequesAsPaid:
+			 * * لو الارسال لاودو فشل كان التعديل المحلي بيفضل متسجل،
+			 * * فالسيستم يقول الشيك مدفوع وأودو مسجلش حاجة. بلف التعديل
+			 * * المحلي + اودو + تصحيح تاريخ الحركة في ترانزاكشن واحدة،
+			 * * فأي فشل بيرجّع الشيك زي ما كان بالظبط ويقدر يعيد المحاولة.
+			 *
+			 * * كمان markPayableChequeAsPaidInOdoo() كانت بتتنادي من غير
+			 * * أي شرط، حتى للشركات اللي مش مربوطة باودو اصلا — دلوقتي
+			 * * اتقيّدت بـ hasOdooIntegrationCredentials() زي باقي المسارات.
+			 */
+			try {
+				DB::transaction(function () use ($cashExpense, $data, $company) {
+					$cashExpense->payableCheque->update($data);
 
+					if ($company->hasOdooIntegrationCredentials()) {
+						$cashExpense->markPayableChequeAsPaidInOdoo();
+					}
+
+					if ($currentStatement = $cashExpense->getCurrentStatement()) {
+						$currentStatement->handleFullDateAfterDateEdit($data['actual_payment_date'],$currentStatement->debit,$currentStatement->credit);
+					}
+				});
+			} catch (\Throwable $e) {
+				$message = __('Error While Connecting With Odoo').' : '.$e->getMessage();
+				if($request->ajax()){
+					return response()->json([
+						'status'=>false ,
+						'msg'=>$message,
+						'pageLink'=>route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::PAYABLE_CHEQUE])
+					]);
+				}
+
+				return redirect()->route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::PAYABLE_CHEQUE])->with('fail', $message);
 			}
 
 		}
@@ -493,7 +519,7 @@ class CashExpenseController
 				'pageLink'=>route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::PAYABLE_CHEQUE])
 			]);
 		}
-		return redirect()->route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::PAYABLE_CHEQUE]);
+		return redirect()->route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::PAYABLE_CHEQUE])->with('success', __('Item Has Been Updated Successfully'));
 
 	}
 	public function markOutgoingTransfersAsPaid(Company $company,Request $request)
@@ -518,7 +544,7 @@ class CashExpenseController
 				'pageLink'=>route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::OUTGOING_TRANSFER])
 			]);
 		}
-		return redirect()->route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::OUTGOING_TRANSFER]);
+		return redirect()->route('view.cash.expense',['company'=>$company->id,'active'=>CashExpense::OUTGOING_TRANSFER])->with('success', __('Item Has Been Updated Successfully'));
 
 	}
 

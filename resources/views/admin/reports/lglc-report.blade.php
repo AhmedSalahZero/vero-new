@@ -1,4 +1,18 @@
 @extends('layouts.dashboard')
+@php
+    /**
+     * * العملات اللي الكونترولر حسبها فعلا في الطلب ده (العملة الشغالة بس
+     * * افتراضيا). بيتعرّف هنا مرة واحدة عشان يكون متاح في سكشن الكونتنت
+     * * وسكشن الجافاسكريبت مع بعض.
+     */
+    $computedCurrencies = $computedCurrencies ?? $selectedCurrencies ;
+    /**
+     * * شريط التابات بيترسم من كل عملات الشركة، مش من $selectedCurrencies
+     * * (اللي بتتقلّص لعملة واحدة اول ما حد يضغط علي لينك عملة) — عشان
+     * * تفضل كل العملات متاحة للتنقل بينها.
+     */
+    $currencyTabs = $allCurrencies ?? $selectedCurrencies ;
+@endphp
 @section('css')
 <link href="{{url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css')}}" rel="stylesheet" type="text/css" />
@@ -104,17 +118,30 @@
             @php
             $index = 0 ;
 			$activeCurrency = null ;
+			/**
+			 * * تحسين سرعة: الصفحة بقت بتحسب العملة الشغالة بس. التاب
+			 * * بتاعها بيفضل تاب عادي، وباقي العملات (اللي عندها بيانات
+			 * * برضه) بقت لينكات بتعيد تحميل الصفحة بالعملة المطلوبة.
+			 */
             @endphp
-            @foreach($selectedCurrencies as $currencyUpper=>$currency)
+            @foreach($currencyTabs as $currencyUpper=>$currency)
 			@if(AtLeastOnKeyIsTrue($canShowDashboardPerCurrency,$currency))
 			@php
-				$activeCurrency = is_null($activeCurrency) ? $currency :$activeCurrency ; 
+				$isComputedCurrency = in_array($currency,$computedCurrencies) ;
+				$activeCurrency = is_null($activeCurrency) && $isComputedCurrency ? $currency :$activeCurrency ;
 			@endphp
             <li class="nav-item @if($activeCurrency == $currency ) active @endif">
+				@if($isComputedCurrency)
                 <a class="nav-link @if($activeCurrency == $currency ) active @endif" data-toggle="tab" href="#kt_apps_contacts_view_tab_main{{ $index }}" role="tab">
                     <i class="flaticon2-checking icon-lg"></i>
                     <span style="font-size:18px !important;">{{ $currency }}</span>
                 </a>
+				@else
+                <a class="nav-link" href="{{ request()->fullUrlWithQuery(['currencies'=>[$currency]]) }}" title="{{ __('Load') }} {{ $currency }}">
+                    <i class="flaticon2-checking icon-lg"></i>
+                    <span style="font-size:18px !important;">{{ $currency }}</span>
+                </a>
+				@endif
             </li>
 			@endif
 
@@ -130,8 +157,17 @@
     @php
     $index = 0 ;
     @endphp
-    @foreach($selectedCurrencies as $name=>$currency)
-	
+    @foreach($currencyTabs as $name=>$currency)
+	{{-- * العملات اللي لسه ماتحسبتش مالهاش بانل — التاب بتاعها لينك بيعيد
+	     * تحميل الصفحة بالعملة دي. $index بيفضل بيزيد عشان ارقام البانلز
+	     * تفضل متطابقة مع ارقام التابات فوق.
+	     * * ونفس شرط AtLeastOnKeyIsTrue بتاع شريط التابات، عشان مايتعملش
+	     * * بانل لعملة مالهاش تاب اصلا. --}}
+	@if(!in_array($currency,$computedCurrencies) || !AtLeastOnKeyIsTrue($canShowDashboardPerCurrency,$currency))
+		@php $index++ ; @endphp
+		@continue
+	@endif
+
     <div class="tab-pane @if($activeCurrency == $currency) active @endif" id="kt_apps_contacts_view_tab_main{{ $index }}" role="tabpanel">
         @foreach([
 			'lg'=>[
@@ -482,7 +518,11 @@
 <script src="{{url('assets/vendors/general/jquery.repeater/src/repeater.js')}}" type="text/javascript"></script>
 <script src="{{url('assets/js/demo1/pages/crud/forms/widgets/form-repeater.js')}}" type="text/javascript"></script>
 @foreach(['outstanding_per_lg_type','lg_outstanding_per_financial_institution','outstanding_per_lc_type','lc_outstanding_per_financial_institution'] as $currentChartType)
-@foreach($selectedCurrencies as $currencyUpper=>$currency)
+{{-- * لازم تتقيد بنفس العملات المحسوبة، لان الاسكريبت ده بيعمل شارت علي
+     * عنصر id موجود جوه البانل — لو البانل مترسمش، amCharts هيدور علي
+     * عنصر مش موجود. --}}
+@foreach($currencyTabs as $currencyUpper=>$currency)
+@continue(!in_array($currency,($computedCurrencies ?? $selectedCurrencies)))
 <script>
     am4core.ready(function() {
 

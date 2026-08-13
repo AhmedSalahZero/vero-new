@@ -578,26 +578,49 @@ class CustomerInvoiceDashboardController extends Controller
 		$agingDate = $request->get('aging_date',now()->format('Y-m-d'))  ;
         $selectedCurrencies = $request->get('currencies', $allCurrencies) ;
 
-		
-		$allFinancialInstitutionIds = $company->financialInstitutions->pluck('id')->toArray(); 
-		foreach($selectedCurrencies as $currencyName)
+		/**
+		 * * تحسين سرعة: قبل كده اللوب اللي تحت كان بيشتغل علي كل عملة
+		 * * الشركة عملتها في اي وقت، في كل مرة الصفحة بتتفتح — يعني
+		 * * حساب الاعمار كامل (خدمتين × نوعين فواتير × كل العملات) حتي
+		 * * للعملات اللي محدش بيبص عليها. دلوقتي بيتحسب للعملة الشغالة
+		 * * بس، وباقي التابات بقت لينكات بتعيد تحميل الصفحة بالعملة
+		 * * المطلوبة (شوف ?currencies[]= في forecast.blade.php).
+		 *
+		 * * $selectedCurrencies سايبينها زي ما هي عن قصد، لانها هي اللي
+		 * * بترسم ازرار العملات نفسها — لو ضيقناها كنا هنخفي العملات
+		 * * كخيارات اصلا مش بس نأجل حسابها.
+		 */
+		/**
+		 * * لو عملة التقرير مش ضمن عملات الشركة المعروضة كتابات، منقدرش
+		 * * نحسبها لان مفيش تاب هيعرضها — فبنرجع لاول عملة معروضة.
+		 */
+		$defaultCurrencyToCompute = in_array($reportCurrentName, (array) $allCurrencies)
+			? $reportCurrentName
+			: (Arr::first((array) $allCurrencies) ?: $reportCurrentName);
+		$currenciesToCompute = $request->filled('currencies')
+			? (array) $request->get('currencies')
+			: array_values(array_filter([$defaultCurrencyToCompute]));
+
+		$allFinancialInstitutionIds = $company->financialInstitutions->pluck('id')->toArray();
+		foreach($currenciesToCompute as $currencyName)
 		{
 			foreach ($invoiceTypesModels as $modelType) {
-				$moneyReceivedOrPaymentModelName  = $moneyReceivedOrPaymentModelNameMap[$modelType];
-				$clientIdsForInvoices = ('\App\Models\\' . $modelType)::getAllUniquePartnerIds($company->id,$currencyName);
-				$clientIdsForCheques = ('\App\Models\\' . $moneyReceivedOrPaymentModelName)::getAllUniquePartnerIdsForCheques($company->id,$currencyName);
-
 				/**
-				 * * Customers Invoices Aging & Supplier Invoices Aging
+				 * * getAllUniquePartnerIds / getAllUniquePartnerIdsForCheques
+				 * * كانوا بيرجعوا كل الشركاء الموجودين لنفس الشركة والعملة،
+				 * * وبعدين يتبعتوا كفلتر whereIn — يعني فلتر مالوش لازمة
+				 * * (بيطابق كل الصفوف) بتكلفة استعلامين تقال لكل عملة ×
+				 * * كل نوع فاتورة. الخدمتين بيتعاملوا مع المصفوفة الفاضية
+				 * * علي انها "من غير فلتر"، فالنتيجة نفسها بظبط.
 				 */
 				$invoiceAgingService = new InvoiceAgingService($company->id, $agingDate,$currencyName);
 				$chequeAgingService = new ChequeAgingService($company->id, $agingDate,$currencyName);
-				$agingsForInvoices = $invoiceAgingService->__execute($clientIdsForInvoices, $modelType) ;
+				$agingsForInvoices = $invoiceAgingService->__execute([], $modelType) ;
 				$agingsForInvoices = $invoiceAgingService->formatForDashboard($agingsForInvoices,$modelType);
 				/**
 				 * * Customers Cheques Aging & Supplier Cheques Aging
 				 */
-				$agingsForChequesWithChart = $chequeAgingService->__execute($clientIdsForCheques, $modelType) ;
+				$agingsForChequesWithChart = $chequeAgingService->__execute([], $modelType) ;
 				$agingsForCheques = $agingsForChequesWithChart['result_for_table'];
 				$agingsForChequesCharts = $agingsForChequesWithChart['result_for_chart'];
 				
@@ -624,6 +647,14 @@ class CustomerInvoiceDashboardController extends Controller
 			'weeks'=>$weeks,
 			'overdraftAccountTypes'=>$overdraftAccountTypes,
 			'selectedCurrencies'=>$selectedCurrencies,
+			// * التابات بترسم من كل عملات الشركة عشان تفضل متاحة دايما —
+			// * لو رسمناها من $selectedCurrencies كان اول ما حد يضغط علي
+			// * عملة (?currencies[]=) شريط التابات يقفل علي العملة دي بس
+			// * ومايبقاش فيه طريقة يرجع لغيرها.
+			'allCurrencies'=>$allCurrencies,
+			// * العملات اللي اتحسبت فعلا في الطلب ده — الفيو بيرسم بانلز
+			// * ليها بس، وباقي التابات بتبقي لينكات.
+			'computedCurrencies'=>$currenciesToCompute,
 			'allFinancialInstitutionIds'=>$allFinancialInstitutionIds,
 			'clientsWithContracts'=>$clientsWithContracts,
 			'cashFlowReport'=>$cashFlowReport,
@@ -707,8 +738,14 @@ class CustomerInvoiceDashboardController extends Controller
 				'lc'=>$lcTypes
 			];
 		$financialInstitutionBanks = FinancialInstitution::onlyForCompany($company->id)->onlyBanks()->get();
-		
-	
+		/**
+		 * * اللوب اللي علي البنوك تحت كان بينادي FinancialInstitution::find()
+		 * * من جديد في كل لفة — استعلام زياده لكل بنك × كل عملة × مرتين
+		 * * (LG و LC). $financialInstitutionBanks فوق اصلا بتجيب كل بنوك
+		 * * الشركة في استعلام واحد، فبنفهرسها بالـ id ونقرا منها.
+		 */
+		$financialInstitutionsById = $financialInstitutionBanks->keyBy('id');
+
 		$currentDate = now()->format('Y-m-d') ;
         $date = $request->get('date');
 		$date = $date ? HDate::formatDateFromDatePicker($date) : $currentDate;
@@ -724,29 +761,85 @@ class CustomerInvoiceDashboardController extends Controller
 		$source = $request->get('lgSource');
         $reports = [];
 		$canShowDashboardPerCurrency = [];
-		
-		foreach([
+
+		$lgAndLcOptions = [
 			'lg'=>[
 			'letter_of_facility_table_name'=>'letter_of_guarantee_facilities',
 			'statement_table_name'=>'letter_of_guarantee_statements',
 			'statement_table'=>'\App\Models\LetterOfGuaranteeStatement'
-		],	
+		],
 			'lc'=>
 			[
 			'letter_of_facility_table_name'=>'letter_of_credit_facilities',
 			'statement_table_name'=>'letter_of_credit_statements',
 			'statement_table'=>'\App\Models\LetterOfCreditStatement'
-			] 
-			
-			] as $currentLgOrLcType => $lgOrLcOptionsArr){
+			]
+
+			];
+
+		/**
+		 * * لفة رخيصة الاول: بتحسب حد التسهيل بس لكل عملة (استعلام sum
+		 * * واحد لكل نوع × عملة). ودي اللي بتحدد التاب بتاع كل عملة يظهر
+		 * * ولا لا، فلازم تتحسب لكل العملات زي الاول بالظبط عشان مايختفيش
+		 * * تاب كان بيظهر قبل كده.
+		 */
+		foreach($lgAndLcOptions as $currentLgOrLcType => $lgOrLcOptionsArr){
+			foreach($allCurrencies as $currencyName){
+				$currentLimitForCurrency = DB::table($lgOrLcOptionsArr['letter_of_facility_table_name'])
+				->where($lgOrLcOptionsArr['letter_of_facility_table_name'].'.company_id', $company->id)
+				->where('currency', $currencyName)
+				->where('contract_end_date', '>=', $date)
+				->sum('limit');
+
+				$reports[$currentLgOrLcType][$currencyName]['limit'] = $currentLimitForCurrency ;
+				$reports[$currentLgOrLcType][$currencyName]['outstanding_balance'] = 0 ;
+				$reports[$currentLgOrLcType][$currencyName]['room'] = 0 ;
+				$reports[$currentLgOrLcType][$currencyName]['cash_cover'] = 0 ;
+				$canShowDashboardPerCurrency[$currentLgOrLcType][$currencyName] = $currentLimitForCurrency > 0;
+			}
+		}
+
+		/**
+		 * * تحسين سرعة: الحسابات التقيلة تحت (LG/LC × بنوك × تسهيلات ×
+		 * * حركات) كانت بتتنفذ لكل عملة الشركة عملتها في اي وقت، في كل
+		 * * مرة الصفحة بتتفتح — حتي للعملات اللي محدش بيبص عليها. دلوقتي
+		 * * بتتنفذ للعملة الشغالة بس، وباقي التابات بقت لينكات بتعيد
+		 * * تحميل الصفحة بالعملة المطلوبة.
+		 *
+		 * * الديفولت هو اول عملة عندها بيانات فعلا — نفس العملة اللي
+		 * * الصفحة كانت بتفتح عليها قبل التعديل بالظبط.
+		 */
+		$currenciesWithData = array_values(array_filter((array) $allCurrencies, function($currencyName) use ($canShowDashboardPerCurrency){
+			return ($canShowDashboardPerCurrency['lg'][$currencyName] ?? false) || ($canShowDashboardPerCurrency['lc'][$currencyName] ?? false);
+		}));
+		/**
+		 * * لازم تتقيد بالعملات اللي عندها بيانات فعلا: شريط التابات تحت
+		 * * بيرسم تاب للعملة بس لو AtLeastOnKeyIsTrue() رجعت true ليها،
+		 * * فلو حسبنا عملة من غير بيانات هيتعمل بانل من غير تاب مقابل له
+		 * * ولا حاجة تبقي active — يعني صفحة فاضية ومحدش يقدر يرجع منها.
+		 * * ولو الطلب كله مالوش بيانات بنرجع لاول عملة عندها بيانات.
+		 */
+		$requestedCurrencies = $request->filled('currencies')
+			? (array) $request->get('currencies')
+			: array_slice($currenciesWithData, 0, 1);
+		$currenciesToCompute = array_values(array_intersect($requestedCurrencies, $currenciesWithData));
+		if (! count($currenciesToCompute)) {
+			$currenciesToCompute = array_slice($currenciesWithData, 0, 1);
+		}
+
+		foreach($lgAndLcOptions as $currentLgOrLcType => $lgOrLcOptionsArr){
 			$statementTableFullClassName = $lgOrLcOptionsArr['statement_table'];
 			$letterOfFacilityTableName = $lgOrLcOptionsArr['letter_of_facility_table_name'];
 			$currentStatementTableName = $lgOrLcOptionsArr['statement_table_name'];
 
 			$lgOrLcTypes = $typesForLgAndLc[$currentLgOrLcType];
-			foreach ($selectedCurrencies as $currencyName) {
-				
-				
+			foreach ($allCurrencies as $currencyName) {
+				// * العملات اللي مش مطلوب حسابها في الطلب ده بتتخطي — حد
+				// * التسهيل بتاعها اتحسب فوق في اللفة الرخيصة.
+				if (! in_array($currencyName, $currenciesToCompute)) {
+					continue;
+				}
+
 				$financialInstitutionBankIds = [
 					// 'lg'=>array_keys($company->letterOfGuaranteeIssuances->where('status','!=','cancelled')->where('lg_currency',$currencyName)->load('financialInstitutionBank')->pluck('financialInstitutionBank.bank.name_en','financialInstitutionBank.id')->toArray()),
 					'lg'=>array_keys($company->letterOfGuaranteeFacilities->where('currency',$currencyName)->pluck('financialInstitution.bank.name_en','financialInstitution.id')->toArray()),
@@ -775,7 +868,7 @@ class CustomerInvoiceDashboardController extends Controller
 				
 				foreach ($selectedFinancialInstitutionBankIds as $financialInstitutionBankId) {
 					
-					$currentFinancialInstitution = FinancialInstitution::find($financialInstitutionBankId);
+					$currentFinancialInstitution = $financialInstitutionsById->get($financialInstitutionBankId);
 					$statementTableFullClassName::getDashboardOutstandingPerFinancialInstitutionFormattedData($charts,$company,$currencyName , $date ,$financialInstitutionBankId,$currentFinancialInstitution->getName(),$source,$lgOrLcTypes);
 						
 					$lastLetterOfGuaranteeOrCreditFacilities = DB::table($letterOfFacilityTableName)
@@ -838,6 +931,9 @@ class CustomerInvoiceDashboardController extends Controller
             'financialInstitutionBanks' => $financialInstitutionBanks,
             'reports' => $reports,
             'selectedCurrencies' => $selectedCurrencies,
+			// * العملات اللي اتحسبت فعلا في الطلب ده — الفيو بيرسم بانلز
+			// * ليها بس، وباقي التابات بتبقي لينكات.
+			'computedCurrencies'=>$currenciesToCompute,
 			'allCurrencies'=>$allCurrencies,
             'selectedFinancialInstitutionsIds' => $selectedFinancialInstitutionBankIds,
 			'details'=>$details,
