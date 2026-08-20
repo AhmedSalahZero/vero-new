@@ -72,9 +72,12 @@
 					update lc_overdraft_withdrawals set net_balance = net_balance + settlement_amount , settlement_amount = 0 where due_date > _start_update_from_date  and lc_overdraft_withdrawals.lc_facility_id = _lc_facility_id ;
 				end //
 				
-				delimiter ; 
+				delimiter //
 				
 
+				-- * الـ delimiter فوق لازم يفضل // : جسم التريجر جواه ; كتير ،
+				-- * ولو رجع ; الـ mysql client بيقطع الجملة عند اول ; فيمسح
+				-- * التريجر (الـ drop فوق) وبعدين يفشل في انشاءه من تاني
 				create trigger refresh_calculation_before_update_lc_overdraft before update on `lc_overdraft_bank_statements` for each row 
 				begin 
 
@@ -290,7 +293,6 @@
 
 				delimiter ;
 				drop procedure if exists recalculate_end_of_month_lc_overdraft_interests ;
-				delimiter // 
 				-- create procedure recalculate_end_of_month_lc_overdraft_interests()
 				-- begin 
 				-- 	declare current_id integer default 0 ;
@@ -323,7 +325,6 @@
 				-- 	end if ;
 					
 				-- end //
-				delimiter ; 
 				DROP EVENT IF EXISTS `recalculate_end_of_month_lc_overdraft_interests_event`;
 				-- DELIMITER $$
 				-- CREATE EVENT `recalculate_end_of_month_lc_overdraft_interests_event`
@@ -335,7 +336,6 @@
 				-- -- call recalculate_end_of_month_lc_overdraft_interests();
 				-- END$$
 				
- delimiter ; 
 drop trigger if exists refresh_calculation_before_delete_lc_over_statements ;
   delimiter //  
   
