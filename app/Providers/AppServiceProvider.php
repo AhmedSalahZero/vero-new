@@ -44,14 +44,17 @@ class AppServiceProvider extends ServiceProvider
 	{	
 		app()->singleton(Company::class, function ($app) {
 			$companyId = Request()->segment(2);
-			if(!is_numeric($companyId)){
+			// /{locale}/user-permissions/{user}/edit/{company?}
+			if ($companyId === 'user-permissions') {
+				$companyId = Request()->segment(5);
+			} elseif (!is_numeric($companyId)) {
 				$companyId = Request()->segment(3); // http://127.0.0.1:8000/en/companySection/140/edit
 			}
-			if(is_null($companyId)){
-				// $companyId = 0;
+			if (is_null($companyId) || !is_numeric($companyId)) {
 				return Company::first();
 			}
-			return Company::find($companyId) ;
+
+			return Company::find($companyId) ?? new Company();
 		});
 		\PhpOffice\PhpSpreadsheet\Shared\Font::setAutoSizeMethod(Font::AUTOSIZE_METHOD_EXACT);
 		require_once storage_path('dompdf/vendor/autoload.php');
