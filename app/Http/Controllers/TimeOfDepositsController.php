@@ -363,7 +363,10 @@ class TimeOfDepositsController
 		/**
 		 * * اول حاجه هنضيف دبت بقيمة الشهادة 
 		 */
+		
+		
 		if($amount > 0){
+			
 			$commentEn = __('TD Amount',[],'en');
 			$commentAr = __('TD Amount',[],'ar');
 			$timeOfDeposit->handleDebitStatement($financialInstitution->id , $accountType , $timeOfDeposit->getMaturityAmountAddedToAccountNumber() , null , $breakDate,$amount,null,null,1,$commentEn , $commentAr);

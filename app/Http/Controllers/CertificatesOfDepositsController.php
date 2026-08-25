@@ -228,7 +228,7 @@ class CertificatesOfDepositsController
 		$certificatesOfDeposit->update($data);
 		$certificatesOfDeposit->deletePeriodInterestAmounts();
 	    $certificatesOfDeposit->handleDeductedForBankStatement($financialInstitution->id,$data['start_date'],number_unformat($request->get('amount')),$company->id,$deductedFromAccountId,$request->get('account_number'));
-		$certificatesOfDeposit->handleTdOrCdStoreDepositForOdoo($accountNumberHasChanged);
+		$certificatesOfDeposit->handleTdOrCdStoreDepositForOdoo(false);
 		$type = $request->get('type',CertificatesOfDeposit::RUNNING);
 		$activeTab = $type ;
 		return redirect()->route('view.certificates.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id,'active'=>$activeTab])->with('success',__('Item Has Been Updated Successfully'));
