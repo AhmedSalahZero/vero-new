@@ -283,7 +283,7 @@ class CertificatesOfDepositsController
 			'actual_interest_amount'=>$actualInterestAmount,
 			'status'=>$certificateType
 		]);
-		$certificatesOfDeposit->handleTdOrCdStoreDepositForOdoo(true);
+		$certificatesOfDeposit->handleTdOrCdStoreDepositForOdoo(true,$actualDepositDate);
 		$accountType = AccountType::where('slug',AccountType::CURRENT_ACCOUNT)->first() ;
 		if($actualInterestAmount > 0){
 			$currentAccount = $certificatesOfDeposit->handleDebitStatement($financialInstitution->id , $accountType , $certificatesOfDeposit->getMaturityAmountAddedToAccountNumber() , null , $actualDepositDate,$actualInterestAmount,null,null,1,null,null,false,true);
@@ -339,7 +339,7 @@ class CertificatesOfDepositsController
 			'status'=>$certificateType,
 			'break_charge_amount'=>$breakChargeAmount
 		]);
-			$certificatesOfDeposit->handleTdOrCdStoreDepositForOdoo(true);
+			$certificatesOfDeposit->handleTdOrCdStoreDepositForOdoo(true,$breakDate);
 		// $certificatesOfDeposit->storeOdooBreak(false);
 		$accountType = AccountType::where('slug',AccountType::CURRENT_ACCOUNT)->first() ;
 		/**

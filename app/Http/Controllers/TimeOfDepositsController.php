@@ -297,7 +297,7 @@ class TimeOfDepositsController
 		$commentEn = __('TD Amount',[],'en');
 		$commentAr = __('TD Amount',[],'ar');
 		$timeOfDeposit->handleDebitStatement($financialInstitution->id , $accountType , $timeOfDeposit->getMaturityAmountAddedToAccountNumber() , null , $actualDepositDate,$timeOfDeposit->getAmount(),null,null,1,$commentEn,$commentAr);
-		$timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true);
+		$timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true,$actualDepositDate);
 		return redirect()->route('view.time.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id ,'active'=>$type])->with('success',__('Time Of Deposit Has Been Marked As Matured'));
 	}
 	
@@ -319,9 +319,6 @@ class TimeOfDepositsController
 		if($breakInterestStatement){
 			$timeOfDeposit->reverseOdooDeposit($breakInterestStatement);
 		}
-		
-		
-		
 		$type = TimeOfDeposit::RUNNING ;
 		$timeOfDeposit->update([
 			'deposit_date'=>null,
@@ -360,7 +357,7 @@ class TimeOfDepositsController
 			'status'=>$type,
 			'break_charge_amount'=>$breakChargeAmount
 		]);
-		$timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true);
+		$timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true,$breakDate);
 		
 		$accountType = AccountType::where('slug',AccountType::CURRENT_ACCOUNT)->first() ;
 		/**

@@ -43,12 +43,12 @@ trait HasDepositAccount
 	{
 		return is_null($this->deducted_from_account_id) || $this->deducted_from_account_id ==0 ;
 	}
-	public function handleTdOrCdStoreDepositForOdoo(bool $isBreakOrApplyDeposit)
+	public function handleTdOrCdStoreDepositForOdoo(bool $isBreakOrApplyDeposit,$odooDate = null)
 	{
 		
 		$company = $this->company ; 
 		$isOpeningBalance = $this->isOpeningBalance(); 
-		$date = $this->getStartDate();
+		$date = $odooDate?:$this->getStartDate();
 		$this->deleteOdooRelations($isBreakOrApplyDeposit);
 		if($company->hasOdooIntegrationCredentials() && $company->withinIntegrationDate($date) && (! $isOpeningBalance || $isBreakOrApplyDeposit) ){
 			$this->handleTdOrCdStoreDepositWithoutJournalForOdoo($isBreakOrApplyDeposit);
