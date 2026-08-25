@@ -136,6 +136,7 @@ use \App\Models\TimeOfDeposit;
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="row mb-3">
+                                                                    @include('reports._settlement_account_select',['model'=>$model,'accounts'=>$financialInstitution->accounts])
 																
 																 <div class="col-md-4 mb-4">
                                                                         <label>{{__('TD Amount')}} </label>
@@ -207,6 +208,7 @@ use \App\Models\TimeOfDeposit;
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="row mb-3">
+                                                                    @include('reports._settlement_account_select',['model'=>$model,'accounts'=>$financialInstitution->accounts])
 
                                                                    
 

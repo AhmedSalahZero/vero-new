@@ -277,8 +277,20 @@ class CertificatesOfDepositsController
 		}
 		$actualDepositDate = $actualDepositDate->format('Y-m-d') ;
 		$actualInterestAmount  = number_unformat($request->get('actual_interest_amount')) ;
+		/**
+		 * * حساب التسوية اللي اصل الوديعة هيترد عليه — اليوزر بيختاره من البوب اب
+		 * * وقيمته الافتراضية هي حساب الخصم الاصلي لو كان موجود ، ولو الوديعة
+		 * * opening balance
+		 * * فا لازم يختاره هنا لان مافيش
+		 * * deducted_from_account_id
+		 */
+		$settlementAccountId = $request->get('settlement_account_id') ;
+		if(!$certificatesOfDeposit->isEligibleSettlementAccount($settlementAccountId,$financialInstitution->accounts)){
+			return redirect()->back()->with('fail',__('Please Select A Valid Settlement Account'));
+		}
 		$certificateType = CertificatesOfDeposit::MATURED ;
 		$certificatesOfDeposit->update([
+			'settlement_account_id'=>$settlementAccountId,
 			'deposit_date'=>$actualDepositDate,
 			'actual_interest_amount'=>$actualInterestAmount,
 			'status'=>$certificateType
@@ -304,8 +316,18 @@ class CertificatesOfDepositsController
 	{
 		$certificateType = CertificatesOfDeposit::RUNNING ;
 			$breakInterestStatement = $certificatesOfDeposit->currentAccountBankStatements->where('is_break_interest',1)->first();
-		$certificatesOfDeposit->reverseOdooDeposit($breakInterestStatement);
+		/**
+		 * * الشهادة اللي مانزلش عليها فايدة مالهاش
+		 * * break interest statement
+		 * * ، وreverseOdooDeposit بتاخد الاستيتمنت مش nullable — فا من غير
+		 * * الشرط ده عكس الاستحقاق كان بيرمي TypeError. نفس الحماية اللي في
+		 * * TimeOfDepositsController::reverseDeposit()
+		 */
+		if($breakInterestStatement){
+			$certificatesOfDeposit->reverseOdooDeposit($breakInterestStatement);
+		}
 		$certificatesOfDeposit->update([
+			'settlement_account_id'=>null,
 			'deposit_date'=>null,
 			'actual_interest_amount'=>null,
 			'status'=>CertificatesOfDeposit::RUNNING
@@ -332,8 +354,20 @@ class CertificatesOfDepositsController
 		$breakInterestAmount  = $request->get('break_interest_amount') ;
 		$breakChargeAmount  = $request->get('break_charge_amount',0) ;
 		$amount  = $request->get('amount') ;
+		/**
+		 * * حساب التسوية اللي اصل الوديعة هيترد عليه — اليوزر بيختاره من البوب اب
+		 * * وقيمته الافتراضية هي حساب الخصم الاصلي لو كان موجود ، ولو الوديعة
+		 * * opening balance
+		 * * فا لازم يختاره هنا لان مافيش
+		 * * deducted_from_account_id
+		 */
+		$settlementAccountId = $request->get('settlement_account_id') ;
+		if(!$certificatesOfDeposit->isEligibleSettlementAccount($settlementAccountId,$financialInstitution->accounts)){
+			return redirect()->back()->with('fail',__('Please Select A Valid Settlement Account'));
+		}
 		$certificateType = CertificatesOfDeposit::BROKEN ;
 		$certificatesOfDeposit->update([
+			'settlement_account_id'=>$settlementAccountId,
 			'break_date'=>$breakDate,
 			'break_interest_amount'=>$breakInterestAmount,
 			'status'=>$certificateType,
@@ -373,6 +407,7 @@ class CertificatesOfDepositsController
 	{
 		$certificateType = CertificatesOfDeposit::RUNNING ;
 		$certificatesOfDeposit->update([
+			'settlement_account_id'=>null,
 			'break_date'=>null,
 			'break_interest_amount'=>null,
 	//		'status'=>$certificateType,

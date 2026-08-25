@@ -43,15 +43,38 @@ class AppServiceProvider extends ServiceProvider
 	public function boot()
 	{	
 		app()->singleton(Company::class, function ($app) {
-			$companyId = Request()->segment(2);
-			// /{locale}/user-permissions/{user}/edit/{company?}
-			if ($companyId === 'user-permissions') {
-				$companyId = Request()->segment(5);
-			} elseif (!is_numeric($companyId)) {
-				$companyId = Request()->segment(3); // http://127.0.0.1:8000/en/companySection/140/edit
+			// When the request carries no company, fall back to a company the logged in
+			// user actually belongs to. Falling back to Company::first() used to leak
+			// another company's systems into the header menu (Dashboard, Data Gathering,
+			// Analysis Report, ...) on company-less pages such as /profile.
+			$defaultCompany = function () {
+				/** @var User|null $user */
+				$user = auth()->user();
+				$userCompany = $user ? $user->companies()->first() : null;
+
+				return $userCompany ?? Company::first() ?? new Company();
+			};
+
+			$routeCompany = Request()->route('company');
+			if ($routeCompany instanceof Company) {
+				return $routeCompany->exists ? $routeCompany : $defaultCompany();
+			}
+
+			$companyId = is_numeric($routeCompany) ? $routeCompany : null;
+			if ($companyId === null) {
+				$segment2 = Request()->segment(2);
+				if (in_array($segment2, ['user-permissions', 'user'], true)) {
+					$segments = Request()->segments();
+					$lastSegment = $segments[count($segments) - 1] ?? null;
+					$companyId = is_numeric($lastSegment) ? $lastSegment : null;
+				} elseif (is_numeric($segment2)) {
+					$companyId = $segment2;
+				} else {
+					$companyId = Request()->segment(3); // http://127.0.0.1:8000/en/companySection/140/edit
+				}
 			}
 			if (is_null($companyId) || !is_numeric($companyId)) {
-				return Company::first();
+				return $defaultCompany();
 			}
 
 			return Company::find($companyId) ?? new Company();
@@ -233,7 +256,6 @@ class AppServiceProvider extends ServiceProvider
 		catch(\Exception $e){
 			
 		}
-	
 		if ($currentCompany) {
 			$excelType ='SalesGathering';
 			if(in_array('uploading',Request()->segments())){

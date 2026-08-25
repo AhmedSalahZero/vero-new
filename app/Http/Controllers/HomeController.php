@@ -45,6 +45,7 @@ class HomeController extends Controller
 				auth()->logout();
 				return redirect()->route('login');
 			}
+			$company = null;
 			$company = $user->companies[0];
 			return view('client_view.homePage', compact('company'));
 		}

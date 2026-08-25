@@ -89,7 +89,9 @@
 </style>
 @endsection
 @section('sub-header')
+@if($company)
 <h1 class="kt-infobox__title" style="color: white">{{__("WELCOME TO  ".$company->name['en']." COMPANY") }}</h1>
+@endif
 <div class="kt-infobox__content" style="color: white">
     {{__("IT IS NOT ABOUT NUMBERS, IT IS ABOUT THE STORY BEHIND THE NUMBERS")}}
 </div>
@@ -120,6 +122,7 @@
                             <div class="kt-portlet__body">
                                 <div class="kt-list-timeline">
                                     <div class="accordion accordion-toggle-arrow" id="veroanalysisId">
+									
                                         @if(auth()->user()->can('upload sales gathering data') || auth()->user()->can('upload expense analysis data') || auth()->user()->can('view sales breakdown analysis report') || auth()->user()->can(viewExpenseAnalysisData))
                                         <div class="card">
                                             <div class="card-header" id="headingOne44">

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\HArr;
+use App\Helpers\HAuth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -94,7 +95,10 @@ class User extends Authenticatable implements HasMedia
 	const MANAGER = 'manager';
 	const USER = 'user';
 	
-    use Notifiable, HasRoles, InteractsWithMedia, HasFactory;
+    use Notifiable, HasRoles, InteractsWithMedia, HasFactory {
+		// التريتس بتتفرد جوه الكلاس نفسه ، فا parent::hasPermissionTo مالهاش وجود.
+		HasRoles::hasPermissionTo as protected hasPermissionToFromTrait;
+	}
 	protected $connection = 'mysql';
     protected $fillable = [
         'name', 'email', 'password','max_users',
@@ -241,6 +245,97 @@ class User extends Authenticatable implements HasMedia
 
 
 	
+	/**
+	 * الصلاحيات متخزنة في model_has_permissions من غير اي ربط بأنظمة الشركة ،
+	 * والربط ده موجود بس في HAuth::getPermissions وبيتطبق وقت *اسناد* الصلاحية.
+	 * يعني صف قديم (اتكتب قبل ما انظمة الشركة تتقفل ، او من bulk assign) بيفضل
+	 * يرجع can() == true لموديول الشركة مش مشتركة فيه اصلا. هنا بنفحص السيستم
+	 * وقت السؤال كمان.
+	 *
+	 * @param  string|int|Permission|\BackedEnum  $permission
+	 */
+	public function hasPermissionTo($permission, $guardName = null): bool
+	{
+		if (! $this->hasPermissionToFromTrait($permission, $guardName)) {
+			return false;
+		}
+
+		return $this->permissionBelongsToCurrentCompanySystems($permission);
+	}
+
+	/**
+	 * @param  string|int|Permission|\BackedEnum  $permission
+	 */
+	protected function permissionBelongsToCurrentCompanySystems($permission): bool
+	{
+		if ($this->roles->isNotEmpty() && $this->isSuperAdmin()) {
+			return true;
+		}
+
+		$permissionName = match (true) {
+			is_string($permission) => $permission,
+			$permission instanceof Permission => $permission->name,
+			default => null,
+		};
+		if ($permissionName === null) {
+			return true;
+		}
+
+		$permissionSystems = self::permissionSystemsCatalogue()[$permissionName] ?? null;
+		if ($permissionSystems === null) {
+			// مش من صلاحيات الكتالوج بتاعنا — مالناش دعوة بيها.
+			return true;
+		}
+
+		/** @var Company|null $company */
+		$company = app(Company::class);
+		$companySystems = ($company && $company->getKey()) ? $company->getSystemsNames() : [];
+		if (! count($companySystems)) {
+			return true;
+		}
+
+		/*
+		 * non-banking-service و property-management ليهم 0 صلاحية في الكتالوج ،
+		 * فا لو قفلنا عليهم بالقاعدة دي هيتقفلوا بالكامل. الشركات دي بتعدي زي
+		 * ما هي لحد ما صلاحياتها تتسجل في HAuth::getPermissions.
+		 */
+		if (count(array_diff($companySystems, self::catalogueSystems()))) {
+			return true;
+		}
+
+		return HArr::atLeastOneValueExistInArray($companySystems, $permissionSystems);
+	}
+
+	/**
+	 * خريطة اسم الصلاحية => الانظمة اللي بتتبعها. الكتالوج تقيل شوية فا بنبنيه
+	 * مرة واحدة في الريكوست.
+	 *
+	 * @return array<string,string[]>
+	 */
+	private static function permissionSystemsCatalogue(): array
+	{
+		static $catalogue = null;
+		if ($catalogue === null) {
+			$catalogue = [];
+			foreach (HAuth::getPermissions() as $permissionArr) {
+				$catalogue[$permissionArr['name']] = $permissionArr['systems'];
+			}
+		}
+
+		return $catalogue;
+	}
+
+	/** @return string[] الانظمة اللي الكتالوج بيعرفها */
+	private static function catalogueSystems(): array
+	{
+		static $systems = null;
+		if ($systems === null) {
+			$systems = array_values(array_unique(array_merge(...array_values(self::permissionSystemsCatalogue()))));
+		}
+
+		return $systems;
+	}
+
 	public function assignNewPermission(array $permissionArr , Permission $permission)
 	{
 

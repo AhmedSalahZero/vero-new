@@ -282,8 +282,20 @@ class TimeOfDepositsController
 		}
 		$actualDepositDate = $actualDepositDate->format('Y-m-d') ;
 		$actualInterestAmount  = number_unformat($request->get('actual_interest_amount')) ;
+		/**
+		 * * حساب التسوية اللي اصل الوديعة هيترد عليه — اليوزر بيختاره من البوب اب
+		 * * وقيمته الافتراضية هي حساب الخصم الاصلي لو كان موجود ، ولو الوديعة
+		 * * opening balance
+		 * * فا لازم يختاره هنا لان مافيش
+		 * * deducted_from_account_id
+		 */
+		$settlementAccountId = $request->get('settlement_account_id') ;
+		if(!$timeOfDeposit->isEligibleSettlementAccount($settlementAccountId,$financialInstitution->accounts)){
+			return redirect()->back()->with('fail',__('Please Select A Valid Settlement Account'));
+		}
 		$type = TimeOfDeposit::MATURED ;
 		$timeOfDeposit->update([
+			'settlement_account_id'=>$settlementAccountId,
 			'deposit_date'=>$actualDepositDate,
 			'actual_interest_amount'=>$actualInterestAmount,
 			'status'=>$type
@@ -321,6 +333,7 @@ class TimeOfDepositsController
 		}
 		$type = TimeOfDeposit::RUNNING ;
 		$timeOfDeposit->update([
+			'settlement_account_id'=>null,
 			'deposit_date'=>null,
 			'actual_interest_amount'=>null,
 			'status'=>TimeOfDeposit::RUNNING,
@@ -342,6 +355,7 @@ class TimeOfDepositsController
 	 */
 	public function applyBreak(Company $company,Request $request,FinancialInstitution $financialInstitution,TimeOfDeposit $timeOfDeposit)
 	{
+
 		$breakDate = Carbon::make($request->get('break_date')) ;
 		if(!$breakDate){
 			return redirect()->back()->with('fail',__('Break Date Is Required'));
@@ -350,8 +364,20 @@ class TimeOfDepositsController
 		$breakInterestAmount  = $request->get('break_interest_amount') ;
 		$breakChargeAmount  = $request->get('break_charge_amount',0) ;
 		$amount  = $request->get('amount') ;
+		/**
+		 * * حساب التسوية اللي اصل الوديعة هيترد عليه — اليوزر بيختاره من البوب اب
+		 * * وقيمته الافتراضية هي حساب الخصم الاصلي لو كان موجود ، ولو الوديعة
+		 * * opening balance
+		 * * فا لازم يختاره هنا لان مافيش
+		 * * deducted_from_account_id
+		 */
+		$settlementAccountId = $request->get('settlement_account_id') ;
+		if(!$timeOfDeposit->isEligibleSettlementAccount($settlementAccountId,$financialInstitution->accounts)){
+			return redirect()->back()->with('fail',__('Please Select A Valid Settlement Account'));
+		}
 		$type = TimeOfDeposit::BROKEN ;
 		$timeOfDeposit->update([
+			'settlement_account_id'=>$settlementAccountId,
 			'break_date'=>$breakDate,
 			'break_interest_amount'=>$breakInterestAmount,
 			'status'=>$type,
@@ -411,6 +437,7 @@ class TimeOfDepositsController
 		
 		
 		$timeOfDeposit->update([
+			'settlement_account_id'=>null,
 			'break_date'=>null,
 			'break_interest_amount'=>null,
 			'status'=>$type,

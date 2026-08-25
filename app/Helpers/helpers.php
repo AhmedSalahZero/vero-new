@@ -4175,7 +4175,55 @@ function getPropertyManagementNavigation(Company $company, User $user):array
 }
 
 
+/**
+ * A user may only see a company's menu when the company is linked to their account
+ * (super admins manage every company, so they keep full access).
+ */
+function userCanAccessCompany($user, $company): bool
+{
+	if (!$user || !$company || !$company->getKey()) {
+		return false;
+	}
+	if ($user->roles->isNotEmpty() && $user->isSuperAdmin()) {
+		return true;
+	}
+
+	return $user->companies->contains('id', $company->getKey());
+}
+/**
+ * Hide menu entries the user may not reach: entries flagged `show => false`, and
+ * parents whose whole submenu is hidden (they used to render as empty dropdowns
+ * because their `show` flag was hard coded to true).
+ */
+function filterMenuItemsByVisibility(array $items): array
+{
+	$visibleItems = [];
+	foreach ($items as $key => $item) {
+		if (!is_array($item)) {
+			continue;
+		}
+		if (empty($item['show'])) {
+			continue;
+		}
+		if (!empty($item['submenu']) && is_array($item['submenu'])) {
+			$item['submenu'] = filterMenuItemsByVisibility($item['submenu']);
+			// A parent that only exists to group links is useless once every link is hidden.
+			if (count($item['submenu']) === 0 && (!isset($item['link']) || $item['link'] === '#')) {
+				continue;
+			}
+		}
+		$visibleItems[$key] = $item;
+	}
+
+	return $visibleItems;
+}
+
 function getHeaderMenu($currentCompany = null)
+{
+	return filterMenuItemsByVisibility(buildHeaderMenu($currentCompany));
+}
+
+function buildHeaderMenu($currentCompany = null)
 {
 	
 
@@ -4183,11 +4231,23 @@ function getHeaderMenu($currentCompany = null)
 	/**
 	 * @var Company|null $company
 	 */
-	$company = app(Company::class);
+	// Prefer the company passed from the view (e.g. homePage) over the URL/singleton guess.
+	// On /en/ the singleton falls back to Company::first(), which may be a different system.
+	$companyFromContainer = app(Company::class);
+	$company = ($currentCompany && $currentCompany->getKey())
+		? $currentCompany
+		: $companyFromContainer;
 
-    $company = $company ?: $currentCompany;
     $user = auth()->user();
-    if (!$company) {
+
+	// Never build the menu from a company the user has no access to: its systems
+	// would expose tabs (Dashboard, Data Gathering, Analysis Report, ...) that the
+	// user cannot reach. Fall back to one of the user's own companies instead.
+	if ($user && $company && $company->getKey() && ! userCanAccessCompany($user, $company)) {
+		$company = $user->companies()->first();
+	}
+
+    if (!$company || !$company->getKey()) {
         return [
             'home'=>generateMenuItem(__('Home'), $user->can('view home'), route('home'), [])
         ];
@@ -4766,48 +4826,60 @@ function getHeaderMenu($currentCompany = null)
         return $cashManagementSubItems ;
     }
         
-    $canViewVeroAnalysisDashboard = $user->can('view sales dashboard') || $user->can('view breakdown dashboard') || ($user->can('view customer dashboard')&& $hasSelectCustomerNameInTemplate)
-    || ($user->can('view sales person dashboard')&&$hasSelectSalesPersonInTemplate) || $user->can('view interval comparing dashboard') || $user->can('view expense analysis dashboard')
-    || $user->can('view income statement dashboard');
-        
-        
-    $canViewUploadSalesData = $user->can('upload sales gathering data') ;
-    $canViewUploadExportData = $user->can(uploadExportAnalysisData) ;
-    $canViewUploadCustomerInvoiceData = $user->can(uploadCustomerInvoiceData) ;
-    $canViewUploadSupplierInvoiceData = $user->can(uploadSupplierInvoiceData) ;
-    $canViewUploadLabelingData = $user->can(uploadLabelingItemData);
-    $canViewDataGathering = $canViewUploadSalesData || $canViewUploadExportData || $canViewUploadCustomerInvoiceData || $canViewUploadSupplierInvoiceData || $canViewUploadLabelingData;
-        
-    $salesAnalysisSubItems = getSalesAnalysisReportSubmenu($user, $companyId) ;
-        
-    $canViewSalesAnalysisReport = count($salesAnalysisSubItems) ;
-    $canExportAnalysisReport = $user->can(viewExportAnalysisData) ;
-    $canExpenseAnalysisReport = $user->can(viewExpenseAnalysisData) ;
-    $canViewAnalysisReport = $canViewSalesAnalysisReport || $canExportAnalysisReport|| $canExpenseAnalysisReport ;
-        
-        
-    $salesForecastValueBaseSubItems=getSalesForecastValueBaseSubmenu($user, $companyId);
-    $canViewSalesForecastValueBase=count($salesForecastValueBaseSubItems);
-    // $user->can('view sales forecast value base');
-    $salesForecastQuantityBaseSubItems= getSalesForecastQuantityBaseSubmenu($user, $companyId);
-    $canViewSalesForecastQuantityBase=count($salesForecastQuantityBaseSubItems);
-    $canViewSalesForecast = ($hasSalesGatheringDataUploadData)  && ($canViewSalesForecastValueBase||$canViewSalesForecastQuantityBase);
-        
-        
-        
+    $hasVero = $company->hasVero();
+    $hasExportAnalysis = $company->hasSystem(EXPORT_ANALYSIS);
+    $hasExpenseAnalysis = $company->hasSystem(EXPENSE_ANALYSIS);
+    $hasLabeling = $company->hasSystem(LABELING);
+    $hasPricingCalculator = $company->hasSystem(PRICING_CALCULATOR);
+    $hasSalesForecast = $company->hasSystem(SALES_FORECAST);
+    $hasCashVero = $company->hasCashVero();
+    $hasIncomeStatementPlanning = $company->hasIncomeStatementPlanning();
+
+    $canViewVeroAnalysisDashboard =
+        ($hasVero && (
+            $user->can('view sales dashboard')
+            || $user->can('view breakdown dashboard')
+            || ($user->can('view customer dashboard') && $hasSelectCustomerNameInTemplate)
+            || ($user->can('view sales person dashboard') && $hasSelectSalesPersonInTemplate)
+            || $user->can('view interval comparing dashboard')
+            || $user->can('view income statement dashboard')
+        ))
+        || ($hasExpenseAnalysis && $user->can('view expense analysis dashboard'));
+
+    $canViewUploadSalesData = $hasVero && $user->can('upload sales gathering data');
+    $canViewUploadExportData = $hasExportAnalysis && $user->can(uploadExportAnalysisData);
+    $canViewUploadExpenseData = $hasExpenseAnalysis && $user->can(uploadExpenseAnalysisData);
+    // Customer/supplier invoice uploads live under Cash Management, not top-level Data Gathering.
+    $canViewUploadLabelingData = $hasLabeling && $user->can(uploadLabelingItemData);
+    $canViewDataGathering = $canViewUploadSalesData || $canViewUploadExportData || $canViewUploadExpenseData || $canViewUploadLabelingData;
+
+    $salesAnalysisSubItems = $hasVero ? getSalesAnalysisReportSubmenu($user, $companyId) : [];
+    $canViewSalesAnalysisReport = count($salesAnalysisSubItems);
+    $canExportAnalysisReport = $hasExportAnalysis && $user->can(viewExportAnalysisData);
+    $canExpenseAnalysisReport = $hasExpenseAnalysis && $user->can(viewExpenseAnalysisData);
+    $canViewAnalysisReport = $canViewSalesAnalysisReport || $canExportAnalysisReport || $canExpenseAnalysisReport;
+
+    $salesForecastValueBaseSubItems = $hasSalesForecast ? getSalesForecastValueBaseSubmenu($user, $companyId) : [];
+    $canViewSalesForecastValueBase = count($salesForecastValueBaseSubItems);
+    $salesForecastQuantityBaseSubItems = $hasSalesForecast ? getSalesForecastQuantityBaseSubmenu($user, $companyId) : [];
+    $canViewSalesForecastQuantityBase = count($salesForecastQuantityBaseSubItems);
+    $canViewSalesForecast = $hasSalesForecast
+        && $hasSalesGatheringDataUploadData
+        && ($canViewSalesForecastValueBase || $canViewSalesForecastQuantityBase);
+
     return [
         'home'=>generateMenuItem(__('Home'), $user->can('view home'), route('home'), []),
         'dashboard'=>[
             'title'=>__('Dashboard'),
             'show'=>$canViewVeroAnalysisDashboard ,
             'submenu'=>[
-                'sales-dashboard'=>generateMenuItem(__('Sales Dashboard'), $user->can('view sales dashboard'), route('dashboard', ['company'=>$companyId]), []),
-                'breakdown-dashboard'=>generateMenuItem(__('Breakdown Dashboard'), $user->can('view breakdown dashboard'), route('dashboard.breakdown', ['company'=>$companyId])),
-                'customers-dashboard'=>generateMenuItem(__('Customers Dashboard'), $user->can('view customer dashboard') && $hasSelectCustomerNameInTemplate, route('dashboard.customers', ['company'=>$companyId]), []),
-                'sales-person-dashboard'=>generateMenuItem(__('Sales Person Dashboard'), $user->can('view sales person dashboard')&&$hasSelectSalesPersonInTemplate, route('dashboard.salesPerson', ['company'=>$companyId])),
-                'interval-comparing-dashboard'=>generateMenuItem(__('Interval Comparing Dashboard'), $user->can('view interval comparing dashboard'), route('dashboard.intervalComparing', ['company'=>$companyId]), []),
-                'expense-analysis-dashboard'=>generateMenuItem(__('Expense Analysis Dashboard'), $user->can('view expense analysis dashboard'), route('view.expense.analysis.dashboard', ['company'=>$companyId]), []),
-                'income-statement'=>generateMenuItem(__('Income Statement'), $user->can('view income statement dashboard'), '#', getIncomeStatementSubmenu($user, $company)),
+                'sales-dashboard'=>generateMenuItem(__('Sales Dashboard'), $hasVero && $user->can('view sales dashboard'), route('dashboard', ['company'=>$companyId]), []),
+                'breakdown-dashboard'=>generateMenuItem(__('Breakdown Dashboard'), $hasVero && $user->can('view breakdown dashboard'), route('dashboard.breakdown', ['company'=>$companyId])),
+                'customers-dashboard'=>generateMenuItem(__('Customers Dashboard'), $hasVero && $user->can('view customer dashboard') && $hasSelectCustomerNameInTemplate, route('dashboard.customers', ['company'=>$companyId]), []),
+                'sales-person-dashboard'=>generateMenuItem(__('Sales Person Dashboard'), $hasVero && $user->can('view sales person dashboard')&&$hasSelectSalesPersonInTemplate, route('dashboard.salesPerson', ['company'=>$companyId])),
+                'interval-comparing-dashboard'=>generateMenuItem(__('Interval Comparing Dashboard'), $hasVero && $user->can('view interval comparing dashboard'), route('dashboard.intervalComparing', ['company'=>$companyId]), []),
+                'expense-analysis-dashboard'=>generateMenuItem(__('Expense Analysis Dashboard'), $hasExpenseAnalysis && $user->can('view expense analysis dashboard'), route('view.expense.analysis.dashboard', ['company'=>$companyId]), []),
+                'income-statement'=>generateMenuItem(__('Income Statement'), $hasVero && $user->can('view income statement dashboard'), '#', $hasVero ? getIncomeStatementSubmenu($user, $company) : []),
             ]
                 ],
                 'data-gathering'=>[
@@ -4830,19 +4902,7 @@ function getHeaderMenu($currentCompany = null)
                         'upload new expense data'=>[
                             'title'=>__('Upload New Expense Data'),
                             'link'=>route('view.uploading', ['company'=>$company->id , 'model'=>'ExpenseAnalysis']),
-                            'show'=>$canViewUploadExportData,
-                            'submenu'=>[]
-                        ],
-                        'upload new customer invoice data'=>[
-                            'title'=>__('Upload New Customer Invoice Data'),
-                            'link'=>route('view.uploading', ['company'=>$company->id , 'model'=>'CustomerInvoice']),
-                            'show'=>$canViewUploadCustomerInvoiceData,
-                            'submenu'=>[]
-                        ],
-                        'upload new supplier invoice data'=>[
-                            'title'=>__('Upload New Supplier Invoice Data'),
-                            'link'=>route('view.uploading', ['company'=>$company->id , 'model'=>'SupplierInvoice']),
-                            'show'=>$canViewUploadSupplierInvoiceData,
+                            'show'=>$canViewUploadExpenseData,
                             'submenu'=>[]
                         ],
                         'upload-new-labeling-data'=>[
@@ -4887,26 +4947,26 @@ function getHeaderMenu($currentCompany = null)
                                         'sales-forecast-value-base'=>[
                                         'title'=>__('Sales Forecast Value Base'),
                                         'link'=>'#',
-                                        'show'=>$canViewSalesForecastValueBase,
+                                        'show'=>$hasSalesForecast && $canViewSalesForecastValueBase,
                                         'submenu'=>$salesForecastValueBaseSubItems
                                         ],
                                         'sales-forecast-quantity-base'=>[
                                             'title'=>__('Sales Forecast Quantity Base'),
                                             'link'=>'#',
-                                            'show'=>$canViewSalesForecastQuantityBase,
-                                            'submenu'=>getSalesForecastQuantityBaseSubmenu($user, $companyId)
+                                            'show'=>$hasSalesForecast && $canViewSalesForecastQuantityBase,
+                                            'submenu'=>$salesForecastQuantityBaseSubItems
                                         ]
                                     ]
                                         ],
                                         'income-statement-planning'=>[
                                             'title'=>__('Income Statement Planning'),
                                             'link'=>route('admin.view.financial.statement', ['company'=>$companyId]),
-                                            'show'=>$user->can('view income statement planning')
+                                            'show'=>$hasIncomeStatementPlanning && $user->can('view income statement planning')
                                         ],
                                         'cash-management'=>[
                                             'title'=>__('Cash Management'),
                                             'link'=>'#',
-                                            'show'=>$company->hasCashVero()   ,
+                                            'show'=>$hasCashVero   ,
                                             'submenu'=>$cashManagementSubItems
                                                 ],
 
@@ -4916,29 +4976,29 @@ function getHeaderMenu($currentCompany = null)
                                                 'quick-price'=>[
                                                     'title'=>__('Quick Price'),
                                                     'link'=>'#',
-                                                    'show'=>$user->can('view quick price'),
+                                                    'show'=>$hasPricingCalculator && $user->can('view quick price'),
                                                     'submenu'=>[
                                                         'pricing-plans'=>[
                                                             'title'=>__('Pricing Plan'),
                                                             'link'=>route('admin.view.quick.pricing.calculator', ['company'=>$companyId]),
-                                                            'show'=>$user->can('view pricing plans')
+                                                            'show'=>$hasPricingCalculator && $user->can('view pricing plans')
                                                         ],
 
                                                         'quick-price-calculator'=>[
                                                             'title'=>__('Quick Price Calculator'),
                                                             'link'=>route('admin.view.quick.pricing.calculator', ['company'=>$companyId]),
-                                                            'show'=>$user->can('view quick price calculator'),
+                                                            'show'=>$hasPricingCalculator && $user->can('view quick price calculator'),
                                                             'submenu'=>[]
                                                         ],
 
                                                         'setting'=>[
                                                             'title'=>__('Setting'),
                                                             'link'=>'#',
-                                                            'show'=>$user->can('view quick price setting'),
+                                                            'show'=>$hasPricingCalculator && $user->can('view quick price setting'),
                                                             'submenu'=>[
-                                                                'revenue-business-line'=>generateMenuItem(__('Revenue Business Line'), $user->can('view revenue business line'), route('admin.view.revenue.business.line', ['company'=>$companyId]), []),
-                                                                'positions'=>generateMenuItem(__('Positions'), $user->can('view positions'), route('positions.index', ['company'=>$companyId]), []),
-                                                                'expenses'=>generateMenuItem(__('Expenses'), $user->can('view expenses'), route('pricing-expenses.index', ['company'=>$companyId]), []),
+                                                                'revenue-business-line'=>generateMenuItem(__('Revenue Business Line'), $hasPricingCalculator && $user->can('view revenue business line'), route('admin.view.revenue.business.line', ['company'=>$companyId]), []),
+                                                                'positions'=>generateMenuItem(__('Positions'), $hasPricingCalculator && $user->can('view positions'), route('positions.index', ['company'=>$companyId]), []),
+                                                                'expenses'=>generateMenuItem(__('Expenses'), $hasPricingCalculator && $user->can('view expenses'), route('pricing-expenses.index', ['company'=>$companyId]), []),
                                                             ]
                                                         ],
 
@@ -4948,12 +5008,12 @@ function getHeaderMenu($currentCompany = null)
                                                     'labeling-items'=>[
                                                         'title'=>__('Labeling Items'),
                                                         'link'=>'#',
-                                                        'show'=>$user->can('view labeling items'),
+                                                        'show'=>$hasLabeling && $user->can('view labeling items'),
                                                         'submenu'=>[
-                                                            'create-labeling-items'=>generateMenuItem(__('Create Labeling Items'), $user->can('view create labeling items'), route('create.labeling.items', ['company'=>$companyId])),
-                                                            'building lable'=>generateMenuItem(__('Building Label'), $user->can('view create labeling items'), route('show.building.label', ['company'=>$companyId])),
-                                                            'FF&E lable'=>generateMenuItem(__('FF&E Label'), $user->can('view create labeling items'), route('show.ffe.label', ['company'=>$companyId])),
-                                                            'create-labeling-form'=>generateMenuItem(__('Create Labeling Form'), $user->can('view create labeling items'), route('create.labeling.form', ['company'=>$companyId])),
+                                                            'create-labeling-items'=>generateMenuItem(__('Create Labeling Items'), $hasLabeling && $user->can('view create labeling items'), route('create.labeling.items', ['company'=>$companyId])),
+                                                            'building lable'=>generateMenuItem(__('Building Label'), $hasLabeling && $user->can('view create labeling items'), route('show.building.label', ['company'=>$companyId])),
+                                                            'FF&E lable'=>generateMenuItem(__('FF&E Label'), $hasLabeling && $user->can('view create labeling items'), route('show.ffe.label', ['company'=>$companyId])),
+                                                            'create-labeling-form'=>generateMenuItem(__('Create Labeling Form'), $hasLabeling && $user->can('view create labeling items'), route('create.labeling.form', ['company'=>$companyId])),
 
                                                         ]
                                                     ],
