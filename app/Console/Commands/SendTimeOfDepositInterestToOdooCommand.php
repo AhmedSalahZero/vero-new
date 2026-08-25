@@ -28,11 +28,11 @@ class SendTimeOfDepositInterestToOdooCommand extends Command
     public function handle()
     {
 		$timeOfDeposit  = TimeOfDeposit::find(39);
-		$breakDate = $timeOfDeposit->break_date;
-		if(!$breakDate){
+		$actualDepositDate = $timeOfDeposit->deposit_date;
+		if(!$actualDepositDate){
 			throw new Exception('Break Data Not Found');
 		}
-       $timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true,$breakDate);
+		$timeOfDeposit->handleTdOrCdStoreDepositForOdoo(true,$actualDepositDate);
 	   
     }
 }
