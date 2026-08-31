@@ -21,8 +21,9 @@ class ReadOdooInvoices extends Controller
 			$odoo->startImportContracts($startDate,$endDate,$company->id);
 			logger('2');
 			$odoo->startImportInvoices($startDate,$endDate,$company->id);
+					logger('4');
 			}catch(\Exception $e){
-				logger('3');
+				logger('5');
 				session()->put('fail', $e->getMessage());
 			return back();
 		}
