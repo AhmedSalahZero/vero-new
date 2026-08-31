@@ -376,7 +376,9 @@ class OdooService
                     'display_name', // so_number
                     'currency_id',
                     'amount_total',
-                    'project_id'
+                    /**
+                     * * project_id كان بيتسحب و ما بيتقراش في اي مكان
+                     */
                 ]
             ]);
             $salesOrderFormatted = [];
@@ -915,26 +917,40 @@ class OdooService
         
         
     // }
-    protected function getInvoices(string $startDate, string $endDate)
+    /**
+     * * الحقول اللي startImportInvoices بتقراها فعلا من صف الفاتورة ، ولا
+     * * حقل زيادة
+     *
+     * * قبل كده كانت بتتبعت [] ، و [] في اودو معناها "رجعلي كل حاجة" —
+     * * يعني ٢٢٧ حقل للفاتورة الواحدة (ومعاهم حقول تقيلة زي narration و
+     * * message_ids و invoice_outstanding_credits_debits_widget) بدل ١٢
+     *
+     * @var array<int, string>
+     */
+    public const INVOICE_FIELDS = [
+        'id',
+        'name',                                 // invoice_number
+        'move_type',                            // in_invoice / out_invoice
+        'invoice_date',
+        'invoice_date_due',
+        'invoice_origin',                       // so_number / po_number
+        'invoice_currency_rate',                // exchange rate
+        'amount_untaxed_in_currency_signed',
+        'partner_id',
+        'currency_id',
+        'tax_totals',                           // vat + withhold
+        'invoice_payments_widget',              // collected / paid
+    ];
+
+    /**
+     * * $fields بتتبعت من syncDeletedInvoices عشان تطلب الـ id بس — هي
+     * * محتاجة قايمة ارقام مش صفوف كاملة
+     *
+     * @param  array<int, string>|null  $fields
+     */
+    protected function getInvoices(string $startDate, string $endDate, ?array $fields = null)
     {
-        $fields= [
-            // 'partner_id',
-            // 'id',
-            // 'invoice_date',
-            // 'name',
-            // 'move_type',
-            // 'currency_id',
-            // 'amount_residual',
-            // 'amount_untaxed_in_currency_signed',
-            // 'amount_tax',
-            // 'invoice_date_due',
-            // 'date',
-            // 'invoice_currency_rate',//exchange rate
-            // 'invoice_origin' ,// so_number
-            // 'write_date',
-            // 'state',
-            // 'invoice_line_ids' // product ids
-        ];
+        $fields = $fields ?? self::INVOICE_FIELDS;
         $filters = array(array(array('move_type', 'in', [
             'in_invoice',
             'out_invoice'
@@ -977,7 +993,11 @@ class OdooService
         $supplierInvoices  = SupplierInvoice::where('company_id', $companyId)->where('invoice_date', '>=', $startDate)->where('invoice_date', '<=', $endDate)->where('odoo_id', '>', 0)->get();
         
         $deletedIds= [];
-        $odooInvoices = $this->getInvoices($startDate, $endDate);
+        /**
+         * * هنا بنستخدم array_column(...,'id') بس ، فما فيش داعي نسحب صفوف
+         * * كاملة من اودو عشان نرمي كل حقولها
+         */
+        $odooInvoices = $this->getInvoices($startDate, $endDate, ['id']);
         if (!is_array($odooInvoices)) {
 			return;
         }
