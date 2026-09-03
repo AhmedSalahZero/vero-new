@@ -156,7 +156,10 @@ class BalancesController
 					 */
 					$invoiceCurrency = null ;
 					$invoicePartnerId = $downPaymentStdClass->{$clientIdColumnName};
-					$invoicePartnerName = Partner::find($invoicePartnerId)->getName();
+					// optional(): a down payment whose partner row has since been
+					// removed would otherwise call getName() on null and 500 the
+					// whole balances screen.
+					$invoicePartnerName = optional(Partner::find($invoicePartnerId))->getName();
 					$addNewRecord = true;
 				}
 				

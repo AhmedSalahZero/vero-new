@@ -1359,5 +1359,8 @@
     "Currency Can Not Be Changed Because There Are Transactions On This Account":"لا يمكن تغيير العملة لأنه يوجد حركات على هذا الحساب , يجب إقفال الحساب و فتح حساب جديد بالعملة المطلوبة",
     "There Is No Payment Method Line Configured In Odoo For The Account Or Safe Used In This Transaction":"لا يوجد payment method line معرّف في أودو للحساب أو الخزنة المستخدمة في هذه العملية , برجاء ضبطها في أودو ثم حفظ الحساب مرة أخرى",
     "Settlement Account #":"حساب التسوية",
-    "Please Select A Valid Settlement Account":"برجاء اختيار حساب تسوية صحيح"
+    "Please Select A Valid Settlement Account":"برجاء اختيار حساب تسوية صحيح",
+    "Could not reach Odoo. Your record was saved and marked as not sent — it can be sent again once the connection is back.": "تعذّر الاتصال بأودو. تم حفظ السجل ووُسِم بأنه لم يُرسَل — ويمكن إرساله مرة أخرى بمجرد عودة الاتصال.",
+    "Odoo rejected this record. Please contact your administrator.": "رفض أودو هذا السجل. برجاء التواصل مع مسؤول النظام.",
+    "Odoo did not return a record id.": "لم يُرجع أودو رقم سجل."
 }
