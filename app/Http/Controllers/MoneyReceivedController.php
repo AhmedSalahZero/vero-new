@@ -416,7 +416,7 @@ class MoneyReceivedController
         $companyId = $company->id;
         $receivingCurrency = $data['receiving_currency'] ;
         $isDownPayment = $request->get('is_down_payment') && $request->has('sales_orders_amounts');
-        $isDownPaymentFromMoneyReceived = $request->get('unapplied_amount', 0) > 0 && !$request->get('is_down_payment') && $moneyType =='is_customer';
+        $isDownPaymentFromMoneyReceived = MoneyReceived::requestHasInvoiceSettlementWithDownPayment($request);
         $data['money_type'] =  !$isDownPayment ? 'money-received' : 'down-payment';
         $data['money_type'] = $isDownPaymentFromMoneyReceived ? MoneyReceived::INVOICE_SETTLEMENT_WITH_DOWN_PAYMENT : $data['money_type'];
         $data['partner_id'] = $partnerId;

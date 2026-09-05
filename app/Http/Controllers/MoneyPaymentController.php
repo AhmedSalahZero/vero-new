@@ -399,7 +399,7 @@ class MoneyPaymentController
         $data['user_id'] = auth()->user()->id ;
         $data['company_id'] = $company->id ;
         $isDownPayment =  $request->get('is_down_payment') && $request->has('purchases_orders_amounts');
-        $isDownPaymentFromMoneyPayment = $request->get('unapplied_amount', 0) > 0 && !$request->get('is_down_payment') && $moneyType == 'is_supplier'  ;
+        $isDownPaymentFromMoneyPayment = MoneyPayment::requestHasInvoiceSettlementWithDownPayment($request);
         $data['money_type'] =  !$isDownPayment ? 'money-payment' : 'down-payment';
         $data['money_type'] = $isDownPaymentFromMoneyPayment ? MoneyPayment::INVOICE_SETTLEMENT_WITH_DOWN_PAYMENT : $data['money_type'];
         $currency = $data['currency'] ;
