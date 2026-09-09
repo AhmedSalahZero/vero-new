@@ -369,11 +369,17 @@
                                             @endif
                                         </td>
                                         <td class="sub-text-bg text-center">
-                                            @if(!$invoice->$isCollectedOrPaid())
+                                            {{--
+                                             * * الزرار ظاهر دايما ، حتى لو الفاتورة اتسددت —
+                                             * * لأن الخصومات المتسجلة عليها لازم تفضل تتعرض و
+                                             * * تتعدل . اللي مسموح بيه بيتحدد من السيرفر
+                                             * * (UpdateInvoiceDeductionRequest) اللي بيرجع
+                                             * * الخصومات المحفوظة قبل المقارنة ، فإعادة حفظها
+                                             * * بتعدي و الزيادة عليها بتترفض
+                                            --}}
                                             <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#add-new-customer-modal-{{ $invoice->id }}">
                                                 {{ __('Deduct') }}
                                             </button>
-                                            @endif
                                             <div class="modal fade modal-class-js allocate-modal-class" id="add-new-customer-modal-{{ $invoice->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg" role="document">
                                                     <div class="modal-content">

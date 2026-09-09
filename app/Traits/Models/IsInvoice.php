@@ -108,7 +108,7 @@ trait IsInvoice
 	}
 	public function getVatAmountFormatted()
 	{
-		return number_format($this->getVatAmount()) ;
+		return number_format($this->getVatAmount(), 2) ;
 	}
 	public function getStatus()
 	{
@@ -147,7 +147,7 @@ trait IsInvoice
 	}
 	public function getWithholdAmountFormatted()
 	{
-		return number_format($this->getWithholdAmount());
+		return number_format($this->getWithholdAmount(), 2);
 	}
 	public function getTotalWithholdAmount()
 	{
@@ -155,7 +155,7 @@ trait IsInvoice
 	}
 	public function getTotalWithholdAmountFormatted()
 	{
-		return number_format($this->getTotalWithholdAmount());
+		return number_format($this->getTotalWithholdAmount(), 2);
 	}
 	public function getTotalDeduction()
 	{
@@ -163,7 +163,7 @@ trait IsInvoice
 	}
 	public function getTotalDeductionFormatted()
 	{
-		return number_format($this->getTotalDeduction());
+		return number_format($this->getTotalDeduction(), 2);
 	}
 	// public function getTotalCollected()
 	// {
@@ -186,7 +186,7 @@ trait IsInvoice
 	// }
 	public function getTotalCollectedOrPaidFormatted()
 	{
-		return number_format($this->getTotalCollectedOrPaid());
+		return number_format($this->getTotalCollectedOrPaid(), 2);
 	}
 
 	public function getNetInvoiceAmount()
@@ -201,7 +201,7 @@ trait IsInvoice
     }
 	public function getNetInvoiceAmountFormatted()
 	{
-		return number_format($this->getNetInvoiceAmount());
+		return number_format($this->getNetInvoiceAmount(), 2);
 	}
 
     
@@ -437,7 +437,7 @@ trait IsInvoice
 	}
 	public function getInvoiceAmountFormatted():string 
 	{
-		return  number_format($this->getInvoiceAmount()); 
+		return  number_format($this->getInvoiceAmount(), 2); 
 	}
 	public function getContractName()
 	{
