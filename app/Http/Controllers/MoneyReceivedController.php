@@ -1124,6 +1124,21 @@ class MoneyReceivedController
         }
         return back();
     }
+
+    /**
+     * * تفاصيل الفواتير المسوّاة — بتترد كـ JSON و بتتعرض في بوب اب
+     * * للقراءة فقط من صفحة الـ index
+     */
+    public function settlementsInfo(Company $company, MoneyReceived $moneyReceived)
+    {
+        /**
+         * * الـ endpoint دي بتعرض بيانات فواتير ، فبتتقيّد بنفس صلاحية
+         * * العرض بتاعة الشاشة اللي بتتنادى منها
+         */
+        abort_unless(auth()->user()->can('view money received'), 403);
+
+        return response()->json($moneyReceived->getSettlementsInfo());
+    }
     
     
 

@@ -8,13 +8,61 @@ use Illuminate\Support\Facades\Artisan;
 
 class DeletingClass
 {
+    /**
+     * * بيمسح الصفوف واحد واحد و بيعدّي اللي محمي بدل ما يقع
+     *
+     * * فيه موديلات بترفض المسح لو فيه حاجة معتمدة عليها — زي الفاتورة
+     * * اللي نازل عليها تسويات (CannotBeDeletedWhileSettled) . من غير
+     * * المعالجة دي كان اول صف محمي بيرمي استثناء فالعملية بتقف في نصها :
+     * * جزء اتمسح و جزء لا ، و المستخدم يشوف صفحة خطأ من غير ما يعرف السبب
+     *
+     * @return array{deleted: int, blocked: array<int, string>}
+     */
+    private function deleteWhatIsAllowed($rows): array
+    {
+        $deleted = 0;
+        $blocked = [];
+
+        foreach ($rows as $row) {
+            try {
+                $row->delete();
+                $deleted++;
+            } catch (\InvalidArgumentException $e) {
+                $blocked[] = $e->getMessage();
+            }
+        }
+
+        return ['deleted' => $deleted, 'blocked' => $blocked];
+    }
+
+    /**
+     * * بيعرض رسالة واحدة تقول اتمسح كام و اتساب كام و ليه
+     */
+    private function reportDeletionOutcome(array $outcome, string $successMessage): void
+    {
+        if ($outcome['blocked'] === []) {
+            toastr()->success($successMessage);
+
+            return;
+        }
+
+        $message = __(':deleted row(s) deleted. :blocked could not be deleted:', [
+            'deleted' => $outcome['deleted'],
+            'blocked' => count($outcome['blocked']),
+        ]).' '.implode(' | ', array_slice($outcome['blocked'], 0, 5));
+
+        $outcome['deleted'] > 0 ? toastr()->warning($message) : toastr()->error($message);
+    }
+
     public function truncate(Company $company, $model)
     {
         $model_name = 'App\\Models\\' . $model;
         $model_obj = new $model_name();
         $all_model_data = $model_obj->company()->get();
+        $outcome = ['deleted' => 0, 'blocked' => []];
+
         if (count($all_model_data) > 0) {
-            $all_model_data->each->delete();
+            $outcome = $this->deleteWhatIsAllowed($all_model_data);
             if ($model == 'SalesGathering') {
                 Artisan::call('caching:run', [
                     'company_id' => [$company->id]
@@ -22,7 +70,7 @@ class DeletingClass
             }
         }
 
-        toastr()->success('All Rows Were Deleted  Successfully');
+        $this->reportDeletionOutcome($outcome, 'All Rows Were Deleted  Successfully');
 
         return redirect()->back();
     }
@@ -49,18 +97,22 @@ class DeletingClass
         } else {
             $all_model_data = $model_obj->company()->whereIn('id', is_array($request->rows) ? $request->rows : [$request->rows])->get();
         }
+        $outcome = ['deleted' => 0, 'blocked' => []];
+
         if (count($all_model_data) > 0) {
-            $all_model_data->each->delete();
+            $outcome = $this->deleteWhatIsAllowed($all_model_data);
         }
         Artisan::call('caching:run', [
             'company_id' => [$company->id]
         ]);
         if ($request->ajax()) {
             return response()->json([
-                'status' => true
+                'status' => $outcome['blocked'] === [],
+                'deleted' => $outcome['deleted'],
+                'blocked' => $outcome['blocked'],
             ]);
         }
-        toastr()->success('Deleted Selected Rows Successfully');
+        $this->reportDeletionOutcome($outcome, 'Deleted Selected Rows Successfully');
 
         return redirect()->back();
     }

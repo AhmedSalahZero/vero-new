@@ -150,6 +150,9 @@ use App\Models\MoneyReceived;
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
                                             @include('reports._integrated_modal',['model'=>$moneyReceived])
+                                            @if($moneyReceived->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
+                                            @endif
 
                                             @if(auth()->user()->can('update money received'))
                                             @include('reports._review_modal',['model'=>$moneyReceived])
@@ -245,6 +248,9 @@ use App\Models\MoneyReceived;
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
                                             @include('reports._integrated_modal',['model'=>$moneyReceived])
+                                            @if($moneyReceived->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
+                                            @endif
                                             @if(!$moneyReceived->isOpenBalance() )
                                             @if(auth()->user()->can('update money received') )
                                             @include('reports._review_modal',['model'=>$moneyReceived])
@@ -352,6 +358,9 @@ use App\Models\MoneyReceived;
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
                                             @include('reports._integrated_modal',['model'=>$moneyReceived])
+                                            @if($moneyReceived->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
+                                            @endif
 
                                             @if(!$moneyReceived->isOpenBalance() )
                                             @if(auth()->user()->can('update money received') )
@@ -519,6 +528,9 @@ use App\Models\MoneyReceived;
                                     <td>
                                         @include('reports._user_odoo_modal',['model'=>$moneyReceived,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
                                         @include('reports._integrated_modal',['model'=>$moneyReceived])
+                                            @if($moneyReceived->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
+                                            @endif
 
                                         @if($moneyReceived->cheque->isCollected())
                                         <a type="button" class="btn btn-secondary btn-outline-hover-danger btn-icon" title="{{ __('Under Collection') }}" href="{{ route('cheque.send.to.under.collection',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id ]) }}"><i class="fa fa-undo"></i></a>
@@ -581,6 +593,9 @@ use App\Models\MoneyReceived;
                                         <span style="overflow: visible; position: relative; width: 110px">
                                             @include('reports._user_odoo_modal',['model'=>$money,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$money->id])])
                                             @include('reports._integrated_modal',['model'=>$money])
+                                            @if($money->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$money->id])])
+                                            @endif
                                             @if(!$money->isOpenBalance() )
                                             @if(auth()->user()->can('update money received') )
                                             @include('reports._review_modal',['model'=>$money])
@@ -672,6 +687,9 @@ use App\Models\MoneyReceived;
                                             @include('reports._user_comment_modal',['model'=>$moneyReceived])
                                             @include('reports._user_odoo_modal',['model'=>$moneyReceived,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
                                             @include('reports._integrated_modal',['model'=>$moneyReceived])
+                                            @if($moneyReceived->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$moneyReceived->id])])
+                                            @endif
                                             @if(!$moneyReceived->isOpenBalance() )
 
                                             @if(auth()->user()->can('update money received') )
@@ -774,6 +792,9 @@ use App\Models\MoneyReceived;
                                             @include('reports._user_comment_modal',['model'=>$money])
                                             @include('reports._user_odoo_modal',['model'=>$money,'resendUrl'=>route('resend.with.odoo',['company'=>$company->id,'moneyReceived'=>$money->id])])
                                             @include('reports._integrated_modal',['model'=>$money])
+                                            @if($money->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.received.settlements.info',['company'=>$company->id,'moneyReceived'=>$money->id])])
+                                            @endif
                                             @if(!$money->isOpenBalance())
                                             @include('reports._review_modal',['model'=>$money])
                                             @if(auth()->user()->can('update money received') )
@@ -1000,3 +1021,5 @@ use App\Models\MoneyReceived;
 {{-- <script src="{{ url('assets/vendors/custom/datatables/datatables.bundle.js') }}" type="text/javascript"></script> --}}
 {{-- <script src="{{ url('assets/js/demo1/pages/crud/datatables/basic/paginations.js') }}" type="text/javascript"></script> --}}
 @endpush
+
+@include('reports._settlements_info_modal')

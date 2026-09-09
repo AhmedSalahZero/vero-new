@@ -5,11 +5,13 @@ use App\Models\Branch;
 use App\Models\CashExpense;
 use App\Models\Company;
 use App\Models\Currency;
+use App\Models\CustomerInvoice;
 use App\Models\FinancialInstitution;
 use App\Models\ForeignExchangeRate;
 use App\Models\MoneyPayment;
 use App\Models\MoneyReceived;
 use App\Models\Partner;
+use App\Models\SupplierInvoice;
 use App\Services\Api\CashExpenseOdooService;
 use App\Services\Api\OdooPayment;
 use App\Services\Api\OdooSync;
@@ -71,9 +73,38 @@ trait IsMoney
         $totalWithholdAmount= 0 ;
 		$storedSettlements = [];
 		$shouldSyncWithOdoo = $company->hasOdooIntegrationCredentials() && $syncWithOdoo ;
+
+        /**
+         * * التسوية معناها "المبلغ ده اتسدد من الفاتورة الفلانية" — من غير
+         * * فاتورة موجودة الصف ما بيعنيش حاجة
+         *
+         * * قبل كده الشرط الوحيد كان ان المبلغ اكبر من صفر ، فأي صف جاي من
+         * * الفورم من غير invoice_id كان بيتخزن و الـ invoice_id يفضل NULL ،
+         * * و بوب اب تفاصيل التسوية كان بيعرضه "N/A ... 0.00" و جنبه مبلغ
+         * * تسوية حقيقي — رقم مالوش معنى
+         *
+         * * راجعنا كل المسارات اللي بتنادي الدالة دي : كلها بتبعت فاتورة
+         * * حقيقية (فورم الماني ريسيد/الماني بايمنت ، فورم تسوية الدفعة
+         * * المقدمة ، و الكوماند) ما عدا مسار النقل عند التعديل اللي بينقل
+         * * الصفوف القديمة زي ما هي — و دي كلها is_from_down_payment = 1
+         * * و مفيش فيها ولا صف من غير فاتورة . يبقى مفيش مسار شرعي بيبعت
+         * * تسوية من غير فاتورة ، فالاستثناء هنا معناه باج مش حالة عادية
+         */
+        $existingInvoiceIds = $this->existingInvoiceIdsForSettlements($settlements);
+
         foreach ($settlements as $settlementArr) {
             $settlementArr['settlement_amount'] = isset($settlementArr['settlement_amount']) ?  unformat_number($settlementArr['settlement_amount']) :  0 ;
             if ($settlementArr['settlement_amount'] > 0) {
+                $invoiceId = $settlementArr['invoice_id'] ?? null;
+
+                if (! $invoiceId || ! isset($existingInvoiceIds[$invoiceId])) {
+                    throw new \RuntimeException(
+                        'Refusing to store a settlement of '.$settlementArr['settlement_amount']
+                        .' on '.class_basename($this).'#'.($this->id ?? 'new')
+                        .': invoice_id '.var_export($invoiceId, true).' does not exist.'
+                    );
+                }
+
                 $settlementArr['company_id'] = $company->id ;
                 $settlementArr['partner_id'] = $partnerId;
                 $settlementArr['is_from_down_payment'] = $isFromDownPayment ;
@@ -100,6 +131,28 @@ trait IsMoney
 			'settlements'=>$storedSettlements
 			] ;
     }
+    /**
+     * * بيرجّع الفواتير الموجودة فعلا من اللي التسويات بتشاور عليها ، في
+     * * استعلام واحد بدل استعلام لكل صف
+     *
+     * * الماني ريسيد بيتسوّى بفواتير عملاء و الماني بايمنت بفواتير موردين
+     *
+     * @param  array<int, array<string, mixed>>  $settlements
+     * @return array<int|string, int>  المفاتيح هي الـ ids الموجودة
+     */
+    protected function existingInvoiceIdsForSettlements(array $settlements): array
+    {
+        $ids = array_values(array_unique(array_filter(array_column($settlements, 'invoice_id'))));
+
+        if ($ids === []) {
+            return [];
+        }
+
+        $invoiceClass = $this instanceof MoneyReceived ? CustomerInvoice::class : SupplierInvoice::class;
+
+        return array_flip($invoiceClass::whereIn('id', $ids)->pluck('id')->all());
+    }
+
     public function getTotalSettlementAmount()
     {
         return $this->settlements->sum('settlement_amount');
@@ -495,6 +548,196 @@ trait IsMoney
         }
     }
 
+    /**
+     * * تفاصيل الفواتير المسوّاة على الحركة دي — للعرض في بوب اب للقراءة
+     * * فقط في صفحة الـ index
+     *
+     * * قبل كده مكانش فيه اي طريقة يشوف بيها المستخدم الفواتير اللي
+     * * اتسوّت غير انه يفتح شاشة التعديل
+     *
+     * @return array<string, mixed>
+     */
+    public function getSettlementsInfo(): array
+    {
+        /**
+         * * بنحترم العلاقة لو كانت متحمّلة قبل كده (eager loading في
+         * * صفحة الـ index) و ما نعملش استعلام تاني من غير داعي
+         */
+        $settlements = $this->relationLoaded('settlements')
+            ? $this->settlements
+            : $this->settlements()->with('invoice')->get();
+
+        $rows = $settlements->map(function ($settlement) {
+            $invoice = $settlement->invoice;
+
+            return [
+                /**
+                 * * الصف اللي فاتورته مش موجودة كان بيبان "N/A ... 0.00" و
+                 * * جنبه مبلغ تسوية حقيقي ، فالمستخدم يفتكر ان فيه فاتورة
+                 * * بصفر — بنقول السبب صراحةً بدل ما نسيبه يخمّن
+                 *
+                 * * صفوف قديمة اتخزنت من غير فاتورة (المسار ده اتقفل دلوقتي
+                 * * في storeNewSettlement) و صفوف فاتورتها اتمسحت بعدين
+                 */
+                'has_invoice' => (bool) $invoice,
+                'invoice_number' => $invoice
+                    ? $invoice->getInvoiceNumber()
+                    : ($settlement->invoice_id ? __('Invoice Not Found') : __('No Invoice Linked')),
+                'invoice_date' => $invoice ? $invoice->getInvoiceDateFormatted() : '—',
+                'due_date' => $invoice ? $invoice->getInvoiceDueDateFormatted() : '—',
+                /**
+                 * * الصافي بعد الضريبة (المبلغ + الضريبة − الخصم) مش المبلغ
+                 * * الخام قبل الضريبة : ده اللي التسوية بتتحسب عليه فعلا
+                 * * (net_balance) و ده اللي شاشة الحركة نفسها بتعرضه تحت
+                 * * نفس العنوان "Invoice Amount" — فكان نفس العنوان بيدي
+                 * * رقمين مختلفين ، و مبلغ التسوية كان ممكن يبان اكبر من
+                 * * "مبلغ الفاتورة" المعروض جنبه
+                 */
+                'invoice_amount' => $invoice
+                    ? number_format((float) $invoice->getNetInvoiceAmount(), 2)
+                    : '—',
+                'settlement_amount' => number_format((float) $settlement->settlement_amount, 2),
+                'withhold_amount' => number_format((float) $settlement->withhold_amount, 2),
+                /**
+                 * * التسوية اللي جاية من دفعة مقدمة اتعملت قبل كده مش من
+                 * * فلوس الحركة دي نفسها — بنميّزها عشان الارقام تبان مفهومة
+                 */
+                'is_from_down_payment' => (bool) $settlement->is_from_down_payment,
+            ];
+        })->all();
+
+        $downPaymentAmount = null;
+
+        if ($this->isInvoiceSettlementWithDownPayment()) {
+            $downPaymentAmount = number_format((float) $this->downPaymentSettlements->sum('down_payment_amount'), 2);
+        }
+
+        return [
+            'rows' => $rows,
+            'currency' => $this->getCurrency(),
+            'total_amount' => number_format((float) $this->getAmount(), 2),
+            'total_settlement' => number_format((float) $settlements->sum('settlement_amount'), 2),
+            'total_withhold' => number_format((float) $settlements->sum('withhold_amount'), 2),
+            'down_payment_amount' => $downPaymentAmount,
+            'down_payment' => $this->getDownPaymentInfo(),
+        ];
+    }
+
+    /**
+     * * هل بوب اب تفاصيل التسوية عنده حاجة يعرضها أصلا ؟
+     *
+     * * زرار الـ i كان بيظهر على كل صف حتى لما البوب اب يفتح فاضي — مفيش
+     * * فواتير مسوّاة و لا دفعة مقدمة — فالمستخدم يدوس على فاضي
+     *
+     * * بيحترم العلاقات المحمّلة مسبقًا (الـ index بيعملها loadMissing)
+     * * عشان ما يعملش استعلام لكل صف
+     */
+    public function hasSettlementDetailsToShow(): bool
+    {
+        $settlements = $this->relationLoaded('settlements')
+            ? $this->settlements
+            : $this->settlements()->get();
+
+        if ($settlements->isNotEmpty()) {
+            return true;
+        }
+
+        return $this->getDownPaymentInfo() !== null;
+    }
+
+    /**
+     * * وصف الدفعة المقدمة نفسها : نوعها (عام / على عقد) و العقد لو موجود
+     *
+     * * قبل كده البوب اب مكانش بيقول حاجة عن الدفعة المقدمة غير مبلغها ، و
+     * * الدفعة المقدمة الصافية (من غير تسوية فواتير) مكانش بيبان لها اي
+     * * تفاصيل خالص — بس "مفيش فواتير مسوّاة"
+     *
+     * * بيشتغل في الحالتين :
+     * *   - دفعة مقدمة صافية : النوع متخزن في العمود down_payment_type
+     * *   - تسوية فواتير مع دفعة مقدمة : العمود ده بيفضل NULL دايمًا في
+     * *     الداتا الحقيقية ، فبنستنتج النوع من صفوف التوزيع نفسها
+     * *     (فيها contract_id ولا لأ)
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getDownPaymentInfo(): ?array
+    {
+        $isDownPayment = $this->isDownPayment();
+
+        if (! $isDownPayment && ! $this->isInvoiceSettlementWithDownPayment()) {
+            return null;
+        }
+
+        $allocations = $this->downPaymentSettlements;
+
+        $allocationRows = $allocations->map(function ($allocation) {
+            $contract = $allocation->contract;
+
+            return [
+                'contract_name' => $contract?->getName(),
+                'contract_code' => $contract?->getCode(),
+                'amount' => number_format((float) $allocation->down_payment_amount, 2),
+            ];
+        })->all();
+
+        /**
+         * * العقد المربوط بالحركة نفسها له الأولوية ، و لو مش موجود بنرجع
+         * * لعقد صف التوزيع
+         */
+        $contract = $this->contract;
+        $contractName = $contract?->getName() ?: ($allocationRows[0]['contract_name'] ?? null);
+        $contractCode = $contract?->getCode() ?: ($allocationRows[0]['contract_code'] ?? null);
+
+        /**
+         * * النوع المتخزن هو المرجع لو موجود ، لأنه اللي المستخدم اختاره
+         * * فعلا في الشاشة — و بنستنتج بس لما يكون فاضي
+         */
+        $storedType = $this->getDownPaymentType();
+        $type = $storedType ?: ($contractName ? self::DOWN_PAYMENT_OVER_CONTRACT : self::DOWN_PAYMENT_GENERAL);
+
+        $labels = [
+            self::DOWN_PAYMENT_OVER_CONTRACT => __('Over Contract'),
+            self::DOWN_PAYMENT_GENERAL => __('General'),
+            self::SETTLEMENT_OF_OPENING_BALANCE => __('Settlement Of Opening Balance'),
+        ];
+
+        /**
+         * * الدفعة المقدمة الصافية ملهاش صف توزيع في كل الحالات ، فبنرجع
+         * * لمبلغ الحركة نفسها عشان ما نعرضش صفر
+         */
+        $amount = $allocations->count()
+            ? (float) $allocations->sum('down_payment_amount')
+            : ($isDownPayment ? (float) $this->getAmount() : 0.0);
+
+        /**
+         * * مفيش دفعة مقدمة نوصفها أصلا : لا صفوف توزيع و لا مبلغ
+         *
+         * * في الداتا حركات كتير (عهدة لموظف ، تمويل شركة تابعة ، ضرائب ...)
+         * * الـ money_type بتاعها اتكتب invoice-settlement-with-down-payment
+         * * بالغلط من كود قديم — الشرط الحالي في
+         * * requestHasInvoiceSettlementWithDownPayment بيمنع ده دلوقتي لأنه
+         * * بيشترط ان الشريك مورد ، بس الصفوف القديمة فضلت زي ما هي
+         *
+         * * من غير الشرط ده البوب اب كان بيقول "دفعة مقدمة : عام ٠٫٠٠"
+         * * لحركة ملهاش دفعة مقدمة خالص
+         */
+        if ($amount <= 0) {
+            return null;
+        }
+
+        return [
+            'type' => $type,
+            'type_label' => $labels[$type] ?? __('General'),
+            'is_over_contract' => $type === self::DOWN_PAYMENT_OVER_CONTRACT,
+            'is_with_invoice_settlement' => ! $isDownPayment,
+            'contract_name' => $contractName,
+            'contract_code' => $contractCode,
+            'amount' => number_format($amount, 2),
+            'allocations' => $allocationRows,
+        ];
+    }
+
+
     public function handleOdooDownPayments($OdooPaymentService, $hasOdooIntegration)
     {
         
@@ -590,6 +833,31 @@ trait IsMoney
 	public function getTransactionType()
     {
         return $this->transaction_type;
+    }
+
+    /**
+     * * نوع العملية بشكل مقروء : refund-custody تبقى "رد عهدة"
+     *
+     * * عمود الـ Type في القوائم كان بيقول "استلام من [ موظف ]" بس ، من
+     * * غير ما يقول استلام ايه — عهدة راجعة ولا سداد قرض ، و دول حاجتين
+     * * مختلفين تمامًا . النوع متخزن فعلا في transaction_type و كان
+     * * متسيب من غير عرض
+     */
+    public function getTransactionTypeFormatted(): string
+    {
+        $transactionType = $this->getTransactionType();
+
+        return $transactionType ? __(camelizeWithSpace($transactionType)) : '';
+    }
+
+    /**
+     * * بيلزّق نوع العملية جنب الوصف لو موجود : "[ رد عهدة ]"
+     */
+    protected function withTransactionType(string $label): string
+    {
+        $transactionType = $this->getTransactionTypeFormatted();
+
+        return $transactionType === '' ? $label : $label.' [ '.$transactionType.' ]';
     }
     // public function markOpeningReceivedChequeAsPaidInOdoo()
     // {

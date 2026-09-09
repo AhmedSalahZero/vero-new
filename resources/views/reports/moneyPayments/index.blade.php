@@ -170,6 +170,9 @@ $banks = [];
                                             @include('reports._user_comment_modal',['model'=>$moneyPayment])
                                             @include('reports._user_odoo_modal',['model'=>$moneyPayment])
                                             @include('reports._integrated_modal',['model'=>$moneyPayment])
+                                            @if($moneyPayment->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.payment.settlements.info',['company'=>$company->id,'moneyPayment'=>$moneyPayment->id])])
+                                            @endif
 
 
                                             @if(auth()->user()->can('update supplier payment'))
@@ -287,6 +290,9 @@ $banks = [];
                                             @include('reports._user_comment_modal',['model'=>$money])
                                             @include('reports._user_odoo_modal',['model'=>$money])
                                             @include('reports._integrated_modal',['model'=>$money])
+                                            @if($money->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.payment.settlements.info',['company'=>$company->id,'moneyPayment'=>$money->id])])
+                                            @endif
                                             @if(!$money->isOpenBalance())
                                             @if(auth()->user()->can('update supplier payment'))
                                             @include('reports._review_modal',['model'=>$money])
@@ -377,6 +383,9 @@ $banks = [];
                                             @include('reports._user_comment_modal',['model'=>$moneyPayment])
                                             @include('reports._user_odoo_modal',['model'=>$moneyPayment])
                                             @include('reports._integrated_modal',['model'=>$moneyPayment])
+                                            @if($moneyPayment->hasSettlementDetailsToShow())
+                                            @include('reports._settlements_info_button',['url'=>route('money.payment.settlements.info',['company'=>$company->id,'moneyPayment'=>$moneyPayment->id])])
+                                            @endif
 
                                             @if(!$moneyPayment->isOpenBalance())
                                             @if(auth()->user()->can('update supplier payment'))
@@ -602,3 +611,5 @@ $(document).on('show.bs.modal', '.editable-opening-balance-cheque', function() {
 {{-- <script src="{{ url('assets/vendors/custom/datatables/datatables.bundle.js') }}" type="text/javascript"></script> --}}
 {{-- <script src="{{ url('assets/js/demo1/pages/crud/datatables/basic/paginations.js') }}" type="text/javascript"></script> --}}
 @endpush
+
+@include('reports._settlements_info_modal')

@@ -889,4 +889,19 @@ class MoneyPaymentController
 		return redirect()->back()->with('success',__('Done'));
 	
 	}
+
+    /**
+     * * تفاصيل الفواتير المسوّاة — بتترد كـ JSON و بتتعرض في بوب اب
+     * * للقراءة فقط من صفحة الـ index
+     */
+    public function settlementsInfo(Company $company, MoneyPayment $moneyPayment)
+    {
+        /**
+         * * الـ endpoint دي بتعرض بيانات فواتير ، فبتتقيّد بنفس صلاحية
+         * * العرض بتاعة الشاشة اللي بتتنادى منها
+         */
+        abort_unless(auth()->user()->can('view supplier payment'), 403);
+
+        return response()->json($moneyPayment->getSettlementsInfo());
+    }
 }
