@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Statements\BankStatementExport;
 use App\Models\AccountType;
 use App\Models\CleanOverdraft;
 use App\Models\Company;
@@ -23,6 +24,7 @@ use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -46,6 +48,56 @@ class BankStatementController
     }
 
     public function result(Company $company, Request $request)
+    {
+        $built = $this->buildStatementRows($company, $request);
+
+        if ($built === null) {
+            return redirect()->back()->with('fail', __('No Data Found'));
+        }
+
+        return view('bank_statement_result', array_merge($built['meta'], [
+            'results' => $this->paginate($built['results'], 50),
+        ]));
+    }
+
+    /**
+     * * تصدير كل الصفوف — مش الصفحة المعروضة بس
+     *
+     * * أزرار التصدير الموجودة في الشاشة بتاعة DataTables ، و الجدول
+     * * مقسّم صفحات من السيرفر (50 صف) ، فهي بتصدّر اللي على الشاشة بس.
+     * * الزرار ده بيعيد نفس الاستعلام من غير تقسيم و بيطلّع الملف كامل
+     */
+    public function exportAll(Company $company, Request $request)
+    {
+        $built = $this->buildStatementRows($company, $request);
+
+        if ($built === null) {
+            return redirect()->back()->with('fail', __('No Data Found'));
+        }
+
+        $meta = $built['meta'];
+        $headings = $this->exportHeadings($meta);
+        $rows = $this->exportRows($built['results'], $meta);
+
+        $fileName = implode(' - ', array_filter([
+            __('Bank Statement'),
+            $meta['financialInstitutionName'],
+            $meta['accountNumber'],
+            $meta['currency'],
+        ])).'.xlsx';
+
+        return (new BankStatementExport($headings, $rows))->download($fileName);
+    }
+
+    /**
+     * * بناء صفوف الكشف من غير أي تقسيم صفحات
+     *
+     * * العرض و التصدير الاتنين بيستخدموها ، فمستحيل يختلفوا في الترشيح
+     * * أو الترتيب
+     *
+     * @return array{results: \Illuminate\Support\Collection, meta: array<string, mixed>}|null
+     */
+    private function buildStatementRows(Company $company, Request $request): ?array
     {
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
@@ -148,22 +200,98 @@ class BankStatementController
                  ->get();
         }
         if (!count($results)) {
-            return redirect()->back()->with('fail', __('No Data Found'));
+            return null;
         }
-        $results = $this->paginate($results, 50);
-        return view('bank_statement_result', [
-            'results' => $results,
-            'currency' => $currencyName,
-            'isCurrentAccount'=>$isCurrentAccount,
-            'financialInstitutionName'=>$financialInstitutionName,
-            'accountTypeName'=>$accountTypeName,
-            'accountNumber'=>$accountNumber,
-            'isAgainstCommercialPaper'=>$accountType->isOverdraftAgainstCommercialPaperAccount(),
-            'isAgainstAssignmentOfContract'=>$accountType->isOverdraftAgainstAssignmentOfContractAccount(),
-            'statementModelName'=>$statementModelName
-        ]);
+
+        return [
+            'results' => collect($results),
+            'meta' => [
+                'currency' => $currencyName,
+                'isCurrentAccount'=>$isCurrentAccount,
+                'financialInstitutionName'=>$financialInstitutionName,
+                'accountTypeName'=>$accountTypeName,
+                'accountNumber'=>$accountNumber,
+                'isAgainstCommercialPaper'=>$accountType->isOverdraftAgainstCommercialPaperAccount(),
+                'isAgainstAssignmentOfContract'=>$accountType->isOverdraftAgainstAssignmentOfContractAccount(),
+                'statementModelName'=>$statementModelName
+            ],
+        ];
     }
     
+    /**
+     * * نفس أعمدة الشاشة بالترتيب — من غير عمود الإجراءات (مالوش معنى في
+     * * ملف) و من غير الترقيم التسلسلي (اكسل بيرقّم لوحده)
+     *
+     * @param  array<string, mixed>  $meta
+     * @return array<int, string>
+     */
+    private function exportHeadings(array $meta): array
+    {
+        $headings = [__('Date')];
+
+        if (! $meta['isCurrentAccount']) {
+            $headings[] = __('Limit');
+
+            if ($meta['isAgainstCommercialPaper'] || $meta['isAgainstAssignmentOfContract']) {
+                $headings[] = __('Actual Limit');
+            }
+        }
+
+        $headings[] = __('Beginning Balance');
+        $headings[] = __('Debit');
+        $headings[] = __('Credit');
+        $headings[] = __('End Balance');
+
+        if (! $meta['isCurrentAccount']) {
+            $headings[] = __('Room');
+            $headings[] = __('Calculated Interest');
+        }
+
+        $headings[] = __('Reviewed');
+        $headings[] = __('Comment');
+
+        return $headings;
+    }
+
+    /**
+     * * بنبني القيم بنفس التعبيرات اللي في الشاشة بالظبط عشان الملف
+     * * يطابق اللي المستخدم شايفه
+     *
+     * @param  array<string, mixed>  $meta
+     * @return array<int, array<int, mixed>>
+     */
+    private function exportRows(Collection $results, array $meta): array
+    {
+        $lang = app()->getLocale();
+
+        return $results->map(function ($row) use ($meta, $lang) {
+            $cells = [Carbon::make($row->date)->format('d-m-Y')];
+
+            if (! $meta['isCurrentAccount']) {
+                $cells[] = (float) ($row->limit ?? 0);
+
+                if ($meta['isAgainstCommercialPaper'] || $meta['isAgainstAssignmentOfContract']) {
+                    $cells[] = (float) ($row->statement_limit ?? 0);
+                }
+            }
+
+            $cells[] = (float) ($row->beginning_balance ?? 0);
+            $cells[] = (float) ($row->debit ?? 0);
+            $cells[] = (float) ($row->credit ?? 0);
+            $cells[] = (float) ($row->end_balance ?? 0);
+
+            if (! $meta['isCurrentAccount']) {
+                $cells[] = (float) ($row->room ?? 0);
+                $cells[] = (float) ($row->interest_amount ?? 0);
+            }
+
+            $cells[] = getReviewedText(getBankStatementReviewed($row));
+            $cells[] = ($row->{'comment_'.$lang} ?? null) ?: getBankStatementComment($row);
+
+            return $cells;
+        })->all();
+    }
+
     public function paginate(\Illuminate\Support\Collection $results, $pageSize)
     {
         $page = Paginator::resolveCurrentPage('page');

@@ -285,14 +285,26 @@
 
 
                 <div class="table-custom-container position-relative">
-                    @if(!$isCurrentAccount)
+                    {{--
+                     * * أزرار DataTables بتصدّر اللي على الشاشة بس ، و الجدول
+                     * * مقسّم صفحات من السيرفر (50 صف) — فالزرار ده بيروح
+                     * * للسيرفر بنفس الفلتر و بيرجّع كل الصفوف في ملف واحد
+                    --}}
                     <div class="d-flex z-index-6" style="justify-content:right">
-                        <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id ]) }}" class="btn active-style btn-icon-sm align-self-center">
+                        <a href="{{ route('export.bank.statement', array_merge(request()->except(['page','_token']), ['company'=>$company->id])) }}"
+                           class="btn active-style btn-icon-sm align-self-center"
+                           title="{{ __('Export All Pages') }}">
+                            <i class="fas fa-file-excel"></i>
+                            {{ __('Export All') }}
+                        </a>
+
+                        @if(!$isCurrentAccount)
+                        <a href="{{ route('view.withdrawals.settlement.report',['company'=>$company->id ]) }}" class="btn active-style btn-icon-sm align-self-center ml-2">
                             <i class="fas fa-book"></i>
                             {{ __('Withdrawals Settlement Report') }}
                         </a>
+                        @endif
                     </div>
-                    @endif
 
                     <div>
 

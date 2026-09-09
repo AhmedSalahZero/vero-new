@@ -1,4 +1,9 @@
 {
+    "Calculated Interest": "الفائدة المحتسبة",
+    "Bank Statement": "كشف الحساب البنكي",
+    "Export All Pages": "تصدير كل الصفحات",
+    "Export All": "تصدير الكل",
+    "Transaction Date Must Be Greater Than Or Equal Account Opening Balance Date": "يجب أن يكون تاريخ الحركة في تاريخ الرصيد الافتتاحي للحساب أو بعده",
     "Refund Custody": "رد عهدة",
     "Pay Loan": "سداد قرض",
     "Funding From": "تمويل من",

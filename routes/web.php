@@ -839,6 +839,11 @@ Route::middleware([])->group(function () {
                     
                     Route::get('show-bank-statement', 'BankStatementController@index')->name('view.bank.statement');
                     Route::get('bank-statement', 'BankStatementController@result')->name('result.bank.statement');
+                    /**
+                     * * تصدير الكشف كامل — الجدول مقسّم صفحات من السيرفر فأزرار
+                     * * DataTables بتصدّر الصفحة المعروضة بس
+                     */
+                    Route::get('bank-statement-export', 'BankStatementController@exportAll')->name('export.bank.statement');
                     
                     Route::post('update-commission-fees', 'BankStatementController@updateCommissionFees')->name('update.commission.fees');
                     Route::post('update-bank-statement-row-fees', 'BankStatementController@updateBankStatementRow')->name('update.bank.statement.debit.or.credit');

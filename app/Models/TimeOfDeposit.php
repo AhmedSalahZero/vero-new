@@ -397,7 +397,6 @@ class TimeOfDeposit extends Model implements IHasDebitCurrentAccountStatement
     {
         return $this->getEndDate();
     }
-   
     public function isExpired():bool
     {
         return Carbon::make($this->getEndDate())->lessThanOrEqualTo(now());
@@ -417,7 +416,6 @@ class TimeOfDeposit extends Model implements IHasDebitCurrentAccountStatement
         $financialInstitution = $this->financialInstitution;
         // $accountType = AccountType::where('slug',AccountType::CURRENT_ACCOUNT)->first() ;
         $statementDate = $expiryDate ;
-        
         $accountNumber= $this->getMaturityAmountAddedToAccountNumber() ;
         $financialInstitutionId = $financialInstitution->id ;
         $interestAmount = $this->calculateInterestAmount($expiryDate, $renewalDate, $newInterestRate);
@@ -464,9 +462,6 @@ class TimeOfDeposit extends Model implements IHasDebitCurrentAccountStatement
         //    ->limit(1)
         //    ->
            ->get();
-        
-    
-         
         $totalCashInFlowKey = __('Total Cash Inflow');
         $subType = __('Time Of Deposits');
         foreach ($rows as $row) {
