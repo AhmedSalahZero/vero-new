@@ -342,7 +342,11 @@ class TimeOfDepositsController
 		/**
 		 * !!!!
 		 */
-		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($timeOfDeposit->currentAccountBankStatements->where('type','!=',CurrentAccountBankStatement::DEDUCTED_FOR_CURRENT_ACCOUNT));
+		/**
+		 * * الفوايد الدورية و التجديد و الخصم الأصلي بيفضلوا — يتحذف بس
+		 * * اللي عملية الاستحقاق/الكسر عملته
+		 */
+		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($timeOfDeposit->statementRowsFromMaturityOrBreak());
 		if($breakInterestStatement){
 			$timeOfDeposit->reverseOdooDeposit($breakInterestStatement);
 		}
@@ -452,7 +456,11 @@ class TimeOfDepositsController
 		
 		$breakInterestStatement = $timeOfDeposit->currentAccountBankStatements->where('is_break_interest',1)->first();
 		
-		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($timeOfDeposit->currentAccountBankStatements->where('type','!=',CurrentAccountBankStatement::DEDUCTED_FOR_CURRENT_ACCOUNT));
+		/**
+		 * * الفوايد الدورية و التجديد و الخصم الأصلي بيفضلوا — يتحذف بس
+		 * * اللي عملية الاستحقاق/الكسر عملته
+		 */
+		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($timeOfDeposit->statementRowsFromMaturityOrBreak());
 		if($breakInterestStatement){
 			$timeOfDeposit->reverseOdooDeposit($breakInterestStatement);
 		}
@@ -473,9 +481,13 @@ class TimeOfDepositsController
 		
 		
 		
-		 CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($timeOfDeposit->currentAccountBankStatements);
-		 
-		 
+		/**
+		 * * كان فيه هنا حذف تاني من غير أي فلتر ، و لأن العلاقة متخزنة في
+		 * * الذاكرة كان بيشتغل على نفس النسخة اللي لسه فيها الخصم الأصلي —
+		 * * فبيحذفه و يلغي حماية السطر اللي فوق . الفلوس لسه في الوديعة
+		 * * (رجعت running) فالخصم لازم يفضل ، و إلا الحساب يزيد بمبلغ
+		 * * الوديعة بالغلط
+		 */
 		return redirect()->route('view.time.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id ,'active'=>$type])->with('success',__('Time Of Deposit Has Been Marked As Matured'));
 	}
 }

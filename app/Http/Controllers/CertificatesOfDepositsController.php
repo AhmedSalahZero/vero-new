@@ -350,7 +350,11 @@ class CertificatesOfDepositsController
 		 * * هنشيل قيم ال
 		 * * current account bank statement
 		 */
-		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($certificatesOfDeposit->currentAccountBankStatements->where('type','!=',CurrentAccountBankStatement::DEDUCTED_FOR_CURRENT_ACCOUNT));
+		/**
+		 * * الفوايد الدورية و التجديد و الخصم الأصلي بيفضلوا — يتحذف بس
+		 * * اللي عملية الاستحقاق/الكسر عملته
+		 */
+		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($certificatesOfDeposit->statementRowsFromMaturityOrBreak());
 		return redirect()->route('view.certificates.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id ,'active'=>$certificateType])->with('success',__('Certificate Has Been Marked As Matured'));
 	}
 	
@@ -440,7 +444,12 @@ class CertificatesOfDepositsController
 		 * * current account bank statement
 		 */
 		
-		 CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($certificatesOfDeposit->currentAccountBankStatements);
+		/**
+		 * * كان بيحذف كل صفوف الشهادة من غير أي فلتر — حتى الخصم الأصلي .
+		 * * الفلوس لسه في الشهادة (رجعت running) فالخصم لازم يفضل ، و الفوايد
+		 * * الدورية و التجديد أحداث مستقلة مالهاش علاقة بالكسر
+		 */
+		CurrentAccountBankStatement::deleteButTriggerChangeOnLastElement($certificatesOfDeposit->statementRowsFromMaturityOrBreak());
 		 
 		 
 		return redirect()->route('view.certificates.of.deposit',['company'=>$company->id,'financialInstitution'=>$financialInstitution->id ,'active'=>$certificateType])->with('success',__('Certificate Has Been Marked As Matured'));
