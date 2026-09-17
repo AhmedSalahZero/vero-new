@@ -77,6 +77,22 @@ class SuccessFlashSurvivesRedirectTest extends TestCase
     }
 
     /**
+     * * الباكدج بيحقن ميدلويره في مجموعة web من غير ما تكون مكتوبة في
+     * * app/Http/Kernel.php. مع flash_bag => false بيبطّل يحقنها خالص —
+     * * فوجودها في المجموعة معناه إن الجسر رجع اشتغل و بيخطف المفاتيح
+     */
+    public function test_the_flasher_session_bridge_is_not_wired_into_the_web_group(): void
+    {
+        $group = app('router')->getMiddlewareGroups()['web'] ?? [];
+
+        $this->assertNotContains(
+            \Flasher\Laravel\Middleware\SessionMiddleware::class,
+            $group,
+            'الميدلوير دي بتعمل forget لـ session(\'success\') قبل ما أي صفحة تشوفه'
+        );
+    }
+
+    /**
      * * الليـاوت هي اللي بتعرض الرسالة فعلا — لو المفتاح اتغير هناك
      * * الرسالة هتضيع تاني من غير ما حد ياخد باله
      */

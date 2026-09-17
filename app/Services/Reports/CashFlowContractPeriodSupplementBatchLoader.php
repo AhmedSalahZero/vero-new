@@ -199,35 +199,24 @@ class CashFlowContractPeriodSupplementBatchLoader
             self::applyLgFeeRow($result, $row, $lgsTypes, $mainType, $subTypeFees, $totalCashInFlowKey, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, false);
         }
 
-        $coverSumQuery = DB::table('letter_of_guarantee_cash_cover_statements')
-            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
-            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId);
-        $coverSumQuery = LgCashCoverEffectiveDate::joinTo($coverSumQuery);
-        $effectiveDateSql = LgCashCoverEffectiveDate::sql();
-        $coverSumRows = $coverSumQuery
-            ->selectRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql.' as movement_date, sum(debit) as total_amount')
-            ->whereBetween(DB::raw($effectiveDateSql), [$periodStart, $periodEnd])
-            ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
-            ->whereIn('letter_of_guarantee_issuances.contract_id', $contractIds)
-            ->groupByRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql)
-            ->get();
+        /**
+         * * صف الكاش كفر كان فيه باجين متراكبين:
+         * *
+         * *   ١) كان بيقرا عمود debit — و ده مبلغ الإصدار ، يعني فلوس
+         * *      بتتحجز و تخرج — و بيحطه في صف فلوس داخلة و يضيفه لـ
+         * *      Total Cash Inflow. عقد عليه خطاب شغال (اتحجز ٤١٬١١٧٫٧٠
+         * *      و مرجعش منه حاجة) كان بيعرض الرقم ده كإيراد.
+         * *
+         * *   ٢) كان فيه استعلامين على نفس الداتا — واحد مجمّع و واحد
+         * *      تفصيلي — و الاتنين بيضيفوا لنفس الصف ، فالرقم كان
+         * *      بيتضاعف. قِسناها: ٤١٬١١٧٫٧٠ كانت بتطلع ٨٢٬٢٣٥٫٤٠.
+         * *
+         * * دلوقتي نداء واحد لنفس الخدمة اللي تقرير العقد و تقرير
+         * * الشركة بيستخدموها ، فالتلاتة ما يقدروش يختلفوا.
+         */
+        $coverRows = LgCashCoverRefunds::between($companyId, $periodStart, $periodEnd, $contractIds);
 
-        foreach ($coverSumRows as $row) {
-            self::applyLgFeeRow($result, $row, $lgsTypes, $mainType, $subTypeCover, $totalCashInFlowKey, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, true);
-        }
-
-        $coverDetailQuery = DB::table('letter_of_guarantee_cash_cover_statements')
-            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
-            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId);
-        $coverDetailQuery = LgCashCoverEffectiveDate::joinTo($coverDetailQuery);
-        $coverDetailRows = $coverDetailQuery
-            ->selectRaw('letter_of_guarantee_issuances.lg_type, letter_of_guarantee_cash_cover_statements.currency, '.$effectiveDateSql.' as movement_date, letter_of_guarantee_cash_cover_statements.debit as total_amount')
-            ->whereBetween(DB::raw($effectiveDateSql), [$periodStart, $periodEnd])
-            ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
-            ->whereIn('letter_of_guarantee_issuances.contract_id', $contractIds)
-            ->get();
-
-        foreach ($coverDetailRows as $row) {
+        foreach ($coverRows as $row) {
             self::applyLgFeeRow($result, $row, $lgsTypes, $mainType, $subTypeCover, $totalCashInFlowKey, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, true);
         }
     }
