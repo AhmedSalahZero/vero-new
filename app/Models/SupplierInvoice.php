@@ -561,82 +561,54 @@ class SupplierInvoice extends Model implements IInvoice
 			$poAllocations
 		);
 	}
+	/**
+	 * "Forecasted Project Payment" — the cash-OUT mirror of
+	 * "Forecasted Project Collection": what is still expected to be paid
+	 * out on the Supplier contracts hanging under the Customer contract
+	 * the report was run for.
+	 *
+	 * Rewritten 2026-09. It used to query the CUSTOMER contract's own
+	 * salesOrders and label each sub-row with the customer, so the row
+	 * was a near-duplicate of "Forecasted Project Collection" on the
+	 * cash-out side — the same project amount, counted twice. It now
+	 * walks contracts.parent_id down to the Supplier contracts (the ones
+	 * the contract screen lists under "Supplier Contracts") and reads
+	 * their purchase orders, so a sub-row names the SUPPLIER contract
+	 * and carries the PO's own remaining balance.
+	 *
+	 * Sharing computeForecastedProjectCollection() also restores the
+	 * parent row's ['total'] per period, which the old inline version
+	 * had commented out — leaving the "Forecasted Project Payment"
+	 * header row (and therefore Total Cash Outflow / Net Cash /
+	 * Accumulated Net Cash, which sum the parent totals) permanently at
+	 * zero however much its sub-rows held.
+	 */
 	public static function getForecastedProjectPayment(array &$result   , string $startDate , string $endDate , $currency  , $companyId  , array $datesWithWeekNumber ,?int $contractId = null , $foreignExchangeRates = null , ?string $mainFunctionalCurrency = null):void
 	{
-		/**
-		 *
-		 * * في حالة لو مرر العقد فا مش محتاجين عمله لان العقد الواحد مربوط بعملة واحدة
-		 * * المبالغ هنا بعملة العقد فلازم تتحول للعملة الوظيفية عشان تتجمع مع باقي الصفوف المحولة
-		 */
-		// $totalCashInFlowKey = __('Total Cash Inflow');
-		
-		$key =  'Forecasted Project Payment';
-		$contracts = Contract::where('company_id',$companyId)
-		->where('end_date','>=',now()->format('Y-m-d'))
-		->where('end_date','<=',$endDate)
-		->where('currency',$currency)
-		->when($contractId,function($query) use ($contractId){
-			$query->where('id',$contractId);
-		})
-		// ->where('end_date','<=',now()->format('Y-m-d'))
-		->with('salesOrders')->get();
-		$contractWithSalesOrders = [];
-		foreach($contracts as $contract){
-			foreach($contract->salesOrders as $salesOrder){
-				$salesOrders = HArr::getLatestNonZeroExecutionKeys($salesOrder->toArray());
-				if(empty($salesOrders['end_date'])){
-					continue;
-				}
-				$contractWithSalesOrders[$contract->id][$salesOrder->id] = [
-					'contract'=>$contract ,
-					'sales_orders'=>$salesOrders
-				];
-			}
-		}
-		
-		foreach($contractWithSalesOrders as $contractId => $contractWithSos){
-			foreach($contractWithSos as $soId => $ContractWithSoArr){
-				$contract = $ContractWithSoArr['contract'];
-				$soArr = $ContractWithSoArr['sales_orders'];
-				if (empty($soArr)) {
-					continue;
-				}
-				$soEndDate = $soArr['end_date'];
-				$soCollectionDays = $soArr['collection_days'] ?? 0;
-				$currentSoCollectionDays = Carbon::make($soEndDate)->addDays($soCollectionDays);
-				$isBetweenViewInterval = $currentSoCollectionDays->between($startDate,$endDate);
-				if(!$isBetweenViewInterval){
-					continue;
-				}
-				$currentSoCollectionDaysFormatted = $currentSoCollectionDays->format('Y-m-d');
-				$currentWeekYear =$datesWithWeekNumber[$currentSoCollectionDaysFormatted];
-				$salesOrderAmount = $soArr['amount'];
-				$contractCode = $contract->getCode();
-				$contractName = $contract->getName();
-				$soNumber = $soArr['so_number']; 
-				$customerName = $contract->getClientName();
-				$currentInvoiceAmount = DB::table('customer_invoices')->where('company_id',$companyId)->where('currency',$currency)->where('sales_order_number',$soNumber)->where('contract_code',$contractCode)->sum('invoice_amount');
-				$salesOrderNetBalance = 0 ;
-				if($currentInvoiceAmount > $salesOrderAmount){
-					$salesOrderNetBalance = 0;
-				}else{
-					$salesOrderNetBalance = $salesOrderAmount - $currentInvoiceAmount;
-				}
-				$exchangeRate = ForeignExchangeRate::getExchangeRateAtOrOne($contract->getCurrency(),$mainFunctionalCurrency,$currentSoCollectionDaysFormatted,$companyId,$foreignExchangeRates);
-				$salesOrderNetBalance = $salesOrderNetBalance * $exchangeRate;
-				$invoiceNumber =   $customerName . '-' . $contractName  ;
-				$result['suppliers'][$key][$invoiceNumber]['weeks'][$currentWeekYear] = isset($result['suppliers'][$key][$invoiceNumber]['weeks'][$currentWeekYear]) ? $result['suppliers'][$key][$invoiceNumber]['weeks'][$currentWeekYear]+  $salesOrderNetBalance :$salesOrderNetBalance;
-				$result['suppliers'][$key][$invoiceNumber]['total'] = isset($result['suppliers'][$key][$invoiceNumber]['total']) ? $result['suppliers'][$key][$invoiceNumber]['total']  + $salesOrderNetBalance : $salesOrderNetBalance;
-				// $currentTotal = $salesOrderNetBalance;
-				// $result['suppliers'][$key]['total'][$currentWeekYear] = isset($result['suppliers'][$key]['total'][$currentWeekYear]) ? $result['suppliers'][$key]['total'][$currentWeekYear] +  $currentTotal : $currentTotal ;
-				// $result['suppliers'][$totalCashOutFlowKey]['total'][$currentWeekYear] = isset($result['suppliers'][$totalCashInFlowKey]['total'][$currentWeekYear]) ? $result['suppliers'][$totalCashInFlowKey]['total'][$currentWeekYear] + $salesOrderNetBalance : $salesOrderNetBalance;
-				
-				
-			}
-		}
-
-		
-			
+		static::computeForecastedProjectCollection(
+			$result,
+			$startDate,
+			$endDate,
+			$currency,
+			$companyId,
+			$datesWithWeekNumber,
+			$contractId,
+			$foreignExchangeRates,
+			$mainFunctionalCurrency,
+			[
+				'main_result_type' => 'suppliers',
+				'result_key' => 'Forecasted Project Payment',
+				'invoice_table' => 'supplier_invoices',
+				'order_relation' => 'purchasesOrders',
+				'order_number_key' => 'po_number',
+				'invoice_order_number_column' => 'purchases_order_number',
+				'down_payment_table' => 'down_payment_money_payment_settlements',
+				'down_payment_order_id_column' => 'purchase_order_id',
+				'add_to_cash_inflow_total' => false,
+				'paid_or_collected_status' => self::COLLETED_OR_PAID,
+				'contract_scope' => 'supplier_children',
+			]
+		);
 	}
 	
 public function getPurchasesOrderNumber()
