@@ -93,8 +93,11 @@
                         </div>
 
                     </div>
+                    {{-- * كان هنا <form> جوّه الـ <form> اللي فوق. HTML مابيسمحش
+                         * بده ، فالمتصفح كان بيرمي الوسم الداخلي و يخلي </form>
+                         * اللي في الآخر تقفل الفورم الخارجي في نص الـ divs ،
+                         * فالبنية بتتشابك و الصفحة بتطلع مكسورة --}}
                     <!--begin::Form-->
-                    <form class="kt-form kt-form--label-right">
                         <div class="kt-portlet">
 
 
@@ -213,8 +216,10 @@
             <x-submitting-by-ajax :backTo="route('partners.index',['company'=>$company->id])" />
         </form>
 
-        </div>
-        @endsection
+        </div>{{-- col-md-12 --}}
+    </div>{{-- row --}}
+</div>
+@endsection
         @section('js')
         <!--begin::Page Scripts(used by this page) -->
         <script src="{{ url('assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>

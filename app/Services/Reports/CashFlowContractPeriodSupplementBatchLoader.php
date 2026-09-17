@@ -172,6 +172,7 @@ class CashFlowContractPeriodSupplementBatchLoader
         $mainType = __('Letter Of Guarantee');
         $subTypeFees = __('Fees');
         $subTypeCover = __('Cash Cover');
+        $subTypeIssued = __('Issued LG Cash Cover');
         $totalCashInFlowKey = __('Total Cash Inflow');
 
         $feeRows = DB::table('current_account_bank_statements')
@@ -218,6 +219,45 @@ class CashFlowContractPeriodSupplementBatchLoader
 
         foreach ($coverRows as $row) {
             self::applyLgFeeRow($result, $row, $lgsTypes, $mainType, $subTypeCover, $totalCashInFlowKey, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $periodsByWeekKey, true);
+        }
+
+        /**
+         * * الكفر اللي بيتحجز وقت الإصدار — فلوس خارجة.
+         *
+         * * الصف ده ماكانش موجود هنا خالص: التقرير كان بيعرض الرد
+         * * الراجع كإيراد و ما بيعرضش الخروج أبدا ، فـ Net Cash كان
+         * * متضخّم بمبلغ الكفر بالكامل لكل خطاب اتصدر جوّه المدة.
+         * * قِسناها على العقد ٩١: ١٣٤٬١٤٥ خرجت و ماظهرتش في أي مصروف.
+         *
+         * * مقصور على New Issuance زي تقرير العقد بالظبط — كفر خطاب
+         * * الرصيد الافتتاحي اتدفع قبل ما النظام يشتغل فمفيش خروج نعرضه.
+         */
+        foreach (LgCashCoverIssuances::between($companyId, $periodStart, $periodEnd, $contractIds) as $row) {
+            $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->movement_date, $periodsByWeekKey);
+            if ($weekKey === null) {
+                continue;
+            }
+
+            $exchangeRate = ForeignExchangeRate::getExchangeRateAt(
+                (string) $row->currency,
+                $mainFunctionalCurrency,
+                (string) $row->movement_date,
+                $companyId,
+                $foreignExchangeRates,
+            );
+            $amount = (float) $row->total_amount * $exchangeRate;
+            $lgType = $lgsTypes[$row->lg_type] ?? $row->lg_type;
+
+            if (! isset($result[$mainType][$subTypeIssued][$lgType])) {
+                $result[$mainType][$subTypeIssued][$lgType] = ['weeks' => [], 'total' => []];
+            }
+
+            $result[$mainType][$subTypeIssued][$lgType]['weeks'][$weekKey] = ($result[$mainType][$subTypeIssued][$lgType]['weeks'][$weekKey] ?? 0) + $amount;
+            $result[$mainType][$subTypeIssued][$lgType]['total'][$weekKey] = ($result[$mainType][$subTypeIssued][$lgType]['total'][$weekKey] ?? 0) + $amount;
+            $result[$mainType][$subTypeIssued]['total'][$weekKey] = ($result[$mainType][$subTypeIssued]['total'][$weekKey] ?? 0) + $amount;
+
+            // نفس دلو المصروفات اللي الرسوم بتنزل فيه — هو اللي بيغذّي Total Cash Outflow
+            $result['cash_expenses'][$mainType]['total'][$weekKey] = ($result['cash_expenses'][$mainType]['total'][$weekKey] ?? 0) + $amount;
         }
     }
 

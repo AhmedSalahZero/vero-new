@@ -48,6 +48,8 @@
     }
 
 </style>
+    </div>{{-- row --}}
+</div>
 @endsection
 @section('sub-header')
 
@@ -79,8 +81,10 @@
                             </div>
                         </div>
                     </div>
+                    {{-- * كان هنا <form> جوّه الـ <form> اللي فوق. HTML مابيسمحش
+                         * بده ، فالمتصفح كان بيرمي الوسم الداخلي و يخلي </form>
+                         * اللي في الآخر تقفل الفورم الخارجي في نص الـ divs --}}
                     <!--begin::Form-->
-                    <form class="kt-form kt-form--label-right">
                         <div class="kt-portlet">
                             <div class="kt-portlet__head">
                                 <div class="kt-portlet__head-label">

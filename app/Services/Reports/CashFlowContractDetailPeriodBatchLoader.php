@@ -1005,17 +1005,7 @@ final class CashFlowContractDetailPeriodBatchLoader
         // is the row previously missing from the Contract Cash Flow report
         // entirely.
         $subTypeIssued = __('Issued LG Cash Cover');
-        $issuedCoverRows = DB::table('letter_of_guarantee_cash_cover_statements')
-            ->join('letter_of_guarantee_issuances', 'letter_of_guarantee_issuances.id', '=', 'letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id')
-            ->join('partners', 'partners.id', '=', 'letter_of_guarantee_issuances.partner_id')
-            ->where('letter_of_guarantee_cash_cover_statements.company_id', $companyId)
-            ->where('letter_of_guarantee_cash_cover_statements.type', 'debit-lg-amount')
-            ->where('letter_of_guarantee_issuances.contract_id', $contractId)
-            ->where('letter_of_guarantee_issuances.category_name', LetterOfGuaranteeIssuance::NEW_ISSUANCE)
-            ->where('letter_of_guarantee_cash_cover_statements.letter_of_guarantee_issuance_id', '>', 0)
-            ->whereBetween('letter_of_guarantee_cash_cover_statements.date', [$periodStart, $periodEnd])
-            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, letter_of_guarantee_cash_cover_statements.debit as total_amount, letter_of_guarantee_cash_cover_statements.currency as currency, letter_of_guarantee_cash_cover_statements.date as movement_date, partners.name as partner_name, letter_of_guarantee_issuances.lg_code as lg_code')
-            ->get();
+        $issuedCoverRows = LgCashCoverIssuances::between($companyId, $periodStart, $periodEnd, $contractId);
 
         foreach ($issuedCoverRows as $row) {
             $weekKey = CashFlowWeekBucketer::resolveWeekKey((string) $row->movement_date, $periodsByWeekKey);

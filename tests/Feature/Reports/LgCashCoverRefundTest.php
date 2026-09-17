@@ -818,4 +818,138 @@ class LgCashCoverRefundTest extends TestCase
         $this->assertSame(12345.0, $company);
         $this->assertSame(12345.0, $consolidated);
     }
+
+    /* ──────────── الكفر الخارج في تقرير الـ Consolidated ──────────── */
+
+    private function issueCover(int $lgId, float $amount, string $date = '2026-09-10', string $currency = 'EGP'): void
+    {
+        DB::table('letter_of_guarantee_cash_cover_statements')->insert([
+            'company_id' => $this->companyId,
+            'letter_of_guarantee_issuance_id' => $lgId,
+            'type' => 'debit-lg-amount',
+            'source' => 'lg-facility',
+            'financial_institution_id' => 1,
+            'lg_type' => 'final-lgs',
+            'date' => $date,
+            'debit' => $amount,
+            'credit' => 0,
+            'currency' => $currency,
+        ]);
+    }
+
+    /**
+     * @return array{issued: float, refunded: float, outflow: float, inflow: float}
+     */
+    private function supplementBothSides(): array
+    {
+        $result = ['customers' => [], 'suppliers' => [], 'cash_expenses' => []];
+
+        \App\Services\Reports\CashFlowContractPeriodSupplementBatchLoader::apply(
+            $result,
+            collect([\App\Models\Contract::find($this->contractId)]),
+            \App\Models\ForeignExchangeRate::where('company_id', $this->companyId)->get(),
+            'EGP',
+            $this->companyId,
+            '2026-09-01',
+            '2027-06-30',
+            ['all' => ['start_date' => '2026-09-01', 'end_date' => '2027-06-30']],
+        );
+
+        $lg = __('Letter Of Guarantee');
+
+        return [
+            'issued' => round((float) array_sum($result[$lg][__('Issued LG Cash Cover')]['total'] ?? []), 2),
+            'refunded' => round((float) array_sum($result['customers'][__('Cash Cover')]['total'] ?? []), 2),
+            'outflow' => round((float) array_sum($result['cash_expenses'][$lg]['total'] ?? []), 2),
+            'inflow' => round((float) array_sum($result['customers'][__('Total Cash Inflow')]['total'] ?? []), 2),
+        ];
+    }
+
+    /**
+     * * الصف ده ماكانش موجود خالص: الكفر كان بيرجع كإيراد و خروجه
+     * * ماكانش بيتعرض ، فـ Net Cash كان متضخّم بمبلغ الكفر بالكامل
+     */
+    public function test_the_consolidated_path_now_shows_the_locked_cover_as_an_outflow(): void
+    {
+        $lgId = $this->lg(['lg_code' => 'LG-OUT', 'renewal_date' => '2027-01-20', 'cash_cover_amount' => 7500]);
+        $this->issueCover($lgId, 7500);
+
+        $this->assertSame(7500.0, $this->supplementBothSides()['issued']);
+    }
+
+    /**
+     * * أهم اختبار: اللي خرج لازم يساوي اللي رجع لما الاتنين جوّه المدة
+     */
+    public function test_the_consolidated_path_balances_what_went_out_with_what_comes_back(): void
+    {
+        $lgId = $this->lg(['lg_code' => 'LG-BAL2', 'renewal_date' => '2027-01-20', 'cash_cover_amount' => 7500]);
+        $this->issueCover($lgId, 7500);
+
+        $t = $this->supplementBothSides();
+
+        $this->assertSame(7500.0, $t['issued']);
+        $this->assertSame(7500.0, $t['refunded']);
+        $this->assertSame($t['issued'], $t['refunded'], 'الخارج = الراجع');
+    }
+
+    public function test_the_locked_cover_reaches_the_outflow_bucket_with_the_fees(): void
+    {
+        $lgId = $this->lg(['lg_code' => 'LG-BUCKET', 'renewal_date' => '2027-01-20', 'cash_cover_amount' => 7500]);
+        $this->issueCover($lgId, 7500);
+
+        $this->assertSame(7500.0, $this->supplementBothSides()['outflow'],
+            'نفس دلو المصروفات اللي بيغذّي Total Cash Outflow');
+    }
+
+    /**
+     * * كفر خطاب الرصيد الافتتاحي اتدفع قبل ما النظام يشتغل ، فمفيش
+     * * خروج نعرضه — لكن رجوعه حقيقي فبيفضل في صف الرد
+     */
+    public function test_an_opening_balance_guarantee_shows_no_outflow_but_still_refunds(): void
+    {
+        $lgId = $this->lg([
+            'lg_code' => 'LG-OPENBAL',
+            'category_name' => 'opening-balance',
+            'renewal_date' => '2027-01-20',
+            'cash_cover_amount' => 9000,
+        ]);
+        $this->issueCover($lgId, 9000);
+
+        $t = $this->supplementBothSides();
+
+        $this->assertSame(0.0, $t['issued'], 'مفيش خروج نعرضه');
+        $this->assertSame(9000.0, $t['refunded'], 'لكن الرجوع حقيقي');
+    }
+
+    public function test_an_issuance_outside_the_window_is_not_shown_as_an_outflow(): void
+    {
+        $lgId = $this->lg(['lg_code' => 'LG-OLDISSUE', 'renewal_date' => '2027-01-20', 'cash_cover_amount' => 7500]);
+        $this->issueCover($lgId, 7500, '2024-05-01');
+
+        $this->assertSame(0.0, $this->supplementBothSides()['issued']);
+    }
+
+    public function test_the_issuance_is_counted_once_per_movement(): void
+    {
+        $lgId = $this->lg(['lg_code' => 'LG-TWICE', 'renewal_date' => '2027-01-20', 'cash_cover_amount' => 7500]);
+        $this->issueCover($lgId, 5000, '2026-09-10');
+        $this->issueCover($lgId, 2500, '2026-10-10');
+
+        $this->assertSame(7500.0, $this->supplementBothSides()['issued'], 'مجموع الحركتين ، من غير تكرار');
+    }
+
+    /**
+     * * نفس الرقم من تقرير العقد و من مسار الـ Consolidated
+     */
+    public function test_the_contract_and_consolidated_reports_agree_on_the_outflow(): void
+    {
+        $lgId = $this->lg(['lg_code' => 'LG-AGREE2', 'renewal_date' => '2027-01-20', 'cash_cover_amount' => 7500]);
+        $this->issueCover($lgId, 7500);
+
+        $report = $this->runContractReport('09/01/2026', '06/30/2027');
+        $contractIssued = round((float) array_sum($report['result']['cash_expenses'][__('Issued LG Cash Cover')]['total'] ?? []), 2);
+
+        $this->assertSame(7500.0, $contractIssued);
+        $this->assertSame($contractIssued, $this->supplementBothSides()['issued']);
+    }
 }

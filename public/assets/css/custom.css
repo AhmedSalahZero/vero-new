@@ -157,3 +157,17 @@ table.dataTable thead tr > .dtfc-fixed-left, table.dataTable thead tr > .dtfc-fi
 .modal-backdrop {
     z-index: 1090;
 }
+
+/*
+ * * الكلاس ده كان متعرّف جوه كومبوننت x-sectionTitle بـ color:white ،
+ * * و الكومبوننت بتتحط في ٣٨ صفحة فالقاعدة كانت بتتحقن في كل الصفحات
+ * * دي. النتيجة: كل label عليه text-black كان بيطلع أبيض على خلفية
+ * * بيضا — يعني نص مش ظاهر خالص في:
+ * *   - تعديل الشريك (partners/form)
+ * *   - شهادات الإيداع (certificates-of-deposit/form)
+ * *   - الودائع لأجل (time-of-deposit/form)
+ * * الكلاس اسمه text-black فالمفروض يكون أسود.
+ */
+.text-black {
+    color: #000 !important;
+}
