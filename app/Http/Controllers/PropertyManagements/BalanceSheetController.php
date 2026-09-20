@@ -17,9 +17,17 @@ class BalanceSheetController extends Controller
 	
 	public function view(Request $request , Company $company,Study $study)
 	{
+		  /**
+		   * * الفيو بيستخدم $company في لينك التصدير (سطر ٥٨) ، و
+		   * * getBalanceSheetViewVars() مابترجعهاش — فالصفحة كانت بترمي
+		   * * Undefined variable $company و ترجّع 500 على طول.
+		   *
+		   * * IncomeStatementController بيبعتها مع نفس الفيو ، عشان كده
+		   * * الصفحة التانية شغالة و دي لأ.
+		   */
 		  return view(
             'property_managements.income-statement.cash-flow',
-			$study->getBalanceSheetViewVars()
+			array_merge($study->getBalanceSheetViewVars(), ['company' => $company])
         );
 	}
 	public function exportReport(Request $request,Company $company , Study $study )
