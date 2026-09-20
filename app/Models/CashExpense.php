@@ -802,7 +802,102 @@ class CashExpense extends Model  implements IHaveCreditOverdraftStatement
 	public function getDeliveryDate()
 	{
 		return $this->getDate();
-	}public function isInvoiceSettlementWithDownPayment()
+	}
+	/**
+	 * * الدوال الأربعة دي هي عقد "موديل الفلوس" اللي OdooPayment
+	 * * بيتوقعه من أي موديل بيتبعتله. العقد ده معرّف في IsMoney اللي
+	 * * MoneyPayment و MoneyReceived بيستخدموه ، و المصروف النقدي
+	 * * بيستخدم IsMoneyOut اللي مفيهوش أي حاجة منه.
+	 *
+	 * * فحفظ مصروف نوعه شيك دائن على شركة مربوطة بأودو كان بيضرب:
+	 * *   Call to undefined method CashExpense::getReceivingOrPaymentMoneyDate()
+	 * * و المسار:
+	 * *   CashExpenseController::store
+	 * *     → storeNonCustomerOrSupplierOdooExpense
+	 * *       → HasNonCustomerOrSupplier::createNonCustomerOrSupplierOdooExpense
+	 * *         → OdooPayment::createDownPayment → buildDownPaymentData
+	 *
+	 * * buildDownPaymentData() بتنادي الأربعة كلها ، فإصلاح التاريخ
+	 * * لوحده كان هينقل العطل للي بعده.
+	 *
+	 * * اتحطوا هنا مش في IsMoneyOut لأن MoneyPayment بيستخدم IsMoney و
+	 * * IsMoneyOut مع بعض ، فتكرار الأسماء هناك هيعمل تصادم.
+	 */
+
+	/**
+	 * * نفس اللي MoneyPayment بيرجّعه بالظبط (getDeliveryDate) ، عشان
+	 * * الشيك الدائن يتسجّل في أودو بنفس التاريخ في الحالتين.
+	 *
+	 * * payment_date عمود nullable ، و نسخة IsMoney معرّفة :string —
+	 * * فلو فضي كانت هترمي TypeError. بنرجّع نص فاضي بدل ما نستبدل
+	 * * عطل بعطل.
+	 */
+	public function getReceivingOrPaymentMoneyDate(): string
+	{
+		return (string) ($this->getDeliveryDate() ?? '');
+	}
+
+	public function getReceivingOrPaymentMoneyDateFormatted(): string
+	{
+		return (string) ($this->getPaymentDateFormatted() ?? '');
+	}
+
+	/**
+	 * * المصروف النقدي دايما فلوس خارجة ، فمفيش فرع MoneyReceived زي
+	 * * اللي في IsMoney
+	 */
+	public function getInboundOrOutbound(): string
+	{
+		return 'outbound';
+	}
+
+	/**
+	 * * بيستخدم getFinancialInstitution() / getAccountTypeId() /
+	 * * getAccountNumber() بتوع المصروف نفسه ، و دول بيحلّوا صح
+	 * * للتحويل الصادر و للشيك الدائن ، فمش محتاج يفرّق بينهم زي نسخة
+	 * * IsMoney
+	 */
+	public function getPaymentMethodLineId()
+	{
+		if ($this->isCashPayment()) {
+			/**
+			 * * الدفع النقدي بيتصرف من خزنة ، و Branch بياخد
+			 * * getOdooOutboundTransferPaymentMethodId() من trait
+			 * * HasOdooPaymentMethod (زي FinancialInstitutionAccount)
+			 */
+			$branch = $this->cashPaymentDeliveryBranch();
+
+			return $branch ? $branch->getOdooOutboundTransferPaymentMethodId() : null;
+		}
+
+		if ($this->isOutgoingTransfer() || $this->isPayableCheque()) {
+			$financialInstitution = $this->getFinancialInstitution();
+
+			if (! $financialInstitution) {
+				return null;
+			}
+
+			$key = $this->isPayableCheque()
+				? 'odoo_outbound_cheque_payment_method_id'
+				: 'odoo_outbound_transfer_payment_method_id';
+
+			return $financialInstitution->getOdooPaymentIds($this->getAccountTypeId(), $this->getAccountNumber())[$key] ?? null;
+		}
+
+		return null;
+	}
+
+	/**
+	 * * المصروف النقدي مالوش مفهوم دفعة مقدمة
+	 * * (isInvoiceSettlementWithDownPayment تحت بترجّع false دايما) ،
+	 * * فدي الحالة البسيطة بس
+	 */
+	public function generateDownPaymentMessage(): string
+	{
+		return __('Paid').' '.$this->getExpenseCategoryName();
+	}
+
+	public function isInvoiceSettlementWithDownPayment()
 	{
 		return false;
 	}
