@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\CurrentAccountBankStatement;
 use App\Models\FinancialInstitution;
 use App\Models\FinancialInstitutionAccount;
+use App\Models\TimeOfDeposit;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
@@ -112,11 +113,68 @@ class BankStatementRowOdooGuardTest extends TestCase
             'company_id' => $this->company->id,
         ]);
         $user->assignRole('company-admin');
+        /*
+         * cashvero عنده EnforcePermission بيخريطة كل راوت لصلاحية
+         * (و ده مش موجود في system.veroanalysisb.com) — فبناخد
+         * المطلوب من الخريطة نفسها لو موجودة ، عشان نفس الملف يشتغل
+         * في المشروعين من غير تفريع
+         */
+        $mapClass = '\App\Support\Permissions\RoutePermissionMap';
+        $required = class_exists($mapClass) ? ($mapClass::for('update.bank.statement.debit.or.credit') ?: []) : [];
+        foreach ($required as $permissionName) {
+            $permission = \Spatie\Permission\Models\Permission::firstOrCreate(
+                ['name' => $permissionName, 'guard_name' => 'web']
+            );
+            $user->givePermissionTo($permission);
+        }
         $user->load('roles', 'permissions');
         $user->companies()->attach($this->company->id);
         $user->load('companies');
 
         $this->actor = $user;
+    }
+
+    /**
+     * * نفس الباج في مسار الحذف : HasPeriodicInterest::deletePeriodInterest()
+     * * كان بينشئ CashExpenseOdooService على طول عشان يفك ارتباط القيد
+     */
+    public function test_a_period_interest_row_is_deleted_without_odoo_credentials(): void
+    {
+        $this->assertFalse($this->company->hasOdooIntegrationCredentials($this->actor));
+
+        $deposit = TimeOfDeposit::create([
+            'company_id' => $this->company->id,
+            'financial_institution_id' => $this->account->financial_institution_id,
+            'account_number' => 'TD-ODOO-GUARD-'.uniqid(),
+            'amount' => 100000,
+            'currency' => 'EGP',
+            'interest_rate' => 10,
+            'interest_amount' => 1000,
+            'start_date' => now()->subYear()->format('Y-m-d'),
+            'end_date' => now()->subDay()->format('Y-m-d'),
+            'status' => TimeOfDeposit::RUNNING,
+            'maturity_amount_added_to_account_id' => $this->account->id,
+            'is_at_maturity' => 1,
+            'is_active' => 1,
+        ]);
+
+        $statement = CurrentAccountBankStatement::create([
+            'company_id' => $this->company->id,
+            'financial_institution_account_id' => $this->account->id,
+            'time_of_deposit_id' => $deposit->id,
+            'date' => now()->subMonth()->format('Y-m-d'),
+            'debit' => 500,
+            'credit' => 0,
+            'beginning_balance' => 0,
+            'comment_en' => 'Odoo guard delete test',
+            'comment_ar' => 'Odoo guard delete test',
+            'interest_journal_entry_id' => 123456789,
+        ]);
+
+        $deposit->load('currentAccountBankStatements');
+        $deposit->deletePeriodInterest($statement);
+
+        $this->assertNull(CurrentAccountBankStatement::find($statement->id));
     }
 
     public function test_a_row_carrying_an_odoo_interest_entry_updates_without_odoo_credentials(): void

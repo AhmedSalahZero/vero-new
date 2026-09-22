@@ -27,8 +27,22 @@ trait AuthTrait
 	 */
 	public function __construct(Company $company, ?User $user = null )
 	{
-		$this->url = $company->getOdooDBUrl();
-		$this->db = $company->getOdooDBName();
+		/**
+		 * * الخصائص دي معرّفة string مش nullable ، فالشركة اللي ماعندهاش
+		 * * تكامل كانت بتطلّع
+		 * *   TypeError: Cannot assign null to property ...::$url
+		 * * و دي رسالة ماتقولش ان السبب ان التكامل مش متظبط اصلا . كل
+		 * * المسارات المفروض تحرس نفسها بـ
+		 * * Company::hasOdooIntegrationCredentials() ، و ده خط الدفاع
+		 * * الاخير اللي بيقول المشكلة فين لو مسار فات من غير حارس
+		 */
+		$odooUrl = $company->getOdooDBUrl();
+		$odooDbName = $company->getOdooDBName();
+		if (!$odooUrl || !$odooDbName) {
+			throw new \RuntimeException(__('Missing company Odoo DB URL/Name.'));
+		}
+		$this->url = (string) $odooUrl;
+		$this->db = (string) $odooDbName;
 		$user = $user ?: auth()->user();
 		/**
 		 * @var User|null $user
@@ -38,10 +52,15 @@ trait AuthTrait
 			 * * قبل كده كان بيضرب "Call to a member function on null"
 			 * * من غير ما يقول إن السبب إن مفيش يوزر أصلاً
 			 */
-			throw new \RuntimeException('Odoo services need a user: pass one explicitly when there is no authenticated user.');
+			throw new \RuntimeException(__('No authenticated user found for Odoo integration context.'));
 		}
-		$this->username =$user->getOdooDBUserName();
-		$this->password = $user->getOdooDBPassword();
+		$odooUsername = $user->getOdooDBUserName();
+		$odooPassword = $user->getOdooDBPassword();
+		if (!$odooUsername || !$odooPassword) {
+			throw new \RuntimeException(__('Missing Odoo username/password for current user.'));
+		}
+		$this->username = (string) $odooUsername;
+		$this->password = (string) $odooPassword;
 		$this->company_id = $company->id;
 		$this->company = $company;
 		$currentOdooId = $user->getOdooId() ;
