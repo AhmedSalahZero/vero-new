@@ -13,24 +13,37 @@ use Illuminate\Support\Facades\DB;
  * Shared "Forecasted Project Collection" (customer side) / "Forecasted
  * Suppliers Contract Payments" (supplier side) calculation.
  *
- * Formula per order (confirmed with project owner, 2026-08):
+ * Formula per order (confirmed with project owner, 2026-09):
  *
- *   Forecast = Order Amount − Unused Down Payment Balance
- *              − Σ(each linked invoice's own net_balance)
+ *   Forecast = Total Contract Amount
+ *              − Total Invoice Settlement
+ *                  (total_collected_amount_in_main_currency
+ *                   + total_deductions_in_main_currency
+ *                   + net_balance_in_main_currency)
+ *              − Down Payment Balance
  *
- * Both halves are already settlement-aware at the data level, so no
- * special-case branching is needed here for "invoice fully/partially
- * settled by down payment":
- *   - "Unused Down Payment Balance" reads down_payment_balance — NOT
- *     the original down_payment_amount — which is the portion of a
- *     down payment still not applied to any invoice.
- *   - Each invoice's own net_balance already reflects any down
- *     payment settlement applied against IT specifically (see
- *     DownPaymentContractsController / IsInvoice::calculateNetBalanceInEditMode).
- *     A fully down-payment-settled invoice has net_balance = 0 and so
- *     contributes nothing here (avoiding double-counting against the
- *     down payment deduction above); a partially-settled invoice
- *     contributes only its remaining balance.
+ * net_balance is in there because the open part of an invoice is
+ * already reported by the "Customers Invoices" / "Suppliers Invoices"
+ * row; leaving it in the forecast counts the same money twice inside
+ * one report.
+ *
+ * Everything is compared in the MAIN FUNCTIONAL CURRENCY. The invoice
+ * side reads the *_in_main_currency columns directly, so nothing is
+ * converted twice. The down payment tables carry no main-currency
+ * column, so each row converts at the FX rate of the date its cash
+ * actually moved (money_received.receiving_date /
+ * money_payments.delivery_date) — the same date
+ * CustomerInvoice::getDownPaymentsOverContracts() converts at.
+ *
+ * Because the order amount is stored in the contract's own currency,
+ * each phase is converted to the main functional currency BEFORE the
+ * deduction is applied to it (the deduction is already in main
+ * currency). This is the opposite order from the previous formula,
+ * which deducted in contract currency and converted afterwards.
+ *
+ * Note this formula subtracts SETTLED amounts, not open balances, so
+ * a fully collected/paid invoice must NOT be filtered out —
+ * 'paid_or_collected_status' is no longer used for the deduction.
  *
  * Previously this exact formula was duplicated once in CustomerInvoice
  * and once in SupplierInvoice, both with the same bug: the down
@@ -100,6 +113,10 @@ trait HasForecastedProjectCollection
      *   down_payment_order_id_column: string, // 'sales_order_id' | 'purchase_order_id'
      *   add_to_cash_inflow_total: bool,       // true for customer (cash IN); false for supplier (cash OUT, not part of inflow total)
      *   paid_or_collected_status: string,      // invoice_status value meaning "fully settled": SupplierInvoice::COLLETED_OR_PAID | CustomerInvoice::COLLETED_OR_PAID
+     *   invoice_settled_main_column: string,   // 'total_collected_amount_in_main_currency' | 'total_paid_amount_in_main_currency'
+     *   down_payment_money_table: string,      // 'money_received' | 'money_payments'
+     *   down_payment_money_id_column: string,  // 'money_received_id' | 'money_payment_id'
+     *   down_payment_money_date_column: string,// 'receiving_date' | 'delivery_date'
      *   contract_scope?: 'self'|'supplier_children', // default 'self' — see class docblock
      * }
      * @param  Collection|null  $poAllocations  Supplier side only — PoAllocation rows (each already
@@ -132,6 +149,10 @@ trait HasForecastedProjectCollection
         $downPaymentOrderIdColumn = $config['down_payment_order_id_column'];
         $addToCashInflowTotal = $config['add_to_cash_inflow_total'];
         $paidOrCollectedStatus = $config['paid_or_collected_status'];
+        $invoiceSettledMainColumn = $config['invoice_settled_main_column'];
+        $downPaymentMoneyTable = $config['down_payment_money_table'];
+        $downPaymentMoneyIdColumn = $config['down_payment_money_id_column'];
+        $downPaymentMoneyDateColumn = $config['down_payment_money_date_column'];
         $contractScope = $config['contract_scope'] ?? 'self';
         $useSupplierChildren = $contractScope === 'supplier_children';
 
@@ -233,7 +254,9 @@ trait HasForecastedProjectCollection
                     $foreignExchangeRates, $mainFunctionalCurrency,
                     $mainResultType, $resultKey, $invoiceTable, $orderNumberKey,
                     $invoiceOrderNumberColumn, $downPaymentTable, $downPaymentOrderIdColumn,
-                    $addToCashInflowTotal, $paidOrCollectedStatus, 1.0
+                    $addToCashInflowTotal, $paidOrCollectedStatus, 1.0,
+                    $invoiceSettledMainColumn, $downPaymentMoneyTable,
+                    $downPaymentMoneyIdColumn, $downPaymentMoneyDateColumn
                 );
             }
         }
@@ -267,7 +290,9 @@ trait HasForecastedProjectCollection
                     $foreignExchangeRates, $mainFunctionalCurrency,
                     $mainResultType, $resultKey, $invoiceTable, $orderNumberKey,
                     $invoiceOrderNumberColumn, $downPaymentTable, $downPaymentOrderIdColumn,
-                    $addToCashInflowTotal, $paidOrCollectedStatus, $allocationPercentage
+                    $addToCashInflowTotal, $paidOrCollectedStatus, $allocationPercentage,
+                    $invoiceSettledMainColumn, $downPaymentMoneyTable,
+                    $downPaymentMoneyIdColumn, $downPaymentMoneyDateColumn
                 );
             }
         }
@@ -327,7 +352,11 @@ trait HasForecastedProjectCollection
         string $downPaymentOrderIdColumn,
         bool $addToCashInflowTotal,
         string $paidOrCollectedStatus,
-        float $weightMultiplier
+        float $weightMultiplier,
+        string $invoiceSettledMainColumn,
+        string $downPaymentMoneyTable,
+        string $downPaymentMoneyIdColumn,
+        string $downPaymentMoneyDateColumn
     ): void {
         $totalCashInFlowKey = __('Total Cash Inflow');
 
@@ -340,59 +369,84 @@ trait HasForecastedProjectCollection
         $contractName = $contract->getName();
         $customerName = $contract->getClientName();
 
-        // Sum of each linked invoice's OWN net_balance — already
-        // settlement-aware (see trait docblock), so a fully
-        // down-payment-settled invoice contributes 0 automatically,
-        // and a partially-settled one contributes only what's left.
-        // Explicitly excludes fully paid/collected invoices too (not
-        // just relying on net_balance reaching 0 for them) — confirmed
-        // with the project owner as the safer, authoritative signal.
-        $invoicesNetBalance = (float) DB::table($invoiceTable)
+        // كل ما اتفوتر على الأمر ده و اتحسب في مكان تاني ، بالعملة
+        // الوظيفية مباشرة من أعمدة _in_main_currency :
+        //   - المسدّد فعلا (اتحصّل/اتدفع) + الخصومات : فلوس خلصت
+        //   - net_balance : الرصيد المفتوح ، و ده ظاهر اصلا في صف
+        //     Customers Invoices / Suppliers Invoices ، فلو مااتطرحش
+        //     هنا بيتحسب مرتين في نفس التقرير
+        // مفيش فلتر على invoice_status هنا : المعادلة بتجمع المفوتر
+        // مش المتبقي بس ، فالفاتورة المحصّلة بالكامل لازم تدخل .
+        $invoicesSettlement = (float) DB::table($invoiceTable)
             ->where('company_id', $companyId)
             ->where('currency', $contract->getCurrency())
             ->where($invoiceOrderNumberColumn, $orderNumber)
             ->where('contract_code', $contractCode)
-            ->where('invoice_status', '!=', $paidOrCollectedStatus)
-            ->sum('net_balance');
+            ->sum(DB::raw(
+                'ifnull('.$invoiceSettledMainColumn.', 0)'
+                .' + ifnull(total_deductions_in_main_currency, 0)'
+                .' + ifnull(net_balance_in_main_currency, 0)'
+            ));
 
-        // The portion of any down payment NOT yet applied to an
-        // invoice — down_payment_balance, not the original
-        // down_payment_amount, so it isn't double-counted once
-        // it's been used to settle an invoice above.
-        $unusedDownPaymentBalance = (float) DB::table($downPaymentTable)
-            ->where('company_id', $companyId)
-            ->where($downPaymentOrderIdColumn, $orderId)
-            ->where('contract_id', $downPaymentContractId)
-            ->sum('down_payment_balance');
+        // Down Payment Balance — الرصيد اللي لسه ما اتصرفش على فاتورة
+        // بس ، مش الدفعة كلها : الجزء اللي اتصرف موجود اصلا جوه
+        // total_collected_amount فوق (تريجر insert_total_collected_amount
+        // بيجمع كل التسويات سواء is_from_down_payment بصفر او واحد) ،
+        // فطرح الدفعة كلها كان بيطرحه مرتين . الجدولين مفيهمش عمود
+        // بالعملة الوظيفية ، فكل صف بيتحوّل بسعر تاريخ حركة الفلوس .
+        $downPaymentRows = DB::table($downPaymentTable.' as dp')
+            ->leftJoin($downPaymentMoneyTable.' as m', 'm.id', '=', 'dp.'.$downPaymentMoneyIdColumn)
+            ->where('dp.company_id', $companyId)
+            ->where('dp.'.$downPaymentOrderIdColumn, $orderId)
+            ->where('dp.contract_id', $downPaymentContractId)
+            ->select([
+                'dp.down_payment_amount',
+                'dp.down_payment_balance',
+                'dp.currency',
+                'm.'.$downPaymentMoneyDateColumn.' as money_date',
+            ])
+            ->get();
 
-        $remainingDeduction = $unusedDownPaymentBalance + $invoicesNetBalance;
+        $downPaymentDeduction = 0.0;
+        foreach ($downPaymentRows as $downPaymentRow) {
+            $downPaymentCurrency = $downPaymentRow->currency ?: $contract->getCurrency();
+            $downPaymentDate = $downPaymentRow->money_date ?: $startDate;
+            $downPaymentRate = ForeignExchangeRate::getExchangeRateAtOrOne(
+                $downPaymentCurrency, $mainFunctionalCurrency, $downPaymentDate, $companyId, $foreignExchangeRates
+            );
+
+            $downPaymentDeduction += (float) $downPaymentRow->down_payment_balance * $downPaymentRate;
+        }
+
+        $remainingDeduction = $invoicesSettlement + $downPaymentDeduction;
         $rowLabel = $customerName.'-'.$contractName;
 
         foreach ($phases as $phase) {
-            $phaseAmount = $orderAmount * $phase['share'];
+            $currentCollectionDate = Carbon::make($phase['end_date'])
+                ->addDays((int) $phase['collection_days']);
+            $currentCollectionDateFormatted = $currentCollectionDate->format('Y-m-d');
+
+            // Each phase converts at the rate of ITS own collection
+            // date, not one rate for the whole order. The conversion
+            // now happens BEFORE the deduction, because the deduction
+            // is already in the main functional currency.
+            $exchangeRate = ForeignExchangeRate::getExchangeRateAtOrOne($contract->getCurrency(), $mainFunctionalCurrency, $currentCollectionDateFormatted, $companyId, $foreignExchangeRates);
+            $phaseAmount = $orderAmount * $phase['share'] * $exchangeRate;
 
             // min() is what keeps the forecast from going negative and
             // carries any excess on to the next phase.
             $deducted = min($remainingDeduction, $phaseAmount);
             $remainingDeduction -= $deducted;
-            $phaseNetBalance = $phaseAmount - $deducted;
+            $phaseNetBalance = ($phaseAmount - $deducted) * $weightMultiplier;
 
-            $currentCollectionDate = Carbon::make($phase['end_date'])
-                ->addDays((int) $phase['collection_days']);
             if (! $currentCollectionDate->between($startDate, $endDate)) {
                 continue;
             }
 
-            $currentCollectionDateFormatted = $currentCollectionDate->format('Y-m-d');
             if (! isset($datesWithWeekNumber[$currentCollectionDateFormatted])) {
                 continue;
             }
             $currentWeekYear = $datesWithWeekNumber[$currentCollectionDateFormatted];
-
-            // Each phase converts at the rate of ITS own collection
-            // date, not one rate for the whole order.
-            $exchangeRate = ForeignExchangeRate::getExchangeRateAtOrOne($contract->getCurrency(), $mainFunctionalCurrency, $currentCollectionDateFormatted, $companyId, $foreignExchangeRates);
-            $phaseNetBalance = $phaseNetBalance * $exchangeRate * $weightMultiplier;
 
             $result[$mainResultType][$resultKey][$rowLabel]['weeks'][$currentWeekYear] =
                 ($result[$mainResultType][$resultKey][$rowLabel]['weeks'][$currentWeekYear] ?? 0) + $phaseNetBalance;

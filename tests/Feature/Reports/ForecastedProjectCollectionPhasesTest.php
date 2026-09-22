@@ -147,7 +147,7 @@ class ForecastedProjectCollectionPhasesTest extends TestCase
      * * net_balance و invoice_status بيتحسبوا من ترايجر على الجدول ، فالتست
      * * بيبعت قيمة الفاتورة و المحصّل و يسيب الترايجر يوصل للرصيد و الحالة
      */
-    private function openInvoice(string $contractCode, float $amount, string $soNumber = 'SO-PHASES'): void
+    private function openInvoice(string $contractCode, float $amount, string $soNumber = 'SO-PHASES', float $collected = 0.0): void
     {
         DB::table('customer_invoices')->insert([
             'company_id' => $this->companyId,
@@ -158,7 +158,7 @@ class ForecastedProjectCollectionPhasesTest extends TestCase
             'sales_order_number' => $soNumber,
             'invoice_number' => 'INV-'.uniqid(),
             'invoice_amount' => $amount,
-            'collected_amount' => 0,
+            'collected_amount' => $collected,
             'invoice_date' => '2026-10-01',
             'invoice_due_date' => '2027-02-15',
         ]);
@@ -341,6 +341,41 @@ class ForecastedProjectCollectionPhasesTest extends TestCase
         $contract = $this->contract(1000000);
         $this->salesOrder($contract['id'], 1000000, $this->reportedPhases());
         $this->openInvoice($contract['code'], 500000);
+
+        $this->assertSame([
+            '10-2026' => 0.0,
+            '11-2026' => 200000.0,
+            '12-2026' => 300000.0,
+        ], $this->buckets($contract['id']));
+    }
+
+    /**
+     * * الفاتورة المحصّلة بالكامل بتخصم زي المفتوحة بالظبط : الفلوس
+     * * دخلت البنك خلاص فمش متوقع تدخل تاني . قبل كده كانت مستبعدة
+     * * بفلتر invoice_status فكان التوقع بيفضل شايل قيمتها .
+     */
+    public function test_a_fully_collected_invoice_deducts_like_an_open_one(): void
+    {
+        $contract = $this->contract(1000000);
+        $this->salesOrder($contract['id'], 1000000, $this->reportedPhases());
+        $this->openInvoice($contract['code'], 500000, 'SO-PHASES', 500000);
+
+        $this->assertSame([
+            '10-2026' => 0.0,
+            '11-2026' => 200000.0,
+            '12-2026' => 300000.0,
+        ], $this->buckets($contract['id']));
+    }
+
+    /**
+     * * و ازاي المبلغ اتقسم بين محصّل و مفتوح ما بيفرقش : الخصم هو
+     * * قيمة الفاتورة كلها في الحالتين .
+     */
+    public function test_how_an_invoice_splits_between_collected_and_open_does_not_change_the_forecast(): void
+    {
+        $contract = $this->contract(1000000);
+        $this->salesOrder($contract['id'], 1000000, $this->reportedPhases());
+        $this->openInvoice($contract['code'], 500000, 'SO-PHASES', 200000);
 
         $this->assertSame([
             '10-2026' => 0.0,

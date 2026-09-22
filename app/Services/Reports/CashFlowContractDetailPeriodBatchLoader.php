@@ -989,7 +989,13 @@ final class CashFlowContractDetailPeriodBatchLoader
             ->where(function ($q) {
                 $q->where('is_renewal_fees', 1)->orWhere('is_commission_fees', 1)->orWhere('is_issuance_fees', 1);
             })
-            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, credit as paid_amount, financial_institution_accounts.currency as currency, current_account_bank_statements.date as movement_date')
+            /**
+             * * leftJoin مش join : الخطاب اللي مالوش partner لازم يفضل
+             * * في النتيجة بمبلغه ، الاسم الناقص ما يصحش يغيّر أرقام
+             * * التقرير
+             */
+            ->leftJoin('partners', 'partners.id', '=', 'letter_of_guarantee_issuances.partner_id')
+            ->selectRaw('letter_of_guarantee_issuances.lg_type as lg_type, credit as paid_amount, financial_institution_accounts.currency as currency, current_account_bank_statements.date as movement_date, letter_of_guarantee_issuances.lg_code as lg_code, partners.name as partner_name')
             ->get();
 
         foreach ($feeRows as $row) {
@@ -1014,6 +1020,15 @@ final class CashFlowContractDetailPeriodBatchLoader
             $result[$mainType][$subTypeFees][$lgType]['weeks'][$weekKey] += $amount;
             $result[$mainType][$subTypeFees][$lgType]['total'] = ($result[$mainType][$subTypeFees][$lgType]['total'] ?? 0) + $amount;
             $result[$mainType][$subTypeFees]['total'][$weekKey] = ($result[$mainType][$subTypeFees]['total'][$weekKey] ?? 0) + $amount;
+
+            // Same breakdown payload as the two cash-cover rows below, so the
+            // ℹ️ popup on "LGs Commission & Fees" shows which guarantees the
+            // cell is made of instead of a bare number.
+            $letterOfGuaranteeModelData[$subTypeFees][$lgType]['weeks'][$weekKey][] = [
+                'amount' => $amount,
+                'lg_code' => $row->lg_code,
+                'name' => $row->partner_name,
+            ];
         }
 
         // ⚠️ Bug fix: this used to be a single, unfiltered query that read

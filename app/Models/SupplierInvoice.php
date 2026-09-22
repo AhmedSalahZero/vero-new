@@ -635,6 +635,10 @@ class SupplierInvoice extends Model implements IInvoice
 				'down_payment_order_id_column' => 'purchase_order_id',
 				'add_to_cash_inflow_total' => false,
 				'paid_or_collected_status' => self::COLLETED_OR_PAID,
+				'invoice_settled_main_column' => 'total_paid_amount_in_main_currency',
+				'down_payment_money_table' => 'money_payments',
+				'down_payment_money_id_column' => 'money_payment_id',
+				'down_payment_money_date_column' => 'delivery_date',
 			],
 			$poAllocations
 		);
@@ -684,6 +688,10 @@ class SupplierInvoice extends Model implements IInvoice
 				'down_payment_order_id_column' => 'purchase_order_id',
 				'add_to_cash_inflow_total' => false,
 				'paid_or_collected_status' => self::COLLETED_OR_PAID,
+				'invoice_settled_main_column' => 'total_paid_amount_in_main_currency',
+				'down_payment_money_table' => 'money_payments',
+				'down_payment_money_id_column' => 'money_payment_id',
+				'down_payment_money_date_column' => 'delivery_date',
 				'contract_scope' => 'supplier_children',
 			]
 		);

@@ -442,7 +442,12 @@ class ForecastedProjectPaymentTest extends TestCase
         $this->assertSame(['Vendor Test 2-Test 2' => 3000.0], $this->subRows($this->runRow($scenario['customer_contract_id'])));
     }
 
-    public function test_a_partially_settled_supplier_invoice_only_deducts_what_is_left(): void
+    /**
+     * * الفاتورة المسدّدة جزئيا بتخصم بالكامل — مش الباقي منها بس :
+     * * الـ 1250 المدفوعة فلوس خرجت خلاص ، و الـ 750 المفتوحة ظاهرة
+     * * في صف Suppliers Invoices . الاتنين مش دفعات مستقبلية متوقعة .
+     */
+    public function test_a_partially_settled_supplier_invoice_deducts_the_whole_invoice(): void
     {
         $scenario = $this->buildBaseScenario();
         $invoiceId = $this->supplierInvoice($scenario['supplier_contract_code'], 'P00256', 'EGP', 2000, 1250);
@@ -450,10 +455,15 @@ class ForecastedProjectPaymentTest extends TestCase
         $stored = $this->storedInvoice($invoiceId);
         $this->assertSame(750.0, (float) $stored->net_balance);
         $this->assertNotSame(SupplierInvoice::COLLETED_OR_PAID, $stored->invoice_status);
-        $this->assertSame(['Vendor Test 2-Test 2' => 4250.0], $this->subRows($this->runRow($scenario['customer_contract_id'])));
+        $this->assertSame(['Vendor Test 2-Test 2' => 3000.0], $this->subRows($this->runRow($scenario['customer_contract_id'])));
     }
 
-    public function test_a_fully_paid_supplier_invoice_is_excluded_like_on_the_collection_side(): void
+    /**
+     * * الفاتورة المدفوعة بالكامل مابقتش مستبعدة : المعادلة بتطرح
+     * * المسدّد (total_paid_amount_in_main_currency) ، و ده بالظبط
+     * * اللي بيمنع التقرير من انه يتوقع صرف فلوس اتصرفت خلاص .
+     */
+    public function test_a_fully_paid_supplier_invoice_deducts_what_was_paid(): void
     {
         $scenario = $this->buildBaseScenario();
         $invoiceId = $this->supplierInvoice($scenario['supplier_contract_code'], 'P00256', 'EGP', 2000, 2000);
@@ -461,7 +471,7 @@ class ForecastedProjectPaymentTest extends TestCase
         $stored = $this->storedInvoice($invoiceId);
         $this->assertSame(0.0, (float) $stored->net_balance);
         $this->assertSame(SupplierInvoice::COLLETED_OR_PAID, $stored->invoice_status);
-        $this->assertSame(['Vendor Test 2-Test 2' => 5000.0], $this->subRows($this->runRow($scenario['customer_contract_id'])));
+        $this->assertSame(['Vendor Test 2-Test 2' => 3000.0], $this->subRows($this->runRow($scenario['customer_contract_id'])));
     }
 
     public function test_an_invoice_on_another_purchase_order_does_not_touch_this_one(): void

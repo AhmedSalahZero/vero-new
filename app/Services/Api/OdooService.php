@@ -1348,7 +1348,7 @@ class OdooService
             'in_invoice',
             'out_invoice'
         ])
-        // ,array('name', '=', 'BILL/2026/04/0005')
+        // ,array('name', '=', 'INV/2026/00010')
         ,array('state', '=', 'posted')
 		,  array('write_date', '>=', $startDate),
             array('write_date', '<=', $endDate),
@@ -1369,7 +1369,7 @@ class OdooService
         if (! count($invoiceIds)) {
             return [];
         }
-
+		
         return $this->readInBatches('account.move', $invoiceIds, $fields);
         // /**
         //  * * الكود اللي تحت دا بيجيب المنتجات

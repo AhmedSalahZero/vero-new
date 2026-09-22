@@ -119,6 +119,19 @@
     {{-- <td class="sub-text-bg max-w-classes-name editable editable-text is-name-cell">{{$currentSubRowKeyName }}</td> --}}
     @php
     $currentSubTotal = 0;
+
+    /**
+     * * صفوف خطابات الضمان اللي ليها breakdown popup
+     *
+     * * التلاتة بياخدوا بياناتهم من نفس المصدر
+     * * ($letterOfGuaranteeModelData) و هو متقسّم بإسم الصف ، فالبوب اب
+     * * واحد بيخدمهم كلهم بدل ما نكرّره تلات مرات
+     */
+    $lgBreakdownRowNames = [
+    __('Cancelled LGs Cash Cover'),
+    __('Issued LG Cash Cover'),
+    __('LGs Commission & Fees'),
+    ];
     @endphp
     @foreach($weeks as $weekAndYear => $week)
     @php
@@ -159,9 +172,17 @@
     @endphp
     <td class="sub-numeric-bg text-center editable-date">{{ number_format($currentValue) }}
 
-        @if($customerName == __('Cancelled LGs Cash Cover') && $currentValue)
+        @if(in_array($customerName, $lgBreakdownRowNames, true) && $currentValue)
         @php
-        $currentId = convertStringToClass($currentSubRowKeyName.$weekAndYear);
+        /**
+         * * الـ id لازم يشيل اسم الصف الأب كمان : نفس نوع الخطاب بيتكرر
+         * * تحت التلات صفوف ، فـ (نوع + أسبوع) لوحدهم كانوا هيدّوا نفس
+         * * الـ id لتلات بوب اب مختلفين و بوتستراب بيفتح أول واحد يلاقيه
+         *
+         * * md5 مش convertStringToClass لأن "LGs Commission & Fees" فيها
+         * * & و دي بتكسر الـ CSS selector اللي data-target بيدوّر بيه
+         */
+        $currentId = substr(md5($customerName.'|'.$currentSubRowKeyName.'|'.$weekAndYear), 0, 12);
         @endphp
         <i data-toggle="modal" data-target="#lg-breakdown-modal-{{ $currentId }}" class="flaticon2-information fs-15 kt-font-primary exclude-icon ml-2 cursor-pointer"></i>
 
