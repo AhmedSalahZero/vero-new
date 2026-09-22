@@ -299,7 +299,7 @@ class CashFlowReportController
 		  
 		  CustomerInvoice::getCustomerInvoicesUnderCollectionAtDatesForContracts($result,$company->id,$contractCode,$datesWithWeekNumber,$endDate,$currency,$mainFunctionalCurrency);
 
-		  $isContract ? SupplierInvoice::getSupplierInvoicesForPoUnderCollectionAtDates($result,$company->id,$datesWithWeekNumber,$startDate,$endDate,$poAllocations,$pastDueSupplierInvoicesForContracts) : SupplierInvoice::getSupplierInvoicesUnderCollectionAtDates($result,$company->id,$datesWithWeekNumber,$startDate,$endDate,$currency,$mainFunctionalCurrency);
+		  $isContract ? SupplierInvoice::getSupplierInvoicesForPoUnderCollectionAtDates($result,$company->id,$datesWithWeekNumber,$startDate,$endDate,$poAllocations,$pastDueSupplierInvoicesForContracts,$contractId ? (int) $contractId : null) : SupplierInvoice::getSupplierInvoicesUnderCollectionAtDates($result,$company->id,$datesWithWeekNumber,$startDate,$endDate,$currency,$mainFunctionalCurrency);
 	
 		/**
 		 * Per-period movements. These used to be gathered by looping over

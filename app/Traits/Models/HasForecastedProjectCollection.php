@@ -181,8 +181,25 @@ trait HasForecastedProjectCollection
         // main functional currency further down anyway).
         $filterByCurrency = ! $showAllCurrenciesConverted && ! $useSupplierChildren;
 
+        // NOT filtered by contracts.end_date. It used to be
+        // ->where('end_date', '<=', $endDate), i.e. "only contracts that
+        // FINISH inside the report window" — which dropped the whole
+        // contract, orders and all, whenever it ran past the window's
+        // end. A contract running to July 2027 whose phases are invoiced
+        // and collected in Oct/Nov/Dec 2026 is entirely normal, and its
+        // Forecasted Project Collection row came out empty.
+        //
+        // The window is a property of each PHASE's collection date, not
+        // of the contract: phase dates live on the order
+        // (sales_orders/purchase_orders.end_date_N + collection_days_N),
+        // so no contracts.* date can stand in for them. Every phase is
+        // already checked against [$startDate, $endDate] in
+        // applyForecastedOrderBalance() and an order with nothing inside
+        // the window writes no row at all, so this was only ever a
+        // coarse pre-filter — and a wrong one. Dropping it costs
+        // nothing: the whole system holds a couple of hundred contracts,
+        // at most ~130 for a single company.
         $contracts = Contract::where('company_id', $companyId)
-            ->where('end_date', '<=', $endDate)
             ->when($filterByCurrency, function ($query) use ($currencyList) {
                 count($currencyList) === 1
                     ? $query->where('currency', $currencyList[0])
@@ -205,13 +222,13 @@ trait HasForecastedProjectCollection
                     continue;
                 }
 
-                $orderArr = HArr::getLatestNonZeroExecutionKeys($order->toArray());
-                if (empty($orderArr['end_date'])) {
+                $phases = HArr::getNonZeroExecutionPhases($order->toArray());
+                if (! $phases) {
                     continue;
                 }
 
                 self::applyForecastedOrderBalance(
-                    $result, $orderArr, $contract, $order->id, $contract->id,
+                    $result, $phases, $contract, $order->id, $contract->id,
                     $startDate, $endDate, $currency, $companyId, $datesWithWeekNumber,
                     $foreignExchangeRates, $mainFunctionalCurrency,
                     $mainResultType, $resultKey, $invoiceTable, $orderNumberKey,
@@ -225,8 +242,8 @@ trait HasForecastedProjectCollection
         // po_allocations, weighted by allocation_percentage. ──────────
         if ($poAllocations !== null) {
             foreach ($poAllocations as $poAllocation) {
-                $orderArr = HArr::getLatestNonZeroExecutionKeys($poAllocation->toArray());
-                if (empty($orderArr['end_date'])) {
+                $phases = HArr::getNonZeroExecutionPhases($poAllocation->toArray());
+                if (! $phases) {
                     continue;
                 }
 
@@ -245,7 +262,7 @@ trait HasForecastedProjectCollection
                 }
 
                 self::applyForecastedOrderBalance(
-                    $result, $orderArr, $supplierContract, $poAllocation->purchase_order_id, $poAllocation->customer_contract_id,
+                    $result, $phases, $supplierContract, $poAllocation->purchase_order_id, $poAllocation->customer_contract_id,
                     $startDate, $endDate, $currency, $companyId, $datesWithWeekNumber,
                     $foreignExchangeRates, $mainFunctionalCurrency,
                     $mainResultType, $resultKey, $invoiceTable, $orderNumberKey,
@@ -260,10 +277,37 @@ trait HasForecastedProjectCollection
      * One order's (Sales Order / Purchase Order) contribution to the
      * forecast row — shared by both the "directly owned" and the
      * "allocated via po_allocations" paths above.
+     *
+     * ── Per-execution-phase split (fixed 2026-09) ───────────────────
+     * $phases is every non-zero execution phase of the order, oldest
+     * end_date first (HArr::getNonZeroExecutionPhases). Each phase is
+     * invoiced at its own end_date and collected collection_days
+     * later, so each lands in its OWN period bucket, carrying its own
+     * share of the order amount.
+     *
+     * Before this, only the phase with the furthest end_date was read
+     * and the WHOLE order amount was dropped into that single bucket —
+     * a 1,000,000 contract split 50/20/30 across Sep/Oct/Nov showed as
+     * 1,000,000 in December instead of 500,000 / 200,000 / 300,000
+     * across October / November / December.
+     *
+     * ── Where the deduction lands (confirmed with project owner) ────
+     * "Unused down payment + open invoices" is one number for the
+     * whole order, but the forecast is now several buckets, so it has
+     * to be spent somewhere. It eats the phases OLDEST FIRST: money
+     * already received, or already invoiced, covers the phases that
+     * have actually been executed, and only what is left over stays in
+     * the later phases at their own dates.
+     *
+     * The deduction walk runs over EVERY phase in order — including
+     * phases whose collection date falls outside the report window —
+     * before the window check, otherwise an early out-of-window phase
+     * would keep its share of the deduction unspent and the in-window
+     * phases would be over-deducted.
      */
     private static function applyForecastedOrderBalance(
         array &$result,
-        array $orderArr,
+        array $phases,
         Contract $contract,
         $orderId,
         $downPaymentContractId,
@@ -287,19 +331,13 @@ trait HasForecastedProjectCollection
     ): void {
         $totalCashInFlowKey = __('Total Cash Inflow');
 
-        $orderEndDate = $orderArr['end_date'];
-        $orderCollectionDays = $orderArr['collection_days'] ?? 0;
-        $currentCollectionDate = Carbon::make($orderEndDate)->addDays($orderCollectionDays);
-        if (! $currentCollectionDate->between($startDate, $endDate)) {
-            return;
-        }
+        // Order-level columns (amount, so_number/po_number) are copied
+        // onto every phase, so any phase answers for the whole order.
+        $orderAmount = (float) $phases[0]['amount'];
+        $orderNumber = $phases[0][$orderNumberKey];
 
-        $currentCollectionDateFormatted = $currentCollectionDate->format('Y-m-d');
-        $currentWeekYear = $datesWithWeekNumber[$currentCollectionDateFormatted];
-        $orderAmount = $orderArr['amount'];
         $contractCode = $contract->getCode();
         $contractName = $contract->getName();
-        $orderNumber = $orderArr[$orderNumberKey];
         $customerName = $contract->getClientName();
 
         // Sum of each linked invoice's OWN net_balance — already
@@ -327,25 +365,46 @@ trait HasForecastedProjectCollection
             ->where('contract_id', $downPaymentContractId)
             ->sum('down_payment_balance');
 
-        $orderNetBalance = $orderAmount - $unusedDownPaymentBalance - $invoicesNetBalance;
-        if ($orderNetBalance < 0) {
-            $orderNetBalance = 0;
-        }
-
-        $exchangeRate = ForeignExchangeRate::getExchangeRateAtOrOne($contract->getCurrency(), $mainFunctionalCurrency, $currentCollectionDateFormatted, $companyId, $foreignExchangeRates);
-        $orderNetBalance = $orderNetBalance * $exchangeRate * $weightMultiplier;
-
+        $remainingDeduction = $unusedDownPaymentBalance + $invoicesNetBalance;
         $rowLabel = $customerName.'-'.$contractName;
-        $result[$mainResultType][$resultKey][$rowLabel]['weeks'][$currentWeekYear] =
-            ($result[$mainResultType][$resultKey][$rowLabel]['weeks'][$currentWeekYear] ?? 0) + $orderNetBalance;
-        $result[$mainResultType][$resultKey][$rowLabel]['total'] =
-            ($result[$mainResultType][$resultKey][$rowLabel]['total'] ?? 0) + $orderNetBalance;
-        $result[$mainResultType][$resultKey]['total'][$currentWeekYear] =
-            ($result[$mainResultType][$resultKey]['total'][$currentWeekYear] ?? 0) + $orderNetBalance;
 
-        if ($addToCashInflowTotal) {
-            $result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] =
-                ($result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] ?? 0) + $orderNetBalance;
+        foreach ($phases as $phase) {
+            $phaseAmount = $orderAmount * $phase['share'];
+
+            // min() is what keeps the forecast from going negative and
+            // carries any excess on to the next phase.
+            $deducted = min($remainingDeduction, $phaseAmount);
+            $remainingDeduction -= $deducted;
+            $phaseNetBalance = $phaseAmount - $deducted;
+
+            $currentCollectionDate = Carbon::make($phase['end_date'])
+                ->addDays((int) $phase['collection_days']);
+            if (! $currentCollectionDate->between($startDate, $endDate)) {
+                continue;
+            }
+
+            $currentCollectionDateFormatted = $currentCollectionDate->format('Y-m-d');
+            if (! isset($datesWithWeekNumber[$currentCollectionDateFormatted])) {
+                continue;
+            }
+            $currentWeekYear = $datesWithWeekNumber[$currentCollectionDateFormatted];
+
+            // Each phase converts at the rate of ITS own collection
+            // date, not one rate for the whole order.
+            $exchangeRate = ForeignExchangeRate::getExchangeRateAtOrOne($contract->getCurrency(), $mainFunctionalCurrency, $currentCollectionDateFormatted, $companyId, $foreignExchangeRates);
+            $phaseNetBalance = $phaseNetBalance * $exchangeRate * $weightMultiplier;
+
+            $result[$mainResultType][$resultKey][$rowLabel]['weeks'][$currentWeekYear] =
+                ($result[$mainResultType][$resultKey][$rowLabel]['weeks'][$currentWeekYear] ?? 0) + $phaseNetBalance;
+            $result[$mainResultType][$resultKey][$rowLabel]['total'] =
+                ($result[$mainResultType][$resultKey][$rowLabel]['total'] ?? 0) + $phaseNetBalance;
+            $result[$mainResultType][$resultKey]['total'][$currentWeekYear] =
+                ($result[$mainResultType][$resultKey]['total'][$currentWeekYear] ?? 0) + $phaseNetBalance;
+
+            if ($addToCashInflowTotal) {
+                $result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] =
+                    ($result['customers'][$totalCashInFlowKey]['total'][$currentWeekYear] ?? 0) + $phaseNetBalance;
+            }
         }
     }
 }
