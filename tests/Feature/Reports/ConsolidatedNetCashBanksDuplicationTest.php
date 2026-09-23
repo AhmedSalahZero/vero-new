@@ -198,13 +198,55 @@ class ConsolidatedNetCashBanksDuplicationTest extends TestCase
             $banks = (float) ($grand['cash_and_banks'][$period] ?? 0);
             $net = (float) ($grand['net_cash'][$period] ?? 0);
 
-            $this->assertEqualsWithDelta($inflow - $outflow, $net, 0.01,
-                "صافي التدفق في {$period} لازم يساوي الداخل − الخارج");
+            // الرصيد بيتحسب في الصافي مرة واحدة بس
+            $this->assertEqualsWithDelta($inflow + $banks - $outflow, $net, 0.01,
+                "صافي التدفق في {$period} لازم يساوي الداخل + الرصيد − الخارج");
+        }
+    }
 
-            if ($banks > 0.0) {
-                $this->assertEqualsWithDelta($inflow + $banks - $outflow - $banks, $net, 0.01,
-                    "رصيد البنوك في {$period} اتحسب مرتين");
+    /**
+     * * الرصيد ليه صف لوحده (banksSection / grandTotal['cash_and_banks']) ،
+     * * فلو فضل داخل في صف الدخل غير المخصّص كمان بيبان مرتين على الشاشة .
+     */
+    public function test_the_bank_balance_is_not_repeated_inside_the_unallocated_inflow_row(): void
+    {
+        $this->bankAccountWithOpeningBalance();
+        $contract = $this->customerContract(60000);
+
+        $data = $this->buildReport($contract);
+        $grand = $data['grandTotal'];
+
+        $this->assertGreaterThan(0.0, array_sum($grand['cash_and_banks']),
+            'الفكسشر لازم ينتج رصيد بنوك غير صفر و إلا التست ما بيختبرش حاجة');
+
+        $contractsInflow = [];
+        foreach (($data['contractsSection'] ?? []) as $block) {
+            foreach (($block['cash_inflow'] ?? []) as $period => $amount) {
+                $contractsInflow[$period] = ($contractsInflow[$period] ?? 0.0) + (float) $amount;
             }
+        }
+
+        foreach (array_keys($data['weeks']) as $period) {
+            $banks = (float) ($grand['cash_and_banks'][$period] ?? 0);
+            if ($banks <= 0.0) {
+                continue;
+            }
+
+            $unallocated = (float) ($data['companyUnallocatedCashIn'][$period] ?? 0);
+            $sumInflow = (float) ($grand['cash_inflow'][$period] ?? 0);
+
+            $this->assertEqualsWithDelta(
+                ($contractsInflow[$period] ?? 0.0) + $unallocated, $sumInflow, 0.01,
+                "مجموع الداخل في {$period} لازم يكون العقود + غير المخصّص");
+
+            /*
+             * في الفكسشر ده مفيش للشركة اي دخل غير رصيد البنوك و توقّع
+             * العقد نفسه ، و توقّع العقد بيتطرح لانه في contractsSection —
+             * فالصف الصح لازم يكون اقل من الرصيد . لو الرصيد تسرّب جوه
+             * الصف كان هيبقى مساوي له على الاقل .
+             */
+            $this->assertLessThan($banks, $unallocated,
+                "صف الدخل غير المخصّص في {$period} المفروض ما يشملش رصيد البنوك");
         }
     }
 

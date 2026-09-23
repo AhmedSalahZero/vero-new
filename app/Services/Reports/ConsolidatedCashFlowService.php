@@ -343,7 +343,7 @@ class ConsolidatedCashFlowService
             $sumOutflow = $this->sumByWeek($sumOutflow, $companyUnallocatedCashOut);
 
             $cashAndBanks = $banksSection[self::CASH_AND_BANKS_BALANCE_KEY]['total'] ?? [];
-            $sumNet = $this->netCashFromTotals($sumInflow, $sumOutflow, $weeks);
+            $sumNet = $this->netCashFromTotals($sumInflow, $cashAndBanks, $sumOutflow, $weeks);
             $grandTotal = [
                 'cash_and_banks' => $cashAndBanks,
                 'cash_inflow' => $sumInflow,
@@ -508,6 +508,14 @@ class ConsolidatedCashFlowService
      * projected. They now both mean "what the report shows for the
      * company, minus what it shows for the contracts you picked".
      *
+     * ⚠️ "Cash & Banks Balance" IS subtracted, though: it is part of the
+     * company's "Total Cash Inflow" but the report already prints it as
+     * its own row (banksSection / grandTotal['cash_and_banks']), so
+     * leaving it here showed the same opening balance twice on screen.
+     * It is not lost — netCashFromTotals() adds it back exactly once when
+     * it computes Net Cash, so Net Cash and Accumulated Net Cash keep the
+     * same values they had before this row was trimmed.
+     *
      * @param  list<array{cash_inflow: array<string, float|int>}>  $contractsSection
      * @param  array<string, string|int>  $weeks
      * @return array<string, float|int>
@@ -515,6 +523,8 @@ class ConsolidatedCashFlowService
     private function computeUnallocatedCashIn(array $companyResult, array $contractsSection, array $weeks): array
     {
         $companyInflow = $this->extractTotalCashInflow($companyResult);
+        $cashAndBanks = $companyResult['customers'][self::CASH_AND_BANKS_BALANCE_KEY]['total'] ?? [];
+        $cashAndBanks = is_array($cashAndBanks) ? $cashAndBanks : [];
         $contractsInflow = [];
 
         foreach ($contractsSection as $block) {
@@ -525,7 +535,9 @@ class ConsolidatedCashFlowService
 
         $unallocated = [];
         foreach (array_keys($weeks) as $weekKey) {
-            $diff = (float) ($companyInflow[$weekKey] ?? 0) - (float) ($contractsInflow[$weekKey] ?? 0);
+            $diff = (float) ($companyInflow[$weekKey] ?? 0)
+                - (float) ($cashAndBanks[$weekKey] ?? 0)
+                - (float) ($contractsInflow[$weekKey] ?? 0);
             $unallocated[$weekKey] = max(0.0, $diff);
         }
 
@@ -628,27 +640,31 @@ class ConsolidatedCashFlowService
      * @return array<string, float|int>
      */
     /**
-     * صافي التدفق = الداخل − الخارج ، و خلاص .
+     * صافي التدفق = الداخل + رصيد البنوك − الخارج .
      *
-     * ⚠️ كان بيضيف "Cash & Banks Balance" فوق الداخل ، و ده كان بيعدّه
-     * * مرتين : الرصيد داخل اصلا في Total Cash Inflow بتاع الشركة ،
-     * * و منها بيعدي جوه companyUnallocatedCashIn الى $inflow هنا .
-     * * فصف صافي التدفق كان بيزيد بقيمة الرصيد كلها في اول فترة
-     * * (و الـ Accumulated بيورّث الزيادة على كل الفترات اللي بعدها) .
+     * * رصيد البنوك بيتحسب هنا **مرة واحدة بس** ، لان
+     * * computeUnallocatedCashIn() بتطرحه من طرف الشركة قبل ما تحطه في
+     * * $inflow . قبل كده كان داخل في الاتنين — في $inflow و هنا —
+     * * فصافي التدفق كان بيزيد بقيمة الرصيد كلها في اول فترة ، و
+     * * Accumulated Net Cash بيورّث الزيادة على كل الفترات اللي بعدها .
      *
-     * * الرصيد بيفضل معروض لوحده في grandTotal['cash_and_banks'] و في
-     * * banksSection عشان القارئ يشوف نقطة البداية ، بس مابيتضافش تاني .
+     * * يعني الثابتة اللي لازم تفضل : الرصيد يظهر مرة في صفه الخاص
+     * * (banksSection) و مرة في الصافي ، و مايظهرش خالص في صف الدخل
+     * * غير المخصّص .
      *
      * @param  array<string, float|int>  $inflow
+     * @param  array<string, float|int>  $cashAndBanks
      * @param  array<string, float|int>  $outflow
      * @param  array<string, string|int>  $weeks
      * @return array<string, float>
      */
-    private function netCashFromTotals(array $inflow, array $outflow, array $weeks): array
+    private function netCashFromTotals(array $inflow, array $cashAndBanks, array $outflow, array $weeks): array
     {
         $out = [];
         foreach (array_keys($weeks) as $wk) {
-            $out[$wk] = (float) ($inflow[$wk] ?? 0) - (float) ($outflow[$wk] ?? 0);
+            $out[$wk] = (float) ($inflow[$wk] ?? 0)
+                + (float) ($cashAndBanks[$wk] ?? 0)
+                - (float) ($outflow[$wk] ?? 0);
         }
 
         return $out;
