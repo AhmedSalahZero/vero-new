@@ -460,11 +460,15 @@ class SupplierInvoice extends Model implements IInvoice
 		// report. Main functional currency tab -> keep every currency
 		// (net_balance_in_main_currency is already the converted
 		// equivalent); a specific foreign-currency tab -> that currency only.
-		$showAllCurrenciesConverted = $mainFunctionalCurrency !== null && $currency === $mainFunctionalCurrency;
+		/**
+		 * * كل صفوف التقرير على مستوى الشركة و بالعملة الوظيفية دايما .
+		 * * اختيار العملة وظيفته يفلتر العقود بس (شوف
+		 * * HasForecastedProjectCollection) — مش يضيّق باقي الصفوف و لا
+		 * * يغيّر وحدة العرض . قبل كده تبويب العملة الاجنبية كان بيفلتر
+		 * * هنا كمان ، فالتقرير كان بيعرض جزء من الشركة و صافي التدفق
+		 * * ما كانش بيطابق بين الـ Consolidated و تقرير الشركة .
+		 */
 		$items = self::where('company_id',$companyId)
-		->when(! $showAllCurrenciesConverted && $currency !== null, function($builder) use ($currency){
-			$builder->where('currency',$currency);
-		})
 		->where('net_balance','>',0)
 	
 		->whereBetween('invoice_due_date',[$startDate,$endDate])->get();

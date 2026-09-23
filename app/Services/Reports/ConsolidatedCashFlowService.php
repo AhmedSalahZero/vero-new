@@ -395,8 +395,21 @@ class ConsolidatedCashFlowService
         LoanSchedule::getLoanInstallmentsAtDates($result, $foreignExchangeRates, $mainFunctionalCurrency, $companyId, $datesWithWeekNumber, $periodEnd);
         CashExpense::getProjectionOtherCashOut($result, $company, $cashflowReportId, $isContract);
         CustomerInvoice::getProjectionOtherCashIn($result, $company, $cashflowReportId, $isContract);
-        CustomerInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currencies, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
-        SupplierInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $currencies, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
+        /**
+         * * القسم العام لازم يشيل الشركة كلها — كل العقود بكل العملات ،
+         * * محوّلة للعملة الوظيفية . اختيار العملة وظيفته يحدد انهي عقود
+         * * تاخد صفوف مستقلة في contractsSection بس ، و اللي مش مختار
+         * * بيظهر في Cash In/Out (unallocated) .
+         *
+         * * قبل كده كان بيتبعت $currencies هنا ، فصفوف التوقّع في القسم
+         * * العام كانت بتتضيّق على العملات المختارة بينما باقي صفوفه
+         * * (بنوك ، فواتير ، شيكات ، عمولات) شايلة الشركة كلها — فاجمالي
+         * * القسم العام كان ناقص ، و صافي التدفق ما كانش بيطابق تقرير
+         * * الشركة . بعتنا العملة الوظيفية بدلها عشان الدالة توسّع لكل
+         * * العملات (شرط $showAllCurrenciesConverted جوه الـ trait) .
+         */
+        CustomerInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $mainFunctionalCurrency, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
+        SupplierInvoice::getForecastedProjectCollection($result, $periodStart, $periodEnd, $mainFunctionalCurrency, $companyId, $datesWithWeekNumber, null, $foreignExchangeRates, $mainFunctionalCurrency);
         CustomerInvoice::getCustomerInvoicesUnderCollectionAtDatesForContracts($result, $companyId, null, $datesWithWeekNumber, $periodEnd);
         SupplierInvoice::getSupplierInvoicesUnderCollectionAtDates($result, $companyId, $datesWithWeekNumber, $periodStart, $periodEnd);
 
