@@ -25,10 +25,31 @@
 
 
 
+/* الاعمدة الثابتة (DataTables FixedColumns) بتفضل مكانها وقت السحب
+   الافقي ، و الاعمدة المتحركة بتعدي من وراها . فلو خلفيتها شفافة
+   الكلام بيتراكب — و ده اللي كان بيحصل في صفوف الجسم .
+
+   ملف المكتبة datatable.css فيه القاعدة دي اصلا ، بس هو متعلّق عليه
+   في layouts/dashboard.blade.php فما بتوصلش . بنعرّفها هنا بدل ما
+   نحمّل الملف كله (٦٠ كيلوبايت) و نخاطر بتغيير شكل جداول تانية .
+
+   من غير !important عن قصد : الصفوف الملوّنة (الاجماليات و الصفوف
+   الفرعية) معرّفة بـ !important في البليدات و لازم تفضل تدوس على دي . */
 table.dataTable thead tr > .dtfc-fixed-left, table.dataTable thead tr > .dtfc-fixed-right{
 	  background-color: #0741A5 !important;  
 	
   }
+
+table.dataTable tbody tr > .dtfc-fixed-left,
+table.dataTable tbody tr > .dtfc-fixed-right {
+	background-color: #fff;
+	z-index: 1;
+}
+
+div.dtfc-left-top-blocker,
+div.dtfc-right-top-blocker {
+	background-color: #fff;
+}
  
   
 .active-text-color   {

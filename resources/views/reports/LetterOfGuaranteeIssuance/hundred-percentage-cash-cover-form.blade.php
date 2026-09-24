@@ -296,17 +296,19 @@ use App\Models\LetterOfGuaranteeIssuance;
 
                                     <div class="col-md-3">
 
-                                        <x-form.date :classes="'recalc-renewal-date issuance-date-js'" :label="__('Issuance Date')" :required="true" :model="$model??null" :name="'issuance_date'" :placeholder="__('Select Purchase Order Date')"></x-form.date>
+                                        <x-form.date :classes="'recalc-lg-duration issuance-date-js'" :label="__('Issuance Date')" :required="true" :model="$model??null" :name="'issuance_date'" :placeholder="__('Select Purchase Order Date')"></x-form.date>
                                     </div>
 
                                     <div class="col-md-3">
-                                        <x-form.input :default-value="1" :model="$model??null" :label="__('LG Duration Months')" :type="'numeric'" :placeholder="__('LG Duration Months')" :name="'lg_duration_months'" :class="'recalc-renewal-date lg-duration-months-js'" :required="true"></x-form.input>
+
+                                        <x-form.date :classes="'recalc-lg-duration renewal-date-js'" :label="__('Renewal Date')" :required="true" :model="$model??null" :name="'renewal_date'" :placeholder="__('Select Renewal Date')"></x-form.date>
                                     </div>
 
-
+                                    {{-- * المدة بقت محسوبة تلقائيا من تاريخي الاصدار و التجديد ، و
+                                         * readonly مش disabled عن قصد : الـ disabled مابيتبعتش مع الفورم
+                                         * و القيمة دي بتدخل في حسابات العمولة فلازم توصل للسيرفر . --}}
                                     <div class="col-md-3">
-
-                                        <x-form.date :classes="'renewal-date-js'" :readonly="true" :label="__('Renewal Date')" :required="true" :model="$model??null" :name="'renewal_date'" :placeholder="__('Select Renewal Date')"></x-form.date>
+                                        <x-form.input :default-value="1" :readonly="true" :model="$model??null" :label="__('LG Duration Months')" :type="'numeric'" :placeholder="__('LG Duration Months')" :name="'lg_duration_months'" :class="'lg-duration-months-js'" :required="true"></x-form.input>
                                     </div>
 
                                  
@@ -575,22 +577,48 @@ use App\Models\LetterOfGuaranteeIssuance;
             </script>
 
             <script>
-                $(document).on('change', '.recalc-renewal-date', function(e) {
-                    e.preventDefault()
-                    let date = $('.issuance-date-js').val();
-                    date = date.replaceAll('-', '/')
+                /*
+                 * * المدة بقت مخرجات مش مدخلات : المستخدم بيختار تاريخ
+                 * * الاصدار و تاريخ التجديد ، و الشهور بتتحسب بينهم .
+                 *
+                 * * التقريب لفوق (ceiling) : اي يوم زيادة بيحسب شهر كامل ،
+                 * * يعني ٣ شهور و يوم = ٤ شهور . و ده لان الرقم بيغذّي
+                 * * حسابات العمولة اللي بتتحسب بالشهر .
+                 *
+                 * * الحد الادنى شهر واحد عشان ما يحصلش صفر او سالب لو
+                 * * المستخدم اختار تاريخ تجديد قبل تاريخ الاصدار .
+                 */
+                function monthsBetweenCeil(startValue, endValue) {
+                    const start = new Date(String(startValue).replaceAll('-', '/'));
+                    const end = new Date(String(endValue).replaceAll('-', '/'));
 
-                    const issuanceDate = new Date(date);
-                    const duration = $('.lg-duration-months-js').val();
-                    if (issuanceDate || duration == '0') {
-                        const numberOfMonths = duration
-
-                        let renewalDate = issuanceDate.addMonths(numberOfMonths)
-
-                        renewalDate = formatDateForSelect2(renewalDate)
-                        $('.renewal-date-js').val(renewalDate).trigger('change')
+                    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+                        return null;
                     }
 
+                    let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+                    if (end.getDate() > start.getDate()) {
+                        months += 1;
+                    }
+
+                    return Math.max(1, months);
+                }
+
+                $(document).on('change', '.recalc-lg-duration', function(e) {
+                    e.preventDefault()
+
+                    const issuance = $('.issuance-date-js').val();
+                    const renewal = $('.renewal-date-js').val();
+                    if (!issuance || !renewal) {
+                        return;
+                    }
+
+                    const months = monthsBetweenCeil(issuance, renewal);
+                    if (months === null) {
+                        return;
+                    }
+
+                    $('.lg-duration-months-js').val(months).trigger('change');
                 })
                 $(document).on('change', '.recalculate-cash-cover-amount-js', function() {
                     const lgAmount = number_unformat($('.lg-amount-js').val())
@@ -606,7 +634,7 @@ use App\Models\LetterOfGuaranteeIssuance;
                     $('.lg-commission-amount-js').val(toFixed(lgCommissionAmount))
                 })
 
-                $('.recalc-renewal-date').trigger('change')
+                $('.recalc-lg-duration').trigger('change')
                 $('.recalculate-cash-cover-amount-js').trigger('change')
                 $('.recalculate-lg-commission-amount-js').trigger('change')
 

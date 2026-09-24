@@ -108,15 +108,18 @@ class ConsolidatedMatchesCompanyNetCashTest extends TestCase
         return Contract::find($contractId);
     }
 
-    /** @return array<string, float> صافي التدفق لكل فترة */
-    private function companyReportNet(array $params): array
+    /** @return array{0: array<string, float>, 1: array<string, float>} [الصافي , التراكمي] لكل فترة */
+    private function companyReportNetAndAccumulated(array $params): array
     {
         $request = Request::create('/x', 'GET', $params);
         app()->instance('request', $request);
         $out = app(CashFlowReportController::class)->result(Company::find($this->companyId), $request, true);
         $result = is_array($out) ? ($out['result'] ?? $out) : [];
 
-        return $result['cash_expenses'][__('Net Cash (+/-)')]['total'] ?? [];
+        return [
+            $result['cash_expenses'][__('Net Cash (+/-)')]['total'] ?? [],
+            $result['cash_expenses'][__('Accumulated Net Cash (+/-)')]['total'] ?? [],
+        ];
     }
 
     public function test_net_cash_matches_the_company_report_whatever_currency_is_picked(): void
@@ -126,7 +129,7 @@ class ConsolidatedMatchesCompanyNetCashTest extends TestCase
 
         $window = ['report_interval' => 'monthly', 'start_date' => '09/01/2026', 'end_date' => '01/31/2027'];
 
-        $reference = $this->companyReportNet($window + ['currency' => 'EGP']);
+        [$reference, $referenceAccumulated] = $this->companyReportNetAndAccumulated($window + ['currency' => 'EGP']);
         if ($reference === []) {
             $this->markTestSkipped('Today is outside the report window this test builds.');
         }
@@ -157,6 +160,14 @@ class ConsolidatedMatchesCompanyNetCashTest extends TestCase
                     (float) ($data['grandTotal']['net_cash'][$period] ?? 0),
                     0.01,
                     "صافي التدفق في {$period} مع اختيار [{$label}] لازم يطابق تقرير الشركة"
+                );
+
+                // التراكمي كمان مش الصافي بس — ده اللي المستخدم بيقرأه
+                $this->assertEqualsWithDelta(
+                    (float) ($referenceAccumulated[$period] ?? 0),
+                    (float) ($data['grandTotal']['accumulated_net'][$period] ?? 0),
+                    0.01,
+                    "التراكمي في {$period} مع اختيار [{$label}] لازم يطابق تقرير الشركة"
                 );
             }
         }
