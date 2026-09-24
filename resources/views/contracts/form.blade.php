@@ -190,7 +190,13 @@ use App\Models\MoneyReceived ;
                                 </div> --}}
 								
 								 <div class="col-md-2">
-                                    <x-form.date :type="'text'" :classes="'datepicker-input '" :default-value="formatDateForDatePicker(old('end_date') ?: (isset($model)  ? $model->getEndDate() : now()->addYear()) )" :model="$model??null" :label="__('End Date')" :type="'text'" :id="'end-date-id'" :placeholder="__('')" :name="'end_date'" :required="true"></x-form.date>
+                                    {{-- * الكلاس end-date مطلوب : فحص تواريخ مراحل التنفيذ في
+                                         * recheck-start-date-rule-js بيقرا حد العقد بـ $('.end-date').
+                                         * الحقل اللي كان شايله اتعلّق عليه تحت و اللي محلّه اتعمل من
+                                         * غيره ، فالـ selector كان بيرجّع undefined → new Date(undefined)
+                                         * = Invalid Date ، و اي مقارنة مع Invalid Date بترجع false —
+                                         * يعني الشرط كان ميت و الفورم بيقبل اي تاريخ بعد نهاية العقد . --}}
+                                    <x-form.date :type="'text'" :classes="'datepicker-input end-date '" :default-value="formatDateForDatePicker(old('end_date') ?: (isset($model)  ? $model->getEndDate() : now()->addYear()) )" :model="$model??null" :label="__('End Date')" :type="'text'" :id="'end-date-id'" :placeholder="__('')" :name="'end_date'" :required="true"></x-form.date>
                                 </div>
 								
                                 {{-- <div class="col-md-2">
@@ -718,101 +724,18 @@ use App\Models\MoneyReceived ;
 </script>
 
 <script>
-$(document).on('change','.recheck-start-date-rule-js',function(){
-	
-	let originContractStartDate = $('.start-date').val() ;
-	let contractStartDate = new Date(originContractStartDate)
-	let originContractEndDate = $('.end-date').val() ;
-	let contractEndDate = new Date(originContractEndDate)
-	let value = new Date($(this).val())
-	if(value < contractStartDate ){
-		let lang = $('body').data('lang');
-	title = "Oops..." ;
-	message = "Execution Start Date Can Not Be Less Than Contract Start Date" ;
-	if(lang === 'ar'){
-		title = 'خطأ'  ;
-		message = "تاريخ بدايه التنفيذ لا يمكن ان يكون اصغر من تاريخ بدايه العقد"
-	}
-	Swal.fire({
-            icon: "warning",
-            title,
-            text: message,
-        })
-		
-		$(this).datepicker('update',originContractStartDate)
-		
-	}
-	else if(value > contractEndDate ){
-		let lang = $('body').data('lang');
-	title = "Oops..." ;
-	message = "Execution Start Date Can Not Be Greater Than Contract End Date" ;
-	if(lang === 'ar'){
-		title = 'خطأ'  ;
-		message = "تاريخ بدايه التنفيذ لا يمكن ان يكون اكبر من تاريخ نهاية العقد"
-	}
-	Swal.fire({
-            icon: "warning",
-            title,
-            text: message,
-        })
-		
-		$(this).datepicker('update',originContractEndDate)
-		
-	}
-
-	
-	
-	
-})
-
-$(document).on('change','.recheck-end-date-rule-js',function(){
-	
-	let originContractStartDate = $('.start-date').val() ;
-	let contractStartDate = new Date(originContractStartDate)
-	let originContractEndDate = $('.end-date').val() ;
-	let contractEndDate = new Date(originContractEndDate)
-	let value = new Date($(this).val())
-	if(value < contractStartDate ){
-		let lang = $('body').data('lang');
-	title = "Oops..." ;
-	message = "Execution Date Can Not Be Less Than Contract Start Date" ;
-	if(lang === 'ar'){
-		title = 'خطأ'  ;
-		message = "تاريخ التنفيذ لا يمكن ان يكون اصغر من تاريخ بدايه العقد"
-	}
-	Swal.fire({
-            icon: "warning",
-            title,
-            text: message,
-        })
-		
-		$(this).datepicker('update',originContractStartDate)
-		
-	}
-	else if(value > contractEndDate ){
-		let lang = $('body').data('lang');
-	title = "Oops..." ;
-	message = "Execution Date Can Not Be Greater Than Contract End Date" ;
-	if(lang === 'ar'){
-		title = 'خطأ'  ;
-		message = "تاريخ التنفيذ لا يمكن ان يكون اكبر من تاريخ نهاية العقد"
-	}
-	Swal.fire({
-            icon: "warning",
-            title,
-            text: message,
-        })
-		
-		$(this).datepicker('update',originContractEndDate)
-		
-	}
-
-	
-	
-	
-})
-
-$('.recheck-start-date-rule-js').trigger('change')
+/*
+ * * فحص تواريخ مراحل التنفيذ اتنقل للسيرفر (StoreContractRequest) .
+ *
+ * * الكود اللي كان هنا كان بيعمل حاجتين وقت الكتابة : يطلّع تحذير ، و
+ * * يرجّع التاريخ لحد العقد بـ datepicker('update', ...) — يعني بيغيّر
+ * * اللي المستخدم كتبه من تحت ايده . المطلوب انه يسيبه يكتب و يقوله
+ * * وقت الحفظ ايه الغلط بالظبط (اي تاريخ ، في اي امر ، في اي مرحلة) .
+ *
+ * * و كان معطّل اصلا : بيقرا حد العقد بـ $('.end-date') و الكلاس ده
+ * * ما كانش موجود على الحقل ، فـ new Date(undefined) = Invalid Date و
+ * * اي مقارنة معاه بترجع false .
+ */
 </script>
 <script src="{{asset('assets/form-repeater.js')}}" type="text/javascript"></script>
 

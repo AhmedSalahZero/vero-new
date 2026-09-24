@@ -46,7 +46,11 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <x-form.date :type="'text'" :classes="'datepicker-input recalc-end-date-2 start-date-2 recheck-start-date-rule-js'" :default-value="formatDateForDatePicker(isset($salesOrder)  ? $salesOrder->getStartDate($i) : now())" :model="$salesOrder??null" :label="''" :type="'text'" :placeholder="__('')" :name="'start_date_'.$i" :required="true"></x-form.date>
+                                    {{-- * تواريخ المراحل بتتفحص على السيرفر (StoreContractRequest) وقت
+                                         * الحفظ — مش وقت الكتابة . الكلاس recheck-start-date-rule-js
+                                         * و الهاندلر بتاعه اتشالوا لانهم كانوا بيرجّعوا التاريخ لحد
+                                         * العقد من تحت ايد المستخدم . --}}
+                                    <x-form.date :type="'text'" :classes="'datepicker-input recalc-end-date-2 start-date-2'" :default-value="formatDateForDatePicker(isset($salesOrder)  ? $salesOrder->getStartDate($i) : now())" :model="$salesOrder??null" :label="''" :type="'text'" :placeholder="__('')" :name="'start_date_'.$i" :required="true"></x-form.date>
                                 </td>
 
                                 {{-- <td>
@@ -57,7 +61,7 @@
                                     </div>
                                 </td> --}}
                                 <td>
-                                    <x-form.date :type="'text'" :classes="'datepicker-input recheck-start-date-rule-js  end-date-2'" :default-value="formatDateForDatePicker(isset($salesOrder)  ? $salesOrder->getEndDate($i) : now())" :model="$salesOrder??null" :label="''" :type="'text'" :placeholder="__('')" :name="'end_date_'.$i" :required="true"></x-form.date>
+                                    <x-form.date :type="'text'" :classes="'datepicker-input end-date-2'" :default-value="formatDateForDatePicker(isset($salesOrder)  ? $salesOrder->getEndDate($i) : now())" :model="$salesOrder??null" :label="''" :type="'text'" :placeholder="__('')" :name="'end_date_'.$i" :required="true"></x-form.date>
                                 </td>
                                 <td>
                                     <div class="kt-input-icon">
