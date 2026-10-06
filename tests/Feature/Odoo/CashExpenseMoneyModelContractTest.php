@@ -9,6 +9,7 @@ use App\Models\MoneyReceived;
 use App\Services\Api\OdooPayment;
 use App\Traits\HasOdooPaymentMethod;
 use App\Traits\Models\HasNonCustomerOrSupplier;
+use App\Traits\Models\IsMoneyOut;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 use ReflectionMethod;
@@ -399,5 +400,120 @@ class CashExpenseMoneyModelContractTest extends TestCase
             $source,
             'المقارنة لازم تفضل strict — من غير الـ true الأخيرة الـ null هتساوي أي نص فاضي'
         );
+    }
+
+    /**
+     * * markPayableChequeAsPaidInOdoo() بتنادي getAmountInReceivingCurrency()
+     * * على CashExpense نفسه لما مفيش تسويات. الميثود دي مش في OdooPayment
+     * * فتيست العقد اللي فوق مش ماسكها. من غيرها Mark as Paid بيقع:
+     * *   Call to undefined method CashExpense::getAmountInReceivingCurrency()
+     */
+    public function test_amount_in_receiving_currency_is_the_paid_amount_exactly_like_money_payment(): void
+    {
+        $this->assertTrue(method_exists(CashExpense::class, 'getAmountInReceivingCurrency'));
+
+        $expense = new CashExpense;
+        $expense->forceFill(['paid_amount' => 1500]);
+
+        $this->assertSame($expense->getPaidAmount(), $expense->getAmountInReceivingCurrency());
+
+        $payment = new MoneyPayment;
+        $payment->forceFill(['paid_amount' => 1500]);
+
+        $this->assertSame($payment->getAmountInReceivingCurrency(), $expense->getAmountInReceivingCurrency());
+    }
+
+    /**
+     * * Mark as Paid بينادي دوال على الموديل من IsMoneyOut مش من
+     * * OdooPayment ، فتيست العقد اللي فوق كان مش شايفهم. المصروف
+     * * النقدي بيبقى هو نفسه العنصر في $items لما مفيش تسويات.
+     *
+     * @return list<string>
+     */
+    private function methodsMarkAsPaidCallsOnTheMoneyModel(): array
+    {
+        $source = file_get_contents((new ReflectionClass(IsMoneyOut::class))->getFileName());
+
+        preg_match_all('/\$(?:this|settlementOrMoneyModel)->([a-zA-Z_][a-zA-Z0-9_]*)\(/', $source, $matches);
+
+        return array_values(array_diff(array_unique($matches[1]), ['update']));
+    }
+
+    public function test_mark_as_paid_really_calls_methods_on_the_money_model(): void
+    {
+        $this->assertNotEmpty($this->methodsMarkAsPaidCallsOnTheMoneyModel(),
+            'لو القايمة فضيت يبقى الاستخراج باظ و التست بقى بلا معنى');
+
+        $this->assertContains('getAmountInReceivingCurrency', $this->methodsMarkAsPaidCallsOnTheMoneyModel(),
+            'الاستخراج لازم يفضل ماسك النداء اللي كان ناقص على CashExpense');
+    }
+
+    /**
+     * * أي دالة IsMoneyOut بتناديها على $this أو على العنصر في $items
+     * * لازم تكون موجودة على CashExpense — من غيرها Mark as Paid بيقع
+     * * Call to undefined method والـ modal لسه مفتوح
+     */
+    public function test_cash_expense_satisfies_every_method_mark_as_paid_calls(): void
+    {
+        $missing = [];
+
+        foreach ($this->methodsMarkAsPaidCallsOnTheMoneyModel() as $method) {
+            if (! method_exists(CashExpense::class, $method)) {
+                $missing[] = $method;
+            }
+        }
+
+        $this->assertSame([], $missing,
+            "المصروف النقدي بيوصل markPayableChequeAsPaidInOdoo من غير تسويات ، فأي دالة ناقصة دي بتبقى\n"
+            ."Call to undefined method وقت Mark as Paid:\n  ".implode("\n  ", $missing));
+    }
+
+    /**
+     * @return list<class-string>
+     */
+    private function modelsUsingIsMoneyOut(): array
+    {
+        $found = [];
+
+        foreach (glob(app_path('Models').'/*.php') as $file) {
+            $class = 'App\\Models\\'.basename($file, '.php');
+
+            if (! class_exists($class) || ! is_subclass_of($class, Model::class)) {
+                continue;
+            }
+
+            if (in_array(IsMoneyOut::class, class_uses_recursive($class), true)) {
+                $found[] = $class;
+            }
+        }
+
+        sort($found);
+
+        return $found;
+    }
+
+    public function test_the_discovery_finds_the_models_using_is_money_out(): void
+    {
+        $models = $this->modelsUsingIsMoneyOut();
+
+        $this->assertContains(CashExpense::class, $models);
+        $this->assertContains(MoneyPayment::class, $models);
+    }
+
+    public function test_every_model_using_is_money_out_satisfies_mark_as_paid(): void
+    {
+        $gaps = [];
+
+        foreach ($this->modelsUsingIsMoneyOut() as $model) {
+            foreach ($this->methodsMarkAsPaidCallsOnTheMoneyModel() as $method) {
+                if (! method_exists($model, $method)) {
+                    $gaps[] = class_basename($model).'::'.$method.'()';
+                }
+            }
+        }
+
+        $this->assertSame([], $gaps,
+            "الموديلات دي بتستخدم IsMoneyOut ، فكل دالة ناقصة هنا بتبقى Call to undefined method\n"
+            ."وقت Mark as Paid:\n  ".implode("\n  ", $gaps));
     }
 }

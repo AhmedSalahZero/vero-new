@@ -179,6 +179,13 @@ div.dtfc-right-top-blocker {
     z-index: 1090;
 }
 
+/* الـ modal اترفعت لـ 1100 فوق الهيدر، بينما SweetAlert2 الافتراضي 1060.
+   بوب اب Mark as Paid (وأي modal تاني) بيفضل مفتوح لما Swal.fire يعرض
+   الـ error، فالرسالة كانت بتظهر تحت الـ modal. بنرفعها فوق الاتنين. */
+.swal2-container {
+    z-index: 2000 !important;
+}
+
 /*
  * * الكلاس ده كان متعرّف جوه كومبوننت x-sectionTitle بـ color:white ،
  * * و الكومبوننت بتتحط في ٣٨ صفحة فالقاعدة كانت بتتحقن في كل الصفحات
