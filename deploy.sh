@@ -14,7 +14,7 @@
             sudo supervisord -c /etc/supervisord.conf
 
             
-            sudo supervisorctl restart queue-worker:*
+            sudo supervisorctl restart all
             /usr/local/bin/ea-php84 artisan run:sql
             /usr/local/bin/ea-php84 artisan view:cache
             /usr/local/bin/ea-php84 artisan run:odoo-connection
