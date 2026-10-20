@@ -54,16 +54,24 @@ class LgByBankNameReportController
 		->join('financial_institutions','financial_institutions.id','=','letter_of_guarantee_issuances.financial_institution_id')
 		->join('banks','banks.id','=','financial_institutions.bank_id')
 		->selectRaw(
-			'letter_of_guarantee_issuances.id as id , partner_id , partners.name as partner_name , lg_type , transaction_name,lg_code, source ,banks.name_en as financial_institution_name , lg_amount , case when status = \'cancelled\' then \'cancelled\' else (DATE_FORMAT(renewal_date,\'%d-%m-%Y\')) end as renewal_date , cash_cover_amount,lg_commission_rate '
+			'letter_of_guarantee_issuances.id as id , partner_id , partners.name as partner_name , lg_type , transaction_name,lg_code, source ,banks.name_en as financial_institution_name , lg_amount , DATE_FORMAT(letter_of_guarantee_issuances.renewal_date,\'%d-%m-%Y\') as renewal_date , DATE_FORMAT(COALESCE(letter_of_guarantee_issuances.cancellation_date, (SELECT MIN(letter_of_guarantee_statements.date) FROM letter_of_guarantee_statements WHERE letter_of_guarantee_statements.letter_of_guarantee_issuance_id = letter_of_guarantee_issuances.id AND letter_of_guarantee_statements.type = \'for-cancellation\')),\'%d-%m-%Y\') as cancellation_date , letter_of_guarantee_issuances.status as status , cash_cover_amount,lg_commission_rate '
 		)->get();
         if (!count($results)) {
             return redirect()->back()->with('fail', __('No Data Found'));
         }
+		$openRows = $results->where('status', '!=', 'cancelled');
+		$totals = [
+			'lgAmountWithoutCancellation' => $openRows->sum('lg_amount'),
+			'cashCoverWithoutCancellation' => $openRows->sum('cash_cover_amount'),
+			'lgAmountWithCancellation' => $results->sum('lg_amount'),
+			'cashCoverWithCancellation' => $results->sum('cash_cover_amount'),
+		];
 		$results = $this->paginate($results,50);
 		$lgsTypes = LgTypes::getAll();
 		$lgsSources = LgSources::getAll();
         return view('lg_by_bank_name_result', [
             'results' => $results,
+			'totals' => $totals,
 			'lgsTypes'=>$lgsTypes,
 			'lgsSources'=>$lgsSources,
             'currency' => $currencyName,

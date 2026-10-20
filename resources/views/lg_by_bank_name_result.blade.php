@@ -351,11 +351,6 @@
                                         let currentTable = null;
 
                                     </script>
-									@php
-										$lgAmountTotal =  0 ;
-										$cashCoverAmountTotal =  0 ;
-										
-									@endphp
                                     @foreach($results as $index=>$modelAsStdClass)
                                     <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
                                         <td class="sub-text-bg">{{ $index+1 }}</td>
@@ -368,30 +363,44 @@
                                         <td class="sub-text-bg text-center">{{ $modelAsStdClass->lg_code }}</td>
                                         <td class="sub-text-bg text-center">{{ $lgsSources[$modelAsStdClass->source] }}</td>
                                         <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->lg_amount) }}</td>
-                                        <td class="sub-text-bg text-center">{{ $modelAsStdClass->renewal_date }}</td>
+                                        <td class="sub-text-bg text-center">
+                                            {{ $modelAsStdClass->renewal_date }}
+                                            @if($modelAsStdClass->status === 'cancelled')
+                                                <br>
+                                                {{ $modelAsStdClass->cancellation_date ? __('cancelled (:date)', ['date' => $modelAsStdClass->cancellation_date]) : 'cancelled' }}
+                                            @endif
+                                        </td>
                                         <td class="sub-text-bg text-center">{{ number_format($modelAsStdClass->cash_cover_amount) }}</td>
                                         <td class="sub-text-bg text-center">{{ $modelAsStdClass->lg_commission_rate }}</td>
 
                                     </tr>
-									@php
-										$lgAmountTotal += $modelAsStdClass->lg_amount ;
-										$cashCoverAmountTotal += $modelAsStdClass->cash_cover_amount ;
-									@endphp
                                     @endforeach
-									
+
 									 <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
                                         <td class="sub-text-bg">-</td>
-                                        <td class="sub-text-bg text-center">{{ __('Total') }}</td>
+                                        <td class="sub-text-bg text-center">{{ __('Total (without cancellation)') }}</td>
                                         <td class="sub-text-bg text-center">-</td>
                                         <td class="sub-text-bg text-center">-</td>
                                         <td class="sub-text-bg text-center">-</td>
                                         <td class="sub-text-bg text-center">-</td>
                                         <td class="sub-text-bg text-center">-</td>
-                                        <td class="sub-text-bg text-center">{{ number_format($lgAmountTotal) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($totals['lgAmountWithoutCancellation']) }}</td>
                                         <td class="sub-text-bg text-center">-</td>
-                                        <td class="sub-text-bg text-center">{{ number_format($cashCoverAmountTotal) }}</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($totals['cashCoverWithoutCancellation']) }}</td>
                                         <td class="sub-text-bg text-center">-</td>
-
+                                    </tr>
+									 <tr class="parent-tr reset-table-width text-nowrap cursor-pointer sub-text-bg text-capitalize is-close">
+                                        <td class="sub-text-bg">-</td>
+                                        <td class="sub-text-bg text-center">{{ __('Total (with cancellation)') }}</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($totals['lgAmountWithCancellation']) }}</td>
+                                        <td class="sub-text-bg text-center">-</td>
+                                        <td class="sub-text-bg text-center">{{ number_format($totals['cashCoverWithCancellation']) }}</td>
+                                        <td class="sub-text-bg text-center">-</td>
                                     </tr>
 
 
