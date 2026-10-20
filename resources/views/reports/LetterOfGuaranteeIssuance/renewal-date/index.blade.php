@@ -299,7 +299,7 @@ use Carbon\Carbon;
 
 
 
-                @if(isset($model) || $letterOfGuaranteeIssuance->isExpired())
+                @if(isset($model) || ! $letterOfGuaranteeIssuance->isCancelled())
                 <div class="row">
                     <div class="col-md-12">
                         <!--begin::Portlet-->
