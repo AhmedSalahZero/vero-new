@@ -259,6 +259,27 @@
 
  @elseif($model->isCancelled())
 
+ <a data-toggle="modal" data-target="#cancellation-date-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Cancellation Date') }}" href="#"><i class="fa fa-calendar-alt"></i></a>
+ <div class="modal fade" id="cancellation-date-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="cancellation-date-title-{{ $model->id }}" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="cancellation-date-title-{{ $model->id }}">{{ __('Cancellation Date') }}</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                 <label>{{ __('Cancellation Date') }}</label>
+                 <input disabled type="text" class="form-control" value="{{ $model->getCancellationDateFormatted() ?: '—' }}">
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
+             </div>
+         </div>
+     </div>
+ </div>
+
  <a data-toggle="modal" data-target="#back-to-running-modal-{{ $model->id }}" type="button" class="btn btn-secondary btn-outline-hover-success btn-icon" title="{{ __('Back To Running') }}" href="#"><i class="fa fa fa-undo"></i></a>
 
  <div class="modal fade" id="back-to-running-modal-{{ $model->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

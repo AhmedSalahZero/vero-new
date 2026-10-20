@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Cash Flow buckets "Cancelled LGs Cash Cover" by the date cash cover actually
- * returns — cancellation date when the LG was cancelled, otherwise renewal_date
- * (current expiry / last renewal). Cancellation date lives on cash-cover
- * statement rows with type = for-cancellation (there is no cancellation_date
- * column on letter_of_guarantee_issuances); those rows are deleted when an LG
+ * returns — the for-cancellation cash-cover statement date when the LG was
+ * cancelled, otherwise renewal_date (current expiry / last renewal).
+ *
+ * letter_of_guarantee_issuances.cancellation_date stores that date for the
+ * index, but this report stays on the cash-cover statement date because that
+ * is the day the cash cover is returned. Those rows are deleted when an LG
  * is returned to running, so a left join is enough.
  */
 final class LgCashCoverEffectiveDate
