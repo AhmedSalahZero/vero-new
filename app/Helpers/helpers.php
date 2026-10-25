@@ -4274,6 +4274,9 @@ function buildHeaderMenu($currentCompany = null)
     $canViewBankStatement = $user->can('view bank statement report') ;
     $canViewLgByBeneficiaryNameReport = $user->can('view lg by beneficiary name report') ;
     $canViewLgByBankNameReport = $user->can('view lg by bank name report') ;
+    // Cheques Report / Down Payment Report read what Money Received and Money Payment already hold,
+    // so they follow the same permissions - each report only offers the kind the user may open there.
+    $canViewChequesAndDownPaymentReports = $user->can('view money received') || $user->can('view supplier payment') ;
     $canViewLgLcStatement = $user->can('view lc & lg statement report') ;
     $canViewCashFlow = $user->can('view cash flow report');
     $canViewContractCashFlow = $user->can('view contract cash flow report');
@@ -4477,7 +4480,7 @@ function buildHeaderMenu($currentCompany = null)
         
         'reports'=>[
             'title'=>__('Reports'),
-            'show'=>$canViewCashFlow || $canViewContractCashFlow ||  $canViewSafeStatement || $canViewCashExpenseStatement || $canViewPartnersStatement || $canViewBankStatement|| $canViewLgByBeneficiaryNameReport || $canViewLgByBankNameReport || $canViewLgLcStatement || $canViewWithdrawalsSettlementReport ,
+            'show'=>$canViewCashFlow || $canViewContractCashFlow ||  $canViewSafeStatement || $canViewCashExpenseStatement || $canViewPartnersStatement || $canViewBankStatement|| $canViewLgByBeneficiaryNameReport || $canViewLgByBankNameReport || $canViewLgLcStatement || $canViewWithdrawalsSettlementReport || $canViewChequesAndDownPaymentReports ,
             'link'=>'#',
             'submenu'=>
             [
@@ -4546,6 +4549,18 @@ function buildHeaderMenu($currentCompany = null)
                     'title'=>__('Withdrawals Settlement Report'),
                     'link'=>route('view.withdrawals.settlement.report', ['company'=>$companyId]),
                     'show'=>$canViewWithdrawalsSettlementReport ,
+                    'submenu'=>[]
+                ],
+                [
+                    'title'=>__('Cheques Report'),
+                    'link'=>route('view.cheques.report', ['company'=>$companyId]),
+                    'show'=>$canViewChequesAndDownPaymentReports ,
+                    'submenu'=>[]
+                ],
+                [
+                    'title'=>__('Down Payment Report'),
+                    'link'=>route('view.down.payment.report', ['company'=>$companyId]),
+                    'show'=>$canViewChequesAndDownPaymentReports ,
                     'submenu'=>[]
                 ]
                 

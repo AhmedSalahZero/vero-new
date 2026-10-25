@@ -853,6 +853,16 @@ Route::middleware([])->group(function () {
                     
                     Route::get('show-lg-by-bank-name-report', 'LgByBankNameReportController@index')->name('view.lg.by.bank.name.report');
                     Route::get('lg-by-bank-name-report', 'LgByBankNameReportController@result')->name('result.lg.by.bank.name.report');
+
+                    // Cheques Report - received / payable cheques due on or after a date.
+                    Route::get('cheques-report', 'ChequesReportController@index')->name('view.cheques.report');
+                    Route::get('cheques-report/result', 'ChequesReportController@result')->name('result.cheques.report');
+                    Route::get('cheques-report/export', 'ChequesReportController@exportExcel')->name('export.cheques.report');
+
+                    // Down Payment Report - customer / supplier down payments with settled amount and balance.
+                    Route::get('down-payment-report', 'DownPaymentReportController@index')->name('view.down.payment.report');
+                    Route::get('down-payment-report/result', 'DownPaymentReportController@result')->name('result.down.payment.report');
+                    Route::get('down-payment-report/export', 'DownPaymentReportController@exportExcel')->name('export.down.payment.report');
                     
                     Route::get('lg-lc-bank-statement', 'LGLCSBanktatementController@index')->name('view.lg.lc.bank.statement');
                     // GET بدل POST عشان لينكات الصفحات ترجع نفس الفلاتر مع كل صفحة

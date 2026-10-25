@@ -57,6 +57,7 @@ class StoreCashExpenseRequest extends FormRequest
 		
         return [
 			'type'=>'required',
+			'cash_expense_category_name_id'=>'required|numeric',
 			'delivery_branch_id'=>$type == CashExpense::CASH_PAYMENT  ? ['required','not_in:-1'] : [],
 			'paid_amount.'.$type => ['required','gt:0'],
 			'account_type.'.$type => $accountTypeValidation =  $type == CashExpense::OUTGOING_TRANSFER || $type == CashExpense::PAYABLE_CHEQUE ? 'required' : 'sometimes',

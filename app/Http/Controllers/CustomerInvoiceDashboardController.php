@@ -891,6 +891,14 @@ class CustomerInvoiceDashboardController extends Controller
 								$debug=true;
 								}
 							$details[$currencyName][$currentLgOrLcType][] = [
+								'id' => (int) $currentLastLetterOfGuaranteeOrCreditFacility->id,
+								'name' => $currentLastLetterOfGuaranteeOrCreditFacility->name,
+								'contract_start_date' => $currentLastLetterOfGuaranteeOrCreditFacility->contract_start_date
+									? Carbon::parse($currentLastLetterOfGuaranteeOrCreditFacility->contract_start_date)->format('d-m-Y')
+									: null,
+								'contract_end_date' => $currentLastLetterOfGuaranteeOrCreditFacility->contract_end_date
+									? Carbon::parse($currentLastLetterOfGuaranteeOrCreditFacility->contract_end_date)->format('d-m-Y')
+									: null,
 								'limit'=>$currentLimit =  $currentLastLetterOfGuaranteeOrCreditFacility->limit  ,
 								'outstanding_balance'=> $currentOutstanding = $statementTableFullClassName::getTotalOutstandingBalanceForAllTypes($currentLastLetterOfGuaranteeOrCreditFacility->id,$company->id,$financialInstitutionBankId,$currencyName,$debug)  , 
 								'room'=> $currentRoom = $currentLimit - $currentOutstanding ,

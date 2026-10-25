@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @php
 use App\Models\Contract;
+use App\Http\Controllers\ContractsController;
 @endphp
 @section('css')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/cr-1.5.6/date-1.1.2/fc-4.1.0/fh-3.2.3/r-2.3.0/rg-1.2.0/sl-1.4.0/sr-1.1.1/datatables.min.css" />
@@ -467,6 +468,12 @@ use App\Models\Contract;
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a onclick="return false" class="nav-link {{ Request('active') == ContractsController::ALL_TAB ?'active':'' }}" data-toggle="tab" href="#{{ ContractsController::ALL_TAB }}" role="tab">
+                        <i class="fa fa-list"></i> {{ __('All') }}
+                    </a>
+                </li>
+
 
 
             </ul>
@@ -515,6 +522,10 @@ use App\Models\Contract;
                                 <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Start Date') }}</b></td>
                                 <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('End Date') }}</b></td>
                                 <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Amount') }}</b></td>
+                                {{-- تاب "الكل" بس هو اللي محتاج يقول كل عقد في حالة إيه --}}
+                                @if($currentType == ContractsController::ALL_TAB)
+                                <td class="text-center view-table-th"><b style="color:white !important" class="text-capitalize">{{ __('Status') }}</b></td>
+                                @endif
 
 
                                 <td style="color:white !important" class="text-center view-table-th">
@@ -531,17 +542,21 @@ use App\Models\Contract;
                             $parent =$parnetAndSubData['parent'] ;
                             $subItems =$parnetAndSubData['sub_items'] ?? [];
                             $contract = $parent['contract'] ;
+                            // أزرار الصف بتعتمد على حالة العقد نفسه مش على التاب (تاب "الكل" فيه الحالات كلها)
+                            $rowStatus = $parent['status'] ;
+                            // نفس العقد بيظهر في تاب الحالة وفي تاب "الكل" ، فالـ ids لازم تتفرق
+                            $idSuffix = $currentType == ContractsController::ALL_TAB ? '-all' : '' ;
 
                             @endphp
                             <tr class="group-color main-row-tr closest-parent-tr">
 
 
 
-                                <td class="black-text" style="cursor: pointer;" onclick="toggleRow('{{ $mainItemId }}')">
+                                <td class="black-text" style="cursor: pointer;" onclick="toggleRow('{{ $mainItemId }}{{ $idSuffix }}')">
 
                                     <div class="d-flex align-items-center">
                                         @if(count($subItems))
-                                        <i class="row_icon{{ $mainItemId }} flaticon2-up mr-2"></i>
+                                        <i class="row_icon{{ $mainItemId }}{{ $idSuffix }} flaticon2-up mr-2"></i>
                                         @endif
                                         <b class="text-capitalize">
                                             <b class="text-capitalize text-wrap">{{ $parent['client_name'] }}</b>
@@ -580,6 +595,17 @@ use App\Models\Contract;
                                     </b>
 
                                 </td>
+                                @if($currentType == ContractsController::ALL_TAB)
+                                <td class="text-center">
+                                    @if($rowStatus == Contract::RUNNING)
+                                    <span class="badge badge-success">{{ __('Running') }}</span>
+                                    @elseif($rowStatus == Contract::RUNNING_AND_AGAINST)
+                                    <span class="badge badge-warning">{{ __('Running And Against') }}</span>
+                                    @else
+                                    <span class="badge badge-secondary">{{ __('Finished') }}</span>
+                                    @endif
+                                </td>
+                                @endif
 
 
                                 <td class="text-left text-capitalize">
@@ -596,7 +622,7 @@ use App\Models\Contract;
                                         @endif
                                         <span style="overflow: visible; position: relative; width: 110px;">
                                             @php
-                                            $currentModelId = 'contract-invoice-details-'.$mainItemId ;
+                                            $currentModelId = 'contract-invoice-details-'.$mainItemId.$idSuffix ;
                                             @endphp
                                             {{-- الزرار بيظهر لعقود العملاء والموردين طالما العقد ليه فواتير --}}
                                             @if(count($parent['invoices']))
@@ -607,15 +633,15 @@ use App\Models\Contract;
                                             {{-- عقود الموردين المربوطة بعقد العميل ده --}}
                                             @if($type == 'Customer' && count($parent['related_contracts']))
                                             @php
-                                            $relatedContractsModalId = 'related-supplier-contracts-'.$mainItemId ;
+                                            $relatedContractsModalId = 'related-supplier-contracts-'.$mainItemId.$idSuffix ;
                                             @endphp
                                             <button class="btn btn-sm btn-outline-brand btn-pill" data-toggle="modal" data-target="#{{ $relatedContractsModalId }}">{{ __('Supplier Contracts') }} ({{ count($parent['related_contracts']) }})</button>
                                             @include('contracts.related-supplier-contracts',['modalId'=>$relatedContractsModalId,'detailItems'=>$parent['related_contracts']])
                                             @endif
 
-                                            @if($currentType == Contract::RUNNING )
-                                            <a data-toggle="modal" data-target="#mark-as-finished-contract-{{ $mainItemId }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Finished') }}" href="#"><i class="fa fa-check-double"></i></a>
-                                            <div class="modal fade" id="mark-as-finished-contract-{{ $mainItemId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            @if($rowStatus == Contract::RUNNING )
+                                            <a data-toggle="modal" data-target="#mark-as-finished-contract-{{ $mainItemId }}{{ $idSuffix }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Finished') }}" href="#"><i class="fa fa-check-double"></i></a>
+                                            <div class="modal fade" id="mark-as-finished-contract-{{ $mainItemId }}{{ $idSuffix }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <form action="{{ route('contract.mark.as.finished', ['company'=>$company->id , 'contract'=>$mainItemId,'type'=>$type]) }}" method="post">
@@ -637,10 +663,10 @@ use App\Models\Contract;
                                                 </div>
                                             </div>
                                             @endif
-                                            @if($currentType == Contract::RUNNING_AND_AGAINST )
+                                            @if($rowStatus == Contract::RUNNING_AND_AGAINST )
                                             @if(hasAuthFor('update '. str_plural(strtolower($type)) .' contracts'))
-                                            <a data-toggle="modal" data-target="#mark-as-finished-contract-{{ $mainItemId }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Finished') }}" href="#"><i class="fa fa-thumbs-up"></i></a>
-                                            <div class="modal fade" id="mark-as-finished-contract-{{ $mainItemId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <a data-toggle="modal" data-target="#mark-as-finished-contract-{{ $mainItemId }}{{ $idSuffix }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Finished') }}" href="#"><i class="fa fa-thumbs-up"></i></a>
+                                            <div class="modal fade" id="mark-as-finished-contract-{{ $mainItemId }}{{ $idSuffix }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <form action="{{ route('contract.mark.as.finished', ['company'=>$company->id , 'contract'=>$mainItemId,'type'=>$type]) }}" method="post">
@@ -662,10 +688,10 @@ use App\Models\Contract;
                                                 </div>
                                             </div>
                                             @endif
-                                            @elseif($currentType == Contract::FINISHED)
+                                            @elseif($rowStatus == Contract::FINISHED)
                                             @if(hasAuthFor('update '. str_plural(strtolower($type)) .' contracts'))
-                                            <a data-toggle="modal" data-target="#mark-as-running-and-against-contract-{{ $mainItemId }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Running And Against') }}" href="#"><i class="fa fa-thumbs-up"></i></a>
-                                            <div class="modal fade" id="mark-as-running-and-against-contract-{{ $mainItemId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <a data-toggle="modal" data-target="#mark-as-running-and-against-contract-{{ $mainItemId }}{{ $idSuffix }}" type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="{{ __('Running And Against') }}" href="#"><i class="fa fa-thumbs-up"></i></a>
+                                            <div class="modal fade" id="mark-as-running-and-against-contract-{{ $mainItemId }}{{ $idSuffix }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <form action="{{ route('contract.mark.as.running.and.against', ['company'=>$company->id , 'contract'=>$mainItemId,'type'=>$type]) }}" method="post">
@@ -693,10 +719,10 @@ use App\Models\Contract;
                                             <a type="button" class="btn btn-secondary btn-outline-hover-brand btn-icon" title="Edit" href="{{ route('contracts.edit', ['company'=>$company->id , 'contract'=>$mainItemId,'type'=>$type]) }}"><i class="fa fa-pen-alt"></i></a>
                                             @endif
                                             @if(hasAuthFor('delete '. str_plural(strtolower($type)) .' contracts'))
-                                            <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $mainItemId }}" title="Delete"><i class="fa fa-trash-alt"></i>
+                                            <a class="btn btn-secondary btn-outline-hover-danger btn-icon" href="#" data-toggle="modal" data-target="#modal-delete-{{ $mainItemId }}{{ $idSuffix }}" title="Delete"><i class="fa fa-trash-alt"></i>
                                             </a>
 
-                                            <div id="modal-delete-{{ $mainItemId }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div id="modal-delete-{{ $mainItemId }}{{ $idSuffix }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -737,8 +763,8 @@ use App\Models\Contract;
 
 
 
-                            <tr class="row{{ $mainItemId }} text-center sub-item-row" style="display: none">
-                                <td colspan="5" class="text-left text-capitalize">
+                            <tr class="row{{ $mainItemId }}{{ $idSuffix }} text-center sub-item-row" style="display: none">
+                                <td colspan="{{ $currentType == ContractsController::ALL_TAB ? 6 : 5 }}" class="text-left text-capitalize">
                                     <table class="table ml-3 table-borderless">
 
 
@@ -773,12 +799,12 @@ use App\Models\Contract;
                                         @csrf
                                         <input type="hidden" name="po_id" value="{{ $titleAndValue['id'] }}">
                                         @if($type == 'Supplier' && !$company->hasOdooIntegrationCredentials())
-                                        <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#allocate-po-{{ $titleAndValue['id'] }}">
+                                        <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#allocate-po-{{ $titleAndValue['id'] }}{{ $idSuffix }}">
                                             {{ __('Allocate') }}
 
                                         </button>
 
-                                        <div class="modal fade modal-class-js allocate-modal-class" id="allocate-po-{{ $titleAndValue['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade modal-class-js allocate-modal-class" id="allocate-po-{{ $titleAndValue['id'] }}{{ $idSuffix }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-90 modal-xl" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">

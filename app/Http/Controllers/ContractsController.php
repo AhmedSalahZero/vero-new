@@ -18,6 +18,12 @@ use Illuminate\Http\Request;
 class ContractsController
 {
     use GeneralFunctions;
+
+	/**
+	 * * التاب الرابعة : كل العقود بغض النظر عن حالتها (بتعرض عمود الحالة)
+	 */
+	public const ALL_TAB = 'all';
+
 	public function index(Company  $company ,$type)
     {
 		/**
@@ -31,6 +37,8 @@ class ContractsController
 			Contract::RUNNING_AND_AGAINST ,
 			Contract::FINISHED 
 		];
+		// الحالات الثلاثة + تاب "الكل" (كل العقود بغض النظر عن حالتها)
+		$tabs = array_merge($contractStatues, [self::ALL_TAB]);
 		
 		/**
 		 * * كل تاب ليها بيچينيشن مستقلة بالـ page parameter بتاعها ، عشان
@@ -40,9 +48,9 @@ class ContractsController
 		 */
 		$contracts = [];
 		$paginators = [];
-		foreach($contractStatues as $contractStatus){
+		foreach($tabs as $contractStatus){
 			$paginator = Contract::where('contracts.company_id',$company->id)
-				->where('status',$contractStatus)
+				->when($contractStatus !== self::ALL_TAB, fn ($query) => $query->where('contracts.status',$contractStatus))
 				->where('model_type',$type)
 				->join('partners','partners.id','=','contracts.partner_id')
 				->selectRaw('contracts.*,partners.name as partner_name')
@@ -55,7 +63,7 @@ class ContractsController
 		
 		$customerOrSupplierContractsText = $type == 'Supplier' ? __('Supplier Contracts') : __('Customer Contracts');
 		$items = [];
-		foreach($contractStatues as $contractStatus){
+		foreach($tabs as $contractStatus){
 			foreach($contracts[$contractStatus] as $index=>$contract){
 				$contractId = $contract->id ;
 				/**
@@ -67,6 +75,8 @@ class ContractsController
 					'contract'=>$contract,
 					'client_name'=>$contract->getClientName(),
 					'contract_code'=>$contract->getCode(),
+					// الحالة الفعلية للعقد — بتتعرض في تاب "الكل" ، وأزرار الصف بتعتمد عليها مش على التاب
+					'status'=>$contract->status,
 					'start_date'=>$contract->getStartDateFormatted(),
 					'end_date'=>$contract->getEndDateFormatted(),
 					'currency'=> $contract->getCurrency() ,
@@ -89,6 +99,8 @@ class ContractsController
 		$commonVars = $this->getCommonVars($company,$type);
 		$clientsWithContracts = $commonVars['clientsWithContracts'];
 		
+		// الـ view بتلف على التابات كلها ، فبنبعتلها الأربعة
+		$contractStatues = $tabs;
         return view('contracts.index',compact('clientsWithContracts','company','items','type','customerOrSupplierContractsText','contractStatues','hasProjectNameColumn','paginators'));
     }
 	/**
