@@ -27,6 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $max_users
  * @property int|null $acceptance_of_privacy_policy
  * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $last_login_at
  * @property int|null $created_by
  * @property int|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -109,6 +110,7 @@ class User extends Authenticatable implements HasMedia
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
     ];
     public function companies():BelongsToMany
     {

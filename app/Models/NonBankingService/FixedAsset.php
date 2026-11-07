@@ -422,10 +422,10 @@ class FixedAsset extends Model
     // {
     //     return $this->amount ?: 0 ;
     // }
-    // public function getDuration()
-    // {
-    //     return 0;
-    // }
+    public function getDuration()
+    {
+        return 0;
+    }
 
 
     

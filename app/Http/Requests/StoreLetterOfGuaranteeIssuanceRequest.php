@@ -21,6 +21,7 @@ class StoreLetterOfGuaranteeIssuanceRequest extends FormRequest
     {
         return [
 			'transaction_name'=>['required'],
+			'lg_type'=>['required'],
 			'lg_fees_and_commission_account_id'=>'required',
 			'issuance_date'=>['required'],
 			'lg_amount'=>['required','gt:0'],

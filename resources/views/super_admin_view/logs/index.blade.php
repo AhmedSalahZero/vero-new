@@ -76,7 +76,8 @@
                     <tr class="table-standard-color">
                         <th class="text-center">{{ __('#') }}</th>
                         <th class="text-center">{{ __('User') }}</th>
-                        <th class="text-center">{{ __('Last Login Date') }}</th>
+                        <th class="text-center">{{ __('Last Login') }}</th>
+                        <th class="text-center">{{ __('Last Activity') }}</th>
                         <th class="text-center">{{ __('Role') }}</th>
                         {{-- <th class="text-center">{{ __('Log') }}</th> --}}
                         <th>{{ __('Actitivy') }}</th>
@@ -89,6 +90,7 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>{{ $log->user->name }}</td>
+                            <td>{{ $log->user->last_login_at ? $log->user->last_login_at->format('d-m-Y g:i A') : '--' }}</td>
                             <td>{{ Carbon\Carbon::make($log->created_at)->format('d-m-Y g:i A') }}</td>
                             <td>{{ $log->user->getRoleName() }}</td>
                             <td>{{ $log->activity }}</td>
