@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Section;
 use App\Models\User;
+use App\Support\UserAdministration;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -41,11 +42,17 @@ class UsersAndPermissionsController extends Controller
     }
     public function edit(User $user , ?Company $company = null)
     {
+        abort_unless(UserAdministration::canManage(auth()->user(), $user), 403);
         return view('super_admin_view.users_permissions.form',compact('user','company'));
     }
     public function update(Request $request,user $user )
     {
-		$user->syncPermissions(array_keys((array)$request->permissions));
+		// SECURITY: previously any authenticated user could sync any permissions onto
+		// any user (incl. themselves) — full privilege escalation.
+		$actor = $request->user();
+		abort_unless(UserAdministration::canManage($actor, $user), 403);
+		abort_unless(UserAdministration::isSuperAdmin($actor) || $actor->can('update permissions'), 403);
+		$user->syncPermissions(UserAdministration::grantablePermissions($actor, $user, array_keys((array)$request->permissions)));
         toastr()->success(__('updated Successfully'));
         return redirect()->back();
     }

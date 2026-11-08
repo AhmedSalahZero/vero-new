@@ -37,6 +37,7 @@ class CompanyController extends Controller
   
     public function store(Request $request)
     {
+        $request->validate(['image' => UserController::IMAGE_RULES]);
         toastr()->success('Created Successfully');
         $companySection = Company::create($request->except(['image','systems','is_api']));
 		foreach($request->get('systems') as $systemName){
@@ -101,6 +102,7 @@ class CompanyController extends Controller
   
      public function update(Request $request, Company $companySection)
     {
+        $request->validate(['image' => UserController::IMAGE_RULES]);
         toastr()->success('Updated Successfully');
 		$oldSystems =$companySection->getSystemsNames(); 
 		$newSystems = $request->get('systems');
@@ -120,15 +122,19 @@ class CompanyController extends Controller
 
 		$usersWithNewCredentials = [];
 
-		foreach($request->get('odoo_username',[]) as $userId => $odooUsername){
-			$user = User::find($userId);
+		foreach((array) $request->get('odoo_username',[]) as $userId => $odooUsername){
+			// SECURITY: only users of THIS company (any user id used to be accepted).
+			$user = $companySection->users()->where('users.id', $userId)->first();
 			if(!$user){
 				continue;
 			}
-			$user->update([
-				'odoo_username'=>$odooUsername,
-				'odoo_db_password'=>$request->input('odoo_db_password.'.$userId)
-			]);
+			$odooCredentials = ['odoo_username'=>$odooUsername];
+			// The stored password is no longer rendered back into the form: a blank
+			// field means "keep the current password".
+			if($request->filled('odoo_db_password.'.$userId)){
+				$odooCredentials['odoo_db_password'] = $request->input('odoo_db_password.'.$userId);
+			}
+			$user->update($odooCredentials);
 			$usersWithNewCredentials[] = $user;
 		}
 		Partner::handleTaxesColumnsToPartnerTable($companySection);
@@ -171,6 +177,9 @@ class CompanyController extends Controller
         return redirect()->back();
     }
 	public function saveLabelingData(Request $request,Company $company){
+		// SECURITY: the logo is stored on the public disk; without validation a PHP
+		// payload was saved with a .php extension (Laravel guesses it from content).
+		$request->validate(['labeling_client_logo' => UserController::IMAGE_RULES]);
 	
 		$company->update([
 			'labeling_type'=>$request->get('labeling_type'),

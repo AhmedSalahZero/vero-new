@@ -16,7 +16,7 @@
 						@endif 
 						<span class="kt-menu__link-text">
 						
-						{!! $menuArr['title']  !!}
+						{!! safeMenuTitle($menuArr['title']) !!}
 						
 					
 						

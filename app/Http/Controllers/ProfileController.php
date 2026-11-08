@@ -33,7 +33,7 @@ class ProfileController extends Controller
 		$request->validate([
 			'name' => ['required', 'string', 'max:255'],
 			'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-			'avatar' => ['nullable', 'image'],
+			'avatar' => UserController::IMAGE_RULES,
 			'odoo_username' => ['nullable', 'string', 'max:255'],
 			'odoo_db_password' => ['nullable', 'string', 'max:255'],
 		]);
@@ -45,12 +45,15 @@ class ProfileController extends Controller
 		$hasOdooCredentials = $user->companies->contains(fn (Company $company) => $company->hasOdooCredentials());
 
 		if ($hasOdooCredentials) {
+			// The stored password is no longer echoed into the form (it was rendered
+			// in a plain text input); a blank field keeps the current password.
+			$newOdooPassword = $request->filled('odoo_db_password') ? $request->odoo_db_password : $user->odoo_db_password;
 			$odooCredentialsChanged = $request->odoo_username !== $user->odoo_username
-				|| $request->odoo_db_password !== $user->odoo_db_password;
+				|| $newOdooPassword !== $user->odoo_db_password;
 
 			$user->update([
 				'odoo_username' => $request->odoo_username,
-				'odoo_db_password' => $request->odoo_db_password,
+				'odoo_db_password' => $newOdooPassword,
 			]);
 
 			/**

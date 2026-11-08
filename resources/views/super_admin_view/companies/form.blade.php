@@ -155,7 +155,7 @@
 						<div class="col-3 mb-3">
                             <label>{{__('Password')  }}</label>
                             <div class="kt-input-icon">
-                                <input type="text" name="odoo_db_password[{{ $user->id }}]" value="{{$user['odoo_db_password']}}" class="form-control" placeholder="{{__('Odoo  Database Password')}}" >
+                                <input type="password" name="odoo_db_password[{{ $user->id }}]" value="" autocomplete="new-password" class="form-control" placeholder="{{ $user['odoo_db_password'] ? __('Leave blank to keep the current password') : __('Odoo  Database Password') }}" >
                             </div>
                         </div>
 						

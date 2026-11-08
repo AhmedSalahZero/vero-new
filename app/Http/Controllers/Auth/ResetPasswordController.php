@@ -21,6 +21,12 @@ class ResetPasswordController extends Controller
 
     use ResetsPasswords;
 
+    public function __construct()
+    {
+        // SECURITY: rate-limit reset attempts (token guessing).
+        $this->middleware('throttle:5,1')->only('reset');
+    }
+
 
     public function redirectTo()
     {

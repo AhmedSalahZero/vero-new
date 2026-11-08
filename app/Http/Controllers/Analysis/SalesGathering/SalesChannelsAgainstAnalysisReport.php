@@ -125,7 +125,7 @@ class SalesChannelsAgainstAnalysisReport
                    $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,sales_channel," . $type ."
                     FROM sales_gathering
-                    WHERE ( company_id = '".$company->id."'AND sales_channel = '".$salesChannelName."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                    WHERE ( company_id = '".$company->id."'AND sales_channel = ".sqlValue($salesChannelName)." AND date between '".$request->start_date."' and '".$request->end_date."')
                     ORDER BY id ";
                    $salesChannels_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                         return $item->groupBy('gr_date')->map(function($sub_item) use($data_type){
@@ -370,7 +370,7 @@ class SalesChannelsAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." sales_channel
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND sales_channel = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND sales_channel = ".sqlValue($zone)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id";
             $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){
@@ -466,7 +466,7 @@ class SalesChannelsAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,sales_channel
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND sales_channel = '".$sales_channel."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND sales_channel = ".sqlValue($sales_channel)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
             $sales_channels_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');

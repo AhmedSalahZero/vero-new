@@ -114,7 +114,7 @@ class ForeignExchangeRateController
     public function edit(Request $request, Company $company, $foreignExchangeRateId)
     {
         $indexViewData = $this->index($company, $request, true);
-        $foreignExchangeRate = ForeignExchangeRate::find($foreignExchangeRateId);
+        $foreignExchangeRate = ForeignExchangeRate::where('company_id', $company->id)->findOrFail($foreignExchangeRateId); // SECURITY: scoped to route company (IDOR)
         return view('property_managements.foreign-exchange-rate.foreign-exchange-rate', array_merge($indexViewData, [
             'company'=>$company,
             'foreignExchangeRates'=>ForeignExchangeRate::where('company_id', $company->id)->get(),
@@ -124,7 +124,7 @@ class ForeignExchangeRateController
     }
     public function update(Request $request, Company $company, $foreignExchangeRateId)
     {
-        $foreignExchangeRate = ForeignExchangeRate::find($foreignExchangeRateId);
+        $foreignExchangeRate = ForeignExchangeRate::where('company_id', $company->id)->findOrFail($foreignExchangeRateId); // SECURITY: scoped to route company (IDOR)
         $data = [
             'exchange_rate'=>$request->get('exchange_rate'),
             'date'=>$request->get('date'),
@@ -138,7 +138,7 @@ class ForeignExchangeRateController
     }
     public function destroy(Request $request, Company $company, $foreignExchangeRateId)
     {
-        $foreignExchangeRate = ForeignExchangeRate::find($foreignExchangeRateId);
+        $foreignExchangeRate = ForeignExchangeRate::where('company_id', $company->id)->findOrFail($foreignExchangeRateId); // SECURITY: scoped to route company (IDOR)
         $foreignExchangeRate->delete();
         
         /**

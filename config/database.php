@@ -121,14 +121,14 @@ return [
 			]) : [],
 		]
 		
-		, 'mysql_production' => [
+		, /* SECURITY: production credentials used to be hardcoded here (and are in git history) — rotate them. */ 'mysql_production' => [
 			'driver' => 'mysql',
 			'url' => env('DATABASE_URL'),
-			'host' => 'veroanalysis.com',
+			'host' => env('PROD_DB_HOST', '127.0.0.1'),
 			'port' => env('DB_PORT', '3306'),
-			'database' => 'veroanalysis_db',
-			'username' => 'veroanalysis_production',
-			'password' => 'ho_OQYRjSqGB',
+			'database' => env('PROD_DB_DATABASE', ''),
+			'username' => env('PROD_DB_USERNAME', ''),
+			'password' => env('PROD_DB_PASSWORD', ''),
 			'unix_socket' => env('DB_SOCKET', ''),
 			'charset' => 'utf8mb4',
 			'collation' => 'utf8mb4_unicode_ci',

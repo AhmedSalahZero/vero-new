@@ -26,7 +26,13 @@ class ExpenseController
 		
 		$modelId = $request->get('model_id');
 		$modelName = $request->get('model_name');
-		$model = ('\App\Models\\'.$modelName)::find($modelId);
+		// SECURITY: model class + id came from the body (any model of any company);
+		// related rows were deleted through generateRelationDynamically().
+		$model = \App\Support\CompanyScopedModelResolver::findForCompany(
+			\App\Support\CompanyScopedModelResolver::modelClass($modelName, ['IncomeStatement']),
+			$modelId,
+			(int) (is_object($company_id) ? $company_id->id : $company_id)
+		);
 		foreach((array)$request->get('tableIds') as $tableId){
 			#::delete all
 			$model->generateRelationDynamically($tableId)->delete();

@@ -42,7 +42,8 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::middleware([])->group(function () {
     // Route::any('FreeUserSubscription', 'UserController@freeSubscription')->name('free.user.subscription');
-    Auth::routes();
+    // SECURITY: public self-registration disabled — users are created by admins.
+    Auth::routes(['register' => false]);
     
     Route::group(
         [
@@ -57,13 +58,13 @@ Route::middleware([])->group(function () {
             Route::post('getTopAndBottomsForDashboard', [SalesBreakdownAgainstAnalysisReport::class, 'topAndBottomsForDashboard'])->name('getTopAndBottomsForDashboard');
 
             Route::post('remove-user', [RemoveUsercontroller::class, '__invoke'])->name('remove.user');
-            Route::post('remove-company', [RemoveCompanycontroller::class, '__invoke'])->name('remove.company');
+            Route::post('remove-company', [RemoveCompanycontroller::class, '__invoke'])->middleware('superAdmin')->name('remove.company');
             Route::get('/client', function () {
                 return view('client_view.supplier_invoices.form');
             });
 
-            Route::resource('section', 'SectionController');
-            Route::resource('companySection', 'CompanyController');
+            Route::resource('section', 'SectionController')->middleware('superAdmin');
+            Route::resource('companySection', 'CompanyController')->middleware('superAdmin');
             // Route::resource('user', 'UserController');
             Route::get('user/create/{company?}', 'UserController@create')->middleware('isCashManagement')->name('user.create');
             Route::get('user/all/{company?}', 'UserController@index')->middleware('isCashManagement')->name('user.index');
@@ -90,9 +91,9 @@ Route::middleware([])->group(function () {
             Route::get('update-users-based-on-company-and-role', 'UserController@getUsersBasedOnCompanyAndRole')->name('update.users.based.on.company.and.role');
             Route::get('render-permission-html-for-user', 'UserController@renderPermissionForUser')->name('render.permissions.html.for.user');
             Route::group(['prefix' => 'user-permissions/{user}/', 'as' => 'user.permissions.'], function () {
-                Route::get('/index', 'UsersAndPermissionsController@index')->name('index');
-                Route::get('/create', 'UsersAndPermissionsController@create')->name('create');
-                Route::post('/store', 'UsersAndPermissionsController@store')->name('store');
+                Route::get('/index', 'UsersAndPermissionsController@index')->middleware('superAdmin')->name('index');
+                Route::get('/create', 'UsersAndPermissionsController@create')->middleware('superAdmin')->name('create');
+                Route::post('/store', 'UsersAndPermissionsController@store')->middleware('superAdmin')->name('store');
                 Route::get('/edit/{company?}', 'UsersAndPermissionsController@edit')->middleware('isCashManagement')->name('edit');
                 Route::post('/update', 'UsersAndPermissionsController@update')->name('update');
             });
@@ -1324,42 +1325,37 @@ Route::middleware([])->group(function () {
     );
 });
 
-Route::delete('deleteMultiRowsFromCaching/{company}/{modelName}', [DeleteMultiRowsFromCaching::class, '__invoke'])->name('deleteMultiRowsFromCaching');
-Route::get('deleteAllRowsFromCaching/{company}/{modelType}', [DeleteAllRowsFromCaching::class, '__invoke'])->name('deleteAllCaches');
-Route::post('get-uploading-percentage/{companyId}/{modelName}', [getUploadPercentage::class, '__invoke']);
-Route::get('{lang}/remove-company-image/{company}', function ($lang, Company $company) {
-    if ($company->getFirstMedia('default')) {
-        $company->getFirstMedia('default')->delete();
-    }
-    
-    return redirect()->back()->with('success', __('Company Image Has Been Deleted Successfully'));
-})->name('remove.company.image');
+// SECURITY: these routes previously had no `auth` middleware (guests could e.g.
+// delete any company's logo). Paths are unchanged because JS callers use them
+// as absolute URLs; company membership is enforced by canViewCurrentCompany.
+Route::middleware(['auth'])->group(function () {
+    Route::delete('deleteMultiRowsFromCaching/{company}/{modelName}', [DeleteMultiRowsFromCaching::class, '__invoke'])->name('deleteMultiRowsFromCaching');
+    Route::get('deleteAllRowsFromCaching/{company}/{modelType}', [DeleteAllRowsFromCaching::class, '__invoke'])->name('deleteAllCaches');
+    Route::post('get-uploading-percentage/{companyId}/{modelName}', [getUploadPercentage::class, '__invoke']);
+    Route::get('{lang}/remove-company-image/{company}', function ($lang, Company $company) {
+        if ($company->getFirstMedia('default')) {
+            $company->getFirstMedia('default')->delete();
+        }
 
-Route::get('getStartDateAndEndDateOfIncomeStatementForCompany', 'HomeController@getIncomeStatementStartDateAndEndDate');
-Route::get('removeSessionForRedirect', function () {
-    if (session()->has('redirectTo')) {
-        $url = session()->get('redirectTo');
-        session()->forget('redirectTo');
+        return redirect()->back()->with('success', __('Company Image Has Been Deleted Successfully'));
+    })->middleware('superAdmin')->name('remove.company.image');
 
-        return response()->json([
-            'status' => true,
-            'url' => $url
-        ]);
-    }
-});
-Route::domain('second.con')->group(function () {
-    Route::get('salah', function () {
-        return 'good';
+    Route::get('getStartDateAndEndDateOfIncomeStatementForCompany', 'HomeController@getIncomeStatementStartDateAndEndDate');
+    Route::get('removeSessionForRedirect', function () {
+        if (session()->has('redirectTo')) {
+            $url = session()->get('redirectTo');
+            session()->forget('redirectTo');
+
+            return response()->json([
+                'status' => true,
+                'url' => $url
+            ]);
+        }
     });
 });
 
-Route::get('eee', function () {
-    $migrationOutput = Artisan::call('migrate');
-    // $testOutput = Artisan::call('run:test');
-    $testOutput = Artisan::call('run:sql');
-    return $testOutput . $migrationOutput;
-   
-});
-
+// SECURITY: the unauthenticated `GET /eee` route (Artisan migrate + run:sql) and the
+// `second.con` test domain route were removed. deploy.sh already runs
+// `artisan migrate --force` and `artisan run:sql`.
 
 // Route::get('salah', );

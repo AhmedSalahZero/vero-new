@@ -114,8 +114,9 @@ class SalesGatheringController extends Controller
  
     public function store(Request $request, Company $company)
     {
-        // $request['company_id'] = $company->id;
-        SalesGathering::create($request->all());
+        // SECURITY: SalesGathering has $guarded = [] — company_id / id must come from
+        // the route, never from the request body (cross-tenant row injection).
+        SalesGathering::create(array_merge($request->except(['id', 'company_id']), ['company_id' => $company->id]));
         return redirect()->back();
     }
 
@@ -145,9 +146,10 @@ class SalesGatheringController extends Controller
  
     public function destroy(Company $company,Request $request, $modelId)
     {
-		$modelType  = $request->get('modelType');
-		$fullModelName = 'App\Models\\'.$modelType ;
-		$model = $fullModelName::find($modelId);
+		// SECURITY: model class came from the request and the record was not
+		// scoped to the company — any record of any model could be deleted.
+		$fullModelName = DeletingClass::uploadModelClass($request->get('modelType'));
+		$model = \App\Support\CompanyScopedModelResolver::findForCompany($fullModelName, $modelId, (int) $company->id);
 		toastr()->error('Deleted Successfully');
         $model->delete();
         return redirect()->back();
@@ -388,6 +390,13 @@ class SalesGatheringController extends Controller
 	}
 	public function printLabelingByCustomHeaders(Company $company , Request $request)
 	{
+		// SECURITY: logos are stored on the public disk — raster images only.
+		$request->validate([
+			'labeling_logo_1' => UserController::IMAGE_RULES,
+			'labeling_logo_2' => UserController::IMAGE_RULES,
+			'labeling_logo_3' => UserController::IMAGE_RULES,
+			'labeling_stamp' => UserController::IMAGE_RULES,
+		]);
 		$headers = $request->get('labeling_print_headers',[]) ;
 		$headers = array_merge($headers, ['id','company_id']);
 		$printPaper = $request->get('print_labeling_type'); // landscape or portrait
@@ -398,10 +407,10 @@ class SalesGatheringController extends Controller
 			'no_rows_for_each_page_labeling'=>$rowsPerPage,
 			'print_labeling_type'=>$printPaper,
 			'labeling_print_headers'=>$headers,
-			'labeling_logo_1'=>$request->has('labeling_logo_1') ? $request->file('labeling_logo_1')->store('logs','public')  : $company->labeling_logo_1,
-			'labeling_logo_2'=>$request->has('labeling_logo_2') ? $request->file('labeling_logo_2')->store('logs','public')  : $company->labeling_logo_2,
-			'labeling_logo_3'=>$request->has('labeling_logo_3') ? $request->file('labeling_logo_3')->store('logs','public')  : $company->labeling_logo_3,
-			'labeling_stamp'=>$request->has('labeling_stamp') ? $request->file('labeling_stamp')->store('logs','public')  : $company->labeling_stamp,
+			'labeling_logo_1'=>$request->hasFile('labeling_logo_1') ? $request->file('labeling_logo_1')->store('logs','public')  : $company->labeling_logo_1,
+			'labeling_logo_2'=>$request->hasFile('labeling_logo_2') ? $request->file('labeling_logo_2')->store('logs','public')  : $company->labeling_logo_2,
+			'labeling_logo_3'=>$request->hasFile('labeling_logo_3') ? $request->file('labeling_logo_3')->store('logs','public')  : $company->labeling_logo_3,
+			'labeling_stamp'=>$request->hasFile('labeling_stamp') ? $request->file('labeling_stamp')->store('logs','public')  : $company->labeling_stamp,
 		]);
         // $viewing_names = array_values($exportableFields);
         // $db_names = array_keys($exportableFields);

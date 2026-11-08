@@ -169,6 +169,20 @@ trait AuthTrait
 			'fields'=>$fields
 		]);
 	}
+	/**
+	 * Parses an Odoo selection literal such as "[('draft', 'Draft'), ('posted', 'Posted')]"
+	 * (or the JSON/PHP list form) into [[value, label], ...] without executing anything.
+	 */
+	public static function parseSelectionLiteral(string $literal): array
+	{
+		$decoded = json_decode($literal, true);
+		if (is_array($decoded)) {
+			return array_values(array_filter($decoded, fn ($pair) => is_array($pair) && count($pair) >= 2));
+		}
+		preg_match_all('/[\(\[]\s*([\'"])(.*?)\1\s*,\s*([\'"])(.*?)\3\s*[\)\]]/s', $literal, $matches, PREG_SET_ORDER);
+
+		return array_map(fn ($match) => [$match[2], $match[4]], $matches);
+	}
 	public function getFieldAcceptableValues($modelName, $fieldName=null)
     {
         try {
@@ -200,7 +214,8 @@ trait AuthTrait
                     // Parse selection options
                     if ($field['selection']) {
                         // Selection is stored as a string like "[['draft', 'Draft'], ['posted', 'Posted']]"
-                        $selection = eval("return " . $field['selection'] . ";"); // Convert string to array
+                        // SECURITY: previously eval()'d a string received from the Odoo server.
+                        $selection = self::parseSelectionLiteral((string) $field['selection']);
                         $result['acceptable_values'] = array_map(function ($option) {
                             return [
                                 'value' => $option[0],

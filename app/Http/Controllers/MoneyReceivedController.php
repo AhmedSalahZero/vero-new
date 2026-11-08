@@ -1106,8 +1106,11 @@ class MoneyReceivedController
     }
     public function markAsConfirmed(Company $company, Request $request, int $modelId)
     {
+        // SECURITY: the table name came from the body and the row was not scoped to
+        // the company — any row of any table with is_reviewed could be updated.
         $tableName = $request->get('table_name');
-        DB::table($tableName)->where('id', $modelId)->update([
+        abort_unless(in_array($tableName, ['money_received', 'money_payments', 'cash_expenses'], true), 422);
+        DB::table($tableName)->where('id', $modelId)->where('company_id', $company->id)->update([
             'is_reviewed'=>1,
             'reviewed_by'=>auth()->user()->id
         ]);

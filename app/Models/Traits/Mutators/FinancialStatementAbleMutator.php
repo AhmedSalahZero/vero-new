@@ -194,7 +194,12 @@ trait FinancialStatementAbleMutator
 	{
 		// names of new added element in add popup
 		$incomeStatementId = $request->input('financial_statement_able_id');
-		$incomeStatement = static::find($incomeStatementId);
+		// SECURITY: scope to the {company} in the route (IDOR). Internal callers
+		// such as ActualIncomeStatementImport pass a route-less Request.
+		$routeCompanyId = \App\Support\CompanyScopedModelResolver::routeCompanyId($request);
+		$incomeStatement = static::query()
+			->when($routeCompanyId, fn ($query, $companyId) => $query->where('company_id', $companyId))
+			->find($incomeStatementId);
 		if (!$incomeStatement) {
 			throw new \RuntimeException('Income statement not found.');
 		}
@@ -859,7 +864,7 @@ trait FinancialStatementAbleMutator
 			foreach ($dates as $date => $formattedDate) {
 				$mainIdsWithItsValues = $this->replaceEquationIdsWithItsValues($equationsIds, $date, $totalOfMainRows);
 				$formattedEquation = HArr::replaceArr($mainIdsWithItsValues, $equation);
-				$values['total']['dates'][$date] = eval('return ' . $formattedEquation . ';');
+				$values['total']['dates'][$date] = HArr::evaluateArithmetic($formattedEquation);
 				$values['total']['total'] += $values['total']['dates'][$date];
 			}
 		}

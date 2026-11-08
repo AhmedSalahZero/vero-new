@@ -16,6 +16,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\SecurityHeaders::class,
     ];
 
   
@@ -31,6 +32,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\EnsureRouteModelsBelongToCompany::class,
             \App\Http\Middleware\canViewCurrentCompany::class,
+            \App\Http\Middleware\GuardAnalysisSqlInput::class,
             \App\Http\Middleware\RecordSectionVisit::class,
         ],
 
@@ -61,5 +63,6 @@ class Kernel extends HttpKernel
 		'isCashManagement'=>CashManagementMiddleware::class,
 		'isNonBankingService'=>NonBankingServiceMiddleware::class,
 		'isPropertyManagement'=>PropertyManagementServiceMiddleware::class,
+		'superAdmin'=>\App\Http\Middleware\EnsureSuperAdmin::class,
     ];
 }

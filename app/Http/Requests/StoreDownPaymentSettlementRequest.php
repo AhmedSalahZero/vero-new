@@ -23,10 +23,11 @@ class StoreDownPaymentSettlementRequest extends FormRequest
     {
 		$modelType = Request('model_type');
 		$downPaymentId = Request('down_payment_id');
-		$fullClassName = 'App\Models\\'.$modelType;
+		// SECURITY: model type allow-listed and the down payment scoped to the route company.
+		$fullClassName = \App\Support\CompanyScopedModelResolver::invoiceClass($modelType);
 		$downPaymentModelName=$fullClassName::MONEY_MODEL_NAME;
 		$downPaymentModelFullName = 'App\Models\\'.$downPaymentModelName ;   
-		$downPayment =$downPaymentModelFullName::find($downPaymentId);
+		$downPayment =$downPaymentModelFullName::where('company_id', (int) \App\Support\CompanyScopedModelResolver::routeCompanyId($this))->findOrFail($downPaymentId);
 		$receivingDate  = $downPayment->getDate();
 		$settlementDate = Request('settlement_date');
 		$greaterNumber = Request()->get('received_amount',0);

@@ -963,7 +963,11 @@ class HomeController extends Controller
 	public function getIncomeStatementStartDateAndEndDate(Request $request)
 	{
 		$income_statement_id = $request->get('income_statement_id');
-		$incomeStatement  = IncomeStatement::where('id', $income_statement_id)->first();
+		$user = $request->user();
+		// SECURITY: only statements of the caller's companies (IDOR).
+		$incomeStatement  = IncomeStatement::where('id', $income_statement_id)
+			->when(! \App\Support\UserAdministration::isSuperAdmin($user), fn ($query) => $query->whereIn('company_id', \App\Support\UserAdministration::companyIds($user)))
+			->first();
 		if ($incomeStatement) {
 			$dates = $incomeStatement->getFirstAndEndDate();
 			return response()->json([
@@ -971,5 +975,7 @@ class HomeController extends Controller
 				'dates' => $dates
 			]);
 		}
+
+		return response()->json(['status' => 0, 'dates' => []]);
 	}
 }

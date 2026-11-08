@@ -116,7 +116,7 @@ class IncomeStatementController extends Controller
 
 		$incomeStatementId = $request->get('financial_statement_able_id');
 		$incomeStatementItemId = $request->get('financial_statement_able_item_id');
-		$incomeStatement = IncomeStatement::find($incomeStatementId);
+		$incomeStatement = $this->findCompanyIncomeStatement($company, $incomeStatementId);
 		$incomeStatementItem = $incomeStatement->withMainItemsFor($incomeStatementItemId)->first();
 		$currentSubItemType = $request->get('sub_item_type'); 
 		$subItem = $incomeStatementItem
@@ -207,7 +207,7 @@ class IncomeStatementController extends Controller
 	{
 		$incomeStatementId = $request->get('financial_statement_able_id');
 		$incomeStatementItemId = $request->get('financial_statement_able_item_id');
-		$incomeStatement = IncomeStatement::find($incomeStatementId);
+		$incomeStatement = $this->findCompanyIncomeStatement($company, $incomeStatementId);
 		$subItemsNames = formatSubItemsNamesForQuantity($request->get('sub_item_name'));
 
 	//	$isFinancialIncome = (bool)$request->get('is_financial_income');
@@ -247,16 +247,16 @@ class IncomeStatementController extends Controller
 	
 	public function exportReport(Request $request,Company $company , int $incomeStatementId , string $subItemType)
 	{
+		$incomeStatement = $this->findCompanyIncomeStatement($company, $incomeStatementId);
 		$formattedData = $this->formatReportDataForExport($request,$incomeStatementId,$subItemType)['data'];
 		
-		$incomeStatement = IncomeStatement::find($incomeStatementId);
 		$reportType = $request->input('sub_item_type');
 		return (new IncomeStatementExport(collect($formattedData), $request, $incomeStatement,$reportType))->download();
 	}
 	public function exportReportAsPdf(Request $request ,Company $company, int $incomeStatementId,string $subItemType)
 	{
 		$reportType = $request->input('sub_item_type');
-		$incomeStatement = IncomeStatement::find($incomeStatementId);
+		$incomeStatement = $this->findCompanyIncomeStatement($company, $incomeStatementId);
 		$reportItems = $this->formatReportDataForExport($request,$incomeStatementId,$subItemType) ;
 		$formattedData = $reportItems['data'];
 		$mainRowsIndexes = array_keys($reportItems['mainRowsIndexes']);
@@ -294,6 +294,14 @@ class IncomeStatementController extends Controller
 
 	// 	return $mergeArray;
 	// }
+	/**
+	 * SECURITY: income statement ids arrive in the request body / unbound route
+	 * params, so they must be scoped to the route company (IDOR).
+	 */
+	protected function findCompanyIncomeStatement(Company $company, $incomeStatementId): IncomeStatement
+	{
+		return IncomeStatement::where('company_id', $company->id)->findOrFail($incomeStatementId);
+	}
 	public function formatReportDataForExport(Request $request,int $incomeStatementId, string $subItemType)
 	{
 		$dynamicRowsShow = (bool) $request->get('dynamic_rows_shown');

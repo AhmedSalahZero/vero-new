@@ -11,6 +11,14 @@ class FilterColumnBasedOnAnotherColumnController extends Controller
 {
     public function filter(Request $request,Company $company){
 		$tableName = $request->get('filterTableName');
+		// SECURITY: table and column names come from the request and reach raw SQL
+		// (selectRaw / groupBy). Only the analysis tables and real identifiers are
+		// accepted (GuardAnalysisSqlInput enforces the same rules globally).
+		abort_unless(in_array($tableName, \App\Http\Middleware\GuardAnalysisSqlInput::ALLOWED_TABLES, true), 422);
+		foreach (['mainColumnName', 'secondColumnName', 'thirdColumnName'] as $columnKey) {
+			$columnValue = $request->get($columnKey);
+			abort_unless($columnValue === null || $columnValue === '' || (is_string($columnValue) && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $columnValue)), 422);
+		}
 		$firstColumnName = $request->get('mainColumnName');
 		$firstColumnValues = $request->get('mainColumnValues',[]);
 		$secondColumnName = $request->get('secondColumnName');

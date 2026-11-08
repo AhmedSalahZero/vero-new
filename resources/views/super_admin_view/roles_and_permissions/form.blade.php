@@ -146,12 +146,12 @@
 			type:"get",
 			success:function(res){
 				const users = res.users
-				let userOptions = '';
+				// Build options as text nodes: user names are user-controlled (stored XSS).
+				const userSelect = $('select#user-id').empty();
 				for(var i = 0 ; i <users.length ; i++){
-					var selected = currentUserSelect == users[i].id ? 'selected':''
-					userOptions +=' <option '+ selected +' value="'+users[i].id+'" >'+ users[i].name +'</option>';
+					userSelect.append($('<option>').val(users[i].id).text(users[i].name).prop('selected', currentUserSelect == users[i].id));
 				}
-				$('select#user-id').empty().append(userOptions).trigger('change')
+				userSelect.trigger('change')
 			}
 		})
 		}

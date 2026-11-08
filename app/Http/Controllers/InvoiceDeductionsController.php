@@ -15,7 +15,7 @@ class InvoiceDeductionsController
 	public function update(UpdateInvoiceDeductionRequest $request , Company $company ,  $InvoiceId , $invoiceModelName ){
 		$totalDeductions = array_sum(array_column($request->input('deductions',[]),'amount'));
 
-		$invoice = ('App\Models\\'.$invoiceModelName)::find($InvoiceId);
+		$invoice = \App\Support\CompanyScopedModelResolver::invoiceForCompany($invoiceModelName, $InvoiceId, (int) $company->id); // SECURITY: IDOR
 		$currentBalance  =$invoice->net_balance + $invoice->deductions->sum('pivot.amount');
 		$invoice->net_balance = $currentBalance - $totalDeductions;
 		

@@ -114,11 +114,15 @@ return $newArray;
 			$day = Carbon::make($date)->format('d');
 			$date = $year . '-'.$month.'-'.$day;
 			$dataFormatted['"ds"'][] = '"'.$date.'"' ;
-			$dataFormatted['"y"'][] = $value ;
+			// SECURITY: the payload is passed unquoted to shell_exec(); only numbers
+			// may reach the command line (dates are already rebuilt from Carbon).
+			$dataFormatted['"y"'][] = is_numeric($value) ? $value : 0 ;
 		}
 
 		
 		$pythonFilePath = resource_path('python/forecast/prophet_predicit.py');
+		$max = is_numeric($max) ? $max : 0;
+		$testCount = (int) $testCount;
 
 		$dataFormatted = json_encode($dataFormatted);
 

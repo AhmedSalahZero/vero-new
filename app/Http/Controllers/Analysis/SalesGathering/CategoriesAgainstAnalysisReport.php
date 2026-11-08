@@ -135,7 +135,7 @@ class CategoriesAgainstAnalysisReport
                 $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,category," . $type ."
                     FROM sales_gathering
-                    WHERE ( company_id = '".$company->id."'AND ". $mainField ."  = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                    WHERE ( company_id = '".$company->id."'AND ". $mainField ."  = ".sqlValue($zone)." AND date between '".$request->start_date."' and '".$request->end_date."')
                     ORDER BY id ";
                 $zones_data =collect(DB::select($query))->groupBy($type)->map(function ($item) use ($data_type) {
                     return $item->groupBy('gr_date')->map(function ($sub_item) use ($data_type) {
@@ -335,7 +335,7 @@ class CategoriesAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." category
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND category = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND category = ".sqlValue($zone)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id";
             $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function ($sub_item) {
@@ -443,7 +443,7 @@ class CategoriesAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,category
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND category = '".$category."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND category = ".sqlValue($category)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
             $categories_data =collect(DB::select($query))->groupBy('gr_date')->map(function ($item) {
                 return $item->sum('net_sales_value');

@@ -1014,12 +1014,15 @@ function getTypeSalesAnalysisData(Request $request, Company $company, $type)
 
     $sales_channels = is_array(json_decode(($request->sales_channels[0]))) ? json_decode(($request->sales_channels[0])) : $request->sales_channels;
 
+    // SECURITY: $type is a column name and the item names are user data — the
+    // former must be an identifier, the latter is quoted by PDO (a backslash
+    // previously defeated the str_replace("'", "\'") escaping).
+    abort_unless(is_string($type) && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $type), 422);
     foreach ($sales_channels as $sales_channel) {
-        $sales_channel = str_replace("'", "\'", $sales_channel);
         $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ," . $type . "
                 FROM sales_gathering
-                WHERE ( company_id = '" . $company->id . "'AND " . $type . " = '" . $sales_channel . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
+                WHERE ( company_id = '" . $company->id . "'AND " . $type . " = " . sqlValue($sales_channel) . " AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
                 ORDER BY id ";
         $sales_channels_data = collect(DB::select($query))->groupBy('gr_date')->map(function ($item) {
             return $item->sum('net_sales_value');
@@ -1598,7 +1601,36 @@ function addFirstReportKeysToSendReport($keys, $secondReport)
 
 function getCurrentCompanyId()
 {
+    // Prefer the matched {company} route parameter: segment(2) is wrong when the
+    // locale prefix is absent (see canViewCurrentCompany).
+    $route = Request()->route();
+    $routeCompany = $route ? $route->parameter('company') : null;
+    if ($routeCompany instanceof \App\Models\Company && $routeCompany->getKey()) {
+        return (string) $routeCompany->getKey();
+    }
+    if (is_numeric($routeCompany)) {
+        return (string) $routeCompany;
+    }
+
     return Request()->segment(2) ?? null;
+}
+
+/**
+ * Escape a menu title for raw output while keeping the intentional <br> line
+ * breaks (titles include DB-sourced names, e.g. expense names — stored XSS).
+ */
+function safeMenuTitle($title): string
+{
+    return str_ireplace(['&lt;br&gt;', '&lt;br/&gt;', '&lt;br /&gt;'], '<br>', e((string) $title, false));
+}
+
+/**
+ * Quote a value as an SQL string literal for the legacy reports that build raw
+ * SQL by concatenation. Uses the PDO driver's escaping (equivalent to binding).
+ */
+function sqlValue($value): string
+{
+    return \Illuminate\Support\Facades\DB::connection()->getPdo()->quote((string) $value);
 }
 function getCurrentDateForFormDate($fieldName, $format = 'm/d/Y')
 {
@@ -3470,18 +3502,12 @@ function getUploadDataText($typePrefixName)
 }
 function convertArrayToSqlString($items)
 {
+    // SECURITY: values were wrapped in quotes without escaping (SQL injection).
     if (!is_array($items)) {
-
-        return "'".$items."'";
-        ;
-
+        return sqlValue($items);
     }
-    $sqlString = "";
 
-    foreach ($items as $item) {
-        $sqlString .= "'".$item."',";
-    }
-    return trim($sqlString, ',');
+    return implode(',', array_map('sqlValue', $items));
 }
 function convertDateToFormatIfDate($strOrDate)
 {

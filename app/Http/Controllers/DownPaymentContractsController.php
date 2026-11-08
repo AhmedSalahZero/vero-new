@@ -145,10 +145,11 @@ class DownPaymentContractsController extends Controller
 	public function downPaymentSettlements(Company $company,Request $request, int $downPaymentId ,string $modelType)
 	{
 
-		$fullClassName = 'App\Models\\'.$modelType;
+		// SECURITY: {modelType} allow-listed and the down payment scoped to the company (IDOR).
+		$fullClassName = \App\Support\CompanyScopedModelResolver::invoiceClass($modelType);
 		$downPaymentModelName=$fullClassName::MONEY_MODEL_NAME;
 		$downPaymentModelFullName = 'App\Models\\'.$downPaymentModelName ;   
-		$downPayment =$downPaymentModelFullName::find($downPaymentId);
+		$downPayment =$downPaymentModelFullName::where('company_id', $company->id)->findOrFail($downPaymentId);
 		$contract = $downPayment->contract;
 		$partnerId = $downPayment->getPartnerId();
 		$partnerName = $downPayment->getPartnerName();
@@ -234,11 +235,12 @@ public function storeDownPaymentSettlement(
 	
 	
 	
-    $fullClassName = 'App\Models\\' . $modelType;
+    // SECURITY: {modelType} allow-listed and the down payment scoped to the company (IDOR).
+    $fullClassName = \App\Support\CompanyScopedModelResolver::invoiceClass($modelType);
     $downPaymentModelName = $fullClassName::MONEY_MODEL_NAME;
     $isMoneyReceived = $modelType == 'CustomerInvoice'; // true = customer, false = supplier
     $downPaymentModelFullName = 'App\Models\\' . $downPaymentModelName;   
-    $downPayment = $downPaymentModelFullName::find($downPaymentId);
+    $downPayment = $downPaymentModelFullName::where('company_id', $company->id)->findOrFail($downPaymentId);
     
     $downPayment->update([
         'down_payment_settlement_date' => $request->get('settlement_date')

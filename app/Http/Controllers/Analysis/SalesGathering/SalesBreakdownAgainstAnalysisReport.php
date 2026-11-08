@@ -427,23 +427,46 @@ class SalesBreakdownAgainstAnalysisReport
 	}
 
 
+	/**
+	 * SECURITY: previously every value (company_id, type, selectedType, modal_id,
+	 * dates) was concatenated into raw SQL, and company_id came from the body with
+	 * no membership check (the route is outside the {company} prefix) — SQL
+	 * injection + cross-tenant reads. Values are now bound, identifiers are
+	 * validated (GuardAnalysisSqlInput + backticks) and the company is authorized.
+	 */
+	protected function authorizedCompanyId(Request $request): int
+	{
+		$companyId = $request->get('company_id');
+		abort_unless(\App\Support\UserAdministration::canAccessCompany($request->user(), $companyId), 403);
+
+		return (int) $companyId;
+	}
+
+	protected static function identifier($value): string
+	{
+		abort_unless(is_string($value) && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $value), 422);
+
+		return '`' . $value . '`';
+	}
+
 	public function getNetSalesValueSum(Request $request)
 	{
 
-		$companyId = $request->get('company_id');
+		$companyId = $this->authorizedCompanyId($request);
 		$selectedType = $request->get('selectedType');
 		$start_date = $request->get('start_date');
 		$end_date = $request->get('end_date');
 		$type = $request->get('type');
+		$typeColumn = self::identifier($type);
 		$modal_id = $request->get('modal_id');
 		$query = '
-             SELECT "' . $selectedType . '" as selected_type_name , "' . $modal_id . '" as modal_id , FORMAT(sum(net_sales_value) , 0) as total_sales_value , count(DISTINCT(customer_name)) as customer_name , count(DISTINCT(category)) as category , count(DISTINCT(product_or_service)) as product_or_service , count(DISTINCT(product_item)) as product_item, count(DISTINCT(sales_person)) as sales_person ,
+             SELECT ? as selected_type_name , ? as modal_id , FORMAT(sum(net_sales_value) , 0) as total_sales_value , count(DISTINCT(customer_name)) as customer_name , count(DISTINCT(category)) as category , count(DISTINCT(product_or_service)) as product_or_service , count(DISTINCT(product_item)) as product_item, count(DISTINCT(sales_person)) as sales_person ,
               count(DISTINCT(business_sector)) as business_sector, count(DISTINCT(sales_channel)) as sales_channel, count(DISTINCT(zone)) as zone, count(DISTINCT(branch)) as branch
                 FROM sales_gathering
               force index (sales_channel_index)
-                WHERE ( company_id = ' . $companyId  . ' AND ' . $type .  ' =  "'  . $selectedType .  '" AND date between "' . $start_date . '" and "' . $end_date . '"  )
+                WHERE ( company_id = ? AND ' . $typeColumn . ' = ? AND date between ? and ?  )
                 ORDER BY id ';
-		$db = DB::select($query);
+		$db = DB::select($query, [$selectedType, $modal_id, $companyId, $selectedType, $start_date, $end_date]);
 
 		$request['branches'] = [$selectedType];
 		$request['type'] = $type;
@@ -463,11 +486,13 @@ class SalesBreakdownAgainstAnalysisReport
 
 	public function topAndBottomsForDashboard(Request $request)
 	{
-		$companyId = $request->get('company_id');
+		$companyId = $this->authorizedCompanyId($request);
 		$company = Company::find($companyId);
 		$type = $request->get('type');
 		$direction = $request->get('direction');
 		$column = $request->get('column');
+		$typeColumn = self::identifier($type);
+		$groupColumn = self::identifier($column);
 		$start_date = $request->get('date_from');
 		$end_date = $request->get('date_to');
 		$modal_id = $request->get('modal_id');
@@ -476,13 +501,13 @@ class SalesBreakdownAgainstAnalysisReport
 
 
 		$query = '
-             SELECT "' . $selectedType . '" as selected_type_name , "' . $modal_id . '" as modal_id , sum(net_sales_value)  as total_sales_value ,  ' . $column . ' as customer_name
+             SELECT ? as selected_type_name , ? as modal_id , sum(net_sales_value)  as total_sales_value ,  ' . $groupColumn . ' as customer_name
                 FROM sales_gathering
            force index (sales_channel_index)
-                WHERE ( company_id = ' . $companyId  . ' AND ' . $type .  ' =  "'  . $selectedType .  '" AND date between "' . $start_date . '" and "' . $end_date . '"  )
-                 group by ' . $column . '
+                WHERE ( company_id = ? AND ' . $typeColumn . ' = ? AND date between ? and ?  )
+                 group by ' . $groupColumn . '
                  ORDER BY total_sales_value ' . ($direction == 'top' ? 'DESC limit 50' : 'ASC limit 50');
-		$queryResult = DB::select($query);
+		$queryResult = DB::select($query, [$selectedType, $modal_id, $companyId, $selectedType, $start_date, $end_date]);
 
 		return response()->json([
 			'data' => $queryResult,

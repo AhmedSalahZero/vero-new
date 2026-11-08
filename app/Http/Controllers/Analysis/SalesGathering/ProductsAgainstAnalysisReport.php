@@ -103,11 +103,10 @@ class ProductsAgainstAnalysisReport
 		$data_type = ($request->data_type === null || $request->data_type == 'value') ? 'net_sales_value' : 'quantity';
 		foreach ($mainData as  $main_row) {
 			if ($result == 'view' || $result == 'data') {
-				$main_row = str_replace("'", "''", $main_row);
 				$query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , " . $data_type . " ,product_or_service," . $type . "
                     FROM sales_gathering
-                    WHERE ( company_id = '" . $company->id . "'AND product_or_service = '" .  $main_row . "'AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
+                    WHERE ( company_id = '" . $company->id . "'AND product_or_service = " .  sqlValue($main_row) . "AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
                     ORDER BY id ";
 				$mainData_data = collect(DB::select($query))->groupBy($type)->map(function ($item) use ($data_type) {
 					return $item->groupBy('gr_date')->map(function ($sub_item) use ($data_type) {
@@ -314,7 +313,7 @@ class ProductsAgainstAnalysisReport
 			$query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields . " product_or_service
                 FROM sales_gathering
-                WHERE ( company_id = '" . $company->id . "'AND product_or_service = '" . $zone . "' AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
+                WHERE ( company_id = '" . $company->id . "'AND product_or_service = " . sqlValue($zone) . " AND date between '" . $request->start_date . "' and '" . $request->end_date . "')
                 ORDER BY id";
 			$sales = collect(DB::select($query))->groupBy('gr_date');
 			$sales_values_per_zone[$zone] = $sales->map(function ($sub_item) {
@@ -437,7 +436,7 @@ class ProductsAgainstAnalysisReport
                 $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_or_service
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND product_or_service = '".$branch."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND product_or_service = ".sqlValue($branch)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
                 $branches_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');

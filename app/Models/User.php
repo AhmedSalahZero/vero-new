@@ -107,6 +107,8 @@ class User extends Authenticatable implements HasMedia
     ];
     protected $hidden = [
         'password', 'remember_token',
+        // SECURITY: stored Odoo credential must never be serialized (toArray/JSON).
+        'odoo_db_password',
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -143,27 +145,29 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->name ;
     }
+	// Role helpers are null-safe: a user without a role used to throw here
+	// (e.g. on every Gate::before check), turning authorization into a 500.
 	public function getRoleName()
 	{
-		return $this->roles->first()->name;
+		return $this->roles->first()?->name;
 	}
 	
 	public function isSuperAdmin()
 	{
-		return  $this->roles->first()->name == 'super-admin';
+		return  $this->roles->first()?->name === 'super-admin';
 	}
 	public function isCompanyAdmin():bool 
 	{
 	
-		return  $this->roles->first()->name == 'company-admin';
+		return  $this->roles->first()?->name === 'company-admin';
 	}
 	public function isManager():bool 
 	{
-		return  $this->roles->first()->name == 'manager';
+		return  $this->roles->first()?->name === 'manager';
 	}
 	public function isUser():bool 
 	{
-		return  $this->roles->first()->name == 'user';
+		return  $this->roles->first()?->name === 'user';
 	}
 	public function usersCreatedBy():HasMany
 	{
@@ -200,7 +204,7 @@ class User extends Authenticatable implements HasMedia
 	}
 	public function hasRole($roleName):bool
 	{
-		return $this->roles->first()->name == $roleName ;
+		return $this->roles->first()?->name == $roleName ;
 	}
 	
 	
@@ -349,7 +353,17 @@ class User extends Authenticatable implements HasMedia
 	public static function getUsersWithRoles(?Company $company,?string $roleName = null)
 	{
 		$authUser = auth()->user();
-		return User::with('roles')->when($company,function($q) use ($company,$authUser,$roleName){
+		// SECURITY: without a company this returned every user of every tenant to
+		// any caller (e.g. the company-admin "Users" top-bar link).
+		$restrictToOwnCompanies = !$company && !($authUser && $authUser->isSuperAdmin());
+		return User::with('roles')->when($restrictToOwnCompanies,function($q) use ($authUser){
+			$companyIds = $authUser ? $authUser->companies()->pluck('companies.id')->all() : [];
+			$q->whereHas('companies',function($q) use ($companyIds){
+				$q->whereIn('companies.id',$companyIds);
+			})->whereHas('roles',function($q){
+				$q->where('roles.name','!=','super-admin');
+			});
+		})->when($company,function($q) use ($company,$authUser,$roleName){
 			$q
 			->whereHas('companies',function($q) use($company){
 				$q->where('companies.id',$company->id);

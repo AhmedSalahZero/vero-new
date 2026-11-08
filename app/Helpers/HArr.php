@@ -1510,13 +1510,61 @@ public static function formatMonths($numberOfMonths):array
     return $result;
 }
 
-public static function stringArrayToArray(string $str)
+/**
+ * Converts a stored "array as string" (JSON like ["1","all"], or a legacy PHP
+ * literal like ['1','2'] / array(1,2)) into a PHP array.
+ *
+ * SECURITY: this used to eval() the string. The string is built from request
+ * input (sub_items[*][is_percentage_of]), so eval() allowed remote code
+ * execution through PHP string interpolation ("{${...}}"). It now only parses
+ * data and never executes anything.
+ */
+public static function stringArrayToArray(?string $str): array
 {
-    if (!$str) {
+    if ($str === null || trim($str) === '') {
         return [];
     }
 
-    return 	eval('return ' . $str . ';');
+    $decoded = json_decode($str, true);
+    if (is_array($decoded)) {
+        return $decoded;
+    }
+
+    // Legacy PHP array literal of scalars — extract quoted strings and numbers only.
+    $body = preg_replace('/^\s*(array\s*\(|\[)|(\)|\])\s*$/i', '', $str);
+    preg_match_all("/'((?:[^'\\\\]|\\\\.)*)'|\"((?:[^\"\\\\]|\\\\.)*)\"|(-?\d+(?:\.\d+)?)/", (string) $body, $matches, PREG_SET_ORDER);
+    $result = [];
+    foreach ($matches as $match) {
+        if (isset($match[3]) && $match[3] !== '') {
+            $result[] = $match[3];
+        } elseif (isset($match[2]) && $match[2] !== '') {
+            $result[] = stripcslashes($match[2]);
+        } else {
+            $result[] = stripcslashes($match[1] ?? '');
+        }
+    }
+
+    return $result;
+}
+
+/**
+ * Evaluates a purely arithmetic expression (numbers, + - * / and parentheses).
+ *
+ * SECURITY: replaces a bare eval() of a computed equation. Anything that is
+ * not plain arithmetic is rejected (logged, returns 0) instead of executed.
+ */
+public static function evaluateArithmetic(string $expression)
+{
+    $expression = trim($expression);
+    if ($expression === '') {
+        return 0;
+    }
+    if (!preg_match('/^(?:[0-9eE+\-*\/().\s]|INF|NAN)+$/', $expression)) {
+        logger()->warning('Rejected non-arithmetic expression in HArr::evaluateArithmetic', ['expression' => $expression]);
+        return 0;
+    }
+
+    return eval('return ' . $expression . ';');
 }
 
 

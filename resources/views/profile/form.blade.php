@@ -87,7 +87,7 @@
                         <div class="col-6">
                             <label>{{__('Odoo Database Password / API Key')}}</label>
                             <div class="kt-input-icon">
-                                <input type="text" name="odoo_db_password" value="{{ old('odoo_db_password', $user->odoo_db_password) }}" class="form-control" placeholder="{{__('Odoo Database Password / API Key')}}">
+                                <input type="password" name="odoo_db_password" value="" autocomplete="new-password" class="form-control" placeholder="{{ $user->odoo_db_password ? __('Leave blank to keep the current password') : __('Odoo Database Password / API Key') }}">
                             </div>
                         </div>
                     </div>

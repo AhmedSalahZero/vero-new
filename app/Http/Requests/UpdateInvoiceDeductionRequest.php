@@ -25,7 +25,8 @@ class UpdateInvoiceDeductionRequest extends FormRequest
 	
 		$InvoiceId = Request()->route('modelId');
 		$invoiceModelName = Request()->route('modelType');
-		$invoice = ('App\Models\\'.$invoiceModelName)::find($InvoiceId);
+		// SECURITY: model type allow-listed and the invoice scoped to the route company.
+		$invoice = \App\Support\CompanyScopedModelResolver::invoiceForCompany($invoiceModelName, $InvoiceId, (int) \App\Support\CompanyScopedModelResolver::routeCompanyId($this));
 		/**
 		 * * الحفظ هنا بيستبدل كل خصومات الفاتورة (detach ثم إنشاء من جديد) ،
 		 * * فالخصومات المحفوظة حاليًا مش "مستهلكة" — هي نفسها اللي بتتعاد

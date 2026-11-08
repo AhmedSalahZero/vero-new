@@ -100,13 +100,12 @@ class SKUsAgainstAnalysisReport
         $branches = is_array(json_decode(($request->branches[0]))) ? json_decode(($request->branches[0])) :$request->branches ;
 
         foreach ($branches as  $branch) {
-			$branch  = replaceSingleQuote($branch);
 			
 		
                 $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_item
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND product_item = '".$branch."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND product_item = ".sqlValue($branch)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
                 $branches_data =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('net_sales_value');
@@ -192,11 +191,10 @@ class SKUsAgainstAnalysisReport
         $view_name = $request->view_name;
         foreach ($mainData as  $main_row) {
                 // $main_row = str_replace("'" , "''",$main_row);
-				$main_row  = replaceSingleQuote($main_row);
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,product_item," . $type ."
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND product_item = '".$main_row."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND product_item = ".sqlValue($main_row)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
             $mainData_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                     return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
@@ -286,11 +284,10 @@ class SKUsAgainstAnalysisReport
 
 
         foreach ($mainData as  $zone) {
-			$zone  = replaceSingleQuote($zone);
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." product_item
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND product_item = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND product_item = ".sqlValue($zone)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id";
             $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){
@@ -523,14 +520,13 @@ class SKUsAgainstAnalysisReport
         // gr_date Get last date of month
         foreach ($mainData as  $main_row) {
             $previous_date =$start_date;
-			$main_row  = replaceSingleQuote($main_row);
             foreach ($interval_dates as $key => $date) {
 
 
                 $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_item
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND product_item = '".$main_row."' AND date between '".$previous_date."' and '".$date."')
+                WHERE ( company_id = '".$company->id."'AND product_item = ".sqlValue($main_row)." AND date between '".$previous_date."' and '".$date."')
                 ORDER BY id ";
                 $report_data[$main_row]['Total'][date('d-m-Y',strtotime($date))] =collect(DB::select($query))->sum('net_sales_value');
 
@@ -575,13 +571,12 @@ class SKUsAgainstAnalysisReport
 
         foreach ($mainData as  $main_row) {
 
-			$main_row  = replaceSingleQuote($main_row);
 
 
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,sku," . $type ."
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND sku = '".$main_row."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND sku = ".sqlValue($main_row)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
             $mainData_data =collect(DB::select($query))-> groupBy('gr_date')->map(function($sub_item){
 
@@ -732,7 +727,6 @@ class SKUsAgainstAnalysisReport
 
 
         foreach ($mainData as  $main_row) {
-			$main_row  = replaceSingleQuote($main_row);
 			
             $previous_date =$start_date;
             foreach ($interval_dates as $key => $date) {
@@ -741,7 +735,7 @@ class SKUsAgainstAnalysisReport
                 $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , net_sales_value ,product_item
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND product_item = '".$main_row."' AND date between '".$previous_date."' and '".$date."')
+                WHERE ( company_id = '".$company->id."'AND product_item = ".sqlValue($main_row)." AND date between '".$previous_date."' and '".$date."')
                 ORDER BY id ";
                 $report_data[$main_row]['Total'][date('d-m-Y',strtotime($date))] =collect(DB::select($query))->sum('net_sales_value');
 

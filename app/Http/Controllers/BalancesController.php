@@ -50,9 +50,16 @@ class BalancesController
 		$total['currencies'] = [$mainCurrency => $valueAtMainCurrency]+$totalOfCurrency ;
 		return $total ;
 	}
+    /**
+     * SECURITY: {modelType} is a URL segment used to build a class name whose
+     * constants are concatenated into raw SQL — only the two invoice models apply.
+     */
+    public const BALANCE_MODEL_TYPES = ['CustomerInvoice', 'SupplierInvoice'];
+
     public function index(Request $request,Company $company,string $modelType)
 	{
 		$netBalanceCondition = self::NET_BALANCE_CONDITION;
+		abort_unless(in_array($modelType, self::BALANCE_MODEL_TYPES, true), 404);
 		$fullClassName = ('\App\Models\\'.$modelType) ;
 		$customersOrSupplierText = (new $fullClassName )->getClientDisplayName();
 		$title = (new $fullClassName )->getBalancesTitle();
@@ -297,6 +304,7 @@ class BalancesController
 		$netBalanceCondition = self::NET_BALANCE_CONDITION;
 		$onlyPasted = $request->has('only') ;
 		$additionalWhereClause = $onlyPasted ? "and invoice_status in ('past_due' , 'partially_collected_and_past_due' )" :  '' ;
+		abort_unless(in_array($modelType, self::BALANCE_MODEL_TYPES, true), 404);
 		$fullClassName = ('\App\Models\\'.$modelType) ;
 		$customersOrSupplierText = (new $fullClassName )->getClientDisplayName();
 		$title = (new $fullClassName )->getBalancesTitle();
@@ -308,7 +316,7 @@ class BalancesController
 		$moneyReceivedOrPaidUrlName = (new $fullClassName)->getMoneyReceivedOrPaidUrlName();
 		$moneyReceivedOrPaidText = (new $fullClassName)->getMoneyReceivedOrPaidText();
 		$clientNameText = (new $fullClassName)->getClientNameText();
-		$query = 'select id,'. $clientNameColumnName .' ,invoice_due_date,invoice_status,invoice_number,DATE_FORMAT(invoice_date,"%d-%m-%Y") as invoice_date, currency , net_balance   from '. $tableName .' where '.$netBalanceCondition.'  currency = "'. $currency .'" and company_id = '. $company->id . ' ' . $additionalWhereClause . ' order by invoice_due_date asc , net_balance desc ;';
+		$query = 'select id,'. $clientNameColumnName .' ,invoice_due_date,invoice_status,invoice_number,DATE_FORMAT(invoice_date,"%d-%m-%Y") as invoice_date, currency , net_balance   from '. $tableName .' where '.$netBalanceCondition.'  currency = '. sqlValue($currency) .' and company_id = '. $company->id . ' ' . $additionalWhereClause . ' order by invoice_due_date asc , net_balance desc ;';
 		$invoicesBalances = DB::select($query);
         return view('admin.reports.total_net_balance_details', compact('company','invoicesBalances','currency','moneyReceivedOrPaidUrlName','moneyReceivedOrPaidText','clientNameColumnName','clientNameText'));
     }

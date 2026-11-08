@@ -96,7 +96,7 @@ class InvoicesAgainstAnalysisReport
        $queryResult =  collect(DB::select("select ". $type.",((product_item)) as product_items, ((document_number)) as invoice_number  , Year , Month , net_sales_value
             from sales_gathering
             where document_type in ('INV' , 'inv' , 'invoice','INVOICE','فاتوره') and company_id = ". $company->id ."  
-            and ". $type ." in ( ". "\"" . $branches . "\"". ")
+            and ". $type ." in ( ". $branches . ")
             AND date between '".$request->start_date."' and '".$request->end_date."'
             order by year , month"));
             $queryResult = $queryResult->groupBy($type) ;
@@ -237,14 +237,14 @@ class InvoicesAgainstAnalysisReport
         return $result ;
     } 
 
+    /**
+     * Returns an SQL list of quoted values for an IN (...) clause.
+     * SECURITY: values used to be joined with '", "' and wrapped in double quotes
+     * without escaping (SQL injection through item names).
+     */
     public function formatTypesAsString($branches)
     {
-        if(is_array($branches))
-        {
-            return implode('", "',$branches);
-        }
-     
-        return $branches ;
+        return implode(', ', array_map('sqlValue', is_array($branches) ? $branches : [$branches]));
     }
   
     

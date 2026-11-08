@@ -36,6 +36,11 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
 			if($request->user()->AccountExpired()){
+				// SECURITY: the expired account used to stay authenticated here (only
+				// routes with checkIfAccountExpired logged it out later).
+				$this->guard()->logout();
+				$request->session()->invalidate();
+				$request->session()->regenerateToken();
 				session()->put('expired-login','Your Free Trail Has Been Expired .. Please Subscribe');
 				return redirect()->route('login');
 			}

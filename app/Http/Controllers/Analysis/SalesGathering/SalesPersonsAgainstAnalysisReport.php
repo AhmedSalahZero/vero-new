@@ -104,7 +104,7 @@ class SalesPersonsAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,sales_person," . $type ."
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND sales_person = '".$main_row."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND sales_person = ".sqlValue($main_row)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
             $mainData_data =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
                     return $item->groupBy('gr_date')->map(function($sub_item)use($data_type){
@@ -201,7 +201,7 @@ class SalesPersonsAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , sales_value ," . $fields ." sales_person
                 FROM sales_gathering
-                WHERE ( company_id = '".$company->id."'AND sales_person = '".$zone."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND sales_person = ".sqlValue($zone)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id";
             $sales =collect(DB::select($query))->groupBy('gr_date');
             $sales_values_per_zone[$zone] = $sales->map(function($sub_item){

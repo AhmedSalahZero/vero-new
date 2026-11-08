@@ -54,9 +54,18 @@ class DeletingClass
         $outcome['deleted'] > 0 ? toastr()->warning($message) : toastr()->error($message);
     }
 
+    /**
+     * SECURITY: the model name comes from the URL; only the uploadable models
+     * (getUploadParamsFromType) may be bulk-deleted through these endpoints.
+     */
+    public static function uploadModelClass($model): string
+    {
+        return \App\Support\CompanyScopedModelResolver::modelClass($model, array_keys(getUploadParamsFromType()));
+    }
+
     public function truncate(Company $company, $model)
     {
-        $model_name = 'App\\Models\\' . $model;
+        $model_name = self::uploadModelClass($model);
         $model_obj = new $model_name();
         $all_model_data = $model_obj->company()->get();
         $outcome = ['deleted' => 0, 'blocked' => []];
@@ -84,7 +93,7 @@ class DeletingClass
             return redirect()->back();
         }
 
-        $model_name = 'App\\Models\\' . $model;
+        $model_name = self::uploadModelClass($model);
         $model_obj = new $model_name();
         $all_model_data = null ;
         if ($request->has('delete_date_from')) {

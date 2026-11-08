@@ -257,7 +257,8 @@ class SalesGatheringTestController extends Controller
 
 	public function update(Request $request, Company $company, SalesGatheringTest $salesGatheringTest,string $modelName)
 	{
-		$salesGatheringTest->update($request->all());
+		// SECURITY: $guarded = [] — never let the body move the row to another company.
+		$salesGatheringTest->update($request->except(['id', 'company_id']));
 		toastr()->success('Updated Successfully');
 		return redirect()->route('salesGatheringImport', ['company'=>$company->id , 'model'=>$modelName]);
 	}
@@ -327,11 +328,12 @@ class SalesGatheringTestController extends Controller
 	public function storeModel(Company $company ,Request $request, string $modelName )
 	{
 		$companyId = $company->id;
-		$class = '\App\Models\\'.$modelName ;
+		// SECURITY: model allow-listed; company_id always forced from the route.
+		$class = DeletingClass::uploadModelClass($modelName) ;
 		$model = new $class;
 		
 		if($modelName == 'CustomerInvoice'){
-					$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','sales_order_id']);
+					$tableDataArr = $request->except(['tableIds','_token','model_id','id','company_id','creator_id','contract_id','sales_order_id']);
 						$salesOrderId = $request->get('sales_order_id') ;
 						$contractId = $request->get('contract_id') ;
 						$tableDataArr['sales_order_number'] =$salesOrderId ? SalesOrder::find($salesOrderId)->getNumber() : null ; 
@@ -341,10 +343,10 @@ class SalesGatheringTestController extends Controller
 						$customerName = Partner::find($tableDataArr['customer_id'])->getName();
 						$tableDataArr['customer_name'] = $customerName ;
 
-						CustomerInvoice::create($this->onlyTableColumns(new CustomerInvoice, $tableDataArr));
+						CustomerInvoice::create($this->onlyTableColumns(new CustomerInvoice, array_merge($tableDataArr, ['company_id' => $companyId])));
 					}
 					if($modelName == 'SupplierInvoice'){
-						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','purchases_order_id']);
+						$tableDataArr = $request->except(['tableIds','_token','model_id','id','company_id','creator_id','contract_id','purchases_order_id']);
 						$purchasesOrderId = $request->get('purchases_order_id') ;
 						$contractId = $request->get('contract_id') ;
 						$tableDataArr['purchases_order_number'] =$purchasesOrderId ? PurchaseOrder::find($purchasesOrderId)->getNumber() : null ; 
@@ -355,11 +357,11 @@ class SalesGatheringTestController extends Controller
 							$tableDataArr['contract_code'] = $contract ? $contract->getCode() : null;
 								$supplierName = Partner::find($tableDataArr['supplier_id'])->getName();
 								$tableDataArr['supplier_name'] = $supplierName ;
-							SupplierInvoice::create($this->onlyTableColumns(new SupplierInvoice, $tableDataArr));
+							SupplierInvoice::create($this->onlyTableColumns(new SupplierInvoice, array_merge($tableDataArr, ['company_id' => $companyId])));
 					}
 					if($modelName == 'SalesGathering'){
-						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','sales_order_id']);
-						$model->create($this->onlyTableColumns($model, $tableDataArr));
+						$tableDataArr = $request->except(['tableIds','_token','model_id','id','company_id','creator_id','contract_id','sales_order_id']);
+						$model->create($this->onlyTableColumns($model, array_merge($tableDataArr, ['company_id' => $companyId])));
 					}
 
 		foreach((array)$request->get('tableIds') as $tableId){
@@ -384,7 +386,7 @@ class SalesGatheringTestController extends Controller
 	public function editModel(Company $company ,Request $request, string $modelName,$modelId )
 	{
 		$exportables = getExportableFieldsForModel($company->id,$modelName);
-		$model = ('\App\Models\\'.$modelName)::find($modelId);
+		$model = \App\Support\CompanyScopedModelResolver::findForCompany(DeletingClass::uploadModelClass($modelName), $modelId, (int) $company->id);
 		$data = [
 			'pageTitle'=>__('Create'),
 			'type'=>'_create',
@@ -399,10 +401,11 @@ class SalesGatheringTestController extends Controller
 	public function updateModel(Company $company ,Request $request, string $modelName,$modelId )
 	{
 		$companyId = $company->id;
-		$model = ('\App\Models\\'.$modelName)::find($modelId) ;
+		// SECURITY: model allow-listed and record scoped to the route company (IDOR).
+		$model = \App\Support\CompanyScopedModelResolver::findForCompany(DeletingClass::uploadModelClass($modelName), $modelId, (int) $companyId) ;
 		
 		if($modelName == 'CustomerInvoice'){
-					$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','sales_order_id']);
+					$tableDataArr = $request->except(['tableIds','_token','model_id','id','company_id','creator_id','contract_id','sales_order_id']);
 						$salesOrderId = $request->get('sales_order_id') ;
 						$contractId = $request->get('contract_id') ;
 						$tableDataArr['sales_order_number'] =$salesOrderId ? SalesOrder::find($salesOrderId)->getNumber() : null ; 
@@ -414,7 +417,7 @@ class SalesGatheringTestController extends Controller
 						$model->update($this->onlyTableColumns($model, $tableDataArr));
 					}
 					if($modelName == 'SupplierInvoice'){
-						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','purchases_order_id']);
+						$tableDataArr = $request->except(['tableIds','_token','model_id','id','company_id','creator_id','contract_id','purchases_order_id']);
 						$purchasesOrderId = $request->get('purchases_order_id') ;
 						$contractId = $request->get('contract_id') ;
 						$tableDataArr['purchases_order_number'] =$purchasesOrderId ? PurchaseOrder::find($purchasesOrderId)->getNumber() : null ; 
@@ -429,7 +432,7 @@ class SalesGatheringTestController extends Controller
 
 					}
 					if($modelName == 'SalesGathering'){
-						$tableDataArr = $request->except(['tableIds','_token','model_id','id','creator_id','contract_id','sales_order_id']);
+						$tableDataArr = $request->except(['tableIds','_token','model_id','id','company_id','creator_id','contract_id','sales_order_id']);
 						$model->update($this->onlyTableColumns($model, $tableDataArr));
 					}
 

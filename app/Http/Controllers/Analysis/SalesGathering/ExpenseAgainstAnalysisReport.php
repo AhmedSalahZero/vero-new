@@ -265,7 +265,7 @@ class ExpenseAgainstAnalysisReport
                 $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,".$firstColumn.$lastColumnQuery ."
                     FROM expense_analysis
-                    WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = '".$firstColumnItem."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                    WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = ".sqlValue($firstColumnItem)." AND date between '".$request->start_date."' and '".$request->end_date."')
 					". $whereIn ."
                     ORDER BY id ";
                 $results =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){
@@ -352,7 +352,7 @@ class ExpenseAgainstAnalysisReport
             $query = "
                 SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , total_cost ,".$firstColumnName."
                 FROM expense_analysis
-                WHERE ( company_id = '".$company->id."'AND ".$firstColumnName." = '".$currentMainItemName."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                WHERE ( company_id = '".$company->id."'AND ".$firstColumnName." = ".sqlValue($currentMainItemName)." AND date between '".$request->start_date."' and '".$request->end_date."')
                 ORDER BY id ";
             $currentResult =collect(DB::select($query))->groupBy('gr_date')->map(function($item){
                     return $item->sum('total_cost');
@@ -654,7 +654,7 @@ class ExpenseAgainstAnalysisReport
                 $query = "
                     SELECT DATE_FORMAT(LAST_DAY(date),'%d-%m-%Y') as gr_date  , ".$data_type." ,".$firstColumn.$lastColumnQuery ."
                     FROM expense_analysis
-                    WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = '".$firstColumnItem."' AND date between '".$request->start_date."' and '".$request->end_date."')
+                    WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = ".sqlValue($firstColumnItem)." AND date between '".$request->start_date."' and '".$request->end_date."')
 					". $whereIn ."
                     ORDER BY id ";
                 $results =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){

@@ -104,13 +104,17 @@ class PropertyExpensesController extends Controller
         Property $property
     ) {
 		if($request->get('in_edit_mode')){
-			$propertyExpense = $request->input('sub_items.0',[]);
-			$propertyExpense = PropertyExpense::find($propertyExpense['id'])->update($propertyExpense);
+			// SECURITY: the expense id and every attribute came from the body — any
+			// company's expense could be edited or moved. Scope to this property and
+			// never accept ownership columns from the request.
+			$propertyExpense = (array) $request->input('sub_items.0',[]);
+			$propertyExpense = PropertyExpense::where('property_id', $property->id)->findOrFail($propertyExpense['id'] ?? null)
+				->update(array_merge($propertyExpense, ['property_id' => $property->id, 'company_id' => $property->company_id]));
 
 		}else{
 			$propertyExpenses = $request->get('sub_items',[]);
 			foreach($propertyExpenses as $propertyExpense){
-				$propertyExpense = PropertyExpense::create($propertyExpense);
+				$propertyExpense = PropertyExpense::create(array_merge((array) $propertyExpense, ['property_id' => $property->id, 'company_id' => $property->company_id]));
 			}
 			
 		}

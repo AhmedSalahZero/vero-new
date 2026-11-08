@@ -6,6 +6,7 @@ use App\Helpers\HArr;
 use App\Helpers\HAuth;
 use App\Models\Company;
 use App\Models\User;
+use App\Support\UserAdministration;
 use App\Traits\ImageSave;
 use Auth;
 use Carbon\Carbon;
@@ -16,6 +17,9 @@ use Spatie\Permission\Models\Permission;
 class UserController extends Controller
 {
 	use ImageSave;
+
+	/** Raster images only — SVG/HTML are excluded (stored on the public disk). */
+	public const IMAGE_RULES = ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'];
 	public function __construct()
 	{
 		$this->middleware(['can:view users'])->only(['index']);
@@ -75,6 +79,8 @@ class UserController extends Controller
 
 		$users = collect([]);
 		$authUser = Auth()->user() ;
+		// SECURITY: a user list for a company the actor does not belong to was readable.
+		abort_if($company && $company->exists && ! UserAdministration::canAccessCompany($authUser, $company->id), 403);
 		/**
 		 * @var \App\Models\User $authUser;
 		 */
@@ -87,6 +93,7 @@ class UserController extends Controller
 	public function create(?Company $company = null)
 	{
 		$authUser = Auth()->user();
+		abort_if(UserAdministration::assignableRoles($authUser) === [], 403);
 		$companies = $this->companiesForForm($authUser, $company);
 		$canEditCompanies = $this->authUserCanEditCompanyAssignment($authUser);
 
@@ -100,25 +107,37 @@ class UserController extends Controller
 		/**
 		 * @var User $user
 		 */
-		$request->validate([
-			'email'=>'unique:users,email'
+		// SECURITY: role, password and quota fields were taken from the request
+		// unchecked (any role incl. super-admin, no password policy).
+		abort_if(UserAdministration::assignableRoles($user) === [], 403);
+		$isSuperAdmin = UserAdministration::isSuperAdmin($user);
+		$validated = $request->validate([
+			'name' => ['required', 'string', 'max:255'],
+			'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+			'password' => ['required', 'string', 'min:8', 'confirmed'],
+			'role' => ['required', 'string', \Illuminate\Validation\Rule::in(UserAdministration::assignableRoles($user))],
+			'max_users' => ['nullable', 'integer', 'min:0'],
+			'avatar' => self::IMAGE_RULES,
+			'image' => self::IMAGE_RULES,
 		]);
 		if (!$user->canStoreMoreUser()) {
 			return redirect()->back()->with('fail', __('You Exceed Your Max Users [ ' . $user->max_users . ' ]'));
 		}
 		$companyIds = $this->resolveCompanyIdsForWrite($user, $request->input('companies'), null);
 		abort_unless(count($companyIds) > 0, 422, __('Select at least one company.'));
-		$request['password'] = Hash::make($request->password);
-		$request['subscription'] = 'subscripted';
+		$attributes = [
+			'name' => $validated['name'],
+			'email' => $validated['email'],
+			'password' => Hash::make($validated['password']),
+			'created_by' => Auth()->user()->id,
+		];
+		if ($isSuperAdmin && $request->filled('max_users')) {
+			$attributes['max_users'] = $validated['max_users'];
+		}
 
-		$user = User::create(
-			array_merge(
-				$request->except('avatar', 'companies'),
-				['created_by'=>Auth()->user()->id]
-			),
-		);
+		$user = User::create($attributes);
 		$user->companies()->attach($companyIds);
-		$user->assignRole($request->role);
+		$user->assignRole($validated['role']);
 		/**
 		 * @var User $user
 		 */
@@ -145,6 +164,7 @@ class UserController extends Controller
 	public function edit(User $user)
 	{
 		$authUser = Auth()->user();
+		abort_unless(UserAdministration::canManage($authUser, $user), 403);
 		$companies = $this->companiesForForm($authUser, null);
 		$canEditCompanies = $this->authUserCanEditCompanyAssignment($authUser);
 
@@ -155,14 +175,38 @@ class UserController extends Controller
 	public function update(Request $request, User $user)
 	{
 		$authUser = Auth()->user();
+		// SECURITY: previously any authenticated CashVero user could update any
+		// user, the whole request was mass-assigned (password stored UNHASHED,
+		// created_by / max_users / odoo_* overwritable) and any role — including
+		// super-admin — could be assigned.
+		abort_unless(UserAdministration::canManage($authUser, $user), 403);
+		$validated = $request->validate([
+			'name' => ['required', 'string', 'max:255'],
+			'email' => ['required', 'string', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users', 'email')->ignore($user->id)],
+			'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+			'role' => ['nullable', 'string'],
+			'max_users' => ['nullable', 'integer', 'min:0'],
+			'avatar' => self::IMAGE_RULES,
+		]);
+		$requestedRole = $validated['role'] ?? null;
+		if ($requestedRole !== null) {
+			abort_unless(UserAdministration::canAssignRole($authUser, $requestedRole, $user), 403);
+		}
 		$companyIds = $this->resolveCompanyIdsForWrite($authUser, $request->input('companies'), $user);
 		abort_unless(count($companyIds) > 0, 422, __('Select at least one company.'));
 
-		$user->update($request->except('avatar', 'companies'));
+		$attributes = ['name' => $validated['name'], 'email' => $validated['email']];
+		if (! empty($validated['password'])) {
+			$attributes['password'] = Hash::make($validated['password']);
+		}
+		if (UserAdministration::isSuperAdmin($authUser) && $request->filled('max_users')) {
+			$attributes['max_users'] = $validated['max_users'];
+		}
+		$user->forceFill($attributes)->save();
 		$user->companies()->sync($companyIds);
-		@count($user->roles) == 0 ?: $user->removeRole($user->roles[0]->name);
-
-		$user->assignRole($request->role);
+		if ($requestedRole !== null && UserAdministration::roleName($user) !== $requestedRole) {
+			$user->syncRoles([$requestedRole]);
+		}
 		ImageSave::saveIfExist('avatar', $user);
 
 		return redirect()->back();
@@ -251,15 +295,21 @@ class UserController extends Controller
 	public function getUsersBasedOnCompanyAndRole(Request $request){
 		$roleName = $request->input('roleName');
 		$companyId = $request->input('companyId');
-		$company = Company::find($companyId);
-		$users = User::getUsersWithRoles($company,$roleName);
+		// SECURITY: companyId came from the request without a membership check and a
+		// missing company returned ALL users with every attribute (incl. Odoo password).
+		abort_unless(UserAdministration::canAccessCompany($request->user(), $companyId), 403);
+		$company = Company::findOrFail($companyId);
+		$users = User::getUsersWithRoles($company,$roleName)
+			->map(fn (User $user) => ['id' => $user->id, 'name' => $user->name])
+			->values();
 		return response()->json([
 			'users'=>$users
 		]);
 	}
 	public function renderPermissionForUser(Request $request)
 	{
-		$user = User::find($request->get('userId'));
+		$user = User::findOrFail($request->get('userId'));
+		abort_unless(UserAdministration::canManage($request->user(), $user), 403);
 		$permissionViews = view('super_admin_view.roles_and_permissions.permissions-radio',['user'=>$user])->render();
 		return response()->json([
 			'view'=>$permissionViews

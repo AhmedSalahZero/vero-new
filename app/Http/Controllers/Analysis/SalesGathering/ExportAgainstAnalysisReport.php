@@ -63,7 +63,7 @@ class ExportAgainstAnalysisReport
                 $query = "
                     SELECT DATE_FORMAT(LAST_DAY(purchase_order_date),'%d-%m-%Y') as gr_date  , ".$data_type." ,".$firstColumn."," . $secondColumnName ."
                     FROM export_analysis
-                    WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = '".$firstColumnItem."' AND purchase_order_date between '".$request->start_date."' and '".$request->end_date."')
+                    WHERE ( company_id = '".$company->id."'AND ". $firstColumn ."  = ".sqlValue($firstColumnItem)." AND purchase_order_date between '".$request->start_date."' and '".$request->end_date."')
 					". $whereIn ."
                     ORDER BY id ";
                 $results =collect(DB::select($query))->groupBy($type)->map(function($item)use($data_type){

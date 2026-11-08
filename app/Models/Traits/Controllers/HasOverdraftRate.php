@@ -42,7 +42,8 @@ trait HasOverdraftRate
 		/**
 		 * @var CleanOverdraft $modelFullName
 		 */
-		$rate = ($modelFullName::rateFullClassName())::find($rateId);
+		// SECURITY: {rate} is an unbound id — scope it to the route company (IDOR).
+		$rate = ($modelFullName::rateFullClassName())::where('company_id', $company->id)->findOrFail($rateId);
 		$date = $request->get('date_edit') ;
 		$marginRate = $request->get('margin_rate_edit') ;
 		$minInterestRate = $request->get('min_interest_rate_edit') ;
@@ -73,7 +74,8 @@ trait HasOverdraftRate
 		/**
 		 * @var CleanOverdraft $modelFullName
 		 */
-		$rate = ($modelFullName::rateFullClassName())::find($rateId);
+		// SECURITY: {rate} is an unbound id — scope it to the route company (IDOR).
+		$rate = ($modelFullName::rateFullClassName())::where('company_id', $company->id)->findOrFail($rateId);
 		$overdraftModel = $rate->overdraftModal;
 		$date = $rate->getDate();
 		$rate->delete();
