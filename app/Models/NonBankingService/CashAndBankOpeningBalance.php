@@ -100,8 +100,10 @@ class CashAndBankOpeningBalance extends Model
             $extendedStudyEndDate = $model->study->convertDateStringToDateIndex($model->study->getEndDate()) ;
             $dates = range(0, $extendedStudyEndDate);
             if (!is_null($openingBalance)) {
-                $model->statement = self::calculateSettlementStatement($dates, $statementPayload, [], $openingBalance, false, true);
-                $model->non_performing_statement = self::calculateSettlementStatement($dates, $nonPerformingStatementPayload, [], $nonPerformingOpeningBalance, false, true);
+                // a row saved without a collection schedule (null) has nothing collected in the study (found by
+                // non-banking:recalculate in phase 7: saving such a row again failed)
+                $model->statement = self::calculateSettlementStatement($dates, (array) ($statementPayload ?: []), [], $openingBalance, false, true);
+                $model->non_performing_statement = self::calculateSettlementStatement($dates, (array) ($nonPerformingStatementPayload ?: []), [], (float) $nonPerformingOpeningBalance, false, true);
                 $rates = $model->ecl_existing_rate ;
                 $nonPerformingRates = $model->non_performing_ecl_existing_rate ;
                     
@@ -118,8 +120,9 @@ class CashAndBankOpeningBalance extends Model
                 $cbeCorridorChanges = $study->generalAndReserveAssumption  ? $study->generalAndReserveAssumption->getCbeCorridorChangesRates() : [];
                 $interestCorridorChanges=[];
                 foreach ($cbeCorridorChanges as $dateAsIndex => $cbeCorridorChange) {
-                    $cbeCorridorChange =$cbeCorridorChange/100;
-                    $interestCorridorChanges[$dateAsIndex] = $totalOpeningBalances[$dateAsIndex] * $cbeCorridorChange;
+                    /** * التغيير سعر سنوي ، والأثر بيتحسب كل شهر: الرصيد × التغيير ÷ 12 (من غير ÷12 الأثر كان 12 ضعف) */
+                    $cbeCorridorChange =$cbeCorridorChange/100/12;
+                    $interestCorridorChanges[$dateAsIndex] = ($totalOpeningBalances[$dateAsIndex]??0) * $cbeCorridorChange;
                 }
                     
                 foreach ($endBalance as $dateAsIndex => $endBalanceAmount) {

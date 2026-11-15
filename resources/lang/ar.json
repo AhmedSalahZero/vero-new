@@ -1431,5 +1431,6 @@
     "No down payments found for these filters.": "لا توجد دفعات مقدمة بهذه الفلاتر.",
     "Received or payable cheques whose due date is on or after the date you pick.": "الشيكات المستلمة أو المستحقة الدفع التي يكون تاريخ استحقاقها في التاريخ المحدد أو بعده.",
     "Down payments received or paid on or after the date you pick, with how much of each has been settled and what is left.": "الدفعات المقدمة المستلمة أو المدفوعة في التاريخ المحدد أو بعده، مع المبلغ المسدَّد من كل دفعة والمتبقي منها.",
-    "Running And Against": "ساري ومقابل"
+    "Running And Against": "ساري ومقابل",
+    "This form has more fields than the server accepts (max_input_vars = :limit), so nothing was saved. Please ask the system administrator to raise max_input_vars.": "عدد حقول الفورم أكبر من الحد اللي السيرفر بيقبله (max_input_vars = :limit)، فماتحفظش أي حاجة. برجاء طلب رفع max_input_vars من مسؤول النظام."
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\NonBankingServices;
 
+use App\Providers\NonBankingServiceProvider;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStudyRequest;
 use App\Models\Company;
@@ -158,6 +159,8 @@ class StudyController extends Controller
 		]);
 		$data = $request->except(['_token']) ;
 		$model = null ;
+		$oldStudyStartDate = $study ? Carbon::make($study->study_start_date)->startOfMonth() : null;
+		$oldStudyDates = $study ? $study->getStudyDates() : null;
 		if(is_null($study)){
 			$model = Study::create($data);
 		}else{
@@ -188,9 +191,52 @@ class StudyController extends Controller
 		$dateIndexWithDate=$datesAndIndexesHelpers['dateIndexWithDate']; 
 		$dateWithMonthNumber=$datesAndIndexesHelpers['dateWithMonthNumber']; 
 		$model->updateStudyAndOperationDates($datesAsStringAndIndex,$datesIndexWithYearIndex,$yearIndexWithYear,$dateIndexWithDate,$dateWithMonthNumber);
+		if ($oldStudyStartDate) {
+			$this->keepMarketRatesOnTheirCalendarMonths($model, $oldStudyStartDate);
+		}
+		if (! is_null($oldStudyDates) && $oldStudyDates !== $model->fresh()->getStudyDates()) {
+			$this->recalculateForNewStudyDates($model);
+		}
 		return response()->json([
 			'redirectTo'=>route('non.banking.create.general.assumption',['company'=>$company->id,'study'=>$model->id])
 		]);
+	}
+
+	/**
+	 * * الكوريدور وأسعار البنك أسعار سوق: لما تاريخ بداية الدراسة يتغير بتفضل على نفس شهور التقويم.
+	 * * مثال: البداية بقت يناير 2025 بدل يناير 2026 ، فسعر يناير 2026 (كان index 0) بقى index 12.
+	 * * بعد كده القروض بتتحسب تاني بالتواريخ الجديدة (الـ hook بتاع الافتراضات).
+	 */
+	private function keepMarketRatesOnTheirCalendarMonths(Study $study, Carbon $oldStudyStartDate): void
+	{
+		$newStudyStartDate = Carbon::make($study->study_start_date)->startOfMonth();
+		$shiftMonths = ($oldStudyStartDate->year - $newStudyStartDate->year) * 12 + ($oldStudyStartDate->month - $newStudyStartDate->month);
+		$generalAndReserveAssumption = $study->generalAndReserveAssumption;
+		if ($shiftMonths === 0 || ! $generalAndReserveAssumption) {
+			return;
+		}
+		/** * الصفحة اتفتحت بتواريخ الدراسة القديمة ، فبنربط الجديدة قبل ما القروض تتحسب */
+		$study = $study->fresh();
+		NonBankingServiceProvider::bindStudyDates($study);
+		DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->transaction(function () use ($study, $shiftMonths) {
+			$generalAndReserveAssumption = $study->generalAndReserveAssumption;
+			$generalAndReserveAssumption->update($generalAndReserveAssumption->shiftedToNewStudyStart($shiftMonths));
+		});
+	}
+
+	/**
+	 * * تواريخ الدراسة اتغيرت (تطويلها مثلاً): المرتبات وصفوف صفحة Expenses بتتحسب تاني على التواريخ الجديدة.
+	 * * قبل كده كانت بتفضل محسوبة على التواريخ القديمة: دراسة 154 (سنة اتطوّلت لـ 3 سنين) فضل فيها مصروف آخره 12/2027
+	 * * بمبالغ لحد 12/2028 (دراسة السنة بتمد المصروف اللي آخره آخر الدراسة لسنتها الزيادة) ، والمرتبات ناقصة الشهور الجديدة.
+	 */
+	private function recalculateForNewStudyDates(Study $study): void
+	{
+		$study = $study->fresh();
+		NonBankingServiceProvider::bindStudyDates($study);
+		DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->transaction(function () use ($study) {
+			$study->recalculateManpower();
+			$study->recalculateStudyExpenses();
+		});
 	}
 	public function edit(Company $company , Request $request,Study $study){
 		return view('non_banking_services.study.form', $this->getViewVars($company,$study));

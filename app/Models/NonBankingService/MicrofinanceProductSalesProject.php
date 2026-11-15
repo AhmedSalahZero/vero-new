@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\NonBankingService;
 
+use App\Helpers\HArr;
 use App\Helpers\HNonBanking;
 use App\Models\Traits\Scopes\CompanyScope;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
@@ -178,29 +179,32 @@ class MicrofinanceProductSalesProject extends Model
         }
 		return __('N/A');
     }
+    /**
+     * * الشهر اللي مالوش قيمة محفوظة (بعد تطويل الدراسة) بياخد قيمة آخر شهر محفوظ قبله ، زي باقي getters الصفحة.
+     */
     public function getProductMixAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
-        return $this->product_mixes[$yearOrDateIndex]??0;
+        return HArr::valueAtOrBefore($this->product_mixes, $yearOrDateIndex, 0);
     }
     public function getFlatRateAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
 		if($this->type =='by-branch'){
 			return $this->study->microfinanceByBranchProductMixes->where('microfinance_product_id',$this->microfinance_product_id)->first()->getFlatRateAtYearOrMonthIndex($yearOrDateIndex);
 		}
-        return $this->flat_rates[$yearOrDateIndex]??0;
-    }  
+        return HArr::valueAtOrBefore($this->flat_rates, $yearOrDateIndex, 0);
+    }
 	public function getSetupFeesRateAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
 		// if($this->type =='by-branch'){
 		// 	return $this->study->microfinanceByBranchProductMixes->where('microfinance_product_id',$this->microfinance_product_id)->first()->getFlatRateAtYearOrMonthIndex($yearOrDateIndex);
 		// }
-        return $this->fees_rates[$yearOrDateIndex]??1;
+        return HArr::valueAtOrBefore($this->fees_rates, $yearOrDateIndex, 1);
     }public function getSetupFeesDurationAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
 		// if($this->type =='by-branch'){
 		// 	return $this->study->microfinanceByBranchProductMixes->where('microfinance_product_id',$this->microfinance_product_id)->first()->getFlatRateAtYearOrMonthIndex($yearOrDateIndex);
 		// }
-        return $this->setup_fees_durations[$yearOrDateIndex]??12;
+        return HArr::valueAtOrBefore($this->setup_fees_durations, $yearOrDateIndex, 12);
     }
     public function getIncreaseRateAtYearIndex($yearIndex)
     {

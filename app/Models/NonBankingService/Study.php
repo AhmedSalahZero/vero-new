@@ -21,7 +21,9 @@ use App\ReadyFunctions\CalculateVariableLoanAtEndService;
 use App\ReadyFunctions\CollectionPolicyService;
 use App\ReadyFunctions\FixedAssetsPayableEndBalance;
 use App\ReadyFunctions\PortfolioPresentValue;
+use App\ReadyFunctions\ProfitDistribution;
 use App\ReadyFunctions\ProjectsUnderProgress;
+use App\ReadyFunctions\TaxLossCarryForward;
 use App\Traits\HasBasicStoreRequest;
 use App\Traits\HasCollectionOrPaymentStatement;
 use Carbon\Carbon;
@@ -1244,7 +1246,11 @@ class Study extends Model
 	}
     public function storeFixedLoans(Request $request, string $revenueStreamType, string $relationName, bool $isSensitivity = false, ?array $pricingPerMonths = null):void
     {
-        $this->storeAdminFeesAndFundingStructureFor($request, $revenueStreamType);
+        // a sensitivity run writes its own loan table only and never the study's results (V11, phase 4): it used to
+        // write its revenue, bank interest and collections over the study's statements and recalculate its ECL
+        if (!$isSensitivity) {
+            $this->storeAdminFeesAndFundingStructureFor($request, $revenueStreamType);
+        }
         $studyId  = $this->id ;
         $companyId = $this->company->id ;
         $study = $this ;
@@ -1253,7 +1259,9 @@ class Study extends Model
         DB::connection('non_banking_service')->table($loanSchedulePaymentTableName)->where('revenue_stream_type', $revenueStreamType)->where('study_id', $studyId)->delete();
         $revenueIdWitLoanAmounts = $this->{$relationName}->pluck('loan_amounts', 'id')->toArray() ;
     
-        $this->storeMonthlyLoan($revenueStreamType, $relationName);
+        if (!$isSensitivity) {
+            $this->storeMonthlyLoan($revenueStreamType, $relationName);
+        }
         $calculateFixedLoanAtEndService = new CalculateFixedLoanAtEndService ;
         $calculateFixedLoanAtBeginningService = new CalculateFixedLoanAtBeginningService ;
         $portfolioLoans = [];
@@ -1304,9 +1312,9 @@ class Study extends Model
         
         foreach ($operationDurationPerYear as $yearIndex => $yearMonthIndexes) {
             foreach ($yearMonthIndexes as $monthIndex => $monthlyZeroOrOne) {
-	
-                $baseRatesMapping = is_array($baseRatesMapping) ? HArr::filterByYearOrMonthIndex($baseRatesMapping, $yearIndexWithYear, $yearIndex, $dateIndexWithDate[$monthIndex], $this->isMonthlyStudy()) : $baseRatesMapping;
-            
+
+                // the loan service takes the corridor of every month and keeps what applies to each loan, from its own month
+
              //   $yearOrMonthIndex = $isMonthlyStudy ? $monthIndex : $yearIndex;
                 
                 foreach ($revenueIdWitLoanAmounts as $leasingRevenueStreamBreakdownId => $yearIndexWithAmount) {
@@ -1322,7 +1330,6 @@ class Study extends Model
                     
                     $currentMonth = $dateIndexWithDate[$monthIndex];
                     $currentMarginRate = $isSensitivity ?  $leasingRevenueStreamBreakdown->getSensitivityMarginRate() : $leasingRevenueStreamBreakdown->getMarginRate();
-                    $gracePeriod = $leasingRevenueStreamBreakdown->getGracePeriod();
                     $tenor = $leasingRevenueStreamBreakdown->getTenor();
                     $installmentInterval = $leasingRevenueStreamBreakdown->getInstallmentInterval();
                     $installmentPaymentIntervalValue = $calculateFixedLoanAtEndService->getInstallmentPaymentIntervalValue($installmentInterval);
@@ -1330,13 +1337,16 @@ class Study extends Model
                     $stepDown = $leasingRevenueStreamBreakdown->getStepDown();
                     $stepInterval = $leasingRevenueStreamBreakdown->getStepInterval();
                     $loanType = $leasingRevenueStreamBreakdown->getLoanType();
+                    // only the grace loan types have a grace period: a normal (every ijara) or step loan saved with one is
+                    // calculated without it (phase 4). It used to leave a balance the client never repaid.
+                    $gracePeriod = str_contains((string) $loanType, 'grace') ? $leasingRevenueStreamBreakdown->getGracePeriod() : 0;
                     $loanNature = $leasingRevenueStreamBreakdown->getLoanNature();
                     $loanService = $loanNature == 'fixed-at-end' ? $calculateFixedLoanAtEndService : $calculateFixedLoanAtBeginningService ;
                     $currentPortfolioLoans=[];
                     if (is_array($baseRatesMapping)) {
                         $currentPortfolioLoans=$loanService->__calculateBasedOnDiffBaseRates($baseRatesMapping, $loanType, $currentMonth, $currentMonthlyLoanAmount, $currentMarginRate, $tenor, $installmentInterval, $installmentPaymentIntervalValue, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, $dateWithDateIndex, $dateIndexWithDate);
                     } else {
-                        $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, $pricingPerMonths);
+                        $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, $pricingPerMonths, 0, true);
                         $finalResult = $currentPortfolioLoans['final_result']??[];
                         unset($finalResult['totals']);
                         $currentPortfolioLoans = $finalResult ;
@@ -1372,7 +1382,7 @@ class Study extends Model
                         if (is_array($baseRatesMapping)) {
                             $currentPortfolioLoans=$loanService->__calculateBasedOnDiffBaseRates($baseRatesMapping, $loanType, $currentMonth, $currentMonthlyLoanAmount, $currentMarginRate, $tenor, $installmentInterval, $installmentPaymentIntervalValue, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, $dateWithDateIndex, $dateIndexWithDate);
                         } else {
-                            $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex);
+                            $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, null, 0, true);
                             $finalResult = $currentPortfolioLoans['final_result']??[];
                             unset($finalResult['totals']);
                             $currentPortfolioLoans = $finalResult;
@@ -1402,7 +1412,15 @@ class Study extends Model
                 }
             }
         }
+        if ($isSensitivity) {
+            // the sensitivity table wants a JSON `totals` (NOT NULL, json_valid) that the loan rows do not carry: every
+            // sensitivity run with a loan failed on this insert until phase 4
+            $portfolioLoans = array_map(fn (array $row): array => $row + ['totals' => '[]'], $portfolioLoans);
+        }
         DB::connection('non_banking_service')->table($loanSchedulePaymentTableName)->insert($portfolioLoans);
+        if ($isSensitivity) {
+            return; // the sensitivity loans stay in their own table (V11)
+        }
         DB::connection('non_banking_service')->table('income_statement_reports')->where('study_id', $this->id)->update([
             $revenueStreamType.'_revenue'=>json_encode($totalInterests),
             $revenueStreamType.'_bank_interest'=>json_encode($totalBankInterests),
@@ -1419,6 +1437,15 @@ class Study extends Model
         // }
         
         
+    }
+
+    /**
+     * * بيحسب تاني كل صفوف صفحة Expenses (الأنواع الخمسة) من تاريخ بداية ونهاية كل صف ، زي حفظ الصفحة بالظبط.
+     * * بيتنده لما تواريخ الدراسة تتغير (تطويلها مثلاً) ، ومن أمر non-banking:recalculate.
+     */
+    public function recalculateStudyExpenses(): void
+    {
+        $this->recalculateExpenses('Study', $this->id, 'Expense', array_keys(getTypesForValuesForNonBanking()));
     }
 
     public function recalculateExpenses(string $modelName, int $modelId, string $expenseType, array $expenseTypes, $isSensitivity=false)
@@ -1648,6 +1675,12 @@ class Study extends Model
             $expenseNameId = $expense['expense_name_id'];
             $currentColumn = $expenseColumnNames[$tableId];
             $currentSubItem = $expense[$currentColumn];
+            // a one-time expense keeps its months under monthly_one_time, as the income statement reads it: the whole
+            // payload was summed by month index, so a one-time expense counted 0 in the totals the corporate tax is
+            // worked out from (study 127: 3,000 in April 2026, taxed as profit; found in phase 5)
+            if ($tableId === 'one_time_expense' && isset(((array) $currentSubItem)['monthly_one_time'])) {
+                $currentSubItem = (array) ((array) $currentSubItem)['monthly_one_time'];
+            }
             foreach ($currentNetPaymentsAfterWithholds as $dateAsIndex=>$value) {
                 $totalExpensePayment[$expenseNameId][$dateAsIndex] = isset($totalExpensePayment[$expenseNameId][$dateAsIndex]) ? $totalExpensePayment[$expenseNameId][$dateAsIndex] + $value : $value  ;
             }
@@ -1814,6 +1847,14 @@ class Study extends Model
     }
     public function recalculateAllRevenuesLoans($request, $isSensitivity = false)
     {
+        if ($isSensitivity) {
+            // the sensitivity margins exist for these three streams only; their loans go to the sensitivity table and the
+            // study's own results are not touched (V11, phase 4)
+            $this->storeFixedLoans($request, Study::LEASING, 'leasingRevenueStreamBreakdown', true);
+            $this->storeVariableLoans($request, Study::REVERSE_FACTORING, 'reverseFactoringBreakdowns', true);
+            $this->storeFixedLoans($request, Study::IJARA, 'ijaraMortgageBreakdowns', true);
+            return;
+        }
         $this->storeFixedLoans($request, Study::LEASING, 'leasingRevenueStreamBreakdown', $isSensitivity);
         $this->refreshDirectFactoringLoans($request);
         $this->storeVariableLoans($request, Study::REVERSE_FACTORING, 'reverseFactoringBreakdowns', $isSensitivity);
@@ -1823,12 +1864,15 @@ class Study extends Model
         $this->calculateConsumerfinanceLoans();
         $this->updateExpensesPercentageAndCostPerUnitsOfSales();
     }
-    public function getProductMixSeniorLoanOfficersAt(int $yearOrDateIndex, $isSenior = null)
+    /**
+     * * الشهر اللي مالوش قيمة محفوظة (بعد تطويل الدراسة) بياخد قيمة آخر شهر محفوظ قبله.
+     * * (كان بيقرا المصفوفة من غير default ، فصفحة الفرع كانت بتقع على أول شهر جديد.)
+     */
+    public function getProductMixSeniorLoanOfficersAt(int $yearOrDateIndex, $isSenior = null): float
     {
-        if ($isSenior) {
-            return $this->product_mix_senior_loan_officers[$yearOrDateIndex];
-        }
-        return $this->product_mix_loan_officers[$yearOrDateIndex];
+        $cases = $isSenior ? $this->product_mix_senior_loan_officers : $this->product_mix_loan_officers;
+
+        return HArr::valueAtOrBefore($cases, $yearOrDateIndex, 0);
     }
     public function incomeStatementReport()
     {
@@ -1838,7 +1882,13 @@ class Study extends Model
     {
         return $this->hasOne(CashflowStatementReport::class, 'study_id', 'id');
     }
-    public function calculateCorporateTaxesFromIncomeStatementReport(IncomeStatementReport $incomeStatementReport, array $yearWithItsMonths, int $startDateAsIndex, int $endDateAsIndex, array $dateIndexWithDate)
+    /**
+     * * ضريبة سنة ضريبية واحدة (الشهور من $startDateAsIndex لـ $endDateAsIndex).
+     * * المرحلة 5: السنة بتتخصم منها خسائر الخمس سنين اللي قبلها ($earlierYearsProfitBeforeTax: السنة => ربحها قبل الضريبة ؛
+     * * TaxLossCarryForward) ، وضريبة كل شهر = ربح الشهر × ضريبة السنة ÷ ربح السنة. قبل كده سنة الخسارة ضريبتها صفر ،
+     * * والخسارة مكانتش بتترحّل.
+     */
+    public function calculateCorporateTaxesFromIncomeStatementReport(IncomeStatementReport $incomeStatementReport, array $yearWithItsMonths, int $startDateAsIndex, int $endDateAsIndex, array $dateIndexWithDate, array $earlierYearsProfitBeforeTax = [])
     {
         $sumKeys = range($startDateAsIndex, $endDateAsIndex);
         $revenues = [
@@ -1909,18 +1959,25 @@ class Study extends Model
         $totalExpenses = HArr::sumAtDates($expenseColumnArr, $sumKeys);
         $ebt = HArr::subtractAtDates([$totalRevenues,$totalExpenses], $sumKeys);
         $corporateTaxesRate = $this->corporate_taxes_rate/100;
-        $calculatedCorporateTaxesPerYear = HArr::MultiplyWithNumber($ebt, $corporateTaxesRate);
-        $calculatedCorporateTaxesPerYear = HArr::allValuesZeroIfTotalIsLessThanOrEqualZero($calculatedCorporateTaxesPerYear, $ebt);
-        $corporateTaxesPayable = $this->getCorporateTaxesPayable();
-        $studyStartDateAsMonthNumber = array_values($this->getDateWithMonthNumber())[0];
+        $taxYear = (int) substr((string) ($dateIndexWithDate[$endDateAsIndex] ?? $this->getDateFromDateIndex($endDateAsIndex)), 0, 4);
+        $profitBeforeTax = array_sum($ebt);
+        $taxableProfit = TaxLossCarryForward::taxableProfits($earlierYearsProfitBeforeTax + [$taxYear => $profitBeforeTax])[$taxYear];
+        $taxShareOfProfit = $profitBeforeTax > 0 ? $taxableProfit * $corporateTaxesRate / $profitBeforeTax : 0;
+        $calculatedCorporateTaxesPerYear = HArr::MultiplyWithNumber($ebt, $taxShareOfProfit);
         $dates = $this->getStudyDates();
+        // the opening corporate tax payable belongs to the first tax year only: every tax year's statement used to start
+        // with it, and the statements are added up, so the balance sheet carried it once per year
+        $corporateTaxesPayable = $startDateAsIndex === (array_key_first($dates) ?? 0) ? $this->getCorporateTaxesPayable() : 0;
+        $studyStartDateAsMonthNumber = array_values($this->getDateWithMonthNumber())[0];
         $corporateTaxesStatement  = Study::calculateCorporateTaxesStatement($dates, [], $calculatedCorporateTaxesPerYear, $corporateTaxesPayable, $dateIndexWithDate, $studyStartDateAsMonthNumber);
         $corporateTaxesPayment   = $corporateTaxesStatement['monthly']['payment'];
         $corporateTaxesEndBalances   = $corporateTaxesStatement['monthly']['end_balance'];
         return [
             'corporate_taxes_payments'=>$corporateTaxesPayment,
             'corporate_taxes_end_balances'=>$corporateTaxesEndBalances,
-            'calculate_corporate_taxes'=>$calculatedCorporateTaxesPerYear
+            'calculate_corporate_taxes'=>$calculatedCorporateTaxesPerYear,
+            'tax_year'=>$taxYear,
+            'profit_before_tax'=>$profitBeforeTax,
         ];
     
     }
@@ -2006,15 +2063,23 @@ class Study extends Model
         $odaOpeningBalance =  $odaOpeningBalance ? (float)$odaOpeningBalance->odas_outstanding_opening_amount : 0;
         
         
-        $previousTotalDues = $odaOpeningBalance;
         $sumKeys = array_keys($studyDates);
         $yearWithItsMonths=$this->getYearIndexWithItsMonths();
         $dateIndexWithDate = $this->getDateIndexWithDate();
-        $currentStartDateAsIndex = 0 ;
-        $currentEndDateAsIndex = 11 ;
+        // the tax year is the calendar year: it starts with the study's first month and ends with each December (or the
+        // study's last month). It used to be the 12 months from the study start, so a study starting in March had a
+        // first tax year from March to the next February.
+        $currentStartDateAsIndex = array_key_first($studyDates) ?? 0 ;
+        $currentEndDateAsIndex = $currentStartDateAsIndex + 11 ;
+        $lastStudyDateAsIndex = array_key_last($studyDates);
         $corporateTaxesPayments=[];
         $corporateTaxesEndBalances=[];
         $calculateCorporateTaxes=[];
+        // every tax year's profit before tax, for the losses carried forward (phase 5)
+        $profitBeforeTaxByYear = [];
+        // the reserves and the profit distribution of each year (phase 5, FinVero's formula — ProfitDistribution)
+        $profitDistributions = [];
+        $distributionState = $this->openingStateForProfitDistribution();
 		$isFirstLoop = true ;
 		$firstDateAsIndex = null;
         foreach ($studyDates as $dateAsIndex => $dateAsString) {
@@ -2027,7 +2092,8 @@ class Study extends Model
 				// $minCash =  $minCash ;
 			}
 			$isFirstLoop =false;
-            $isLastMonthInTheYear =  explode('-', $dateAsString)[1] == 12;
+            // December closes the tax year, and the study's last month closes the last one (and stores the results)
+            $isLastMonthInTheYear =  explode('-', $dateAsString)[1] == 12 || $dateAsIndex === $lastStudyDateAsIndex;
             foreach ($cashInColumnNames as $columnName) {
                 $cashInBeforeOdasAndExtraCapital += ($cashflowStatement[$columnName][$dateAsIndex]??0);
             }
@@ -2039,6 +2105,8 @@ class Study extends Model
 				
             }
             $cashOutBeforeOdasAndExtraCapital -= ($cashflowStatement['securitization_reverse_loan_payment'][$dateAsIndex]??0);
+            // last year's profit shares and cash dividend, paid in April (phase 5)
+            $cashOutBeforeOdasAndExtraCapital += $profitDistributions['payments'][$dateAsIndex] ?? 0;
             $result['cash_in_beginning'][$dateAsIndex] = $openingCash;
             $result['total_cash_in_before_oda_and_capital_injection'][$dateAsIndex] = $cashInBeforeOdasAndExtraCapital;
             $result['total_cash_out_before_oda_and_capital_injection'][$dateAsIndex] = $cashOutBeforeOdasAndExtraCapital;
@@ -2084,10 +2152,16 @@ class Study extends Model
 			  $netCashAfterOda = $netCashBeforeWorkingCapital - $currentSettlement;
 			  
 			 $result['net_cash_after_oda_and_capital_injection'][$dateAsIndex] = $netCashAfterOda;
-            $interestCashSurplus = 0;
-            if ($netCashAfterOda>0) {
-                $interestCashSurplus = $netCashAfterOda * $currentCreditInterestSurplusRate;
-            }
+            /**
+             * * فايدة فائض النقدية (المرحلة 5 ، نفس قاعدة FinVero): السعر ÷ 12 × متوسط رصيد الشهر =
+             * * (أول الشهر + الكاش قبل الفوايد) ÷ 2 ، وصفر لو المتوسط سالب.
+             * * الكاش قبل الفوايد = أول الشهر + كل التدفقات + سحب الـ ODA − سداده ، وأول الشهر هو آخر الشهر اللي قبله
+             * * (ضخ رأس المال اليدوي تدفق جوه الشهر). مثال: أول الشهر 10 مليون وقبل الفوايد 20 مليون بسعر 18% → 225,000.
+             * * قبل كده كانت على الكاش قبل الفوايد بس ، ومن غير سحب الـ ODA بتاع الشهر.
+             */
+            $cashBeforeInterest = $netCashAfterOda + $currentWithdrawalAmount;
+            $openingCashOfTheMonth = $openingCash - ($hasManualEquityInjection ? ($manualEquityInjections[$dateAsIndex] ?? 0) : 0);
+            $interestCashSurplus = max(0, ($openingCashOfTheMonth + $cashBeforeInterest) / 2) * $currentCreditInterestSurplusRate;
             
             $result['interest_cash_surplus'][$dateAsIndex] = $interestCashSurplus;
 			
@@ -2095,7 +2169,7 @@ class Study extends Model
            
 		
 						
-            $result['net_cash_before_extra_capital_injection'][$dateAsIndex] = $netCashAfterOda + $interestCashSurplus + $currentWithdrawalAmount ;
+            $result['net_cash_before_extra_capital_injection'][$dateAsIndex] = $cashBeforeInterest + $interestCashSurplus ;
             $netCashBeforeExtraCapitalAndAfterOdaInjection = $result['net_cash_before_extra_capital_injection'][$dateAsIndex];
 			
 			$result['extra_capital_injection'][$dateAsIndex] = 0;
@@ -2111,7 +2185,12 @@ class Study extends Model
             $result['oda_statements']['settlements'][$dateAsIndex] =   $currentSettlement;
             $currentTotalDues = $beforeSettlement - $currentSettlement ;
             $result['oda_statements']['total_dues'][$dateAsIndex] =   $currentTotalDues;
-            $interest = $currentRate * (($currentTotalDues + $previousTotalDues)/2) ;
+            /**
+             * * فايدة الـ ODA (المرحلة 5): السعر ÷ 12 × (رصيد أول الشهر + الرصيد بعد سحب الشهر وسداده) ÷ 2. السحب الزيادة
+             * * للحد الأدنى للكاش آخر الشهر ، فبيبدأ يتحسب عليه من الشهر اللي بعده.
+             * * قبل كده المتوسط كان مع "الرصيد قبل الفوايد" بتاع الشهر اللي فات ، فكان بيسيب فايدته والسحب الزيادة بتاعه.
+             */
+            $interest = $currentRate * (($odaOpeningBalance + $currentTotalDues)/2) ;
             $result['oda_statements']['oda_interests'][$dateAsIndex] =   $interest ;
 			
 						$result['oda_statements']['extra_odas_withdrawal'][$dateAsIndex] = $result['extra_capital_injection'][$dateAsIndex] ;
@@ -2120,8 +2199,6 @@ class Study extends Model
             $result['oda_statements']['end_balance'][$dateAsIndex] =   $interest + $currentTotalDues +$result['oda_statements']['extra_odas_withdrawal'][$dateAsIndex] = $result['extra_capital_injection'][$dateAsIndex] ;
 			
             $odaOpeningBalance = $result['oda_statements']['end_balance'][$dateAsIndex];
-            
-            $previousTotalDues = $currentTotalDues;
 
 	
             
@@ -2135,11 +2212,20 @@ class Study extends Model
                     'interest_cash_surplus'=>$result['interest_cash_surplus'],
                     'oda_interests'=>$result['oda_statements']['oda_interests']
                 ]);
-            
-                $corporateTaxesArr = $this->calculateCorporateTaxesFromIncomeStatementReport($this->incomeStatementReport, $yearWithItsMonths, $currentStartDateAsIndex, $currentEndDateAsIndex, $dateIndexWithDate);
+                $currentEndDateAsIndex = $dateAsIndex ; // the tax year ends with this month
+
+                $corporateTaxesArr = $this->calculateCorporateTaxesFromIncomeStatementReport($this->incomeStatementReport, $yearWithItsMonths, $currentStartDateAsIndex, $currentEndDateAsIndex, $dateIndexWithDate, $profitBeforeTaxByYear);
+                $profitBeforeTaxByYear[$corporateTaxesArr['tax_year']] = $corporateTaxesArr['profit_before_tax'];
                 $currentCorporateTaxPayments = $corporateTaxesArr['corporate_taxes_payments']??[];
                 $currentCorporateTaxEndBalances = $corporateTaxesArr['corporate_taxes_end_balances']??[];
                 $currentCalculatedCorporateTaxes = $corporateTaxesArr['calculate_corporate_taxes']??[];
+                // December closes the year's books: the reserves now, the profit distribution in January, paid in April
+                if (explode('-', $dateAsString)[1] == 12) {
+                    $yearNetProfit = $corporateTaxesArr['profit_before_tax'] - array_sum($currentCalculatedCorporateTaxes);
+                    $this->distributeTheYearsProfit($profitDistributions, $distributionState, $yearNetProfit, $currentStartDateAsIndex, $dateAsIndex, (int) $lastStudyDateAsIndex);
+                } else {
+                    $distributionState['retained_earnings'] += $corporateTaxesArr['profit_before_tax'] - array_sum($currentCalculatedCorporateTaxes);
+                }
                 /**
                  * * +4
                  * * علشان نجيب قيمة الدفع اللي بعد نهايه السنه باربع شهور
@@ -2158,7 +2244,8 @@ class Study extends Model
                     'extra_capital_injection'=>$result['extra_capital_injection'],
                     'cash_end_balances'=>$result['cash_end_balance'],
                     'cash_and_bank_beginning_balances'=>$result['cash_in_beginning'],
-					'net_cash_before_extra_capital_injection'=>$result['net_cash_before_extra_capital_injection']
+					'net_cash_before_extra_capital_injection'=>$result['net_cash_before_extra_capital_injection'],
+					'profit_distributions'=>$profitDistributions,
                 ]);
                 
                 $this->incomeStatementReport->update([
@@ -2172,6 +2259,75 @@ class Study extends Model
         }
 		
     }
+    /**
+     * * نقطة البداية لتوزيع الأرباح: رأس المال المدفوع والاحتياطي القانوني والأرباح المرحلة الافتتاحية
+     * * (الأرباح المرحلة بعد التوزيعات المعلنة منها في الرصيد الافتتاحي).
+     */
+    private function openingStateForProfitDistribution(): array
+    {
+        $equityOpeningBalance = $this->equityOpeningBalances->first();
+        $openingDistributions = $equityOpeningBalance ? array_map('floatval', $equityOpeningBalance->getRetainedEarningDistributionAmounts()) : [];
+
+        return [
+            'paid_up_capital' => $equityOpeningBalance ? (float) $equityOpeningBalance->getPaidUpCapitalAmount() : 0.0,
+            'legal_reserve' => $equityOpeningBalance ? (float) $equityOpeningBalance->getLegalReserveAmount() : 0.0,
+            'fra_reserve' => 0.0,
+            'retained_earnings' => ($equityOpeningBalance ? (float) $equityOpeningBalance->getRetainedEarningAmount() : 0.0),
+            'opening_distributions' => $openingDistributions,
+        ];
+    }
+
+    /**
+     * * توزيع ربح السنة اللي بتخلص في ديسمبر $decemberIndex (المرحلة 5 ، معادلة FinVero — ProfitDistribution):
+     * * الاحتياطيات في ديسمبر ، وحصة العاملين وأول توزيع والمجلس والتوزيع في يناير اللي بعدها ، والدفع النقدي في أبريل ،
+     * * والتوزيع بالأسهم بيتضاف لرأس المال في يناير. الشهور اللي بعد الدراسة مابتتكتبش.
+     * * حد الاحتياطي نسبة من رأس المال المدفوع آخر السنة: الافتتاحي + ضخ رأس المال اليدوي لحد ديسمبر + توزيعات الأسهم.
+     */
+    private function distributeTheYearsProfit(array &$profitDistributions, array &$state, float $yearNetProfit, int $yearStartIndex, int $decemberIndex, int $lastStudyIndex): void
+    {
+        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
+        $yearIndex = $this->getDatesIndexWithYearIndex()[$decemberIndex] ?? 0;
+        $cashflowStatementReport = $this->cashflowStatementReport;
+        $manualEquityInjections = $cashflowStatementReport && $cashflowStatementReport->has_manual_equity_injection ? (array) $cashflowStatementReport->manual_equity_injection : [];
+        $yearMonths = range($yearStartIndex, $decemberIndex);
+        $paidUpCapital = $state['paid_up_capital'] + array_sum(array_intersect_key(array_map('floatval', $manualEquityInjections), array_flip(range(0, $decemberIndex))));
+        $state['retained_earnings'] -= array_sum(array_intersect_key($state['opening_distributions'], array_flip($yearMonths)));
+        $grossSalaries = array_sum(array_intersect_key(array_map('floatval', (array) ($this->incomeStatementReport->total_manpower_expenses ?? [])), array_flip($yearMonths)));
+        $rate = fn ($value) => max(0.0, (float) $value) / 100;
+        $rates = [
+            'legal_reserve_rate' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getLegalReserveRate() : 0),
+            'legal_reserve_cap' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getMaxLegalReserveRate() : 0),
+            'fra_reserve_rate' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getFinancialRegulatoryAuthorityRate() : 0),
+            'fra_reserve_cap' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getMaxFinancialRegulatoryAuthorityRate() : 0),
+            'employee_share' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getEmployeeProfitShareRatesAtYearIndex($yearIndex) : 0),
+            'first_dividend' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getShareholderFirstDividendPortionAtYearIndex($yearIndex) : 0),
+            'board_share' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getBorderOfDirectorsProfitShareRateAtYearIndex($yearIndex) : 0),
+            'dividend_payout' => $rate($generalAndReserveAssumption ? $generalAndReserveAssumption->getShareholderDividendPayoutRatioAtYearIndex($yearIndex) : 0),
+            'dividend_in_cash' => ($generalAndReserveAssumption ? $generalAndReserveAssumption->getShareholderDividendInCashOrSharesAtYear($yearIndex) : 'in_cash') !== 'in_shares',
+        ];
+        $distribution = ProfitDistribution::forYear($yearNetProfit, $state['retained_earnings'], $grossSalaries, $paidUpCapital,
+            $state['legal_reserve'], $state['fra_reserve'], $rates);
+
+        $profitDistributions['legal_reserve'][$decemberIndex] = $distribution['legal_reserve'];
+        $profitDistributions['fra_reserve'][$decemberIndex] = $distribution['fra_reserve'];
+        $state['legal_reserve'] += $distribution['legal_reserve'];
+        $state['fra_reserve'] += $distribution['fra_reserve'];
+        $state['retained_earnings'] += $yearNetProfit - array_sum($distribution);
+
+        $januaryIndex = $decemberIndex + 1;
+        $aprilIndex = $decemberIndex + 4;
+        if ($januaryIndex <= $lastStudyIndex) {
+            foreach (ProfitDistribution::ITEMS as $item) {
+                $profitDistributions[$item][$januaryIndex] = $distribution[$item];
+            }
+            $state['paid_up_capital'] += $distribution['shareholders_dividend_shares'];
+        }
+        if ($aprilIndex <= $lastStudyIndex) {
+            $profitDistributions['payments'][$aprilIndex] = $distribution['employee_profit_share'] + $distribution['shareholders_first_dividend']
+                + $distribution['board_profit_share'] + $distribution['shareholders_dividend_cash'];
+        }
+    }
+
     // public static function sumTwoIncomeStatements()
     // {
     //     $firstStudy = Study::find(71);
@@ -2205,11 +2361,16 @@ class Study extends Model
     public function storeVariableLoans(Request $request, string $revenueStreamType, string $relationName, bool $isSensitivity = false):void
     {
         $study = $this ;
-        $this->storeAdminFeesAndFundingStructureFor($request, $revenueStreamType);
+        // a sensitivity run writes its own loan table only (V11, phase 4)
+        if (!$isSensitivity) {
+            $this->storeAdminFeesAndFundingStructureFor($request, $revenueStreamType);
+        }
         $loanSchedulePaymentTableName = $isSensitivity ? 'sensitivity_loan_schedule_payments' : 'loan_schedule_payments';
         $bankLendingRateType = $study->getBankLendingRateTypeForRevenueStream($revenueStreamType);
         $calculateVariableLoanAtEndService = new CalculateVariableLoanAtEndService ;
-        $this->storeMonthlyLoan($revenueStreamType, 'reverseFactoringBreakdowns');
+        if (!$isSensitivity) {
+            $this->storeMonthlyLoan($revenueStreamType, 'reverseFactoringBreakdowns');
+        }
 
         $totalMonthlyLoanAmounts = [];
         $totalPortfolioEndBalance = [];
@@ -2238,6 +2399,9 @@ class Study extends Model
 		 * @var array $dateIndexWithDate
 		 */
         $baseRatesMapping = $generalAndReserveAssumption->getBaseRatesPerMonths(GeneralAndReserveAssumption::FACTORING_BANK_LENDING_MARGIN_RATE);
+        // the corridor of every month, the same for every loan: each month's interest takes the rate of the month it accrues in
+        // (there was a filter by year and month number here, run again every month, that delayed every change)
+        $baseRatesMapping = is_array($baseRatesMapping) ? $study->interestYearSpread($baseRatesMapping, $dateIndexWithDate) : $baseRatesMapping;
         DB::connection('non_banking_service')->table($loanSchedulePaymentTableName)->where('revenue_stream_type', $revenueStreamType)->where('study_id', $studyId)->delete();
         $operationDates = range($study->getOperationStartDateAsIndex(), $study->getStudyEndDateAsIndex());
     //    $CurrentIndex = -1 ;
@@ -2246,9 +2410,8 @@ class Study extends Model
             //     $CurrentIndex++ ;
             // }
             foreach ($yearMonthIndexes as $monthIndex => $monthlyZeroOrOne) {
-            
-                
-                $baseRatesMapping = is_array($baseRatesMapping) ? $study->interestYearSpread(HArr::filterByYearOrMonthIndex($baseRatesMapping, $yearIndexWithYear, $yearIndex, $dateIndexWithDate[$monthIndex], $this->isMonthlyStudy()), $dateIndexWithDate) :  $baseRatesMapping;
+
+
              //   $yearOrMonthIndex = $this->isMonthlyStudy() ? $monthIndex : $yearIndex;
                 // if ($this->isMonthlyStudy()) {
 					
@@ -2385,7 +2548,15 @@ class Study extends Model
             
         }
         
+        if ($isSensitivity) {
+            // the sensitivity table wants a JSON `totals` (NOT NULL, json_valid) that the loan rows do not carry: every
+            // sensitivity run with a loan failed on this insert until phase 4
+            $portfolioLoans = array_map(fn (array $row): array => $row + ['totals' => '[]'], $portfolioLoans);
+        }
         DB::connection('non_banking_service')->table($loanSchedulePaymentTableName)->insert($portfolioLoans);
+        if ($isSensitivity) {
+            return; // the sensitivity loans stay in their own table (V11)
+        }
         
         $revenueStreamType = Study::REVERSE_FACTORING;
         DB::connection('non_banking_service')->table('income_statement_reports')->where('study_id', $this->id)->update([
@@ -2731,6 +2902,7 @@ class Study extends Model
         $totalBankInterests = [];
         $totalSchedulePayments = [];
         $totalBankSchedulePayments = [];
+        $totalBankLoanAmounts = [];
         foreach ($this->refresh()->directFactoringBreakdowns as $directFactoringBreakdown) {
             $isFirstLoop = true ;
             $totalDuesAtMonths =[];
@@ -2760,8 +2932,8 @@ class Study extends Model
                 // $currentDaysInMonth = 30;
                 $currentDateAsString = $dateIndexWithDates[$monthIndex];
                 $currentDaysInMonth = Carbon::make($currentDateAsString)->daysInMonth;
-                $currentBaseRate = $baseRates[$monthIndex];
-                $currentBankMarginRate = $this->isMonthlyStudy() ? $bankMarginRates[$monthIndex] : $bankMarginRates[$currentYearIndex];
+                $currentBaseRate = GeneralAndReserveAssumption::valueAtOrBefore((array) $baseRates, (int) $monthIndex);
+                $currentBankMarginRate = GeneralAndReserveAssumption::valueAtOrBefore((array) $bankMarginRates, (int) ($this->isMonthlyStudy() ? $monthIndex : $currentYearIndex));
                 $bankInterestRate = ($currentBaseRate + $currentBankMarginRate)/100  ;
                 $currentDailyPricing = ($currentMarginRate  + $currentBaseRate) /100 / 360;
                 
@@ -2843,8 +3015,9 @@ class Study extends Model
             $currentBankSchedulePayments = $directFactoringBankLoanStatements[$directFactoringBreakdownId]['loan_settlements']??[];
             $totalSchedulePayments = HArr::sumAtDates([$totalSchedulePayments,$currentSchedulePayments], $monthsIndexes);
             $totalBankSchedulePayments = HArr::sumAtDates([$totalBankSchedulePayments,$currentBankSchedulePayments], $monthsIndexes);
-            
-            
+            $totalBankLoanAmounts = HArr::sumAtDates([$totalBankLoanAmounts,$directFactoringBankLoanStatements[$directFactoringBreakdownId]['loan_amounts']??[]], $monthsIndexes);
+
+
             $directFactoringBreakdown->update([
                 'beginning_balance' => $factoringInterestRevenue[$directFactoringBreakdownId]['beginning_balance'],
                 'interest_revenue' => $currentInterestRevenue,
@@ -2873,8 +3046,11 @@ class Study extends Model
         DB::connection('non_banking_service')->table('cashflow_statement_reports')->where('study_id', $this->id)->update([
                 $revenueStreamType.'_collection'=>json_encode($totalSchedulePayments),
             $revenueStreamType.'_payment'=>json_encode($totalBankSchedulePayments),
-            $revenueStreamType.'_bank_interest'=>json_encode($totalBankInterests)
-            
+            $revenueStreamType.'_bank_interest'=>json_encode($totalBankInterests),
+            // the bank loans received are the loans the bank balance is built from (net funding × the bank's share);
+            // the figures the page posts are computed in the browser and differed by a few piasters a month, so the
+            // balance sheet went out by them (study 85: 0.38 a month in 2026)
+            $revenueStreamType.'_loan_withdrawal_amount'=>json_encode($totalBankLoanAmounts),
         ]);
         
         
@@ -3742,6 +3918,12 @@ class Study extends Model
          * * First Collection
         */
         $cashAndBankOpeningBalances= $cashflowStatementReport ? (array)$cashflowStatementReport->cash_and_bank_beginning_balances : [];
+        // phase 8: the opening cash is the closing cash of the month before; the month's manual equity injection is a
+        // cash-in line of its own (the cash flow keeps it inside the opening cash, so it used to show only there)
+        $manualEquityInjections = $cashflowStatementReport && $cashflowStatementReport->has_manual_equity_injection ? (array) $cashflowStatementReport->manual_equity_injection : [];
+        foreach ($cashAndBankOpeningBalances as $dateAsIndex => $openingCashOfTheMonth) {
+            $cashAndBankOpeningBalances[$dateAsIndex] = (float) $openingCashOfTheMonth - (float) ($manualEquityInjections[$dateAsIndex] ?? 0);
+        }
         $tableDataFormatted[-1]['main_items']['cash-and-banks']['options'] = array_merge([
            'title'=>__('Cash And Banks')
         ], $defaultNumericInputClasses);
@@ -3911,6 +4093,10 @@ class Study extends Model
         
         $totalFixedAssetEquity = [];
     
+        if (array_sum(array_map('abs', array_map('floatval', $manualEquityInjections))) > 0) {
+            $tableDataFormatted[0]['sub_items'][__('Equity Injection')]['data'] = $manualEquityInjections;
+            $tableDataFormatted[0]['sub_items'][__('Equity Injection')]['year_total'] = HArr::sumPerYearIndex($manualEquityInjections, $yearWithItsMonths);
+        }
         $totalCashIn = HArr::sumAtDates(array_column($tableDataFormatted[0]['sub_items'], 'data'), $sumKeys);
         $tableDataFormatted[0]['main_items']['cash-in-flow']['data'] = $totalCashIn;
         $tableDataFormatted[0]['main_items']['cash-in-flow']['year_total'] = $totalCashInflowPerYear = HArr::sumPerYearIndex($totalCashIn, $yearWithItsMonths);
@@ -4092,6 +4278,8 @@ class Study extends Model
 		  
 		  $dividendPayments =$this->cashflowStatementReport ? $this->cashflowStatementReport->opening_dividend_payments : [];
 		  $dividendPayments= $dividendPayments?:[];
+		  // and the profit shares and cash dividend of each year, paid in the next April (phase 5)
+		  $dividendPayments = HArr::sumAtDates([$dividendPayments, $this->cashflowStatementReport ? $this->cashflowStatementReport->getProfitDistribution('payments') : []], $sumKeys);
 			$tableDataFormatted[1]['sub_items'][__('Dividend Payment')]['data'] = $dividendPayments;
 			$tableDataFormatted[1]['sub_items'][__('Dividend Payment')]['year_total'] = HArr::sumPerYearIndex($dividendPayments, $yearWithItsMonths);
 		
@@ -4520,7 +4708,9 @@ class Study extends Model
         $cashAndBankOpeningBalances= HArr::formatMultiSubItems($cashAndBankOpeningBalances, $sumKeys, ['monthly','end_balance']);
        
 		$NonPerformingCashAndBankOpeningBalances = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('cash_and_bank_opening_balances')->where('study_id', $this->id)->pluck('non_performing_statement')->toArray();
-        $NonPerformingCashAndBankOpeningBalances= HArr::formatMultiSubItems($cashAndBankOpeningBalances, $sumKeys, ['monthly','end_balance']);
+        // the non-performing statements themselves (it used to format the performing balances again, so the
+        // non-performing opening portfolio was always 0 on the balance sheet)
+        $NonPerformingCashAndBankOpeningBalances= HArr::formatMultiSubItems($NonPerformingCashAndBankOpeningBalances, $sumKeys, ['monthly','end_balance']);
 		$cashAndBankOpeningBalances = HArr::sumAtDates([$cashAndBankOpeningBalances,$NonPerformingCashAndBankOpeningBalances], $sumKeys);
         $title = __('Existing Customer Outstanding');
         $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['options']['title'] =$title ;
@@ -4562,9 +4752,12 @@ class Study extends Model
         
         $cashAndBankOpeningBalance = $this->cashAndBankOpeningBalances->first();
         $accumulatedExistingEcl = $cashAndBankOpeningBalance ? $cashAndBankOpeningBalance->accumulated_ecl_existing_expenses : [];
+        // the non-performing opening portfolio is on the balance sheet (Existing Customer Outstanding), so its ECL is too
+        $accumulatedNonPerformingExistingEcl = $cashAndBankOpeningBalance ? (array) $cashAndBankOpeningBalance->non_performing_accumulated_ecl_existing_expenses : [];
         $totalEcl = HArr::MultiplyWithNumber($totalEcl, -1);
         $accumulatedExistingEcl = HArr::MultiplyWithNumberIfOnlyPositive($accumulatedExistingEcl, -1);
-        $totalEcl = HArr::sumAtDates([$totalEcl,$accumulatedExistingEcl], $sumKeys);
+        $accumulatedNonPerformingExistingEcl = HArr::MultiplyWithNumberIfOnlyPositive($accumulatedNonPerformingExistingEcl, -1);
+        $totalEcl = HArr::sumAtDates([$totalEcl,$accumulatedExistingEcl,$accumulatedNonPerformingExistingEcl], $sumKeys);
         
                 
         $title = __('Accumulated ECL');
@@ -4927,6 +5120,12 @@ class Study extends Model
 		$equityOpeningBalance = $this->equityOpeningBalances->first();
 		$equityOpeningBalance = $equityOpeningBalance ? $equityOpeningBalance->dividend_statement:[];
 		$dividendPayable = $equityOpeningBalance ? $equityOpeningBalance['monthly']['end_balance']:[];
+		// phase 5: the profit shares and cash dividend declared in January, until they are paid in April
+		$profitDistributionPayable = $cashflowStatementReport ? HArr::accumulateArray(HArr::subtractAtDates([
+			HArr::sumAtDates([$cashflowStatementReport->getProfitDistributionPayables()], $sumKeys),
+			HArr::sumAtDates([$cashflowStatementReport->getProfitDistribution('payments')], $sumKeys),
+		], $sumKeys)) : [];
+		$dividendPayable = HArr::sumAtDates([$dividendPayable, $profitDistributionPayable], $sumKeys);
 
         $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['options']['title'] = $title ;
         $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['data'] = $dividendPayable ;
@@ -5012,7 +5211,9 @@ class Study extends Model
 
       
         $fixedAssetStatements = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('fixed_assets_loan_schedule_payments')->where('fixed_assets_loan_schedule_payments.study_id', $this->id)->join('fixed_assets', 'fixed_assets.id', '=', 'fixed_assets_loan_schedule_payments.fixed_asset_id')->join('fixed_asset_names', 'fixed_asset_names.id', '=', 'fixed_assets.name_id')->get(['endBalance','name as title','fixed_asset_names.id as fixed_asset_name_id','fixed_assets.id as fixed_asset_id','interest_rate'])->toArray();
-        $totalFixedAssets = [];
+        // the loans that financed the fixed assets (a liability): their own total, so $totalFixedAssets stays the
+        // assets' net value that the balance sheet is saved with (monthly_fixed_assets used to get these loans)
+        $totalFixedAssetLoans = [];
         $totalFixedAssetPerId = [];
         foreach ($fixedAssetStatements as $fixedAssetStatement) {
             $fixedAssetId = $fixedAssetStatement->fixed_asset_name_id ;
@@ -5031,12 +5232,12 @@ class Study extends Model
             $title = FixedAssetName::find($fixedAssetNameId)->getName();
             $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['options']['title'] = $title;
             $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['data']= $totalFixedAssetEndBalance;
-            $totalFixedAssets = HArr::sumAtDates([$totalFixedAssets , $totalFixedAssetEndBalance  ], $sumKeys);
+            $totalFixedAssetLoans = HArr::sumAtDates([$totalFixedAssetLoans , $totalFixedAssetEndBalance  ], $sumKeys);
             $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['year_total']=  HArr::getPerYearIndexForEndBalance($totalFixedAssetEndBalance, $yearWithItsMonths);
-           
+
         }
-     
-        $totalLongTermLiabilities = HArr::sumAtDates([$totalLoansOpening,$totalOtherLongTermsOpening,$totalFixedAssets], $sumKeys);
+
+        $totalLongTermLiabilities = HArr::sumAtDates([$totalLoansOpening,$totalOtherLongTermsOpening,$totalFixedAssetLoans], $sumKeys);
         $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['data'] = $totalLongTermLiabilities;
         $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['year_total'] = $totalLongTermLiabilitiesPerYears=HArr::getPerYearIndexForEndBalance($totalLongTermLiabilities, $yearWithItsMonths);
         
@@ -5070,6 +5271,8 @@ class Study extends Model
         $equityOpeningBalance = count($this->equityOpeningBalances) ? $this->equityOpeningBalances[0] : null;
         
         $paidUpCapitals = $equityOpeningBalance ? $equityOpeningBalance->getExtendedPaidUpCapitalAmount() : [];
+        // phase 5: a dividend paid in shares joins the paid-up capital in January
+        $paidUpCapitals = HArr::sumAtDates([$paidUpCapitals, HArr::accumulateArray(HArr::sumAtDates([$cashflowStatementReport->getProfitDistribution('shareholders_dividend_shares')], $sumKeys))], $sumKeys);
         $currentDataArr =$paidUpCapitals ;
         ;
         $title = __('Paid Up Capital');
@@ -5117,6 +5320,8 @@ class Study extends Model
 
         
         $legalReserve = $equityOpeningBalance ? $equityOpeningBalance->getExtendedLegalReserveAmount() : [];
+        // phase 5: each December's transfer from the year's profit (it used to stay at the opening reserve)
+        $legalReserve = HArr::sumAtDates([$legalReserve, HArr::accumulateArray(HArr::sumAtDates([$cashflowStatementReport->getProfitDistribution('legal_reserve')], $sumKeys))], $sumKeys);
         $currentDataArr =$legalReserve ;
         ;
         $title = __('Legal Reserve');
@@ -5127,6 +5332,15 @@ class Study extends Model
         ], $defaultNumericInputClasses);
         $tableDataFormatted[$currentTabIndex]['sub_items'][$currentTabId]['data'] = $currentDataArr;
         $tableDataFormatted[$currentTabIndex]['sub_items'][$currentTabId]['year_total'] =HArr::getPerYearIndexForEndBalance($currentDataArr, $yearWithItsMonths) ;
+
+        // the Financial Regulatory Authority reserve, from each December's profit (phase 5)
+        $fraReserve = HArr::accumulateArray(HArr::sumAtDates([$cashflowStatementReport->getProfitDistribution('fra_reserve')], $sumKeys));
+        $title = __('FRA Reserve');
+        $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['options'] = array_merge([
+           'title'=>$title
+        ], $defaultNumericInputClasses);
+        $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['data'] = $fraReserve;
+        $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['year_total'] =HArr::getPerYearIndexForEndBalance($fraReserve, $yearWithItsMonths) ;
         /**
         //  * * End Key
         //  */
@@ -5170,7 +5384,7 @@ class Study extends Model
         $tableDataFormatted[$currentTabIndex]['sub_items'][$currentTabId]['data'] = $currentDataArr;
         $tableDataFormatted[$currentTabIndex]['sub_items'][$currentTabId]['year_total'] =HArr::sumPerYearIndex($currentDataArr, $yearWithItsMonths) ;
         
-        $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['data'] = $totalShareholderEquity = HArr::sumAtDates([$paidUpCapitals,$additionalPaidUpCapital,$legalReserve,$accumulatedRetainedEarnings,$netProfit], $sumKeys);
+        $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['data'] = $totalShareholderEquity = HArr::sumAtDates([$paidUpCapitals,$additionalPaidUpCapital,$legalReserve,$fraReserve,$accumulatedRetainedEarnings,$netProfit], $sumKeys);
         $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['year_total'] = $totalShareholderEquityPerYears=HArr::getPerYearIndexForEndBalance($totalShareholderEquity, $yearWithItsMonths);
         
         $currentTabIndex++;
@@ -5178,7 +5392,8 @@ class Study extends Model
         // $annuallyCheckError=[];
         //   $annuallyCheckError = HArr::sumAtDates([$totalCurrentLiabilities,$totalLongTermLiabilities,$totalShareholderEquity], $sumKeys);
         $checkErrors = HArr::subtractAtDates([$totalAssets,$sum], $sumKeys);
-        $checkErrors = HArr::zeroIfAtRange($checkErrors, -1000, 1000);
+        // the real difference, to the piaster (it used to show 0 for anything between -1,000 and 1,000)
+        $checkErrors = array_map(fn ($difference) => round((float) $difference, 2), $checkErrors);
         $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['data'] = $checkErrors ;
         $tableDataFormatted[$currentTabIndex]['main_items'][$currentTabIndex]['year_total'] = HArr::getPerYearIndexForEndBalance($checkErrors, $yearWithItsMonths) ;
         /**
@@ -6170,7 +6385,10 @@ class Study extends Model
                 if (!count($finalResult)) {
                     continue;
                 }
-                if ($earlyPaymentInstallmentCounts>0) {
+                // the installments the client pays in advance move the client's loan only: the bank loan that funds it
+                // keeps its own schedule, first interest and installment the month after it is drawn (V19, phase 4).
+                // It used to move the bank loan as many months earlier too.
+                if ($isPortfolio && $earlyPaymentInstallmentCounts>0) {
                     $currentPortfolioLoans = HArr::replacePreviousValues($currentPortfolioLoans, $earlyPaymentInstallmentCounts);
                 }
                 $currentPortfolioLoans['study_id'] = $this->id ;
@@ -6802,88 +7020,92 @@ class Study extends Model
         }
         return $results;
     }
-	  public function getCbeBaseLendingCorridorRatesFormatted(array $dates)
+	  /**
+     * * سلسلة شهرية لصفحة General Assumptions: كل شهر من الشهور المعروضة ،
+     * * والشهر اللي مش متسجل بياخد قيمة آخر شهر قبله (مثال: بعد زيادة مدة الدراسة) بدل ما يظهر صفر.
+     */
+    private function generalAssumptionSeriesForPage(array $series, array $dates): array
     {
-        $results=[];
-        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getCbeBaseLendingCorridorRatesAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
-    }  
-    public function getCbeLendingCorridorRatesFormatted(array $dates)
-    {
-        $results=[];
-        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getCbeLendingCorridorRatesAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
-    }  
-	  public function getCbeCorridorChangesRatesFormatted(array $dates)
-    {
-        $results=[];
-        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getCbeCorridorChangesRatesAtYearOrMonthIndex($dateIndex) :0;
+        $results = [];
+        foreach ($dates as $dateIndex => $dateFormatted) {
+            $results[$dateIndex] = GeneralAndReserveAssumption::valueAtOrBefore($series, (int) $dateIndex);
         }
         return $results;
     }
+    public function getCbeBaseLendingCorridorRatesFormatted(array $dates)
+    {
+        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
+        if (! $generalAndReserveAssumption) {
+            return array_map(fn () => 0, $dates);
+        }
+        $base = $generalAndReserveAssumption->getCbeBaseLendingCorridorRates();
+        $net = $generalAndReserveAssumption->getCbeLendingCorridorRates();
+        if ($base === [] && $net !== []) {
+            /** * صف قديم: كان بيحفظ الكوريدور الصافي بس ، فالأساس = الصافي − التغيير (وإلا الصافي بيتعرض 0 + 0) */
+            $changes = $generalAndReserveAssumption->getCbeCorridorChangesRates();
+            foreach ($net as $index => $rate) {
+                $base[$index] = (float) $rate - (float) ($changes[$index] ?? 0);
+            }
+        }
+        return $this->generalAssumptionSeriesForPage($base, $dates);
+    }  
+    public function getCbeLendingCorridorRatesFormatted(array $dates)
+    {
+        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->getCbeLendingCorridorRates(), $dates)
+            : array_map(fn () => 0, $dates);
+    }  
+	  public function getCbeCorridorChangesRatesFormatted(array $dates)
+    {
+        $generalAndReserveAssumption = $this->generalAndReserveAssumption;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->getCbeCorridorChangesRates(), $dates)
+            : array_map(fn () => 0, $dates);
+    }
     public function getCreditInterestRateForSurplusCashesFormatted(array $dates)
     {
-        $results = [];
         $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getCreditInterestRateForSurplusCashAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->getCreditInterestRateForSurplusCash(), $dates)
+            : array_map(fn () => 0, $dates);
     }
     public function getBankLendingMarginRatesFormatted(array $dates)
     {
         $results=[];
         $generalAndReserveAssumption = $this->generalAndReserveAssumption;
         foreach (GeneralAndReserveAssumption::getBankLendingMarginTypes() as $type) {
-           
-            foreach ($dates as $dateIndex=>$dateFormatted) {
-                $results[$type][$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getBankLendingMarginRatesAtYearOrMonthIndex($dateIndex, $type) :0;
-            }
+            $results[$type] = $generalAndReserveAssumption
+                ? $this->generalAssumptionSeriesForPage($generalAndReserveAssumption->getBankLendingMarginRates($type), $dates)
+                : array_map(fn () => 0, $dates);
         }
-        
         return $results;
     }
     public function getOdasBankLendingMarginRatesFormatted(array $dates):array
     {
-        $results=[];
         $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getOdasBankLendingMarginRatesAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->getOdasBankLendingMarginRates(), $dates)
+            : array_map(fn () => 0, $dates);
     }public function getFromDispersementOfRates(array $dates):array
     {
-        $results=[];
         $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getFromDispersementOfRatesAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->getFromDispersementOfRates(), $dates)
+            : array_map(fn () => 0, $dates);
     }
 	public function getToCoverCostRates(array $dates):array
     {
-        $results=[];
         $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getToCoverCostRatesAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->to_cover_cost_rates, $dates)
+            : array_map(fn () => 0, $dates);
     }public function getMinCashBalancesFormatted(array $dates):array
     {
-        $results=[];
         $generalAndReserveAssumption = $this->generalAndReserveAssumption;
-        foreach ($dates as $dateIndex=>$dateFormatted) {
-            $results[$dateIndex] =$generalAndReserveAssumption ? $generalAndReserveAssumption->getMinCashBalancesAtYearOrMonthIndex($dateIndex) :0;
-        }
-        return $results;
+        return $generalAndReserveAssumption
+            ? $this->generalAssumptionSeriesForPage((array) $generalAndReserveAssumption->getMinCashBalances(), $dates)
+            : array_map(fn () => 0, $dates);
     }
 	
     public function getBankLendingRateTypeForRevenueStream(string $revenueStreamType):string

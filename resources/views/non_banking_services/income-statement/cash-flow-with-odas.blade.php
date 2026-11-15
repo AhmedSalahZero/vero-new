@@ -4,7 +4,8 @@ use App\Models\NonBankingService\Study;
 @endphp
 @section('css')
 @php
-$months = $study->getMicrofinanceMonths() ;
+// the manual funding months cover the whole study, like the cashflow statement above it (getCashInOutFlowViewVars)
+$months = $study->getViewStudyEndDateAsIndex() ;
 @endphp
 <link href="{{ url('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url('assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css') }}" rel="stylesheet" type="text/css" />

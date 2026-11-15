@@ -170,14 +170,15 @@ class PortfolioPresentValue
 	
             $currentBaseRate = $portfolioMortgageLoanArray['base_rate'];
             $currentUnearnedInterest = $portfolioMortgageLoanArray['unearned_interest'];
-            $currentDaysCount = 30 ;
+			// the bank loan accrues the actual days of each month (÷ 360), with a flat corridor too: it used to take 30 days
+			// when the corridor never changed, and the actual days as soon as it changed once, anywhere in the study
 			$baseRatesMapping = $study->generalAndReserveAssumption->getBaseRatesPerMonths(GeneralAndReserveAssumption::MORTGAGE_BANK_LENDING_MARGIN_RATE);
 			if(is_array($baseRatesMapping)){
 				$dateWithDateIndex = $study->getDateWithDateIndex();
 				$installmentPaymentIntervalValue = $calculateFixedLoanAtEndService->getInstallmentPaymentIntervalValue($installmentPaymentIntervalName);
 				$bankLoanAmounts[$currentOccurrenceMonthIndex]=$calculateFixedLoanAtEndService->__calculateBasedOnDiffBaseRates($baseRatesMapping,$loanType, $currentLoanDateAsString, $currentBankLoanAmount, $currentBankMarginRate,$tenorInMonths, $installmentPaymentIntervalName, $installmentPaymentIntervalValue, 0, null, 0, null, 0, $currentOccurrenceMonthIndex, $dateWithDateIndex, $dateIndexWithDate);
 			}else{
-				$bankLoanAmounts[$currentOccurrenceMonthIndex]=$calculateFixedLoanAtEndService->__calculate([], -1, $loanType, $currentLoanDateAsString, $currentBankLoanAmount, $currentBaseRate, $currentBankMarginRate, $tenorInMonths, $installmentPaymentIntervalName, 0, null, 0, null, 0, $currentOccurrenceMonthIndex, $currentDaysCount)['final_result']??[];
+				$bankLoanAmounts[$currentOccurrenceMonthIndex]=$calculateFixedLoanAtEndService->__calculate([], -1, $loanType, $currentLoanDateAsString, $currentBankLoanAmount, $currentBaseRate, $currentBankMarginRate, $tenorInMonths, $installmentPaymentIntervalName, 0, null, 0, null, 0, $currentOccurrenceMonthIndex, null, null, 0, true)['final_result']??[];
 			}
             $bankLoanAmountsFormatted=$bankLoanAmounts[$currentOccurrenceMonthIndex];
             if (count($bankLoanAmountsFormatted)) {

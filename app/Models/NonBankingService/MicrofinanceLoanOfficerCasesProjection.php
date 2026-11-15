@@ -105,17 +105,16 @@ class MicrofinanceLoanOfficerCasesProjection extends Model
    
     public function getExistingLoanCasesAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
-        return $this->existing_cases[$yearOrDateIndex]??0;
+        // a month with no saved cases (the study was made longer) takes the last saved month's cases: the saving
+        // hook repeats the last submitted value to the study end, so showing zero here used to save zero cases onwards
+        return HArr::valueAtOrBefore($this->existing_cases, $yearOrDateIndex, 0);
     }
     public function getNewLoanCasesAtYearOrMonthIndex(int $yearOrDateIndex , $isSenior = null):float
     {
 		if($this->type =='by-branch'){
-			if($isSenior){
-				return $this->study->product_mix_senior_loan_officers[$yearOrDateIndex];
-			}
-			return $this->study->product_mix_loan_officers[$yearOrDateIndex];
+			return $this->study->getProductMixSeniorLoanOfficersAt($yearOrDateIndex, $isSenior);
 		}
-        return $this->new_cases[$yearOrDateIndex]??0;
+        return HArr::valueAtOrBefore($this->new_cases, $yearOrDateIndex, 0);
     }	public function getHiringAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
         return $this->hiring[$yearOrDateIndex]??0;

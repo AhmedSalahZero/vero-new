@@ -98,7 +98,10 @@ class StoreOpeningBalancesRequest extends FormRequest
         $totalCashAndBanks  = array_sum(array_column($data['cashAndBankOpeningBalances']??[], 'cash_and_bank_amount'));
         $totalCustomerReceivableAmount  = array_sum(array_column($data['cashAndBankOpeningBalances']??[], 'customer_receivable_amount'));
         $ecl  = array_sum(array_column($data['cashAndBankOpeningBalances']??[], 'expected_credit_loss'));
-            
+        // the non-performing portfolio is an asset too (net of its ECL, entered as a negative), as on the balance sheet
+        $nonPerformingOutstanding  = array_sum(array_column($data['cashAndBankOpeningBalances']??[], 'non_performing_outstanding'));
+        $nonPerformingEcl  = array_sum(array_column($data['cashAndBankOpeningBalances']??[], 'non_performing_expected_credit_loss'));
+
         $totalOtherDebtorsAmount  = array_sum(array_column($data['otherDebtorsOpeningBalances']??[], 'amount'));
         $totalSupplierPayableAmount  = array_sum(array_column($data['supplierPayableOpeningBalances']??[], 'amount'));
         $totalCreditorPayableAmount  = array_sum(array_column($data['otherCreditorsOpeningBalances']??[], 'amount'));
@@ -113,7 +116,7 @@ class StoreOpeningBalancesRequest extends FormRequest
         $totalRetainedEarningsAmount  = array_sum(array_column($data['equityOpeningBalances']??[], 'retained_earnings'));
         $rightOfUseAssetAmount  = array_sum(array_column($data['rightOfUseAssetOpeningBalances']??[], 'amount'));
         $totalLeaseRentLiabilityAmount  = array_sum(array_column($data['leaseRentLiabilityOpeningBalances']??[], 'amount'));
-        $totalAssets =  $netFixedAsset + $totalCashAndBanks + $totalCustomerReceivableAmount+$rightOfUseAssetAmount+$totalOtherDebtorsAmount+$totalOtherLongAssetAmount+$totalLongTermInvestmentAmount+$ecl;
+        $totalAssets =  $netFixedAsset + $totalCashAndBanks + $totalCustomerReceivableAmount+$rightOfUseAssetAmount+$totalOtherDebtorsAmount+$totalOtherLongAssetAmount+$totalLongTermInvestmentAmount+$ecl+$nonPerformingOutstanding+$nonPerformingEcl;
         $totalLiabilitiesAndEquity = $totalSupplierPayableAmount+$totalCreditorPayableAmount+$totalLeaseRentLiabilityAmount+$totalVatAmount+$totalWithholdAmount+$totalLoanAmount+$totalOtherLongAmount+$totalPaidUpAmount+$totalLegalReserveAmount+$totalRetainedEarningsAmount+$odasOutstandingOpeningAmount;
             
         $this->merge([

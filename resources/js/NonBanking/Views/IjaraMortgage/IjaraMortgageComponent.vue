@@ -558,11 +558,6 @@ onMounted(() => {
                   </th>
                   <th
                     class="form-label font-weight-bold text-center align-middle header-border-down">
-                    Grace <br />
-                    Period
-                  </th>
-                  <th
-                    class="form-label font-weight-bold text-center align-middle header-border-down">
                     Spread <br />
                     Rate
                   </th>
@@ -659,24 +654,14 @@ onMounted(() => {
                     <td>
                       <InputNumber
                         v-model="ijaraMortgageBreakdownItem.tenor"
-                        :min="ijaraMortgageBreakdownItem.grace_period + 1"
+                        :min="1"
                         input-class="text-center"
                         :minFractionDigits="0"
                         :maxFractionDigits="0"
                         suffix=" Mth"
                         fluid />
                     </td>
-                    <td>
-                      <InputNumber
-                        v-model="ijaraMortgageBreakdownItem.grace_period"
-                        :min="0"
-                        :max="ijaraMortgageBreakdownItem.tenor - 1"
-                        input-class="text-center"
-                        :minFractionDigits="0"
-                        :maxFractionDigits="0"
-                        suffix=" Mth"
-                        fluid />
-                    </td>
+                    <!-- no grace period: an ijara is a normal loan, and a normal loan has none (phase 4) -->
                     <td>
                       <InputNumber
                         v-model="ijaraMortgageBreakdownItem.margin_rate"

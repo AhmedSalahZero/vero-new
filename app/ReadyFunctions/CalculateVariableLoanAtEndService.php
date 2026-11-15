@@ -211,13 +211,20 @@ class CalculateVariableLoanAtEndService
         $intervalPrincipleAmount=0;
         $intervalInterestAmount=0;
         $loopIndex = 0 ;
+        $firstDateAsIndex = array_key_first($datesIndexAndDaysCount);
         foreach ($datesIndexAndDaysCount as $dateAsIndex=>$currentDaysCount) {
             $currentDaysCount = $datesIndexAndDaysCount[$dateAsIndex]??0;
             $previousDate = $dateAsIndex-$intervalValue;
             $dateAsString = $dateIndexWithDate[$dateAsIndex] ?? null ;
     
             $i = $dateAsIndex ;
-            $currentPricing = is_array($dailyPricing) ? ($dailyPricing[$dateAsString]??0) : $dailyPricing ;
+            // the interest of this row accrues in the month before it (its days are that month's days), at the rate set
+            // at the start of its interest period, like every other loan: monthly interest takes the rate of that month
+            // (a corridor change in February first shows in March's interest), quarterly interest the rate of the
+            // quarter's first month (a change inside the quarter starts with the next quarter)
+            $interestPeriodStartIndex = $loopIndex === 0 ? $dateAsIndex : $firstDateAsIndex + intdiv($loopIndex - 1, max(1, $interestPaymentIntervalValue)) * max(1, $interestPaymentIntervalValue);
+            $pricingDateAsString = $dateIndexWithDate[$interestPeriodStartIndex] ?? $dateAsString ;
+            $currentPricing = is_array($dailyPricing) ? ($dailyPricing[$pricingDateAsString]??0) : $dailyPricing ;
 
             $loanScheduleResult['beginning'][$i] =  $firstLoop ? $loanAmount : $loanScheduleResult['endBalance'][$previousDate]??0;
 

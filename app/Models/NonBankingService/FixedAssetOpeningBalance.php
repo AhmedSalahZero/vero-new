@@ -95,7 +95,20 @@ class FixedAssetOpeningBalance extends Model
 					$accumulatedDepreciations[$dateAsIndex] = $currentAccumulated ;
 					$statement['end_balance'][$dateAsIndex] = $openingBalance-$currentAccumulated;
 				}
-				
+				// after its last depreciation month the asset stays on the balance sheet at what is left of it, with no
+				// more depreciation (FinVero keeps it the same way): the monthly amount is rounded — 177,778 over 4
+				// months = 44,444, 2 left — and the 2 used to drop off the balance sheet with no expense, so the
+				// balance sheet went out by them (study 127: −2.00 from May to September)
+				if (isset($currentAccumulated)) {
+					$study = $model->study;
+					$lastStudyDateAsIndex = $study ? $study->getViewStudyEndDateAsIndex() : max($dates);
+					for ($dateAsIndex = max($dates) + 1; $dateAsIndex <= $lastStudyDateAsIndex; $dateAsIndex++) {
+						$statement['beginning_balance'][$dateAsIndex] = $openingBalance;
+						$statement['accumulated_depreciation'][$dateAsIndex] = $currentAccumulated;
+						$statement['end_balance'][$dateAsIndex] = $openingBalance - $currentAccumulated;
+					}
+				}
+
 				$model->statement =$statement;
 				
 			});
@@ -157,6 +170,16 @@ class FixedAssetOpeningBalance extends Model
     public function getMonthlyDepreciation():float 
 	{
 		return $this->monthly_depreciation;
+	}
+
+	/**
+	 * What is left of the net amount after the monthly depreciation × the months (phase 4): 0 when they agree. Positive:
+	 * that much stays on the balance sheet after the last depreciation month; negative: the months take more than the
+	 * net amount. Study 141's licence: 1,192,932 − 866,934 = 325,998 net, 57,055 × 5 = 285,275, so 40,723 stays.
+	 */
+	public function depreciationLeftOver():float
+	{
+		return $this->getNetAmount() - $this->getMonthlyDepreciation() * $this->getMonthlyCounts();
 	}  
 
 

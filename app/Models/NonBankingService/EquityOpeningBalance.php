@@ -60,11 +60,17 @@ class EquityOpeningBalance extends Model
 	{
 			parent::boot();
 			static::saving(function(self $model){
-					$studyMonthsForViews = array_flip($model->study->getOperationDatesAsDateAndDateAsIndexToStudyEndDate());
+					// the capital and the reserve are there from the first month of the study, like every other
+					// opening balance (OpeningBalancesController): they used to start with the operation, so the
+					// balance sheet of the months before it was short by them
+					$study = $model->study;
+					$studyMonthsForViews = array_slice($study->getStudyDates(), 0, $study->getViewStudyEndDateAsIndex() + 1);
      			   	$sumKeys = array_keys($studyMonthsForViews);
 					$model->paid_up_capital_extended = HArr::repeatThrough($model->paid_up_capital_amount?:0,$sumKeys);
 					$model->legal_reserve_extended = HArr::repeatThrough($model->legal_reserve?:0,$sumKeys);
-					$model->dividend_statement = self::calculateDividendStatement($model->study,$model->retained_earning_distribution_amounts,$model->retained_earning_distribution_payments);
+					// a row saved before the distributions were on the page has none (null): nothing declared, nothing paid
+					// (found by non-banking:recalculate in phase 7: saving such a row failed)
+					$model->dividend_statement = self::calculateDividendStatement($model->study,(array) ($model->retained_earning_distribution_amounts ?: []),(array) ($model->retained_earning_distribution_payments ?: []));
 			});
 	}
 	

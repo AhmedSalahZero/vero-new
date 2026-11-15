@@ -26,46 +26,60 @@ class NonBankingServiceProvider extends ServiceProvider
 			 * @var Study|null $study 
 			 */
 			if($study){
-				$datesAndIndexesHelpers = $study->getDatesIndexesHelper();
-				$datesIndexWithYearIndex=$datesAndIndexesHelpers['datesIndexWithYearIndex']; 
-	
-				$yearIndexWithYear=$datesAndIndexesHelpers['yearIndexWithYear']; 
-				$dateIndexWithDate=$datesAndIndexesHelpers['dateIndexWithDate']; 
-				$dateIndexWithMonthNumber=$datesAndIndexesHelpers['dateIndexWithMonthNumber']; 
-				$dateWithMonthNumber=$datesAndIndexesHelpers['dateWithMonthNumber']; 
-				$dateWithDateIndex=$datesAndIndexesHelpers['dateWithDateIndex']; 
-				app()->singleton('datesIndexWithYearIndex',function() use ($datesIndexWithYearIndex){
-					return $datesIndexWithYearIndex;
-				});
-				app()->singleton('yearIndexWithYear',function() use ($yearIndexWithYear){
-					return $yearIndexWithYear;
-				});
-				
-				app()->singleton('dateIndexWithDate',function() use ($dateIndexWithDate){
-					return $dateIndexWithDate;
-				});
-				app()->singleton('dateWithMonthNumber',function() use ($dateWithMonthNumber){
-					return $dateWithMonthNumber;
-				});
-				app()->singleton('dateIndexWithMonthNumber',function() use ($dateIndexWithMonthNumber){
-					return $dateIndexWithMonthNumber;
-				});
-				app()->singleton('dateWithDateIndex',function() use ($dateWithDateIndex){
-					return $dateWithDateIndex;
-				});
-				foreach([
-					// [0 => '']
-					'datesIndexWithYearIndex'=>$datesIndexWithYearIndex , 
-					'yearIndexWithYear'=>$yearIndexWithYear 
-				,'dateIndexWithDate'=>$dateIndexWithDate 
-				// ,'dateWithMonthNumber'=>$dateWithMonthNumber
-				// ,'dateIndexWithMonthNumber'=>$dateIndexWithMonthNumber
-				// ,'dateWithDateIndex'=>$dateWithDateIndex
-				 ] as $key => $dateArr){
-					View::share($key,$dateArr);
-				}
+				self::bindStudyDates($study);
 			}
 			
+		}
+	}
+
+	/**
+	 * * بيربط تواريخ الدراسة في الـ container (والـ views) زي ما الصفحة بتعمل.
+	 * * الصفحات بتربطها من الرابط وقت الـ boot ، لكن الأوامر (CLI) والـ tests مالهمش رابط ،
+	 * * فبيندهوها بنفسهم قبل أي حساب للدراسة.
+	 */
+	public static function bindStudyDates(Study $study): void
+	{
+		foreach (['datesIndexWithYearIndex', 'yearIndexWithYear', 'dateIndexWithDate', 'dateWithMonthNumber', 'dateIndexWithMonthNumber', 'dateWithDateIndex'] as $key) {
+			/** دراسة جديدة بتشيل ربط الدراسة اللي قبلها (singleton لوحده بيسيب النسخة اللي اتعملت قبل كده) */
+			app()->forgetInstance($key);
+		}
+		$datesAndIndexesHelpers = $study->getDatesIndexesHelper();
+		$datesIndexWithYearIndex=$datesAndIndexesHelpers['datesIndexWithYearIndex']; 
+	
+		$yearIndexWithYear=$datesAndIndexesHelpers['yearIndexWithYear']; 
+		$dateIndexWithDate=$datesAndIndexesHelpers['dateIndexWithDate']; 
+		$dateIndexWithMonthNumber=$datesAndIndexesHelpers['dateIndexWithMonthNumber']; 
+		$dateWithMonthNumber=$datesAndIndexesHelpers['dateWithMonthNumber']; 
+		$dateWithDateIndex=$datesAndIndexesHelpers['dateWithDateIndex']; 
+		app()->singleton('datesIndexWithYearIndex',function() use ($datesIndexWithYearIndex){
+			return $datesIndexWithYearIndex;
+		});
+		app()->singleton('yearIndexWithYear',function() use ($yearIndexWithYear){
+			return $yearIndexWithYear;
+		});
+		
+		app()->singleton('dateIndexWithDate',function() use ($dateIndexWithDate){
+			return $dateIndexWithDate;
+		});
+		app()->singleton('dateWithMonthNumber',function() use ($dateWithMonthNumber){
+			return $dateWithMonthNumber;
+		});
+		app()->singleton('dateIndexWithMonthNumber',function() use ($dateIndexWithMonthNumber){
+			return $dateIndexWithMonthNumber;
+		});
+		app()->singleton('dateWithDateIndex',function() use ($dateWithDateIndex){
+			return $dateWithDateIndex;
+		});
+		foreach([
+			// [0 => '']
+			'datesIndexWithYearIndex'=>$datesIndexWithYearIndex , 
+			'yearIndexWithYear'=>$yearIndexWithYear 
+		,'dateIndexWithDate'=>$dateIndexWithDate 
+		// ,'dateWithMonthNumber'=>$dateWithMonthNumber
+		// ,'dateIndexWithMonthNumber'=>$dateIndexWithMonthNumber
+		// ,'dateWithDateIndex'=>$dateWithDateIndex
+		 ] as $key => $dateArr){
+			View::share($key,$dateArr);
 		}
 	}
 		

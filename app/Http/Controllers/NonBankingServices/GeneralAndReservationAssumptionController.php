@@ -8,6 +8,7 @@ use App\Models\NonBankingService\GeneralAndReserveAssumption;
 use App\Models\NonBankingService\Study;
 use App\Traits\NonBankingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GeneralAndReservationAssumptionController extends Controller
 {
@@ -82,8 +83,17 @@ class GeneralAndReservationAssumptionController extends Controller
 	}
 	public function store(Company $company , Request $request,Study $study)
 	{
-		$data = $request->except(['_token','save','_method']) ;
-		$study->generalAndReserveAssumption ? $study->generalAndReserveAssumption->update($data) : GeneralAndReserveAssumption::create($data);
+		/**
+		 * * الصفحة بتعرض شهور التشغيل بس: اللي اتبعت بيتدمج على المحفوظ شهر بشهر ، عشان الشهور اللي مش ظاهرة ماتتمسحش.
+		 * * الأعمدة المسموحة بس ، والدراسة والشركة من الرابط مش من الطلب.
+		 */
+		$saved = $study->generalAndReserveAssumption;
+		$data = GeneralAndReserveAssumption::mergeEditedValues($saved, $request->all());
+		DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->transaction(function () use ($saved, $data, $study, $company) {
+			$saved
+				? $saved->update($data)
+				: GeneralAndReserveAssumption::create($data + ['study_id' => $study->id, 'company_id' => $company->id]);
+		});
 		$redirectRoute = $study->getRevenueRoute(Study::LEASING) ;
 		if($request->get('submit_button') == 'save'){
 			return response()->json([

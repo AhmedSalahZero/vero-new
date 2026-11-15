@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\NonBankingService;
 
+use App\Helpers\HArr;
 use App\Helpers\HNonBanking;
 use App\Models\Traits\Scopes\CompanyScope;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
@@ -82,7 +83,8 @@ class MicrofinanceByBranchProductMix extends Model
     }
 	 public function getFlatRateAtYearOrMonthIndex(int $yearOrDateIndex):float
     {
-        return $this->flat_rates[$yearOrDateIndex]??0;
+        // a month with no saved rate (the study was made longer) takes the last saved month's rate
+        return HArr::valueAtOrBefore($this->flat_rates, $yearOrDateIndex, 0);
     }
     public function getIncreaseRateAtYearIndex($yearIndex)
     {

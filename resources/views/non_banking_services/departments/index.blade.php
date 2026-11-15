@@ -35,7 +35,7 @@ use App\Helpers\HArr;
                 </li>
 				
 				 <li class="nav-item">
-                    <a onclick="return false" class="nav-link {{ Request('active') == Department::MICROFINANCE ?'active':'' }}" href="{{route('non.banking.edit.departments',['company'=>$company->id,'department'=>$microfinanceDepartment->id,'type'=>Department::MICROFINANCE ])}}" role="tab">
+                    <a class="nav-link {{ Request('active') == Department::MICROFINANCE ?'active':'' }}" href="{{route('non.banking.edit.departments',['company'=>$company->id,'department'=>$microfinanceDepartment->id,'type'=>Department::MICROFINANCE ])}}" role="tab">
                         <i class="fa fa-money-check-alt"></i> {{ __('Microfinance Departments') }}
                     </a>
                 </li>

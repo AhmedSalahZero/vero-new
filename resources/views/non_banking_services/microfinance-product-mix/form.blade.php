@@ -287,7 +287,7 @@
                                 $columnIndex = 0 ;
 								
                                 @endphp
-                                @for($i = 0 ; $i<= $months ; $i++) @php $currentVal= $study->{$name}[$i]??0 ;
+                                @for($i = 0 ; $i<= $months ; $i++) @php $currentVal= $study->getProductMixSeniorLoanOfficersAt($i, $isSenior) ;
 
                                     @endphp
                                     <td>

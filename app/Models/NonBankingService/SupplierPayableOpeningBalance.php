@@ -68,7 +68,8 @@ class SupplierPayableOpeningBalance extends Model
     
                 $cbeCorridorChanges = $study->generalAndReserveAssumption  ? $study->generalAndReserveAssumption->getCbeCorridorChangesRates() : [];
                 foreach ($cbeCorridorChanges as $dateAsIndex => $cbeCorridorChange) {
-                    $cbeCorridorChange =$cbeCorridorChange/100;
+                    /** * التغيير سعر سنوي ، والأثر بيتحسب كل شهر: الرصيد × التغيير ÷ 12 (من غير ÷12 الأثر كان 12 ضعف) */
+                    $cbeCorridorChange =$cbeCorridorChange/100/12;
                     $loansInterestCorridorChanges[$dateAsIndex] = ($beginningBalances[$dateAsIndex]??0) * $cbeCorridorChange;
                 }
                     

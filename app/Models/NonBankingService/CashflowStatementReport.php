@@ -4,6 +4,7 @@ namespace App\Models\NonBankingService;
 
 use App\Models\Traits\Scopes\BelongsToCompany;
 use App\Models\Traits\Scopes\NonBankingServices\BelongsToStudy;
+use App\ReadyFunctions\ProfitDistribution;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -189,6 +190,7 @@ class CashflowStatementReport extends Model
     protected $connection =NON_BANKING_SERVICE_CONNECTION_NAME;
     protected $guarded = ['id'];
     protected $casts = [
+		'profit_distributions'=>'array',
 		'new_branches_rent_payments'=>'array',
 		'interest_corridor_changes'=>'array',
 		'loans_interest_corridor_changes'=>'array',
@@ -272,6 +274,41 @@ class CashflowStatementReport extends Model
 	public function getManualEquityInjectionAtMonthIndex(int $monthIndex)
 	{
 		return $this->manual_equity_injection[$monthIndex]??0;
+	}
+
+	/**
+	 * * توزيع الأرباح (المرحلة 5 ، Study::distributeTheYearsProfit): بند واحد ، [رقم الشهر => المبلغ].
+	 * * البنود: legal_reserve و fra_reserve (ديسمبر) ، employee_profit_share و shareholders_first_dividend و
+	 * * board_profit_share و shareholders_dividend_cash و shareholders_dividend_shares (يناير) ، و payments (أبريل).
+	 */
+	public function getProfitDistribution(string $item): array
+	{
+		return array_map('floatval', (array) (((array) $this->profit_distributions)[$item] ?? []));
+	}
+
+	/** * اللي بيخرج من الأرباح المرحلة كل شهر: الاحتياطيات في ديسمبر ، وبنود التوزيع في يناير */
+	public function getProfitDistributionTakenFromRetainedEarnings(): array
+	{
+		return $this->sumOfProfitDistributionItems(array_merge(['legal_reserve', 'fra_reserve'], ProfitDistribution::ITEMS));
+	}
+
+	/** * الالتزام الجديد كل شهر (يناير): حصة العاملين وأول توزيع وحصة المجلس والتوزيع النقدي (التوزيع بالأسهم رأس مال) */
+	public function getProfitDistributionPayables(): array
+	{
+		return $this->sumOfProfitDistributionItems(array_diff(ProfitDistribution::ITEMS, ['shareholders_dividend_shares']));
+	}
+
+	private function sumOfProfitDistributionItems(array $items): array
+	{
+		$total = [];
+		foreach ($items as $item) {
+			foreach ($this->getProfitDistribution($item) as $dateAsIndex => $amount) {
+				$total[$dateAsIndex] = ($total[$dateAsIndex] ?? 0) + $amount;
+			}
+		}
+		ksort($total);
+
+		return $total;
 	}
 	
 }

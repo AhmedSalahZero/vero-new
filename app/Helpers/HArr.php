@@ -486,21 +486,40 @@ class HArr
 
         return $keys[$index - 1]; // Return the previous key
     }
-    public static function filterByYearOrMonthIndex(array $baseRatesMapping, array $yearIndexWithYear, int $yearIndex, string $currentLoopDateString, bool $isMonthlyStudy):array
+    /**
+     * * الأسعار اللي القرض بيتسعّر بيها من شهر صرفه: السعر الساري في شهر الصرف ، وبعده كل شهر السعر فيه اتغير.
+     * * $ratesByDate: سعر كل شهر ({'2026-01-01': 22, ...}) زي GeneralAndReserveAssumption::getBaseRatesPerMonths.
+     * * بيرجع [رقم الشهر => السعر] ، وأول مفتاح هو شهر الصرف.
+     * * مثال: الكوريدور 22% لحد يناير 2027 و 20% من فبراير 2027 ، وقرض اتصرف نوفمبر 2026 (الشهر 10 لو الدراسة بتبدأ يناير 2026):
+     * *       [10 => 22, 13 => 20]
+     * * الشهور اللي قبل الصرف مالهاش دعوة بالقرض ، والشهر اللي سعره زي اللي قبله مش بيعيد التسعير.
+     * * (كان فيه فلتر بالسنة ورقم الشهر بدل الدالة دي: كان بيشيل تغيير فبراير 2027 من قرض نوفمبر 2026.)
+     */
+    public static function rateChangesFromMonth(array $ratesByDate, int $fromIndex, array $dateWithDateIndex): array
     {
-        $result = [];
-        
-        $currentYear = $yearIndexWithYear[$yearIndex];
-        // $loopIndex = 0 ;
-        foreach ($baseRatesMapping as $currentDateString => $no) {
-            $currentYearNumber =explode('-', $currentDateString)[0];
-            $currentMonthNumber =explode('-', $currentDateString)[1];
-            $currentMonth = explode('-', $currentLoopDateString)[1] ;
-            // $loopIndex++;
-            $condition = $isMonthlyStudy ? $currentYearNumber >= $currentYear && $currentMonthNumber>=$currentMonth // new added to be reviewed
-            : $currentYearNumber >= $currentYear   ;
-            if ($condition) {
-                $result[$currentDateString] = $no;
+        $ratesByIndex = [];
+        foreach ($ratesByDate as $dateAsString => $rate) {
+            if (isset($dateWithDateIndex[$dateAsString]) && is_numeric($rate)) {
+                $ratesByIndex[(int) $dateWithDateIndex[$dateAsString]] = (float) $rate;
+            }
+        }
+        if ($ratesByIndex === []) {
+            return [];
+        }
+        ksort($ratesByIndex);
+        // a loan before the first month that has a rate takes the first rate
+        $rateInForce = reset($ratesByIndex);
+        foreach ($ratesByIndex as $index => $rate) {
+            if ($index > $fromIndex) {
+                break;
+            }
+            $rateInForce = $rate;
+        }
+        $result = [$fromIndex => $rateInForce];
+        foreach ($ratesByIndex as $index => $rate) {
+            if ($index > $fromIndex && abs($rate - $rateInForce) > 1e-9) {
+                $result[$index] = $rate;
+                $rateInForce = $rate;
             }
         }
     
@@ -1112,17 +1131,24 @@ class HArr
         }
         return $result ;
     }
-    public static function calculateRetainEarning(float $retainedEarningOpening, array $netProfit):array
+    /**
+     * * الأرباح المرحلة أول كل شهر (من غير ربح الشهر نفسه).
+     * * $declaredDistributions: التوزيعات اللي اتقررت من الأرباح المرحلة الافتتاحية في كل شهر (EquityOpeningBalance):
+     * * بتقل الأرباح المرحلة في شهرها ، وبتبقى التزام (Dividends Payable) لحد ما تتدفع.
+     * * مثال: أرباح مرحلة 1,000,000 واتقرر توزيع 300,000 في مارس: الأرباح المرحلة من مارس 700,000 ،
+     * * والالتزام 300,000 لحد الدفع. (التوزيع كان بيتسجل التزام بس ، فالميزانية كانت بتختل بقيمته.)
+     */
+    public static function calculateRetainEarning(float $retainedEarningOpening, array $netProfit, array $declaredDistributions = []):array
     {
-        $retainedEarnings  = [0 => $retainedEarningOpening];
+        $retainedEarnings  = [0 => $retainedEarningOpening - (float) ($declaredDistributions[0] ?? 0)];
         foreach ($netProfit as $dateAsIndex => $value) {
             if ($dateAsIndex == 0) {
                 continue ;
             }
             $previousNetProfit = $netProfit[$dateAsIndex-1] ?? 0 ;
             $previousRetainedEarning = $retainedEarnings[$dateAsIndex-1]??0;
-            $retainedEarnings[$dateAsIndex] = $previousNetProfit + $previousRetainedEarning;
-            
+            $retainedEarnings[$dateAsIndex] = $previousNetProfit + $previousRetainedEarning - (float) ($declaredDistributions[$dateAsIndex] ?? 0);
+
         }
         return $retainedEarnings;
     }
@@ -1452,6 +1478,27 @@ public static function repeatLastValueInArrayUntil(array $itemsArray, int $study
         $itemsArray[$loopingKey] =$itemsArray[$lastKey];
     }
     return $itemsArray;
+}
+
+/**
+ * * القيمة المحفوظة عند المفتاح. لو المفتاح مش محفوظ: قيمة آخر مفتاح محفوظ قبله ، ولو مفيش: الـ default.
+ * * مثال: دراسة كانت سنة (الشهور 0–11) واتطوّلت لـ 3 سنين: الشهر 20 بياخد قيمة الشهر 11 بدل صفر.
+ * * المفتاح المحفوظ بقيمة null بيرجّع الـ default زي `?? $default` بالظبط.
+ */
+public static function valueAtOrBefore(?array $items, int $key, float $default = 0): float
+{
+    $items = $items ?: [];
+    if (array_key_exists($key, $items)) {
+        return (float) ($items[$key] ?? $default);
+    }
+    $previousKey = null;
+    foreach (array_keys($items) as $itemKey) {
+        if ((int) $itemKey < $key && ($previousKey === null || (int) $itemKey > (int) $previousKey)) {
+            $previousKey = $itemKey;
+        }
+    }
+
+    return is_null($previousKey) ? $default : (float) ($items[$previousKey] ?? $default);
 }
 
 

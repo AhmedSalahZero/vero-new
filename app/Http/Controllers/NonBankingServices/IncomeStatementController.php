@@ -189,12 +189,10 @@ class IncomeStatementController extends Controller
         $tableDataFormatted[$generalExpenseOrder]['main_items']['% Of Revenue']['options']['title'] = __('% Of Revenue');
         
         // $tableDataFormatted[$generalExpenseOrder]['sub_items']['Existing Branches Rent Liability Interest']['options']['title'] = __('Existing Branches Rent Liability Interest');
+		// the lease liabilities' interest is a finance cost, below EBIT (phase 8, the user's presentation decision, as
+		// FinVero; IFRS 16): it is shown in the finance section further down, not in General Expense any more
 		$existingBranchesRentLiabilityInterest = (array)$incomeStatementReport->rent_interest;
-        $tableDataFormatted[$generalExpenseOrder]['sub_items']['Existing Branches Rent Liability Interest']['data'] = $existingBranchesRentLiabilityInterest;
-
-		// $tableDataFormatted[$generalExpenseOrder]['sub_items']['New Branches Rent Liability Interest']['options']['title'] = __('New Branches Rent Liability Interest');
 		$newBranchesRentLiabilityInterest = (array)$incomeStatementReport->new_branches_rent_interest;
-        $tableDataFormatted[$generalExpenseOrder]['sub_items']['New Branches Rent Liability Interest']['data'] = $newBranchesRentLiabilityInterest;
 
 		
         $depreciationKey ='total-depreciation';
@@ -359,12 +357,8 @@ class IncomeStatementController extends Controller
         $interestCashSurplusAmounts =$incomeStatementReport? $incomeStatementReport->interest_cash_surplus : [];
 		
         
-        $title = __('Cash Surplus Interest');
-        $tableDataFormatted[0]['sub_items'][$title]['options'] =array_merge([
-            'title'=>$title
-        ], $defaultNumericInputClasses);
-        $tableDataFormatted[0]['sub_items'][$title]['data'] = $interestCashSurplusAmounts;
-        $tableDataFormatted[0]['sub_items'][$title]['year_total'] = HArr::sumPerYearIndex($interestCashSurplusAmounts, $yearWithItsMonths);
+        // the surplus cash interest is a finance income, below EBIT (phase 8, the user's presentation decision, as
+        // FinVero): it is in the finance section further down, not in the revenue any more
   
 		
 		
@@ -611,8 +605,10 @@ class IncomeStatementController extends Controller
         $tableDataFormatted[$ebitdaOrderIndex]['main_items']['% Of Revenue']['options']['title'] = __('% Of Revenue');
         // $fixedAssetAdminDepreciations = [];
       
-        $totalDepreciation = HArr::sumAtDates([$totalFixedAssetAdminDepreciation,$totalGrossProfit], $sumKeys);
-        $editda = HArr::subtractAtDates([$totalDepreciation,$totalSGANDA], $sumKeys) ;
+        // the depreciation (with the ECL and the right-of-use amortisation) is deducted after this line, in EBIT, so
+        // nothing is added back here: EBITDA = gross profit − SG&A, and EBIT = EBITDA − ECL − depreciation − ROU.
+        // (It used to add the depreciation back to the gross profit, so EBITDA came out higher by the depreciation.)
+        $editda = HArr::subtractAtDates([$totalGrossProfit,$totalSGANDA], $sumKeys) ;
 	
         $tableDataFormatted[$ebitdaOrderIndex]['main_items']['ebitda']['data'] = $editda;
         $tableDataFormatted[$ebitdaOrderIndex]['main_items']['ebitda']['year_total'] =$ebitdaTotalPerYear= HArr::sumPerYearIndex($editda, $yearWithItsMonths);
@@ -640,8 +636,9 @@ class IncomeStatementController extends Controller
         /**
         * * Start Seven Item
         */
+        // net finance cost (phase 8): loans' interest and the lease liabilities' interest, less the surplus cash interest
         $tableDataFormatted[$financialExpenseOrderIndex]['main_items']['finance_exp']['options'] = array_merge([
-            'title'=>__('Finance Expense')
+            'title'=>__('Net Finance Cost')
         ], $defaultNumericInputClasses);
       
         $openingLoans = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('long_term_loan_opening_balances')->where('study_id', $study->id)->pluck('interests')->toArray();
@@ -661,6 +658,15 @@ class IncomeStatementController extends Controller
         }
         
         
+        foreach ([__('Existing Branches Rent Liability Interest') => $existingBranchesRentLiabilityInterest,
+            __('New Branches Rent Liability Interest') => $newBranchesRentLiabilityInterest,
+            __('Cash Surplus Interest') => HArr::MultiplyWithNumber((array) $interestCashSurplusAmounts, -1)] as $financeTitle => $financeLine) {
+            if (array_sum(array_map('abs', array_map('floatval', $financeLine))) > 0) {
+                $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][$financeTitle]['options']['title'] = $financeTitle;
+                $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][$financeTitle]['data'] = $financeLine;
+                $tableDataFormatted[$financialExpenseOrderIndex]['sub_items'][$financeTitle]['year_total'] = HArr::sumPerYearIndex($financeLine, $yearWithItsMonths);
+            }
+        }
         $totalFinanceExpense = HArr::sumAtDates(array_column($tableDataFormatted[$financialExpenseOrderIndex]['sub_items']??[], 'data'), $sumKeys);
         $tableDataFormatted[$financialExpenseOrderIndex]['main_items']['finance_exp']['data'] = $totalFinanceExpense;
         $tableDataFormatted[$financialExpenseOrderIndex]['main_items']['finance_exp']['year_total'] = $financeExpenseTotalPerYear = HArr::sumPerYearIndex($totalFinanceExpense, $yearWithItsMonths);
@@ -706,8 +712,10 @@ class IncomeStatementController extends Controller
         $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['corporate-taxes']['data'] = $annuallyCorporateTaxes;
         $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['corporate-taxes']['year_total'] = HArr::sumPerYearIndex($annuallyCorporateTaxes,$yearWithItsMonths);
         $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['% Of Revenue']['options']['title'] = __('% Of Revenue');
-        $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['% Of Revenue']['data']=  [];
-        $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['% Of Revenue']['year_total'] = $corporateTaxesRevenuePercentage=HArr::calculatePercentageOf($totalSalesExpensesPerYear, $annuallyCorporateTaxes);
+        // the tax as a share of the revenue, like every other "% Of Revenue" line (it used to divide the yearly sales
+        // expenses by the monthly taxes)
+        $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['% Of Revenue']['data']=  HArr::calculatePercentageOf($totalSalesRevenues, $annuallyCorporateTaxes);
+        $tableDataFormatted[$corporateTaxesOrderIndex]['main_items']['% Of Revenue']['year_total'] = HArr::calculatePercentageOf($totalSalesRevenuesPerYears, HArr::sumPerYearIndex($annuallyCorporateTaxes, $yearWithItsMonths));
 		$study->incomeStatementReport->update([
 			'corporate_taxes'=>$annuallyCorporateTaxes
 		]);
@@ -749,10 +757,21 @@ class IncomeStatementController extends Controller
         $tableDataFormatted[$netProfitOrderIndex]['main_items']['% Of Revenue']['data'] = HArr::calculatePercentageOf($totalSalesRevenues, $netProfit);
         $tableDataFormatted[$netProfitOrderIndex]['main_items']['% Of Revenue']['year_total'] = $netProfitRevenuePercentage = HArr::calculatePercentageOf($totalSalesRevenuesPerYears, $netProfitTotalPerYear);
         	
-        $retainedEarningOpening = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('equity_opening_balances')->where('study_id', $study->id)->first();
-        $retainedEarningOpening = $retainedEarningOpening ? $retainedEarningOpening->retained_earnings : 0;
+        $equityOpeningBalance = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('equity_opening_balances')->where('study_id', $study->id)->first();
+        $retainedEarningOpening = $equityOpeningBalance ? $equityOpeningBalance->retained_earnings : 0;
+        // the distributions declared from the opening retained earnings leave them in their month (they are paid from
+        // the Dividends Payable on the balance sheet)
+        $openingDistributions = $equityOpeningBalance && $equityOpeningBalance->retained_earning_distribution_amounts
+            ? array_map('floatval', (array) json_decode($equityOpeningBalance->retained_earning_distribution_amounts, true))
+            : [];
+        // phase 5: each December's reserves and each January's profit distribution leave the retained earnings too
+        // (the reserve and the payables / paid-up capital take them on the balance sheet)
+        $cashflowStatementReport = $study->cashflowStatementReport;
+        foreach ($cashflowStatementReport ? $cashflowStatementReport->getProfitDistributionTakenFromRetainedEarnings() : [] as $dateAsIndex => $amount) {
+            $openingDistributions[$dateAsIndex] = ($openingDistributions[$dateAsIndex] ?? 0) + $amount;
+        }
         // $retainedEarning = HArr::calculateRetainEarning($retainedEarningOpening,$ebt);
-        $retainedEarning = HArr::calculateRetainEarning($retainedEarningOpening, $netProfit);
+        $retainedEarning = HArr::calculateRetainEarning((float) $retainedEarningOpening, $netProfit, $openingDistributions);
         $statementData = [
             'monthly_corporate_taxes_statements'=>$corporateTaxesStatement,
             'monthly_net_profit'=>$netProfit,

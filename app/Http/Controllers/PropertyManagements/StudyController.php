@@ -201,7 +201,8 @@ class StudyController extends Controller
 	}
 	public function destroy(Request $request , Company $company,Study $study)
 	{
-		Artisan::call('delete:study',['study_id'=>$study->id]);
+		/** * الدراسة في قاعدة الـ property management: من غير الـ connection الأمر كان بيمسح دراسة non-banking بنفس الرقم */
+		Artisan::call('delete:study',['study_id'=>$study->id, '--connection'=>PROPERTY_MANAGEMENT_CONNECTION_NAME]);
 		$active = $study->getActiveTab();
 		$study->delete();
 		return redirect()->route('property.management.view.study',['company'=>$company->id,'active'=>$active]);

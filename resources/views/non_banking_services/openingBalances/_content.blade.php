@@ -5,6 +5,33 @@
 
 <div class="formItem">
 
+    {{-- phase 4: a saved asset whose monthly depreciation × months is not its net amount (the difference stays on the
+         balance sheet after the last month, or the months take more than the asset is worth) --}}
+    @php
+        $depreciationWarnings = collect($fixedAssetOpeningBalances ?? [])->filter(fn ($asset) => $asset instanceof \App\Models\NonBankingService\FixedAssetOpeningBalance
+            && $asset->getMonthlyDepreciation() > 0 && abs($asset->depreciationLeftOver()) >= 1);   // no monthly depreciation (land): nothing to check
+    @endphp
+    @if($depreciationWarnings->isNotEmpty())
+        <div class="col-12">
+            <div class="alert alert-warning mb-3" role="alert">
+                @foreach($depreciationWarnings as $asset)
+                    <div>
+                        <strong>{{ $asset->getName() }}</strong>:
+                        {{ __('monthly depreciation') }} {{ number_format($asset->getMonthlyDepreciation(), 0) }} × {{ $asset->getMonthlyCounts() }} {{ __('months') }}
+                        = {{ number_format($asset->getMonthlyDepreciation() * $asset->getMonthlyCounts(), 0) }},
+                        {{ __('but the net amount is') }} {{ number_format($asset->getNetAmount(), 0) }}.
+                        @if($asset->depreciationLeftOver() > 0)
+                            {{ number_format($asset->depreciationLeftOver(), 0) }} {{ __('stays on the balance sheet after the last depreciation month.') }}
+                        @else
+                            {{ __('The months take') }} {{ number_format(-$asset->depreciationLeftOver(), 0) }} {{ __('more than the net amount.') }}
+                        @endif
+                        {{ __('Check the monthly depreciation or the months.') }}
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     <div class="col-12">
         @php
         $repeaterId = 'fixedAssetOpeningBalances';
