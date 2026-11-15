@@ -70,10 +70,10 @@ class ExpenseAsPercentageEquation
                 foreach ($directFactoringAmounts as $directFactoringAmount) {
                     foreach ($directFactoringAmount as $monthIndex => $val) {
                         $valBeforeRate = $monthlyRate / 100 * $val ;
-                        $valueAfterVat =  0;
-                        if (!$isDeductible) {
-                            $valueAfterVat = $valBeforeRate * (1+($vatRate/100));
-                        }
+                        // round 2: the invoice carries the VAT whether it is deductible or not (a deductible VAT is recovered later:
+                        // Recoverable VAT on the balance sheet). It was 0 when deductible, so the VAT came out as −the expense and
+                        // the expense was never charged nor paid (1,000 + 14 % → VAT −1,000, total 0)
+                        $valueAfterVat = $valBeforeRate * (1+($vatRate/100));
                         $result[$monthIndex] = isset($result[$monthIndex]) ? $result[$monthIndex] + $valBeforeRate : $valBeforeRate ;
                         $onlyVatValue = $valueAfterVat -$valBeforeRate ;
                         $withholdValue = $withholdTaxRate / 100 * $valBeforeRate ;
@@ -88,10 +88,10 @@ class ExpenseAsPercentageEquation
         foreach ($resultArrs as $resultArrItem) {
             foreach ($resultArrItem as $monthIndex => $val) {
                 $valBeforeRate = $monthlyRate / 100 * $val ;
-                $valueAfterVat =  0;
-                if (!$isDeductible) {
-                    $valueAfterVat = $valBeforeRate * (1+($vatRate/100));
-                }
+                // round 2: the invoice carries the VAT whether it is deductible or not (a deductible VAT is recovered later:
+                // Recoverable VAT on the balance sheet). It was 0 when deductible, so the VAT came out as −the expense and
+                // the expense was never charged nor paid (1,000 + 14 % → VAT −1,000, total 0)
+                $valueAfterVat = $valBeforeRate * (1+($vatRate/100));
                 $result[$monthIndex] = isset($result[$monthIndex]) ? $result[$monthIndex] + $valBeforeRate : $valBeforeRate ;
                 $onlyVatValue = $valueAfterVat -$valBeforeRate ;
                 $withholdValue = $withholdTaxRate / 100 * $valBeforeRate ;

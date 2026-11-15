@@ -2,28 +2,21 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\NonBankingServices\IncomeStatementController;
 use App\Models\Company;
-use App\Models\NonBankingService\CashAndBankOpeningBalance;
-use App\Models\NonBankingService\EquityOpeningBalance;
-use App\Models\NonBankingService\FixedAsset;
-use App\Models\NonBankingService\FixedAssetOpeningBalance;
 use App\Models\NonBankingService\Study;
-use App\Models\NonBankingService\SupplierPayableOpeningBalance;
 use App\Models\User;
 use App\Providers\NonBankingServiceProvider;
-use App\Services\NonBanking\OpeningBalancesStatements;
+use App\Services\NonBanking\StudyRecalculation;
 use Illuminate\Console\Command;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 /**
- * * المرحلة 7: كل دراسات الـ non-banking بتتحسب تاني بالكود الحالي ، بنفس ترتيب الصفحات:
- * *   1. الأرصدة الافتتاحية (حقوق الملكية ، الأصول الثابتة ، المحفظة وقروضها ، وتحصيلاتها ومدفوعاتها بالشهر)
- * *   2. القروض والإيرادات والمصروفات (recalculateAllRevenuesLoans) ، 3. الأصول الثابتة ، 4. المرتبات
- * *   ومصروفات صفحة Expenses كلها (recalculateStudyExpenses) ، 5. قائمة الدخل والتدفقات والـ ODA ، 6. الميزانية.
+ * * المرحلة 7: كل دراسات الـ non-banking بتتحسب تاني بالكود الحالي ، كأن اليوزر حفظ كل صفحاتها بالترتيب
+ * * (الجولة 2: الخطوات في App\Services\NonBanking\StudyRecalculation ، وأداة المقارنة بتستخدمها كمان):
+ * *   الأرصدة الافتتاحية (الـ 13 جدول) ، وحالات التمويل متناهي الصغر وعقوده ، والقروض والإيرادات ، والأصول الثابتة ،
+ * *   والمرتبات ، ومصروفات صفحة Expenses كلها ، وإيجار الفروع الجديدة ، وقائمة الدخل والتدفقات والـ ODA والميزانية.
  * * الإصلاحات اللي اتعملت في المراحل 1–6 (مثلاً V6 و V18 و V19 والضريبة والتوزيعات) مش بتظهر في الدراسات المحفوظة غير لما
  * * تتحسب تاني. كل دراسة في transaction لوحدها ، والتقرير بيطلّع قبل وبعد: صافي الربح ، والأصول والكاش آخر الدراسة ،
  * * وأكبر فرق في الميزانية.
@@ -117,27 +110,8 @@ class RecalculateNonBankingStudiesCommand extends Command
 
 	private function recalculateStudy(int $studyId, Company $company): void
 	{
-		// 1. the opening balances, as their page's Save does (the model hooks rebuild their statements)
-		foreach ([EquityOpeningBalance::class, FixedAssetOpeningBalance::class, CashAndBankOpeningBalance::class, SupplierPayableOpeningBalance::class] as $model) {
-			foreach ($model::where('study_id', $studyId)->get() as $openingBalance) {
-				$openingBalance->save();
-			}
-		}
-		OpeningBalancesStatements::refresh(Study::findOrFail($studyId));
-		// 2. the loans, revenues and the expenses that follow them
-		Study::findOrFail($studyId)->recalculateAllRevenuesLoans(new Request());
-		// 3. the fixed assets and 4. the manpower
-		foreach ([FixedAsset::FFE, FixedAsset::PER_EMPLOYEE, FixedAsset::NEW_BRANCH] as $type) {
-			Study::findOrFail($studyId)->recalculateFixedAssets($type);
-		}
-		Study::findOrFail($studyId)->recalculateManpower();
-		// 4b. every Expenses-page row from its own dates (the loans step only redoes % of sales and cost per unit): a
-		// study that was extended kept the amounts of its old dates (study 154: an expense ending 12/2027 had 2028)
-		Study::findOrFail($studyId)->recalculateStudyExpenses();
-		// 5. income statement (it runs the cash flow first), cash flow and ODA, 6. balance sheet
-		(new IncomeStatementController())->index($company, Study::findOrFail($studyId), true);
-		$study = Study::findOrFail($studyId);
-		$study->cashFlowForOdas($study->getCashInOutFlowViewVars()['netCashBeforeWorking']);
+		// every page's Save, in the pages' order (the gate's runner uses the same steps)
+		StudyRecalculation::run($studyId, $company);
 	}
 
 	/**

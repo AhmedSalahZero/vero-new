@@ -41,7 +41,9 @@ class PortfolioPresentValue
             $totalNetPresentValue = 0 ;
             $totalInterestAmount= 0;
             $schedulePaymentAmount = $currentOccurrenceAvgAmount  / $tenorInMonths ;
-            $currentBaseRate = $cbeLendingRatesPerMonths[$currentOccurrenceMonthIndex] ;
+            // a month with no saved corridor (a study extended before General Assumptions was saved again) takes the
+            // last saved one, as the loans do
+            $currentBaseRate = GeneralAndReserveAssumption::valueAtOrBefore($cbeLendingRatesPerMonths, (int) $currentOccurrenceMonthIndex);
             $currentPricingAtOccurrenceIndex = ($currentBaseRate + $marginRate) / 100;
             $currentMonthlyInterest =  $currentPricingAtOccurrenceIndex / 12  ;
             $isFirstLoop = true ;

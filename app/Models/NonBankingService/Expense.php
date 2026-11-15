@@ -379,6 +379,20 @@ class Expense extends Model
 	{
 		return $this->start_date_type;
 	}
+	/**
+	 * * العمود اللي قائمة الدخل بتقراه لمصروف (الجولة 2): المصروف اللي الـ VAT بتاعته قابلة للخصم بيتسجل قبل الـ VAT في كل
+	 * * الأنواع ، والـ VAT أصل (Recoverable VAT في الميزانية). "% من" كان بيتقري من total_after_vat حتى لو قابلة للخصم.
+	 * * مثال: عمولة 1,000 + VAT ‏14% قابلة للخصم → مصروف 1,000 (من expense_as_percentages) ، ومش 1,140.
+	 */
+	public static function incomeStatementColumn(string $relationName, mixed $isDeductible): string
+	{
+		if ($relationName === 'percentage_of_sales' && filter_var($isDeductible, FILTER_VALIDATE_BOOLEAN)) {
+			return 'expense_as_percentages';
+		}
+
+		return self::getColumnMapping()[$relationName];
+	}
+
 	public static function getColumnMapping():array 
 	{
 		return [

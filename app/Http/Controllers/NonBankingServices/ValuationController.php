@@ -63,7 +63,7 @@ class ValuationController extends Controller
 		
 $incomeStatement = $study->incomeStatement;
 		
-		 $formattedDcfMethod['ebit'] =  $incomeStatement ? $incomeStatement->ebit : [];
+		 $formattedDcfMethod['ebit'] = self::ebitBeforeThePresentationChange($study, $incomeStatement ? (array) $incomeStatement->ebit : []);
 		
 			$years = range(0 , $study->getDurationInYears()-1);
         $balanceSheet = $study->balanceSheet;
@@ -137,7 +137,7 @@ $incomeStatement = $study->incomeStatement;
 		$formattedDcfMethod['ebit']=$study->replaceMonthIndexWithYearIndex($formattedDcfMethod['ebit']);
 		 $ebit = $formattedDcfMethod['ebit'];
         $formattedDcfMethod['taxes'] = $taxes =  HArr::MultiplyWithNumberIfPositive($formattedDcfMethod['ebit'], $taxRate);
-        $formattedDcfMethod['depreciation'] =  $incomeStatement ? $incomeStatement->total_depreciation : [];
+        $formattedDcfMethod['depreciation'] =  $incomeStatement ? (array) $incomeStatement->total_depreciation : [];
 		$formattedDcfMethod['depreciation'] = $study->replaceMonthIndexWithYearIndex($formattedDcfMethod['depreciation']);
 		$depreciation = $formattedDcfMethod['depreciation'];
         $formattedDcfMethod['net-change-in-working-capital'] = $netChangeInWorkingCapital ;
@@ -225,4 +225,29 @@ $incomeStatement = $study->incomeStatement;
         
     }
  
+
+	/**
+	 * * الجولة 2 (قرار اليوزر): تغيير العرض في المرحلة 8 مايغيّرش التقييم. المرحلة 8 نزّلت فايدة فائض النقدية وفايدة
+	 * * التزامات الإيجار (الفروع الموجودة والجديدة) تحت الـ EBIT ، فالـ DCF بياخد الـ EBIT اللي كان قبلها:
+	 * * EBIT + فايدة فائض النقدية − فايدة الإيجار ، لكل سنة. مثال: EBIT ‏10 مليون ، فايدة كاش 1.2 مليون ، فايدة إيجار
+	 * * 120,000 → الـ DCF على 11.08 مليون زي ما كان.
+	 *
+	 * @param array<int|string, float|int|string> $ebitPerYear income_statements.ebit (HArr::sumPerYearIndex)
+	 */
+	public static function ebitBeforeThePresentationChange(Study $study, array $ebitPerYear): array
+	{
+		$report = $study->incomeStatementReport;
+		if (! $report || $ebitPerYear === []) {
+			return $ebitPerYear;
+		}
+		$yearWithItsMonths = $study->getYearIndexWithItsMonths();
+		$months = array_keys($study->getStudyDates());
+		$cashInterest = HArr::sumPerYearIndex((array) $report->interest_cash_surplus, $yearWithItsMonths);
+		$rentInterest = HArr::sumPerYearIndex(HArr::sumAtDates([(array) $report->rent_interest, (array) $report->new_branches_rent_interest], $months), $yearWithItsMonths);
+		foreach ($ebitPerYear as $year => $ebit) {
+			$ebitPerYear[$year] = (float) $ebit + (float) ($cashInterest[$year] ?? 0) - (float) ($rentInterest[$year] ?? 0);
+		}
+
+		return $ebitPerYear;
+	}
 }

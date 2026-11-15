@@ -386,9 +386,15 @@ class IncomeStatementController extends Controller
 			$tableDataFormatted[1]['sub_items'][$odasInterestExpenseText]['year_total'] = HArr::sumPerYearIndex($odaInterestExpenses, $yearWithItsMonths);
 		}
 				$totalExpenses = [];
-        $expenses = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('expenses')->where('study_id',$study->id)->join('expense_names', 'expense_names.id', '=', 'expenses.expense_name_id')->selectRaw('expenses.expense_category,expense_names.name as name,expenses.relation_name,expenses.monthly_repeating_amounts,expenses.total_after_vat,payload')->where('expenses.model_id', $study->id)->where('expenses.model_name', 'Study')->get()->toArray();
+        $expenses = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('expenses')->where('study_id',$study->id)->join('expense_names', 'expense_names.id', '=', 'expenses.expense_name_id')->selectRaw('expenses.expense_category,expense_names.name as name,expenses.relation_name,expenses.monthly_repeating_amounts,expenses.total_after_vat,expenses.expense_as_percentages,expenses.is_deductible,payload')->where('expenses.model_id', $study->id)->where('expenses.model_name', 'Study')->get()->toArray();
         $columnPerTypes = Expense::getColumnMapping();
-        $salaryExpensesForCategories = Manpower::getSalaryExpensesPerCategory($monthsWithItsYear, $study->id, $company->id);
+		// Round 2 (the user's decision, as FinVero): the salaries and expenses of the months before the operation start are
+		// costs of those months. They were paid (cash flow) but the income statement took the operation months only, so the
+		// balance sheet was out by them: 10 staff employed from the start × 5,000 × 8 months = 400,000 for a study
+		// operating from September. Every month of the study up to its end (the revenue lines keep the operation months).
+		$viewEndIndex = $study->getViewStudyEndDateAsIndex();
+		$allMonthsWithItsYear = array_filter($study->getDatesIndexWithYearIndex(), fn ($monthIndex) => (int) $monthIndex <= $viewEndIndex, ARRAY_FILTER_USE_KEY);
+        $salaryExpensesForCategories = Manpower::getSalaryExpensesPerCategory($allMonthsWithItsYear, $study->id, $company->id);
         foreach ($salaryExpensesForCategories as $manpowerCategory => $salaryExpensesForCategory) {
             foreach ($salaryExpensesForCategory as $monthIndex => $value) {
                 $currentOrderIndex = $orderIndexPerExpenseCategory[$manpowerCategory];
@@ -428,19 +434,16 @@ class IncomeStatementController extends Controller
             $currentOrderIndex = $orderIndexPerExpenseCategory[$expenseCategory];
             $tableDataFormatted[$currentOrderIndex]['main_items'][$expenseCategory]['options']['title'] =$expenseMainTitlesMapping[$expenseCategory] ;
             $tableDataFormatted[$currentOrderIndex]['sub_items'][$name]['options']['title'] =$name ;
-            $currentColumnName = $columnPerTypes[$relationName];
+            $currentColumnName = Expense::incomeStatementColumn($relationName, $expense->is_deductible);   // round 2: a deductible VAT is not part of the expense
           
       
             $monthlyExpenses = json_decode($expense->{$currentColumnName},true);
-            foreach ($yearWithItsIndexes as $yearIndex => $monthIndexWithActive) {
-                foreach ($monthIndexWithActive as $monthIndex=> $isActiveIndex) {
+            foreach ($allMonthsWithItsYear as $monthIndex => $yearIndex) {   // every month of the study (round 2, above)
                     $currentMonthManpowerTotal = 0 ;
                     $monthlyExpense = $relationName == 'one_time_expense' && isset($monthlyExpenses['monthly_one_time']) ? ($monthlyExpenses['monthly_one_time']) : $monthlyExpenses;
                     $currentMonthlyExpenseValue = $monthlyExpense[$monthIndex]??0 ;
                     $tableDataFormatted[$currentOrderIndex]['sub_items'][$name]['data'][$monthIndex] = isset($tableDataFormatted[$currentOrderIndex]['sub_items'][$name]['data'][$monthIndex]) ? $tableDataFormatted[$currentOrderIndex]['sub_items'][$name]['data'][$monthIndex] + $currentMonthlyExpenseValue:$currentMonthlyExpenseValue ;
 					$totalExpenses[$monthIndex] = isset($totalExpenses[$monthIndex]) ? $totalExpenses[$monthIndex] + $currentMonthlyExpenseValue : $currentMonthlyExpenseValue; 
-                }
-                
             }
    
         }
@@ -778,7 +781,10 @@ class IncomeStatementController extends Controller
              'accumulated_retained_earnings'=>$retainedEarning,
             'study_id'=>$study->id,
 			'ebit'=>$ebitTotalPerYear,
-			// 'total_depreciation'=>$totalDepreciationExpensesPerYears,
+			// the depreciation the DCF adds back (ValuationController), by year. Round 2: it was never written (the
+			// variable this line named does not exist), so it kept a value from older code, or none: 5 of the 45
+			// production studies (140 among them) had none and their Valuation page stopped with a TypeError.
+			'total_depreciation'=>HArr::sumPerYearIndex($totalFixedAssetAdminDepreciation, $yearWithItsMonths),
         ];
         $study->incomeStatement ?  $study->incomeStatement->update($statementData) : $study->incomeStatement()->create($statementData);
         $studyMonthsForViews=$study->getStudyDurationPerYearFromIndexesForView();

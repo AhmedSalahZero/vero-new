@@ -8,6 +8,8 @@ use App\Http\Requests\StoreStudyRequest;
 use App\Models\Company;
 use App\Models\NonBankingService\Consolidation;
 use App\Models\NonBankingService\Study;
+use App\Services\NonBanking\StudyExtension;
+use App\Services\NonBanking\StudyRecalculation;
 use Artisan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -161,6 +163,8 @@ class StudyController extends Controller
 		$model = null ;
 		$oldStudyStartDate = $study ? Carbon::make($study->study_start_date)->startOfMonth() : null;
 		$oldStudyDates = $study ? $study->getStudyDates() : null;
+		$oldStudyEndDate = $study ? Carbon::make($study->study_end_date)->startOfMonth() : null;
+		$oldStudyEndIndex = $study ? $study->getStudyEndDateAsIndex() : null;
 		if(is_null($study)){
 			$model = Study::create($data);
 		}else{
@@ -195,7 +199,7 @@ class StudyController extends Controller
 			$this->keepMarketRatesOnTheirCalendarMonths($model, $oldStudyStartDate);
 		}
 		if (! is_null($oldStudyDates) && $oldStudyDates !== $model->fresh()->getStudyDates()) {
-			$this->recalculateForNewStudyDates($model);
+			$this->recalculateForNewStudyDates($model, $company, $oldStudyStartDate, $oldStudyEndDate, $oldStudyEndIndex);
 		}
 		return response()->json([
 			'redirectTo'=>route('non.banking.create.general.assumption',['company'=>$company->id,'study'=>$model->id])
@@ -225,17 +229,26 @@ class StudyController extends Controller
 	}
 
 	/**
-	 * * تواريخ الدراسة اتغيرت (تطويلها مثلاً): المرتبات وصفوف صفحة Expenses بتتحسب تاني على التواريخ الجديدة.
-	 * * قبل كده كانت بتفضل محسوبة على التواريخ القديمة: دراسة 154 (سنة اتطوّلت لـ 3 سنين) فضل فيها مصروف آخره 12/2027
-	 * * بمبالغ لحد 12/2028 (دراسة السنة بتمد المصروف اللي آخره آخر الدراسة لسنتها الزيادة) ، والمرتبات ناقصة الشهور الجديدة.
+	 * * تواريخ الدراسة اتغيرت: الدراسة كلها بتتحسب تاني على التواريخ الجديدة (StudyRecalculation) ، كأن اليوزر حفظ كل
+	 * * صفحاتها. لو آخرها بقى بعد كده بنفس البداية (تطويل ، زي دراسة 154: سنة بقت 3 سنين) ، النسب والأسعار وحجم الشغل
+	 * * بتاخد آخر قيمة محفوظة في الشهور والسنين الجديدة الأول (StudyExtension) ، والأحداث زي التعيينات لأ.
+	 * * قبل كده: المرتبات ومصروفات صفحة Expenses بس ، والباقي فضل محسوب على التواريخ القديمة (ECL ورسوم وهوامش صفر).
+	 * * دراسة لسه مالهاش General Assumptions مفيهاش حاجة محسوبة.
 	 */
-	private function recalculateForNewStudyDates(Study $study): void
+	private function recalculateForNewStudyDates(Study $study, Company $company, Carbon $oldStudyStartDate, Carbon $oldStudyEndDate, int $oldStudyEndIndex): void
 	{
 		$study = $study->fresh();
+		if (! $study->generalAndReserveAssumption) {
+			return;
+		}
 		NonBankingServiceProvider::bindStudyDates($study);
-		DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->transaction(function () use ($study) {
-			$study->recalculateManpower();
-			$study->recalculateStudyExpenses();
+		$isExtended = Carbon::make($study->study_start_date)->startOfMonth()->equalTo($oldStudyStartDate)
+			&& Carbon::make($study->study_end_date)->startOfMonth()->greaterThan($oldStudyEndDate);
+		DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->transaction(function () use ($study, $company, $isExtended, $oldStudyEndIndex) {
+			if ($isExtended) {
+				StudyExtension::carryInputsForward($study, $oldStudyEndIndex);
+			}
+			StudyRecalculation::run($study->id, $company);
 		});
 	}
 	public function edit(Company $company , Request $request,Study $study){

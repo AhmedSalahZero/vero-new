@@ -8,8 +8,10 @@ use App\Models\Company;
 use App\Models\NonBankingService\LongTermInvestmentsOpeningBalance;
 use App\Models\NonBankingService\Study;
 use App\Services\NonBanking\OpeningBalancesStatements;
+use App\Services\NonBanking\StudyRecalculation;
 use App\Traits\NonBankingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OpeningBalancesController extends Controller
 {
@@ -22,22 +24,41 @@ class OpeningBalancesController extends Controller
     
     public function store(Company $company, StoreOpeningBalancesRequest $request, Study $study)
     {
-		
-        $study->storeRepeaterRelations($request, ['fixedAssetOpeningBalances','cashAndBankOpeningBalances','otherDebtorsOpeningBalances','vatAndCreditWithholdTaxesOpeningBalances'
-        ,'supplierPayableOpeningBalances','rightOfUseAssetOpeningBalances','leaseRentLiabilityOpeningBalances','otherCreditorsOpeningBalances','otherLongTermAssetsOpeningBalances','longTermInvestmentsOpeningBalances','otherLongTermLiabilitiesOpeningBalances','equityOpeningBalances','longTermLoanOpeningBalances'
-         ], $company, ['study_id'=>$study->id]);
-        // the opening balances' cash in and out of the study months, for the statements (OpeningBalancesStatements)
-        OpeningBalancesStatements::refresh($study);
+		// Round 2 (the user's decision): the checks come BEFORE anything is saved. They used to run after the save, so an
+		// opening balance sheet that does not balance was saved anyway, with the message on top (studies 99, 102–106 and
+		// 137: 104 is out by 113.47 million, the amounts typed in the Name field). The page saves by ajax now, so a refused
+		// save keeps what the user typed on the page.
 		$checkSettlementsValidations = $this->checkSettlementsOrPrincipleValidation($request);
 		if(!$checkSettlementsValidations['status']){
-			return redirect()->back()->with('fail',$checkSettlementsValidations['message']);
+			return $this->refused($request, $checkSettlementsValidations['message']);
 		}
-		if($request->get('total_liabilities_and_equity_minus_total_assets') != 0 ){
-			return redirect()->back()->with('fail',__('Total Assets Must Be Equal Total Liabilities And Owners Equity [ Difference = ' . $request->get('total_liabilities_and_equity_minus_total_assets') .' ]'));
+		// worked out by StoreOpeningBalancesRequest from the rows sent (not the browser's figure), to the piaster; input()
+		// reads it whatever the request's format (get() misses what the request merged into a JSON body)
+		$difference = $request->input('total_liabilities_and_equity_minus_total_assets');
+		if(round((float) $difference, 2) != 0 ){
+			return $this->refused($request, __('Total Assets Must Be Equal Total Liabilities And Owners Equity [ Difference = ' . $difference .' ]'));
 		}
-        return redirect()->route('view.non.banking.forecast.income.statement', ['company'=>$company->id,'study'=>$study->id]);
+		DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->transaction(function () use ($study, $request, $company) {
+			$study->storeRepeaterRelations($request, StudyRecalculation::OPENING_BALANCE_RELATIONS, $company, ['study_id'=>$study->id]);
+			// the opening balances' cash in and out of the study months, for the statements (OpeningBalancesStatements)
+			OpeningBalancesStatements::refresh($study);
+		});
+		$redirectTo = route('view.non.banking.forecast.income.statement', ['company'=>$company->id,'study'=>$study->id]);
+		if($request->ajax() || $request->expectsJson()){
+			return response()->json(['status'=>true, 'message'=>__('Saved'), 'redirectTo'=>$redirectTo]);
+		}
+        return redirect($redirectTo);
     
     }
+
+	/** a refused save: nothing was saved; by ajax the page keeps what the user typed and shows the message */
+	private function refused(Request $request, string $message)
+	{
+		if($request->ajax() || $request->expectsJson()){
+			return response()->json(['message'=>$message, 'errors'=>['opening_balances'=>[$message]]], 422);
+		}
+		return redirect()->back()->withInput()->with('fail', $message);
+	}
 	protected function checkSettlementsOrPrincipleValidation(Request $request):array 
 	{
 		

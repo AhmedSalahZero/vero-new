@@ -453,7 +453,8 @@ class FixedAsset extends Model
             foreach ($positions as $positionId) {
                 $manpowers = Manpower::where('study_id', $this->study->id)->where('position_id', $positionId)->get();
 				foreach($manpowers as $manpower){
-					$currentHiringCounts = $manpower->hiring_counts;
+					// a new-branches position is a per-branch template: its hires by study month (Study::newBranchesHiringCounts)
+					$currentHiringCounts = $manpower->type === 'new-branches' ? $this->study->newBranchesHiringCounts((array) $manpower->hiring_counts) : $manpower->hiring_counts;
 					$result = HArr::sumAtDates([$result,$currentHiringCounts], $studyDates);
 				}
                 

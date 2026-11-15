@@ -36,8 +36,12 @@ class RecalculateAndPruneCommandsTest extends NonBankingTestCase
 	private function savedStudy(int $studyId): array
 	{
 		$rows = [];
+		// (round 2: and what the steps added since write — every opening-balance table, the microfinance cases and
+		// contracts, the new branches' rent)
 		foreach (['equity_opening_balances', 'cash_and_bank_opening_balances', 'income_statement_reports', 'cashflow_statement_reports',
-			'income_statements', 'loan_schedule_payments', 'fixed_assets', 'manpowers', 'expenses'] as $table) {
+			'income_statements', 'loan_schedule_payments', 'fixed_assets', 'manpowers', 'expenses', 'other_credits_opening_balances',
+			'long_term_investments_opening_balances', 'other_long_term_assets_opening_balances', 'microfinance_product_sales_projects',
+			'revenue_contracts', 'new_branch_microfinance_opening_projections'] as $table) {
 			$rows[$table] = $this->nb()->table($table)->where('study_id', $studyId)->orderBy('id')->get()
 				->map(fn ($row) => array_diff_key((array) $row, ['updated_at' => 0]))->all();
 		}

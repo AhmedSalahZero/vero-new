@@ -24,10 +24,11 @@
                     <div class="form-group row" style="flex:1;">
                         <div class="col-md-12 mt-3" data-repeater-row=".opening-balances-row">
 
-                            <form class="kt-form kt-form--label-right" action="{{ route('store.opening.balances.for.non.banking',['company'=>$company->id , 'study'=>$study->id]) }}" method="POST">
+                            <form id="opening-balances-form" class="kt-form kt-form--label-right" action="{{ route('store.opening.balances.for.non.banking',['company'=>$company->id , 'study'=>$study->id]) }}" method="POST">
                                 {{ csrf_field() }}
 							@include('non_banking_services.openingBalances._content',$study->getOpeningBalancesViewVars())
-                                <x-save-without-ajax-btn :submitByAjax=false />
+                                {{-- by ajax (round 2): a save the server refuses (the balance sheet does not balance) keeps what was typed --}}
+                                <x-save-without-ajax-btn :submitByAjax=true />
                             </form>
 
 

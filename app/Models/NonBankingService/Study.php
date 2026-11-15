@@ -264,6 +264,8 @@ class Study extends Model
     const IJARA ='ijara';
     const PORTFOLIO_MORTGAGE ='portfolio-mortgage';
     const MICROFINANCE ='microfinance';
+    /** the microfinance branch pages' expense types (the Expenses page's own rows are 'Expense') */
+    public const BRANCH_EXPENSE_TYPES = ['all-branches', 'by-branch', 'new-branches'];
     const CONSUMER_FINANCE ='consumer-finance';
     const SECURITIZATION ='securitization';
     const DIRECT_FACTORING ='direct-factoring';
@@ -1550,7 +1552,8 @@ class Study extends Model
                         // $totalAfterVats = $monthlyFixedRepeatingResults['total_after_vat'];
                         $totalBeforeVats = $monthlyFixedRepeatingResults['total_before_vat'];
                         // $monthlyFixedRepeatingResults['total_after_vat'] = $totalAfterVats HArr::multipleTwoArrAtSameIndex(, $accumulatedManpowerPowersForAllSelectedPositions);
-                        $repeatingExpenseValues = $monthlyFixedRepeatingResults['total_after_vat'] ;
+                        // round 2: before VAT when the VAT is deductible, as the other types (it was always with the VAT)
+                        $repeatingExpenseValues = $isDeductible ? $totalBeforeVats : $monthlyFixedRepeatingResults['total_after_vat'] ;
                         $collectionValues = $totalBeforeVats ;
                     }
                     $withholdAmounts  = $monthlyFixedRepeatingResults['withhold_amounts'];
@@ -1638,6 +1641,34 @@ class Study extends Model
 		$this->refreshTotalExpensePaymentsInIncomeStatement();
         
     }
+	/**
+	 * * الـ VAT القابلة للخصم على مصروفات الدراسة (كل الأنواع ، ومصروفات الفروع) ، متراكمة من شهر الفاتورة (الجولة 2).
+	 * * مثال: إيجار 1,000 من فبراير + VAT ‏14% قابلة للخصم → 140 آخر فبراير ، 280 آخر مارس.
+	 *
+	 * @param list<int> $sumKeys the study's month indexes
+	 * @return array<int, float> month index => recoverable VAT at the end of the month
+	 */
+	public function getRecoverableVatEndBalances(array $sumKeys): array
+	{
+		$added = [];
+		$expenses = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('expenses')->where('study_id', $this->id)->get(['is_deductible', 'total_vat']);
+		foreach ($expenses as $expense) {
+			if (! filter_var($expense->is_deductible, FILTER_VALIDATE_BOOLEAN)) {
+				continue;
+			}
+			foreach ((array) json_decode($expense->total_vat ?? '[]', true) as $dateIndex => $vat) {
+				$added[$dateIndex] = ($added[$dateIndex] ?? 0) + (float) $vat;
+			}
+		}
+		$endBalances = [];
+		$balance = 0.0;
+		foreach ($sumKeys as $dateIndex) {
+			$balance += $added[$dateIndex] ?? 0;
+			$endBalances[$dateIndex] = $balance;
+		}
+
+		return $endBalances;
+	}
 	protected function refreshTotalExpensePaymentsInIncomeStatement()
 	{
 		$totalPerTypes=[
@@ -1673,7 +1704,7 @@ class Study extends Model
             $totalWithholdStatement = HArr::sumAtDates([$totalWithholdStatement,$currentWithholdStatement], $sumKeys);
             $expenseCategory =$expense['expense_category'];
             $expenseNameId = $expense['expense_name_id'];
-            $currentColumn = $expenseColumnNames[$tableId];
+            $currentColumn = Expense::incomeStatementColumn($tableId, $expense->is_deductible);   // round 2: a deductible VAT is not part of the expense
             $currentSubItem = $expense[$currentColumn];
             // a one-time expense keeps its months under monthly_one_time, as the income statement reads it: the whole
             // payload was summed by month index, so a one-time expense counted 0 in the totals the corporate tax is
@@ -2425,7 +2456,8 @@ class Study extends Model
                     // $baseRatesMapping = $this->convertDateStringToYearIndex($baseRatesMapping);
                     //$baseRatesMapping = $study->interestYearSpread($baseRatesMapping,$dateIndexWithDate);
                     // $currentMonthlyLoanAmount = $loanArr['loan_amounts'][$CurrentIndex] / ($this->isMonthlyStudy() ? 1 :count($yearMonthIndexes)) ;
-                    $currentMonthlyLoanAmount = $loanArr['loan_amounts'][$monthIndex] ;
+                    // a month with no saved loan amount (a study extended before its page was saved again) has no loans
+                    $currentMonthlyLoanAmount = $loanArr['loan_amounts'][$monthIndex] ?? 0;
                     if ($currentMonthlyLoanAmount <= 0) {
                         continue ;
                     }
@@ -2830,6 +2862,29 @@ class Study extends Model
 	{
 		return $this->hasMany(Manpower::class,'study_id','id');
 	}
+    /**
+     * * تعيينات الفروع الجديدة لوظيفة بالشهور الحقيقية (الجولة 2). صفحة New Branches بتكتب التعيين كقالب لكل فرع: الشهر i من
+     * * افتتاح الفرع ، والعدد لكل فرع. الحفظ (NewBranchesMicrofinanceController::store) بيفرده على الافتتاحات: الشهر = شهر
+     * * الافتتاح + i ، والعدد × عدد الفروع اللي اتفتحت. recalculateManpower و FixedAsset::getCounts كانوا بيقروا القالب
+     * * كأنه شهور الدراسة. مثال: قالب 2 في الشهر 0 و 1 في الشهر 3 ، وافتتاح 3 فروع في الشهر 5 → 6 في الشهر 5 و 3 في الشهر 8.
+     *
+     * @param array<int|string, int|float> $template month from the branch opening => hires per branch
+     * @return array<int, float> study month index => hires
+     */
+    public function newBranchesHiringCounts(array $template): array
+    {
+        $counts = [];
+        foreach ($this->newBranchMicrofinanceOpeningProjections as $opening) {
+            $startIndex = $opening->getStartDate();
+            $branches = $opening->getCounts();
+            foreach ($template as $monthFromOpening => $hires) {
+                $index = (int) $monthFromOpening + $startIndex;
+                $counts[$index] = ($counts[$index] ?? 0) + (float) $hires * $branches;
+            }
+        }
+
+        return $counts;
+    }
     public function recalculateManpower()
     {
         $manpowers = $this->manpowers ;
@@ -2843,7 +2898,8 @@ class Study extends Model
 			 * @var Manpower $manpower
 			 */
             $manpowerArr = [];
-            $hiringCounts = $manpower->getHiringCounts();
+            // round 2: a new-branches position is a per-branch template (Mth-i from each branch's opening), as its page saves it
+            $hiringCounts = $manpower->type === 'new-branches' ? $this->newBranchesHiringCounts($manpower->getHiringCounts()) : $manpower->getHiringCounts();
             $currentExistingCount = $manpower->getExistingCount();
             $monthlyNetSalary = $manpower->getMonthlyNetSalary();
             $additionalDatabaseResult =  $this->calculateManpowerResult($dateAsIndexes, $currentExistingCount, $hiringCounts, $operationStartDateAsIndex, $monthlyNetSalary, $salaryTaxesRate, $socialInsuranceRate);
@@ -4856,8 +4912,18 @@ class Study extends Model
         }
         $totalExpenses = HArr::sumAtDates(array_values($totalPerType), $sumKeys) ;
         $totalOtherDebtorsOpeningBalances = HArr::sumAtDates([$totalOtherDebtorsOpeningBalances , $totalExpenses], $sumKeys);
-        
-        
+
+        // Round 2 (the user's decision): the deductible VAT on the expenses is recovered later, so it is an asset from the
+        // month of the invoice. It was paid with the invoice and recorded nowhere, so the balance sheet was out by it
+        // (a 1,000 rent + 14 % deductible VAT: 140 a month). It stays: the study has no output VAT to set it against.
+        $recoverableVat = $this->getRecoverableVatEndBalances($sumKeys);
+        if (array_sum(array_map('abs', $recoverableVat)) > 0) {
+            $title = __('Recoverable VAT');
+            $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['options'] = array_merge(['title' => $title], $defaultNumericInputClasses);
+            $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['data'] = $recoverableVat;
+            $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['year_total'] = HArr::getPerYearIndexForEndBalance($recoverableVat, $yearWithItsMonths);
+            $totalOtherDebtorsOpeningBalances = HArr::sumAtDates([$totalOtherDebtorsOpeningBalances, $recoverableVat], $sumKeys);
+        }
         
         $totalOtherDebtors = HArr::sumAtDates([$totalOtherDebtorsOpeningBalances ,$totalAccruedInterestRevenues ], $sumKeys);
         $totalCurrentAssets = HArr::sumAtDates([$totalOtherDebtors , $totalCustomerReceivables , $monthlyCashAndBanks], $sumKeys);
@@ -5939,17 +6005,10 @@ class Study extends Model
         $modelId = $request->get('model_id');
         $modelName = $request->get('model_name');
         $expenseType = $request->get('expense_type');
-        $isAllBranchExpense = $expenseType == 'all-branches'  ;
-        $numberOfBranches = $isAllBranchExpense ?  $this->getExistingBranchCounts() : 1 ;
-        
-        $monthlyFixedRepeatingAmountEquation = new MonthlyFixedRepeatingAmountEquation;
+        $numberOfBranches = $this->getNumberOfBranchesForBranchExpense($expenseType);
+
         $datesAsStringDateIndex = $this->getDatesAsStringAndIndex();
-        $datesAsIndexAndString = array_flip($datesAsStringDateIndex);
         $operationStartDateAsIndex = $datesAsStringDateIndex[$this->getOperationStartDate()];
-        $studyExtendedEndDateAsIndex = Arr::last($datesAsStringDateIndex);
-        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex();
-        $dateIndexWithDate = $this->getDateIndexWithDate();
-        $dateWithDateIndex = $this->getDateWithDateIndex();
         $model = ('\App\Models\\NonBankingService\\'.$modelName)::find($modelId);
         // foreach (['fixed_monthly_repeating_amount'] as $tableId) {
             #::delete all
@@ -5959,7 +6018,6 @@ class Study extends Model
                 $tableDataArr['branch_id'] = $branchId;
                 $tableDataArr['start_date_type'] = $tableDataArr['start_date_type']??null;
                 $tableDataArr['study_id'] = $this->id;
-                $withholdRate = $tableDataArr['withhold_tax_rate']??0;
                 if (isset($tableDataArr['start_date']) && count(explode('-', $tableDataArr['start_date'])) == 2) {
                     $tableDataArr['start_date'] = $tableDataArr['start_date'].'-01';
                     
@@ -5980,67 +6038,11 @@ class Study extends Model
                     $tableDataArr['end_date'] = $operationStartDateAsIndex;
                 }
             
-                /**
-                 * * to repeat 2 years inside json
-                 */
-                $loopEndDate = $tableDataArr['end_date'] >=  $studyEndDateAsIndex ? $studyExtendedEndDateAsIndex : $tableDataArr['end_date'];
-                //     $loopEndDate = $loopEndDate ==  0 ? $studyEndDateAsIndex : $loopEndDate ;
-
-
-                $tableDataArr['relation_name']  = $tableId ;
-                /**
-                 * * Fixed Repeating
-                 */
-                $vatRate = $tableDataArr['vat_rate']??0;
-                $isDeductible = $tableDataArr['is_deductible'] ?? false;
+                // the page's own payment terms: the policy is built from the due days and rates it posts
                 if ($tableDataArr['payment_terms'] == 'customize') {
                     $tableDataArr['custom_collection_policy'] = sumDueDayWithPayment($tableDataArr['payment_rate'], $tableDataArr['due_days']);
                 }
-                $customCollectionPolicy = $tableDataArr['custom_collection_policy']??[];
-                if (is_array($isDeductible)) {
-                    $tableDataArr['is_deductible'] = $isDeductible[0];
-                    $isDeductible= $isDeductible[0];
-                }
-                $isFixedRepeating = isset($tableDataArr['amount']) ;
-                
-                if ($isFixedRepeating) {
-                    $amount = $tableDataArr['amount']??0 ;
-                    // $isDeductible = false;
-                    $dateIndexWithYearIndex = $this->getDatesIndexWithYearIndex();
-                    $startDateType = $tableDataArr['start_date_type'] ;
-                    $currentAccumulatedOpeningBranchesCounts = $accumulatedOpeningBranchesCounts[$startDateType]??null;
-                    if ($currentAccumulatedOpeningBranchesCounts ) {
-                        $tableDataArr['start_date'] = array_key_first($currentAccumulatedOpeningBranchesCounts);
-                        
-                    }
-                
-                    $monthlyFixedRepeatingResults = $monthlyFixedRepeatingAmountEquation->calculate($amount, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['increase_interval']??'annually', $tableDataArr['increase_rates']??0, $isDeductible, $vatRate, $withholdRate, $dateIndexWithYearIndex, $currentAccumulatedOpeningBranchesCounts, $numberOfBranches);
-                
-                    /**
-                     * * دي القيمة اللي هتدخل في الاكسبنس
-                     */
-                    $repeatingExpenseValues = [];
-                    $collectionValues = [];
-                
-                        $repeatingExpenseValues = $isDeductible ? $monthlyFixedRepeatingResults['total_before_vat'] : $monthlyFixedRepeatingResults['total_after_vat'];
-                        $collectionValues = $monthlyFixedRepeatingResults['total_before_vat'];
-                   
-                    $withholdAmounts  = $monthlyFixedRepeatingResults['withhold_amounts'];
-                    $tableDataArr['monthly_repeating_amounts']  = $repeatingExpenseValues;
-                    $tableDataArr['total_vat']  = $monthlyFixedRepeatingResults['total_vat'];
-                    $tableDataArr['total_after_vat']  = $monthlyFixedRepeatingResults['total_after_vat'];
-                    
-                    $payments = $this->calculateCollectionOrPaymentAmounts($tableDataArr['payment_terms'], $tableDataArr['total_after_vat'], $datesAsIndexAndString, $customCollectionPolicy) ;
-                    $withholdPayments = $this->calculateCollectionOrPaymentAmounts($tableDataArr['payment_terms'], $withholdAmounts, $datesAsIndexAndString, $customCollectionPolicy) ;
-                    $netPaymentsAfterWithhold = HArr::subtractAtDates([$payments,$withholdPayments], $dateWithDateIndex);
-                    $tableDataArr['withhold_amounts'] = $withholdAmounts ;
-                    $tableDataArr['withhold_payments']=$withholdPayments;
-                    $tableDataArr['payment_amounts'] = $payments;
-                    $tableDataArr['net_payments_after_withhold']=$netPaymentsAfterWithhold;
-                    $tableDataArr['withhold_statements']=$this->calculateWithholdStatement($withholdPayments, 0, $dateIndexWithDate);
-                    $tableDataArr['collection_statements']   =$this->calculateStatement($collectionValues, $tableDataArr['total_vat'], $netPaymentsAfterWithhold, $withholdPayments, $dateIndexWithDate, $this);
-        
-                }
+                $tableDataArr = $this->calculateBranchFixedRepeatingExpense($tableDataArr, $accumulatedOpeningBranchesCounts, $numberOfBranches);
               
                 $tableDataArr['company_id']  = $this->company->id ;
                 $tableDataArr['model_id']   = $modelId ;
@@ -6055,6 +6057,96 @@ class Study extends Model
 		
 		
 		$this->refreshTotalExpensePaymentsInIncomeStatement();
+    }
+    /**
+     * * مصروف صفحة All Branches بيتضرب في عدد الفروع الموجودة. الفرع الواحد (By Branch) واحد ، والفروع الجديدة واحد
+     * * لأنها بتتضرب في الفروع اللي اتفتحت لحد كل شهر.
+     */
+    private function getNumberOfBranchesForBranchExpense(?string $expenseType): int
+    {
+        return $expenseType == 'all-branches' ? $this->getExistingBranchCounts() : 1;
+    }
+
+    /**
+     * * صف مصروف فرع بمبلغ شهري ثابت: المبالغ والضريبة والخصم والمدفوعات وكشوفها. بيستخدمه حفظ صفحات الفروع
+     * * (handleFixedRepeatingExpenses) وإعادة حساب الصفوف المحفوظة (recalculateBranchExpenses) ، بنفس الحساب.
+     */
+    private function calculateBranchFixedRepeatingExpense(array $tableDataArr, ?array $accumulatedOpeningBranchesCounts, int $numberOfBranches): array
+    {
+        $datesAsStringDateIndex = $this->getDatesAsStringAndIndex();
+        $datesAsIndexAndString = array_flip($datesAsStringDateIndex);
+        $studyExtendedEndDateAsIndex = Arr::last($datesAsStringDateIndex);
+        $studyEndDateAsIndex = $this->getStudyEndDateAsIndex();
+        $dateIndexWithDate = $this->getDateIndexWithDate();
+        $dateWithDateIndex = $this->getDateWithDateIndex();
+        $withholdRate = $tableDataArr['withhold_tax_rate']??0;
+        /**
+         * * to repeat 2 years inside json
+         */
+        $loopEndDate = $tableDataArr['end_date'] >=  $studyEndDateAsIndex ? $studyExtendedEndDateAsIndex : $tableDataArr['end_date'];
+        $tableDataArr['relation_name']  = 'fixed_monthly_repeating_amount' ;
+        $vatRate = $tableDataArr['vat_rate']??0;
+        $isDeductible = $tableDataArr['is_deductible'] ?? false;
+        $customCollectionPolicy = $tableDataArr['custom_collection_policy']??[];
+        if (is_array($isDeductible)) {
+            $tableDataArr['is_deductible'] = $isDeductible[0];
+            $isDeductible= $isDeductible[0];
+        }
+        if (! isset($tableDataArr['amount'])) {
+            return $tableDataArr;
+        }
+        $amount = $tableDataArr['amount']??0 ;
+        $dateIndexWithYearIndex = $this->getDatesIndexWithYearIndex();
+        $startDateType = $tableDataArr['start_date_type'] ;
+        $currentAccumulatedOpeningBranchesCounts = $accumulatedOpeningBranchesCounts[$startDateType]??null;
+        if ($currentAccumulatedOpeningBranchesCounts ) {
+            $tableDataArr['start_date'] = array_key_first($currentAccumulatedOpeningBranchesCounts);
+        }
+        $monthlyFixedRepeatingResults = (new MonthlyFixedRepeatingAmountEquation)->calculate($amount, $tableDataArr['start_date'], $loopEndDate, $tableDataArr['increase_interval']??'annually', $tableDataArr['increase_rates']??0, $isDeductible, $vatRate, $withholdRate, $dateIndexWithYearIndex, $currentAccumulatedOpeningBranchesCounts, $numberOfBranches);
+        /**
+         * * دي القيمة اللي هتدخل في الاكسبنس
+         */
+        $repeatingExpenseValues = $isDeductible ? $monthlyFixedRepeatingResults['total_before_vat'] : $monthlyFixedRepeatingResults['total_after_vat'];
+        $collectionValues = $monthlyFixedRepeatingResults['total_before_vat'];
+        $withholdAmounts  = $monthlyFixedRepeatingResults['withhold_amounts'];
+        $tableDataArr['monthly_repeating_amounts']  = $repeatingExpenseValues;
+        $tableDataArr['total_vat']  = $monthlyFixedRepeatingResults['total_vat'];
+        $tableDataArr['total_after_vat']  = $monthlyFixedRepeatingResults['total_after_vat'];
+
+        $payments = $this->calculateCollectionOrPaymentAmounts($tableDataArr['payment_terms'], $tableDataArr['total_after_vat'], $datesAsIndexAndString, $customCollectionPolicy) ;
+        $withholdPayments = $this->calculateCollectionOrPaymentAmounts($tableDataArr['payment_terms'], $withholdAmounts, $datesAsIndexAndString, $customCollectionPolicy) ;
+        $netPaymentsAfterWithhold = HArr::subtractAtDates([$payments,$withholdPayments], $dateWithDateIndex);
+        $tableDataArr['withhold_amounts'] = $withholdAmounts ;
+        $tableDataArr['withhold_payments']=$withholdPayments;
+        $tableDataArr['payment_amounts'] = $payments;
+        $tableDataArr['net_payments_after_withhold']=$netPaymentsAfterWithhold;
+        $tableDataArr['withhold_statements']=$this->calculateWithholdStatement($withholdPayments, 0, $dateIndexWithDate);
+        $tableDataArr['collection_statements']   =$this->calculateStatement($collectionValues, $tableDataArr['total_vat'], $netPaymentsAfterWithhold, $withholdPayments, $dateIndexWithDate, $this);
+
+        return $tableDataArr;
+    }
+
+    /**
+     * * مصروفات الفروع المحفوظة بتتحسب تاني من صفوفها ، من غير الصفحة: بعد تطويل الدراسة ومن StudyRecalculation.
+     * * نفس حساب حفظ صفحات الفروع ، وشروط الدفع "customize" بالسياسة المحفوظة في الصف.
+     * * مثال: مصروف 500 في الشهر لكل الفروع (فرع موجود واحد) آخره ديسمبر 2028 بعد التطويل: 500 لحد الشهر 35.
+     */
+    public function recalculateBranchExpenses(): void
+    {
+        $branchExpenses = Expense::where('study_id', $this->id)->where('model_name', 'Study')->where('model_id', $this->id)
+            ->where('relation_name', 'fixed_monthly_repeating_amount')->whereIn('expense_type', self::BRANCH_EXPENSE_TYPES)->get();
+        if ($branchExpenses->isEmpty()) {
+            return;
+        }
+        $newBranchesOpenings = $branchExpenses->contains('expense_type', 'new-branches') ? $this->getNewBranchesOpeningBalancesAccumulation() : [];
+        $inputColumns = ['amount', 'start_date', 'end_date', 'start_date_type', 'increase_interval', 'increase_rates', 'is_deductible', 'vat_rate', 'withhold_tax_rate', 'payment_terms', 'custom_collection_policy'];
+        $calculatedColumns = ['start_date', 'monthly_repeating_amounts', 'total_vat', 'total_after_vat', 'withhold_amounts', 'withhold_payments', 'payment_amounts', 'net_payments_after_withhold', 'withhold_statements', 'collection_statements'];
+        foreach ($branchExpenses as $expense) {
+            $openings = $expense->expense_type === 'new-branches' ? $newBranchesOpenings : [];
+            $calculated = $this->calculateBranchFixedRepeatingExpense($expense->only($inputColumns), $openings, $this->getNumberOfBranchesForBranchExpense($expense->expense_type));
+            $expense->forceFill(Arr::only($calculated, $calculatedColumns))->save();
+        }
+        $this->refreshTotalExpensePaymentsInIncomeStatement();
     }
     public function getNewBranchesOpeningBalancesAccumulation()
     {
@@ -6499,7 +6591,9 @@ class Study extends Model
             foreach ($operationDurationPerYear as $yearIndex => $yearMonthIndexes) {
                 foreach ($yearMonthIndexes as $monthIndex => $monthlyZeroOrOne) {
                     $yearOrMonthIndex = $this->isMonthlyStudy() ? $monthIndex : $yearIndex;
-                    $baseRatesPerMonths[Carbon::make($dateIndexWithDate[$monthIndex])->format('Y-m-d')] = $decreasingRates[$yearOrMonthIndex];
+                    // round 2: a month the rates were never saved for (the study was extended after the Consumer Finance page
+                    // was saved: "Undefined array key 12") takes the last saved rate before it, as the page would show it
+                    $baseRatesPerMonths[Carbon::make($dateIndexWithDate[$monthIndex])->format('Y-m-d')] = HArr::valueAtOrBefore((array) $decreasingRates, (int) $yearOrMonthIndex, 0);
                 }
             }
             $rates = [];
@@ -7344,7 +7438,7 @@ class Study extends Model
 			$yearWithItsIndexes = $this->getOperationDurationPerYearFromIndexes();
 			        $monthsWithItsYear = $this->getMonthsWithItsYear($yearWithItsIndexes) ;
 				$totalExpenses = [];
-        $expenses = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('expenses')->where('study_id',$this->id)->join('expense_names', 'expense_names.id', '=', 'expenses.expense_name_id')->selectRaw('expenses.expense_category,expense_names.name as name,expenses.relation_name,expenses.monthly_repeating_amounts,expenses.total_after_vat,payload')->where('expenses.model_id', $this->id)->where('expenses.model_name', 'Study')->get()->toArray();
+        $expenses = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('expenses')->where('study_id',$this->id)->join('expense_names', 'expense_names.id', '=', 'expenses.expense_name_id')->selectRaw('expenses.expense_category,expense_names.name as name,expenses.relation_name,expenses.monthly_repeating_amounts,expenses.total_after_vat,expenses.expense_as_percentages,expenses.is_deductible,payload')->where('expenses.model_id', $this->id)->where('expenses.model_name', 'Study')->get()->toArray();
         $columnPerTypes = Expense::getColumnMapping();
         $salaryExpensesForCategories = Manpower::getSalaryExpensesPerCategory($monthsWithItsYear, $this->id, $this->company->id);
         foreach ($salaryExpensesForCategories as $manpowerCategory => $salaryExpensesForCategory) {
@@ -7358,7 +7452,7 @@ class Study extends Model
         
             $relationName = $expense->relation_name;
             
-            $currentColumnName = $columnPerTypes[$relationName];
+            $currentColumnName = Expense::incomeStatementColumn($relationName, $expense->is_deductible);   // round 2: a deductible VAT is not part of the expense
           
       
             $monthlyExpenses = json_decode($expense->{$currentColumnName},true);
