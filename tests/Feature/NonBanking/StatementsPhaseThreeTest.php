@@ -184,27 +184,26 @@ class StatementsPhaseThreeTest extends NonBankingTestCase
 		}
 	}
 
-	public function test_the_opening_balances_page_warns_when_the_monthly_depreciation_does_not_use_up_the_net_amount(): void
+	public function test_the_opening_balances_page_shows_no_depreciation_warning_and_the_leftover_stays_on_the_balance_sheet(): void
 	{
-		// phase 4: study 141's licence — 1,192,932 gross, 866,934 depreciated (325,998 net), 57,055 a month for 5 months
-		// = 285,275, so 40,723 stays on the balance sheet after the last month. The page says so above the assets.
+		// study 141's licence — 1,192,932 gross, 866,934 depreciated (325,998 net), 57,055 a month for 5 months = 285,275,
+		// so 40,723 stays on the balance sheet after the last month. Phase 4 warned about it above the assets; the user
+		// removed that warning (study 154: "we don't want it"), the asset's statement is unchanged.
 		$asset = FixedAssetOpeningBalance::where('study_id', $this->study->id)->firstOrFail();
 		$asset->gross_amount = 1192932;
 		$asset->accumulated_depreciation = 866934;
 		$asset->monthly_depreciation = 57055;
 		$asset->monthly_counts = 5;
 		$asset->save();
-		$this->assertEqualsWithDelta(40723, FixedAssetOpeningBalance::findOrFail($asset->id)->depreciationLeftOver(), 0.01);
+
+		$statement = FixedAssetOpeningBalance::findOrFail($asset->id)->statement;
+		$this->assertEqualsWithDelta(40723, $statement['end_balance'][4], 0.01, 'after the 5th month');
+		$this->assertEqualsWithDelta(40723, $statement['end_balance'][11], 0.01, 'and it stays to the end of the study');
 
 		$html = $this->openingBalancesSection();
-		$this->assertStringContainsString('285,275', $html);
-		$this->assertStringContainsString('40,723', $html);
-		$this->assertStringContainsString('stays on the balance sheet after the last depreciation month', $html);
-
-		// 65,199.6 a month for the same 5 months uses up the 325,998: no warning
-		$asset->monthly_depreciation = 65199.6;
-		$asset->save();
-		$this->assertStringNotContainsString('stays on the balance sheet', $this->openingBalancesSection());
+		$this->assertStringNotContainsString('stays on the balance sheet', $html);
+		$this->assertStringNotContainsString('Check the monthly depreciation or the months', $html);
+		$this->assertStringNotContainsString('alert-warning', $html);
 	}
 
 	private function openingBalancesSection(): string
