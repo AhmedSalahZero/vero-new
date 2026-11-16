@@ -275,6 +275,8 @@ use App\Models\LetterOfCreditIssuance;
 
 
                                     </div>
+                                    {{-- الشركة المربوطة بأودو بتقرا الـ partners من أودو بس --}}
+                                    @if(!$company->hasOdooCredentials())
                                     <div class="col-md-1 hidden show-only-bond">
                                         <label style="visibility:hidden !important;"> *</label>
                                         <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#add-new-customer-modal">
@@ -302,6 +304,7 @@ use App\Models\LetterOfCreditIssuance;
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
 
 

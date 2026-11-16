@@ -147,6 +147,8 @@ use App\Models\MoneyReceived ;
 
 
                                 </div>
+                                {{-- الشركة المربوطة بأودو بتقرا الـ partners من أودو بس --}}
+                                @if(!$company->hasOdooCredentials())
                                 <div class="col-md-1">
                                     <label style="visibility:hidden !important;"> *</label>
                                     <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#add-new-customer-modal">
@@ -174,6 +176,7 @@ use App\Models\MoneyReceived ;
                                         </div>
                                     </div>
                                 </div>
+                                @endif
 
                                 <div class="col-md-2">
                                     <x-form.date :type="'text'" :classes="'datepicker-input start-date regenerate-code-ajax '" :default-value="formatDateForDatePicker(old('start_date') ?: (isset($model)  ? $model->getStartDate() : now()) )" :model="$model??null" :label="__('Start Date')" :type="'text'" :id="'start-date-id'" :placeholder="__('')" :name="'start_date'" :required="true"></x-form.date>

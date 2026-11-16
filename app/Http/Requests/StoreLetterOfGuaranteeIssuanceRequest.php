@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\BeneficiaryLinkedToOdooRule;
 use App\Rules\LgTermAmountRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,6 +22,7 @@ class StoreLetterOfGuaranteeIssuanceRequest extends FormRequest
     {
         return [
 			'transaction_name'=>['required'],
+			'partner_id'=>['required',new BeneficiaryLinkedToOdooRule($this->route('company'),$this->get('category_name'),$this->get('issuance_date'))],
 			'lg_type'=>['required'],
 			'lg_fees_and_commission_account_id'=>'required',
 			'issuance_date'=>['required'],

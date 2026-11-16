@@ -111,7 +111,10 @@ $incomeStatement = $study->incomeStatement;
 		 */
 		$yearIndexWithLastMonth = HArr::getLastMonthOfYear($yearWithItsMonths);
 		$otherCreditorsOpeningBalance=$study->getTotalOtherCreditors();
-		$changeInOtherCreditors = HArr::calculateChangeInAfter($balanceSheet->yearly_other_creditors,$otherCreditorsOpeningBalance,$yearIndexWithLastMonth);
+		// round 3 (the user's decision): a liability that grows is cash kept, so its change is closing − opening, as the
+		// portfolio loans above (calculateChangeInBefore). It used opening − closing, the rule of an asset: creditors going
+		// from 1,000,000 to 1,500,000 took 500,000 off the free cash flow instead of adding it.
+		$changeInOtherCreditors = HArr::calculateChangeInBefore($balanceSheet->yearly_other_creditors,$otherCreditorsOpeningBalance,$yearIndexWithLastMonth);
 		$changeInOtherCreditors = array_values($changeInOtherCreditors);
 		
 		/**

@@ -1432,5 +1432,8 @@
     "Received or payable cheques whose due date is on or after the date you pick.": "الشيكات المستلمة أو المستحقة الدفع التي يكون تاريخ استحقاقها في التاريخ المحدد أو بعده.",
     "Down payments received or paid on or after the date you pick, with how much of each has been settled and what is left.": "الدفعات المقدمة المستلمة أو المدفوعة في التاريخ المحدد أو بعده، مع المبلغ المسدَّد من كل دفعة والمتبقي منها.",
     "Running And Against": "ساري ومقابل",
-    "This form has more fields than the server accepts (max_input_vars = :limit), so nothing was saved. Please ask the system administrator to raise max_input_vars.": "عدد حقول الفورم أكبر من الحد اللي السيرفر بيقبله (max_input_vars = :limit)، فماتحفظش أي حاجة. برجاء طلب رفع max_input_vars من مسؤول النظام."
+    "This form has more fields than the server accepts (max_input_vars = :limit), so nothing was saved. Please ask the system administrator to raise max_input_vars.": "عدد حقول الفورم أكبر من الحد اللي السيرفر بيقبله (max_input_vars = :limit)، فماتحفظش أي حاجة. برجاء طلب رفع max_input_vars من مسؤول النظام.",
+    "The selected beneficiary is invalid.": "المستفيد المختار غير صحيح.",
+    "The beneficiary :name is not linked to Odoo. Add it in Odoo, run \"Read Odoo Partners\", then select it again.": "المستفيد :name غير مرتبط بأودو. أضفه في أودو، ثم اعمل \"Read Odoo Partners\"، ثم اختاره مرة أخرى.",
+    "This company is linked to Odoo. Partners can only be added in Odoo and then loaded with \"Read Odoo Partners\".": "هذه الشركة مرتبطة بأودو. لا يمكن إضافة العملاء والموردين والشركاء إلا من أودو، ثم قراءتهم بـ \"Read Odoo Partners\"."
 }

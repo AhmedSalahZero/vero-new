@@ -368,7 +368,10 @@ class CalculateFixedLoanAtEndService
             $loopDateAsIndex = $installmentStartDateAsIndex ;
             $stepVal = ($appliedStepValue / $installmentPaymentIntervalValue) ;
             // the step falls on the loan's installment number, also after a re-pricing
-            if ($i != 1 && (($i + $installmentsAlreadyPaid) %$stepVal) == 1) {
+            // round 3: a step every installment (step interval = installment interval) is stepVal 1, and anything % 1 is
+            // 0: the installment never stepped while the first one was solved for the steps, so the loan ended with a
+            // balance (1,000,000 semi-annual over 12 months, step-up 10 % every 6 months: 56,272.19 left)
+            if ($i != 1 && ($stepVal <= 1 || (($i + $installmentsAlreadyPaid) % $stepVal) == 1)) {
                 $installmentAmount = $installmentAmount * ((pow((1 + $stepRate), 1)));
             } else {
                 $installmentAmount = $installmentAmount;

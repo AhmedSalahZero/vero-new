@@ -267,33 +267,6 @@ use App\Models\LetterOfGuaranteeIssuance;
 
 
                                     </div>
-                                    <div class="col-md-1 hidden show-only-bond">
-                                        <label style="visibility:hidden !important;"> *</label>
-                                        <button type="button" class="add-new btn btn-primary d-block" data-toggle="modal" data-target="#add-new-customer-modal">
-                                            {{ __('Add New') }}
-                                        </button>
-                                    </div>
-                                    <div class="modal fade" id="add-new-customer-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">{{ __('Add New Customer') }}</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form>
-                                                        <input value="" class="form-control" name="new_customer_name" id="new_customer_name" placeholder="{{ __('Enter New Customer Name') }}">
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                                                    <button type="button" class="btn btn-primary js-add-new-customer-if-not-exist">{{ __('Save') }}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
 
 
@@ -565,30 +538,6 @@ use App\Models\LetterOfGuaranteeIssuance;
 
 
 
-                $(document).on('click', '.js-add-new-customer-if-not-exist', function(e) {
-                    const customerName = $('#new_customer_name').val()
-                    const url = "{{ route('add.new.partner',['company'=>$company->id,'type'=>'Customer']) }}"
-                    if (customerName) {
-                        $.ajax({
-                            url
-                            , data: {
-                                customerName
-                            }
-                            , type: "post"
-                            , success: function(response) {
-                                if (response.status) {
-                                    $('select#customer_name').append('<option selected value="' + response.customer.id + '"> ' + customerName + ' </option>  ')
-                                    $('#add-new-customer-modal').modal('hide')
-                                } else {
-                                    Swal.fire({
-                                        icon: "error"
-                                        , title: response.message
-                                    })
-                                }
-                            }
-                        })
-                    }
-                })
 
             </script>
 

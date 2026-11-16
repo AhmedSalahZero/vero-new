@@ -1310,6 +1310,7 @@ class Study extends Model
         // $baseRatesMapping2 = HArr::isAllValuesEqual($baseRatesMapping, $bankLendingMarginRates);
         $baseRatesMapping = $this->generalAndReserveAssumption->getBaseRatesPerMonths($this->getBankLendingRateTypeForRevenueStream($revenueStreamType));
         $totalMonthlyLoanAmounts = [];
+        $totalBankLoanAmounts = [];
         // $loanEndBalances =[];
         
         foreach ($operationDurationPerYear as $yearIndex => $yearMonthIndexes) {
@@ -1348,7 +1349,12 @@ class Study extends Model
                     if (is_array($baseRatesMapping)) {
                         $currentPortfolioLoans=$loanService->__calculateBasedOnDiffBaseRates($baseRatesMapping, $loanType, $currentMonth, $currentMonthlyLoanAmount, $currentMarginRate, $tenor, $installmentInterval, $installmentPaymentIntervalValue, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, $dateWithDateIndex, $dateIndexWithDate);
                     } else {
-                        $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, $pricingPerMonths, 0, true);
+                        // round 3: the at-beginning service has no day-count, pricing or by-days arguments; given the
+                        // at-end ones it got null as $installmentsAlreadyPaid (int): a TypeError on every loan paid at the
+                        // beginning in a study whose corridor and margin never change
+                        $currentPortfolioLoans = $loanNature == 'fixed-at-end'
+                            ? $loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, $pricingPerMonths, 0, true)
+                            : $loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex);
                         $finalResult = $currentPortfolioLoans['final_result']??[];
                         unset($finalResult['totals']);
                         $currentPortfolioLoans = $finalResult ;
@@ -1380,11 +1386,15 @@ class Study extends Model
                         $currentMarginRate = $generalAndReserveAssumption->getBankLendingMarginRatesAtYearOrMonthIndex($monthIndex, $bankLendingRateType);
                         $currentMonthlyLoanAmount = $totalMonthlyLoanAmounts[$monthIndex];
                         $currentMonthlyLoanAmount = $currentMonthlyLoanAmount * $newLoanFundingRate / 100 ;
+                        $totalBankLoanAmounts[$monthIndex] = ($totalBankLoanAmounts[$monthIndex] ?? 0) + $currentMonthlyLoanAmount;
                         // $currentMonthlyLoanAmount = $currentMonthlyLoanAmount * $newLoanFundingRate / 100 ;
                         if (is_array($baseRatesMapping)) {
                             $currentPortfolioLoans=$loanService->__calculateBasedOnDiffBaseRates($baseRatesMapping, $loanType, $currentMonth, $currentMonthlyLoanAmount, $currentMarginRate, $tenor, $installmentInterval, $installmentPaymentIntervalValue, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, $dateWithDateIndex, $dateIndexWithDate);
                         } else {
-                            $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, null, 0, true);
+                            // the bank loan behind it: the same call per service as the client loan (round 3, see above)
+                            $currentPortfolioLoans = $loanNature == 'fixed-at-end'
+                                ? $loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex, null, null, 0, true)
+                                : $loanService->__calculate([], -1, $loanType, $currentMonth, $currentMonthlyLoanAmount, $baseRatesMapping, $currentMarginRate, $tenor, $installmentInterval, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex);
                             $finalResult = $currentPortfolioLoans['final_result']??[];
                             unset($finalResult['totals']);
                             $currentPortfolioLoans = $finalResult;
@@ -1433,6 +1443,7 @@ class Study extends Model
             $revenueStreamType.'_payment'=>json_encode($totalBankSchedulePayments),
             
         ]);
+        $this->storeBankLoansReceived($revenueStreamType, $totalBankLoanAmounts);
         $study->recalculateMonthlyAndAccumulatedEcl($revenueStreamType, $totalPortfolioEndBalance);
         
         // foreach($totalEndBalanceForPortfolioPerRevenueType as $revenueStreamType => $totalPortfolioEndBalance){
@@ -1668,6 +1679,28 @@ class Study extends Model
 		}
 
 		return $endBalances;
+	}
+	/**
+	 * * الجولة 3 (قرار اليوزر): المصروف المدفوع قبل ما يستحق (مثلاً مصروف نص سنوي بيتدفع أول الفترة) أصل «Prepaid Expenses».
+	 * * رصيد كشف المصروف (collection_statements) السالب كان بيظهر دائن بالسالب في «Other Creditors». الجزء السالب من كل صف في
+	 * * كل شهر بيتنقل هنا موجب ، والموجب بيفضل في الدائنين (getBalanceSheetViewVars).
+	 * * مثال: إيجار 25,000 في الشهر بيتدفع كل 6 شهور مقدماً من يناير: آخر يناير 150,000 − 25,000 = 125,000 مدفوع مقدماً.
+	 *
+	 * @param list<int> $sumKeys the study's month indexes
+	 * @return array<int, float> month index => prepaid at the end of the month
+	 */
+	public function getPrepaidExpenseEndBalances(array $sumKeys): array
+	{
+		$prepaid = array_fill_keys($sumKeys, 0.0);
+		$expenses = DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('expenses')->where('study_id', $this->id)->get(['collection_statements']);
+		foreach ($expenses as $expense) {
+			$endBalances = (array) ((json_decode($expense->collection_statements ?? '[]', true)['monthly'] ?? [])['end_balance'] ?? []);
+			foreach ($sumKeys as $dateIndex) {
+				$prepaid[$dateIndex] += max(0.0, -(float) ($endBalances[$dateIndex] ?? 0));
+			}
+		}
+
+		return $prepaid;
 	}
 	protected function refreshTotalExpensePaymentsInIncomeStatement()
 	{
@@ -2417,6 +2450,7 @@ class Study extends Model
         $loans = $this->{$relationName}->toArray() ;
         $generalAndReserveAssumption = $study->generalAndReserveAssumption;
         $eclAndNewPortfolioFundingRate = $study->getEclAndNewPortfolioFundingRatesForStreamType($revenueStreamType);
+        $totalBankLoanAmounts = [];
   
     
         /**
@@ -2533,6 +2567,7 @@ class Study extends Model
                     
                         $currentMonthlyLoanAmount = $totalMonthlyLoanAmounts[$monthIndex];
                         $currentMonthlyLoanAmount = $currentMonthlyLoanAmount * $newLoanFundingRate / 100 ;
+                        $totalBankLoanAmounts[$monthIndex] = ($totalBankLoanAmounts[$monthIndex] ?? 0) + $currentMonthlyLoanAmount;
                         $baseRateBankPortfolioLoans = is_array($baseRatesMapping) ? $this->sumBaseRateWithMarginRate($baseRatesMapping, $currentMarginRate) : $baseRatesMapping ;
                             
                         $currentPortfolioLoans=$loanService->__calculate([], -1, $loanType, $currentMonthFormatted, $currentMonthlyLoanAmount, $baseRateBankPortfolioLoans, $currentMarginRate, $tenor, $installmentPaymentIntervalName, $interestPaymentIntervalName, $stepUp, $stepInterval, $stepDown, $stepInterval, $gracePeriod, $monthIndex);
@@ -2600,6 +2635,7 @@ class Study extends Model
             $revenueStreamType.'_payment'=>json_encode($totalBankSchedulePayments),
             
         ]);
+        $this->storeBankLoansReceived($revenueStreamType, $totalBankLoanAmounts);
         
         $this->recalculateMonthlyAndAccumulatedEcl($revenueStreamType, $totalPortfolioEndBalance);
         
@@ -2621,7 +2657,15 @@ class Study extends Model
         $monthlyEclValues = [];
         $previousAccumulated = 0 ;
         $accumulatedEclValues =[];
-        foreach ($monthlyEclRates as $dateAsIndex => $eclRate) {
+        // * الجولة 3 (قرار اليوزر): كل شهر لحد آخر الدراسة ، والشهر اللي مالوش نسبة متحفظة بياخد آخر نسبة قبله (HArr::valueAtOrBefore ،
+        // * زي ما Vero بيقرا الكوريدور والهوامش). اللوب كان على النسب المتحفظة بس: دراسة اتطولت (أو نسبها أقصر منها) كان
+        // * المخصص بتاعها بيختفي من الميزانية في أول شهر مالوش نسبة من غير ما يتسجل في قائمة الدخل ، فالميزانية بتختل بيه.
+        // * مثال: محفظة متناهي الصغر 1,134,616,352 بنسبة 2.5% متحفظة لـ 12 شهر في دراسة 18 شهر: المخصص 28,365,409 كان بيختفي
+        // * في الشهر 13 (الميزانية مختلة بيه) ؛ دلوقتي بيفضل 2.5% من المحفظة كل شهر.
+        $rateKeys = array_map('intval', array_keys((array) $monthlyEclRates));
+        $months = $rateKeys === [] ? [] : range(min($rateKeys), max(max($rateKeys), (int) $this->getStudyEndDateAsIndex()));
+        foreach ($months as $dateAsIndex) {
+            $eclRate = HArr::valueAtOrBefore((array) $monthlyEclRates, $dateAsIndex, 0);
             $currentMonthPortfolioEndBalance  = $totalPortfolioEndBalance[$dateAsIndex]??0;
             $eclRate = $eclRate / 100 ;
             $monthlyEclValues[$dateAsIndex] =  $currentMonthPortfolioEndBalance * $eclRate - $previousAccumulated;
@@ -3103,11 +3147,11 @@ class Study extends Model
                 $revenueStreamType.'_collection'=>json_encode($totalSchedulePayments),
             $revenueStreamType.'_payment'=>json_encode($totalBankSchedulePayments),
             $revenueStreamType.'_bank_interest'=>json_encode($totalBankInterests),
-            // the bank loans received are the loans the bank balance is built from (net funding × the bank's share);
-            // the figures the page posts are computed in the browser and differed by a few piasters a month, so the
-            // balance sheet went out by them (study 85: 0.38 a month in 2026)
-            $revenueStreamType.'_loan_withdrawal_amount'=>json_encode($totalBankLoanAmounts),
         ]);
+        // the bank loans received are the loans the bank balance is built from (net funding × the bank's share);
+        // the figures the page posts are computed in the browser and differed by a few piasters a month, so the
+        // balance sheet went out by them (study 85: 0.38 a month in 2026). Round 2: the cash flow page's row too.
+        $this->storeBankLoansReceived($revenueStreamType, $totalBankLoanAmounts);
         
         
         // $this->recalculateMonthlyAndAccumulatedEcl(Study::DIRECT_FACTORING, $totalPortfolioEndBalance);
@@ -3858,6 +3902,24 @@ class Study extends Model
         }
 
         return $result;
+    }
+    /**
+     * * الجولة 2 (دراسة 103): القروض المستلمة من البنك في التدفقات = نفس القروض اللي رصيد البنك في الميزانية متحسب منها
+     * * (صرف كل صف × نسبة تمويل البنك) ، مش الأرقام اللي صفحة المنتج بتحسبها في المتصفح وبتقربها لأقرب جنيه.
+     * * مثال (103 ، leasing فبراير 2026): قرض البنك 133,333,333.50 ، والصفحة كانت باعتة 133,333,334 ، فالكاش بيقل 0.50
+     * * والقرض في الميزانية لأ: الميزانية اختلت 1.66 لحد يونيو. نفس إصلاح V17 للـ DF.
+     */
+    private function storeBankLoansReceived(string $revenueStreamType, array $bankLoanAmounts): void
+    {
+        $monthly = [];
+        foreach (array_keys($this->getStudyDates()) as $monthIndex) {
+            $monthly[$monthIndex] = $bankLoanAmounts[$monthIndex] ?? 0;
+        }
+        DB::connection(NON_BANKING_SERVICE_CONNECTION_NAME)->table('cashflow_statement_reports')->where('study_id', $this->id)->update([
+            $revenueStreamType.'_loan_withdrawal_amount' => json_encode($monthly),
+        ]);
+        // the cash flow page shows this column as the stream's "Loan Withdrawal Amount" (recalculateCashflowStatement's table)
+        $this->getEclAndNewPortfolioFundingRatesForStreamType($revenueStreamType)?->update(['monthly_new_loans_funding_values' => $monthly]);
     }
     public function storeAdminFeesAndFundingStructureFor(Request $request, string $revenueStreamType, array $portfolioMonthlyNewLoansFundingValues = [], array $occurrenceDates = [], array $totalMonthlyLoanPerMtls = [], array $totalMonthlyLoanPerOdas = [])
     {
@@ -4924,6 +4986,16 @@ class Study extends Model
             $tableDataFormatted[$currentTabIndex]['sub_items'][$title]['year_total'] = HArr::getPerYearIndexForEndBalance($recoverableVat, $yearWithItsMonths);
             $totalOtherDebtorsOpeningBalances = HArr::sumAtDates([$totalOtherDebtorsOpeningBalances, $recoverableVat], $sumKeys);
         }
+
+        // Round 3 (the user's decision): an expense paid before it is due is an asset, not a negative creditor
+        // (getPrepaidExpenseEndBalances; the creditors below keep the positive part of each expense).
+        $prepaidExpenses = $this->getPrepaidExpenseEndBalances($sumKeys);
+        if (array_sum($prepaidExpenses) > 0) {
+            $tableDataFormatted[$currentTabIndex]['sub_items']['prepaid-expenses']['options'] = array_merge(['title' => __('Prepaid Expenses')], $defaultNumericInputClasses);
+            $tableDataFormatted[$currentTabIndex]['sub_items']['prepaid-expenses']['data'] = $prepaidExpenses;
+            $tableDataFormatted[$currentTabIndex]['sub_items']['prepaid-expenses']['year_total'] = HArr::getPerYearIndexForEndBalance($prepaidExpenses, $yearWithItsMonths);
+            $totalOtherDebtorsOpeningBalances = HArr::sumAtDates([$totalOtherDebtorsOpeningBalances, $prepaidExpenses], $sumKeys);
+        }
         
         $totalOtherDebtors = HArr::sumAtDates([$totalOtherDebtorsOpeningBalances ,$totalAccruedInterestRevenues ], $sumKeys);
         $totalCurrentAssets = HArr::sumAtDates([$totalOtherDebtors , $totalCustomerReceivables , $monthlyCashAndBanks], $sumKeys);
@@ -5062,6 +5134,9 @@ class Study extends Model
             
         
             foreach ($collectionStatements as $dateIndex => $amount) {
+                // round 3: a negative balance (paid before it is due) is a prepaid expense among the other debtors
+                // (getPrepaidExpenseEndBalances); the row's creditor is its positive part
+                $amount = max(0.0, (float) $amount);
                 $withholdAmount = $withholdStatementEndBalances[$dateIndex]??0;
                 $totalExpensePerCategory[$expenseNameId][$dateIndex] = isset($totalExpensePerCategory[$expenseNameId][$dateIndex]) ? $totalExpensePerCategory[$expenseNameId][$dateIndex] + $amount : $amount;
                 $totalWithholdEndBalancePerCategories[$dateIndex] = isset($totalWithholdEndBalancePerCategories[$dateIndex]) ? $totalWithholdEndBalancePerCategories[$dateIndex] + $withholdAmount : $withholdAmount;
@@ -6247,13 +6322,23 @@ class Study extends Model
             $currentBankPortfolioEndBalance =  $currentBankBeginningBalance  + $previousAccuredInterest;
                     
             $result[$securitization->id]['bank_portfolio_end_balance_sum'] = $currentBankPortfolioEndBalance ;
-            $result[$securitization->id]['early_settlements_expense_amount'] = ($earlySettlementExpenseRate * $currentBankPortfolioEndBalance) ;
+            // round 2 (the user's decision, as FinVero): the early-settlement fee is on the bank principal settled early;
+            // the accrued interest was due anyway. Study 87: 1 % × 3,197,305 = 31,973 (it was 1 % × 3,202,080 = 32,021)
+            $result[$securitization->id]['early_settlements_expense_amount'] = ($earlySettlementExpenseRate * $currentBankBeginningBalance) ;
                     
             $result[$securitization->id]['securitization_id'] = $securitization->id;
             $result[$securitization->id]['study_id'] = $this->id;
             $result[$securitization->id]['company_id'] = $this->company->id;
             $values = $result[$securitization->id]['portfolio_result']??[];
-            $netPresetValue = Finance::npv($discountRate, array_values($values)) ;
+            // round 2 (the user's decision, as FinVero): the sold loans leave the books at the start of the sale month (their
+            // installment of that month goes to the buyer), so the buyer receives it at the month's end: each installment is
+            // discounted by the months since the sale, the sale month counting as 1. Finance::npv left the first one
+            // undiscounted and counted installments, not months: a 1,000,000 loan at 18 % sold at 18 % was worth 1,015,000
+            // (a gain of 15,000 out of nothing); it is worth 1,000,000. Study 87: 6,254,212 → 6,161,786.
+            $netPresetValue = 0.0;
+            foreach ($values as $dateAsIndex => $value) {
+                $netPresetValue += $value / (1 + $discountRate) ** ((int) $dateAsIndex - (int) $securitizationDate + 1);
+            }
             $principleAmountSum = $result[$securitization->id]['portfolio_principle_amount_sum']??0;
             $result[$securitization->id]['net_present_value'] = $netPresetValue;
             $result[$securitization->id]['securitization_profit_or_loss'] = $netPresetValue - $principleAmountSum - $previousPortfolioAccuredInterest;

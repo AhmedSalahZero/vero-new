@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
 		'isNonBankingService'=>NonBankingServiceMiddleware::class,
 		'isPropertyManagement'=>PropertyManagementServiceMiddleware::class,
 		'superAdmin'=>\App\Http\Middleware\EnsureSuperAdmin::class,
+		'noLocalPartnersForOdoo'=>\App\Http\Middleware\PreventLocalPartnerCreationForOdooCompanies::class,
     ];
 }

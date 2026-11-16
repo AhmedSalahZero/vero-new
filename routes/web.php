@@ -398,8 +398,8 @@ Route::middleware([])->group(function () {
                      */
                     Route::get('financial-institutions/{financialInstitution}/bank-accounts', 'FinancialInstitutionController@viewAllAccounts')->name('view.all.bank.accounts');
 
-                    Route::post('add-new-partner', 'AddNewCustomerController@addNew')->name('add.new.partner');
-                    Route::post('add-new-partner/{type}', 'AddNewCustomerController@addNew2')->name('add.new.partner.type');
+                    Route::post('add-new-partner', 'AddNewCustomerController@addNew')->name('add.new.partner')->middleware('noLocalPartnersForOdoo');
+                    Route::post('add-new-partner/{type}', 'AddNewCustomerController@addNew2')->name('add.new.partner.type')->middleware('noLocalPartnersForOdoo');
                     Route::resource('opening-balance', 'OpeningBalancesController');
                     Route::resource('customers-opening-balance', 'CustomerOpeningBalancesController');
                     Route::resource('suppliers-opening-balance', 'SupplierOpeningBalancesController');
@@ -407,23 +407,23 @@ Route::middleware([])->group(function () {
                  
                     Route::group(['prefix'=>'general-settings'], function () {
                         Route::get('partners', 'PartnersController@index')->name('partners.index');
-                        Route::get('partners/create', 'PartnersController@create')->name('partners.create');
-                        Route::post('partners/store', 'PartnersController@store')->name('partners.store');
+                        Route::get('partners/create', 'PartnersController@create')->name('partners.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('partners/store', 'PartnersController@store')->name('partners.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('partners/{partner}/edit', 'PartnersController@edit')->name('partners.edit');
                         Route::put('partners/{partner}/update', 'PartnersController@update')->name('partners.update');
                         Route::delete('partners/{partner}/delete', 'PartnersController@destroy')->name('partners.destroy');
                     
                         Route::get('customers', 'CustomersController@index')->name('customers.index');
-                        Route::get('customers/create', 'CustomersController@create')->name('customers.create');
-                        Route::post('customers/store', 'CustomersController@store')->name('customers.store');
+                        Route::get('customers/create', 'CustomersController@create')->name('customers.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('customers/store', 'CustomersController@store')->name('customers.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('customers/{supplier}/edit', 'CustomersController@edit')->name('customers.edit');
                         Route::put('customers/{supplier}/update', 'CustomersController@update')->name('customers.update');
                         Route::delete('customers/{supplier}/delete', 'CustomersController@destroy')->name('customers.destroy');
                     
                     
                         Route::get('suppliers', 'SuppliersController@index')->name('suppliers.index');
-                        Route::get('suppliers/create', 'SuppliersController@create')->name('suppliers.create');
-                        Route::post('suppliers/store', 'SuppliersController@store')->name('suppliers.store');
+                        Route::get('suppliers/create', 'SuppliersController@create')->name('suppliers.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('suppliers/store', 'SuppliersController@store')->name('suppliers.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('suppliers/{supplier}/edit', 'SuppliersController@edit')->name('suppliers.edit');
                         Route::put('suppliers/{supplier}/update', 'SuppliersController@update')->name('suppliers.update');
                         Route::delete('suppliers/{supplier}/delete', 'SuppliersController@destroy')->name('suppliers.destroy');
@@ -431,22 +431,22 @@ Route::middleware([])->group(function () {
                     
                     
                         Route::get('shareholders', 'ShareholdersController@index')->name('shareholders.index');
-                        Route::get('shareholders/create', 'ShareholdersController@create')->name('shareholders.create');
-                        Route::post('shareholders/store', 'ShareholdersController@store')->name('shareholders.store');
+                        Route::get('shareholders/create', 'ShareholdersController@create')->name('shareholders.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('shareholders/store', 'ShareholdersController@store')->name('shareholders.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('shareholders/{shareholder}/edit', 'ShareholdersController@edit')->name('shareholders.edit');
                         Route::put('shareholders/{shareholder}/update', 'ShareholdersController@update')->name('shareholders.update');
                         Route::delete('shareholders/{shareholder}/delete', 'ShareholdersController@destroy')->name('shareholders.destroy');
                     
                         Route::get('employees', 'EmployeesController@index')->name('employees.index');
-                        Route::get('employees/create', 'EmployeesController@create')->name('employees.create');
-                        Route::post('employees/store', 'EmployeesController@store')->name('employees.store');
+                        Route::get('employees/create', 'EmployeesController@create')->name('employees.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('employees/store', 'EmployeesController@store')->name('employees.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('employees/{employee}/edit', 'EmployeesController@edit')->name('employees.edit');
                         Route::put('employees/{employee}/update', 'EmployeesController@update')->name('employees.update');
                         Route::delete('employees/{employee}/delete', 'EmployeesController@destroy')->name('employees.destroy');
                     
                         Route::get('subsidiary-companies', 'SubsidiaryCompaniesController@index')->name('subsidiary.companies.index');
-                        Route::get('subsidiary-companies/create', 'SubsidiaryCompaniesController@create')->name('subsidiary.companies.create');
-                        Route::post('subsidiary-companies/store', 'SubsidiaryCompaniesController@store')->name('subsidiary.companies.store');
+                        Route::get('subsidiary-companies/create', 'SubsidiaryCompaniesController@create')->name('subsidiary.companies.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('subsidiary-companies/store', 'SubsidiaryCompaniesController@store')->name('subsidiary.companies.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('subsidiary-companies/{subsidiaryCompany}/edit', 'SubsidiaryCompaniesController@edit')->name('subsidiary.companies.edit');
                         Route::put('subsidiary-companies/{subsidiaryCompany}/update', 'SubsidiaryCompaniesController@update')->name('subsidiary.companies.update');
                         Route::delete('subsidiary-companies/{subsidiaryCompany}/delete', 'SubsidiaryCompaniesController@destroy')->name('subsidiary.companies.destroy');
@@ -461,8 +461,8 @@ Route::middleware([])->group(function () {
                     
                     
                         Route::get('other-partners', 'OtherPartnersController@index')->name('other.partners.index');
-                        Route::get('other-partners/create', 'OtherPartnersController@create')->name('other.partners.create');
-                        Route::post('other-partners/store', 'OtherPartnersController@store')->name('other.partners.store');
+                        Route::get('other-partners/create', 'OtherPartnersController@create')->name('other.partners.create')->middleware('noLocalPartnersForOdoo');
+                        Route::post('other-partners/store', 'OtherPartnersController@store')->name('other.partners.store')->middleware('noLocalPartnersForOdoo');
                         Route::get('other-partners/{otherPartner}/edit', 'OtherPartnersController@edit')->name('other.partners.edit');
                         Route::put('other-partners/{otherPartner}/update', 'OtherPartnersController@update')->name('other.partners.update');
                         Route::delete('other-partners/{otherPartner}/delete', 'OtherPartnersController@destroy')->name('other.partners.destroy');
