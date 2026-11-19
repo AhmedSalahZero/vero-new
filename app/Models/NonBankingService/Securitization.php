@@ -59,6 +59,7 @@ class Securitization extends Model
 			$model->discount_rate = $model->discount_rate ? $model->discount_rate : 0;
 			$model->collection_revenue_rate = $model->collection_revenue_rate ? $model->collection_revenue_rate  : 0;
 			$model->early_settlements_expense_rate = $model->early_settlements_expense_rate ? $model->early_settlements_expense_rate : 0;
+			$model->expense_amount = $model->expense_amount ? $model->expense_amount : 0;
 			foreach([
 				'disbursement_date',
 				'securitization_date'

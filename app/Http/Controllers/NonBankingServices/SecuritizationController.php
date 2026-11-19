@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\NonBankingServices;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSecuritizationRequest;
 use App\Models\Company;
 use App\Models\NonBankingService\Study;
 use App\Traits\NonBankingService;
@@ -56,7 +57,7 @@ class SecuritizationController extends Controller
         ];
     }
 
-    public function store(Company $company, Request $request, Study $study )
+    public function store(Company $company, StoreSecuritizationRequest $request, Study $study )
     {
 		$study->storeRepeaterRelations($request,['securitizations'],$company,[]);
 		 $study->calculateSecuritizationLoans();
