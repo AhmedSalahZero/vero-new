@@ -53,6 +53,7 @@ class OtherLongTermAssetsOpeningBalance extends Model
     {
         parent::boot();
         static::saving(function (self $model) {
+            $model->amount = $model->amount ?: 0; // the column is NOT NULL: an empty amount (a row added on the page) is zero
             $openingBalance = $model->{self::getOpeningBalanceColumnName()};
             $statementPayload = $model->{self::getPayloadStatementColumn()};
             // $dateIndexWithDate = $model->study->getDateIndexWithDatE();

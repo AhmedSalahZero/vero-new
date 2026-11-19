@@ -69,6 +69,7 @@ class NewBranchMicrofinanceOpeningProjection extends Model
 				$operationDateAsIndex = $study->convertDateStringToDateIndex($operationDate);
 				$model->operation_date = $operationDateAsIndex;
 			}
+			$model->total_branches = $model->total_branches ?: 0;
 		});
 	}
 	

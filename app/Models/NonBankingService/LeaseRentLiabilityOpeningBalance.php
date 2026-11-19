@@ -63,6 +63,7 @@ class LeaseRentLiabilityOpeningBalance extends Model
     {
         parent::boot();
         static::saving(function (self $model) {
+			$model->amount = $model->amount ?: 0; // the column is NOT NULL: an empty amount (a row added on the page) is zero
 			
 			if(is_null($model->name) && $model->amount == 0){
 				if($model->exists){

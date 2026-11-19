@@ -115,6 +115,31 @@ class FixedAsset extends Model
         'custom_collection_policy'=>'array',
         'total_monthly_depreciations'=>'array',
     ];
+    /**
+     * * الأعمدة دي NOT NULL ، والرقم اللي يتمسح في الصفحة بيوصل null. الفاضي بياخد الـ default بتاع العمود نفسه
+     * * (اللي MySQL كان هيحطه لو الخانة مش مبعوتة) ، والصفر المكتوب بيفضل صفر.
+     */
+    private const EMPTY_NUMBER_DEFAULTS = [
+        'ffe_item_cost' => 0,
+        'contingency_rate' => 0,
+        'cost_annual_increase_rate' => 0,
+        'depreciation_duration' => 0,
+        'replacement_cost_rate' => 0,
+        'replacement_interval' => 1,
+        'counts' => 0,
+    ];
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function (self $model) {
+            foreach (self::EMPTY_NUMBER_DEFAULTS as $column => $default) {
+                $value = $model->getAttributes()[$column] ?? null;
+                if ($value === null || $value === '') {
+                    $model->{$column} = $default;
+                }
+            }
+        });
+    }
     public function getId()
     {
         return $this->id;

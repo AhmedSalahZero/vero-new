@@ -6000,7 +6000,7 @@ class Study extends Model
             
             $manpower->hiring_counts = $hiringCounts;
             $hiringCounts = is_null($newBranchesHiringCounts) ? $hiringCounts : $newBranchesHiringCounts[$positionId];
-            $monthlyNetSalary = $manpowerArr['monthly_net_salary'];
+            $monthlyNetSalary = $manpowerArr['monthly_net_salary'] ?? 0;
             $manpower->monthly_net_salary =$monthlyNetSalary ;
             $currentExistingCount = $manpowerArr['existing_count']??0;
             $manpower->existing_count = $currentExistingCount;
